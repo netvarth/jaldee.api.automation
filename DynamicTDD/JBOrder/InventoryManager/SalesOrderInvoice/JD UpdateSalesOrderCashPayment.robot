@@ -362,11 +362,15 @@ JD-TC-Update Cash Payment For Sales Order-1
     ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      0.0
+    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                     ${netTotal}
 
 
 JD-TC-Update Cash Payment For Sales Order-2
 
-    [Documentation]    update amount as half.
+    [Documentation]    update cash payment amount as half of the total .
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
     Log   ${resp.content}
@@ -381,6 +385,116 @@ JD-TC-Update Cash Payment For Sales Order-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=    Get Payment By UUId   ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
     ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      ${half_Total}
+    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                      ${half_Total}
+
+JD-TC-Update Cash Payment For Sales Order-UH1
+
+    [Documentation]    update cash payment amount as higher amount.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${Total}=  Evaluate  ${netTotal}+100
+    ${Total}=  Convert To Number  ${Total}   1
+
+    ${note}=  FakerLibrary.name
+
+    ${resp}=  Update cash payment- Sales Order   ${SO_Inv}  ${acceptPaymentBy[0]}  ${Total}  ${note}  ${paymentRefId}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${GREATER_THAN_THE_BILL}
+
+JD-TC-Update Cash Payment For Sales Order-UH2
+
+    [Documentation]    update cash payment with EMPTY Invoice id.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${note}=  FakerLibrary.name
+
+    ${resp}=  Update cash payment- Sales Order   ${EMPTY}  ${acceptPaymentBy[0]}  ${netTotal}  ${note}  ${paymentRefId}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${INVALID_FM_INVOICE_ID}
+
+JD-TC-Update Cash Payment For Sales Order-UH3
+
+    [Documentation]    update cash payment with negative amount.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${note}=  FakerLibrary.name
+
+    ${resp}=  Update cash payment- Sales Order   ${SO_Inv}  ${acceptPaymentBy[0]}  -${netTotal}  ${note}  ${paymentRefId}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${GREATER_THAN_THE_BILL}
+
+JD-TC-Update Cash Payment For Sales Order-UH4
+
+    [Documentation]    update cash payment with EMPTY note.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update cash payment- Sales Order   ${SO_Inv}  ${acceptPaymentBy[0]}  ${netTotal}  ${EMPTY}  ${paymentRefId}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${NOTES_CANNOT_BE_EMPTY}
+
+JD-TC-Update Cash Payment For Sales Order-UH5
+
+    [Documentation]    update cash payment with EMPTY paymentRefId.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${note}=  FakerLibrary.name
+
+    ${resp}=   Update cash payment- Sales Order    ${SO_Inv}  ${acceptPaymentBy[0]}  ${netTotal}   ${note}   0
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${INVALID_PAYMENT_REF_ID}
+
+JD-TC-Update Cash Payment For Sales Order-UH6
+
+    [Documentation]    update cash payment without login.
+
+    ${note}=  FakerLibrary.name
+
+    ${resp}=   Update cash payment- Sales Order    ${SO_Inv}  ${acceptPaymentBy[0]}  ${netTotal}   ${note}   ${paymentRefId}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings  ${resp.json()}  ${SESSION_EXPIRED}
+
+JD-TC-Update Cash Payment For Sales Order-UH7
+
+    [Documentation]    update cash payment with another provider login.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${note}=  FakerLibrary.name
+
+    ${resp}=   Update cash payment- Sales Order    ${SO_Inv}  ${acceptPaymentBy[0]}  ${netTotal}   ${note}   ${paymentRefId}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${INVALID_PAYMENT_REF_ID}
