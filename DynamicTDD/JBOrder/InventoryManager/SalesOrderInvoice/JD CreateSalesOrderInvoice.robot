@@ -390,7 +390,7 @@ JD-TC-Create Sales Order Invoice-3
     Should Be Equal As Strings    ${resp.status_code}   200
 
 
-JD-TC-Create Sales Order Invoice-
+JD-TC-Create Sales Order Invoice-UH1
 
     [Documentation]    Genarate  invoice with invalid Sales order Uid.
 
@@ -403,7 +403,7 @@ JD-TC-Create Sales Order Invoice-
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}   ${INVALID_ORDER_ID}
 
-JD-TC-Create Sales Order Invoice-
+JD-TC-Create Sales Order Invoice-UH2
 
     [Documentation]    Genarate  invoice with not assigned user.
 
@@ -436,7 +436,7 @@ JD-TC-Create Sales Order Invoice-
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
 
-JD-TC-Create Sales Order Invoice-
+JD-TC-Create Sales Order Invoice-UH3
 
     [Documentation]    Genarate invoice with another provider.
 
@@ -448,7 +448,7 @@ JD-TC-Create Sales Order Invoice-
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
 
-JD-TC-Create Sales Order Invoice-
+JD-TC-Create Sales Order Invoice-4
 
     [Documentation]    Update sales order status as ORDER_CANCELED then Genarate invoice .
 
@@ -473,7 +473,7 @@ JD-TC-Create Sales Order Invoice-
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Create Sales Order Invoice-
+JD-TC-Create Sales Order Invoice-5
 
     [Documentation]    Update sales order status as ORDER_DISCARDED then Genarate invoice .
 
@@ -511,7 +511,7 @@ JD-TC-Create Sales Order Invoice-
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Create Sales Order Invoice-
+JD-TC-Create Sales Order Invoice-6
 
     [Documentation]    Update sales order status as ORDER_COMPLETED then Genarate invoice .
 

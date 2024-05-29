@@ -29,9 +29,9 @@ ${originFrom}       NONE
 
 *** Test Cases ***
 
-JD-TC-Update Sales Order Invoice Status-1
+JD-TC-Share Sales Order Invoice-1
 
-    [Documentation]   Create a sales Order with Valid Details then Update sales order invoice Status New to Settled.
+    [Documentation]   Create a sales Order with Valid Details then generate and Share Sales Order.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
@@ -336,9 +336,9 @@ JD-TC-Update Sales Order Invoice Status-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
 # ------------------------------------------------------------------------------------------------------------------------
 # --------------------------------------------- Share SO Invoice -----------------------------------------------
@@ -351,3 +351,73 @@ JD-TC-Update Sales Order Invoice Status-1
     ${resp}=    Share SO Invoice    ${SO_Inv}    ${email_id}   ${bool[1]}    ${bool[0]}  ${bool[0]}   ${bool[0]}    ${html}   phone=${phone}    whatsappPhNo=${phone}      telegramPhNo=${phone}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Share Sales Order Invoice-2
+
+    [Documentation]   Share Sales Order invoice With Empty email Id.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${PO_Number}    Generate random string    5    123456789
+    ${PO_Number}=  Evaluate  ${PUSERNAME}+${PO_Number}
+
+    ${phone}=   Create Dictionary       number=${PO_Number}      countryCode=${countryCodes[0]}  
+
+    ${resp}=    Share SO Invoice    ${SO_Inv}    ${EMPTY}   ${bool[0]}    ${bool[0]}  ${bool[0]}   ${bool[0]}    ${html}   phone=${phone}    whatsappPhNo=${phone}      telegramPhNo=${phone}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${EMPTY_EMAIL}
+
+JD-TC-Share Sales Order Invoice-3
+
+    [Documentation]   Share Sales Order invoice With  email Notification is true but email is EMPTY.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${PO_Number}    Generate random string    5    123456789
+    ${PO_Number}=  Evaluate  ${PUSERNAME}+${PO_Number}
+
+    ${phone}=   Create Dictionary       number=${PO_Number}      countryCode=${countryCodes[0]}  
+
+    ${resp}=    Share SO Invoice    ${SO_Inv}    ${EMPTY}   ${bool[1]}    ${bool[0]}  ${bool[0]}   ${bool[0]}    ${html}   phone=${phone}    whatsappPhNo=${phone}      telegramPhNo=${phone}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${EMPTY_EMAIL}
+
+JD-TC-Share Sales Order Invoice-4
+
+    [Documentation]   Share Sales Order invoice With  SMS Notification is true but phone is EMPTY.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${PO_Number}    Generate random string    5    123456789
+    ${PO_Number}=  Evaluate  ${PUSERNAME}+${PO_Number}
+
+    ${phone}=   Create Dictionary       number=${PO_Number}      countryCode=${countryCodes[0]}  
+
+    ${resp}=    Share SO Invoice    ${SO_Inv}    ${email_id}   ${bool[0]}    ${bool[1]}  ${bool[0]}   ${bool[0]}    ${html}   phone=${EMPTY}    whatsappPhNo=${phone}      telegramPhNo=${phone}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${EMPTY_EMAIL}
