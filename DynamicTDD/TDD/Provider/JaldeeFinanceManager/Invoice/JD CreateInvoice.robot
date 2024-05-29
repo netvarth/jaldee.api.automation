@@ -49,10 +49,16 @@ JD-TC-CreateInvoice-1
 
     ${name}=   FakerLibrary.word
     Set Suite Variable   ${name}
-    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
+    ${resp}=  CreateVendorCategory  ${name}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id}   ${resp.json()}
+
+    ${resp}=  Get by encId  ${category_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
+    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
     
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[1]} 

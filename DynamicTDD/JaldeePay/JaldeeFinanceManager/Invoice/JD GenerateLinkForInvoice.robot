@@ -77,12 +77,17 @@ JD-TC-GenerateLinkForInvoice-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    ${name}=   FakerLibrary.lastname
-    Set Suite Variable   ${name}
-    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
+    ${name}=   FakerLibrary.word
+    ${resp}=  CreateVendorCategory  ${name}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id}   ${resp.json()}
+
+    ${resp}=  Get by encId  ${category_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
+    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
     
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[1]} 

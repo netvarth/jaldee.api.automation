@@ -241,12 +241,23 @@ JD-TC-Apply Item Level Discount-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-
     ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
+    ${resp}=  CreateVendorCategory  ${name}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id}   ${resp.json()}
+
+    ${resp}=  Get by encId  ${category_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
+    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+
+    # ${name}=   FakerLibrary.word
+    # ${resp}=  Create Category   ${name}  ${categoryType[0]} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${category_id}   ${resp.json()}
 
 
     ${name1}=   FakerLibrary.word
@@ -740,11 +751,16 @@ JD-TC-Apply Item Level Discount-UH2
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
+    ${resp}=  CreateVendorCategory  ${name}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id}   ${resp.json()}
 
+    ${resp}=  Get by encId  ${category_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
+    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
     ${name1}=   FakerLibrary.word
     Set Suite Variable   ${name1}
