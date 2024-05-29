@@ -2324,6 +2324,7 @@ INACTIVE_INVNTRY_CATALOG_ITEMS="Inactive Inventory catalog item"
 DISABLE_INVTRY_ITEM="Disable Item : {}"
 STORE_REQUIRED="Store required."
 INVENTORY_CATALOG_REQUIRED="Inventory catalog required."
+FROM_REQUIRED="From required."
 # Vendor
 INVALID_NAME="Invalid Name"
 CATEGORY_EXIST="Category exists with given name"

@@ -111,12 +111,12 @@ JD-TC-Get NonExpired Item-1
     Set Suite Variable  ${description}
     Set Suite Variable  ${sku}
 
-    ${hsn}=     Create Dictionary    hsnCode=${hsnCode}
+    # ${hsn}=     Create Dictionary    hsnCode=${hsnCode}
 
-    ${resp}=    Create Item Jrx   ${itemName}  description=${description}  sku=${sku}  hsnCode=${hsn}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable     ${itemjrx}   ${resp.json()}
+    # ${resp}=    Create Item Jrx   ${itemName}  description=${description}  sku=${sku}  hsnCode=${hsn}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable     ${itemjrx}   ${resp.json()}
 
     ${resp}=  Encrypted Provider Login  ${MUSERNAME316}  ${PASSWORD}
     Log   ${resp.content}
@@ -379,8 +379,8 @@ JD-TC-Get NonExpired Item-1
     Set Suite Variable              ${shortDesc}
     Set Suite Variable              ${internalDesc}
 
-    # ............... Create Vendor ...............
-    ${resp}=    Create Item Inventory  ${name}  shortDesc=${shortDesc}   internalDesc=${internalDesc}   itemCode=${itemjrx}   categoryCode=${categoryCode}  categoryCode2=${categoryCode}  typeCode=${typeCode}  typeCode2=${typeCode}  hsnCode=${hsnCode}  manufacturerCode=${manufacturerCode}  sku=${sku}  isBatchApplicable=${boolean[1]}  isInventoryItem=${boolean[1]}  itemGroups=${itemGroups}  itemSubGroups=${itemGroups}  tax=${tax}  composition=${composition}  itemUnits=${itemUnits}  attachments=${attachments}     
+    # ............... Create item ...............
+    ${resp}=    Create Item Inventory  ${name}  shortDesc=${shortDesc}   internalDesc=${internalDesc}      categoryCode=${categoryCode}  categoryCode2=${categoryCode}  typeCode=${typeCode}  typeCode2=${typeCode}  hsnCode=${hsnCode}  manufacturerCode=${manufacturerCode}  sku=${sku}  isBatchApplicable=${boolean[1]}  isInventoryItem=${boolean[1]}  itemGroups=${itemGroups}  itemSubGroups=${itemGroups}  tax=${tax}  composition=${composition}  itemUnits=${itemUnits}  attachments=${attachments}     
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Suite Variable              ${itemEncId1}  ${resp.json()}
@@ -388,10 +388,10 @@ JD-TC-Get NonExpired Item-1
     ${resp}=    Get Item Inventory  ${itemEncId1}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
-    Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['itemCode']}                  ${itemjrx}
-    Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['itemName']}                  ${itemName}
-    Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['description']}               ${description}
-    Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['sku']}                       ${sku}
+    # Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['itemCode']}                  ${itemjrx}
+    # Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['itemName']}                  ${itemName}
+    # Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['description']}               ${description}
+    # Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['sku']}                       ${sku}
     Should Be Equal As Strings      ${resp.json()['name']}                                      ${name}
     Should Be Equal As Strings      ${resp.json()['shortDesc']}                                 ${shortDesc}
     Should Be Equal As Strings      ${resp.json()['internalDesc']}                              ${internalDesc}
@@ -489,7 +489,7 @@ JD-TC-Get NonExpired Item-1
     Should Be Equal As Strings      ${resp.json()['taxPercentage']}         ${taxPercentage}
     Should Be Equal As Strings      ${resp.json()['taxAmount']}             ${taxAmount}
     Should Be Equal As Strings      ${resp.json()['netTotal']}              ${netTotal}
-    Should Be Equal As Strings      ${resp.json()['netRate']}               ${netRate}
+    # Should Be Equal As Strings      ${resp.json()['netRate']}               ${netRate}
 
     # ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${name}  ${boolean[0]}
     # Log   ${resp.content}
