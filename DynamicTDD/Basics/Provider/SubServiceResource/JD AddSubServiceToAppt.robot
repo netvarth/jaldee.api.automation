@@ -2505,7 +2505,7 @@ JD-TC-AddSubServicesToAppt-UH3
     
     ${subser_list1}=  Create Dictionary  serviceId=${subser_id1}  serviceAmount=${subser_price}   
 
-    ${STATUS_DISABLED}=  format String   ${STATUS_DISABLED}   ${serviceCategory[0]} : ${subser_id1}
+    ${STATUS_DISABLED}=  format String   ${STATUS_DISABLED}   ${serviceCategory[0]} : ${subser_name}
 
     ${resp}=   Add SubService To Appointment    ${apptid1}   ${subser_list1}
     Log   ${resp.json()}  
