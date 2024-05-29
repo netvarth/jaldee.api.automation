@@ -594,13 +594,6 @@ JD-TC-OrderRequest-1
     Should Be Equal As Strings      ${resp.json()['prescriptioinUid']}          ${prescription_id}   
     Set Suite Variable              ${RDID2}      ${resp.json()['id']}
 
-    ${itemqty}=    Evaluate   ${dos} * ${duration2}
-
-    ${resp}=    Get RX Prescription Item Qnty By EncId  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}             200
-    Should Be Equal As Strings      ${resp.json()}          ${itemqty}
-
     ${resp}=    Order Request    ${store_id}  ${prescription_id}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
@@ -609,3 +602,83 @@ JD-TC-OrderRequest-1
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
     Set Suite Variable      ${sorder_uid}   ${resp.json()[0]['uid']}
+    Should Be Equal As Strings      ${resp.json()[0]['createdDate']}    ${DAY1}
+    Should Be Equal As Strings      ${resp.json()[0]['createdBy']}    ${pid}
+    Should Be Equal As Strings      ${resp.json()[0]['createdByName']}    ${pdrname}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}    ${Store_Name1}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}   ${store_id}
+    Should Be Equal As Strings      ${resp.json()[0]['prescriptionUid']}    ${prescription_id}
+    Should Be Equal As Strings      ${resp.json()[0]['prescriptionDate']}    ${DAY1}
+    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[0]}
+    Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
+    Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
+
+JD-TC-OrderRequest-2
+
+    [Documentation]    Order Request - with same details  
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Order Request    ${store_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+
+JD-TC-OrderRequest-3
+
+    [Documentation]    Order Request - where store id is invalid  
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    RX Create Prescription  ${cid}  ${doc1}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${html}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Set Suite Variable              ${prescription_id2}      ${resp.json()}
+
+    ${inv}=     Random Int  min=1  max=100
+
+    ${INVALID_X_ID}=        format String   ${INVALID_X_ID}   Store
+ 
+    ${resp}=    Order Request    ${inv}  ${prescription_id2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             422
+    Should Be Equal As Strings      ${resp.json()}                  ${INVALID_X_ID}
+
+JD-TC-OrderRequest-4
+
+    [Documentation]    Order Request - where prescription id is invalid  
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${inv}=     Create List
+
+    ${resp}=    Order Request    ${store_id}  ${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             422
+
+
+JD-TC-OrderRequest-5
+
+    [Documentation]    Order Request - without login
+
+    ${resp}=    Order Request    ${store_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             419
+    Should Be Equal As Strings      ${resp.json()}             ${SESSION_EXPIRED}
+
+JD-TC-OrderRequest-6
+
+    [Documentation]    Order Request - with same details  
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Order Request    ${store_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200

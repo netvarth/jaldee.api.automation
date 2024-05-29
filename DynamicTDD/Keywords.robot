@@ -270,7 +270,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{prescriptionSharedStatus}         shared  notShared
 @{serviceCategory}                  SubService   MainService
 @{updateType}                       ADD  SUBTRACT
-
+@{pushedStatus}                     PUSHED   ACCEPTED   DECLINED
 
 
 
