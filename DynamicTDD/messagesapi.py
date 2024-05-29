@@ -2364,3 +2364,6 @@ STATUS_DISABLED = "{} disabled"
 NOT_FOUND_WITH_ID = "{} not found with ID {}"
 INVALID_ORDER = "Invalid Order"
 CAN_NOT_ACCEPT_PAYMENT="Cannot accept payment since the due amount is zero, and status is fully paid"
+
+GREATER_THAN_THE_BILL="Cannot accept payment since amount will be greater than the bill, since you have already paid some amount"
+NOTES_CANNOT_BE_EMPTY="Notes cannot be empty"

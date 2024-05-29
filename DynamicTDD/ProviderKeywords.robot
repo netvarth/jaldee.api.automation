@@ -12116,12 +12116,6 @@ Generate Link For Invoice
     ${resp}=    POST On Session    ynw    /provider/jp/finance/pay/createLink    data=${data}    expected_status=any
     RETURN  ${resp}
 
-Get Payment Link Details
-
-    [Arguments]   ${paylink}  
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/link/${paylink}    expected_status=any
-    RETURN  ${resp}
 
 Apply Discount
 

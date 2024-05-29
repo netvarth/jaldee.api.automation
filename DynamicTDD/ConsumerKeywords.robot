@@ -3303,6 +3303,13 @@ Get Service payment modes
     ${resp}=   GET On Session  ynw  /consumer/payment/modes/service/${accountId}/${serviceId}/${paymentPurpose}    expected_status=any
     RETURN  ${resp}
 
+Get Payment Link Details
+
+    [Arguments]   ${paylink}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/link/${paylink}    expected_status=any
+    RETURN  ${resp}
+
 
 ######## New Communication URLS ############
     
