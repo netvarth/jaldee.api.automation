@@ -2331,6 +2331,7 @@ ORDER_IN_STATUS = "Order is in {} status"
 INVALID_TELEGRAM_NUM= "Invalid Telegram Number"
 EMPTY_EMAIL="Invalid email"
 HTML_FILE_REQUIRED="Html file required"
+REQUIRED_QUANTITY_NOT_AVAILABLE="Required quantity is not avalable for the item {}. Available Quantity is 0.0"
 # Vendor
 INVALID_NAME="Invalid Name"
 CATEGORY_EXIST="Category exists with given name"
