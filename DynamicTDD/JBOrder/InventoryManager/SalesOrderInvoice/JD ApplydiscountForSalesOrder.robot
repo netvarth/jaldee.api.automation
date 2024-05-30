@@ -123,6 +123,8 @@ JD-TC-Apply SalesOrder discount-1
     Set Suite Variable  ${DAY1} 
 
     ${Name}=    FakerLibrary.last name
+    Set Suite Variable  ${Name} 
+
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
@@ -240,6 +242,7 @@ JD-TC-Apply SalesOrder discount-1
 
     ${netTotal}=  Evaluate  ${price}*${quantity}
     ${netTotal}=  Convert To Number  ${netTotal}   1
+    Set Suite Variable  ${netTotal}
 
 
     ${resp}=    Get Sales Order    ${SO_Uid}   
@@ -351,9 +354,12 @@ JD-TC-Apply SalesOrder discount-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${bal_Total}=  Evaluate  ${netTotal}/${discountprice}
+    ${bal_Total}=  Evaluate  ${netTotal}*${discountprice}
     ${bal_Total}=  Convert To Number  ${bal_Total}   1
-    ${bal_Total}=  Evaluate  ${bal_Total}* 100
+    ${bal_Total}=  Evaluate  ${bal_Total}/ 100
+
+    ${discount_final_price}=  Evaluate  ${netTotal}-${bal_Total}
+    ${discount_final_price}=  Convert To Number  ${discount_final_price}   2
 
     ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
     Log   ${resp.content}
@@ -365,13 +371,13 @@ JD-TC-Apply SalesOrder discount-1
     Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${SO_Cata_Encid}
     Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
     Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
-    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       ${discountprice}
+    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       ${bal_Total}
 
     Should Be Equal As Strings    ${resp.json()['taxTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${bal_Total}
-    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      ${bal_Total}
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${discount_final_price}
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      ${discount_final_price}
     Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
@@ -409,8 +415,12 @@ JD-TC-Apply SalesOrder discount-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${bal_Total}=  Evaluate  ${netTotal}-${discountValue1}
+    ${bal_Total}=  Evaluate  ${netTotal}*${discountprice2}
     ${bal_Total}=  Convert To Number  ${bal_Total}   1
+    ${bal_Total}=  Evaluate  ${bal_Total}/ 100
+
+    ${discount_final_price}=  Evaluate  ${netTotal}-${bal_Total}
+    ${discount_final_price}=  Convert To Number  ${discount_final_price}   1
 
     ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
     Log   ${resp.content}
@@ -422,13 +432,13 @@ JD-TC-Apply SalesOrder discount-2
     Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${SO_Cata_Encid}
     Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
     Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
-    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       ${discountValue1}
+    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       ${bal_Total}
 
     Should Be Equal As Strings    ${resp.json()['taxTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${bal_Total}
-    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      ${bal_Total}
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${discount_final_price}
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      ${discount_final_price}
     Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0

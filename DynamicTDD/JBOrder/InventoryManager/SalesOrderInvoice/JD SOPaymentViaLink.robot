@@ -337,9 +337,9 @@ JD-TC-Update Sales Order Invoice Status-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
 # --------------------------------------------------------------------------------------------------------------
 # --------------------------------------------- Share SO Invoice -----------------------------------------------
@@ -364,3 +364,10 @@ JD-TC-Update Sales Order Invoice Status-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME38}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
