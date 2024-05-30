@@ -613,3 +613,30 @@ JD-TC-ConvertToOrder-1
     ${resp}=    Convert to order  ${sorder_uid}  ${orderStatus[0]}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
+
+JD-TC-ConvertToOrder-2
+
+    [Documentation]    Convert to Order - where order is already accepted
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${ORDER_IN_STATUS}=     format String   ${ORDER_IN_STATUS}   ACCEPTED
+
+    ${resp}=    Convert to order  ${sorder_uid}  ${orderStatus[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             422
+    Should Be Equal As Strings      ${resp.json()}                  ${ORDER_IN_STATUS}
+
+
+
+
+JD-TC-OrderRequest-UH
+
+    [Documentation]    Convert to Order - without login
+
+    ${resp}=    Convert to order  ${sorder_uid}  ${orderStatus[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}        419
+    Should Be Equal As Strings      ${resp.json()}             ${SESSION_EXPIRED}

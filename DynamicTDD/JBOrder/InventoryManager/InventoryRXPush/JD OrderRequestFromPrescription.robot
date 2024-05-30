@@ -190,6 +190,7 @@ JD-TC-OrderRequest-1
     Set Suite Variable  ${DAY1} 
 
     ${Store_Name1}=    FakerLibrary.first name
+    Set Suite Variable      ${Store_Name1}
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
     Set Suite Variable  ${email_id}  ${Store_Name1}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
@@ -613,7 +614,7 @@ JD-TC-OrderRequest-1
     Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
     Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
 
-JD-TC-OrderRequest-2
+JD-TC-OrderRequest-UH1
 
     [Documentation]    Order Request - with same details  
 
@@ -623,9 +624,43 @@ JD-TC-OrderRequest-2
 
     ${resp}=    Order Request    ${store_id}  ${prescription_id}
     Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             422
+    Should Be Equal As Strings      ${resp.json()}             ${ALREADY_HAVE_ACTIVE_REQUEST}
+
+
+JD-TC-OrderRequest-UH2
+
+    [Documentation]    Order Request - after order approvel  
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Convert to order  ${sorder_uid}  ${orderStatus[0]}
+    Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
 
-JD-TC-OrderRequest-3
+    ${resp}=    Get Sorder By Filter  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Set Suite Variable      ${sorder_uid}   ${resp.json()[0]['uid']}
+    Should Be Equal As Strings      ${resp.json()[0]['createdDate']}    ${DAY1}
+    Should Be Equal As Strings      ${resp.json()[0]['createdBy']}    ${pid}
+    Should Be Equal As Strings      ${resp.json()[0]['createdByName']}    ${pdrname}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}    ${Store_Name1}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}   ${store_id}
+    Should Be Equal As Strings      ${resp.json()[0]['prescriptionUid']}    ${prescription_id}
+    Should Be Equal As Strings      ${resp.json()[0]['prescriptionDate']}    ${DAY1}
+    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[1]}
+    Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
+    Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
+
+    ${resp}=    Order Request    ${store_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             422
+    Should Be Equal As Strings      ${resp.json()}                  ${ALREADY_ACCEPTED}
+
+JD-TC-OrderRequest-UH3
 
     [Documentation]    Order Request - where store id is invalid  
 
@@ -647,7 +682,7 @@ JD-TC-OrderRequest-3
     Should Be Equal As Strings      ${resp.status_code}             422
     Should Be Equal As Strings      ${resp.json()}                  ${INVALID_X_ID}
 
-JD-TC-OrderRequest-4
+JD-TC-OrderRequest-UH4
 
     [Documentation]    Order Request - where prescription id is invalid  
 
@@ -655,30 +690,23 @@ JD-TC-OrderRequest-4
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${inv}=     Create List
+    ${inv}=     Random Int  min=1000  max=9999
 
     ${resp}=    Order Request    ${store_id}  ${inv}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}             422
+    Should Be Equal As Strings      ${resp.status_code}        422
+    Should Be Equal As Strings      ${resp.json()}             ${ALREADY_HAVE_ACTIVE_REQUEST}
 
 
-JD-TC-OrderRequest-5
+JD-TC-OrderRequest-UH5
 
     [Documentation]    Order Request - without login
 
-    ${resp}=    Order Request    ${store_id}  ${prescription_id}
+    ${resp}=    Order Request    ${store_id}  ${prescription_id2}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}             419
+    Should Be Equal As Strings      ${resp.status_code}        419
     Should Be Equal As Strings      ${resp.json()}             ${SESSION_EXPIRED}
 
-JD-TC-OrderRequest-6
 
-    [Documentation]    Order Request - with same details  
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    Order Request    ${store_id}  ${prescription_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}             200
+    

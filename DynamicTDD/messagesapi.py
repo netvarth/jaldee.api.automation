@@ -2325,6 +2325,11 @@ DISABLE_INVTRY_ITEM="Disable Item : {}"
 STORE_REQUIRED="Store required."
 INVENTORY_CATALOG_REQUIRED="Inventory catalog required."
 FROM_REQUIRED="From required."
+ALREADY_HAVE_ACTIVE_REQUEST="The Store already have a active request"
+ALREADY_ACCEPTED = "The request has already been accepted by another store"
+ORDER_IN_STATUS = "Order is in {} status"
+INVALID_TELEGRAM_NUM= "Invalid Telegram Number"
+
 # Vendor
 INVALID_NAME="Invalid Name"
 CATEGORY_EXIST="Category exists with given name"
