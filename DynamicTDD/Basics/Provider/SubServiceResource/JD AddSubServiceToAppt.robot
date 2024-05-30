@@ -2673,7 +2673,7 @@ JD-TC-AddSubServicesToAppt-UH9
 
 JD-TC-AddSubServicesToAppt-UH10
 
-    [Documentation]  add subservice to an invalid appointment id.
+    [Documentation]  add subservice to an inactive user.
     
     ${resp}=  Encrypted Provider Login  ${MUSERNAME172}  ${PASSWORD}
     Log   ${resp.json()}
@@ -2815,32 +2815,6 @@ JD-TC-AddSubServicesToAppt-16
 
     [Documentation]  Create multiple sub services and add that subservice to a users appointment(online)
 
-    ${resp}=  Consumer Login  ${CUSERNAME12}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-
-JD-TC-AddSubServicesToAppt-UH7
-
-    [Documentation]  add another providers subservice to an appointment
-    
-    ${resp}=  Consumer Login  ${CUSERNAME12}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-
-JD-TC-AddSubServicesToAppt-UH9
-
-    [Documentation]  add another providers subservice to an appointment
-    
-    ${resp}=  Consumer Login  ${CUSERNAME12}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-JD-TC-AddSubServicesToAppt-UH11
-
-    [Documentation]  add subservice to an appointment with no slots available.
-    
     ${resp}=  Consumer Login  ${CUSERNAME12}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200

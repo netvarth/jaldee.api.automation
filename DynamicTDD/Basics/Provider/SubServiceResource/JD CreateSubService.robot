@@ -489,4 +489,4 @@ JD-TC-CreateSubService-UH4
     ...    ${bool[1]}   ${bool[0]}   serviceCategory=${serviceCategory[1]}
     Log   ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  422
-    
+    Should Be Equal As Strings    ${resp.json()}    ${SERVICE_PRICE_REQUIRED}
