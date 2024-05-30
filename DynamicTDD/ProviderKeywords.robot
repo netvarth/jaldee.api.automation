@@ -14722,6 +14722,12 @@ Update Item Remark
     ${resp}=  PUT On Session  ynw  /provider/inventory/remark   data=${data}  expected_status=any
     RETURN  ${resp} 
 
+Update Item Remark Status   
+    [Arguments]   ${status}   ${encid} 
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/inventory/remark/status/${status}/${encid}    expected_status=any
+    RETURN  ${resp} 
+
 Get Item Remark Filter
     [Arguments]  &{param}
     Check And Create YNW Session
