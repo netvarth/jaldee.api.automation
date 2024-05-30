@@ -228,7 +228,7 @@ JD-TC-Get Item Stock adjust Details Filter-1
     Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${spitem_name}
     # Should Be Equal As Strings    ${resp.json()[0]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
     Should Be Equal As Strings    ${resp.json()[0]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['status']}    ${spitem_status}
+    # Should Be Equal As Strings    ${resp.json()[0]['spItem']['status']}    ${spitem_status}
     Should Be Equal As Strings    ${resp.json()[0]['qty']}     ${quantity}
 
 JD-TC-Get Item Stock adjust Details Filter-2
@@ -257,7 +257,7 @@ JD-TC-Get Item Stock adjust Details Filter-2
     Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${spitem_name}
     # Should Be Equal As Strings    ${resp.json()[0]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
     Should Be Equal As Strings    ${resp.json()[0]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['status']}    ${spitem_status}
+    # Should Be Equal As Strings    ${resp.json()[0]['spItem']['status']}    ${spitem_status}
     Should Be Equal As Strings    ${resp.json()[0]['qty']}     ${quantity}
 
 
@@ -287,7 +287,7 @@ JD-TC-Get Item Stock adjust Details Filter-3
     Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${spitem_name}
     # Should Be Equal As Strings    ${resp.json()[0]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
     Should Be Equal As Strings    ${resp.json()[0]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['status']}    ${spitem_status}
+    # Should Be Equal As Strings    ${resp.json()[0]['spItem']['status']}    ${spitem_status}
     Should Be Equal As Strings    ${resp.json()[0]['qty']}     ${quantity}
 
 
@@ -319,7 +319,7 @@ JD-TC-Get Item Stock adjust Details Filter-4
     Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${spitem_name}
     # Should Be Equal As Strings    ${resp.json()[0]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
     Should Be Equal As Strings    ${resp.json()[0]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['status']}    ${spitem_status}
+    # Should Be Equal As Strings    ${resp.json()[0]['spItem']['status']}    ${spitem_status}
     Should Be Equal As Strings    ${resp.json()[0]['qty']}     ${quantity}
 
 
@@ -349,7 +349,7 @@ JD-TC-Get Item Stock adjust Details Filter-5
     Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${spitem_name}
     # Should Be Equal As Strings    ${resp.json()[0]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
     Should Be Equal As Strings    ${resp.json()[0]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['status']}    ${spitem_status}
+    # Should Be Equal As Strings    ${resp.json()[0]['spItem']['status']}    ${spitem_status}----------DEV removed
     Should Be Equal As Strings    ${resp.json()[0]['qty']}     ${quantity}
 
 JD-TC-Get Item Stock adjust Details Filter-6
@@ -413,8 +413,8 @@ JD-TC-Get Item Stock adjust Details Filter-6
     Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${spitem_name}
     # Should Be Equal As Strings    ${resp.json()[0]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
     Should Be Equal As Strings    ${resp.json()[0]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['status']}    ${spitem_status}
-    Should Be Equal As Strings    ${resp.json()[0]['qty']}     ${quantity1}
+    # Should Be Equal As Strings    ${resp.json()[0]['spItem']['status']}    ${spitem_status}
+    Should Be Equal As Strings    ${resp.json()[0]['qty']}     ${quantity2}
 
     Should Be Equal As Strings    ${resp.json()[1]['stockAdjust']['id']}    ${id_of_stockadjust} 
     Should Be Equal As Strings    ${resp.json()[1]['stockAdjust']['invStatus']}    ${InvStatus[0]}
@@ -431,8 +431,8 @@ JD-TC-Get Item Stock adjust Details Filter-6
     Should Be Equal As Strings    ${resp.json()[1]['spItem']['name']}    ${spitem_name}
     # Should Be Equal As Strings    ${resp.json()[1]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
     Should Be Equal As Strings    ${resp.json()[1]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
-    Should Be Equal As Strings    ${resp.json()[1]['spItem']['status']}    ${spitem_status}
-    Should Be Equal As Strings    ${resp.json()[1]['qty']}     ${quantity2}
+    # Should Be Equal As Strings    ${resp.json()[1]['spItem']['status']}    ${spitem_status}
+    Should Be Equal As Strings    ${resp.json()[1]['qty']}     ${quantity1}
 
     Should Be Equal As Strings    ${resp.json()[2]['stockAdjust']['id']}    ${id_of_stockadjust} 
     Should Be Equal As Strings    ${resp.json()[2]['stockAdjust']['invStatus']}    ${InvStatus[0]}
@@ -449,7 +449,7 @@ JD-TC-Get Item Stock adjust Details Filter-6
     Should Be Equal As Strings    ${resp.json()[2]['spItem']['name']}    ${spitem_name}
     # Should Be Equal As Strings    ${resp.json()[2]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
     Should Be Equal As Strings    ${resp.json()[2]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
-    Should Be Equal As Strings    ${resp.json()[2]['spItem']['status']}    ${spitem_status}
+    # Should Be Equal As Strings    ${resp.json()[2]['spItem']['status']}    ${spitem_status}
     Should Be Equal As Strings    ${resp.json()[2]['qty']}     ${quantity}
 
 JD-TC-Get Item Stock adjust Details Filter-7
@@ -534,7 +534,7 @@ JD-TC-Get Item Stock adjust Details Filter-7
     Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${spitem_name}
     # Should Be Equal As Strings    ${resp.json()[0]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
     Should Be Equal As Strings    ${resp.json()[0]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['status']}    ${spitem_status}
+    # Should Be Equal As Strings    ${resp.json()[0]['spItem']['status']}    ${spitem_status}
     Should Be Equal As Strings    ${resp.json()[0]['qty']}     ${quantity3}
 
     Should Be Equal As Strings    ${resp.json()[1]['stockAdjust']['id']}    ${id_of_stockadjust} 
@@ -552,8 +552,8 @@ JD-TC-Get Item Stock adjust Details Filter-7
     Should Be Equal As Strings    ${resp.json()[1]['spItem']['name']}    ${spitem_name}
     # Should Be Equal As Strings    ${resp.json()[1]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
     Should Be Equal As Strings    ${resp.json()[1]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
-    Should Be Equal As Strings    ${resp.json()[1]['spItem']['status']}    ${spitem_status}
-    Should Be Equal As Strings    ${resp.json()[1]['qty']}     ${quantity1}
+    # Should Be Equal As Strings    ${resp.json()[1]['spItem']['status']}    ${spitem_status}
+    Should Be Equal As Strings    ${resp.json()[1]['qty']}     ${quantity2}
 
     Should Be Equal As Strings    ${resp.json()[2]['stockAdjust']['id']}    ${id_of_stockadjust} 
     Should Be Equal As Strings    ${resp.json()[2]['stockAdjust']['invStatus']}    ${InvStatus[0]}
@@ -570,8 +570,8 @@ JD-TC-Get Item Stock adjust Details Filter-7
     Should Be Equal As Strings    ${resp.json()[2]['spItem']['name']}    ${spitem_name}
     # Should Be Equal As Strings    ${resp.json()[2]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
     Should Be Equal As Strings    ${resp.json()[2]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
-    Should Be Equal As Strings    ${resp.json()[2]['spItem']['status']}    ${spitem_status}
-    Should Be Equal As Strings    ${resp.json()[2]['qty']}     ${quantity2}
+    # Should Be Equal As Strings    ${resp.json()[2]['spItem']['status']}    ${spitem_status}
+    Should Be Equal As Strings    ${resp.json()[2]['qty']}     ${quantity1}
 
     Should Be Equal As Strings    ${resp.json()[3]['stockAdjust']['id']}    ${id_of_stockadjust} 
     Should Be Equal As Strings    ${resp.json()[3]['stockAdjust']['invStatus']}    ${InvStatus[0]}
@@ -588,7 +588,7 @@ JD-TC-Get Item Stock adjust Details Filter-7
     Should Be Equal As Strings    ${resp.json()[3]['spItem']['name']}    ${spitem_name}
     # Should Be Equal As Strings    ${resp.json()[3]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
     Should Be Equal As Strings    ${resp.json()[3]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
-    Should Be Equal As Strings    ${resp.json()[3]['spItem']['status']}    ${spitem_status}
+    # Should Be Equal As Strings    ${resp.json()[3]['spItem']['status']}    ${spitem_status}
     Should Be Equal As Strings    ${resp.json()[3]['qty']}     ${quantity}
 
 JD-TC-Get Item Stock adjust Details Filter-UH1

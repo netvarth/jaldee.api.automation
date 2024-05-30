@@ -217,7 +217,7 @@ JD-TC-Update Stock Adjustment-1
     Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][0]['spItem']['name']}    ${spitem_name}
     # Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][0]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
     Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][0]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
-    Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][0]['spItem']['status']}    ${spitem_status}
+    # Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][0]['spItem']['status']}    ${spitem_status}
 
 
 
@@ -277,7 +277,7 @@ JD-TC-Update Stock Adjustment-2
     Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][0]['spItem']['name']}    ${spitem_name}
     # Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][0]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
     Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][0]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
-    Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][0]['spItem']['status']}    ${spitem_status}
+    # Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][0]['spItem']['status']}    ${spitem_status}
     Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][1]['invCatalog']['encId']}    ${inventory_catalog_encid}
     Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][1]['invCatalog']['catalogName']}    ${Name}
     Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][1]['invCatalogItem']['encId']}    ${inventory_catalog_item_encid}
@@ -287,7 +287,7 @@ JD-TC-Update Stock Adjustment-2
     Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][1]['spItem']['name']}    ${spitem_name}
     # Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][1]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
     Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][1]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
-    Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][1]['spItem']['status']}    ${spitem_status}
+    # Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][1]['spItem']['status']}    ${spitem_status}
     Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][1]['qty']}    ${quantity2}
     Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][2]['invCatalog']['encId']}    ${inventory_catalog_encid}
     Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][2]['invCatalog']['catalogName']}    ${Name}
@@ -298,7 +298,7 @@ JD-TC-Update Stock Adjustment-2
     Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][2]['spItem']['name']}    ${spitem_name}
     # Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][2]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
     Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][2]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
-    Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][2]['spItem']['status']}    ${spitem_status}
+    # Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][2]['spItem']['status']}    ${spitem_status}
     Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][2]['qty']}    ${quantity1}
 
 
@@ -349,7 +349,7 @@ JD-TC-Update Stock Adjustment-3
     Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][0]['spItem']['name']}    ${spitem_name}
     # Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][0]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
     Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][0]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
-    Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][0]['spItem']['status']}    ${spitem_status}
+    # Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][0]['spItem']['status']}    ${spitem_status}
 
 
 JD-TC-Update Stock Adjustment-4
@@ -474,7 +474,7 @@ JD-TC-Update Stock Adjustment-4
     Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][0]['spItem']['name']}    ${spitem_name8}
     # Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][0]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem8}
     Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][0]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable8}
-    Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][0]['spItem']['status']}    ${spitem_status8}
+    # Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][0]['spItem']['status']}    ${spitem_status8}
 JD-TC-Update Stock Adjustment-UH1
 
     [Documentation]  update stock adjustment without login

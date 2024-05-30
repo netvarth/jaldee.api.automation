@@ -69,7 +69,9 @@ JD-TC-GetItemRemarksFilter-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Item Remarks   ${remarks}  ${transactionTypeEnum[0]}   
+    ${remark1}=    FakerLibrary.name
+    Set Suite Variable  ${remark1}
+    ${resp}=  Create Item Remarks   ${remark1}  ${transactionTypeEnum[0]}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set suite Variable  ${remarks_encid2}  ${resp.json()}
@@ -77,7 +79,7 @@ JD-TC-GetItemRemarksFilter-2
     ${resp}=  Get Item Remark Filter   encId-eq=${remarks_encid2}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()[0]['remark']}    ${remarks}
+    Should Be Equal As Strings    ${resp.json()[0]['remark']}    ${remark1}
     Should Be Equal As Strings    ${resp.json()[0]['transactionTypeEnum']}    ${transactionTypeEnum[0]}
     Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${remarks_encid2}
 
@@ -91,7 +93,10 @@ JD-TC-GetItemRemarksFilter-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Item Remarks   ${remarks}  ${transactionTypeEnum[1]}  
+    ${remark2}=    FakerLibrary.name
+    Set Suite Variable  ${remark2}
+
+    ${resp}=  Create Item Remarks   ${remark2}  ${transactionTypeEnum[1]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set suite Variable  ${remarks_encid3}  ${resp.json()}
@@ -99,7 +104,7 @@ JD-TC-GetItemRemarksFilter-3
     ${resp}=  Get Item Remark Filter   transactionTypeEnum-eq=${transactionTypeEnum[1]}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()[0]['remark']}    ${remarks}
+    Should Be Equal As Strings    ${resp.json()[0]['remark']}    ${remark2}
     Should Be Equal As Strings    ${resp.json()[0]['transactionTypeEnum']}    ${transactionTypeEnum[1]}
     Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${remarks_encid3}
 
@@ -114,7 +119,9 @@ JD-TC-GetItemRemarksFilter-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Item Remarks   ${remarks}  ${transactionTypeEnum[3]}   
+    ${remark3}=    FakerLibrary.name
+    Set Suite Variable  ${remark3}
+    ${resp}=  Create Item Remarks   ${remark3}  ${transactionTypeEnum[3]}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${remarks_encid4}  ${resp.json()}
@@ -127,7 +134,7 @@ JD-TC-GetItemRemarksFilter-4
     ${resp}=  Get Item Remark Filter   id-eq=${id}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()[0]['remark']}    ${remarks}
+    Should Be Equal As Strings    ${resp.json()[0]['remark']}    ${remark3}
     Should Be Equal As Strings    ${resp.json()[0]['transactionTypeEnum']}    ${transactionTypeEnum[3]}
     Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${remarks_encid4}
 
@@ -143,23 +150,25 @@ JD-TC-GetItemRemarksFilter-5
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=  Update Item Remark    ${remarks_encid1}   ${remarks}  ${transactionTypeEnum[0]}   
+    ${remark4}=    FakerLibrary.name
+    Set Suite Variable  ${remark4}
+    ${resp}=  Update Item Remark    ${remarks_encid1}   ${remark4}  ${transactionTypeEnum[0]}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Item Remark Filter   account-eq=${accountId}     
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()[0]['remark']}    ${remarks}
+    Should Be Equal As Strings    ${resp.json()[0]['remark']}    ${remark3}
     Should Be Equal As Strings    ${resp.json()[0]['transactionTypeEnum']}    ${transactionTypeEnum[3]}
     Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${remarks_encid4}
-    Should Be Equal As Strings    ${resp.json()[1]['remark']}    ${remarks}
+    Should Be Equal As Strings    ${resp.json()[1]['remark']}    ${remark2}
     Should Be Equal As Strings    ${resp.json()[1]['transactionTypeEnum']}    ${transactionTypeEnum[1]}
     Should Be Equal As Strings    ${resp.json()[1]['encId']}    ${remarks_encid3}
-    Should Be Equal As Strings    ${resp.json()[2]['remark']}    ${remarks}
+    Should Be Equal As Strings    ${resp.json()[2]['remark']}    ${remark1}
     Should Be Equal As Strings    ${resp.json()[2]['transactionTypeEnum']}    ${transactionTypeEnum[0]}
     Should Be Equal As Strings    ${resp.json()[2]['encId']}    ${remarks_encid2}
-    Should Be Equal As Strings    ${resp.json()[3]['remark']}    ${remarks}
+    Should Be Equal As Strings    ${resp.json()[3]['remark']}    ${remark4}
     Should Be Equal As Strings    ${resp.json()[3]['transactionTypeEnum']}    ${transactionTypeEnum[0]}
     Should Be Equal As Strings    ${resp.json()[3]['encId']}    ${remarks_encid1}
 
@@ -175,10 +184,10 @@ JD-TC-GetItemRemarksFilter-6
     ${resp}=  Get Item Remark Filter   transactionTypeEnum-eq=${transactionTypeEnum[0]}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()[0]['remark']}    ${remarks}
+    Should Be Equal As Strings    ${resp.json()[0]['remark']}    ${remark1}
     Should Be Equal As Strings    ${resp.json()[0]['transactionTypeEnum']}    ${transactionTypeEnum[0]}
     Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${remarks_encid2}
-    Should Be Equal As Strings    ${resp.json()[1]['remark']}    ${remarks}
+    Should Be Equal As Strings    ${resp.json()[1]['remark']}    ${remark4}
     Should Be Equal As Strings    ${resp.json()[1]['transactionTypeEnum']}    ${transactionTypeEnum[0]}
     Should Be Equal As Strings    ${resp.json()[1]['encId']}    ${remarks_encid1}
 

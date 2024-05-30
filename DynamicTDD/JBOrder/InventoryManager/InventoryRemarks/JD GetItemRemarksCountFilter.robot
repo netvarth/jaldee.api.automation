@@ -97,7 +97,10 @@ JD-TC-GetItemRemarksCountFilter-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Item Remarks   ${remarks}  ${transactionTypeEnum[1]}  
+    ${remark3}=    FakerLibrary.name
+    Set Suite Variable  ${remark3}
+
+    ${resp}=  Create Item Remarks   ${remark3}  ${transactionTypeEnum[1]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set suite Variable  ${remarks_encid3}  ${resp.json()}
@@ -154,7 +157,9 @@ JD-TC-GetItemRemarksCountFilter-5
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=  Update Item Remark    ${remarks_encid1}   ${remarks}  ${transactionTypeEnum[0]}   
+    ${remark4}=    FakerLibrary.name
+    Set Suite Variable  ${remark4}
+    ${resp}=  Update Item Remark    ${remarks_encid1}   ${remark4}  ${transactionTypeEnum[0]}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -194,7 +194,7 @@ JD-TC-CreateItemRemarks-12
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-CreateItemRemarks-13
+JD-TC-CreateItemRemarks-UH4
 
     [Documentation]  create item remarks thats already created.
 
@@ -205,7 +205,8 @@ JD-TC-CreateItemRemarks-13
 
     ${resp}=  Create Item Remarks   ${remarks}  ${transactionTypeEnum[6]}   
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings   ${resp.json()}   ${CUSTOM_VIEW_NAME_EXIT}
 
 
 JD-TC-CreateItemRemarks-UH1
