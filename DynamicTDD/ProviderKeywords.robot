@@ -15374,6 +15374,16 @@ Get Sorder Count By Filter
     ${resp}=  GET On Session  ynw  /provider/sorder/request/count   params=${param}  expected_status=any
     RETURN  ${resp}
 
+Update SOrder Status
+
+    [Arguments]  ${sorq_uid}  ${pushedStatus}
+
+    ${data}=  Create Dictionary  pushedStatus=${pushedStatus}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/sorder/request/status/${sorq_uid}   data=${data}  expected_status=any
+    RETURN  ${resp}
+
 #.............subservice..................
 
 
