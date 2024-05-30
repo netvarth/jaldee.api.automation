@@ -123,7 +123,7 @@ JD-TC-Share Sales Order Invoice-1
 
     ${Name}=    FakerLibrary.last name
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
-    Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
+    Set Suite Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
     ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
@@ -356,7 +356,7 @@ JD-TC-Share Sales Order Invoice-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Share Sales Order Invoice-2
+JD-TC-Share Sales Order Invoice-UH1
 
     [Documentation]   Share Sales Order invoice With Empty email Id.
 
@@ -371,14 +371,10 @@ JD-TC-Share Sales Order Invoice-2
 
     ${resp}=    Share SO Invoice    ${SO_Inv}    ${EMPTY}   ${bool[0]}    ${bool[0]}  ${bool[0]}   ${bool[0]}    ${html}   phone=${phone}    whatsappPhNo=${phone}      telegramPhNo=${phone}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.status_code}     422
+    Should Be Equal As Strings    ${resp.json()}   ${INVALID_SHARING_INFO}
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${EMPTY_EMAIL}
-
-JD-TC-Share Sales Order Invoice-3
+JD-TC-Share Sales Order Invoice-UH2
 
     [Documentation]   Share Sales Order invoice With  email Notification is true but email is EMPTY.
 
@@ -393,14 +389,10 @@ JD-TC-Share Sales Order Invoice-3
 
     ${resp}=    Share SO Invoice    ${SO_Inv}    ${EMPTY}   ${bool[1]}    ${bool[0]}  ${bool[0]}   ${bool[0]}    ${html}   phone=${phone}    whatsappPhNo=${phone}      telegramPhNo=${phone}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}      422
     Should Be Equal As Strings    ${resp.json()}   ${EMPTY_EMAIL}
 
-JD-TC-Share Sales Order Invoice-4
+JD-TC-Share Sales Order Invoice-UH3
 
     [Documentation]   Share Sales Order invoice With  SMS Notification is true but phone is EMPTY.
 
@@ -411,13 +403,96 @@ JD-TC-Share Sales Order Invoice-4
     ${PO_Number}    Generate random string    5    123456789
     ${PO_Number}=  Evaluate  ${PUSERNAME}+${PO_Number}
 
+    ${phone}=   Create Dictionary       number=${EMPTY}      countryCode=${countryCodes[0]}  
+
+    ${resp}=    Share SO Invoice    ${SO_Inv}    ${email_id}   ${bool[0]}    ${bool[1]}  ${bool[0]}   ${bool[0]}    ${html}   phone=${phone}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}     422
+    Should Be Equal As Strings    ${resp.json()}   ${INVAID_USER_PHONE_NUMBER}
+
+JD-TC-Share Sales Order Invoice-UH4
+
+    [Documentation]   Share Sales Order invoice With  SMS Notification is false but phonenumber is active.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${PO_Number}    Generate random string    5    123456789
+    ${PO_Number}=  Evaluate  ${PUSERNAME}+${PO_Number}
+
     ${phone}=   Create Dictionary       number=${PO_Number}      countryCode=${countryCodes[0]}  
 
-    ${resp}=    Share SO Invoice    ${SO_Inv}    ${email_id}   ${bool[0]}    ${bool[1]}  ${bool[0]}   ${bool[0]}    ${html}   phone=${EMPTY}    whatsappPhNo=${phone}      telegramPhNo=${phone}
+    ${resp}=    Share SO Invoice    ${SO_Inv}    ${email_id}   ${bool[0]}    ${bool[0]}  ${bool[0]}   ${bool[0]}    ${html}   phone=${phone}    whatsappPhNo=${phone}      telegramPhNo=${phone}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}   ${INVALID_SHARING_INFO}
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+JD-TC-Share Sales Order Invoice-UH5
+
+    [Documentation]   Share Sales Order invoice With  whatsappPhNo Notification is true but whatsappPhNo is EMPTY.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${PO_Number}    Generate random string    5    123456789
+    ${PO_Number}=  Evaluate  ${PUSERNAME}+${PO_Number}
+
+    ${phone}=   Create Dictionary       number=${PO_Number}      countryCode=${countryCodes[0]}  
+
+    ${resp}=    Share SO Invoice    ${SO_Inv}    ${email_id}   ${bool[0]}    ${bool[0]}  ${bool[1]}   ${bool[0]}    ${html}   phone=${phone}        telegramPhNo=${phone}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}   ${INVAID_WHATSAPP_NUMBER}
+
+JD-TC-Share Sales Order Invoice-UH6
+
+    [Documentation]   Share Sales Order invoice With  telegramPhNo Notification is true but telegramPhNo is EMPTY.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${PO_Number}    Generate random string    5    123456789
+    ${PO_Number}=  Evaluate  ${PUSERNAME}+${PO_Number}
+
+    ${phone}=   Create Dictionary       number=${PO_Number}      countryCode=${countryCodes[0]}  
+
+    ${resp}=    Share SO Invoice    ${SO_Inv}    ${email_id}   ${bool[0]}    ${bool[0]}  ${bool[0]}   ${bool[1]}    ${html}   phone=${phone}    whatsappPhNo=${phone}      
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${EMPTY_EMAIL}
+    Should Be Equal As Strings    ${resp.json()}   ${INVALID_TELEGRAM_NUM}
+
+JD-TC-Share Sales Order Invoice-UH7
+
+    [Documentation]   Share Sales Order invoice Without login.
+
+    ${PO_Number}    Generate random string    5    123456789
+    ${PO_Number}=  Evaluate  ${PUSERNAME}+${PO_Number}
+
+    ${phone}=   Create Dictionary       number=${PO_Number}      countryCode=${countryCodes[0]}  
+
+    ${resp}=    Share SO Invoice    ${SO_Inv}    ${email_id}   ${bool[1]}    ${bool[0]}  ${bool[0]}   ${bool[1]}    ${html}   phone=${phone}    whatsappPhNo=${phone}      telegramPhNo=${phone}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}     419
+    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
+
+JD-TC-Share Sales Order Invoice-UH8
+
+    [Documentation]   Share Sales Order invoice With EMPTY HTML.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${PO_Number}    Generate random string    5    123456789
+    ${PO_Number}=  Evaluate  ${PUSERNAME}+${PO_Number}
+
+    ${phone}=   Create Dictionary       number=${PO_Number}      countryCode=${countryCodes[0]}  
+
+    ${resp}=    Share SO Invoice    ${SO_Inv}    ${email_id}   ${bool[0]}    ${bool[1]}  ${bool[0]}   ${bool[0]}    ${EMPTY}   phone=${phone}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}   ${HTML_FILE_REQUIRED}
+

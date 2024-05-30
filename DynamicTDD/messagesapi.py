@@ -2329,7 +2329,8 @@ ALREADY_HAVE_ACTIVE_REQUEST="The Store already have a active request"
 ALREADY_ACCEPTED = "The request has already been accepted by another store"
 ORDER_IN_STATUS = "Order is in {} status"
 INVALID_TELEGRAM_NUM= "Invalid Telegram Number"
-
+EMPTY_EMAIL="Invalid email"
+HTML_FILE_REQUIRED="Html file required"
 # Vendor
 INVALID_NAME="Invalid Name"
 CATEGORY_EXIST="Category exists with given name"
