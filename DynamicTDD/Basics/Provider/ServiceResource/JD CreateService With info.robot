@@ -73,14 +73,14 @@ ${ZOOM_url}    https://zoom.us/j/{}?pwd=THVLcTBZa2lESFZQbU9DQTQrWUxWZz09
 #                 Log   ${resp.json()}
 #                 Should Be Equal As Strings    ${resp.status_code}    200
 #                 ${resp}=  View Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[1]}
-        ${resp}=  Toggle Department Disable
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
+#     Log  ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}    200
+#     IF  ${resp.json()['filterByDept']}==${bool[1]}
+#         ${resp}=  Toggle Department Disable
+#         Log  ${resp.content}
+#         Should Be Equal As Strings  ${resp.status_code}  200
 
-    END
+#     END
 #         END
 #         RETURN  ${multiloc_providers}
 
