@@ -20,7 +20,7 @@ Variables         /ebs/TDD/varfiles/consumermail.py
 
 JD-TC-Get Waitist Rating-1
  
-    [Documentation]   get history waitlist rating of a provider.(online checkin) with filter- account
+    [Documentation]   Get Provider Waitlist History rating of a provider.(online checkin) with filter- account
     
     ${resp}=  Consumer Login  ${CUSERNAME0}  ${PASSWORD}
     Log   ${resp.json()}
@@ -235,7 +235,7 @@ JD-TC-Get Waitist Rating-2
 
 JD-TC-Get Waitist Rating-3
  
-    [Documentation]   get history waitlist rating of a provider.(online checkin) with filter- date
+    [Documentation]   Get Provider Waitlist History rating of a provider.(online checkin) with filter- date
 
     ${resp}=   Consumer Login  ${CUSERNAME4}  ${PASSWORD}
     Log   ${resp.json()}
@@ -262,7 +262,7 @@ JD-TC-Get Waitist Rating-3
 
 JD-TC-Get Waitist Rating-4
 
-    [Documentation]  get history waitlist rating of a provider.(online checkin) with filter- date and account  
+    [Documentation]  Get Provider Waitlist History rating of a provider.(online checkin) with filter- date and account  
     
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME206}  ${PASSWORD}
@@ -360,8 +360,8 @@ JD-TC-Get Waitist Rating-
 
 JD-TC-Get Waitist Rating-
  
-    [Documentation]   get history waitlist rating of a provider.(walkin checkin) with filter- account
+    [Documentation]   Get Provider Waitlist History rating of a provider.(walkin checkin) with filter- account
 
 JD-TC-Get Waitist Rating-
  
-    [Documentation]   get history waitlist rating of a provider.(walkin checkin) with filter- account and date
+    [Documentation]   Get Provider Waitlist History rating of a provider.(walkin checkin) with filter- account and date

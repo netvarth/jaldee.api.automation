@@ -2014,7 +2014,7 @@ Get Waitlist Count Future
     ${resp}=    GET On Session    ynw  /provider/waitlist/future/count  params=${kwargs}  expected_status=any
     RETURN  ${resp}
     
-Get history Waitlist
+Get Provider Waitlist History
     [Arguments]    &{kwargs}
     ${pro_headers}=  Create Dictionary  &{headers}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
@@ -2025,7 +2025,7 @@ Get history Waitlist
     ${resp}=    GET On Session    ynw  /provider/waitlist/history  params=${kwargs}  expected_status=any
     RETURN  ${resp}
 
-Get history Waitlist Count
+Get Provider Waitlist History Count
     [Arguments]    &{kwargs}
     ${pro_headers}=  Create Dictionary  &{headers}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}

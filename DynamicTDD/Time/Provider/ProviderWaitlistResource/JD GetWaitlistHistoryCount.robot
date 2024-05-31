@@ -142,7 +142,7 @@ JD-TC-GetWaitlistHistoryCount-1
       ${T_DAY}=  db.get_date_by_timezone  ${tz}
       ${resp}=  Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${resp}=  Get history Waitlist
+      ${resp}=  Get Provider Waitlist History
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable    ${cname1}    ${resp.json()[0]['consumer']['firstName']}

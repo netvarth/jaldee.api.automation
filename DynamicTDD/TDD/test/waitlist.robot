@@ -206,7 +206,7 @@ JD-TC-AddToWL-1
         Should Be Equal As Strings  ${resp.status_code}  200
         ${future_wl_len}=  Get Length   ${resp.json()}
 
-        ${resp}=  Get history Waitlist  waitlistStatus-neq=${wl_status[5]},${wl_status[4]}
+        ${resp}=  Get Provider Waitlist History  waitlistStatus-neq=${wl_status[5]},${wl_status[4]}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${past_wl_len}=  Get Length   ${resp.json()}
@@ -218,13 +218,13 @@ JD-TC-AddToWL-1
             
         END
 
-        ${resp}=  Get history Waitlist  waitlistStatus-neq=${wl_status[5]},${wl_status[4]}
+        ${resp}=  Get Provider Waitlist History  waitlistStatus-neq=${wl_status[5]},${wl_status[4]}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${past_wl_len}=  Get Length   ${resp.json()}
         Run Keyword And Continue On Failure  Should Be Equal As Strings  ${past_wl_len}  ${zero}
 
-        ${resp}=  Get history Waitlist  
+        ${resp}=  Get Provider Waitlist History  
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${past_wl_len}=  Get Length   ${resp.json()}

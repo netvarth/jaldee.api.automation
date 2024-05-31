@@ -194,8 +194,8 @@ JD-TC-AddToWL-1
             
         END
 
-        # ${resp}=  ProviderKeywords.Get history Waitlist
-        ${resp}=  Get history Waitlist
+        # ${resp}=  ProviderKeywords.Get Provider Waitlist History
+        ${resp}=  Get Provider Waitlist History
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
 

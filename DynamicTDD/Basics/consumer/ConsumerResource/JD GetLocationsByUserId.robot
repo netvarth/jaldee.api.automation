@@ -37,6 +37,10 @@ JD-TC-Get locations by userid-1
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -71,6 +75,20 @@ JD-TC-Get locations by userid-1
     ELSE
         Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
     END
+
+    ${addon_resp}=   Get Addons Metadata
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Test Variable  ${aId}  ${resp.json()[0]['addons'][0]['addonId']}
+    Set Suite Variable    ${addon_id}      ${resp.json()[6]['addons'][0]['addonId']}
+	Set Suite Variable    ${addon_name}      ${resp.json()[6]['addons'][0]['addonName']}
+
+    ${resp}=  Add addon  ${addon_id}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get User
     Log  ${resp.content}

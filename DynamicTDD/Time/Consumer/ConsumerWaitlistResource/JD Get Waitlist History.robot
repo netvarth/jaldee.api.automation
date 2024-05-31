@@ -183,7 +183,7 @@ JD-TC-Get Waitlist history-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Get history Waitlist  queue-eq=${qId1}
+    ${resp}=  Get Waitlist History Consumer  queue-eq=${qId1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['queue']['id']}  ${qId1}   
@@ -191,7 +191,7 @@ JD-TC-Get Waitlist history-2
     ${count}=  Get Length  ${resp.json()} 
     Should Be Equal As Integers  ${count}  1
 
-    ${resp}=  Get history Waitlist  queue-eq=${qId2}
+    ${resp}=  Get Waitlist History Consumer  queue-eq=${qId2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['queue']['id']}  ${qId2}  
@@ -209,7 +209,7 @@ JD-TC-Get Waitlist history-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get history Waitlist  location-eq=${lid1} 
+    ${resp}=  Get Waitlist History Consumer  location-eq=${lid1} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()[0]['queue']['location']['id']}  ${lid1} 
@@ -219,7 +219,7 @@ JD-TC-Get Waitlist history-3
     ${count}=  Get Length  ${resp.json()} 
     Should Be Equal As Integers  ${count}  3
 
-    ${resp}=  Get history Waitlist  location-eq=${lid} 
+    ${resp}=  Get Waitlist History Consumer  location-eq=${lid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()[0]['queue']['location']['id']}  ${lid} 
@@ -236,7 +236,7 @@ JD-TC-Get Waitlist history-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Get history Waitlist  service-eq=${sId_1}
+    ${resp}=  Get Waitlist History Consumer  service-eq=${sId_1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()[0]['service']['id']}  ${sId_1}   
@@ -254,7 +254,7 @@ JD-TC-Get Waitlist history-5
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable   ${cname1}    ${resp.json()['firstName']}  
 
-    ${resp}=  Get history Waitlist  firstName-eq=${cname1}
+    ${resp}=  Get Waitlist History Consumer  firstName-eq=${cname1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['consumer']['firstName']}  ${cname1}  
@@ -273,7 +273,7 @@ JD-TC-Get Waitlist history-6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
 
-    ${resp}=  Get history Waitlist  date-eq=${DAY1}
+    ${resp}=  Get Waitlist History Consumer  date-eq=${DAY1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()[0]['date']}  ${DAY1}
@@ -281,7 +281,7 @@ JD-TC-Get Waitlist history-6
     ${count}=  Get Length  ${resp.json()} 
     Should Be Equal As Integers  ${count}  1
 
-    ${resp}=  Get history Waitlist  date-eq=${DAY}
+    ${resp}=  Get Waitlist History Consumer  date-eq=${DAY}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()[0]['date']}  ${DAY}
@@ -297,7 +297,7 @@ JD-TC-Get Waitlist history-7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
 
-    ${resp}=  Get history Waitlist  waitlistStatus-eq=${wl_status[0]}   
+    ${resp}=  Get Waitlist History Consumer  waitlistStatus-eq=${wl_status[0]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()[0]['waitlistStatus']}  ${wl_status[0]}
@@ -314,7 +314,7 @@ JD-TC-Get Waitlist history-8
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Get history Waitlist  waitlistStatus-eq=${wl_status[1]} 
+    ${resp}=  Get Waitlist History Consumer  waitlistStatus-eq=${wl_status[1]} 
     Log  ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()[0]['waitlistStatus']}  ${wl_status[1]}
@@ -331,7 +331,7 @@ JD-TC-Get Waitlist history-9
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Get history Waitlist  location-eq=${lid}  queue-eq=${qId1}   
+    ${resp}=  Get Waitlist History Consumer  location-eq=${lid}  queue-eq=${qId1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()[0]['queue']['location']['id']}  ${lid}
@@ -348,7 +348,7 @@ JD-TC-Get Waitlist history-10
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Get history Waitlist  queue-eq=${qId2}  service-eq=${sId_1}   
+    ${resp}=  Get Waitlist History Consumer  queue-eq=${qId2}  service-eq=${sId_1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
@@ -368,7 +368,7 @@ JD-TC-Get Waitlist history-11
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Get history Waitlist  location-eq=${lid1}  service-eq=${sId_1}   
+    ${resp}=  Get Waitlist History Consumer  location-eq=${lid1}  service-eq=${sId_1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -389,7 +389,7 @@ JD-TC-Get Waitlist history-12
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Get history Waitlist    
+    ${resp}=  Get Waitlist History Consumer    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()[0]['consumer']['firstName']}  ${cname1}  
@@ -405,7 +405,7 @@ JD-TC-Get Waitlist history-UH1
 
     [Documentation]   Get Waitlist history  without login
     
-    ${resp}=  Get history Waitlist      
+    ${resp}=  Get Waitlist History Consumer      
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  ${resp.json()}  ${SESSION_EXPIRED}
