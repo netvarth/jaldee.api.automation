@@ -336,7 +336,7 @@ JD-TC-Create Catalog Item Batch-UH8
     ${resp}=  Create Catalog Item Batch-invMgmt False      ${SO_itemEncId1}     ${Name}    0        
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${PRICE_REQUIRED}
+    Should Be Equal As Strings    ${resp.json()}    ${INVENTORY_BATCH_ITEM_ID_REQUIRED}
 
 JD-TC-Create Catalog Item Batch-UH9
 
@@ -782,6 +782,7 @@ JD-TC-Create Catalog Item Batch-1
     ${sgstamount}=      Evaluate    ${taxableAmount} * ${sgst} / 100
     ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
     ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
+    ${netRate}=  roundoff  ${netRate}  
     Set Suite Variable              ${totalQuantity}
     Set Suite Variable              ${netTotal}
     Set Suite Variable              ${discountAmount}
@@ -979,6 +980,7 @@ JD-TC-Create Catalog Item Batch-2
     ${sgstamount}=      Evaluate    ${taxableAmount} * ${sgst} / 100
     ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
     ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
+    ${netRate}=  roundoff  ${netRate}  
 
 
     ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}
