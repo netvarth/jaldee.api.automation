@@ -453,9 +453,13 @@ JD-TC-GetItemDetails-1
     ${discountAmount}=  Evaluate    ${netTotal} * ${discountPercentage} / 100
     ${taxableAmount}=   Evaluate    ${netTotal} - ${discountAmount}
     ${cgstamount}=      Evaluate    ${taxableAmount} * ${cgst} / 100
+    ${cgstamount}=               Convert To Number  ${cgstamount}  2
     ${sgstamount}=      Evaluate    ${taxableAmount} * ${sgst} / 100
+    ${sgstamount}=               Convert To Number  ${sgstamount}  2
     ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
+    ${taxAmount}=               Convert To Number  ${taxAmount}  2
     ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
+    ${netRate}=               Convert To Number  ${netRate}  2
 
 
     ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}
@@ -590,9 +594,13 @@ JD-TC-GetItemDetails-2
     ${discountAmount}=  Evaluate    ${netTotal} * ${discountPercentage} / 100
     ${taxableAmount}=   Evaluate    ${netTotal} - ${discountAmount}
     ${cgstamount}=      Evaluate    ${taxableAmount} * ${cgst} / 100
+    ${cgstamount}=               Convert To Number  ${cgstamount}  2
     ${sgstamount}=      Evaluate    ${taxableAmount} * ${sgst} / 100
+    ${sgstamount}=               Convert To Number  ${sgstamount}  2
     ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
+    ${taxAmount}=               Convert To Number  ${taxAmount}  2
     ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
+    ${netRate}=               Convert To Number  ${netRate}  2
 
     ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  0  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}
     Log   ${resp.content}
@@ -627,9 +635,13 @@ JD-TC-GetItemDetails-3
     ${discountAmount}=  Evaluate    ${netTotal} * ${discountPercentage} / 100
     ${taxableAmount}=   Evaluate    ${netTotal} - ${discountAmount}
     ${cgstamount}=      Evaluate    ${taxableAmount} * ${cgst} / 100
+    ${cgstamount}=               Convert To Number  ${cgstamount}  2
     ${sgstamount}=      Evaluate    ${taxableAmount} * ${sgst} / 100
+    ${sgstamount}=               Convert To Number  ${sgstamount}  2
     ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
+    ${taxAmount}=               Convert To Number  ${taxAmount}  2
     ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
+    ${netRate}=               Convert To Number  ${netRate}  2
 
     ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${empty}   ${amount}  ${fixedDiscount}  ${discountPercentage}
     Log   ${resp.content}
@@ -687,9 +699,13 @@ JD-TC-GetItemDetails-5
     ${discountAmount}=  Evaluate    ${netTotal} * ${discountPercentage} / 100
     ${taxableAmount}=   Evaluate    ${netTotal} - ${discountAmount}
     ${cgstamount}=      Evaluate    ${taxableAmount} * ${cgst} / 100
+    ${cgstamount}=               Convert To Number  ${cgstamount}  2
     ${sgstamount}=      Evaluate    ${taxableAmount} * ${sgst} / 100
+    ${sgstamount}=               Convert To Number  ${sgstamount}  2
     ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
+    ${taxAmount}=               Convert To Number  ${taxAmount}  2
     ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
+    ${netRate}=               Convert To Number  ${netRate}  2
 
     ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${empty}  ${discountPercentage}
     Log   ${resp.content}

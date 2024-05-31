@@ -457,9 +457,13 @@ JD-TC-GetPurchaseByFilter-1
     ${discountAmount}=  Evaluate    ${netTotal} * ${discountPercentage} / 100
     ${taxableAmount}=   Evaluate    ${netTotal} - ${discountAmount}
     ${cgstamount}=      Evaluate    ${taxableAmount} * ${cgst} / 100
+    ${cgstamount}=               Convert To Number  ${cgstamount}  2
     ${sgstamount}=      Evaluate    ${taxableAmount} * ${sgst} / 100
+    ${sgstamount}=               Convert To Number  ${sgstamount}  2
     ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
+    ${taxAmount}=               Convert To Number  ${taxAmount}  2
     ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
+    ${netRate}=               Convert To Number  ${netRate}  2
     Set Suite Variable              ${totalQuantity}
     Set Suite Variable              ${netTotal}
     Set Suite Variable              ${discountAmount}
@@ -516,7 +520,7 @@ JD-TC-GetPurchaseByFilter-1
     ${batchNo}=                 Random Int              min=1  max=9999
     ${invoiceReferenceNo}=      Random Int              min=1  max=999
     ${purchaseNote}=            FakerLibrary.Sentence
-    ${roundOff}=                Random Int              min=1  max=99
+    ${roundOff}=                Random Int              min=1  max=10
     ${totalDiscountAmount}=     Evaluate                ${totalAmount} * ${discountPercentage} / 100
     ${totaltaxable}=            Evaluate                ${totalAmount} - ${totalDiscountAmount}
     ${totaltaxableamount}=      Evaluate                round(${totaltaxable}, 2)
