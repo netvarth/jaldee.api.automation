@@ -127,6 +127,15 @@ JD-TC-UpdateItemRemarkStatus-2
     Should Be Equal As Strings    ${resp.json()['encId']}    ${remarks_encid}
    Should Be Equal As Strings    ${resp.json()['status']}     ${status[1]}
 
+    ${resp}=  Get Item Remark Filter      status-eq=${status[1]}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()[0]['remark']}    ${remark2}
+    Should Be Equal As Strings    ${resp.json()[0]['transactionTypeEnum']}    ${transactionTypeEnum[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${remarks_encid}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}     ${status[1]}
+
+
 
 JD-TC-UpdateItemRemarkStatus-3
 
@@ -146,6 +155,14 @@ JD-TC-UpdateItemRemarkStatus-3
     ${resp}=  Update Item Remark Status      ${status[0]}   ${remarks_encid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Item Remark Filter      status-eq=${status[0]}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()[0]['remark']}    ${remarks}
+    Should Be Equal As Strings    ${resp.json()[0]['transactionTypeEnum']}    ${transactionTypeEnum[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${remarks_encid}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}     ${status[0]}
 
 JD-TC-UpdateItemRemarkStatus-UH1
 
