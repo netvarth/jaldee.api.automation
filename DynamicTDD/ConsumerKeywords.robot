@@ -3474,7 +3474,7 @@ Consumer Get Verify Status of consent form by uid
     RETURN  ${resp}
 
 
-Consumer Comsent Form Sent Otp 
+Consumer Consent Form Send Otp 
 
     [Arguments]     ${uuid}
 

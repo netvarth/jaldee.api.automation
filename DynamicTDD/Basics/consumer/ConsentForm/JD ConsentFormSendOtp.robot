@@ -173,7 +173,7 @@ JD-TC-GetConsentFormByUid-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings  ${resp.json()}       ${bool[0]}
 
-    ${resp}=    Consumer Comsent Form Sent Otp   ${cf_uid}
+    ${resp}=    Consumer Consent Form Send Otp   ${cf_uid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -199,7 +199,7 @@ JD-TC-ConsentFormSendOtp-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Consumer Comsent Form Sent Otp     ${cf_uid}
+    ${resp}=    Consumer Consent Form Send Otp     ${cf_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -227,7 +227,7 @@ JD-TC-ConsentFormSendOtp-UH2
 
     ${fake}=    Random Int  min=1000000   max=9999999
 
-    ${resp}=    Consumer Comsent Form Sent Otp     ${fake}
+    ${resp}=    Consumer Consent Form Send Otp     ${fake}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${INVALID_UNIQUE_ID}
@@ -236,7 +236,7 @@ JD-TC-ConsentFormSendOtp-UH3
 
     [Documentation]  Consent Form Send Otp - without login
 
-    ${resp}=    Consumer Comsent Form Sent Otp     ${cf_uid}
+    ${resp}=    Consumer Consent Form Send Otp     ${cf_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  ${resp.json()}       ${SESSION_EXPIRED}
@@ -249,7 +249,7 @@ JD-TC-ConsentFormSendOtp-Uh4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Consumer Comsent Form Sent Otp     ${cf_uid}
+    ${resp}=    Consumer Consent Form Send Otp     ${cf_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  ${resp.json()}       ${SESSION_EXPIRED}
@@ -262,10 +262,10 @@ JD-TC-ConsentFormSendOtp-UH5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Consumer Comsent Form Sent Otp     ${cf_uid}
+    ${resp}=    Consumer Consent Form Send Otp     ${cf_uid}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  401
-    Should Be Equal As Strings  ${resp.json()}       ${NO_PERMISSION}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}       ${INVALID_CONSENTFORM_INPUT_FORMAT}
 
 JD-TC-GetConsentFormByUid-UH6
 
@@ -275,7 +275,7 @@ JD-TC-GetConsentFormByUid-UH6
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Consumer Comsent Form Sent Otp     ${cf_uid}
+    ${resp}=    Consumer Consent Form Send Otp     ${cf_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
 
@@ -325,6 +325,6 @@ JD-TC-GetConsentFormByUid-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Consumer Comsent Form Sent Otp     ${cf_uid}
+    ${resp}=    Consumer Consent Form Send Otp     ${cf_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422

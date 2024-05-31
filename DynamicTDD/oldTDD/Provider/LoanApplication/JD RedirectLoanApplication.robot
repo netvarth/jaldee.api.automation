@@ -33,7 +33,7 @@ ${phonez}   7024567616
 ${autoApprovalUptoAmount}    50000
 ${autoApprovalUptoAmount2}    70000
 
-*** Keyword ***
+*** Keywords ***
 
 Redirect Loan Application
 

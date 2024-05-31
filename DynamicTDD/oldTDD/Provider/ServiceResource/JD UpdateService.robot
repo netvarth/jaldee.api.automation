@@ -612,7 +612,7 @@ JD-TC-UpdateService-UH10
 
 
 
-*** Keyword ***
+*** Keywords ***
 Billable
 
     ${resp}=   Get File    /ebs/TDD/varfiles/providers.py

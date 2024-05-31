@@ -173,7 +173,7 @@ JD-TC-GetConsentFormByUid-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings  ${resp.json()}       ${bool[0]}
 
-    ${resp}=    Consumer Comsent Form Sent Otp   ${cf_uid}
+    ${resp}=    Consumer Consent Form Send Otp   ${cf_uid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -203,7 +203,7 @@ JD-TC-ConsentFormVerifyOtp-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Consumer Comsent Form Sent Otp   ${cf_uid}
+    ${resp}=    Consumer Consent Form Send Otp   ${cf_uid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -232,7 +232,7 @@ JD-TC-ConsentFormVerifyOtp-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Consumer Comsent Form Sent Otp   ${cf_uid}
+    ${resp}=    Consumer Consent Form Send Otp   ${cf_uid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -262,7 +262,7 @@ JD-TC-ConsentFormVerifyOtp-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Consumer Comsent Form Sent Otp   ${cf_uid}
+    ${resp}=    Consumer Consent Form Send Otp   ${cf_uid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -294,7 +294,7 @@ JD-TC-ConsentFormVerifyOtp-UH4
 
     ${fake}=    Random Int  min=11111  max=99999
 
-    ${resp}=    Consumer Comsent Form Sent Otp   ${cf_uid}
+    ${resp}=    Consumer Consent Form Send Otp   ${cf_uid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -324,7 +324,7 @@ JD-TC-ConsentFormVerifyOtp-UH5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Consumer Comsent Form Sent Otp   ${cf_uid}
+    ${resp}=    Consumer Consent Form Send Otp   ${cf_uid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -354,7 +354,7 @@ JD-TC-ConsentFormVerifyOtp-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Consumer Comsent Form Sent Otp   ${cf_uid}
+    ${resp}=    Consumer Consent Form Send Otp   ${cf_uid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -386,7 +386,7 @@ JD-TC-ConsentFormVerifyOtp-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Consumer Comsent Form Sent Otp   ${cf_uid}
+    ${resp}=    Consumer Consent Form Send Otp   ${cf_uid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

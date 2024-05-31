@@ -55,7 +55,7 @@ ${requestedAmount1}    4000
 ${autoApprovalUptoAmount}    50000
 ${autoApprovalUptoAmount2}    70000
 
-*** Keyword ***
+*** Keywords ***
 
 Cancel Loan Application
 

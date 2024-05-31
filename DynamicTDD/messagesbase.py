@@ -226,3 +226,5 @@ PUSH_PH_NO_NOT_EXIST ="{} is not a registered number of any provider in this acc
 INVALID_PHONE_CODE= "{} is a invalid number"
 PHONE_CODE_RQD= "Both phone number and country code required."
 
+INVALID_CONSENTFORM_INPUT_FORMAT = "Choose a consent form to share"
+

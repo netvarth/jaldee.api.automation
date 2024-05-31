@@ -1859,7 +1859,7 @@ JD-TC-Get_Report_ByStatus-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-# *** keyword ***
+# *** Keywords ***
 # Get Report By Status
 #     [Arguments]  @{kwargs}
 #     Check And Create YNW Session

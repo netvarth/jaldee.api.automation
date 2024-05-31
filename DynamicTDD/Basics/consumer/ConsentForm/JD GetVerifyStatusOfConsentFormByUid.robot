@@ -195,7 +195,7 @@ JD-TC-GetConsentFormByUid-UH1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-    ${resp}=    Consumer Comsent Form Sent Otp   ${cf_uid}
+    ${resp}=    Consumer Consent Form Send Otp   ${cf_uid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -226,7 +226,7 @@ JD-TC-GetConsentFormByUid-UH2
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-    ${resp}=    Consumer Comsent Form Sent Otp   ${cf_uid}
+    ${resp}=    Consumer Consent Form Send Otp   ${cf_uid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

@@ -173,7 +173,7 @@ JD-TC-GetConsentFormByUid-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings  ${resp.json()}       ${bool[0]}
 
-    ${resp}=    Consumer Comsent Form Sent Otp   ${cf_uid}
+    ${resp}=    Consumer Consent Form Send Otp   ${cf_uid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
