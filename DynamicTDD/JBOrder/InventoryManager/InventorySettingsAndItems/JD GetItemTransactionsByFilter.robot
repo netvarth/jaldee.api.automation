@@ -612,6 +612,12 @@ JD-TC-Get Item Transaction By Filter-1
 # ------------------------------------------------------------------------------------------------------------
 # ------------------------------------Get Item Transaction By Filter (After took sales order)------------------------------------------------------------------------
 
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
     ${resp}=   Get Item Transaction By Filter       updateType-eq=${updateType[1]}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
