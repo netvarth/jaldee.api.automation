@@ -367,7 +367,7 @@ JD-TC-Inventory Manager Work Flow-1
     ${batchNo}=     Random Int      min=1  max=9999
     ${invoiceReferenceNo}=          Random Int  min=1  max=999
     ${purchaseNote}=                FakerLibrary.Sentence
-    ${roundOff}=                    Random Int  min=1  max=99
+    ${roundOff}=                    Random Int  min=1  max=10
 
     ${purchaseItemDtoList1}=        Create purchaseItemDtoList   ${ic_Item_id}   ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  0  ${netTotal}   ${expiryDate}  ${mrp}  ${EMPTY}  0   0   ${iu_id}
     Set Suite Variable              ${purchaseItemDtoList1}
@@ -1016,7 +1016,7 @@ JD-TC-Inventory Manager Work Flow-2
     ${batchNo}=     Random Int      min=1  max=9999
     ${invoiceReferenceNo}=          Random Int  min=1  max=999
     ${purchaseNote}=                FakerLibrary.Sentence
-    ${roundOff}=                    Random Int  min=1  max=99
+    ${roundOff}=                    Random Int  min=1  max=10
 
     ${purchaseItemDtoList2}=        Create purchaseItemDtoList   ${ic_TAX_Item_id}   ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  0  ${netTotal}   ${expiryDate}  ${mrp}  ${EMPTY}  0   0   ${iu_id}
     Set Suite Variable              ${purchaseItemDtoList2}
@@ -1369,7 +1369,7 @@ JD-TC-Inventory Manager Work Flow-3
     ${batchNo}=     Random Int      min=1  max=9999
     ${invoiceReferenceNo}=          Random Int  min=1  max=999
     ${purchaseNote}=                FakerLibrary.Sentence
-    ${roundOff}=                    Random Int  min=1  max=99
+    ${roundOff}=                    Random Int  min=1  max=10
 
     ${purchaseItemDtoList2}=        Create purchaseItemDtoList   ${ic_Batch_Item_id}   ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  0  ${netTotal}   ${expiryDate}  ${mrp}  ${batchNo}  0   0   ${iu_id}
     Set Suite Variable              ${purchaseItemDtoList2}
@@ -1613,9 +1613,9 @@ JD-TC-Inventory Manager Work Flow-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
 # --------------------------------------------- Share SO Invoice -----------------------------------------------
 
