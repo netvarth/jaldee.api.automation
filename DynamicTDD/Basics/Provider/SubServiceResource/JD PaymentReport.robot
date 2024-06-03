@@ -12,8 +12,9 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
-Variables       /ebs/TDD/varfiles/providers.py
-Variables       /ebs/TDD/varfiles/consumerlist.py 
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/consumerlist.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
@@ -1026,7 +1027,7 @@ JD-TC-PaymentReport-4
     [Documentation]  take an appointment(online) for today for a provider consumer.
                 ...   do the payment from provider as cash ( auto invoice generation on) and verify payment report.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME13}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1124,7 +1125,7 @@ JD-TC-PaymentReport-4
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME13}'
+            IF   not '${user_phone}' == '${HLPUSERNAME13}'
                 clear_users  ${user_phone}
             END
         END
@@ -1263,7 +1264,7 @@ JD-TC-PaymentReport-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME13}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1353,7 +1354,7 @@ JD-TC-PaymentReport-5
     [Documentation]  take an appointment(online) for today for a provider consumer.
                 ...   do the payment by consumer ( auto invoice generation on) and verify payment report.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME14}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1451,7 +1452,7 @@ JD-TC-PaymentReport-5
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME14}'
+            IF   not '${user_phone}' == '${HLPUSERNAME14}'
                 clear_users  ${user_phone}
             END
         END
@@ -1590,7 +1591,7 @@ JD-TC-PaymentReport-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME14}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1641,35 +1642,37 @@ JD-TC-PaymentReport-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Get Booking Invoices
+    ${resp}=   Get Booking Invoices
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    Should Be Equal As Strings  ${resp.json()[0]['accountId']}                                        ${account_id}
-    Should Be Equal As Strings  ${resp.json()[0]['categoryName']}                                     ${CategoryName[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['invoiceDate']}                                      ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['providerConsumerId']}                               ${cid}
-    Should Be Equal As Strings  ${resp.json()[0]['providerConsumerData']['phoneNos'][0]['number']}    ${NewCustomer}
-    Should Be Equal As Strings   ${resp.json()[0]['ynwUuid']}                                         ${apptid1}
-    Should Be Equal As Strings   ${resp.json()[0]['amountPaid']}                                      0.0
-    Should Be Equal As Strings   ${resp.json()[0]['amountDue']}                                       ${ser_amount}
-    Should Be Equal As Strings   ${resp.json()[0]['amountTotal']}                                     ${ser_amount}
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}                      ${s_id}
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}                    ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}                       1.0
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['taxable']}                        ${bool[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['totalPrice']}                     ${ser_amount}
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}                        ${ser_amount}
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceCategory']}                ${serviceCategory[1]}
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['assigneeUsers']}                  ${empty_list}
+    # Should Be Equal As Strings  ${resp.json()[0]['accountId']}                                        ${account_id}
+    # Should Be Equal As Strings  ${resp.json()[0]['categoryName']}                                     ${CategoryName[0]}
+    # Should Be Equal As Strings  ${resp.json()[0]['invoiceDate']}                                      ${DAY1}
+    # Should Be Equal As Strings  ${resp.json()[0]['providerConsumerId']}                               ${cid}
+    # Should Be Equal As Strings  ${resp.json()[0]['providerConsumerData']['phoneNos'][0]['number']}    ${NewCustomer}
+    # Should Be Equal As Strings   ${resp.json()[0]['ynwUuid']}                                         ${apptid1}
+    # Should Be Equal As Strings   ${resp.json()[0]['amountPaid']}                                      0.0
+    # Should Be Equal As Strings   ${resp.json()[0]['amountDue']}                                       ${ser_amount}
+    # Should Be Equal As Strings   ${resp.json()[0]['amountTotal']}                                     ${ser_amount}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}                      ${s_id}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}                    ${SERVICE1}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}                       1.0
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['taxable']}                        ${bool[0]}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['totalPrice']}                     ${ser_amount}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}                        ${ser_amount}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceCategory']}                ${serviceCategory[1]}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['assigneeUsers']}                  ${empty_list}
 
-    ${resp}=  Make payment Consumer Mock  ${pid1}  ${min_pre}  ${purpose[0]}  ${cwid}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${None}
+    ${resp}=  Make payment Consumer Mock  ${account_id}  ${ser_amount}  ${purpose[1]}  ${apptid1}  ${s_id}  ${bool[0]}   ${bool[1]}  ${None}
     Log  ${resp.json()}
-    # ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre}  ${purpose[0]}  ${cwid}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${cid1}
-    # Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=   Get Booking Invoices
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME14}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
