@@ -10,8 +10,8 @@ Variables           superadminmessagesapi.py
 &{headers}                Content-Type=application/json
 &{headers1}		          Content-Type=multipart/form-data
 ${SUSERNAME}              admin.support@jaldee.com
-${PASSWORD}               Netvarth12
-${SPASSWORD}              Netvarth1
+${PASSWORD}               Jaldee12
+${SPASSWORD}              Jaldee1
 ${test_mail}              test@jaldee.com
 ${Invalid_email}          inv.${test_mail}
 ${merchantid}             6811180

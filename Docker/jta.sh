@@ -7,12 +7,12 @@
 
 defaultEnv="dev"
 defaultParallelContainers="1"
-defaultPSeries="1110000001"
-defaultCSeries="1710000001"
-defaultBSeries="1910000001"
+defaultPSeries="2220000001"
+defaultCSeries="3330000001"
+# defaultBSeries="4440000001"
 defaultPUserCount="260"
 defaultCUserCount="40"
-defaultBCount="160"
+# defaultBCount="160"
 defaultPemail="d_p"
 defaultCemail="d_c"
 defaultBemail="d_b"
@@ -315,8 +315,8 @@ setCounts()
     pseries=$defaultPSeries
     cusercount=$defaultCUserCount
     cseries=$defaultCSeries
-    bcount=$defaultBCount
-    bseries=$defaultBSeries
+    # bcount=$defaultBCount
+    # bseries=$defaultBSeries
 }
 
 #Set container count if -c is specified
@@ -385,59 +385,59 @@ setConsumerCount()
 }
 
 # Set Branch count and phone number if default value requires change
-setBranchCount()
-{
-    local ok=0
-    read -p "Enter number of branches required per container[$defaultBCount]: " bcount
-    bcount="${bcount:-$defaultBCount}"
-    while [ $ok = 0 ]
-    do
-    read -p "Enter phone number series for branch signup [$defaultBSeries]: " bseries
-    bseries="${bseries:-$defaultBSeries}"
+# setBranchCount()
+# {
+#     local ok=0
+#     read -p "Enter number of branches required per container[$defaultBCount]: " bcount
+#     bcount="${bcount:-$defaultBCount}"
+#     while [ $ok = 0 ]
+#     do
+#     read -p "Enter phone number series for branch signup [$defaultBSeries]: " bseries
+#     bseries="${bseries:-$defaultBSeries}"
     
-    if [ ${#bseries} -gt 10 ] || [ ${#bseries} -lt 10 ]
-    then
-        echo "Phone number requires 10 digits"
-    else
-        ok=1
-    fi
-    done
-}
+#     if [ ${#bseries} -gt 10 ] || [ ${#bseries} -lt 10 ]
+#     then
+#         echo "Phone number requires 10 digits"
+#     else
+#         ok=1
+#     fi
+#     done
+# }
 
 # if suite specified is APre, check if provider, consumer or Branch signup has been specified seperately
 checkSignup()
 {
-    if [ "$suite" == "APre/DynamicProviderSignup.robot" ]; then
+    if [ "$suite" == "APre/DynamicMultiUserAccSignup.robot" ]; then
         setProviderCount
         cusercount=$defaultCUserCount
         cseries=$defaultCSeries
-        bcount=$defaultBCount
-        bseries=$defaultBSeries
+        # bcount=$defaultBCount
+        # bseries=$defaultBSeries
 
     elif [ "$suite" == "APre/Dynamic Consumer Signup.robot" ]; then
         setConsumerCount
         pusercount=$defaultPUserCount
         pseries=$defaultPSeries
-        bcount=$defaultBCount
-        bseries=$defaultBSeries
+        # bcount=$defaultBCount
+        # bseries=$defaultBSeries
 
-    elif [ "$suite" == "APre/DynamicCorporateSignUp.robot" ]; then
-        setProviderCount
-        setBranchCount
-        cusercount=$defaultCUserCount
-        cseries=$defaultCSeries
+    # elif [ "$suite" == "APre/DynamicCorporateSignUp.robot" ]; then
+    #     setProviderCount
+    #     setBranchCount
+    #     cusercount=$defaultCUserCount
+    #     cseries=$defaultCSeries
     
-    elif [ "$suite" == "APre/DynamicBranchSignup.robot" ]; then
-        setBranchCount
-        pusercount=$defaultPUserCount
-        pseries=$defaultPSeries
-        cusercount=$defaultCUserCount
-        cseries=$defaultCSeries
+    # elif [ "$suite" == "APre/DynamicBranchSignup.robot" ]; then
+    #     setBranchCount
+    #     pusercount=$defaultPUserCount
+    #     pseries=$defaultPSeries
+    #     cusercount=$defaultCUserCount
+    #     cseries=$defaultCSeries
 
     else
         setProviderCount
         setConsumerCount
-        setBranchCount
+        # setBranchCount
     
     fi
     clearFiles
@@ -466,7 +466,8 @@ setEnvVariables ()
     if [ $1 -eq 1 ]
     then
         
-        echo -e "NUM_PSERIES=$pseries\nNUM_CSERIES=$cseries\nNUM_BSERIES=$bseries\nPUSER_COUNT=$pusercount\nCUSER_COUNT=$cusercount\nBRANCH_COUNT=$bcount\nP_EMAIL=$pemail\nC_EMAIL=$cemail\nB_EMAIL=$bemail\nB_SPEMAIL=$bspemail\nENV_KEY=$key\nSUITE="$suite"\nSIGN_UP=$dynSignUp\nTIMEFLAG="$timeFlag"\nFULL_RUN=$full\nMAIN=$mainres" > env$c.list
+        # echo -e "NUM_PSERIES=$pseries\nNUM_CSERIES=$cseries\nNUM_BSERIES=$bseries\nPUSER_COUNT=$pusercount\nCUSER_COUNT=$cusercount\nBRANCH_COUNT=$bcount\nP_EMAIL=$pemail\nC_EMAIL=$cemail\nB_EMAIL=$bemail\nB_SPEMAIL=$bspemail\nENV_KEY=$key\nSUITE="$suite"\nSIGN_UP=$dynSignUp\nTIMEFLAG="$timeFlag"\nFULL_RUN=$full\nMAIN=$mainres" > env$c.list
+        echo -e "NUM_PSERIES=$pseries\nNUM_CSERIES=$cseries\nPUSER_COUNT=$pusercount\nCUSER_COUNT=$cusercount\nP_EMAIL=$pemail\nC_EMAIL=$cemail\nENV_KEY=$key\nSUITE="$suite"\nSIGN_UP=$dynSignUp\nTIMEFLAG="$timeFlag"\nFULL_RUN=$full\nMAIN=$mainres" > env$c.list
         if [ "$id" -gt "9" ];then
             echo -e "CONTAINER_ID=$id" >> env$id.list
         else
@@ -478,7 +479,7 @@ setEnvVariables ()
         
     else
         
-        echo -e "NUM_PSERIES=$pseries\nNUM_CSERIES=$cseries\nNUM_BSERIES=$bseries\nPUSER_COUNT=$pusercount\nCUSER_COUNT=$cusercount\nBRANCH_COUNT=$bcount\nP_EMAIL=$defaultPemail\nC_EMAIL=$defaultCemail\nB_EMAIL=$defaultBemail\nB_SPEMAIL=$defaultBSPemail\nCONTAINER_ID=$id\nENV_KEY=$key\nSUITE="$suite"\nSIGN_UP=$dynSignUp\nTIMEFLAG="$timeFlag"\nFULL_RUN=$full\nMAIN=$mainres" > env.list
+        echo -e "NUM_PSERIES=$pseries\nNUM_CSERIES=$cseries\nPUSER_COUNT=$pusercount\nCUSER_COUNT=$cusercount\nP_EMAIL=$defaultPemail\nC_EMAIL=$defaultCemail\nCONTAINER_ID=$id\nENV_KEY=$key\nSUITE="$suite"\nSIGN_UP=$dynSignUp\nTIMEFLAG="$timeFlag"\nFULL_RUN=$full\nMAIN=$mainres" > env.list
         selectVarFile env.list
     fi
     spdataimport=$(grep "spdataimport.notification.sms" /ebs/apache-tomcat-8.0.36/conf/ynwsuperadmin.properties | cut -d'=' -f2 )
@@ -967,11 +968,11 @@ if [ "$parallelContainers" -gt "1" ]; then
 
         ((pseries = pseries + 10000))
         ((cseries = cseries + 10000))
-        ((bseries = bseries + 10000))
+        # ((bseries = bseries + 10000))
         pemail="d$c""_p"
         cemail="d$c""_c"
-        bemail="d$c""_b"
-        bspemail="d$c""_bsp"
+        # bemail="d$c""_b"
+        # bspemail="d$c""_bsp"
         setEnvVariables 1 "$c"
         setUserAndIP 1
         variablelogs "$inputPath" "$newoutputPath" "$c"
