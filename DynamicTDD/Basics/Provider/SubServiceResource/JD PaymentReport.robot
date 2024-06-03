@@ -14,8 +14,8 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -31,7 +31,7 @@ JD-TC-PaymentReport-1
     [Documentation]  Create a sub service and add that sub service to an appointment(walkin) for a provider consumer.
                 ...   without doing the payment ( auto invoice generation on) and verify payment report.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -124,7 +124,7 @@ JD-TC-PaymentReport-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME10}'
+            IF   not '${user_phone}' == '${HLPUSERNAME10}'
                 clear_users  ${user_phone}
             END
         END
@@ -256,7 +256,7 @@ JD-TC-PaymentReport-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -366,7 +366,7 @@ JD-TC-PaymentReport-2
     [Documentation]  Create a sub service and add that sub service to an appointment(walkin) for a provider consumer.
                 ...   do the payment from provider as cash ( auto invoice generation on) and verify payment report.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -464,7 +464,7 @@ JD-TC-PaymentReport-2
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME11}'
+            IF   not '${user_phone}' == '${HLPUSERNAME11}'
                 clear_users  ${user_phone}
             END
         END
@@ -596,7 +596,7 @@ JD-TC-PaymentReport-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -725,7 +725,7 @@ JD-TC-PaymentReport-3
     [Documentation]  take an appointment(walkin) for today for a provider consumer.
                 ...   do the payment from provider as cash ( auto invoice generation on) and verify payment report.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -823,7 +823,7 @@ JD-TC-PaymentReport-3
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME12}'
+            IF   not '${user_phone}' == '${HLPUSERNAME12}'
                 clear_users  ${user_phone}
             END
         END
@@ -925,7 +925,7 @@ JD-TC-PaymentReport-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
