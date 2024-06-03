@@ -29,9 +29,9 @@ ${originFrom}       NONE
       
 *** Test Cases ***
 
-JD-TC-GetOrderByFilter-1
+JD-TC-GetOrderByUid-1
 
-    [Documentation]    Get Order By Filter
+    [Documentation]    Get Order By Uid
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
     Log  ${iscorp_subdomains}
@@ -313,8 +313,8 @@ JD-TC-GetOrderByFilter-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${vendorId}     ${resp.json()['encId']}
-# -----------------------------------------------------------------------------------------------------------------------------
-# ----------------------------------------- Create itemUnits ------------------------------------------------------------------
+ 
+ # ----------------------------------------- Create itemUnits ------------------------------------------------------------------
 
     ${unitName}=                    FakerLibrary.name
     ${convertionQty}=               Random Int  min=1  max=20
@@ -416,7 +416,6 @@ JD-TC-GetOrderByFilter-1
     Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
     Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Store_Name1}
 
-# -----------------------------------------------------------------------------------
 
 # -------------------------------- Add a provider Consumer -----------------------------------
 
@@ -454,7 +453,6 @@ JD-TC-GetOrderByFilter-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-# --------------------------------------------------------------------------------------------------------
 
 # --------------------------- Create SalesOrder Inventory Catalog-InvMgr True --------------------------
 
@@ -471,7 +469,7 @@ JD-TC-GetOrderByFilter-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${inv_order_encid}  ${resp.json()}
-# ---------------------------------------------------------------------------------------------------------
+
 # ------------------------------Create SalesOrder Catalog Item-invMgmt True-------------------------------
 
     ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${inv_order_encid}    ${boolean[1]}     ${ic_Item_id}     ${price}    ${boolean[0]}   

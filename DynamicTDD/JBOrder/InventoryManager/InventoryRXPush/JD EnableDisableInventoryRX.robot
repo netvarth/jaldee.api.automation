@@ -56,7 +56,7 @@ JD-TC-EbableDisableInventoryRX-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableInventoryRx']}  ${bool[1]}
 
-JD-TC-EbableDisableInventoryRX-1
+JD-TC-EbableDisableInventoryRX-2
 
     [Documentation]  Ebable Disable Inventory RX - status enable to enable  
 
@@ -73,7 +73,7 @@ JD-TC-EbableDisableInventoryRX-1
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
 
-JD-TC-EbableDisableInventoryRX-1
+JD-TC-EbableDisableInventoryRX-3
 
     [Documentation]  Ebable Disable Inventory RX - enable to disable
 
@@ -95,7 +95,7 @@ JD-TC-EbableDisableInventoryRX-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableInventoryRx']}  ${bool[0]}
 
-JD-TC-EbableDisableInventoryRX-1
+JD-TC-EbableDisableInventoryRX-4
 
     [Documentation]  Ebable Disable Inventory RX - status disable to disaable  
 
@@ -112,7 +112,7 @@ JD-TC-EbableDisableInventoryRX-1
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
 
-JD-TC-EbableDisableInventoryRX-1
+JD-TC-EbableDisableInventoryRX-5
 
     [Documentation]  Ebable Disable Inventory RX - disable to enaable
 

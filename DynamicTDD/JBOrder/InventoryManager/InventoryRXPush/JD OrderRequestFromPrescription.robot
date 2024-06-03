@@ -614,6 +614,22 @@ JD-TC-OrderRequest-1
     Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
     Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
 
+JD-TC-OrderRequest-UH3
+
+    [Documentation]    Order Request - same request after order Declined 
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Update SOrder Status  ${sorder_uid}  ${pushedStatus[2]}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Order Request    ${store_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+
 JD-TC-OrderRequest-UH1
 
     [Documentation]    Order Request - with same details  
@@ -660,6 +676,7 @@ JD-TC-OrderRequest-UH2
     Should Be Equal As Strings      ${resp.status_code}             422
     Should Be Equal As Strings      ${resp.json()}                  ${ALREADY_ACCEPTED}
 
+
 JD-TC-OrderRequest-UH3
 
     [Documentation]    Order Request - where store id is invalid  
@@ -682,7 +699,24 @@ JD-TC-OrderRequest-UH3
     Should Be Equal As Strings      ${resp.status_code}             422
     Should Be Equal As Strings      ${resp.json()}                  ${INVALID_X_ID}
 
+
 JD-TC-OrderRequest-UH4
+
+    [Documentation]    Order Request - same request after order Declined 
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Update SOrder Status  ${sorder_uid}  ${pushedStatus[2]}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Order Request    ${store_id}  ${prescription_id2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+
+JD-TC-OrderRequest-UH5
 
     [Documentation]    Order Request - where prescription id is invalid  
 
@@ -698,7 +732,7 @@ JD-TC-OrderRequest-UH4
     Should Be Equal As Strings      ${resp.json()}             ${ALREADY_HAVE_ACTIVE_REQUEST}
 
 
-JD-TC-OrderRequest-UH5
+JD-TC-OrderRequest-UH6
 
     [Documentation]    Order Request - without login
 
