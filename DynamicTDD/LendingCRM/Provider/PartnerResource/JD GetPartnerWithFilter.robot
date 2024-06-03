@@ -13,8 +13,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -41,7 +41,7 @@ JD-TC-create_partner_user-1
                                   
     [Documentation]              create partner user
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -219,7 +219,7 @@ JD-TC-Get_partner-2
                                   
     [Documentation]               Get Partner with id
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -236,7 +236,7 @@ JD-TC-Get_partner-3
                                   
     [Documentation]               Get Partner with uid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -253,7 +253,7 @@ JD-TC-Get_partner-4
                                   
     [Documentation]               Get Partner with referenceNo
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -270,7 +270,7 @@ JD-TC-Get_partner-5
                                   
     [Documentation]               Get Partner with partnerName
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -287,7 +287,7 @@ JD-TC-Get_partner-6
                                   
     [Documentation]               Get Partner with  
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -304,7 +304,7 @@ JD-TC-Get_partner-7
                                   
     [Documentation]               Get Partner with partnerMobile
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -30,7 +30,7 @@ JD-TC-Get inventory catalog item by inventory catalog encoded id-1
 
     [Documentation]  Get inventory catalog item by inventory catalog encoded id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME41}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -73,10 +73,10 @@ JD-TC-Get inventory catalog item by inventory catalog encoded id-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME41}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME41}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME41}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -179,7 +179,7 @@ JD-TC-Get inventory catalog item by inventory catalog encoded id-2
 
     [Documentation]  Create Inventory Catalog Item from main account then Get inventory catalog item by inventory catalog encoded id from user login.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME41}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -280,7 +280,7 @@ JD-TC-Get inventory catalog item by inventory catalog encoded id-3
 
     [Documentation]  update inventory catalog items then Get inventory catalog item by inventory catalog encoded id
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME41}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -322,7 +322,7 @@ JD-TC-Get inventory catalog item by inventory catalog encoded id-4
 
     [Documentation]  update inventory catalog items status then Get inventory catalog item by inventory catalog encoded id
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME41}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -366,7 +366,7 @@ JD-TC-Get inventory catalog item by inventory catalog encoded id-UH1
 
     [Documentation]  Get inventory catalog item by inventory catalog encoded id using invalid encid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME41}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -407,7 +407,7 @@ JD-TC-Get inventory catalog item by inventory catalog encoded id-UH6
 
     [Documentation]  Get inventory catalog item by inventory catalog encoded id using another provider
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

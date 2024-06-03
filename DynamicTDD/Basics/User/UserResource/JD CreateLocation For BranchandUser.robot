@@ -10,18 +10,18 @@ Library         FakerLibrary
 Resource        /ebs/TDD/ProviderKeywords.robot
 Resource        /ebs/TDD/ConsumerKeywords.robot
 Variables       /ebs/TDD/varfiles/providers.py
-Variables       /ebs/TDD/varfiles/musers.py
+Variables       /ebs/TDD/varfiles/providers.py
 Variables       /ebs/TDD/varfiles/consumerlist.py 
 
 *** Test Cases ***
 
 JD-TC-CreateLocation-1
-	[Documentation]  Create a location in account level ${MUSERNAME5}
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME5}  ${PASSWORD}
+	[Documentation]  Create a location in account level ${PUSERNAME5}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
 
 
-      clear_location   ${MUSERNAME5}
+      clear_location   ${PUSERNAME5}
 
       ${latti}  ${longi}  ${postcode}  ${citya}  ${district}  ${state}  ${address}=  get_loc_details
       ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
@@ -68,22 +68,22 @@ JD-TC-CreateLocation-2
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_D}=  Evaluate  ${MUSERNAME}+9898110
+     ${PUSERNAME_D}=  Evaluate  ${PUSERNAME}+9898110
      ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_D}    ${highest_package[0]}
+     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_D}    ${highest_package[0]}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Activation  ${MUSERNAME_D}  0
+     ${resp}=  Account Activation  ${PUSERNAME_D}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${MUSERNAME_D}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${PUSERNAME_D}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_D}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_D}${\n}
-     Set Suite Variable  ${MUSERNAME_D}
-     ${id}=  get_id  ${MUSERNAME_D}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_D}${\n}
+     Set Suite Variable  ${PUSERNAME_D}
+     ${id}=  get_id  ${PUSERNAME_D}
      Set Suite Variable  ${id}
       # ${city1}=   get_place
       # Set Suite Variable  ${city1}
@@ -155,23 +155,23 @@ JD-TC-CreateLocation-3
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+9898111
+     ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+9898111
      ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Activation  ${MUSERNAME_E}  0
+     ${resp}=  Account Activation  ${PUSERNAME_E}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
-     Set Suite Variable  ${MUSERNAME_E}
-     ${id}=  get_id  ${MUSERNAME_E}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+     Set Suite Variable  ${PUSERNAME_E}
+     ${id}=  get_id  ${PUSERNAME_E}
       # ${city3}=   get_place
       # Set Suite Variable  ${city3}
       # ${latti3}=  get_latitude
@@ -218,22 +218,22 @@ JD-TC-CreateLocation-4
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_F}=  Evaluate  ${MUSERNAME}+9898112
+     ${PUSERNAME_F}=  Evaluate  ${PUSERNAME}+9898112
      ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_F}    ${highest_package[0]}
+     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_F}    ${highest_package[0]}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Activation  ${MUSERNAME_F}  0
+     ${resp}=  Account Activation  ${PUSERNAME_F}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${MUSERNAME_F}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${PUSERNAME_F}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_F}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_F}${\n}
-     Set Suite Variable  ${MUSERNAME_F}
-     ${id}=  get_id  ${MUSERNAME_F}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_F}${\n}
+     Set Suite Variable  ${PUSERNAME_F}
+     ${id}=  get_id  ${PUSERNAME_F}
       # ${city5}=   get_place
       # Set Suite Variable  ${city5}
       # ${latti5}=  get_latitude
@@ -267,7 +267,7 @@ JD-TC-CreateLocation-4
 
 JD-TC-CreateLocation-UH1
       [Documentation]  Create a location for a user in a branch
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_F}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -330,7 +330,7 @@ JD-TC-CreateLocation-UH1
 
 JD-TC-CreateLocation-UH2
       [Documentation]  Create a location which is already created
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_F}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Create Location  ${city6}  ${longi5}  ${latti5}  www.${city5}.com  ${postcode5}  ${address5}  ${parking_type5}  ${24hours5}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
       Log  ${resp.json()}
@@ -350,7 +350,7 @@ JD-TC-CreateLocation-UH2
       sleep  02s
 JD-TC-VerifyCreateLocation-1
 	[Documentation]  Verify location details by provider login
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME5}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Location ById  ${lid}
       Log  ${resp.json()}
@@ -364,7 +364,7 @@ JD-TC-VerifyCreateLocation-1
 
 JD-TC-VerifyCreateLocation-2
 	[Documentation]  Verify location details by provider login
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_D}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Locations
       Log  ${resp.json()}
@@ -400,7 +400,7 @@ JD-TC-VerifyCreateLocation-2
 
 JD-TC-VerifyCreateLocation-3
 	[Documentation]  Verify location details by provider login
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Locations
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -435,7 +435,7 @@ JD-TC-VerifyCreateLocation-3
 
 JD-TC-VerifyCreateLocation-4
 	[Documentation]  Verify location details by provider login
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_F}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Locations
       Should Be Equal As Strings  ${resp.status_code}  200

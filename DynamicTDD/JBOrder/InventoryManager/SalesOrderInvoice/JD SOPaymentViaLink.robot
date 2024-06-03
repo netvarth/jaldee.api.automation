@@ -15,7 +15,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -34,7 +34,7 @@ JD-TC-Update Sales Order Invoice Status-1
 
     [Documentation]   Create a sales Order with Valid Details then Update sales order invoice Status New to Settled.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME38}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME38}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -89,11 +89,11 @@ JD-TC-Update Sales Order Invoice Status-1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME38}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME38}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${accountId}=  get_acc_id  ${HLMUSERNAME38}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME38}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -220,7 +220,7 @@ JD-TC-Update Sales Order Invoice Status-1
 
 # ----------------------------- Provider take a Sales Order ------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME38}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME38}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -364,7 +364,7 @@ JD-TC-Update Sales Order Invoice Status-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME38}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME38}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

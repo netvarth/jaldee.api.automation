@@ -12,8 +12,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Library           /ebs/TDD/db.py
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables          /ebs/TDD/varfiles/hl_musers.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables          /ebs/TDD/varfiles/hl_providers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Resource          /ebs/TDD/Keywords.robot
 Library           /ebs/TDD/Imageupload.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
@@ -86,12 +86,12 @@ JD-TC-ChangeUploadStatus-2
    
     [Documentation]    Change upload status by user
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${HLMUSERNAME4}
-    Set Test Variable  ${HLMUSERNAME4}
-    ${id}=  get_id  ${HLMUSERNAME4}
+    ${pid}=  get_acc_id  ${HLPUSERNAME4}
+    Set Test Variable  ${HLPUSERNAME4}
+    ${id}=  get_id  ${HLPUSERNAME4}
     Set Test Variable  ${id}
      
     ${resp}=   Get Business Profile
@@ -167,7 +167,7 @@ JD-TC-ChangeUploadStatus-2
 
 
 
-    ${p_id}=  get_acc_id  ${HLMUSERNAME4}
+    ${p_id}=  get_acc_id  ${HLPUSERNAME4}
     Set Test Variable   ${p_id}
 
     ${caption1}=  Fakerlibrary.Sentence
@@ -207,12 +207,12 @@ JD-TC-ChangeUploadStatus-3
     [Documentation]   upload file by branch and  Change upload status by user login
 
    
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${HLMUSERNAME4}
-    Set Test Variable    ${HLMUSERNAME4}
-    ${id}=  get_id       ${HLMUSERNAME4}
+    ${pid}=  get_acc_id  ${HLPUSERNAME4}
+    Set Test Variable    ${HLPUSERNAME4}
+    ${id}=  get_id       ${HLPUSERNAME4}
     Set Test Variable    ${id}
    
 
@@ -260,12 +260,12 @@ JD-TC-ChangeUploadStatus-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
-    # ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
-    # ${pid}=  get_acc_id  ${HLMUSERNAME4}
-    # Set Test Variable    ${HLMUSERNAME4}
-    # ${id}=  get_id       ${HLMUSERNAME4}
+    # ${pid}=  get_acc_id  ${HLPUSERNAME4}
+    # Set Test Variable    ${HLPUSERNAME4}
+    # ${id}=  get_id       ${HLPUSERNAME4}
     # Set Test Variable    ${id}
    
 
@@ -290,11 +290,11 @@ JD-TC-ChangeUploadStatus-4
     Should Be Equal As Strings                 ${resp.json()['${u_id1}']['files'][0]['uploadStatus']}    ${QnrStatus[0]}
     Set Suite Variable                         ${fileid33}                          ${resp.json()['${u_id1}']['files'][0]['id']} 
   
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${HLMUSERNAME4}
-    # Set Test Variable    ${HLMUSERNAME4}
+    ${pid}=  get_acc_id  ${HLPUSERNAME4}
+    # Set Test Variable    ${HLPUSERNAME4}
   
   
     ${resp}=    Change Upload Status    COMPLETE    ${fileid33} 
@@ -340,7 +340,7 @@ JD-TC-ChangeUploadStatus-5
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${p_id12}=  get_acc_id  ${PUSERNAME120}
-    #Set Test Variable  ${HLMUSERNAME4}
+    #Set Test Variable  ${HLPUSERNAME4}
     ${id12}=  get_id  ${PUSERNAME120}
     Set Test Variable  ${id12}
     
@@ -396,7 +396,7 @@ JD-TC-ChangeUploadStatus-UH3
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${p_id22}=  get_acc_id  ${PUSERNAME122}
-    #Set Test Variable  ${HLMUSERNAME4}
+    #Set Test Variable  ${HLPUSERNAME4}
     ${id22}=  get_id  ${PUSERNAME122}
     Set Test Variable  ${id22}
     
@@ -457,7 +457,7 @@ JD-TC-ChangeUploadStatus-UH4
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${p_id44}=  get_acc_id  ${PUSERNAME128}
-    #Set Test Variable  ${HLMUSERNAME4}
+    #Set Test Variable  ${HLPUSERNAME4}
     ${id44}=  get_id  ${PUSERNAME128}
     Set Test Variable  ${id44}
     
@@ -498,12 +498,12 @@ JD-TC-ChangeUploadStatus-6
 
     [Documentation]   upload file by user  status change another user login (same branch)
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${HLMUSERNAME4}
-    Set Test Variable  ${HLMUSERNAME4}
-    ${id}=  get_id  ${HLMUSERNAME4}
+    ${pid}=  get_acc_id  ${HLPUSERNAME4}
+    Set Test Variable  ${HLPUSERNAME4}
+    ${id}=  get_id  ${HLPUSERNAME4}
     Set Test Variable  ${id}
      
     ${resp}=   Get Business Profile

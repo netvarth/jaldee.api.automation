@@ -50,29 +50,29 @@ JD-TC-TeamLevelAnalytics-1
     Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
     ${firstname_A}=  FakerLibrary.first_name
     ${lastname_A}=  FakerLibrary.last_name
-    ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+883250
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+883250
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_E}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200    
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
-    Set Suite Variable  ${MUSERNAME_E}
-    ${accid}=   get_acc_id   ${MUSERNAME_E}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+    Set Suite Variable  ${PUSERNAME_E}
+    ${accid}=   get_acc_id   ${PUSERNAME_E}
     Set Suite Variable  ${accid} 
      ${DAY1}=  db.get_date_by_timezone  ${tz}
      Set Suite Variable  ${DAY1} 
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${ph1}=  Evaluate  ${MUSERNAME_E}+1000000000
-    ${ph2}=  Evaluate  ${MUSERNAME_E}+2000000000
+    ${ph1}=  Evaluate  ${PUSERNAME_E}+1000000000
+    ${ph2}=  Evaluate  ${PUSERNAME_E}+2000000000
     ${views}=  Random Element    ${Views}
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -191,12 +191,12 @@ JD-TC-TeamLevelAnalytics-1
     ${bank_name}=  FakerLibrary.company
     ${name}=  FakerLibrary.name
     ${branch}=   db.get_place
-    ${resp}=   Update Account Payment Settings   ${bool[0]}  ${bool[0]}  ${bool[1]}  ${MUSERNAME_E}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
+    ${resp}=   Update Account Payment Settings   ${bool[0]}  ${bool[0]}  ${bool[1]}  ${PUSERNAME_E}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  payuVerify  ${accid}
     Log  ${resp}
-    ${resp}=   Update Account Payment Settings   ${bool[1]}  ${bool[0]}  ${bool[1]}  ${MUSERNAME_E}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}    
+    ${resp}=   Update Account Payment Settings   ${bool[1]}  ${bool[0]}  ${bool[1]}  ${PUSERNAME_E}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}    
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  SetMerchantId  ${accid}  ${merchantid}
@@ -308,7 +308,7 @@ JD-TC-TeamLevelAnalytics-1
     ${walkin_appmt_len}=   Evaluate  len($appt_ids)
     Set Suite Variable   ${walkin_appmt_len}
 
-    ${USERNAME1}=  Evaluate  ${MUSERNAME_E}+120044
+    ${USERNAME1}=  Evaluate  ${PUSERNAME_E}+120044
     Set Suite Variable  ${USERNAME1}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -327,8 +327,8 @@ JD-TC-TeamLevelAnalytics-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${whpnum}=  Evaluate  ${MUSERNAME_E}+77487
-    ${tlgnum}=  Evaluate  ${MUSERNAME_E}+65874
+    ${whpnum}=  Evaluate  ${PUSERNAME_E}+77487
+    ${tlgnum}=  Evaluate  ${PUSERNAME_E}+65874
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${USERNAME1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${USERNAME1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
@@ -339,7 +339,7 @@ JD-TC-TeamLevelAnalytics-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
-    ${USERNAME2}=  Evaluate  ${MUSERNAME_E}+12458721
+    ${USERNAME2}=  Evaluate  ${PUSERNAME_E}+12458721
     Set Suite Variable  ${USERNAME2}
     clear_users  ${USERNAME2}
     ${firstname1}=  FakerLibrary.name
@@ -412,7 +412,7 @@ JD-TC-TeamLevelAnalytics-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -453,17 +453,17 @@ JD-TC-TeamLevelAnalytics-1
 JD-TC-TeamLevelAnalytics-2
     [Documentation]   take checkins for teleservice for a provider and check Get Team Level Analytics
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${ZOOM_id0}=  Format String  ${ZOOM_url}  ${MUSERNAME_E}
+    ${ZOOM_id0}=  Format String  ${ZOOM_url}  ${PUSERNAME_E}
     Set Suite Variable   ${ZOOM_id0}
 
     ${instructions1}=   FakerLibrary.sentence
     ${instructions2}=   FakerLibrary.sentence
 
-    ${resp}=  Update Virtual Calling Mode   ${CallingModes[0]}  ${ZOOM_id0}   ACTIVE  ${instructions1}   ${CallingModes[1]}  ${MUSERNAME_E}   ACTIVE   ${instructions2}
+    ${resp}=  Update Virtual Calling Mode   ${CallingModes[0]}  ${ZOOM_id0}   ACTIVE  ${instructions1}   ${CallingModes[1]}  ${PUSERNAME_E}   ACTIVE   ${instructions2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -476,7 +476,7 @@ JD-TC-TeamLevelAnalytics-2
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['instructions']}    ${instructions1}
 
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['callingMode']}     ${CallingModes[1]}
-    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['value']}           ${MUSERNAME_E}
+    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['value']}           ${PUSERNAME_E}
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['status']}          ACTIVE
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['instructions']}    ${instructions2}
 
@@ -626,7 +626,7 @@ JD-TC-TeamLevelAnalytics-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -667,9 +667,9 @@ JD-TC-TeamLevelAnalytics-2
 
 JD-TC-TeamLevelAnalytics-3
     [Documentation]   take appointments for normal service and virtual service  and check domain level analytics for online appointments
-    # [Setup]  Run Keywords  clear_queue  ${MUSERNAME_E}   AND  clear_appt_schedule   ${MUSERNAME_E}
+    # [Setup]  Run Keywords  clear_queue  ${PUSERNAME_E}   AND  clear_appt_schedule   ${PUSERNAME_E}
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -812,7 +812,7 @@ JD-TC-TeamLevelAnalytics-3
 
     Log List   ${appt_ids}
 
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200  
 
@@ -880,9 +880,9 @@ JD-TC-TeamLevelAnalytics-3
 
 JD-TC-TeamLevelAnalytics-4
     [Documentation]   take appointments for prepayment service and check domain level analytics 
-    # [Setup]  Run Keywords  clear_queue  ${MUSERNAME_E}   AND  clear_appt_schedule   ${MUSERNAME_E}
+    # [Setup]  Run Keywords  clear_queue  ${PUSERNAME_E}   AND  clear_appt_schedule   ${PUSERNAME_E}
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -962,7 +962,7 @@ JD-TC-TeamLevelAnalytics-4
 
     Log List   ${appt_ids}
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -1009,9 +1009,9 @@ JD-TC-TeamLevelAnalytics-4
 
 JD-TC-TeamLevelAnalytics-5
     [Documentation]   take appointments for a provider and check Get Team Level Analytics for online appointments action changes(started,arrived)
-    # [Setup]  Run Keywords  clear_queue  ${MUSERNAME_E}   AND  clear_service    ${MUSERNAME_E}  AND  clear_appt_schedule   ${MUSERNAME_E}
+    # [Setup]  Run Keywords  clear_queue  ${PUSERNAME_E}   AND  clear_service    ${PUSERNAME_E}  AND  clear_appt_schedule   ${PUSERNAME_E}
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1169,7 +1169,7 @@ JD-TC-TeamLevelAnalytics-5
     Log List   ${appt_ids}
 
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1265,9 +1265,9 @@ JD-TC-TeamLevelAnalytics-5
 
 JD-TC-TeamLevelAnalytics-6
     [Documentation]   take appointments for a provider and check Get Team Level Analytics for online tokens and appointments actions(completed,cancelled)
-    # [Setup]  Run Keywords  clear_queue  ${MUSERNAME_E}   AND  clear_service    ${MUSERNAME_E}  AND  clear_appt_schedule   ${MUSERNAME_E}
+    # [Setup]  Run Keywords  clear_queue  ${PUSERNAME_E}   AND  clear_service    ${PUSERNAME_E}  AND  clear_appt_schedule   ${PUSERNAME_E}
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1361,7 +1361,7 @@ JD-TC-TeamLevelAnalytics-6
 
     Log List   ${appt_ids}
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1505,9 +1505,9 @@ JD-TC-TeamLevelAnalytics-6
 
 JD-TC-TeamLevelAnalytics-7
     [Documentation]     take appointments for a provider from consumer side and check domain level analytics after reschedule it
-    # [Setup]  Run Keywords  clear_queue  ${MUSERNAME_E}   AND  clear_service    ${MUSERNAME_E}  AND  clear_appt_schedule   ${MUSERNAME_E}
+    # [Setup]  Run Keywords  clear_queue  ${PUSERNAME_E}   AND  clear_service    ${PUSERNAME_E}  AND  clear_appt_schedule   ${PUSERNAME_E}
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1631,7 +1631,7 @@ JD-TC-TeamLevelAnalytics-7
 
     Log List   ${appt_ids}
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1659,7 +1659,7 @@ JD-TC-TeamLevelAnalytics-7
     # change_system_time  1  30
     sleep  02s   
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

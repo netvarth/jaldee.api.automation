@@ -13,8 +13,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -495,7 +495,7 @@ JD-TC-Remove Item Level Discount-2
     [Documentation]  login another user who have no admin privilage and check jaldee finance is enabled ,
 
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -801,7 +801,7 @@ JD-TC-Remove Item Level Discount-3
     [Documentation]  remove item level discount after sharing invoice,
 
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${netTotal2}=  Evaluate  ${netTotal1} + ${dis}
@@ -859,7 +859,7 @@ JD-TC-Remove Item Level Discount-4
     [Documentation]  Account is taxable,item is  taxable-Create new invoice.
 
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1409,7 +1409,7 @@ JD-TC-Remove Item Level Discount-6
 
     [Documentation]    Apply itemlevel discount from main account and then remove that discount from user account
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1911,7 +1911,7 @@ JD-TC-Remove Item Level Discount-3
     [Documentation]  login another user who have no admin privilage and try to remove discount from his login .-------------Will come this in next version ,when rbac comes-------------------
 
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2205,7 +2205,7 @@ JD-TC-Remove Item Level Discount-4
     [Documentation]  login another user who have  admin privilage and try to remove discount from his login .-------------Will come this in next version ,when rbac comes-------------------
 
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

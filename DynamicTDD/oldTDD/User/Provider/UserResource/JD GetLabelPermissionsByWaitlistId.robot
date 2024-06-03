@@ -8,7 +8,7 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 
@@ -19,11 +19,11 @@ JD-TC-GetLabelPremissions-1
 
     [Documentation]  Getting Label Permissions when usertype is PROVIDER.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME8}
+    ${pid}=  get_acc_id  ${HLPUSERNAME8}
     Set Suite Variable   ${pid}
 
     ${resp}=  View Waitlist Settings
@@ -197,7 +197,7 @@ JD-TC-GetLabelPremissions-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id2}  ${resp.json()}
     
-    clear_Label  ${HLMUSERNAME8}
+    clear_Label  ${HLPUSERNAME8}
     ${l_id1}=  Create Sample Label
     Set Suite Variable   ${l_id1}
 
@@ -265,7 +265,7 @@ JD-TC-GetLabelPremissions-1
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -373,7 +373,7 @@ JD-TC-GetLabelPremissions-3
 
     [Documentation]  Getting Label Permissions for the default user without setting label permissions.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -399,7 +399,7 @@ JD-TC-GetLabelPremissions-4
 
     [Documentation]  Getting Label Permissions for the default user with setting label permissions.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -419,7 +419,7 @@ JD-TC-GetLabelPremissions-4
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -454,7 +454,7 @@ JD-TC-GetLabelPremissions-5
 
     [Documentation]  Getting Label Permissions for a team.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -559,7 +559,7 @@ JD-TC-GetLabelPremissions-5
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -623,7 +623,7 @@ JD-TC-GetLabelPremissions-6
 
     [Documentation]  Getting Label Permissions when usertype is ASSISTANT.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -700,11 +700,11 @@ JD-TC-GetLabelPremissions-UH2
 
     [Documentation]  try to add label in a waitlist without giving any label permissions.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME8}
+    ${pid}=  get_acc_id  ${HLPUSERNAME8}
 
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -820,7 +820,7 @@ JD-TC-GetLabelPremissions-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_Label  ${HLMUSERNAME8}
+    clear_Label  ${HLPUSERNAME8}
     ${l_id1}=  Create Sample Label
 
     ${resp}=  Get Label By Id  ${l_id1}
@@ -856,7 +856,7 @@ JD-TC-GetLabelPremissions-UH2
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -926,7 +926,7 @@ JD-TC-GetLabelPremissions-UH3
 
     [Documentation]  try to add a label for a user who is not in the label permission list.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1034,7 +1034,7 @@ JD-TC-GetLabelPremissions-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_Label  ${HLMUSERNAME8}
+    clear_Label  ${HLPUSERNAME8}
     ${l_id1}=  Create Sample Label
 
     ${resp}=  Get Label By Id  ${l_id1}
@@ -1070,7 +1070,7 @@ JD-TC-GetLabelPremissions-UH3
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1141,11 +1141,11 @@ JD-TC-GetLabelPremissions-UH4
 
     [Documentation]  try to add another provider's label having label permissions.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME6}
+    ${pid}=  get_acc_id  ${HLPUSERNAME6}
     
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}

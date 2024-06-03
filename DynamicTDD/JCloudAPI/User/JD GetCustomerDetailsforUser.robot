@@ -14,11 +14,11 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ApiKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 @{emptylist}
@@ -30,7 +30,7 @@ JD-TC-GetCustomerDetailsForUser-1
 
     [Documentation]   Get customer details for a branch having one lead.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
@@ -40,7 +40,7 @@ JD-TC-GetCustomerDetailsForUser-1
     Set Test Variable  ${prov_id1}  ${decrypted_data['id']}
     Set Test Variable  ${prov_fname1}  ${decrypted_data['firstName']}
 
-    ${p_id1}=  get_acc_id  ${MUSERNAME8}
+    ${p_id1}=  get_acc_id  ${PUSERNAME8}
 
     ${resp}=  Get Account Settings
     Log  ${resp.content}
@@ -62,7 +62,7 @@ JD-TC-GetCustomerDetailsForUser-1
     Should Be Equal As Strings  ${resp.json()['apiGateway']}   ${toggle[0]}
     Set Suite Variable    ${sp_token}   ${resp.json()['spToken']} 
 
-    ${resp}=   Create User Token   ${MUSERNAME8}  ${PASSWORD}   ${sp_token}   ${countryCodes[0]}  
+    ${resp}=   Create User Token   ${PUSERNAME8}  ${PASSWORD}   ${sp_token}   ${countryCodes[0]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${user_token}   ${resp.json()['userToken']} 
@@ -110,12 +110,12 @@ JD-TC-GetCustomerDetailsForUser-2
 
     [Documentation]   Get customer details for a user having one lead(with admin previlage).
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${prov_id}  ${resp.json()['id']}
 
-    ${p_id}=  get_acc_id  ${HLMUSERNAME2}
+    ${p_id}=  get_acc_id  ${HLPUSERNAME2}
     Set Suite Variable  ${p_id}
 
     ${resp}=  Get Account Settings
@@ -176,7 +176,7 @@ JD-TC-GetCustomerDetailsForUser-2
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME2}'
+            IF   not '${user_phone}' == '${HLPUSERNAME2}'
                 clear_users  ${user_phone}
             END
         END
@@ -260,7 +260,7 @@ JD-TC-GetCustomerDetailsForUser-3
 
     [Documentation]   Get customer details for a branch without add customer.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
   
@@ -284,7 +284,7 @@ JD-TC-GetCustomerDetailsForUser-3
     Should Be Equal As Strings  ${resp.json()['apiGateway']}   ${toggle[0]}
     Set Test Variable    ${sp_token}   ${resp.json()['spToken']} 
 
-    ${resp}=   Create User Token   ${MUSERNAME17}  ${PASSWORD}   ${sp_token}   ${countryCodes[0]}  
+    ${resp}=   Create User Token   ${PUSERNAME17}  ${PASSWORD}   ${sp_token}   ${countryCodes[0]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${user_token}   ${resp.json()['userToken']} 
@@ -299,7 +299,7 @@ JD-TC-GetCustomerDetailsForUser-4
 
     [Documentation]   Get customer details for a branch without create a lead.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -323,7 +323,7 @@ JD-TC-GetCustomerDetailsForUser-5
 
     [Documentation]   Get customer details for a branch having multiple customers.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -350,7 +350,7 @@ JD-TC-GetCustomerDetailsForUser-6
 
     [Documentation]   Get customer details for a branch having customers and family members.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -438,7 +438,7 @@ JD-TC-GetCustomerDetailsForUser-UH2
 
     [Documentation]   Get lead details with sp token.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME8}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

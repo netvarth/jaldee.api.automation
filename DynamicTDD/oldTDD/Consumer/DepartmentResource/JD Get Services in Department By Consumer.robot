@@ -8,7 +8,7 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 
@@ -30,40 +30,40 @@ JD-TC-Create Services and Enable Department
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_K}=  Evaluate  ${MUSERNAME}+423826
+    ${PUSERNAME_K}=  Evaluate  ${PUSERNAME}+423826
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_K}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_K}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_K}  0
+    ${resp}=  Account Activation  ${PUSERNAME_K}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_K}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_K}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_K}${\n}
-    Set Suite Variable  ${MUSERNAME_K}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_K}${\n}
+    Set Suite Variable  ${PUSERNAME_K}
     Set Test Variable  ${pid}  ${resp.json()['id']}
     
-    ${acc_id}=  get_acc_id  ${MUSERNAME_K}
+    ${acc_id}=  get_acc_id  ${PUSERNAME_K}
     Set Suite Variable  ${acc_id}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${ph1}=  Evaluate  ${MUSERNAME_K}+1000000000
-    ${ph2}=  Evaluate  ${MUSERNAME_K}+2000000000
+    ${ph1}=  Evaluate  ${PUSERNAME_K}+1000000000
+    ${ph2}=  Evaluate  ${PUSERNAME_K}+2000000000
     ${views}=  Random Element    ${Views}
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${MUSERNAME_K}.${test_mail}  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERNAME_K}.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state
@@ -110,7 +110,7 @@ JD-TC-Create Services and Enable Department
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${MUSERNAME_K}.${test_mail}
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_K}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname_A}  ${lastname_A}   ${email_id}
     Log  ${resp.json()}
@@ -193,7 +193,7 @@ JD-TC-Get Services in Department By Consumer-UH2
 
 JD-TC-Get Services in Department By Consumer-1
     [Documentation]  Provider Get Services in Department By Consumer
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dep_name1}=  FakerLibrary.bs
@@ -252,7 +252,7 @@ JD-TC-Get Services in Department By Consumer-2
 
     [Documentation]  Provider Create department using Service names then Get Services in Department By Consumer
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -334,7 +334,7 @@ JD-TC-Get Services in Department By Consumer-3
 
     [Documentation]  Provider Create department without Service names then Get Services in Department By Consumer
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

@@ -14,7 +14,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -36,11 +36,11 @@ JD-TC-CreateTemplateConfig-1
 
     [Documentation]  provide login account then try to get Get Templates By Account,Then Create a Template with valid details.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${p_id1}=  get_acc_id  ${HLMUSERNAME6}
+    ${p_id1}=  get_acc_id  ${HLPUSERNAME6}
     Set Suite Variable   ${p_id1}
 
     ${resp}=   Get Templates By Account
@@ -88,7 +88,7 @@ JD-TC-CreateTemplateConfig-2
 
     [Documentation]  Try to Create another Template with isDefaultTemp is false.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -115,7 +115,7 @@ JD-TC-CreateTemplateConfig-3
 
     [Documentation]   Create Template with printTemplateType us case.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -142,7 +142,7 @@ JD-TC-CreateTemplateConfig-4
 
     [Documentation]   Create Template with printTemplateType as Finance.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -169,7 +169,7 @@ JD-TC-CreateTemplateConfig-5
 
     [Documentation]   Create Template with printTemplateStatus as inactive.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -197,7 +197,7 @@ JD-TC-CreateTemplateConfig-6
 
     [Documentation]   User Create a Template with isDefaultTemp is true.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -278,7 +278,7 @@ JD-TC-CreateTemplateConfig-UH1
 
     [Documentation]  Try to Create another Template with isDefaultTemp is true.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -293,7 +293,7 @@ JD-TC-CreateTemplateConfig-UH2
 
     [Documentation]  Try to Create another Template with EMPTY templateName.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -309,7 +309,7 @@ JD-TC-CreateTemplateConfig-UH3
 
     [Documentation]  Try to Create another Template with EMPTY templateHeader.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -324,7 +324,7 @@ JD-TC-CreateTemplateConfig-UH4
 
     [Documentation]  Try to Create another Template with EMPTY templateContent.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -339,7 +339,7 @@ JD-TC-CreateTemplateConfig-UH5
 
     [Documentation]  Try to Create another Template with EMPTY templateFooter.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -354,7 +354,7 @@ JD-TC-CreateTemplateConfig-UH6
 
     [Documentation]  Try to Create another Template with EMPTY printTemplateStatus.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -369,7 +369,7 @@ JD-TC-CreateTemplateConfig-UH7
 
     [Documentation]  Try to Create another Template with EMPTY printTemplateType.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

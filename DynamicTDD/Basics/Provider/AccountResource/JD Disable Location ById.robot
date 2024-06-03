@@ -10,7 +10,7 @@ Library         FakerLibrary
 Resource        /ebs/TDD/ProviderKeywords.robot
 Resource        /ebs/TDD/ConsumerKeywords.robot
 Variables       /ebs/TDD/varfiles/providers.py
-Variables       /ebs/TDD/varfiles/musers.py
+Variables       /ebs/TDD/varfiles/providers.py
 Variables       /ebs/TDD/varfiles/consumerlist.py 
 
 *** Variables ***
@@ -271,21 +271,21 @@ JD-TC-DisableLocation-UH7
       Set Test Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
-      ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+450005
-      ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    2
+      ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+450005
+      ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    2
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Activation  ${MUSERNAME_E}  0
+      ${resp}=  Account Activation  ${PUSERNAME_E}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+      ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
-      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
-      Set Suite Variable  ${MUSERNAME_E}
-      ${uid}=  get_uid  ${MUSERNAME_E}
+      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+      Set Suite Variable  ${PUSERNAME_E}
+      ${uid}=  get_uid  ${PUSERNAME_E}
       # ${city8}=   get_place
       # Set Suite Variable  ${city8}
       # ${latti8}=  get_latitude
@@ -386,7 +386,7 @@ JD-TC-VerifyDisableLocation-1
 
 JD-TC-VerifyDisableLocation-3
       [Documentation]  Verification of Disable location
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       # ${resp}=  Get queues
       # Log  ${resp.json()}

@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -39,7 +39,7 @@ JD-TC-Get Prescription Templates By Filter-1
 
     [Documentation]    Create MedicalRecordPrescription Template then Get Prescription templates by filter
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -110,7 +110,7 @@ JD-TC-Get Prescription Templates By Filter-2
 
     [Documentation]    Update MedicalRecordPrescription Template name then Get Prescription templates by filter
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -136,7 +136,7 @@ JD-TC-Get Prescription Templates By Filter-3
 
     [Documentation]    Remove MedicalRecordPrescription Template  then try Get Prescription templates by filter
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -163,7 +163,7 @@ JD-TC-Get Prescription Templates By Filter-UH2
 
     [Documentation]     Get Prescription templates by filter without login
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

@@ -12,8 +12,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -27,7 +27,7 @@ JD-TC-CreateUserWithRolesAndScope-1
 
     [Documentation]  Create User With Roles And Scope for an existing provider.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
@@ -89,7 +89,7 @@ JD-TC-CreateUserWithRolesAndScope-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME23}'
+            IF   not '${user_phone}' == '${PUSERNAME23}'
                 clear_users  ${user_phone}
             END
         END

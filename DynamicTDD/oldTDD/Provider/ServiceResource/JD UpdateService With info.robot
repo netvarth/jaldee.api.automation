@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 
@@ -1411,9 +1411,9 @@ Non Billable
 
      FOR    ${a}   IN RANGE  ${start1}    ${length-1}
         # clear_service       ${PUSERNAME${a}}
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        clear_customer   ${MUSERNAME${a}}
+        clear_customer   ${PUSERNAME${a}}
         ${domain}=   Set Variable    ${resp.json()['sector']}
         ${subdomain}=    Set Variable      ${resp.json()['subSector']}
         ${resp}=  View Waitlist Settings
@@ -1425,7 +1425,7 @@ Non Billable
         Exit For Loop IF     '${check}' == 'False'
        
      END 
-     RETURN   ${MUSERNAME${a}}
+     RETURN   ${PUSERNAME${a}}
 
 
 

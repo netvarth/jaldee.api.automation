@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -30,7 +30,7 @@ JD-TC-UpdateItemRemarkStatus-1
     [Documentation]  create reamrks and update status as inactive . 
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -80,7 +80,7 @@ JD-TC-UpdateItemRemarkStatus-2
     [Documentation]  update item remarks with transaction type as ADJUSTMENT then change status as inactive. 
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -142,7 +142,7 @@ JD-TC-UpdateItemRemarkStatus-3
     [Documentation]  try to update remarks thats in inactive status .then active the status.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -169,7 +169,7 @@ JD-TC-UpdateItemRemarkStatus-UH1
     [Documentation]  Try to Update already active status remarks to active status.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -184,7 +184,7 @@ JD-TC-UpdateItemRemarkStatus-UH2
     [Documentation]  Try to Update already inactive status remarks to inactive.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -200,7 +200,7 @@ JD-TC-UpdateItemRemarkStatus-UH3
     [Documentation]  Update Item Remarks status with invalid encid
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

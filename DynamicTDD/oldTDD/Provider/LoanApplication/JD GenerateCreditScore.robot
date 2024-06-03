@@ -13,8 +13,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -59,7 +59,7 @@ JD-TC-Generate Credit Score-MAFIL Score-1
     [Documentation]               Create a loan And try to Generate Credit Score-MAFIL Score.
 
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -479,7 +479,7 @@ JD-TC-Generate Credit Score-MAFIL Score-UH1
                                   
     [Documentation]                Generate Credit Score-MAFIL Score with invalid loanuid.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -494,7 +494,7 @@ JD-TC-Generate Credit Score-MAFIL Score-UH2
                                   
     [Documentation]                Generate Credit Score-MAFIL Score with invalid kycid.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

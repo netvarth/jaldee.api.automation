@@ -11,7 +11,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 *** Variables ***
 @{Views}  self  all  customersOnly
@@ -93,7 +93,7 @@ JD-TC-GetBusinessProf-1
 
 JD-TC-GetBusinessProf-2
 	[Documentation]  Get business profile of Branch
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}

@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Test Cases ***
 
@@ -22,7 +22,7 @@ JD-TC-UpdateItemGroup-1
 
     [Documentation]   Update Item Group - group name updated
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -77,7 +77,7 @@ JD-TC-UpdateItemGroup-UH1
 
     [Documentation]   Update Item Group - update the existing name
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -90,7 +90,7 @@ JD-TC-UpdateItemGroup-2
 
     [Documentation]   Update Item Group - update group code
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -106,7 +106,7 @@ JD-TC-UpdateItemGroup-3
 
     [Documentation]   Update Item Group - update group des
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -121,7 +121,7 @@ JD-TC-UpdateItemGroup-4
 
     [Documentation]   Update Item Group - group name is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -135,7 +135,7 @@ JD-TC-UpdateItemGroup-5
 
     [Documentation]   Update Item Group - group code is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -149,7 +149,7 @@ JD-TC-UpdateItemGroup-6
 
     [Documentation]   Update Item Group - group des is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -163,7 +163,7 @@ JD-TC-UpdateItemGroup-7
 
     [Documentation]   Update Item Group - with another provider login
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -181,7 +181,7 @@ JD-TC-UpdateItemGroup-UH2
 
     [Documentation]   Update Item Group - group id is inv
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -199,7 +199,7 @@ JD-TC-UpdateItemGroup-UH3
 
     [Documentation]   Update Item Group - group id is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

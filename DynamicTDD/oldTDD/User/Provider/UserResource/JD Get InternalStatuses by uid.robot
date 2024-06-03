@@ -8,7 +8,7 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 ***Test Cases***
@@ -16,12 +16,12 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 JD-TC-GetInternalStatus-1
      [Documentation]  Getting Internal statuses when user has ADMIN=FALSE and getting internal sts of branch signup user
 
-     clear_customer   ${HLMUSERNAME4}
+     clear_customer   ${HLPUSERNAME4}
 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${pid}=  get_acc_id  ${HLMUSERNAME4}
+     ${pid}=  get_acc_id  ${HLPUSERNAME4}
      Set Suite Variable  ${pid}
 
      ${resp}=  View Waitlist Settings
@@ -218,7 +218,7 @@ JD-TC-GetInternalStatus-1
      ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid}
@@ -275,7 +275,7 @@ JD-TC-GetInternalStatus-1
 
 JD-TC-GetInternalStatus-2
      [Documentation]  Getting Internal statuses when  user is ADMIN=TRUE(No need to add  admin true user to userlist for permission)
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -310,7 +310,7 @@ JD-TC-GetInternalStatus-2
 
 JD-TC-GetInternalStatus-3
      [Documentation]  Changed user list in permission list then get Internal sts(ADMIN=FALSE)
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U4}=  Evaluate  ${PUSERNAME}+301296
@@ -355,7 +355,7 @@ JD-TC-GetInternalStatus-3
      Should Be Equal As Strings  ${resp.json()[0]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[0]['serviceId']}  ${s_id1}
 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid}
@@ -388,7 +388,7 @@ JD-TC-GetInternalStatus-3
 
 JD-TC-GetInternalStatus-4
      [Documentation]  Assign users to team then give permission to that team and getting internal sts
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get User
@@ -424,7 +424,7 @@ JD-TC-GetInternalStatus-4
      ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid}
@@ -503,7 +503,7 @@ JD-TC-GetInternalStatus-4
 
 JD-TC-GetInternalStatus-5
      [Documentation]  Change internal sts with more services then taking waitlist and check internal sts
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -561,7 +561,7 @@ JD-TC-GetInternalStatus-5
      ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid}
@@ -641,7 +641,7 @@ JD-TC-GetInternalStatus-5
      Should Be Equal As Strings  ${resp.json()[0]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[0]['serviceId']}  ${s_id2}
 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid2}
@@ -723,7 +723,7 @@ JD-TC-GetInternalStatus-5
 
 JD-TC-GetInternalStatus-6
      [Documentation]  Change internal sts with team id only then taking waitlist and check internal sts
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -764,7 +764,7 @@ JD-TC-GetInternalStatus-6
     Set Suite Variable  ${wid}  ${wid[0]}
 
 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid}
@@ -931,7 +931,7 @@ JD-TC-GetInternalStatus-7
     Set Suite Variable  ${wid3}  ${wid3[0]}
 
 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid3}
@@ -1058,7 +1058,7 @@ JD-TC-GetInternalStatus-7
 
 JD-TC-GetInternalStatus-8
      [Documentation]  Change internal sts with empty team and empty user list then check only admin=true user can get internal sts
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${permission1}=  InternalStatuses_permissions  ${empty_list}  ${empty_list}
@@ -1092,7 +1092,7 @@ JD-TC-GetInternalStatus-8
     Set Suite Variable  ${wid3}  ${wid3[0]}
 
 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid3}

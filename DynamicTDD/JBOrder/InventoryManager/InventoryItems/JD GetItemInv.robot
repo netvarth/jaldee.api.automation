@@ -15,7 +15,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -28,7 +28,7 @@ JD-TC-GetItemInv-1
 
     [Documentation]   Get Item Inv
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -81,7 +81,7 @@ JD-TC-GetItemInv-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -283,7 +283,7 @@ JD-TC-GetItemInv-Uh1
 
     [Documentation]   Get Item Inv - where item code is invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -298,7 +298,7 @@ JD-TC-GetItemInv-UH2
 
     [Documentation]   Get Item Inv - another provider trying to get
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

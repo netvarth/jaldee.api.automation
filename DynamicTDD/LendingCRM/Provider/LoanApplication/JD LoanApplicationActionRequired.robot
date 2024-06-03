@@ -13,8 +13,8 @@ Resource           /ebs/TDD/ConsumerKeywords.robot
 Resource           /ebs/TDD/ProviderPartnerKeywords.robot
 Variables          /ebs/TDD/varfiles/providers.py
 Variables          /ebs/TDD/varfiles/consumerlist.py 
-Variables          /ebs/TDD/varfiles/musers.py
-Variables          /ebs/TDD/varfiles/hl_musers.py
+Variables          /ebs/TDD/varfiles/providers.py
+Variables          /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -95,22 +95,22 @@ JD-TC-Loan_Application_Action_Required-1
 
 # ..... SignUp Business Head
 
-    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+7513458
+    ${NBFCPUSERNAME1}=  Evaluate  ${PUSERNAME}+7513458
     ${highest_package}=  get_highest_license_pkg
-    Set Suite Variable      ${NBFCMUSERNAME1}
+    Set Suite Variable      ${NBFCPUSERNAME1}
 
-    ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCMUSERNAME1}    ${highest_package[0]}
+    ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCPUSERNAME1}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings            ${resp.status_code}    200
     
-    ${resp}=  Account Activation          ${NBFCMUSERNAME1}  0
+    ${resp}=  Account Activation          ${NBFCPUSERNAME1}  0
     Log   ${resp.json()}
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential      ${NBFCMUSERNAME1}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential      ${NBFCPUSERNAME1}  ${PASSWORD}  0
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login    ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -1097,7 +1097,7 @@ JD-TC-Loan_Application_Action_Required-1
     Should Be Equal As Strings     ${resp.status_code}    200
     Set Suite Variable      ${sp_internal}      ${resp.json()['spInternalStatus']}
 
-    ${resp}=  Encrypted Provider Login    ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -1109,7 +1109,7 @@ JD-TC-Loan_Application_Action_Required-UH1
                                   
     [Documentation]               Loan Application Action Required Where note is empty
 
-    ${resp}=  Encrypted Provider Login    ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -1122,7 +1122,7 @@ JD-TC-Loan_Application_Action_Required-UH2
                                   
     [Documentation]               Loan Application Action Required Where loan uid is empty
 
-    ${resp}=  Encrypted Provider Login    ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -1135,7 +1135,7 @@ JD-TC-Loan_Application_Action_Required-UH3
                                   
     [Documentation]               Loan Application Action Required With invalid launid
 
-    ${resp}=  Encrypted Provider Login    ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

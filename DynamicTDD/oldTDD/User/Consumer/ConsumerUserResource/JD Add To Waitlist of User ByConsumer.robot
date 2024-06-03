@@ -12,7 +12,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 
@@ -47,16 +47,16 @@ ${start}              60
 
 JD-TC-Add To Waitlist of User ByConsumer-1
         [Documentation]  Consumer joins waitlist of a valid provider.    
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
-        ${p_id}=  get_acc_id  ${MUSERNAME29}
+        ${p_id}=  get_acc_id  ${PUSERNAME29}
        
 
-        clear_Department    ${MUSERNAME29}
-        clear_service       ${MUSERNAME29}
-        clear_location      ${MUSERNAME29}
+        clear_Department    ${PUSERNAME29}
+        clear_service       ${PUSERNAME29}
+        clear_location      ${PUSERNAME29}
 
         ${DAY1}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${DAY1}  ${DAY1}
@@ -74,7 +74,7 @@ JD-TC-Add To Waitlist of User ByConsumer-1
         ${name3}=  FakerLibrary.name
         ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
         ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-        ${emails1}=  Emails  ${name3}  Email  ${P_Email}${MUSERNAME29}.${test_mail}  ${views}
+        ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERNAME29}.${test_mail}  ${views}
         ${bs}=  FakerLibrary.bs
         ${companySuffix}=  FakerLibrary.companySuffix
         # ${city}=   get_place
@@ -124,12 +124,12 @@ JD-TC-Add To Waitlist of User ByConsumer-1
         # ${bank_name}=  FakerLibrary.company
         # ${name}=  FakerLibrary.name
         # ${branch}=   db.get_place
-        # ${resp}=   Update Account Payment Settings   ${bool[0]}  ${bool[0]}  ${bool[1]}  ${MUSERNAME26}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
+        # ${resp}=   Update Account Payment Settings   ${bool[0]}  ${bool[0]}  ${bool[1]}  ${PUSERNAME26}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
         # Log   ${resp.content}
         # Should Be Equal As Strings    ${resp.status_code}   200
         # ${resp}=  payuVerify  ${p_id}
         # Log  ${resp}
-        # ${resp}=   Update Account Payment Settings   ${bool[1]}  ${bool[0]}  ${bool[1]}  ${MUSERNAME26}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}    
+        # ${resp}=   Update Account Payment Settings   ${bool[1]}  ${bool[0]}  ${bool[1]}  ${PUSERNAME26}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}    
         # Log   ${resp.content}
         # Should Be Equal As Strings    ${resp.status_code}   200
         # ${resp}=  SetMerchantId  ${p_id}  ${merchantid}
@@ -182,8 +182,8 @@ JD-TC-Add To Waitlist of User ByConsumer-1
         Set Suite Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
 
 
-       ${whpnum}=  Evaluate  ${MUSERNAME29}+336245
-       ${tlgnum}=  Evaluate  ${MUSERNAME29}+336345
+       ${whpnum}=  Evaluate  ${PUSERNAME29}+336245
+       ${tlgnum}=  Evaluate  ${PUSERNAME29}+336345
         
         ${resp}=  Get User
         Log   ${resp.content}
@@ -286,7 +286,7 @@ JD-TC-Add To Waitlist of User ByConsumer-1
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid}  ${wid[0]} 
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -313,10 +313,10 @@ JD-TC-Add To Waitlist of User ByConsumer-1
 JD-TC-Add To Waitlist of User ByConsumer-2
 	[Documentation]  Provider removes consumer waitlisted for a service and consumer joins the waitlist of the same service and another service of same queue
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${p_id}=  get_acc_id  ${MUSERNAME29}
+        ${p_id}=  get_acc_id  ${PUSERNAME29}
 
         ${cancl_reasn}=   FakerLibrary.sentence
         ${resp}=  Waitlist Action Cancel  ${cwid}  ${waitlist_cancl_reasn[3]}  ${cancl_reasn}
@@ -377,7 +377,7 @@ JD-TC-Add To Waitlist of User ByConsumer-3
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${cid}=  get_id  ${CUSERNAME1}
-        ${p_id}=  get_acc_id  ${MUSERNAME29}
+        ${p_id}=  get_acc_id  ${PUSERNAME29}
 
         ${resp}=  Cancel Waitlist  ${cwid1}  ${p_id} 
         Log   ${resp.content}
@@ -418,10 +418,10 @@ JD-TC-Add To Waitlist of User ByConsumer-3
 JD-TC-Add To Waitlist of User ByConsumer-4
 	[Documentation]  A Consumer Added To Waitlist for same service in diffrent queues of Different USERS
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${p_id}=  get_acc_id  ${MUSERNAME29}
+        ${p_id}=  get_acc_id  ${PUSERNAME29}
 
 
         ${number1}=  Random Int  min=1000  max=2000
@@ -526,10 +526,10 @@ JD-TC-Add To Waitlist of User ByConsumer-4
 JD-TC-Add To Waitlist of User ByConsumer-5
 	[Documentation]  Consumer Added To Waitlist for diffrent services of diffrent Queue 
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${p_id}=  get_acc_id  ${MUSERNAME29}
+        ${p_id}=  get_acc_id  ${PUSERNAME29}
 
 
         # ${number1}=  Random Int  min=1000  max=2000
@@ -614,7 +614,7 @@ JD-TC-Add To Waitlist of User ByConsumer-6
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${cid}=  get_id  ${CUSERNAME1}
-        ${p_id}=  get_acc_id  ${MUSERNAME29}
+        ${p_id}=  get_acc_id  ${PUSERNAME29}
     
         ${msg}=  FakerLibrary.word
         ${FUTURE_DAY}=  db.add_timezone_date  ${tz}  3  
@@ -647,7 +647,7 @@ JD-TC-Add To Waitlist of User ByConsumer-7
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${cid}=  get_id  ${CUSERNAME1}
-        ${p_id}=  get_acc_id  ${MUSERNAME29}
+        ${p_id}=  get_acc_id  ${PUSERNAME29}
 
         ${msg}=  FakerLibrary.word
         # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
@@ -703,7 +703,7 @@ JD-TC-Add To Waitlist of User ByConsumer-8
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${cid}=  get_id  ${CUSERNAME1}
-        ${p_id}=  get_acc_id  ${MUSERNAME29}
+        ${p_id}=  get_acc_id  ${PUSERNAME29}
     
         ${msg}=  FakerLibrary.word
         ${FUTURE_DAY}=  db.add_timezone_date  ${tz}  3  
@@ -759,7 +759,7 @@ JD-TC-Add To Waitlist of User ByConsumer-9
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${cid}=  get_id  ${CUSERNAME1}
-        ${p_id}=  get_acc_id  ${MUSERNAME29}
+        ${p_id}=  get_acc_id  ${PUSERNAME29}
     
         ${msg}=  FakerLibrary.word
         ${FUTURE_DAY}=  db.add_timezone_date  ${tz}  3  
@@ -814,7 +814,7 @@ JD-TC-Add To Waitlist of User ByConsumer-10
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${cid}=  get_id  ${CUSERNAME1}
-        ${p_id}=  get_acc_id  ${MUSERNAME29}
+        ${p_id}=  get_acc_id  ${PUSERNAME29}
 
         ${C_fname}=  FakerLibrary.name
         Set Suite Variable   ${C_fname}
@@ -877,7 +877,7 @@ JD-TC-Add To Waitlist of User ByConsumer-10
         Should Be Equal As Strings  ${resp.status_code}  200
         sleep   02s
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME1}
@@ -901,7 +901,7 @@ JD-TC-Add To Waitlist of User ByConsumer-11
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${cid}=  get_id  ${CUSERNAME1}
-        ${p_id}=  get_acc_id  ${MUSERNAME29}
+        ${p_id}=  get_acc_id  ${PUSERNAME29}
 
     
         ${msg}=  FakerLibrary.word
@@ -950,7 +950,7 @@ JD-TC-Add To Waitlist of User ByConsumer-11
         Should Be Equal As Strings  ${resp.status_code}  200
         sleep   02s
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME1}
@@ -975,7 +975,7 @@ JD-TC-Add To Waitlist of User ByConsumer-12
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${cid}=  get_id  ${CUSERNAME3}
-        ${p_id}=  get_acc_id  ${MUSERNAME29}
+        ${p_id}=  get_acc_id  ${PUSERNAME29}
     
         ${C_fname1}=  FakerLibrary.name
         Set Suite Variable   ${C_fname1}
@@ -1005,7 +1005,7 @@ JD-TC-Add To Waitlist of User ByConsumer-12
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid2}  ${wid[0]} 
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1049,7 +1049,7 @@ JD-TC-Add To Waitlist of User ByConsumer-12
         Should Be Equal As Strings  ${resp.status_code}  200
         sleep   02s
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME3}
@@ -1073,7 +1073,7 @@ JD-TC-Add To Waitlist of User ByConsumer-13
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${cid}=  get_id  ${CUSERNAME3}
-        ${p_id}=  get_acc_id  ${MUSERNAME29}
+        ${p_id}=  get_acc_id  ${PUSERNAME29}
     
         ${msg}=  FakerLibrary.word
         # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
@@ -1121,7 +1121,7 @@ JD-TC-Add To Waitlist of User ByConsumer-13
         Should Be Equal As Strings  ${resp.status_code}  200
         sleep   02s
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME3}
@@ -1144,7 +1144,7 @@ JD-TC-Add To Waitlist of User ByConsumer-14
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${cid}=  get_id  ${CUSERNAME1}
-        ${p_id}=  get_acc_id  ${MUSERNAME29}
+        ${p_id}=  get_acc_id  ${PUSERNAME29}
     
         ${msg}=  FakerLibrary.word
         # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
@@ -1210,7 +1210,7 @@ JD-TC-Add To Waitlist of User ByConsumer-15
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${cid}=  get_id  ${CUSERNAME1}
-        ${p_id}=  get_acc_id  ${MUSERNAME29}
+        ${p_id}=  get_acc_id  ${PUSERNAME29}
     
         ${msg}=  FakerLibrary.word
         ${FUTURE_DAY}=  db.add_timezone_date  ${tz}  4  
@@ -1232,7 +1232,7 @@ JD-TC-Add To Waitlist of User ByConsumer-15
         Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${que_id}
 
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1287,7 +1287,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH1
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${cid}=  get_id  ${CUSERNAME4}
-        ${p_id}=  get_acc_id  ${MUSERNAME29}
+        ${p_id}=  get_acc_id  ${PUSERNAME29}
     
         ${msg}=  FakerLibrary.word
         # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
@@ -1299,7 +1299,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH1
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid1}  ${wid[0]} 
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1373,7 +1373,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH1
         Should Be Equal As Strings  ${resp.status_code}  200
         sleep   02s
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME4}
@@ -1391,10 +1391,10 @@ JD-TC-Add To Waitlist of User ByConsumer-UH1
 
 JD-TC-Add To Waitlist of User ByConsumer-UH2
         [Documentation]  Reaches waitlist maximum capacity and check
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${p_id}=  get_acc_id  ${MUSERNAME29}
+        ${p_id}=  get_acc_id  ${PUSERNAME29}
         
         ${resp}=  Create Service For User  ${MAX_SERVICE}  ${description}   ${dur}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  ${EMPTY}  ${totalamt}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${u_id}
         Log   ${resp.content}
@@ -1446,10 +1446,10 @@ JD-TC-Add To Waitlist of User ByConsumer-UH2
        
 JD-TC-Add To Waitlist of User ByConsumer-UH3
 	[Documentation]  Add To Waitlist By Consumer, when Queue Disabled  
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${p_id}=  get_acc_id  ${MUSERNAME29}
+        ${p_id}=  get_acc_id  ${PUSERNAME29}
         
         
         ${resp}=  Disable Queue  ${MAX_qid}
@@ -1476,7 +1476,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH3
         Should Be Equal As Strings  "${resp.json()}"   "${QUEUE_DISABLED}" 
     
         Comment  AGAIN ENABLE QUEUE
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1516,10 +1516,10 @@ JD-TC-Add To Waitlist of User ByConsumer-UH3
 
 JD-TC-Add To Waitlist of User ByConsumer-UH4
 	[Documentation]  Add To Waitlist By Consumer ,provider disable online Checkin  
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${p_id}=  get_acc_id  ${MUSERNAME29}
+        ${p_id}=  get_acc_id  ${PUSERNAME29}
         
         ${resp}=  Disable Online Checkin
         Log   ${resp.content}
@@ -1543,7 +1543,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH4
         Should Be Equal As Strings  "${resp.json()}"   "${ONLINE_CHECKIN_OFF}" 
     
         Comment  AGAIN ENABLE ONLINE_CHECKIN
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1583,10 +1583,10 @@ JD-TC-Add To Waitlist of User ByConsumer-UH4
 
 JD-TC-Add To Waitlist of User ByConsumer-UH5 
     [Documentation]  Add To Waitlist By Consumer ,provider  disable Waitlist
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${p_id}=  get_acc_id  ${MUSERNAME29}
+        ${p_id}=  get_acc_id  ${PUSERNAME29}
         
         ${resp}=  Disable Waitlist
         Log   ${resp.content}
@@ -1615,7 +1615,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH5
         Should Be Equal As Strings  "${resp.json()}"   "${WAITLIST_NOT_ENABLED}" 
     
         Comment  AGAIN ENABLE WAITLIST
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1655,10 +1655,10 @@ JD-TC-Add To Waitlist of User ByConsumer-UH5
     
 JD-TC-Add To Waitlist of User ByConsumer-UH6
 	[Documentation]  Add To Waitlist By Consumer ,provider Disable Future Checkin
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${p_id}=  get_acc_id  ${MUSERNAME29}
+        ${p_id}=  get_acc_id  ${PUSERNAME29}
         
         ${resp}=  Disable Future Checkin
         Log   ${resp.content}
@@ -1682,7 +1682,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH6
         Should Be Equal As Strings  "${resp.json()}"   "${FUTURE_CHECKIN_DISABLED}"
     
         Comment  AGAIN ENABLE FUTURE_CHECKIN
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1728,7 +1728,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH7
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${cid}=  get_id  ${CUSERNAME1}
-        ${p_id}=  get_acc_id  ${MUSERNAME29}
+        ${p_id}=  get_acc_id  ${PUSERNAME29}
         ${msg}=  FakerLibrary.word
         ${FUTURE_DAY}=  db.add_timezone_date  ${tz}  3  
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${MAX_qid}  ${FUTURE_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
@@ -1739,10 +1739,10 @@ JD-TC-Add To Waitlist of User ByConsumer-UH7
 
 JD-TC-Add To Waitlist of User ByConsumer-UH8
 	[Documentation]  Add To Waitlist By Consumer ,provider in holiday
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${p_id}=  get_acc_id  ${MUSERNAME29}
+        ${p_id}=  get_acc_id  ${PUSERNAME29}
         
         
         # ${holidayname}=   FakerLibrary.word
@@ -1776,7 +1776,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH8
         Should Be Equal As Strings  "${resp.json()}"   "${HOLIDAY_NON_WORKING_DAY}" 
     
         Comment  DELETE HOLIDAY
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1815,10 +1815,10 @@ JD-TC-Add To Waitlist of User ByConsumer-UH8
    
 JD-TC-Add To Waitlist of User ByConsumer-UH9
 	[Documentation]  Add To Waitlist By Consumer, service DISABLED 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${p_id}=  get_acc_id  ${MUSERNAME29}
+        ${p_id}=  get_acc_id  ${PUSERNAME29}
         
         ${resp}=  Disable service   ${MAX_sid}
         Log   ${resp.content}
@@ -1842,7 +1842,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH9
         Should Be Equal As Strings  "${resp.json()}"   "${INVALID_SERVICE}"
     
         Comment  AGAIN ENABLE SERVICE
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1900,7 +1900,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH10
 JD-TC-Add To Waitlist of User ByConsumer-UH11    
     [Documentation]   Add To Waitlist without login
         ${cid}=  get_id  ${CUSERNAME1}
-        ${p_id}=  get_acc_id  ${MUSERNAME29}
+        ${p_id}=  get_acc_id  ${PUSERNAME29}
         
         ${FUTURE_DAY}=  db.add_timezone_date  ${tz}  5  
         ${msg}=  FakerLibrary.word
@@ -1913,10 +1913,10 @@ JD-TC-Add To Waitlist of User ByConsumer-UH11
 JD-TC-Add To Waitlist of User ByConsumer-UH12
      [Documentation]   Add to waitlist on a non scheduled day
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${p_id}=  get_acc_id  ${MUSERNAME29}
+        ${p_id}=  get_acc_id  ${PUSERNAME29}
        
         ${resp}=  Create Service For User  ${BRANCH_SERVICE1}  ${description}   ${dur}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  ${EMPTY}  ${totalamt}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${u_id}
         Log   ${resp.content}
@@ -1949,10 +1949,10 @@ JD-TC-Add To Waitlist of User ByConsumer-UH12
 JD-TC-Add To Waitlist of User ByConsumer-UH13   
     [Documentation]   Add to waitlist After Business time
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${p_id}=  get_acc_id  ${MUSERNAME29}
+        ${p_id}=  get_acc_id  ${PUSERNAME29}
 
         ${resp}=  Get Business Profile
         Log   ${resp.content}
@@ -1991,10 +1991,10 @@ JD-TC-Add To Waitlist of User ByConsumer-UH13
 
 JD-TC-Add To Waitlist of User ByConsumer-UH14
     [Documentation]  Add consumer to waitlist when service time exceeds queue time.
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${p_id}=  get_acc_id  ${MUSERNAME29}
+        ${p_id}=  get_acc_id  ${PUSERNAME29}
         
         ${resp}=  Create Service For User  ${BRANCH_SERVICE3}  ${description}   ${service_duration[0]}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  ${EMPTY}  ${totalamt}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${u_id}
         Log   ${resp.content}
@@ -2047,13 +2047,13 @@ JD-TC-Add To Waitlist of User ByConsumer-UH15
 
         comment  Finding billable account
         
-        # ${resp}=   Get File    /ebs/TDD/varfiles/musers.py
+        # ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
         # ${len}=   Split to lines  ${resp}
         # ${length}=  Get Length   ${len}
 
         # FOR    ${a}   IN RANGE    ${length}
-        #         clear_service       ${MUSERNAME${a}}
-        #         ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        #         clear_service       ${PUSERNAME${a}}
+        #         ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         #         Should Be Equal As Strings    ${resp.status_code}    200
         #         ${domain}=   Set Variable    ${resp.json()['sector']}
         #         ${subdomain}=    Set Variable      ${resp.json()['subSector']}
@@ -2065,11 +2065,11 @@ JD-TC-Add To Waitlist of User ByConsumer-UH15
 
         # Set Suite Variable  ${a}
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
-        # ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        # ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         # Log   ${resp.content}
         # Should Be Equal As Strings    ${resp.status_code}    200
         Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
@@ -2084,17 +2084,17 @@ JD-TC-Add To Waitlist of User ByConsumer-UH15
         Set Suite Variable   ${check1}   ${resp3.json()['licensePkgID']}
         Run Keyword If    '${check1}' != '${pkg_id[0]}'   Change License Package  ${pkg_id[0]}
 
-        # ${p_id31}=  get_acc_id  ${MUSERNAME${a}}
+        # ${p_id31}=  get_acc_id  ${PUSERNAME${a}}
         # Set Suite Variable  ${p_id31}
-        # clear_Department    ${MUSERNAME${a}}
-        # clear_service       ${MUSERNAME${a}}
-        # clear_location      ${MUSERNAME${a}}
+        # clear_Department    ${PUSERNAME${a}}
+        # clear_service       ${PUSERNAME${a}}
+        # clear_location      ${PUSERNAME${a}}
 
-        ${p_id31}=  get_acc_id  ${MUSERNAME10}
+        ${p_id31}=  get_acc_id  ${PUSERNAME10}
         Set Suite Variable  ${p_id31}
-        # clear_Department    ${MUSERNAME10}
-        # clear_service       ${MUSERNAME10}
-        # clear_location      ${MUSERNAME10}
+        # clear_Department    ${PUSERNAME10}
+        # clear_service       ${PUSERNAME10}
+        # clear_location      ${PUSERNAME10}
 
         ${resp}=  Get Account Payment Settings
         Log   ${resp.content}
@@ -2254,7 +2254,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH15
         # Log   ${resp.content}
         # Should Be Equal As Strings  ${resp.status_code}  200
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp}=  Waitlist Action  ${waitlist_actions[3]}  ${cwid15_1}
@@ -2276,7 +2276,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH16
         ${resp}=  Consumer Login  ${CUSERNAME1}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${p_id31}=  get_acc_id  ${MUSERNAME${a}}
+        ${p_id31}=  get_acc_id  ${PUSERNAME${a}}
         
         ${msg}=  FakerLibrary.word
         ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
@@ -2286,7 +2286,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH16
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid}  ${wid[0]} 
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp}=  Waitlist Action   ${waitlist_actions[1]}  ${cwid}
@@ -2308,7 +2308,7 @@ JD-TC-Add To Waitlist of User ByConsumer-16
         ${resp}=  Consumer Login  ${CUSERNAME2}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${p_id31}=  get_acc_id  ${MUSERNAME${a}}
+        ${p_id31}=  get_acc_id  ${PUSERNAME${a}}
         
         ${msg}=  FakerLibrary.word
         ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
@@ -2318,7 +2318,7 @@ JD-TC-Add To Waitlist of User ByConsumer-16
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid}  ${wid[0]} 
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp}=  Waitlist Action   ${waitlist_actions[3]}  ${cwid}
@@ -2338,7 +2338,7 @@ JD-TC-Add To Waitlist of User ByConsumer-17
         ${resp}=  Consumer Login  ${CUSERNAME1}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${p_id31}=  get_acc_id  ${MUSERNAME${a}}
+        ${p_id31}=  get_acc_id  ${PUSERNAME${a}}
         
         ${msg}=  FakerLibrary.word
         # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
@@ -2366,7 +2366,7 @@ JD-TC-Add To Waitlist of User ByConsumer-18
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${cid}=  get_id  ${CUSERNAME1}
-        ${p_id31}=  get_acc_id  ${MUSERNAME${a}}
+        ${p_id31}=  get_acc_id  ${PUSERNAME${a}}
         
         ${msg}=  FakerLibrary.word
         ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
@@ -2376,7 +2376,7 @@ JD-TC-Add To Waitlist of User ByConsumer-18
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid}  ${wid[0]}
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2399,7 +2399,7 @@ JD-TC-Add To Waitlist of User ByConsumer-18
         Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${cid4}
         Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${que_id31}
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         
@@ -2412,15 +2412,15 @@ JD-TC-Add To Waitlist of User ByConsumer-19
     
     [Documentation]  Add to waitlist a consumer and completes prepayment
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME28}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
-        ${p_id}=  get_acc_id  ${MUSERNAME28}
+        ${p_id}=  get_acc_id  ${PUSERNAME28}
 
-        clear_Department    ${MUSERNAME28}
-        clear_service       ${MUSERNAME28}
-        clear_location      ${MUSERNAME28}
+        clear_Department    ${PUSERNAME28}
+        clear_service       ${PUSERNAME28}
+        clear_location      ${PUSERNAME28}
     
         ${highest_package}=  get_highest_license_pkg
         Log  ${highest_package}
@@ -2507,7 +2507,7 @@ JD-TC-Add To Waitlist of User ByConsumer-19
         ${len}=  Get Length  ${resp.json()}
         Should Be Equal As Integers  ${len}  2
         FOR  ${i}  IN RANGE   ${len}
-                IF  '${resp.json()[${i}]['mobileNo']}' == '${MUSERNAME28}' 
+                IF  '${resp.json()[${i}]['mobileNo']}' == '${PUSERNAME28}' 
                 Set Test Variable   ${p2_id}   ${resp.json()[${i}]['id']}
                 ELSE
                 Set Test Variable   ${p1_id}   ${resp.json()[${i}]['id']}
@@ -2623,15 +2623,15 @@ JD-TC-Add To Waitlist of User ByConsumer-20
     
         [Documentation]  Add consumer to waitlist for Virtual service and completes prepayment
         
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME5}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
-        ${p_id32}=  get_acc_id  ${MUSERNAME5}
+        ${p_id32}=  get_acc_id  ${PUSERNAME5}
 
-        clear_Department    ${MUSERNAME5}
-        clear_service       ${MUSERNAME5}
-        clear_location      ${MUSERNAME5}
+        clear_Department    ${PUSERNAME5}
+        clear_service       ${PUSERNAME5}
+        clear_location      ${PUSERNAME5}
     
         ${highest_package}=  get_highest_license_pkg
         Log  ${highest_package}
@@ -2679,7 +2679,7 @@ JD-TC-Add To Waitlist of User ByConsumer-20
         Set Suite Variable  ${dep_id}  ${resp.json()}
     
         ${number}=  Random Int  min=100  max=200
-        ${PUSERNAME_U32}=  Evaluate  ${MUSERNAME5}+${number}
+        ${PUSERNAME_U32}=  Evaluate  ${PUSERNAME5}+${number}
         clear_users  ${PUSERNAME_U32}
         Set Suite Variable  ${PUSERNAME_U32}
         ${firstname}=  FakerLibrary.name
@@ -2724,7 +2724,7 @@ JD-TC-Add To Waitlist of User ByConsumer-20
         ${len}=  Get Length  ${resp.json()}
         Should Be Equal As Integers  ${len}  2
         FOR  ${i}  IN RANGE   ${len}
-                IF  '${resp.json()[${i}]['mobileNo']}' == '${MUSERNAME5}' 
+                IF  '${resp.json()[${i}]['mobileNo']}' == '${PUSERNAME5}' 
                 Set Test Variable   ${p0_id32}   ${resp.json()[${i}]['id']}
                 ELSE
                 Set Test Variable   ${p1_id32}   ${resp.json()[${i}]['id']}
@@ -2735,14 +2735,14 @@ JD-TC-Add To Waitlist of User ByConsumer-20
         # Log   ${resp.content}
         # Should Be Equal As Strings  ${resp.status_code}  200
 
-        ${ZOOM_id0}=  Format String  ${ZOOM_url}  ${MUSERNAME5}
+        ${ZOOM_id0}=  Format String  ${ZOOM_url}  ${PUSERNAME5}
         Set Suite Variable   ${ZOOM_id0}
 
         ${instructions1}=   FakerLibrary.sentence
         ${instructions2}=   FakerLibrary.sentence
 
         ${VirtualcallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_id0}   status=ACTIVE    instructions=${instructions1} 
-        ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${MUSERNAME5}   countryCode=${countryCodes[0]}  status=ACTIVE    instructions=${instructions2} 
+        ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME5}   countryCode=${countryCodes[0]}  status=ACTIVE    instructions=${instructions2} 
         ${vcm1}=  Create List  ${VirtualcallingMode1}   ${VirtualcallingMode2}
 
         ${resp}=  Update Virtual Calling Mode   ${vcm1}
@@ -2758,11 +2758,11 @@ JD-TC-Add To Waitlist of User ByConsumer-20
         Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['instructions']}    ${instructions1}
 
         Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['callingMode']}     ${CallingModes[1]}
-        Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['value']}           ${MUSERNAME5}
+        Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['value']}           ${PUSERNAME5}
         Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['status']}          ACTIVE
         Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['instructions']}    ${instructions2}
 
-        ${PUSERPH_id0}=  Evaluate  ${MUSERNAME5}+10101
+        ${PUSERPH_id0}=  Evaluate  ${PUSERNAME5}+10101
         ${ZOOM_Pid0}=  Format String  ${ZOOM_url}  ${PUSERPH_id0}
         Set Suite Variable   ${ZOOM_Pid0}
 
@@ -2853,7 +2853,7 @@ JD-TC-Add To Waitlist of User ByConsumer-20
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${cwid}  ${wid[0]}
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME5}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2911,7 +2911,7 @@ JD-TC-Add To Waitlist of User ByConsumer-20
         Should Be Equal As Strings  ${resp.status_code}  200
         Verify Response  ${resp}  paymentStatus=${paymentStatus[1]}     waitlistStatus=${wl_status[0]}
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME5}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2930,10 +2930,10 @@ JD-TC-Add To Waitlist of User ByConsumer-20
 
 JD-TC-Add To Waitlist of User ByConsumer-UH17
     [Documentation]  add to waitlist, then cancel the waitlist and try to change cancelled waitlit to CHECKIN
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${p_id30}=  get_acc_id  ${MUSERNAME29}
+        ${p_id30}=  get_acc_id  ${PUSERNAME29}
 
         ${resp}=  Get User
         Log   ${resp.content}
@@ -3002,7 +3002,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH17
         Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${que_id}
 
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3021,10 +3021,10 @@ JD-TC-Add To Waitlist of User ByConsumer-UH17
 JD-TC-Add To Waitlist of User ByConsumer-UH18
     
     [Documentation]  Add to waitlist a another USER (Another USER_id is used to "Add To Waitlist Consumer For User")
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${p_id30}=  get_acc_id  ${MUSERNAME29}
+        ${p_id30}=  get_acc_id  ${PUSERNAME29}
 
         ${resp}=  Get User
         Log   ${resp.content}
@@ -3066,7 +3066,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH19
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${cid}=  get_id  ${CUSERNAME1}
-        ${p_id30}=  get_acc_id  ${MUSERNAME29}
+        ${p_id30}=  get_acc_id  ${PUSERNAME29}
     
         ${msg}=  FakerLibrary.word
         ${FUTURE_DAY}=  db.add_timezone_date  ${tz}  4  
@@ -3076,7 +3076,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH19
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid1}  ${wid[0]} 
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3121,7 +3121,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH19
         Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${que_id}
 
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3138,10 +3138,10 @@ JD-TC-Add To Waitlist of User ByConsumer-UH19
 
 JD-TC-Add To Waitlist of User ByConsumer-UH20
     [Documentation]  add to waitlist using Disabled USER_id
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${p_id30}=  get_acc_id  ${MUSERNAME29}
+        ${p_id30}=  get_acc_id  ${PUSERNAME29}
     
         ${u_id1}=  Create Sample User
         Set Suite Variable  ${u_id1}
@@ -3164,7 +3164,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH20
         Should Be Equal As Strings  ${resp.status_code}  422
         Should Be Equal As Strings  "${resp.json()}"   "${PROVIDER_NOT_ACTIVE}"
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -3175,7 +3175,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH21
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${cid}=  get_id  ${CUSERNAME1}
-        ${p_id30}=  get_acc_id  ${MUSERNAME29}
+        ${p_id30}=  get_acc_id  ${PUSERNAME29}
         # ${INVALID_id}=  get_acc_id  ${Invalid_CUSER}
         ${INVALID_id}=   Random Int  min=10000   max=20000
         

@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 *** Variables ***
@@ -26,7 +26,7 @@ JD-TC-AddItemsToMultipleItemGroupsforUser-1
 
     [Documentation]  Create an item and add that item to 2 item groups.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -45,7 +45,7 @@ JD-TC-AddItemsToMultipleItemGroupsforUser-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableItemGroup']}  ${bool[1]}
 
-    clear_Item  ${MUSERNAME110}
+    clear_Item  ${PUSERNAME110}
 
     ${displayName1}=   FakerLibrary.name 
     ${shortDesc1}=  FakerLibrary.Sentence   nb_words=2 
@@ -137,7 +137,7 @@ JD-TC-AddItemsToMultipleItemGroupsforUser-2
 
     [Documentation]  Add items to group by passing empty set of group ids.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME111}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -156,7 +156,7 @@ JD-TC-AddItemsToMultipleItemGroupsforUser-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableItemGroup']}  ${bool[1]}
 
-    clear_Item  ${MUSERNAME111}
+    clear_Item  ${PUSERNAME111}
 
     ${displayName1}=   FakerLibrary.name 
     ${shortDesc1}=  FakerLibrary.Sentence   nb_words=2 
@@ -197,7 +197,7 @@ JD-TC-AddItemsToMultipleItemGroupsforUser-3
 
     [Documentation]  Add items to multiple item groups by user.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME115}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME115}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -254,7 +254,7 @@ JD-TC-AddItemsToMultipleItemGroupsforUser-3
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME115}'
+            IF   not '${user_phone}' == '${PUSERNAME115}'
                 clear_users  ${user_phone}
             END
         END
@@ -282,7 +282,7 @@ JD-TC-AddItemsToMultipleItemGroupsforUser-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_Item  ${MUSERNAME115}
+    clear_Item  ${PUSERNAME115}
 
     ${displayName1}=   FakerLibrary.name 
     ${shortDesc1}=  FakerLibrary.Sentence   nb_words=2 
@@ -396,7 +396,7 @@ JD-TC-AddItemsToMultipleItemGroupsforUser-UH3
 
     [Documentation]  Add items to another providers item group.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME112}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME112}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -415,7 +415,7 @@ JD-TC-AddItemsToMultipleItemGroupsforUser-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableItemGroup']}  ${bool[1]}
 
-    clear_Item  ${MUSERNAME112}
+    clear_Item  ${PUSERNAME112}
 
     ${displayName1}=   FakerLibrary.name 
     ${shortDesc1}=  FakerLibrary.Sentence   nb_words=2 
@@ -445,7 +445,7 @@ JD-TC-AddItemsToMultipleItemGroupsforUser-UH3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -500,7 +500,7 @@ JD-TC-AddItemsToMultipleItemGroupsforUser-UH3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME112}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME112}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

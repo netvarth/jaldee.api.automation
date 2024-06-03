@@ -12,8 +12,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -27,7 +27,7 @@ JD-TC-GetUserWithRoleFilter-1
 
     [Documentation]  Create User With Roles And Scope for an existing provider and get the user with role id filter.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
@@ -99,7 +99,7 @@ JD-TC-GetUserWithRoleFilter-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME48}'
+            IF   not '${user_phone}' == '${PUSERNAME48}'
                 clear_users  ${user_phone}
             END
         END
@@ -161,7 +161,7 @@ JD-TC-GetUserWithRoleFilter-2
 
     [Documentation]  Create User With Roles And Scope for an existing provider and get the user with role name filter.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

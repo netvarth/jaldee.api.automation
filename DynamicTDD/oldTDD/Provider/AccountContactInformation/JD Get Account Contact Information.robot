@@ -888,29 +888,29 @@ JD-TC-Get Account Contact information-6
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_K}=  Evaluate  ${MUSERNAME}+405211222
+    ${PUSERNAME_K}=  Evaluate  ${PUSERNAME}+405211222
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_K}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_K}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_K}  0
+    ${resp}=  Account Activation  ${PUSERNAME_K}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_K}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_K}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pro_id3}  ${resp.json()['id']}
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_K}${\n}
-    Set Suite Variable  ${MUSERNAME_K}
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_K}${\n}
-    ${pid3}=  get_acc_id  ${MUSERNAME_K}  
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_K}${\n}
+    Set Suite Variable  ${PUSERNAME_K}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_K}${\n}
+    ${pid3}=  get_acc_id  ${PUSERNAME_K}  
     ${resp}=  Get Account contact information
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['account']}              ${pid3}
-    Should Be Equal As Strings  ${resp.json()['primaryPhoneNumber']}  ${MUSERNAME_K}
+    Should Be Equal As Strings  ${resp.json()['primaryPhoneNumber']}  ${PUSERNAME_K}
     Should Be Equal As Strings  ${resp.json()['contactFirstName']}    ${firstname_A}
     Should Be Equal As Strings  ${resp.json()['contactLastName']}      ${lastname_A}
     Should Be Equal As Strings  ${resp.json()['emailVerified']}        ${bool[0]} 
@@ -921,7 +921,7 @@ JD-TC-Get Account Contact information-6
     Should Be Equal As Strings  ${resp.json()['basicInfo']['id']}           ${pro_id3}
     Should Be Equal As Strings  ${resp.json()['basicInfo']['firstName']}    ${firstname_A}
     Should Be Equal As Strings  ${resp.json()['basicInfo']['lastName']}     ${lastname_A}
-    Should Be Equal As Strings  ${resp.json()['basicInfo']['mobile']}        ${MUSERNAME_K}
+    Should Be Equal As Strings  ${resp.json()['basicInfo']['mobile']}        ${PUSERNAME_K}
     Should Be Equal As Strings  ${resp.json()['basicInfo']['emailVerified']}   ${bool[0]} 
     Should Be Equal As Strings  ${resp.json()['basicInfo']['phoneVerified']}   ${bool[1]} 
 
@@ -933,62 +933,62 @@ JD-TC-Get Account Contact information-6
     Should Be Equal As Strings  ${resp.json()[0]['resourceType']}     ${NotificationResourceType[0]}
     Should Be Equal As Strings  ${resp.json()[0]['eventType']}        ${EventType[0]}
     Should Be Equal As Strings  ${resp.json()[0]['email']}            []
-    Should Be Equal As Strings  ${resp.json()[0]['sms'][0]['number']}           ${MUSERNAME_K} 
+    Should Be Equal As Strings  ${resp.json()[0]['sms'][0]['number']}           ${PUSERNAME_K} 
     Should Be Equal As Strings  ${resp.json()[0]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp.json()[0]['pushMsg'][0]['number']}       ${MUSERNAME_K} 
+    Should Be Equal As Strings  ${resp.json()[0]['pushMsg'][0]['number']}       ${PUSERNAME_K} 
     Should Be Equal As Strings  ${resp.json()[0]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
-    # Should Be Equal As Strings  ${resp.json()[0]['sms'][0]}           ${MUSERNAME_K}
-    # Should Be Equal As Strings  ${resp.json()[0]['pushMsg'][0]}       ${MUSERNAME_K}
+    # Should Be Equal As Strings  ${resp.json()[0]['sms'][0]}           ${PUSERNAME_K}
+    # Should Be Equal As Strings  ${resp.json()[0]['pushMsg'][0]}       ${PUSERNAME_K}
     comment   WAITLIST-CANCEL
     Should Be Equal As Strings  ${resp.json()[1]['resourceType']}    ${NotificationResourceType[0]}
     Should Be Equal As Strings  ${resp.json()[1]['eventType']}       ${EventType[1]}
     Should Be Equal As Strings  ${resp.json()[1]['email']}            []
-    Should Be Equal As Strings  ${resp.json()[1]['sms'][0]['number']}           ${MUSERNAME_K} 
+    Should Be Equal As Strings  ${resp.json()[1]['sms'][0]['number']}           ${PUSERNAME_K} 
     Should Be Equal As Strings  ${resp.json()[1]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp.json()[1]['pushMsg'][0]['number']}       ${MUSERNAME_K} 
+    Should Be Equal As Strings  ${resp.json()[1]['pushMsg'][0]['number']}       ${PUSERNAME_K} 
     Should Be Equal As Strings  ${resp.json()[1]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
-    # Should Be Equal As Strings  ${resp.json()[1]['sms'][0]}         ${MUSERNAME_K}
-    # Should Be Equal As Strings  ${resp.json()[1]['pushMsg'][0]}     ${MUSERNAME_K}
+    # Should Be Equal As Strings  ${resp.json()[1]['sms'][0]}         ${PUSERNAME_K}
+    # Should Be Equal As Strings  ${resp.json()[1]['pushMsg'][0]}     ${PUSERNAME_K}
     comment   APPOINTMENTADD
     Should Be Equal As Strings  ${resp.json()[2]['resourceType']}    ${NotificationResourceType[1]}
     Should Be Equal As Strings  ${resp.json()[2]['eventType']}       ${EventType[7]}
     Should Be Equal As Strings  ${resp.json()[2]['email']}           []
-    Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['number']}           ${MUSERNAME_K} 
+    Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['number']}           ${PUSERNAME_K} 
     Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]['number']}       ${MUSERNAME_K} 
+    Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]['number']}       ${PUSERNAME_K} 
     Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
-    # Should Be Equal As Strings  ${resp.json()[2]['sms'][0]}           ${MUSERNAME_K}
-    # Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]}       ${MUSERNAME_K}
+    # Should Be Equal As Strings  ${resp.json()[2]['sms'][0]}           ${PUSERNAME_K}
+    # Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]}       ${PUSERNAME_K}
     comment   APPOINTMENT-CANCEL
     Should Be Equal As Strings  ${resp.json()[3]['resourceType']}     ${NotificationResourceType[1]}
     Should Be Equal As Strings  ${resp.json()[3]['eventType']}         ${EventType[8]}
     Should Be Equal As Strings  ${resp.json()[3]['email']}             []
-    Should Be Equal As Strings  ${resp.json()[3]['sms'][0]['number']}           ${MUSERNAME_K} 
+    Should Be Equal As Strings  ${resp.json()[3]['sms'][0]['number']}           ${PUSERNAME_K} 
     Should Be Equal As Strings  ${resp.json()[3]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp.json()[3]['pushMsg'][0]['number']}       ${MUSERNAME_K} 
+    Should Be Equal As Strings  ${resp.json()[3]['pushMsg'][0]['number']}       ${PUSERNAME_K} 
     Should Be Equal As Strings  ${resp.json()[3]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
-    # Should Be Equal As Strings  ${resp.json()[3]['sms'][0]}            ${MUSERNAME_K}
-    # Should Be Equal As Strings  ${resp.json()[3]['pushMsg'][0]}        ${MUSERNAME_K}
+    # Should Be Equal As Strings  ${resp.json()[3]['sms'][0]}            ${PUSERNAME_K}
+    # Should Be Equal As Strings  ${resp.json()[3]['pushMsg'][0]}        ${PUSERNAME_K}
     comment   DONATION
     Should Be Equal As Strings  ${resp.json()[4]['resourceType']}     ${NotificationResourceType[3]}
     Should Be Equal As Strings  ${resp.json()[4]['eventType']}       ${EventType[10]}
     Should Be Equal As Strings  ${resp.json()[4]['email']}           []
-    Should Be Equal As Strings  ${resp.json()[4]['sms'][0]['number']}           ${MUSERNAME_K} 
+    Should Be Equal As Strings  ${resp.json()[4]['sms'][0]['number']}           ${PUSERNAME_K} 
     Should Be Equal As Strings  ${resp.json()[4]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp.json()[4]['pushMsg'][0]['number']}       ${MUSERNAME_K} 
+    Should Be Equal As Strings  ${resp.json()[4]['pushMsg'][0]['number']}       ${PUSERNAME_K} 
     Should Be Equal As Strings  ${resp.json()[4]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
-    # Should Be Equal As Strings  ${resp.json()[4]['sms'][0]}          ${MUSERNAME_K}
-    # Should Be Equal As Strings  ${resp.json()[4]['pushMsg'][0]}      ${MUSERNAME_K}
+    # Should Be Equal As Strings  ${resp.json()[4]['sms'][0]}          ${PUSERNAME_K}
+    # Should Be Equal As Strings  ${resp.json()[4]['pushMsg'][0]}      ${PUSERNAME_K}
     comment   LICENSE
     Should Be Equal As Strings  ${resp.json()[5]['resourceType']}    ${NotificationResourceType[2]}
     Should Be Equal As Strings  ${resp.json()[5]['eventType']}       ${EventType[9]}
     Should Be Equal As Strings  ${resp.json()[5]['email']}           []
-    Should Be Equal As Strings  ${resp.json()[5]['sms'][0]['number']}           ${MUSERNAME_K} 
+    Should Be Equal As Strings  ${resp.json()[5]['sms'][0]['number']}           ${PUSERNAME_K} 
     Should Be Equal As Strings  ${resp.json()[5]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp.json()[5]['pushMsg'][0]['number']}       ${MUSERNAME_K} 
+    Should Be Equal As Strings  ${resp.json()[5]['pushMsg'][0]['number']}       ${PUSERNAME_K} 
     Should Be Equal As Strings  ${resp.json()[5]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
-    # Should Be Equal As Strings  ${resp.json()[5]['sms'][0]}          ${MUSERNAME_K}
-    # Should Be Equal As Strings  ${resp.json()[5]['pushMsg'][0]}      ${MUSERNAME_K}
+    # Should Be Equal As Strings  ${resp.json()[5]['sms'][0]}          ${PUSERNAME_K}
+    # Should Be Equal As Strings  ${resp.json()[5]['pushMsg'][0]}      ${PUSERNAME_K}
 
     ${firstname1}=  FakerLibrary.first_name
     ${lastname1}=  FakerLibrary.last_name
@@ -1005,7 +1005,7 @@ JD-TC-Get Account Contact information-6
     Should Be Equal As Strings  ${resp.json()['basicInfo']['id']}            ${pro_id3}
     Should Be Equal As Strings  ${resp.json()['basicInfo']['firstName']}     ${firstname1}
     Should Be Equal As Strings  ${resp.json()['basicInfo']['lastName']}      ${lastname1}
-    Should Be Equal As Strings  ${resp.json()['basicInfo']['mobile']}        ${MUSERNAME_K}
+    Should Be Equal As Strings  ${resp.json()['basicInfo']['mobile']}        ${PUSERNAME_K}
     Should Be Equal As Strings  ${resp.json()['basicInfo']['email']}         ${email}
     Should Be Equal As Strings  ${resp.json()['basicInfo']['emailVerified']}   ${bool[1]} 
     Should Be Equal As Strings  ${resp.json()['basicInfo']['phoneVerified']}   ${bool[1]} 
@@ -1017,68 +1017,68 @@ JD-TC-Get Account Contact information-6
     Should Be Equal As Strings  ${resp.json()[0]['resourceType']}    ${NotificationResourceType[0]}
     Should Be Equal As Strings  ${resp.json()[0]['eventType']}       ${EventType[0]}
     Should Be Equal As Strings  ${resp.json()[0]['email']}            []
-    Should Be Equal As Strings  ${resp.json()[0]['sms'][0]['number']}           ${MUSERNAME_K} 
+    Should Be Equal As Strings  ${resp.json()[0]['sms'][0]['number']}           ${PUSERNAME_K} 
     Should Be Equal As Strings  ${resp.json()[0]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp.json()[0]['pushMsg'][0]['number']}       ${MUSERNAME_K} 
+    Should Be Equal As Strings  ${resp.json()[0]['pushMsg'][0]['number']}       ${PUSERNAME_K} 
     Should Be Equal As Strings  ${resp.json()[0]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
-    # Should Be Equal As Strings  ${resp.json()[0]['sms'][0]}          ${MUSERNAME_K}
-    # Should Be Equal As Strings  ${resp.json()[0]['pushMsg'][0]}       ${MUSERNAME_K}
+    # Should Be Equal As Strings  ${resp.json()[0]['sms'][0]}          ${PUSERNAME_K}
+    # Should Be Equal As Strings  ${resp.json()[0]['pushMsg'][0]}       ${PUSERNAME_K}
     comment   WAITLIST-CANCEL
     Should Be Equal As Strings  ${resp.json()[1]['resourceType']}    ${NotificationResourceType[0]}
     Should Be Equal As Strings  ${resp.json()[1]['eventType']}       ${EventType[1]}
     Should Be Equal As Strings  ${resp.json()[1]['email']}            []
-    Should Be Equal As Strings  ${resp.json()[1]['sms'][0]['number']}           ${MUSERNAME_K} 
+    Should Be Equal As Strings  ${resp.json()[1]['sms'][0]['number']}           ${PUSERNAME_K} 
     Should Be Equal As Strings  ${resp.json()[1]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp.json()[1]['pushMsg'][0]['number']}       ${MUSERNAME_K} 
+    Should Be Equal As Strings  ${resp.json()[1]['pushMsg'][0]['number']}       ${PUSERNAME_K} 
     Should Be Equal As Strings  ${resp.json()[1]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
-    # Should Be Equal As Strings  ${resp.json()[1]['sms'][0]}          ${MUSERNAME_K}
-    # Should Be Equal As Strings  ${resp.json()[1]['pushMsg'][0]}      ${MUSERNAME_K}
+    # Should Be Equal As Strings  ${resp.json()[1]['sms'][0]}          ${PUSERNAME_K}
+    # Should Be Equal As Strings  ${resp.json()[1]['pushMsg'][0]}      ${PUSERNAME_K}
     comment   APPOINTMENTADD
     Should Be Equal As Strings  ${resp.json()[2]['resourceType']}   ${NotificationResourceType[1]}
     Should Be Equal As Strings  ${resp.json()[2]['eventType']}      ${EventType[7]}
     Should Be Equal As Strings  ${resp.json()[2]['email']}          []
-    Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['number']}           ${MUSERNAME_K} 
+    Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['number']}           ${PUSERNAME_K} 
     Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]['number']}       ${MUSERNAME_K} 
+    Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]['number']}       ${PUSERNAME_K} 
     Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
-    # Should Be Equal As Strings  ${resp.json()[2]['sms'][0]}         ${MUSERNAME_K}
-    # Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]}      ${MUSERNAME_K}
+    # Should Be Equal As Strings  ${resp.json()[2]['sms'][0]}         ${PUSERNAME_K}
+    # Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]}      ${PUSERNAME_K}
     comment   APPOINTMENT-CANCEL
     Should Be Equal As Strings  ${resp.json()[3]['resourceType']}    ${NotificationResourceType[1]}
     Should Be Equal As Strings  ${resp.json()[3]['eventType']}       ${EventType[8]}
     Should Be Equal As Strings  ${resp.json()[3]['email']}           []
-    Should Be Equal As Strings  ${resp.json()[3]['sms'][0]['number']}           ${MUSERNAME_K} 
+    Should Be Equal As Strings  ${resp.json()[3]['sms'][0]['number']}           ${PUSERNAME_K} 
     Should Be Equal As Strings  ${resp.json()[3]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp.json()[3]['pushMsg'][0]['number']}       ${MUSERNAME_K} 
+    Should Be Equal As Strings  ${resp.json()[3]['pushMsg'][0]['number']}       ${PUSERNAME_K} 
     Should Be Equal As Strings  ${resp.json()[3]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
-    # Should Be Equal As Strings  ${resp.json()[3]['sms'][0]}           ${MUSERNAME_K}
-    # Should Be Equal As Strings  ${resp.json()[3]['pushMsg'][0]}        ${MUSERNAME_K}
+    # Should Be Equal As Strings  ${resp.json()[3]['sms'][0]}           ${PUSERNAME_K}
+    # Should Be Equal As Strings  ${resp.json()[3]['pushMsg'][0]}        ${PUSERNAME_K}
     comment   DONATION
     Should Be Equal As Strings  ${resp.json()[4]['resourceType']}  ${NotificationResourceType[3]}
     Should Be Equal As Strings  ${resp.json()[4]['eventType']}     ${EventType[10]}
     Should Be Equal As Strings  ${resp.json()[4]['email']}         []
-    Should Be Equal As Strings  ${resp.json()[4]['sms'][0]['number']}           ${MUSERNAME_K} 
+    Should Be Equal As Strings  ${resp.json()[4]['sms'][0]['number']}           ${PUSERNAME_K} 
     Should Be Equal As Strings  ${resp.json()[4]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp.json()[4]['pushMsg'][0]['number']}       ${MUSERNAME_K} 
+    Should Be Equal As Strings  ${resp.json()[4]['pushMsg'][0]['number']}       ${PUSERNAME_K} 
     Should Be Equal As Strings  ${resp.json()[4]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
-    # Should Be Equal As Strings  ${resp.json()[4]['sms'][0]}        ${MUSERNAME_K}
-    # Should Be Equal As Strings  ${resp.json()[4]['pushMsg'][0]}    ${MUSERNAME_K}
+    # Should Be Equal As Strings  ${resp.json()[4]['sms'][0]}        ${PUSERNAME_K}
+    # Should Be Equal As Strings  ${resp.json()[4]['pushMsg'][0]}    ${PUSERNAME_K}
     comment   LICENSE
     Should Be Equal As Strings  ${resp.json()[5]['resourceType']}    ${NotificationResourceType[2]}
     Should Be Equal As Strings  ${resp.json()[5]['eventType']}       ${EventType[9]}
     Should Be Equal As Strings  ${resp.json()[5]['email']}           []
-    Should Be Equal As Strings  ${resp.json()[5]['sms'][0]['number']}           ${MUSERNAME_K} 
+    Should Be Equal As Strings  ${resp.json()[5]['sms'][0]['number']}           ${PUSERNAME_K} 
     Should Be Equal As Strings  ${resp.json()[5]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp.json()[5]['pushMsg'][0]['number']}       ${MUSERNAME_K} 
+    Should Be Equal As Strings  ${resp.json()[5]['pushMsg'][0]['number']}       ${PUSERNAME_K} 
     Should Be Equal As Strings  ${resp.json()[5]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
-    # Should Be Equal As Strings  ${resp.json()[5]['sms'][0]}          ${MUSERNAME_K}
-    # Should Be Equal As Strings  ${resp.json()[5]['pushMsg'][0]}      ${MUSERNAME_K}
+    # Should Be Equal As Strings  ${resp.json()[5]['sms'][0]}          ${PUSERNAME_K}
+    # Should Be Equal As Strings  ${resp.json()[5]['pushMsg'][0]}      ${PUSERNAME_K}
 
     ${resp}=  Get Account contact information
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['account']}             ${pid3}
-    Should Be Equal As Strings  ${resp.json()['primaryPhoneNumber']}  ${MUSERNAME_K}
+    Should Be Equal As Strings  ${resp.json()['primaryPhoneNumber']}  ${PUSERNAME_K}
     Should Be Equal As Strings  ${resp.json()['contactFirstName']}    ${firstname1}
     Should Be Equal As Strings  ${resp.json()['contactLastName']}     ${lastname1}
     Should Be Equal As Strings  ${resp.json()['emailVerified']}       ${bool[0]} 
@@ -1094,7 +1094,7 @@ JD-TC-Get Account Contact information-7
     # Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
     # Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
 
-    # ${resp}=  Encrypted Provider Login   ${MUSERNAME0}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login   ${PUSERNAME0}  ${PASSWORD}
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
     # Set Suite Variable  ${subdomain}  ${resp.json()['subSector']}
@@ -1102,30 +1102,30 @@ JD-TC-Get Account Contact information-7
 
     ${firstname_B}=  FakerLibrary.first_name
     ${lastname_B}=  FakerLibrary.last_name
-    ${MUSERNAME_L}=  Evaluate  ${MUSERNAME}+405314222
+    ${PUSERNAME_L}=  Evaluate  ${PUSERNAME}+405314222
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_B}  ${lastname_B}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_L}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_B}  ${lastname_B}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_L}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_L}  0
+    ${resp}=  Account Activation  ${PUSERNAME_L}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_L}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_L}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_L}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_L}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${subdomain}  ${resp.json()['subSector']}
     Set Test Variable  ${pro_id3}  ${resp.json()['id']}
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_L}${\n}
-    Set Suite Variable  ${MUSERNAME_L}
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_L}${\n}
-    ${pid4}=  get_acc_id  ${MUSERNAME_L}  
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_L}${\n}
+    Set Suite Variable  ${PUSERNAME_L}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_L}${\n}
+    ${pid4}=  get_acc_id  ${PUSERNAME_L}  
     ${resp}=  Get Account contact information
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['account']}            ${pid4}
-    Should Be Equal As Strings  ${resp.json()['primaryPhoneNumber']}  ${MUSERNAME_L}
+    Should Be Equal As Strings  ${resp.json()['primaryPhoneNumber']}  ${PUSERNAME_L}
     Should Be Equal As Strings  ${resp.json()['contactFirstName']}  ${firstname_B}
     Should Be Equal As Strings  ${resp.json()['contactLastName']}   ${lastname_B}
     Should Be Equal As Strings  ${resp.json()['emailVerified']}     ${bool[0]} 
@@ -1203,7 +1203,7 @@ JD-TC-Get Account Contact information-7
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['account']}              ${pid4}
-    Should Be Equal As Strings  ${resp.json()['primaryPhoneNumber']}  ${MUSERNAME_L}
+    Should Be Equal As Strings  ${resp.json()['primaryPhoneNumber']}  ${PUSERNAME_L}
     Should Be Equal As Strings  ${resp.json()['contactFirstName']}  ${firstname_B}
     Should Be Equal As Strings  ${resp.json()['contactLastName']}   ${lastname_B}
     Should Be Equal As Strings  ${resp.json()['emailVerified']}     ${bool[0]} 

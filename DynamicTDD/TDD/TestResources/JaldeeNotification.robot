@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Resource          /ebs/TDD/NotificationKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 
@@ -70,14 +70,14 @@ Get Non Billable Subdomain
 Get branch by license
     [Arguments]   ${lic_id}
     
-    ${resp}=   Get File    ${EXECDIR}/TDD/varfiles/musers.py
+    ${resp}=   Get File    ${EXECDIR}/TDD/varfiles/providers.py
     ${len}=   Split to lines  ${resp}
     ${length}=  Get Length   ${len}
      
     FOR   ${a***}  IN RANGE  ${length}
             
-        ${Branch_PH}=  Set Variable  ${MUSERNAME${a}}
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${Branch_PH}=  Set Variable  ${PUSERNAME${a}}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${domain}=   Set Variable    ${resp.json()['sector']}
         ${subdomain}=    Set Variable      ${resp.json()['subSector']}
@@ -510,7 +510,7 @@ Billable
 #     Set Suite Variable  ${firstname_A}
 #     ${lastname_A}=  FakerLibrary.last_name
 #     Set Suite Variable  ${lastname_A}
-#     # ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+55045300
+#     # ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+55045300
 #     ${highest_package}=  get_highest_license_pkg
 #     ${resp}=  Account SignUp   simi  Dany  ${None}  ${domains}  ${sub_domains}  ${ConsMobilenum}    ${highest_package[0]}
 #     Log  ${resp.json()}
@@ -637,7 +637,7 @@ Billable
 #         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['lastName']}                        ${lastname_A} 
 #         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[0]}     
 #         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-#         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['mobileNo']}                        ${MUSERNAME_E}
+#         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['mobileNo']}                        ${PUSERNAME_E}
 #         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          ${dep_id}    
 #         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['subdomain']}                       1
 #         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['admin']}                           ${bool[1]} 
@@ -1025,7 +1025,7 @@ Billable
 #     Set Suite Variable  ${firstname_A}
 #     ${lastname_A}=  FakerLibrary.last_name
 #     Set Suite Variable  ${lastname_A}
-#     # ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+55045300
+#     # ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+55045300
 #     ${highest_package}=  get_highest_license_pkg
 #     ${resp}=  Account SignUp   simi  Dany  ${None}  ${domains}  ${sub_domains}  ${ConsMobilenum}    ${highest_package[0]}
 #     Log  ${resp.json()}
@@ -1107,7 +1107,7 @@ Billable
 #     Set Suite Variable  ${firstname_A}
 #     ${lastname_A}=  FakerLibrary.last_name
 #     Set Suite Variable  ${lastname_A}
-#     # ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+55045300
+#     # ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+55045300
 #     ${highest_package}=  get_highest_license_pkg
 #     ${resp}=  Account SignUp   simi  Dany  ${None}  ${domains}  ${sub_domains}  ${ConsMobilenum}    ${highest_package[0]}
 #     Log  ${resp.json()}
@@ -3265,7 +3265,7 @@ Billable
     # #  Set Suite Variable  ${firstname_A}
     # #  ${lastname_A}=  FakerLibrary.last_name
     # #  Set Suite Variable  ${lastname_A}
-    # #  ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+9908813
+    # #  ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+9908813
     #  ${highest_package}=  get_highest_license_pkg
     #  ${resp}=  Account SignUp  Simi  Dany  ${None}  ${domains}  ${sub_domains}  ${ConsMobilenum}    ${highest_package[0]}
     #  Log  ${resp.json()}
@@ -3681,7 +3681,7 @@ JD-TC-DonationPayment, order item by cosumer , order mass communication-1
     #  Set Suite Variable  ${firstname_A}
     #  ${lastname_A}=  FakerLibrary.last_name
     #  Set Suite Variable  ${lastname_A}
-    #  ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+9908813
+    #  ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+9908813
      ${highest_package}=  get_highest_license_pkg
      ${resp}=  Account SignUp  Simi  Dany  ${None}  ${domains}  ${sub_domains}  ${ConsMobilenum}    ${highest_package[0]}
      Log  ${resp.json()}
@@ -5117,7 +5117,7 @@ JD-TC-AssignTeamTo Appointment and waitlist-1
     # #  Set Suite Variable  ${firstname_A}
     # #  ${lastname_A}=  FakerLibrary.last_name
     # #  Set Suite Variable  ${lastname_A}
-    # #  ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+9908813
+    # #  ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+9908813
     #  ${highest_package}=  get_highest_license_pkg
     #  ${resp}=  Account SignUp  Simi  Dany  ${None}  ${domains}  ${sub_domains}  ${ConsMobilenum}    ${highest_package[0]}
     #  Log  ${resp.json()}

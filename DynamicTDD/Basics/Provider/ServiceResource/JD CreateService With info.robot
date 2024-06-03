@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 
@@ -875,11 +875,11 @@ JD-TC-Create Service With info-10
 JD-TC-Create Service With info-11
         [Documentation]   Create service for a branch in default department
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME25}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${MUSERNAME25}
+        clear_service   ${PUSERNAME25}
 
         ${resp}=  View Waitlist Settings
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -940,10 +940,10 @@ JD-TC-Create Service With info-11
 JD-TC-Create Service With info-12
         [Documentation]   Create service for a branch in custom department
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME25}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        clear_service   ${MUSERNAME25}
+        clear_service   ${PUSERNAME25}
         ${resp}=  Get Service
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -1001,11 +1001,11 @@ JD-TC-Create Service With info-12
 
 JD-TC-Create Service With info-13
         [Documentation]   Create service for a branch in default department & custom department
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME25}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${MUSERNAME25}
+        clear_service   ${PUSERNAME25}
 
         @{empty_list}=  Create List
 
@@ -1064,11 +1064,11 @@ JD-TC-Create Service With info-13
 
 JD-TC-Create Service With info-14
         [Documentation]   Create service for a branch in default department & custom department with same service name
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME25}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${MUSERNAME25}
+        clear_service   ${PUSERNAME25}
 
         @{empty_list}=  Create List
 
@@ -1128,11 +1128,11 @@ JD-TC-Create Service With info-14
 JD-TC-Create Service With info-15
         [Documentation]   Create multiple services for a branch in default department
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME25}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${MUSERNAME25}
+        clear_service   ${PUSERNAME25}
 
         @{empty_list}=  Create List
 
@@ -1186,11 +1186,11 @@ JD-TC-Create Service With info-15
 
 JD-TC-Create Service With info-16
         [Documentation]   Create multiple services for a branch in custom department 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME25}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${MUSERNAME25}
+        clear_service   ${PUSERNAME25}
 
         @{empty_list}=  Create List
 
@@ -1251,11 +1251,11 @@ JD-TC-Create Service With info-16
 
 JD-TC-Create Service With info-17
         [Documentation]   Create same service for a branch in default department & custom department
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME25}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${MUSERNAME25}
+        clear_service   ${PUSERNAME25}
 
         @{empty_list}=  Create List
 
@@ -1318,11 +1318,11 @@ JD-TC-Create Service With info-17
 JD-TC-Create Service With info-UH5
         [Documentation]   Create service with same name as existing service for a branch in default department
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME25}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${MUSERNAME25}
+        clear_service   ${PUSERNAME25}
 
         ${resp}=  View Waitlist Settings
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -1382,11 +1382,11 @@ JD-TC-Create Service With info-UH5
 JD-TC-Create Service With info-UH6
         [Documentation]   Create multiple services with same name for a branch in default department
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME25}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${MUSERNAME25}
+        clear_service   ${PUSERNAME25}
 
         ${resp}=  Get Service
         Log  ${resp.json()}
@@ -1657,7 +1657,7 @@ Non Billable
 
      FOR    ${a}   IN RANGE  ${start1}    ${length}
         # clear_service       ${PUSERNAME${a}}
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
 
         ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -1683,7 +1683,7 @@ Non Billable
         Exit For Loop IF     '${check}' == 'False'
        
      END 
-     RETURN   ${MUSERNAME${a}}
+     RETURN   ${PUSERNAME${a}}
 
 
 Disable Services

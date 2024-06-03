@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
@@ -38,7 +38,7 @@ JD-TC-Update MR Case-1
 
     [Documentation]    Update MR Case
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -129,7 +129,7 @@ JD-TC-Update MR Case-1
 
     
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -160,7 +160,7 @@ JD-TC-Update MR Case-2
 
     [Documentation]    Update MR Case title contain 250 words
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -181,7 +181,7 @@ JD-TC-Update MR Case-3
 
     [Documentation]    Update MR Case description contain 250 words
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -203,7 +203,7 @@ JD-TC-Update MR Case-4
 
     [Documentation]    Update MR Case title contain numbers
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -225,7 +225,7 @@ JD-TC-Update MR Case-5
 
     [Documentation]    Update MR Case description contain numbers
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -247,7 +247,7 @@ JD-TC-Update MR Case-7
 
     [Documentation]    Update MR Case title is empty
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -268,7 +268,7 @@ JD-TC-Update MR Case-8
 
     [Documentation]    Update MR Case from user login
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -337,7 +337,7 @@ JD-TC-Update MR Case-9
 
     [Documentation]    Create a MR Case with Assign Then Update MR Case Assignee with another user.
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -390,7 +390,7 @@ JD-TC-Update MR Case-UH1
 
     [Documentation]    Update MR Case description contain more than 255 words
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -407,7 +407,7 @@ JD-TC-Update MR Case-UH2
 
     [Documentation]    Update MR Case using another provider login
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME12}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

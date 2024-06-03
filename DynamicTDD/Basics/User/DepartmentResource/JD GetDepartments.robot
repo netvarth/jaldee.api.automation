@@ -9,7 +9,7 @@ Library           FakerLibrary
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
 *** Variables ***
@@ -32,25 +32,25 @@ JD-TC-Get Departments-1
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_K}=  Evaluate  ${MUSERNAME}+423823
+    ${PUSERNAME_K}=  Evaluate  ${PUSERNAME}+423823
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_K}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_K}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_K}  0
+    ${resp}=  Account Activation  ${PUSERNAME_K}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_K}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_K}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_K}${\n}
-    Set Suite Variable  ${MUSERNAME_K}
-    ${id}=  get_id  ${MUSERNAME_K}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_K}${\n}
+    Set Suite Variable  ${PUSERNAME_K}
+    ${id}=  get_id  ${PUSERNAME_K}
     Set Suite Variable  ${id}
     
-    clear_service    ${MUSERNAME_K}
+    clear_service    ${PUSERNAME_K}
     ${resp}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${sid1}  ${resp}  
     ${resp}=  Create Sample Service  ${SERVICE2}
@@ -110,7 +110,7 @@ JD-TC-Get Departments-1
 JD-TC-Get Departments-2
     [Documentation]  Provider Get Departments
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dep_name3}=  FakerLibrary.bs
     Set Suite Variable   ${dep_name3}
@@ -148,7 +148,7 @@ JD-TC-Get Departments-2
 JD-TC-Get Departments-3
     [Documentation]  Provider Create department using Service names then Get Departments
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200   
     ${dep_name4}=  FakerLibrary.bs
     Set Suite Variable   ${dep_name4}

@@ -11,8 +11,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -25,11 +25,11 @@ JD-TC-ChangeTaskStatusTOClosed-1
 
     [Documentation]     Change Task Status To Closed By Branch Login
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${p_id}=  get_acc_id  ${HLMUSERNAME6}
+    ${p_id}=  get_acc_id  ${HLPUSERNAME6}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -95,7 +95,7 @@ JD-TC-ChangeTaskStatusTOClosed-2
 
     [Documentation]     Change branch Task Status To Closed By user Login after assigning it to user.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -195,7 +195,7 @@ JD-TC-ChangeTaskStatusTOClosed-UH3
 
     [Documentation]     Change branch Task Status To Closed By user Login
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

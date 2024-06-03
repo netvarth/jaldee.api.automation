@@ -10,7 +10,7 @@ Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 
@@ -23,7 +23,7 @@ ${self}     0
 JD-TC-Get locations by userid-1
     [Documentation]  Consumer get user locations by user id.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -97,7 +97,7 @@ JD-TC-Get locations by userid-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME12}'
+            IF   not '${user_phone}' == '${PUSERNAME12}'
                 clear_users  ${user_phone}
             END
         END

@@ -15,8 +15,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -1612,7 +1612,7 @@ JD-TC-AdvancePaymentcalculation-20
 
     [Documentation]  Create a serviceOption with prepayment type as fixed then take a waitlist and do the prepayment and verify the details.
 
-    clear Queue     ${HLMUSERNAME4}
+    clear Queue     ${HLPUSERNAME4}
 
     ${wb}=  readWorkbook  ${xlFile}
     ${sheet1}  GetCurrentSheet   ${wb}
@@ -1700,7 +1700,7 @@ JD-TC-AdvancePaymentcalculation-20
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1736,7 +1736,7 @@ JD-TC-AdvancePaymentcalculation-20
     Log         ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1818,7 +1818,7 @@ JD-TC-AdvancePaymentcalculation-20
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid}  ${wid[0]} 
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLMUSERNAME4}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLPUSERNAME4}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
   
@@ -1849,7 +1849,7 @@ JD-TC-AdvancePaymentcalculation-20
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1885,7 +1885,7 @@ JD-TC-AdvancePaymentcalculation-20
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Encrypted Provider Login   ${HLMUSERNAME4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${HLPUSERNAME4}  ${PASSWORD} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     sleep   01s
@@ -1901,7 +1901,7 @@ JD-TC-AdvancePaymentcalculation-21
 
     [Documentation]   Create a service with prepayment type as percentage then take a waitlist and do the prepayment and verify the details.
 
-    clear Queue     ${HLMUSERNAME7}
+    clear Queue     ${HLPUSERNAME7}
 
     ${wb}=  readWorkbook  ${xlFile}
     ${sheet1}  GetCurrentSheet   ${wb}
@@ -1919,7 +1919,7 @@ JD-TC-AdvancePaymentcalculation-21
     Log  ${unique_snames}
     Set Suite Variable   ${unique_snames}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
@@ -1989,7 +1989,7 @@ JD-TC-AdvancePaymentcalculation-21
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2025,7 +2025,7 @@ JD-TC-AdvancePaymentcalculation-21
     Log         ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2110,7 +2110,7 @@ JD-TC-AdvancePaymentcalculation-21
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid}  ${wid[0]} 
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLMUSERNAME7}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLPUSERNAME7}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
   
@@ -2141,7 +2141,7 @@ JD-TC-AdvancePaymentcalculation-21
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2177,7 +2177,7 @@ JD-TC-AdvancePaymentcalculation-21
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Encrypted Provider Login   ${HLMUSERNAME7}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${HLPUSERNAME7}  ${PASSWORD} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     sleep   01s
@@ -2192,7 +2192,7 @@ JD-TC-AdvancePaymentcalculation-22
 
     [Documentation]  Create a serviceOption with prepayment type as fixed then take a appointment and do the prepayment and verify the details.
 
-    clear Queue     ${HLMUSERNAME6}
+    clear Queue     ${HLPUSERNAME6}
 
     ${wb}=  readWorkbook  ${xlFile}
     ${sheet1}  GetCurrentSheet   ${wb}
@@ -2210,7 +2210,7 @@ JD-TC-AdvancePaymentcalculation-22
     Log  ${unique_snames}
     Set Suite Variable   ${unique_snames}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -2280,7 +2280,7 @@ JD-TC-AdvancePaymentcalculation-22
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2316,7 +2316,7 @@ JD-TC-AdvancePaymentcalculation-22
     Log         ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2431,7 +2431,7 @@ JD-TC-AdvancePaymentcalculation-22
     Should Be Equal As Strings  ${resp.json()['paymentStatus']}   ${paymentStatus[0]} 
     Should Be Equal As Strings  ${resp.json()['apptStatus']}      ${apptStatus[0]}
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLMUSERNAME6}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLPUSERNAME6}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
   
@@ -2459,7 +2459,7 @@ JD-TC-AdvancePaymentcalculation-22
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2499,7 +2499,7 @@ JD-TC-AdvancePaymentcalculation-22
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=   Encrypted Provider Login   ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${HLPUSERNAME6}  ${PASSWORD} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2516,7 +2516,7 @@ JD-TC-AdvancePaymentcalculation-23
 
     [Documentation]  Create a serviceOption with prepayment type as Percentage then take a appointment and do the prepayment and verify the details.
 
-    clear Queue     ${HLMUSERNAME2}
+    clear Queue     ${HLPUSERNAME2}
 
     ${wb}=  readWorkbook  ${xlFile}
     ${sheet1}  GetCurrentSheet   ${wb}
@@ -2534,7 +2534,7 @@ JD-TC-AdvancePaymentcalculation-23
     Log  ${unique_snames}
     Set Suite Variable   ${unique_snames}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -2604,7 +2604,7 @@ JD-TC-AdvancePaymentcalculation-23
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2640,7 +2640,7 @@ JD-TC-AdvancePaymentcalculation-23
     Log         ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2758,7 +2758,7 @@ JD-TC-AdvancePaymentcalculation-23
     Should Be Equal As Strings  ${resp.json()['paymentStatus']}   ${paymentStatus[0]} 
     Should Be Equal As Strings  ${resp.json()['apptStatus']}      ${apptStatus[0]}
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLMUSERNAME2}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLPUSERNAME2}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
   
@@ -2786,7 +2786,7 @@ JD-TC-AdvancePaymentcalculation-23
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2826,7 +2826,7 @@ JD-TC-AdvancePaymentcalculation-23
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=   Encrypted Provider Login   ${HLMUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${HLPUSERNAME2}  ${PASSWORD} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     

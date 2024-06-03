@@ -13,8 +13,8 @@ Resource           /ebs/TDD/ConsumerKeywords.robot
 Resource           /ebs/TDD/ProviderPartnerKeywords.robot
 Variables          /ebs/TDD/varfiles/providers.py
 Variables          /ebs/TDD/varfiles/consumerlist.py 
-Variables          /ebs/TDD/varfiles/musers.py
-Variables          /ebs/TDD/varfiles/hl_musers.py
+Variables          /ebs/TDD/varfiles/providers.py
+Variables          /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -40,18 +40,18 @@ JD-TC-UpdateLeadAssignees-1
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
     ${PH_Number}    Random Number 	digits=6
-    ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+${PH_Number}
-    Set Suite Variable  ${MUSERNAME_E}
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+${PH_Number}
+    Set Suite Variable  ${PUSERNAME_E}
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_E}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -181,7 +181,7 @@ JD-TC-UpdateLeadAssignees-2
 
     [Documentation]             Update Lead Assignees - assigning two users
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -207,7 +207,7 @@ JD-TC-UpdateLeadAssignees-3
 
     [Documentation]             Update Lead Assignees - user id is empty
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -219,7 +219,7 @@ JD-TC-UpdateLeadAssignees-UH1
 
     [Documentation]             Update Lead Assignees - with invalid lead_uid
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -237,7 +237,7 @@ JD-TC-UpdateLeadAssignees-UH2
 
     [Documentation]             Update Lead Assignees - user id is invalid
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

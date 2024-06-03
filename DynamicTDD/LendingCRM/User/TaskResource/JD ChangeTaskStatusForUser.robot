@@ -11,8 +11,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -27,11 +27,11 @@ JD-TC-ChangeTaskStatusForUser-1
 
     [Documentation]  Change  task  status to Assigned
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME22}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${p_id}=  get_acc_id  ${MUSERNAME22}
+    ${p_id}=  get_acc_id  ${PUSERNAME22}
     Set Suite Variable  ${p_id}
 
     ${resp}=    Get Locations
@@ -131,7 +131,7 @@ JD-TC-ChangeTaskStatusForUser-2
 
     [Documentation]  Change  task  status to  In Progress
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME22}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -177,7 +177,7 @@ JD-TC-ChangeTaskStatusForUser-3
 
     [Documentation]  Change  task  status to  Canceled
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME22}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -224,7 +224,7 @@ JD-TC-ChangeTaskStatusForUser-4
 
     [Documentation]  Change  task  status to  Done
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME22}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -270,7 +270,7 @@ JD-TC-ChangeTaskStatusForUser-5
 
     [Documentation]  Change  task  status to  Done
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME22}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -315,11 +315,11 @@ JD-TC-ChangeTaskStatusForUser-6
 
     [Documentation]  Change  task  status by user login.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${p_id1}=  get_acc_id  ${HLMUSERNAME10}
+    ${p_id1}=  get_acc_id  ${HLPUSERNAME10}
     Set Suite Variable   ${p_id1}
 
     ${resp}=    Get Locations
@@ -420,7 +420,7 @@ JD-TC-ChangeTaskStatusForUser-UH1
 
     [Documentation]  Change  task  status to  Done already done status
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME22}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -458,7 +458,7 @@ JD-TC-ChangeTaskStatusForUser-UH2
 
     [Documentation]  Change  task  status to   cancell already cancelled
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME22}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

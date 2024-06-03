@@ -8,7 +8,7 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 
@@ -18,11 +18,11 @@ JD-TC-GetUserAccessScopes-1
 
     [Documentation]  Getting User access scopes when usertype is PROVIDER and take the checkin account level.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME7}
+    ${pid}=  get_acc_id  ${HLPUSERNAME7}
     Set Suite Variable  ${pid}
 
     ${resp}=  View Waitlist Settings
@@ -185,7 +185,7 @@ JD-TC-GetUserAccessScopes-1
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -259,7 +259,7 @@ JD-TC-GetUserAccessScopes-2
 
     [Documentation]  Getting User access scopes when usertype is PROVIDER(without assign the global waitlist to the user and not setting any user scope).
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -283,7 +283,7 @@ JD-TC-GetUserAccessScopes-3
 
     [Documentation]  Getting User access scopes when usertype is PROVIDER(without assign the global waitlist to the user and setting user scope).
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -334,7 +334,7 @@ JD-TC-GetUserAccessScopes-3
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -374,7 +374,7 @@ JD-TC-GetUserAccessScopes-4
 
     [Documentation]  Getting User access scopes when usertype is PROVIDER(with assign the global waitlist to the user and not setting user scope).
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -405,7 +405,7 @@ JD-TC-GetUserAccessScopes-5
 
     [Documentation]  Get waitlist for a service which is not in the user access scope of that user.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -445,7 +445,7 @@ JD-TC-GetUserAccessScopes-6
 
     [Documentation]  Get waitlist for a team which is in the user access scope.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -497,7 +497,7 @@ JD-TC-GetUserAccessScopes-6
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -554,7 +554,7 @@ JD-TC-GetUserAccessScopes-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -566,7 +566,7 @@ JD-TC-GetUserAccessScopes-6
     # ${resp}=   ProviderLogout
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -578,7 +578,7 @@ JD-TC-GetUserAccessScopes-6
     # ${resp}=   ProviderLogout
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -595,7 +595,7 @@ JD-TC-GetUserAccessScopes-7
 
     [Documentation]  Get waitlist for a user who is not in the user access scope.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -616,7 +616,7 @@ JD-TC-GetUserAccessScopes-7
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -654,7 +654,7 @@ JD-TC-GetUserAccessScopes-8
 
     [Documentation]  Get waitlist for a user who is in the user access scope.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -675,7 +675,7 @@ JD-TC-GetUserAccessScopes-8
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     

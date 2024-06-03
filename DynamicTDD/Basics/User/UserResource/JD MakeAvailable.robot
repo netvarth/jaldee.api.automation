@@ -12,8 +12,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 ${SERVICE1}  Makeup  
@@ -28,7 +28,7 @@ ${SERVICE4}  Facial
 JD-TC-MakeAvailable-1
     [Documentation]  set to makeavailable a user giving current time as start time
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -53,7 +53,7 @@ JD-TC-MakeAvailable-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME19}+1000410004
+    ${ph1}=  Evaluate  ${HLPUSERNAME19}+1000410004
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${address}=  get_address
@@ -135,11 +135,11 @@ JD-TC-MakeAvailable-1
 JD-TC-MakeAvailable-2
     [Documentation]  check Queue AvailableNow and call terminate call then check availability
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${ph1}=  Evaluate  ${HLMUSERNAME19}+1000420004
+    ${ph1}=  Evaluate  ${HLPUSERNAME19}+1000420004
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${address}=  get_address
@@ -231,7 +231,7 @@ JD-TC-MakeAvailable-2
 JD-TC-MakeAvailable-3
     [Documentation]  set to makeavailable a user giving future time as start time
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME81}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME81}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -260,7 +260,7 @@ JD-TC-MakeAvailable-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p1_id1}   ${resp.json()[0]['id']}
     
-    ${ph1}=  Evaluate  ${MUSERNAME81}+1000410004
+    ${ph1}=  Evaluate  ${PUSERNAME81}+1000410004
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${address}=  get_address
@@ -327,7 +327,7 @@ JD-TC-MakeAvailable-3
 JD-TC-MakeAvailable-4
     [Documentation]  set to makeavailable a default user (account level)giving current time as start time
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME81}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME81}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -372,7 +372,7 @@ JD-TC-MakeAvailable-4
 JD-TC-MakeAvailable-5
     [Documentation]  set to makeavailable giving subtract time
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME82}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME82}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -403,13 +403,13 @@ JD-TC-MakeAvailable-5
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME82}'
+            IF   not '${user_phone}' == '${PUSERNAME82}'
                 clear_users  ${user_phone}
             END
         END
     END
 
-    ${ph2}=  Evaluate  ${MUSERNAME82}+1000410004
+    ${ph2}=  Evaluate  ${PUSERNAME82}+1000410004
     Set Suite Variable   ${ph2} 
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -485,7 +485,7 @@ JD-TC-MakeAvailable-5
 JD-TC-MakeAvailable-6
     [Documentation]  set to makeavailable giving 2 s delay 
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME82}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME82}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -622,11 +622,11 @@ JD-TC-MakeAvailable-UH3
     JD-TC-MakeAvailable-3
     [Documentation]  check Queue AvailableNow and try to take waitlist
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${ph1}=  Evaluate  ${HLMUSERNAME19}+1000430004
+    ${ph1}=  Evaluate  ${HLPUSERNAME19}+1000430004
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${address}=  get_address
@@ -700,7 +700,7 @@ JD-TC-MakeAvailable-UH3
 JD-TC-MakeAvailable-UH3
     [Documentation]  check make Availabilty with empty id
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME81}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME81}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -11144,6 +11144,7 @@ Encrypted Provider Login
     ${encrypted_data}=  db.encrypt_data  ${data}
     ${data}=    json.dumps    ${encrypted_data}
     ${resp}=    POST On Session    ynw    /provider/login/encrypt    data=${data}  expected_status=any
+    db.decrypt_data  ${resp.content}
     RETURN  ${resp}
 
 
@@ -11392,7 +11393,7 @@ Perfios Score
 Account with Multiple Users in NBFC
 
 
-    ${resp}=   Get File    /ebs/TDD/varfiles/musers.py
+    ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
     ${len}=   Split to lines  ${resp}
     ${length}=  Get Length   ${len}
     ${multiuser_list}=  Create List
@@ -11400,7 +11401,7 @@ Account with Multiple Users in NBFC
     ${licid}  ${licname}=  get_highest_license_pkg
     
     FOR   ${a}    IN RANGE   ${length}   
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
 
         ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -11423,7 +11424,7 @@ Account with Multiple Users in NBFC
         END
     END
    
-    RETURN  ${MUSERNAME${a}}
+    RETURN  ${PUSERNAME${a}}
 
 Get default status by type
 

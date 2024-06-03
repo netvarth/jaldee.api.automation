@@ -13,8 +13,8 @@ Resource           /ebs/TDD/ConsumerKeywords.robot
 Resource           /ebs/TDD/ProviderPartnerKeywords.robot
 Variables          /ebs/TDD/varfiles/providers.py
 Variables          /ebs/TDD/varfiles/consumerlist.py 
-Variables          /ebs/TDD/varfiles/musers.py
-Variables          /ebs/TDD/varfiles/hl_musers.py
+Variables          /ebs/TDD/varfiles/providers.py
+Variables          /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -79,7 +79,7 @@ JD-TC-Get Partner loan Bank Details-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -613,7 +613,7 @@ JD-TC-Get Partner loan Bank Details-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -846,7 +846,7 @@ JD-TC-Get Partner loan Bank Details-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}  
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}  
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
@@ -1252,7 +1252,7 @@ JD-TC-Get Partner loan Bank Details-UH1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}  
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}  
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
@@ -1485,7 +1485,7 @@ JD-TC-Get Partner loan Bank Details-UH2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD} 
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
@@ -1718,7 +1718,7 @@ JD-TC-Get Partner loan Bank Details-UH3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD} 
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
@@ -1951,7 +1951,7 @@ JD-TC-Get Partner loan Bank Details-UH6
                                   
     [Documentation]               Get Partner loan Bank Details - another provider login
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD} 
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable  ${provider_id}  ${decrypted_data['id']}

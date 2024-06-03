@@ -12,8 +12,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/Keywords.robot
 
 
@@ -84,7 +84,7 @@ ${autoApprovalUptoAmount2}    70000
 Account with Multiple Users in NBFC
 
 
-    ${resp}=   Get File    /ebs/TDD/varfiles/musers.py
+    ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
     ${len}=   Split to lines  ${resp}
     ${length}=  Get Length   ${len}
     ${multiuser_list}=  Create List
@@ -92,7 +92,7 @@ Account with Multiple Users in NBFC
     ${licid}  ${licname}=  get_highest_license_pkg
     
     FOR   ${a}  ${start}   IN RANGE   ${length}   
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         # Set Test Variable  ${pkgId}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
         # Set Test Variable  ${Dom}   ${resp.json()['sector']}
@@ -117,7 +117,7 @@ Account with Multiple Users in NBFC
         END
     END
    
-    RETURN  ${MUSERNAME${a}}
+    RETURN  ${PUSERNAME${a}}
 
 
 
@@ -1171,7 +1171,7 @@ JD-TC-Cases-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME15}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1376,7 +1376,7 @@ JD-TC-Cases-2
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME15}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1452,7 +1452,7 @@ JD-TC-Cases-3
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME15}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1661,7 +1661,7 @@ JD-TC-Cases-3
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME15}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1728,7 +1728,7 @@ JD-TC-Case-5
  
     [Documentation]   create loan by partner and view the loan by
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME15}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2042,7 +2042,7 @@ JD-TC-Case-5
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200 
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME15}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2172,7 +2172,7 @@ JD-TC-Case-6
  
     [Documentation]   create loan by partner and view Partner with another user . the another user gave partner id in user scope
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME15}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2225,7 +2225,7 @@ JD-TC-Case-7
  
     [Documentation]   create loan by partner and view Partner with another user . the another user gave partner id in user scope
   
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME15}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2241,7 +2241,7 @@ JD-TC-Case-8
     [Documentation]   create loan by partner and view Partner with another user . the another user gave partner id in user scope
   
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME15}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

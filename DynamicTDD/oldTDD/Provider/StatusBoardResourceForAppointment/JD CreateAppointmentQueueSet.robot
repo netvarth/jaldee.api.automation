@@ -11,8 +11,8 @@ Resource        /ebs/TDD/ProviderKeywords.robot
 Resource        /ebs/TDD/ConsumerKeywords.robot
 Variables       /ebs/TDD/varfiles/providers.py
 Variables       /ebs/TDD/varfiles/consumerlist.py 
-Variables       /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables       /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 ${SERVICE1}     Radio Repdca111
@@ -192,20 +192,20 @@ JD-TC-CreateAppointmentQueueSet-2
     END
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    ${MUSERNAME_M}=  Evaluate  ${MUSERNAME}+85473
+    ${PUSERNAME_M}=  Evaluate  ${PUSERNAME}+85473
     ${pkg_id}=   get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd}  ${MUSERNAME_M}   ${pkg_id[0]}
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd}  ${PUSERNAME_M}   ${pkg_id[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_M}  0
+    ${resp}=  Account Activation  ${PUSERNAME_M}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_M}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_M}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_M}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_M}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_M}${\n}
-    Set Suite Variable  ${MUSERNAME_M}  
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_M}${\n}
+    Set Suite Variable  ${PUSERNAME_M}  
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -397,11 +397,11 @@ JD-TC-CreateAppointmentQueueSet-3
 JD-TC-CreateAppointmentQueueSet-4
 
     [Documentation]  Create a Appointment QueueSet for department only
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    clear_service   ${HLMUSERNAME10}
-    clear_location  ${HLMUSERNAME10}
-    clear_Addon  ${HLMUSERNAME10}
+    clear_service   ${HLPUSERNAME10}
+    clear_location  ${HLPUSERNAME10}
+    clear_Addon  ${HLPUSERNAME10}
 
     ${resp}=  View Waitlist Settings
     Should Be Equal As Strings  ${resp.status_code}  200

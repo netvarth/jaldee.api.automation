@@ -8,7 +8,7 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 
@@ -19,11 +19,11 @@ JD-TC-GetUserRoles-1
 
     [Documentation]  Getting Label Permissions when usertype is PROVIDER.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 *** Comments ***
-    ${pid}=  get_acc_id  ${HLMUSERNAME1}
+    ${pid}=  get_acc_id  ${HLPUSERNAME1}
 
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
@@ -129,7 +129,7 @@ JD-TC-GetUserRoles-1
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

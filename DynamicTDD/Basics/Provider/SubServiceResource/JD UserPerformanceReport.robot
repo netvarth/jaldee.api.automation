@@ -14,8 +14,8 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -30,7 +30,7 @@ JD-TC-UserPerformanceReport-1
     [Documentation]  Create a sub service and add that sub service to an appointment(walkin) for a provider consumer.
                 ...   assign that subservice to a user and verify user performance report.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -107,7 +107,7 @@ JD-TC-UserPerformanceReport-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME40}'
+            IF   not '${user_phone}' == '${HLPUSERNAME40}'
                 clear_users  ${user_phone}
             END
         END
@@ -216,7 +216,7 @@ JD-TC-UserPerformanceReport-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -308,7 +308,7 @@ JD-TC-UserPerformanceReport-2
     [Documentation]  Create a sub service and add that sub service to an appointment(online) for a provider consumer.
                 ...   assign that subservice to a user and verify user performance report.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME41}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -391,7 +391,7 @@ JD-TC-UserPerformanceReport-2
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME41}'
+            IF   not '${user_phone}' == '${HLPUSERNAME41}'
                 clear_users  ${user_phone}
             END
         END
@@ -534,7 +534,7 @@ JD-TC-UserPerformanceReport-2
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceId']}        ${s_id}
     Should Not Contain   ${resp.json()['subServiceData']}                               ${subser_id1}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME41}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -615,7 +615,7 @@ JD-TC-UserPerformanceReport-3
     [Documentation]  Create a sub service and add that sub service to an appointment(online) for a provider consumer's family member.
                 ...   assign that subservice to a user and verify user performance report.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME42}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -698,7 +698,7 @@ JD-TC-UserPerformanceReport-3
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME42}'
+            IF   not '${user_phone}' == '${HLPUSERNAME42}'
                 clear_users  ${user_phone}
             END
         END
@@ -871,7 +871,7 @@ JD-TC-UserPerformanceReport-3
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceId']}        ${s_id}
     Should Not Contain   ${resp.json()['subServiceData']}                               ${subser_id1}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME42}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -953,7 +953,7 @@ JD-TC-UserPerformanceReport-4
     [Documentation]   add multiple sub services to an appointment(walkin) for a provider consumer.
                 ...   assign that subservices to a user and verify user performance report.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME43}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME43}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1030,7 +1030,7 @@ JD-TC-UserPerformanceReport-4
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME43}'
+            IF   not '${user_phone}' == '${HLPUSERNAME43}'
                 clear_users  ${user_phone}
             END
         END
@@ -1175,7 +1175,7 @@ JD-TC-UserPerformanceReport-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME43}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME43}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1286,7 +1286,7 @@ JD-TC-UserPerformanceReport-5
                 ...   update one sub service with a new amount.
                 ...   verify user performance report.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME44}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1363,7 +1363,7 @@ JD-TC-UserPerformanceReport-5
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME44}'
+            IF   not '${user_phone}' == '${HLPUSERNAME44}'
                 clear_users  ${user_phone}
             END
         END
@@ -1508,7 +1508,7 @@ JD-TC-UserPerformanceReport-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME44}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1684,7 +1684,7 @@ JD-TC-UserPerformanceReport-6
                 ...   remove one sub service.
                 ...   verify user performance report.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1761,7 +1761,7 @@ JD-TC-UserPerformanceReport-6
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME45}'
+            IF   not '${user_phone}' == '${HLPUSERNAME45}'
                 clear_users  ${user_phone}
             END
         END
@@ -1906,7 +1906,7 @@ JD-TC-UserPerformanceReport-6
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2067,7 +2067,7 @@ JD-TC-UserPerformanceReport-7
     [Documentation]   add sub services to two appointments(walkin and online) for a provider consumer.
                 ...   verify user performance report with service filter.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME46}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2144,7 +2144,7 @@ JD-TC-UserPerformanceReport-7
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME46}'
+            IF   not '${user_phone}' == '${HLPUSERNAME46}'
                 clear_users  ${user_phone}
             END
         END
@@ -2292,7 +2292,7 @@ JD-TC-UserPerformanceReport-7
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME46}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2443,7 +2443,7 @@ JD-TC-UserPerformanceReport-8
     [Documentation]  Create a sub service and add that sub service to an appointment(walkin) for a provider consumer.
                 ...   assign that subservice to a user and verify user performance report with assignee filter.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME47}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2520,7 +2520,7 @@ JD-TC-UserPerformanceReport-8
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME47}'
+            IF   not '${user_phone}' == '${HLPUSERNAME47}'
                 clear_users  ${user_phone}
             END
         END
@@ -2629,7 +2629,7 @@ JD-TC-UserPerformanceReport-8
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME47}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2714,7 +2714,7 @@ JD-TC-UserPerformanceReport-9
     [Documentation]  Create a sub service and add that sub service to an appointment(walkin) for a provider consumer.
                 ...   assign that subservice to multiple users and verify user performance report with assignee filter.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2791,7 +2791,7 @@ JD-TC-UserPerformanceReport-9
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME48}'
+            IF   not '${user_phone}' == '${HLPUSERNAME48}'
                 clear_users  ${user_phone}
             END
         END
@@ -2910,7 +2910,7 @@ JD-TC-UserPerformanceReport-9
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2996,7 +2996,7 @@ JD-TC-UserPerformanceReport-10
                 ...   assign that subservice to multiple users and verify user performance report with assignee filter.
                 ...   then update with one assignee and verify the report with assignee filter.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME49}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME49}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3073,7 +3073,7 @@ JD-TC-UserPerformanceReport-10
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME49}'
+            IF   not '${user_phone}' == '${HLPUSERNAME49}'
                 clear_users  ${user_phone}
             END
         END
@@ -3192,7 +3192,7 @@ JD-TC-UserPerformanceReport-10
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME49}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME49}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3320,7 +3320,7 @@ JD-TC-UserPerformanceReport-11
     [Documentation]  Create a sub service and add that sub service to an appointment(walkin) for a provider consumer.
                 ...   then reshedule the appointment to another date then verify the user performance report.
                
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME49}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME49}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3330,6 +3330,6 @@ JD-TC-UserPerformanceReport-12
     [Documentation]  Create a sub service and add that sub service to an appointment(walkin) for a provider consumer.
                 ...   then reshedule the appointment to another date then verify the user performance report.
                
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME49}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME49}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200

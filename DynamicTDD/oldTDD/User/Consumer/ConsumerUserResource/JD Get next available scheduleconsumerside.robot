@@ -12,7 +12,7 @@ Resource    /ebs/TDD/ProviderKeywords.robot
 Resource    /ebs/TDD/ConsumerKeywords.robot
 Resource    /ebs/TDD/SuperAdminKeywords.robot
 Variables   /ebs/TDD/varfiles/providers.py
-Variables   /ebs/TDD/varfiles/musers.py
+Variables   /ebs/TDD/varfiles/providers.py
 Variables   /ebs/TDD/varfiles/consumerlist.py
 Variables   /ebs/TDD/varfiles/consumermail.py
 
@@ -23,10 +23,10 @@ Variables   /ebs/TDD/varfiles/consumermail.py
 JD-TC-NextAvailableSchedule consumer -1
     [Documentation]   Get next available schedule for user when there is only one schedule
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${MUSERNAME58}
+    ${pid}=  get_acc_id  ${PUSERNAME58}
     Set Suite Variable  ${pid}
     
     ${highest_package}=   get_highest_license_pkg
@@ -41,8 +41,8 @@ JD-TC-NextAvailableSchedule consumer -1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${MUSERNAME58}
-    clear_appt_schedule   ${MUSERNAME58}
+    clear_service   ${PUSERNAME58}
+    clear_appt_schedule   ${PUSERNAME58}
     
     ${resp2}=   Get Business Profile
     Log  ${resp2.json()}
@@ -202,13 +202,13 @@ JD-TC-NextAvailableSchedule consumer -1
 JD-TC-NextAvailableSchedule consumer -2
     [Documentation]   Get next available schedule  when there more than one schedule
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${MUSERNAME58}
+    ${pid}=  get_acc_id  ${PUSERNAME58}
     
-    clear_service   ${MUSERNAME58}
-    clear_appt_schedule   ${MUSERNAME58}
+    clear_service   ${PUSERNAME58}
+    clear_appt_schedule   ${PUSERNAME58}
     clear_service   ${PUSERPH9}
     clear_appt_schedule   ${PUSERPH9}
 
@@ -338,8 +338,8 @@ JD-TC-NextAvailableSchedule consumer -2
 
 JD-TC-NextAvailableSchedule consumer -3
     [Documentation]   Get next available schedule by provider login
-    ${pid}=  get_acc_id  ${MUSERNAME58}
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD}
+    ${pid}=  get_acc_id  ${PUSERNAME58}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -418,7 +418,7 @@ JD-TC-NextAvailableSchedule consumer -3
 
 JD-TC-NextAvailableSchedule consumer -4
     [Documentation]   Get next available schedule wthiout  login
-    # ${pid}=  get_acc_id  ${MUSERNAME58}
+    # ${pid}=  get_acc_id  ${PUSERNAME58}
 
     ${resp}=    Get NextAvailableSchedule appt consumer    ${pid}    ${lid}   ${u_id}               
     Log   ${resp.content}
@@ -447,8 +447,8 @@ JD-TC-NextAvailableSchedule consumer -4
 
 JD-TC-NextAvailableSchedule consumer -UH1
     [Documentation]   Get next available schedule for user with invalid account id
-    ${pid}=  get_acc_id  ${MUSERNAME58}
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD}
+    ${pid}=  get_acc_id  ${PUSERNAME58}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -469,7 +469,7 @@ JD-TC-NextAvailableSchedule consumer -UH1
     ${len}=  Get Length  ${resp.json()}
     Should Be Equal As Integers  ${len}  2
     FOR  ${i}  IN RANGE   ${len}
-        IF  '${resp.json()[${i}]['mobileNo']}' == '${MUSERNAME58}' 
+        IF  '${resp.json()[${i}]['mobileNo']}' == '${PUSERNAME58}' 
             Set Test Variable   ${u0_id}   ${resp.json()[${i}]['id']}
         ELSE
             Set Test Variable   ${u_id}   ${resp.json()[${i}]['id']}
@@ -501,8 +501,8 @@ JD-TC-NextAvailableSchedule consumer -UH1
 
 JD-TC-NextAvailableSchedule consumer -UH2
     [Documentation]   Get next available schedule for user with invalid location id
-    ${pid}=  get_acc_id  ${MUSERNAME58}
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD}
+    ${pid}=  get_acc_id  ${PUSERNAME58}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -523,7 +523,7 @@ JD-TC-NextAvailableSchedule consumer -UH2
     ${len}=  Get Length  ${resp.json()}
     Should Be Equal As Integers  ${len}  2
     FOR  ${i}  IN RANGE   ${len}
-        IF  '${resp.json()[${i}]['mobileNo']}' == '${MUSERNAME58}' 
+        IF  '${resp.json()[${i}]['mobileNo']}' == '${PUSERNAME58}' 
             Set Test Variable   ${u0_id}   ${resp.json()[${i}]['id']}
         ELSE
             Set Test Variable   ${u_id}   ${resp.json()[${i}]['id']}
@@ -555,8 +555,8 @@ JD-TC-NextAvailableSchedule consumer -UH2
 
 JD-TC-NextAvailableSchedule consumer -UH3
     [Documentation]   Get next available schedule for user with invalid user id
-    ${pid}=  get_acc_id  ${MUSERNAME58}
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD}
+    ${pid}=  get_acc_id  ${PUSERNAME58}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -577,7 +577,7 @@ JD-TC-NextAvailableSchedule consumer -UH3
     ${len}=  Get Length  ${resp.json()}
     Should Be Equal As Integers  ${len}  2
     FOR  ${i}  IN RANGE   ${len}
-        IF  '${resp.json()[${i}]['mobileNo']}' == '${MUSERNAME58}' 
+        IF  '${resp.json()[${i}]['mobileNo']}' == '${PUSERNAME58}' 
             Set Test Variable   ${u0_id}   ${resp.json()[${i}]['id']}
         ELSE
             Set Test Variable   ${u_id}   ${resp.json()[${i}]['id']}
@@ -612,10 +612,10 @@ JD-TC-NextAvailableSchedule consumer -UH4
     [Documentation]   Get next available schedule ,to gave another provider location 
     
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid1}=  get_acc_id  ${MUSERNAME48}
+    ${pid1}=  get_acc_id  ${PUSERNAME48}
     
     ${highest_package}=  get_highest_license_pkg
     Log  ${highest_package}
@@ -629,8 +629,8 @@ JD-TC-NextAvailableSchedule consumer -UH4
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${MUSERNAME48}
-    clear_appt_schedule   ${MUSERNAME48}
+    clear_service   ${PUSERNAME48}
+    clear_appt_schedule   ${PUSERNAME48}
     
     ${resp2}=   Get Business Profile
     Log  ${resp2.json()}
@@ -729,8 +729,8 @@ JD-TC-NextAvailableSchedule consumer -UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id}  ${resp.json()}
 
-    ${pid}=  get_acc_id  ${MUSERNAME58}
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD}
+    ${pid}=  get_acc_id  ${PUSERNAME58}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -751,7 +751,7 @@ JD-TC-NextAvailableSchedule consumer -UH4
     ${len}=  Get Length  ${resp.json()}
     Should Be Equal As Integers  ${len}  2
     FOR  ${i}  IN RANGE   ${len}
-        IF  '${resp.json()[${i}]['mobileNo']}' == '${MUSERNAME58}' 
+        IF  '${resp.json()[${i}]['mobileNo']}' == '${PUSERNAME58}' 
             Set Test Variable   ${u0_id}   ${resp.json()[${i}]['id']}
         ELSE
             Set Test Variable   ${u_id}   ${resp.json()[${i}]['id']}
@@ -786,10 +786,10 @@ JD-TC-NextAvailableSchedule consumer -UH5
     [Documentation]   Get next available schedule , another provider userid
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid1}=  get_acc_id  ${MUSERNAME48}
+    ${pid1}=  get_acc_id  ${PUSERNAME48}
     
   #  ${highest_package}=  get_highest_license_pkg
   #  Log  ${highest_package}
@@ -803,8 +803,8 @@ JD-TC-NextAvailableSchedule consumer -UH5
    # Log   ${resp.content}
    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    #clear_service   ${MUSERNAME48}
-  #  clear_appt_schedule   ${MUSERNAME48}
+    #clear_service   ${PUSERNAME48}
+  #  clear_appt_schedule   ${PUSERNAME48}
     
   #  ${resp2}=   Get Business Profile
    # Log  ${resp2.json()}
@@ -840,15 +840,15 @@ JD-TC-NextAvailableSchedule consumer -UH5
     ${len}=  Get Length  ${resp.json()}
     Should Be Equal As Integers  ${len}  2
     FOR  ${i}  IN RANGE   ${len}
-        IF  '${resp.json()[${i}]['mobileNo']}' == '${MUSERNAME48}' 
+        IF  '${resp.json()[${i}]['mobileNo']}' == '${PUSERNAME48}' 
             Set Test Variable   ${u0_id}   ${resp.json()[${i}]['id']}
         ELSE
             Set Test Variable   ${u_id1}   ${resp.json()[${i}]['id']}
         END
     END
 
-    ${pid}=  get_acc_id  ${MUSERNAME58}
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD}
+    ${pid}=  get_acc_id  ${PUSERNAME58}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -870,7 +870,7 @@ JD-TC-NextAvailableSchedule consumer -UH5
     ${len}=  Get Length  ${resp.json()}
     Should Be Equal As Integers  ${len}  2
     FOR  ${i}  IN RANGE   ${len}
-        IF  '${resp.json()[${i}]['mobileNo']}' == '${MUSERNAME58}' 
+        IF  '${resp.json()[${i}]['mobileNo']}' == '${PUSERNAME58}' 
             Set Test Variable   ${u0_id}   ${resp.json()[${i}]['id']}
         ELSE
             Set Test Variable   ${u_id}   ${resp.json()[${i}]['id']}
@@ -905,10 +905,10 @@ JD-TC-NextAvailableSchedule consumer -UH6
     [Documentation]   Get next available schedule another provider account id
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid1}=  get_acc_id  ${MUSERNAME48}
+    ${pid1}=  get_acc_id  ${PUSERNAME48}
     
   #  ${highest_package}=  get_highest_license_pkg
   #  Log  ${highest_package}
@@ -922,8 +922,8 @@ JD-TC-NextAvailableSchedule consumer -UH6
    # Log   ${resp.content}
    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    #clear_service   ${MUSERNAME48}
-  #  clear_appt_schedule   ${MUSERNAME48}
+    #clear_service   ${PUSERNAME48}
+  #  clear_appt_schedule   ${PUSERNAME48}
     
   #  ${resp2}=   Get Business Profile
    # Log  ${resp2.json()}
@@ -959,15 +959,15 @@ JD-TC-NextAvailableSchedule consumer -UH6
     ${len}=  Get Length  ${resp.json()}
     Should Be Equal As Integers  ${len}  2
     FOR  ${i}  IN RANGE   ${len}
-        IF  '${resp.json()[${i}]['mobileNo']}' == '${MUSERNAME48}' 
+        IF  '${resp.json()[${i}]['mobileNo']}' == '${PUSERNAME48}' 
             Set Test Variable   ${u0_id}   ${resp.json()[${i}]['id']}
         ELSE
             Set Test Variable   ${u_id1}   ${resp.json()[${i}]['id']}
         END
     END
 
-    ${pid}=  get_acc_id  ${MUSERNAME58}
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD}
+    ${pid}=  get_acc_id  ${PUSERNAME58}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -988,7 +988,7 @@ JD-TC-NextAvailableSchedule consumer -UH6
     ${len}=  Get Length  ${resp.json()}
     Should Be Equal As Integers  ${len}  2
     FOR  ${i}  IN RANGE   ${len}
-        IF  '${resp.json()[${i}]['mobileNo']}' == '${MUSERNAME58}' 
+        IF  '${resp.json()[${i}]['mobileNo']}' == '${PUSERNAME58}' 
             Set Test Variable   ${u0_id}   ${resp.json()[${i}]['id']}
         ELSE
             Set Test Variable   ${u_id}   ${resp.json()[${i}]['id']}
@@ -1019,8 +1019,8 @@ JD-TC-NextAvailableSchedule consumer -UH6
 
 JD-TC-NextAvailableSchedule consumer -UH7
     [Documentation]   Get next available schedule  with same provider another location without appt
-    ${pid}=  get_acc_id  ${MUSERNAME58}
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD}
+    ${pid}=  get_acc_id  ${PUSERNAME58}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1169,8 +1169,8 @@ JD-TC-NextAvailableSchedule consumer -UH7
 
 JD-TC-NextAvailableSchedule consumer -UH8
     [Documentation]   Get next available schedule  with same provider another location disable
-    ${pid}=  get_acc_id  ${MUSERNAME58}
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD}
+    ${pid}=  get_acc_id  ${PUSERNAME58}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1316,8 +1316,8 @@ JD-TC-NextAvailableSchedule consumer -UH8
 
 JD-TC-NextAvailableSchedule consumer -5
     [Documentation]   Get next available schedule  with same provider another location and  another userid
-    ${pid}=  get_acc_id  ${MUSERNAME58}
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD}
+    ${pid}=  get_acc_id  ${PUSERNAME58}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

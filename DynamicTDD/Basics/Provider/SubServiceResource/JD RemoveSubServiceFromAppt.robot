@@ -13,8 +13,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -39,7 +39,7 @@ JD-TC-RemoveSubServicesToAppt-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME230}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -130,7 +130,7 @@ JD-TC-RemoveSubServicesToAppt-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME230}'
+            IF   not '${user_phone}' == '${PUSERNAME230}'
                 clear_users  ${user_phone}
             END
         END
@@ -327,7 +327,7 @@ JD-TC-RemoveSubServicesToAppt-2
 
     [Documentation]  remove the subservice with one assigned user.
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME230}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -402,7 +402,7 @@ JD-TC-RemoveSubServicesToAppt-3
 
     [Documentation]  add a subservice and change the price then try to remove the subservice .
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME230}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -546,7 +546,7 @@ JD-TC-RemoveSubServicesToAppt-UH3
 
     [Documentation]  remove an inactive subservice from an appointment
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME230}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -576,7 +576,7 @@ JD-TC-RemoveSubServicesToAppt-UH4
 
     [Documentation]  Remove a subservice from an appointment that has already been canceled.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME230}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -9,7 +9,7 @@ Library           FakerLibrary
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
 *** Variables ***
@@ -35,22 +35,22 @@ JD-TC-Enable or Disable Department-1
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_K}=  Evaluate  ${MUSERNAME}+423821
+    ${PUSERNAME_K}=  Evaluate  ${PUSERNAME}+423821
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_K}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_K}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_K}  0
+    ${resp}=  Account Activation  ${PUSERNAME_K}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_K}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_K}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_K}${\n}
-    Set Suite Variable  ${MUSERNAME_K}
-    ${id}=  get_id  ${MUSERNAME_K}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_K}${\n}
+    Set Suite Variable  ${PUSERNAME_K}
+    ${id}=  get_id  ${PUSERNAME_K}
     Set Suite Variable  ${id}
 
     ${resp}=  Toggle Department Enable
@@ -87,7 +87,7 @@ JD-TC-Enable or Disable Department-1
 JD-TC-Enable or Disable Department-2
     [Documentation]  provider successfully enables a department which is disabled by him
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Departments
@@ -116,7 +116,7 @@ JD-TC-Enable or Disable Department-2
 JD-TC-Enable or Disable Department-3
     [Documentation]  provider adding service from disabled department to other department
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dep_name2}=  FakerLibrary.bs
     Set Suite Variable   ${dep_name2}
@@ -146,7 +146,7 @@ JD-TC-Enable or Disable Department-3
 JD-TC-Enable or Disable Department-UH1
     [Documentation]  provider created and added a service to a disabled department
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Disable Department  ${did01} 
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -159,7 +159,7 @@ JD-TC-Enable or Disable Department-UH1
 JD-TC-Enable or Disable Department-UH2
     [Documentation]  provider creating new department with same name as disabled departrment
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc}   
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -168,7 +168,7 @@ JD-TC-Enable or Disable Department-UH2
 JD-TC-Enable or Disable Department-UH3
     [Documentation]  provider creating new department with same department code as disabled departrment
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dep_name}=  FakerLibrary.bs
     ${resp}=  Create Department  ${dep_name}  ${dep_code1}  ${dep_desc} 
@@ -178,7 +178,7 @@ JD-TC-Enable or Disable Department-UH3
 JD-TC-Enable or Disable Department-UH4
     [Documentation]  provider updating a disabled departrment
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Update Department  ${did01}  ${dep_name1}  ${dep_code1}  ${dep_desc}   ${sid1}  ${sid3}
    # Should Be Equal As Strings  ${resp.status_code}  200

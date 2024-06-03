@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Test Cases ***
 
@@ -22,7 +22,7 @@ JD-TC-GetItemTypeByFilter-1
 
     [Documentation]   Create a Item Type then try to get that item Type with filter(TypeCode).
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -62,7 +62,7 @@ JD-TC-GetItemTypeByFilter-2
 
     [Documentation]   Create a Item Type then try to get that item Type with filter(TypeName).
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -92,7 +92,7 @@ JD-TC-GetItemTypeByFilter-3
 
     [Documentation]   Create a Item Type then try to get that item Type with filter(status).
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -107,7 +107,7 @@ JD-TC-GetItemTypeByFilter-4
 
     [Documentation]   Update a Item Type Status then try to get that item Type with filter(status).
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

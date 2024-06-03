@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Test Cases ***
 
@@ -22,7 +22,7 @@ JD-TC-GetItemManufactureByFilter-1
 
     [Documentation]  Get Item Manufacture Filter
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME26}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME26}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -81,7 +81,7 @@ JD-TC-GetItemManufactureByFilter-2
 
     [Documentation]   Get Item Manufacture Filter - with manufactureCode
  
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME26}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME26}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -97,7 +97,7 @@ JD-TC-GetItemManufactureByFilter-3
 
     [Documentation]   Get Item Manufacture Filter - with manufactureName
  
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME26}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME26}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -112,7 +112,7 @@ JD-TC-GetItemManufactureByFilter-4
 
     [Documentation]   Get Item Manufacture Filter - with status enable
  
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME26}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME26}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -131,7 +131,7 @@ JD-TC-GetItemManufactureByFilter-5
 
     [Documentation]   Get Item Manufacture Filter - with status Disable
  
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME26}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME26}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

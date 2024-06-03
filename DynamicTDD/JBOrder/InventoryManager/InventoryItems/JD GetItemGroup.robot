@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Test Cases ***
 
@@ -22,7 +22,7 @@ JD-TC-GetItemGroup-1
 
     [Documentation]   Get Item Group
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -62,7 +62,7 @@ JD-TC-GetItemGroup-Uh1
 
     [Documentation]   Get Item Group - with invalid item group id
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -85,7 +85,7 @@ JD-TC-GetItemGroup-UH3
 
     [Documentation]   Get Item Group - with another provider login
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

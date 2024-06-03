@@ -14,7 +14,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 *** Test Cases ***
@@ -29,22 +29,22 @@ JD-TC-Delete Logo Image of USER-1
      Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
      ${firstname_A}=  FakerLibrary.first_name
      ${lastname_A}=  FakerLibrary.last_name
-     ${MUSERNAME_E1}=  Evaluate  ${MUSERNAME}+18908901
+     ${PUSERNAME_E1}=  Evaluate  ${PUSERNAME}+18908901
      ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E1}    ${highest_package[0]}
+     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E1}    ${highest_package[0]}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Activation  ${MUSERNAME_E1}  0
+     ${resp}=  Account Activation  ${PUSERNAME_E1}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${MUSERNAME_E1}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${PUSERNAME_E1}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E1}${\n}
-     Set Suite Variable  ${MUSERNAME_E1}
-     ${id}=  get_id  ${MUSERNAME_E1}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E1}${\n}
+     Set Suite Variable  ${PUSERNAME_E1}
+     ${id}=  get_id  ${PUSERNAME_E1}
      Set Suite Variable  ${id}
      ${bs}=  FakerLibrary.bs
      Set Suite Variable  ${bs}
@@ -130,7 +130,7 @@ JD-TC-Delete Logo Image of USER-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id2}  ${resp.json()}
 
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${MUSERNAME_E1}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
@@ -170,11 +170,11 @@ JD-TC-Delete Logo Image of USER-1
 
 JD-TC-Delete Logo Image of USER-UH1
     [Documentation]   Provider check to  Delete Logo image of USER
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${p_id}=  get_acc_id  ${MUSERNAME_E1}
+    ${p_id}=  get_acc_id  ${PUSERNAME_E1}
   
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${MUSERNAME_E1}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -212,11 +212,11 @@ JD-TC-Delete Logo Image of USER-UH3
 
 JD-TC-Delete Logo Image of USER-UH4
     [Documentation]   User u_id2 Delete Logo image of another user u_id1, after creating user profile
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${p_id}=  get_acc_id  ${MUSERNAME_E1}
+    ${p_id}=  get_acc_id  ${PUSERNAME_E1}
    
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${MUSERNAME_E1}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -280,10 +280,10 @@ JD-TC-Delete Logo Image of USER-UH4
 
 JD-TC-Delete Logo Image of USER-UH5
     [Documentation]   User Delete Logo image without creating user profile
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${p_id}=  get_acc_id  ${MUSERNAME_E1}
-    ${resp}=  pyproviderlogin  ${MUSERNAME_E1}  ${PASSWORD}
+    ${p_id}=  get_acc_id  ${PUSERNAME_E1}
+    ${resp}=  pyproviderlogin  ${PUSERNAME_E1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp}  200
 
     @{resp}=  uploadLogoImagesofUSER   ${u_id1}

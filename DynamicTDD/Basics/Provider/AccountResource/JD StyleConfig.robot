@@ -10,7 +10,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 @{color}   00FF95   f0f0f0  
@@ -21,7 +21,7 @@ Variables         /ebs/TDD/varfiles/hl_musers.py
 
 JD-TC-AddOrUpdate UserStyle -1
       [Documentation]  Update License Package with valid data
-   ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+   ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -30,7 +30,7 @@ JD-TC-AddOrUpdate UserStyle -1
     Set Test Variable  ${pro_id}  ${decrypted_data['id']}
     # Set Test Variable  ${pro_id}  ${resp.json()['id']}
 
-    ${pid_B}=  get_acc_id  ${HLMUSERNAME7}
+    ${pid_B}=  get_acc_id  ${HLPUSERNAME7}
     Set Suite Variable  ${pid_B}
 
 
@@ -39,9 +39,9 @@ JD-TC-AddOrUpdate UserStyle -1
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
   
-    clear_service   ${HLMUSERNAME7}
-    clear_appt_schedule   ${HLMUSERNAME7}
-    clear_customer   ${HLMUSERNAME7}
+    clear_service   ${HLPUSERNAME7}
+    clear_appt_schedule   ${HLPUSERNAME7}
+    clear_customer   ${HLPUSERNAME7}
 
     ${resp}=  Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -107,13 +107,13 @@ JD-TC-AddOrUpdate UserStyle -1
         FOR   ${i}  IN RANGE   0   ${len}
         
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME7}'
+            IF   not '${user_phone}' == '${HLPUSERNAME7}'
                 clear_users  ${user_phone}
             END
         END
     END
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME7}+1000260000
+    ${ph1}=  Evaluate  ${HLPUSERNAME7}+1000260000
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -131,8 +131,8 @@ JD-TC-AddOrUpdate UserStyle -1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${whpnum}=  Evaluate  ${HLMUSERNAME7}+336245
-    ${tlgnum}=  Evaluate  ${HLMUSERNAME7}+336345
+    ${whpnum}=  Evaluate  ${HLPUSERNAME7}+336245
+    ${tlgnum}=  Evaluate  ${HLPUSERNAME7}+336345
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
@@ -158,7 +158,7 @@ JD-TC-AddOrUpdate UserStyle -1
 
 JD-TC-AddOrUpdate dashboardStyle -1
       [Documentation]  Update License Package with valid data
-   ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+   ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

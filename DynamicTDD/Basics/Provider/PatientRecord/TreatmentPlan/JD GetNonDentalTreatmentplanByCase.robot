@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -39,7 +39,7 @@ JD-TC-Get NonDental Treatment Plan By case Id-1
 
     [Documentation]    Create Treatment Plan Without dental id Then Get NonDental Treatment Plan By case Id.
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -128,7 +128,7 @@ JD-TC-Get NonDental Treatment Plan By case Id-1
 
     
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

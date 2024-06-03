@@ -13,8 +13,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -32,10 +32,10 @@ JD-TC-SendMessageWithAppt-1
 
     [Documentation]  Send Message With appointment   
 
-    clear_location    ${HLMUSERNAME53}
-    clear_service     ${HLMUSERNAME53}
-    clear_queue       ${HLMUSERNAME53} 
-    clear_customer    ${HLMUSERNAME53}
+    clear_location    ${HLPUSERNAME53}
+    clear_service     ${HLPUSERNAME53}
+    clear_queue       ${HLPUSERNAME53} 
+    clear_customer    ${HLPUSERNAME53}
     ${resp}=  Consumer Login  ${CUSERNAME38}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -48,8 +48,8 @@ JD-TC-SendMessageWithAppt-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${pid}=  get_acc_id  ${HLMUSERNAME53}
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${pid}=  get_acc_id  ${HLPUSERNAME53}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -79,9 +79,9 @@ JD-TC-SendMessageWithAppt-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${HLMUSERNAME53}
-    clear_location  ${HLMUSERNAME53}
-    clear_customer   ${HLMUSERNAME53}
+    clear_service   ${HLPUSERNAME53}
+    clear_location  ${HLPUSERNAME53}
+    clear_customer   ${HLPUSERNAME53}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -108,7 +108,7 @@ JD-TC-SendMessageWithAppt-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${HLMUSERNAME53}
+    clear_appt_schedule   ${HLPUSERNAME53}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -222,7 +222,7 @@ JD-TC-SendMessageWithAppt-2
 
     [Documentation]  Send Message With appointment - multiple Appt 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -239,7 +239,7 @@ JD-TC-SendMessageWithAppt-3
 
     [Documentation]  Send Message With appointment - with two attachment
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -257,7 +257,7 @@ JD-TC-SendMessageWithAppt-4
 
     [Documentation]  Send Message With appointment - owner is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -274,7 +274,7 @@ JD-TC-SendMessageWithAppt-5
 
     [Documentation]  Send Message With appointment - owner is invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -294,7 +294,7 @@ JD-TC-SendMessageWithAppt-6
 
     [Documentation]  Send Message With appointment - file name is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -313,7 +313,7 @@ JD-TC-SendMessageWithAppt-7
 
     [Documentation]  Send Message With appointment - file size is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -332,7 +332,7 @@ JD-TC-SendMessageWithAppt-8
 
     [Documentation]  Send Message With appointment - file type is empty 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -351,7 +351,7 @@ JD-TC-SendMessageWithAppt-9
 
     [Documentation]  Send Message With appointment - order is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -369,7 +369,7 @@ JD-TC-SendMessageWithAppt-10
 
     [Documentation]  Send Message With appointment - drive id is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -388,7 +388,7 @@ JD-TC-SendMessageWithAppt-11
 
     [Documentation]  Send Message With appointment - drive id is invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -409,7 +409,7 @@ JD-TC-SendMessageWithAppt-12
 
     [Documentation]  Send Message With appointment - action is remove
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -427,7 +427,7 @@ JD-TC-SendMessageWithAppt-13
 
     [Documentation]  Send Message With appointment - owner name is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -445,7 +445,7 @@ JD-TC-SendMessageWithAppt-14
 
     [Documentation]  Send Message With appointment - attachment is empty list
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -461,7 +461,7 @@ JD-TC-SendMessageWithAppt-15
 
     [Documentation]  Send Message With appointment - uuid is empty list
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -480,7 +480,7 @@ JD-TC-SendMessageWithAppt-16
 
     [Documentation]  Send Message With appointment - uuid is invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -500,7 +500,7 @@ JD-TC-SendMessageWithAppt-17
 
     [Documentation]  Send Message With appointment - message is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -519,7 +519,7 @@ JD-TC-SendMessageWithAppt-18
 
     [Documentation]  Send Message With appointment - email flag is false
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -537,7 +537,7 @@ JD-TC-SendMessageWithAppt-19
 
     [Documentation]  Send Message With appointment - sms flag is false
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -555,7 +555,7 @@ JD-TC-SendMessageWithAppt-20
 
     [Documentation]  Send Message With appointment - telegram flag is false
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -573,7 +573,7 @@ JD-TC-SendMessageWithAppt-21
 
     [Documentation]  Send Message With appointment - whats app flag is false
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -644,7 +644,7 @@ JD-TC-SendMessageWithAppt-25
 
     [Documentation]  Send Message With appointment - provider consumer login
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -725,7 +725,7 @@ JD-TC-SendMessageWithAppt-25
 JD-TC-SendMessageWithAppt-26
 
     [Documentation]  Send Message With appointment - where appointment status is canceled/Rejected
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -754,7 +754,7 @@ JD-TC-SendMessageWithAppt-26
 JD-TC-SendMessageWithAppt-27
 
     [Documentation]  Send Message With appointment - where appointment status is Confirmed
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -778,7 +778,7 @@ JD-TC-SendMessageWithAppt-27
 JD-TC-SendMessageWithAppt-28
 
     [Documentation]  Send Message With appointment - where appointment status is Arrived
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -802,7 +802,7 @@ JD-TC-SendMessageWithAppt-28
 JD-TC-SendMessageWithAppt-29
 
     [Documentation]  Send Message With appointment - where appointment status is Started
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -827,7 +827,7 @@ JD-TC-SendMessageWithAppt-29
 JD-TC-SendMessageWithAppt-30
 
     [Documentation]  Send Message With appointment - where appointment status is Completed
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

@@ -9,10 +9,10 @@ Library           requests
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Keywords ***
 
@@ -102,7 +102,7 @@ JD-TC-LoginDetails-2
 
     [Documentation]  Get Login Details for Multi-User Account
 
-    ${providers}=   Get File    /ebs/TDD/varfiles/musers.py
+    ${providers}=   Get File    /ebs/TDD/varfiles/providers.py
     ${pro_list}=   Split to lines  ${providers}
     ${length}=  Get Length   ${pro_list}
 

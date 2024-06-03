@@ -14,7 +14,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 *** Variables ***
@@ -39,22 +39,22 @@ JD-TC-CreateCustomViewApis-1
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_A}=  Evaluate  ${MUSERNAME}+810223
+    ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+810223
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_A}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_A}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_A}  0
+    ${resp}=  Account Activation  ${PUSERNAME_A}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_A}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_A}${\n}
-    Set Suite Variable  ${MUSERNAME_A}
-    ${id}=  get_id  ${MUSERNAME_A}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
+    Set Suite Variable  ${PUSERNAME_A}
+    ${id}=  get_id  ${PUSERNAME_A}
     Set Suite Variable  ${id}
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
@@ -146,22 +146,22 @@ JD-TC-CreateCustomViewApis-2
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_B}=  Evaluate  ${MUSERNAME}+400264
+    ${PUSERNAME_B}=  Evaluate  ${PUSERNAME}+400264
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_B}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_B}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_B}  0
+    ${resp}=  Account Activation  ${PUSERNAME_B}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_B}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_B}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_B}${\n}
-    Set Suite Variable  ${MUSERNAME_B}
-    ${id}=  get_id  ${MUSERNAME_B}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_B}${\n}
+    Set Suite Variable  ${PUSERNAME_B}
+    ${id}=  get_id  ${PUSERNAME_B}
     Set Suite Variable  ${id}
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
@@ -340,7 +340,7 @@ JD-TC-CreateCustomViewApis-2
  
 JD-TC-CreateCustomViewApis-H3
     [Documentation]  Trying to Create CustomView With Appointment
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${name2}=  FakerLibrary.name
@@ -351,7 +351,7 @@ JD-TC-CreateCustomViewApis-H3
 
 JD-TC-CreateCustomViewApis-UH0
     [Documentation]  Trying to Create CustomView With invalid Type
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${name2}=  FakerLibrary.name
@@ -363,7 +363,7 @@ JD-TC-CreateCustomViewApis-UH0
 
 JD-TC-CreateCustomViewApis-UH1
     [Documentation]  Checking CustomView name with Existing same name
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Create CustomeView   ${name}  ${bool[1]}  ${dept_id}  ${ser_id}  ${q_id}  ${user_id}  ${type}
@@ -373,7 +373,7 @@ JD-TC-CreateCustomViewApis-UH1
 
 JD-TC-CreateCustomViewApis-UH2
     [Documentation]  Checking CustomView name is Empty
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Create CustomeView   ${Empty}  ${bool[1]}  ${dept_id}  ${ser_id}  ${q_id}  ${user_id}  ${type}
@@ -383,7 +383,7 @@ JD-TC-CreateCustomViewApis-UH2
 
 JD-TC-CreateCustomViewApis-UH3
     [Documentation]  Trying to Create CustomView With Department with different Existing Branch Provider
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Create CustomeView   ${name}  ${bool[1]}  ${dept_id}  ${ser_id}  ${q_id}  ${user_id}  ${type}
@@ -401,7 +401,7 @@ JD-TC-UpdateCustomViewApis-UH4
 
 JD-TC-CreateCustomViewApis-UH5
     [Documentation]  Trying to Create CustomView With Empty CustomeView Conditions
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${name1}=  FakerLibrary.name
@@ -415,7 +415,7 @@ JD-TC-CreateCustomViewApis-UH5
 
 JD-TC-CreateCustomViewApis-UH7
     [Documentation]  Trying to Create CustomView With QueueId is Empty
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${name3}=  FakerLibrary.name
@@ -427,7 +427,7 @@ JD-TC-CreateCustomViewApis-UH7
 *** comments ***
 JD-TC-CreateCustomViewApis-UH6
     [Documentation]  Trying to Create CustomView With ServiceId is Empty
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${name2}=  FakerLibrary.name
@@ -439,7 +439,7 @@ JD-TC-CreateCustomViewApis-UH6
 
 JD-TC-CreateCustomViewApis-UH8
     [Documentation]  Trying to Create CustomView With Userid is Empty
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${name4}=  FakerLibrary.name

@@ -15,11 +15,11 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ApiKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -122,21 +122,21 @@ JD-TC-NHCreditWithRBAC-1
 
 # ..... SignUp Business Head
 
-    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+5476148
+    ${NBFCPUSERNAME1}=  Evaluate  ${PUSERNAME}+5476148
     ${highest_package}=  get_highest_license_pkg
 
-    ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCMUSERNAME1}    ${highest_package[0]}
+    ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCPUSERNAME1}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings            ${resp.status_code}    200
     
-    ${resp}=  Account Activation          ${NBFCMUSERNAME1}  0
+    ${resp}=  Account Activation          ${NBFCPUSERNAME1}  0
     Log   ${resp.json()}
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential      ${NBFCMUSERNAME1}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential      ${NBFCPUSERNAME1}  ${PASSWORD}  0
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login    ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -1567,21 +1567,21 @@ JD-TC-NHCreditWithRBAC-UH5
 
 # ..... SignUp Business Head
 
-    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+6472148
+    ${NBFCPUSERNAME1}=  Evaluate  ${PUSERNAME}+6472148
     ${highest_package}=  get_highest_license_pkg
 
-    ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCMUSERNAME1}    ${highest_package[0]}
+    ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCPUSERNAME1}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings            ${resp.status_code}    200
     
-    ${resp}=  Account Activation          ${NBFCMUSERNAME1}  0
+    ${resp}=  Account Activation          ${NBFCPUSERNAME1}  0
     Log   ${resp.json()}
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential      ${NBFCMUSERNAME1}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential      ${NBFCPUSERNAME1}  ${PASSWORD}  0
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login    ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -2992,21 +2992,21 @@ JD-TC-NHCreditWithRBAC-UH6
 
 # ..... SignUp Business Head
 
-    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+8759624
+    ${NBFCPUSERNAME1}=  Evaluate  ${PUSERNAME}+8759624
     ${highest_package}=  get_highest_license_pkg
 
-    ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCMUSERNAME1}    ${highest_package[0]}
+    ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCPUSERNAME1}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings            ${resp.status_code}    200
     
-    ${resp}=  Account Activation          ${NBFCMUSERNAME1}  0
+    ${resp}=  Account Activation          ${NBFCPUSERNAME1}  0
     Log   ${resp.json()}
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential      ${NBFCMUSERNAME1}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential      ${NBFCPUSERNAME1}  ${PASSWORD}  0
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login    ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

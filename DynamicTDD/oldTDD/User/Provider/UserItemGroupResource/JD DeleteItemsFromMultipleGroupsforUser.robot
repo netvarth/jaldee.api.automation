@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 *** Variables ***
@@ -27,7 +27,7 @@ JD-TC-DeleteItemsFromMultipleGroupsforUser-1
 
     [Documentation]  Create an item and add that item to 2 item groups, then delete items from the group.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -46,7 +46,7 @@ JD-TC-DeleteItemsFromMultipleGroupsforUser-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableItemGroup']}  ${bool[1]}
 
-    clear_Item  ${MUSERNAME120}
+    clear_Item  ${PUSERNAME120}
 
     ${displayName1}=   FakerLibrary.name 
     ${shortDesc1}=  FakerLibrary.Sentence   nb_words=2 
@@ -165,7 +165,7 @@ JD-TC-DeleteItemsFromMultipleGroupsforUser-2
 
     [Documentation]  Create an item and add that item to 2 item groups, then delete items from one group.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME121}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME121}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -184,7 +184,7 @@ JD-TC-DeleteItemsFromMultipleGroupsforUser-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableItemGroup']}  ${bool[1]}
 
-    clear_Item  ${MUSERNAME121}
+    clear_Item  ${PUSERNAME121}
 
     ${displayName1}=   FakerLibrary.name 
     ${shortDesc1}=  FakerLibrary.Sentence   nb_words=2 
@@ -304,7 +304,7 @@ JD-TC-DeleteItemsFromMultipleGroupsforUser-3
 
     [Documentation]  delete items from multiple item groups by user.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME116}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME116}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -361,7 +361,7 @@ JD-TC-DeleteItemsFromMultipleGroupsforUser-3
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME116}'
+            IF   not '${user_phone}' == '${PUSERNAME116}'
                 clear_users  ${user_phone}
             END
         END
@@ -389,7 +389,7 @@ JD-TC-DeleteItemsFromMultipleGroupsforUser-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_Item  ${MUSERNAME116}
+    clear_Item  ${PUSERNAME116}
 
     ${displayName1}=   FakerLibrary.name 
     ${shortDesc1}=  FakerLibrary.Sentence   nb_words=2 

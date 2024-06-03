@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
@@ -2836,19 +2836,19 @@ JD-TC-Appointment_Report-7
 
 JD-TC-Appointment_Report-8
 	[Documentation]   Appointment Report before completing prepayment of a Physical service 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
      Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
     Set Test Variable   ${lic_name}   ${resp.json()['accountLicenseDetails']['accountLicense']['name']}
 
-    ${pid_B15}=  get_acc_id  ${MUSERNAME16}
+    ${pid_B15}=  get_acc_id  ${PUSERNAME16}
     Set Suite variable  ${pid_B15}
 
-    clear_Department    ${MUSERNAME16}
-    clear_service       ${MUSERNAME16}
-    clear_location      ${MUSERNAME16}
+    clear_Department    ${PUSERNAME16}
+    clear_service       ${PUSERNAME16}
+    clear_location      ${PUSERNAME16}
 
     ${resp}=  Update Waitlist Settings  ${calc_mode[1]}   ${duration}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${Empty}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2930,7 +2930,7 @@ JD-TC-Appointment_Report-8
     Set Suite Variable  ${dep_id}  ${resp.json()}
     
     ${number}=  Random Int  min=100  max=200
-    ${PUSERNAME_U32}=  Evaluate  ${MUSERNAME16}+${number}
+    ${PUSERNAME_U32}=  Evaluate  ${PUSERNAME16}+${number}
     clear_users  ${PUSERNAME_U32}
     Set Suite Variable  ${PUSERNAME_U32}
     ${firstname}=  FakerLibrary.name
@@ -2970,14 +2970,14 @@ JD-TC-Appointment_Report-8
         # Log  ${resp.content}
         # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ZOOM_id0}=  Format String  ${ZOOM_url}  ${MUSERNAME16}
+    ${ZOOM_id0}=  Format String  ${ZOOM_url}  ${PUSERNAME16}
     Set Suite Variable   ${ZOOM_id0}
 
     ${instructions1}=   FakerLibrary.sentence
     ${instructions2}=   FakerLibrary.sentence
 
     ${VirtualcallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_id0}   status=ACTIVE    instructions=${instructions1} 
-    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${MUSERNAME16}   countryCode=${countryCodes[0]}  status=ACTIVE    instructions=${instructions2} 
+    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME16}   countryCode=${countryCodes[0]}  status=ACTIVE    instructions=${instructions2} 
     ${vcm1}=  Create List  ${VirtualcallingMode1}   ${VirtualcallingMode2}
 
     ${resp}=  Update Virtual Calling Mode   ${vcm1}
@@ -2993,11 +2993,11 @@ JD-TC-Appointment_Report-8
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['instructions']}    ${instructions1}
 
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['callingMode']}     ${CallingModes[1]}
-    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['value']}           ${MUSERNAME16}
+    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['value']}           ${PUSERNAME16}
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['status']}          ACTIVE
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['instructions']}    ${instructions2}
 
-    ${PUSERPH_id0}=  Evaluate  ${MUSERNAME16}+10101
+    ${PUSERPH_id0}=  Evaluate  ${PUSERNAME16}+10101
     ${ZOOM_Pid0}=  Format String  ${ZOOM_url}  ${PUSERPH_id0}
     Set Suite Variable   ${ZOOM_Pid0}
 
@@ -3167,7 +3167,7 @@ JD-TC-Appointment_Report-8
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3235,7 +3235,7 @@ JD-TC-Verify-1-Appointment_Report-8
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Encrypted Provider Login   ${MUSERNAME16}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME16}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3256,7 +3256,7 @@ JD-TC-Verify-1-Appointment_Report-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${apptid01}  netTotal=${totalamt2}  billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[1]}  netRate=${totalamt2}  billPaymentStatus=${paymentStatus[1]}  totalAmountPaid=${pre2_float1}  amountDue=${balamount2}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3295,7 +3295,7 @@ JD-TC-Verify-1-Appointment_Report-8
 
 JD-TC-Verify-2-Appointment_Report-8
     [Documentation]  Appointment Report When cancel Appointment after completing prepayment of a Physical service 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
         
@@ -3360,24 +3360,24 @@ JD-TC-Appointment_Report-9
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+970065
+     ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+970065
      ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
      Log  ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Activation  ${MUSERNAME_E}  0
+     ${resp}=  Account Activation  ${PUSERNAME_E}  0
      Log  ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${Bid_MUSERNAME_E}=  get_acc_id  ${MUSERNAME_E}
-     Set Suite variable  ${Bid_MUSERNAME_E}
-     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
-     Set Suite Variable  ${MUSERNAME_E}
+     ${Bid_PUSERNAME_E}=  get_acc_id  ${PUSERNAME_E}
+     Set Suite variable  ${Bid_PUSERNAME_E}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+     Set Suite Variable  ${PUSERNAME_E}
      ${resp}=  Get Business Profile
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
@@ -3386,8 +3386,8 @@ JD-TC-Appointment_Report-9
      Set Suite Variable  ${DAY1}  ${DAY1}
      ${list}=  Create List  1  2  3  4  5  6  7
      Set Suite Variable  ${list}  ${list}
-     ${ph1}=  Evaluate  ${MUSERNAME_E}+1000000000
-     ${ph2}=  Evaluate  ${MUSERNAME_E}+2000000000
+     ${ph1}=  Evaluate  ${PUSERNAME_E}+1000000000
+     ${ph2}=  Evaluate  ${PUSERNAME_E}+2000000000
      ${views}=  Random Element    ${Views}
      ${name1}=  FakerLibrary.name
      ${name2}=  FakerLibrary.name
@@ -3497,7 +3497,7 @@ JD-TC-Appointment_Report-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}
 
-     ${id}=  get_id  ${MUSERNAME_E}
+     ${id}=  get_id  ${PUSERNAME_E}
      Set Suite Variable  ${id}
      ${bs}=  FakerLibrary.bs
      Set Suite Variable  ${bs}
@@ -3530,11 +3530,11 @@ JD-TC-Appointment_Report-9
      ${pin}=  get_pincode
 
     ${number}=  Random Int  min=78989  max=99999
-    ${PUSERNAME_U1}=  Evaluate  ${MUSERNAME_E}+${number}
+    ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME_E}+${number}
     clear_users  ${PUSERNAME_U1}
     Set Suite Variable  ${PUSERNAME_U1}
     # ${number}=  Random Int  min=48989  max=69999
-    # ${PUSERNAME_U2}=  Evaluate  ${MUSERNAME_E}+${number}
+    # ${PUSERNAME_U2}=  Evaluate  ${PUSERNAME_E}+${number}
     ${firstname}=  FakerLibrary.name
     Set Suite Variable  ${firstname}
     ${lastname}=  FakerLibrary.last_name
@@ -3562,7 +3562,7 @@ JD-TC-Appointment_Report-9
      ${pin2}=  get_pincode
 
 
-    ${PUSERNAME_U2}=  Evaluate  ${MUSERNAME_E}+521503
+    ${PUSERNAME_U2}=  Evaluate  ${PUSERNAME_E}+521503
     clear_users  ${PUSERNAME_U2}
     Set Suite Variable  ${PUSERNAME_U2}
     ${firstname}=  FakerLibrary.name
@@ -3602,7 +3602,7 @@ JD-TC-Appointment_Report-9
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     # ------------------------------------------------------------------------------------------
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -3624,14 +3624,14 @@ JD-TC-Appointment_Report-9
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${ZOOM_id0}=  Format String  ${ZOOM_url}  ${MUSERNAME_E}
+    ${ZOOM_id0}=  Format String  ${ZOOM_url}  ${PUSERNAME_E}
     Set Suite Variable   ${ZOOM_id0}
 
     ${instructions1}=   FakerLibrary.sentence
     ${instructions2}=   FakerLibrary.sentence
 
     ${VirtualcallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_id0}   status=ACTIVE    instructions=${instructions1} 
-    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${MUSERNAME_E}   countryCode=${countryCodes[0]}  status=ACTIVE    instructions=${instructions2} 
+    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_E}   countryCode=${countryCodes[0]}  status=ACTIVE    instructions=${instructions2} 
     ${vcm1}=  Create List  ${VirtualcallingMode1}   ${VirtualcallingMode2}
 
     ${resp}=  Update Virtual Calling Mode   ${vcm1}
@@ -3647,11 +3647,11 @@ JD-TC-Appointment_Report-9
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['instructions']}    ${instructions1}
 
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['callingMode']}     ${CallingModes[1]}
-    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['value']}           ${MUSERNAME_E}
+    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['value']}           ${PUSERNAME_E}
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['status']}          ACTIVE
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['instructions']}    ${instructions2}
 
-    ${PUSERPH_id0}=  Evaluate  ${MUSERNAME_E}+10101
+    ${PUSERPH_id0}=  Evaluate  ${PUSERNAME_E}+10101
     ${ZOOM_Pid0}=  Format String  ${ZOOM_url}  ${PUSERPH_id0}
     Set Suite Variable   ${ZOOM_Pid0}
 
@@ -3753,7 +3753,7 @@ JD-TC-Appointment_Report-9
     Set Suite Variable  ${sch_id01}  ${resp.json()}
     
     # ------------------------------------------------------------------------------------------
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3787,7 +3787,7 @@ JD-TC-Appointment_Report-9
     Set Suite Variable  ${fid03_name}   ${fname_fid03} ${lname_fid03} 
     Set Suite Variable  ${fid_c03}   ${resp.json()}
 
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id01}   ${Bid_MUSERNAME_E}
+    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id01}   ${Bid_PUSERNAME_E}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
@@ -3809,7 +3809,7 @@ JD-TC-Appointment_Report-9
     ${cnote}=   FakerLibrary.name
     ${apptfor1}=  Create Dictionary  id=${fid_c03}   apptTime=${slot15_3}   firstName=${fname_fid03}
     ${apptfor}=   Create List  ${apptfor1}
-    ${resp}=   Take Virtual Service Appointment For User   ${Bid_MUSERNAME_E}  ${VS_id1}  ${sch_id01}  ${DAY1}  ${cnote}  ${CallingModes[0]}  ${ZOOM_Pid2}   ${u_id1}   ${apptfor}
+    ${resp}=   Take Virtual Service Appointment For User   ${Bid_PUSERNAME_E}  ${VS_id1}  ${sch_id01}  ${DAY1}  ${cnote}  ${CallingModes[0]}  ${ZOOM_Pid2}   ${u_id1}   ${apptfor}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -3817,7 +3817,7 @@ JD-TC-Appointment_Report-9
     Set Suite Variable  ${apptid03}  ${apptid[0]}
     
 
-    ${resp}=   Get consumer Appointment By Id   ${Bid_MUSERNAME_E}  ${apptid03}
+    ${resp}=   Get consumer Appointment By Id   ${Bid_PUSERNAME_E}  ${apptid03}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid03}
@@ -3831,7 +3831,7 @@ JD-TC-Appointment_Report-9
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
     Set Suite Variable  ${jid_cf03}    ${resp.json()['appmtFor'][0]['memberJaldeeId']}   
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3900,20 +3900,20 @@ JD-TC-Verify-2-Appointment_Report-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${jcid03}  ${resp.json()['id']}
     sleep  02s
-    ${resp}=  Make payment Consumer Mock  ${Bid_MUSERNAME_E}  ${min_pre1_V1}  ${purpose[0]}  ${apptid03}  ${VS_id1}  ${bool[0]}   ${bool[1]}  ${jcid03}
+    ${resp}=  Make payment Consumer Mock  ${Bid_PUSERNAME_E}  ${min_pre1_V1}  ${purpose[0]}  ${apptid03}  ${VS_id1}  ${bool[0]}   ${bool[1]}  ${jcid03}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # ${resp}=  Make payment Consumer Mock  ${min_pre1_V1}  ${bool[1]}  ${apptid03}  ${Bid_MUSERNAME_E}  ${purpose[0]}  ${cid03}
+    # ${resp}=  Make payment Consumer Mock  ${min_pre1_V1}  ${bool[1]}  ${apptid03}  ${Bid_PUSERNAME_E}  ${purpose[0]}  ${cid03}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${mer}   ${resp.json()['merchantId']}  
     Set Suite Variable   ${payref}   ${resp.json()['paymentRefId']}
     sleep  02s
-    ${resp}=  Get Payment Details  account-eq=${Bid_MUSERNAME_E}
+    ${resp}=  Get Payment Details  account-eq=${Bid_PUSERNAME_E}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['amount']}   ${pre_float1_V1}
-    Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${Bid_MUSERNAME_E}
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${Bid_PUSERNAME_E}
     Should Be Equal As Strings  ${resp.json()[0]['paymentMode']}   ${payment_modes[5]}
     Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}   ${apptid03}
     Should Be Equal As Strings  ${resp.json()[0]['paymentRefId']}   ${payref} 
@@ -3923,7 +3923,7 @@ JD-TC-Verify-2-Appointment_Report-9
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Encrypted Provider Login   ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3939,12 +3939,12 @@ JD-TC-Verify-2-Appointment_Report-9
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bill By consumer  ${apptid03}  ${Bid_MUSERNAME_E}
+    ${resp}=  Get Bill By consumer  ${apptid03}  ${Bid_PUSERNAME_E}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${apptid03}  netTotal=${totalamt_V1}  billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[1]}  netRate=${totalamt_V1}  billPaymentStatus=${paymentStatus[1]}  totalAmountPaid=${pre_float1_V1}  amountDue=${balamount_V1}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     sleep  02s
@@ -4023,7 +4023,7 @@ JD-TC-Verify-3-Appointment_Report-9
 JD-TC-Verify-4-Appointment_Report-9
     [Documentation]  Appointment report When cancel Appointment after completing prepayment of a Virtual service (Login as Root user)
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
         
@@ -4111,11 +4111,11 @@ JD-TC-Verify-5-Appointment_Report-9
 
 JD-TC-Verify-6-Appointment_Report-9
     [Documentation]  Generate Appointment report When Login user has Admin privilege
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}    200
      
-    ${PUSERNAME_U3}=  Evaluate  ${MUSERNAME_E}+4205003
+    ${PUSERNAME_U3}=  Evaluate  ${PUSERNAME_E}+4205003
     clear_users  ${PUSERNAME_U3}
     Set Suite Variable  ${PUSERNAME_U3}
     ${firstname3}=  FakerLibrary.name
@@ -4237,7 +4237,7 @@ JD-TC-Appointment_Report-UH14
 
 # JD-TC-Appointment_Report-9
 #     [Documentation]  Appointment Report before completing prepayment of a Virtual service
-#     ${resp}=  Encrypted Provider Login  ${MUSERNAME16}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4315,7 +4315,7 @@ JD-TC-Appointment_Report-UH14
 #     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
 #     Set Suite Variable  ${jid_cf03}    ${resp.json()['appmtFor'][0]['memberJaldeeId']}   
 
-#     ${resp}=  Encrypted Provider Login  ${MUSERNAME16}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4375,7 +4375,7 @@ JD-TC-Appointment_Report-UH14
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     Verify Response  ${resp}  uuid=${apptid03}  netTotal=${totalamt_V1}  billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[1]}  netRate=${totalamt_V1}  billPaymentStatus=${paymentStatus[1]}  totalAmountPaid=${pre_float1_V1}  amountDue=${balamount_V1}
 
-#     ${resp}=  Encrypted Provider Login  ${MUSERNAME16}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     sleep  02s
@@ -4408,7 +4408,7 @@ JD-TC-Appointment_Report-UH14
 # JD-TC-Verify-2-Appointment_Report-9
 #     [Documentation]  Appointment report When cancel Appointment after completing prepayment of a Virtual service 
     
-#     ${resp}=  Encrypted Provider Login  ${MUSERNAME16}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
         

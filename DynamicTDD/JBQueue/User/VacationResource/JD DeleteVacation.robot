@@ -14,7 +14,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 *** Variables ***
 ${SERVICE1}   SERVICE1
@@ -35,22 +35,22 @@ JD-TC-DeleteVacation-1
     Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
     ${firstname_A}=  FakerLibrary.first_name
     ${lastname_A}=  FakerLibrary.last_name
-    ${MUSERNAME_E4}=  Evaluate  ${MUSERNAME}+718999817
+    ${PUSERNAME_E4}=  Evaluate  ${PUSERNAME}+718999817
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E4}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E4}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_E4}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E4}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_E4}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E4}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E4}${\n}
-    Set Suite Variable  ${MUSERNAME_E4}
-    ${id}=  get_id  ${MUSERNAME_E4}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E4}${\n}
+    Set Suite Variable  ${PUSERNAME_E4}
+    ${id}=  get_id  ${PUSERNAME_E4}
     Set Suite Variable  ${id}
     ${bs}=  FakerLibrary.bs
 
@@ -58,8 +58,8 @@ JD-TC-DeleteVacation-1
     
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${ph1}=  Evaluate  ${MUSERNAME_E4}+1099880000
-    ${ph2}=  Evaluate  ${MUSERNAME_E4}+2099880000
+    ${ph1}=  Evaluate  ${PUSERNAME_E4}+1099880000
+    ${ph2}=  Evaluate  ${PUSERNAME_E4}+2099880000
     ${views}=  Random Element    ${Views}
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -234,7 +234,7 @@ JD-TC-DeleteVacation-1
 JD-TC-DeleteVacation-2
     [Documentation]   Delete Vacation after created vacation and Verifying when Appointment is Enable
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -323,7 +323,7 @@ JD-TC-DeleteVacation-2
 JD-TC-DeleteVacation-3
     [Documentation]   Delete Vacation after created vacation and Verifying
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -420,7 +420,7 @@ JD-TC-DeleteVacation-3
 JD-TC-DeleteVacation-4
     [Documentation]   Create and Delete Vacation after Created two users when Waitlist is Enable
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -572,7 +572,7 @@ JD-TC-DeleteVacation-4
 JD-TC-DeleteVacation-5
     [Documentation]   Create and Delete Vacation after Created two users when Appointment is Enable
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -757,7 +757,7 @@ JD-TC-DeleteVacation-5
 
 JD-TC-DeleteVacation-UH1
     [Documentation]	   Delete Vacation ID, Login one branch and another branch User  
-    ${resp}=  Encrypted Provider Login      ${MUSERNAME13}     ${PASSWORD}
+    ${resp}=  Encrypted Provider Login      ${PUSERNAME13}     ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp} =   Delete Vacation   ${v_id_A}
@@ -768,7 +768,7 @@ JD-TC-DeleteVacation-UH1
 
 JD-TC-DeleteVacation-UH2
     [Documentation]	  Delete Vacation ID, Login one branch and another branch User 
-    ${resp}=  Encrypted Provider Login      ${MUSERNAME13}     ${PASSWORD}
+    ${resp}=  Encrypted Provider Login      ${PUSERNAME13}     ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp} =   Delete Vacation   ${v_id_Q}
@@ -778,7 +778,7 @@ JD-TC-DeleteVacation-UH2
 
 JD-TC-DeleteVacation-UH3
     [Documentation]	Verifying vacation Details after Deleted
-    ${resp}=  Encrypted Provider Login   ${MUSERNAME_E4}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME_E4}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp} =   Get Vacation     ${v_id_Q}
@@ -803,7 +803,7 @@ JD-TC-DeleteVacation-UH4
 
 JD-TC-DeleteVacation-UH5
     [Documentation]	  Checking Delete Vacation from another Branch
-    ${resp}=  Encrypted Provider Login      ${MUSERNAME_E4}     ${PASSWORD}
+    ${resp}=  Encrypted Provider Login      ${PUSERNAME_E4}     ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp} =   Delete Vacation   ${v_id}
@@ -814,7 +814,7 @@ JD-TC-DeleteVacation-UH5
 
 JD-TC-DeleteVacation-UH6
     [Documentation]	   Trying to Delete Vacation using Invalid ID
-    ${resp} =   Encrypted Provider Login   ${MUSERNAME_E4}    ${PASSWORD}
+    ${resp} =   Encrypted Provider Login   ${PUSERNAME_E4}    ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp} =    Delete Vacation    0

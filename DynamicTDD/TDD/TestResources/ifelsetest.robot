@@ -17,7 +17,7 @@ Library     if.py
 # Resource    /ebs/TDD/ConsumerKeywords.robot
 # Resource    /ebs/TDD/SuperAdminKeywords.robot
 # Variables   /ebs/TDD/varfiles/providers.py
-# Variables   /ebs/TDD/varfiles/hl_musers.py
+# Variables   /ebs/TDD/varfiles/hl_providers.py
 # Variables   /ebs/TDD/varfiles/consumerlist.py
 # Variables   /ebs/TDD/varfiles/consumermail.py
 

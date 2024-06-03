@@ -11,8 +11,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -26,11 +26,11 @@ JD-TC-GetUserTaskById-1
     [Documentation]  Create a task for a  branch and get  task by id
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${p_id}=  get_acc_id  ${MUSERNAME18}
+    ${p_id}=  get_acc_id  ${PUSERNAME18}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -80,10 +80,10 @@ JD-TC-GetUserTaskById-2
 
     [Documentation]   Create  Task for  user  and get  task by id
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${HLMUSERNAME11} 
+    ${pid}=  get_acc_id  ${HLPUSERNAME11} 
     Set Suite variable     ${pid}
 
     ${highest_package}=  get_highest_license_pkg
@@ -95,8 +95,8 @@ JD-TC-GetUserTaskById-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${HLMUSERNAME11} 
-    clear_appt_schedule   ${MUSERNAME11}
+    clear_service   ${HLPUSERNAME11} 
+    clear_appt_schedule   ${PUSERNAME11}
     
     ${resp2}=   Get Business Profile
     Log  ${resp2.json()}
@@ -268,10 +268,10 @@ JD-TC-GetUserTaskById-4
     Set Suite Variable  ${task_uid3}   ${resp.json()['uid']}
     Set Test Variable  ${task_id3}  ${resp.json()['id']}
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${HLMUSERNAME11} 
+    ${pid}=  get_acc_id  ${HLPUSERNAME11} 
     
     ${resp}=    Get Task By Id  ${task_uid3}
     Log   ${resp.content}
@@ -290,10 +290,10 @@ JD-TC-GetUserTaskById-5
 
     [Documentation]  Create   task  for user  and get  task by id  by another user
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${HLMUSERNAME11} 
+    ${pid}=  get_acc_id  ${HLPUSERNAME11} 
 
     FOR  ${p}  IN RANGE  5
         ${ran int}=    Generate Random String    length=4    chars=[NUMBERS]
@@ -442,7 +442,7 @@ JD-TC-GetUserTaskById-UH3
     Set Test Variable  ${task_uid5}   ${resp.json()['uid']}
     Set Test Variable  ${task_id5}  ${resp.json()['id']}
     
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME15}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

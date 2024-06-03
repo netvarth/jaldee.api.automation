@@ -11,8 +11,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -26,7 +26,7 @@ JD-TC-GetTaskMaster-1
 
     [Documentation]  Create a task master for a branch and verify the details by get task master by id.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME37}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -37,7 +37,7 @@ JD-TC-GetTaskMaster-1
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
     Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
-     ${p_id}=  get_acc_id  ${MUSERNAME37}
+     ${p_id}=  get_acc_id  ${PUSERNAME37}
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -116,7 +116,7 @@ JD-TC-GetTaskMaster-2
 
     [Documentation]  Get task master with tittle 
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME37}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -129,7 +129,7 @@ JD-TC-GetTaskMaster-3
 
     [Documentation]  Get task master with tittle 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME37}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -143,7 +143,7 @@ JD-TC-GetTaskMaster-4
 
     [Documentation]  Get task master by id for a user.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id2}  ${resp.json()['id']}
@@ -157,8 +157,8 @@ JD-TC-GetTaskMaster-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${HLMUSERNAME4} 
-    clear_appt_schedule   ${MUSERNAME4}
+    clear_service   ${HLPUSERNAME4} 
+    clear_appt_schedule   ${PUSERNAME4}
     
     ${resp2}=   Get Business Profile
     Log  ${resp2.json()}

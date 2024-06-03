@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Test Cases ***
 
@@ -22,7 +22,7 @@ JD-TC-GetItemCategoryByFilter-1
 
     [Documentation]   Create a Item Category then try to get that item Category with filter(categoryCode).
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -62,7 +62,7 @@ JD-TC-GetItemCategoryByFilter-2
 
     [Documentation]   Create a Item Category then try to get that item Category with filter(categoryName).
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -92,7 +92,7 @@ JD-TC-GetItemCategoryByFilter-3
 
     [Documentation]   Create a Item Category then try to get that item Category with filter(status).
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -107,7 +107,7 @@ JD-TC-GetItemCategoryByFilter-4
 
     [Documentation]   Update a Item Category Status then try to get that item Category with filter(status).
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

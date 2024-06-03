@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -30,7 +30,7 @@ JD-TC-GetPurchaseByFilter-1
 
     [Documentation]  Get Purchase By Filter
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -114,7 +114,7 @@ JD-TC-GetPurchaseByFilter-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -618,7 +618,7 @@ JD-TC-GetPurchaseByFilter-3
 
     [Documentation]  Get Purchase Filter - location
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -647,7 +647,7 @@ JD-TC-GetPurchaseByFilter-4
 
     [Documentation]  Get Purchase Filter - locationName
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -676,7 +676,7 @@ JD-TC-GetPurchaseByFilter-5
 
     [Documentation]  Get Purchase Filter - storeEncId
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -705,7 +705,7 @@ JD-TC-GetPurchaseByFilter-6
 
     [Documentation]  Get Purchase Filter - storeName
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -734,7 +734,7 @@ JD-TC-GetPurchaseByFilter-7
 
     [Documentation]  Get Purchase Filter - uid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -763,7 +763,7 @@ JD-TC-GetPurchaseByFilter-7
 
 #     [Documentation]  Get Purchase Filter - purchaseReferenceNo
 
-#     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -794,7 +794,7 @@ JD-TC-GetPurchaseByFilter-11
 
     [Documentation]  Get Purchase Filter - invoicereferenceNo
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -823,7 +823,7 @@ JD-TC-GetPurchaseByFilter-12
 
     [Documentation]  Get Purchase Filter - invoiceDate
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -852,7 +852,7 @@ JD-TC-GetPurchaseByFilter-13
 
     [Documentation]  Get Purchase Filter - purchaseStatus
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -892,7 +892,7 @@ JD-TC-GetPurchaseByFilter-UH3
 
     [Documentation]  Get Purchase Filter - location invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -907,7 +907,7 @@ JD-TC-GetPurchaseByFilter-UH4
 
     [Documentation]  Get Purchase Filter - locationName invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -920,7 +920,7 @@ JD-TC-GetPurchaseByFilter-UH5
 
     [Documentation]  Get Purchase Filter - storeEncId invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -935,7 +935,7 @@ JD-TC-GetPurchaseByFilter-UH6
 
     [Documentation]  Get Purchase Filter - storeName invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -948,7 +948,7 @@ JD-TC-GetPurchaseByFilter-UH7
 
     [Documentation]  Get Purchase Filter - uid is invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -963,7 +963,7 @@ JD-TC-GetPurchaseByFilter-UH8
 
     [Documentation]  Get Purchase Filter - purchaseReferenceNo invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -978,7 +978,7 @@ JD-TC-GetPurchaseByFilter-UH11
 
     [Documentation]  Get Purchase Filter - invoicereferenceNo invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -993,7 +993,7 @@ JD-TC-GetPurchaseByFilter-UH12
 
     [Documentation]  Get Purchase Filter - invoiceDate invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1008,7 +1008,7 @@ JD-TC-GetPurchaseByFilter-UH13
 
     [Documentation]  Get Purchase Filter - purchaseStatus is another
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

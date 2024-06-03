@@ -9,7 +9,7 @@ Library           FakerLibrary
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
@@ -46,22 +46,22 @@ JD-TC-Delete Service In a Department-1
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_K}=  Evaluate  ${MUSERNAME}+423820
+    ${PUSERNAME_K}=  Evaluate  ${PUSERNAME}+423820
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_K}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_K}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_K}  0
+    ${resp}=  Account Activation  ${PUSERNAME_K}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_K}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_K}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_K}${\n}
-    Set Suite Variable  ${MUSERNAME_K}
-    ${id}=  get_id  ${MUSERNAME_K}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_K}${\n}
+    Set Suite Variable  ${PUSERNAME_K}
+    ${id}=  get_id  ${PUSERNAME_K}
     Set Suite Variable  ${id}
 
     ${ser_desc}=   FakerLibrary.word
@@ -159,7 +159,7 @@ JD-TC-Delete Service In a Department-1
 JD-TC-Delete Service In a Department-3
     [Documentation]  Provider deleting another service from a department
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dep_name12}=  FakerLibrary.bs
     Set Suite Variable   ${dep_name12}
@@ -188,7 +188,7 @@ JD-TC-Delete Service In a Department-3
 JD-TC-Delete Service In a Department-4
     [Documentation]  Provider adding new service to a department then trying to delete it
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dep_name13}=  FakerLibrary.bs
     Set Suite Variable   ${dep_name13}
@@ -221,7 +221,7 @@ JD-TC-Delete Service In a Department-4
 JD-TC-Delete Service In a Department-5
     [Documentation]  Provider enable deleted  service, then again trying to delete it from that same department
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dep_name15}=  FakerLibrary.bs
     Set Suite Variable   ${dep_name15}
@@ -282,7 +282,7 @@ JD-TC-Delete Service In a Department-5
 JD-TC-Delete Service In a Department-6
     [Documentation]  Provider deleting all serviceIds in a department
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dep_name17}=  FakerLibrary.bs
     Set Suite Variable   ${dep_name17}
@@ -310,7 +310,7 @@ JD-TC-Delete Service In a Department-6
 JD-TC-Delete Service In a Department-7
     [Documentation]  Provider deleting a service from  department that service become disabled
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     # ${resp}=   Create Service  ${SERVICE15}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount}  ${bool[1]}  ${bool[0]}
     # Should Be Equal As Strings  ${resp.status_code}  200
@@ -342,7 +342,7 @@ JD-TC-Delete Service In a Department-7
 JD-TC-Delete Service In a Department-UH1
     [Documentation]  Provider deleting already deleted service
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${dep_name21}=  FakerLibrary.bs
@@ -376,7 +376,7 @@ JD-TC-Delete Service In a Department-UH1
 JD-TC-Delete Service In a Department-UH2
     [Documentation]  Provider deleting a invalid service
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Delete Service ById In A Department  ${depid1}  000
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -386,7 +386,7 @@ JD-TC-Delete Service In a Department-UH2
 JD-TC-Delete Service In a Department-UH3
     [Documentation]  Provider deleting other provider's service id
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -400,7 +400,7 @@ JD-TC-Delete Service In a Department-UH3
 JD-TC-Delete Service In a Department-UH4
     [Documentation]  Provider deleting a service that belongs to other department
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dep_name2}=  FakerLibrary.bs
     Set Suite Variable   ${dep_name2}
@@ -442,7 +442,7 @@ JD-TC-Delete Service In a Department-UH6
 JD-TC-Verify Delete Service In a Department-1
     [Documentation]  Verify Provider deleting service from department
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Get Department ById  ${depid1}
@@ -465,7 +465,7 @@ JD-TC-Verify Delete Service In a Department-1
 JD-TC-Verify Delete Service In a Department-2
     [Documentation]  Verify Provider deleting another service from a department
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Department ById  ${depid12}
     Log   ${resp.json()}
@@ -481,7 +481,7 @@ JD-TC-Verify Delete Service In a Department-2
 JD-TC-Verify Delete Service In a Department-3
     [Documentation]  Verify Provider adding new service to a department then trying to delete it
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Department ById  ${depid13}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -502,7 +502,7 @@ JD-TC-Verify Delete Service In a Department-3
 JD-TC-Verify Delete Service In a Department-4
     [Documentation]   Verify Provider adding a already deleted  service to a department then again trying to delete it
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Department ById  ${depid15}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -522,7 +522,7 @@ JD-TC-Verify Delete Service In a Department-4
 JD-TC-Verify Delete Service In a Department-5
     [Documentation]  Verify Provider deleting all serviceIds in a department
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Department ById  ${depid17}
     Should Be Equal As Strings  ${resp.status_code}  200

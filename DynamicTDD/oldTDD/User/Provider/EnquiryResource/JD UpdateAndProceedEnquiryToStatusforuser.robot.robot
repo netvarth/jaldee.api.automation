@@ -9,8 +9,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -20,14 +20,14 @@ ${self}      0
 *** Keywords ***
 Multiple Users branches
 
-    ${resp}=   Get File    /ebs/TDD/varfiles/musers.py
+    ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
     ${len}=   Split to lines  ${resp}
     ${length}=  Get Length   ${len}
     ${multiuser_list}=  Create List
     &{License_total}=  Create Dictionary
     
     FOR   ${a}  IN RANGE   ${length}   
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         
         ${resp1}=   Get Active License
@@ -39,7 +39,7 @@ Multiple Users branches
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         IF  ${resp.json()['metricUsageInfo'][8]['total']} > 1 and ${resp.json()['metricUsageInfo'][8]['used']} < ${resp.json()['metricUsageInfo'][8]['total']}
-            Append To List  ${multiuser_list}  ${MUSERNAME${a}}
+            Append To List  ${multiuser_list}  ${PUSERNAME${a}}
             Set To Dictionary 	${License_total} 	${name}=${resp.json()['metricUsageInfo'][8]['total']}
         END
     END
@@ -670,7 +670,7 @@ JD-TC-UpdateandProceedEnquiry-UH5
     # ${BUSER}=  Random Element    ${multiusers}
     # Set Suite Variable  ${BUSER}
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -723,7 +723,7 @@ JD-TC-UpdateandProceedEnquiry-UH5
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME10}'
+            IF   not '${user_phone}' == '${HLPUSERNAME10}'
                 clear_users  ${user_phone}
             END
         END
@@ -776,7 +776,7 @@ JD-TC-UpdateandProceedEnquiry-UH5
     # ELSE
     #     Set Test Variable  ${locId}  ${resp.json()[0]['id']}
     # END
-    clear_customer   ${HLMUSERNAME10}
+    clear_customer   ${HLPUSERNAME10}
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
     Log  ${resp.content}
@@ -829,7 +829,7 @@ JD-TC-UpdateandProceedEnquiry-UH5
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME10}'
+            IF   not '${user_phone}' == '${HLPUSERNAME10}'
                 clear_users  ${user_phone}
             END
         END

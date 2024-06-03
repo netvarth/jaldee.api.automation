@@ -12,8 +12,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -27,7 +27,7 @@ JD-TC-RestoreRolesById-1
 
     [Documentation]  Create  Roles with empty Capabilities and update role then disable the role then restore the role by id.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -84,7 +84,7 @@ JD-TC-RestoreRolesById-2
 
     [Documentation]   Create two Roles with  Capabilities and restore only 1 role by id.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

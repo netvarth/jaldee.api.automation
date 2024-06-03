@@ -14,11 +14,11 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ApiKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 @{emptylist}
@@ -30,7 +30,7 @@ JD-TC-GetLeadDetailsForUser-1
 
     [Documentation]   Get lead details for a branch having one lead.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
@@ -40,9 +40,9 @@ JD-TC-GetLeadDetailsForUser-1
     Set Test Variable  ${prov_id1}  ${decrypted_data['id']}
     Set Test Variable  ${prov_name1}  ${decrypted_data['firstName']}
 
-    clear_customer   ${MUSERNAME27}
+    clear_customer   ${PUSERNAME27}
 
-    ${p_id1}=  get_acc_id  ${MUSERNAME27}
+    ${p_id1}=  get_acc_id  ${PUSERNAME27}
 
     ${resp}=  Get Account Settings
     Log  ${resp.content}
@@ -64,7 +64,7 @@ JD-TC-GetLeadDetailsForUser-1
     Should Be Equal As Strings  ${resp.json()['apiGateway']}   ${toggle[0]}
     Set Suite Variable    ${sp_token}   ${resp.json()['spToken']} 
 
-    ${resp}=   Create User Token   ${MUSERNAME27}  ${PASSWORD}   ${sp_token}   ${countryCodes[0]}  
+    ${resp}=   Create User Token   ${PUSERNAME27}  ${PASSWORD}   ${sp_token}   ${countryCodes[0]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${user_token}   ${resp.json()['userToken']} 
@@ -119,13 +119,13 @@ JD-TC-GetLeadDetailsForUser-2
 
     [Documentation]   Get lead details for a user having one lead(with admin previlage).
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${prov_id}  ${resp.json()['id']}
 
-    clear_customer   ${HLMUSERNAME8}
-    ${p_id}=  get_acc_id  ${HLMUSERNAME8}
+    clear_customer   ${HLPUSERNAME8}
+    ${p_id}=  get_acc_id  ${HLPUSERNAME8}
     Set Suite Variable  ${p_id}
 
     ${resp}=  Get Account Settings
@@ -186,7 +186,7 @@ JD-TC-GetLeadDetailsForUser-2
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME8}'
+            IF   not '${user_phone}' == '${HLPUSERNAME8}'
                 clear_users  ${user_phone}
             END
         END
@@ -324,11 +324,11 @@ JD-TC-GetLeadDetailsForUser-4
 
     [Documentation]   Get lead details for a user having one lead(without admin previlage).
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${acc_id}=  get_acc_id  ${MUSERNAME10}
+    ${acc_id}=  get_acc_id  ${PUSERNAME10}
     Set Suite Variable   ${acc_id}
 
     ${resp}=  Get Account Settings
@@ -389,7 +389,7 @@ JD-TC-GetLeadDetailsForUser-4
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME10}'
+            IF   not '${user_phone}' == '${PUSERNAME10}'
                 clear_users  ${user_phone}
             END
         END
@@ -527,7 +527,7 @@ JD-TC-GetLeadDetailsForUser-6
 
     [Documentation]   Get lead details for a branch without having a lead.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -551,7 +551,7 @@ JD-TC-GetLeadDetailsForUser-6
     Should Be Equal As Strings  ${resp.json()['apiGateway']}   ${toggle[0]}
     Set Test Variable    ${sp_token}   ${resp.json()['spToken']} 
 
-    ${resp}=   Create User Token   ${MUSERNAME11}  ${PASSWORD}   ${sp_token}   ${countryCodes[0]}  
+    ${resp}=   Create User Token   ${PUSERNAME11}  ${PASSWORD}   ${sp_token}   ${countryCodes[0]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${user_token}   ${resp.json()['userToken']} 
@@ -565,12 +565,12 @@ JD-TC-GetLeadDetailsForUser-7
 
     [Documentation]   Get lead details for a user(with admin previlage) who does not have a lead but branch have.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${prov_id}  ${resp.json()['id']}
 
-    ${p_id}=  get_acc_id  ${MUSERNAME9}
+    ${p_id}=  get_acc_id  ${PUSERNAME9}
 
     ${resp}=  Get Account Settings
     Log  ${resp.content}
@@ -663,7 +663,7 @@ JD-TC-GetLeadDetailsForUser-7
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME9}'
+            IF   not '${user_phone}' == '${PUSERNAME9}'
                 clear_users  ${user_phone}
             END
         END
@@ -702,12 +702,12 @@ JD-TC-GetLeadDetailsForUser-8
 
     [Documentation]   Get lead details for a user(without admin previlage) who does not have a lead but branch have.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${prov_id}  ${resp.json()['id']}
 
-    ${p_id}=  get_acc_id  ${MUSERNAME13}
+    ${p_id}=  get_acc_id  ${PUSERNAME13}
 
     ${resp}=  Get Account Settings
     Log  ${resp.content}
@@ -800,7 +800,7 @@ JD-TC-GetLeadDetailsForUser-8
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME13}'
+            IF   not '${user_phone}' == '${PUSERNAME13}'
                 clear_users  ${user_phone}
             END
         END
@@ -839,12 +839,12 @@ JD-TC-GetLeadDetailsForUser-9
     [Documentation]   create user token (account level) and create lead (user level)
     ...  then user try to get lead details(with admin previlage).
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${prov_id}  ${resp.json()['id']}
 
-    ${p_id}=  get_acc_id  ${MUSERNAME12}
+    ${p_id}=  get_acc_id  ${PUSERNAME12}
 
     ${resp}=  Get Account Settings
     Log  ${resp.content}
@@ -867,7 +867,7 @@ JD-TC-GetLeadDetailsForUser-9
     Set Test Variable    ${sp_token1}   ${resp.json()['spToken']} 
 
     
-    ${resp}=   Create User Token   ${MUSERNAME12}  ${PASSWORD}   ${sp_token1}   ${countryCodes[0]}  
+    ${resp}=   Create User Token   ${PUSERNAME12}  ${PASSWORD}   ${sp_token1}   ${countryCodes[0]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${user_token1}   ${resp.json()['userToken']} 
@@ -910,7 +910,7 @@ JD-TC-GetLeadDetailsForUser-9
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME12}'
+            IF   not '${user_phone}' == '${PUSERNAME12}'
                 clear_users  ${user_phone}
             END
         END
@@ -982,12 +982,12 @@ JD-TC-GetLeadDetailsForUser-10
     [Documentation]   create user token (account level) and create lead (user level)
     ...  then user try to get lead details(without admin previlage).
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${prov_id}  ${resp.json()['id']}
 
-    ${p_id}=  get_acc_id  ${MUSERNAME14}
+    ${p_id}=  get_acc_id  ${PUSERNAME14}
 
     ${resp}=  Get Account Settings
     Log  ${resp.content}
@@ -1010,7 +1010,7 @@ JD-TC-GetLeadDetailsForUser-10
     Set Test Variable    ${sp_token1}   ${resp.json()['spToken']} 
 
     
-    ${resp}=   Create User Token   ${MUSERNAME14}  ${PASSWORD}   ${sp_token1}   ${countryCodes[0]}  
+    ${resp}=   Create User Token   ${PUSERNAME14}  ${PASSWORD}   ${sp_token1}   ${countryCodes[0]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${user_token1}   ${resp.json()['userToken']} 
@@ -1053,7 +1053,7 @@ JD-TC-GetLeadDetailsForUser-10
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME14}'
+            IF   not '${user_phone}' == '${PUSERNAME14}'
                 clear_users  ${user_phone}
             END
         END
@@ -1140,7 +1140,7 @@ JD-TC-GetLeadDetailsForUser-UH2
 
     [Documentation]   Get lead details with sp token.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

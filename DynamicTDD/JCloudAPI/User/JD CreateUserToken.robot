@@ -14,11 +14,11 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ApiKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 @{emptylist}
@@ -29,7 +29,7 @@ JD-TC-CreateUserToken-1
 
     [Documentation]   Create User Token For a branch with his own number.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -53,7 +53,7 @@ JD-TC-CreateUserToken-1
     Should Be Equal As Strings  ${resp.json()['apiGateway']}   ${toggle[0]}
     Set Suite Variable    ${sp_token}   ${resp.json()['spToken']} 
 
-    ${resp}=   Create User Token   ${MUSERNAME3}  ${PASSWORD}   ${sp_token}   ${countryCodes[0]}  
+    ${resp}=   Create User Token   ${PUSERNAME3}  ${PASSWORD}   ${sp_token}   ${countryCodes[0]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -61,7 +61,7 @@ JD-TC-CreateUserToken-2
 
     [Documentation]   Create User Token For a branch with his user number(admin).
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -124,7 +124,7 @@ JD-TC-CreateUserToken-2
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME9}'
+            IF   not '${user_phone}' == '${HLPUSERNAME9}'
                 clear_users  ${user_phone}
             END
         END
@@ -157,7 +157,7 @@ JD-TC-CreateUserToken-UH1
 
     [Documentation]   Create User Token For a branch with his user number(not admin).
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -189,7 +189,7 @@ JD-TC-CreateUserToken-UH2
 
     [Documentation]   Create User Token multiple times with same number(account level).
 
-    ${resp}=   Create User Token   ${MUSERNAME3}  ${PASSWORD}   ${sp_token}   ${countryCodes[0]}  
+    ${resp}=   Create User Token   ${PUSERNAME3}  ${PASSWORD}   ${sp_token}   ${countryCodes[0]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    419
     Should Be Equal As Strings  ${resp.content}   "${USRTKN_EXISTS}"
@@ -207,7 +207,7 @@ JD-TC-CreateUserToken-UH4
 
     [Documentation]   Create User Token For a branch with another providers number.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -231,7 +231,7 @@ JD-TC-CreateUserToken-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['isApiGateway']}   ${bool[1]} 
 
-    ${resp}=   Create User Token   ${MUSERNAME4}  ${PASSWORD}   ${sp_token}   ${countryCodes[0]}  
+    ${resp}=   Create User Token   ${PUSERNAME4}  ${PASSWORD}   ${sp_token}   ${countryCodes[0]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  ${resp.content}   "${INVALID_SP_TOKEN}"
@@ -241,7 +241,7 @@ JD-TC-CreateUserToken-UH5
 
     [Documentation]   Create User Token For a branch with different country code.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -266,7 +266,7 @@ JD-TC-CreateUserToken-UH5
     Should Be Equal As Strings  ${resp.json()['apiGateway']}   ${toggle[0]}
     Set Test Variable    ${sp_token}   ${resp.json()['spToken']} 
 
-    ${resp}=   Create User Token   ${MUSERNAME7}  ${PASSWORD}   ${sp_token}   ${countryCodes[2]}  
+    ${resp}=   Create User Token   ${PUSERNAME7}  ${PASSWORD}   ${sp_token}   ${countryCodes[2]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    401
     Should Be Equal As Strings  ${resp.content}   "${NOT_REGISTERED_PROVIDER}"
@@ -276,7 +276,7 @@ JD-TC-CreateUserToken-UH6
 
     [Documentation]   Create User Token For a branch without sp token.
 
-    ${resp}=   Create User Token   ${MUSERNAME3}  ${PASSWORD}   ${EMPTY}   ${countryCodes[0]}  
+    ${resp}=   Create User Token   ${PUSERNAME3}  ${PASSWORD}   ${EMPTY}   ${countryCodes[0]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  ${resp.content}   "${INVALID_SP_TOKEN}"
@@ -287,7 +287,7 @@ JD-TC-CreateUserToken-UH7
     [Documentation]   Create User Token For a branch with invalid sp token.
 
     ${invalid_sptoken1}=  FakerLibrary.word
-    ${resp}=   Create User Token   ${MUSERNAME3}  ${PASSWORD}   ${invalid_sptoken1}   ${countryCodes[0]}  
+    ${resp}=   Create User Token   ${PUSERNAME3}  ${PASSWORD}   ${invalid_sptoken1}   ${countryCodes[0]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  ${resp.content}   "${INVALID_SP_TOKEN}"
@@ -297,7 +297,7 @@ JD-TC-CreateUserToken-UH8
 
     [Documentation]   a user try to create a user token with another branch sp token.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -333,7 +333,7 @@ JD-TC-CreateUserToken-UH8
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME10}'
+            IF   not '${user_phone}' == '${HLPUSERNAME10}'
                 clear_users  ${user_phone}
             END
         END
@@ -366,7 +366,7 @@ JD-TC-CreateUserToken-UH9
 
     [Documentation]   Create User Token For a branch with invalid password.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -392,7 +392,7 @@ JD-TC-CreateUserToken-UH9
     Set Test Variable    ${sp_token}   ${resp.json()['spToken']} 
 
     ${invalid_pswd}=  FakerLibrary.word
-    ${resp}=   Create User Token   ${MUSERNAME8}  ${invalid_pswd}   ${sp_token}   ${countryCodes[0]}  
+    ${resp}=   Create User Token   ${PUSERNAME8}  ${invalid_pswd}   ${sp_token}   ${countryCodes[0]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    401
     Should Be Equal As Strings  ${resp.content}   "${LOGIN_INVALID_USERID_PASSWORD}"
@@ -410,7 +410,7 @@ JD-TC-CreateUserToken-UH11
 
     [Documentation]   Create User Token For a branch without password.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -435,7 +435,7 @@ JD-TC-CreateUserToken-UH11
     Should Be Equal As Strings  ${resp.json()['apiGateway']}   ${toggle[0]}
     Set Test Variable    ${sp_token}   ${resp.json()['spToken']} 
 
-    ${resp}=   Create User Token   ${MUSERNAME8}  ${EMPTY}   ${sp_token}   ${countryCodes[0]}  
+    ${resp}=   Create User Token   ${PUSERNAME8}  ${EMPTY}   ${sp_token}   ${countryCodes[0]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    401
     Should Be Equal As Strings  ${resp.content}   "${PASSWORD_EMPTY}"
@@ -445,7 +445,7 @@ JD-TC-CreateUserToken-UH12
 
     [Documentation]   Create User Token For a branch without enable API Gateway.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -478,7 +478,7 @@ JD-TC-CreateUserToken-UH12
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['isApiGateway']}   ${bool[0]} 
 
-    ${resp}=   Create User Token   ${MUSERNAME6}  ${PASSWORD}   ${sp_token}   ${countryCodes[0]}  
+    ${resp}=   Create User Token   ${PUSERNAME6}  ${PASSWORD}   ${sp_token}   ${countryCodes[0]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  ${resp.content}   "${API_GATEWAY_NOT_ENABLED}"

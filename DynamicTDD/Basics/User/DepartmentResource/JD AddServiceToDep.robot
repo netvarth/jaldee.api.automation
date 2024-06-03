@@ -9,7 +9,7 @@ Library           FakerLibrary
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
 *** Variables ***
@@ -35,23 +35,23 @@ JD-TC-Add Service To Department-1
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+423812
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+423812
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_E}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
-    Set Suite Variable  ${MUSERNAME_E}
-    ${id}=  get_id  ${MUSERNAME_E}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+    Set Suite Variable  ${PUSERNAME_E}
+    ${id}=  get_id  ${PUSERNAME_E}
     Set Suite Variable  ${id}
     
     ${resp}=  View Waitlist Settings
@@ -72,7 +72,7 @@ JD-TC-Add Service To Department-1
 JD-TC-Add Service To Department-2
     [Documentation]  provider adding services to new department from default department
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dep_name1}=  FakerLibrary.bs
     Set Suite Variable   ${dep_name1}
@@ -100,7 +100,7 @@ JD-TC-Add Service To Department-2
 JD-TC-Add Service To Department-3
     [Documentation]  provider creating and adding new services to new department 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200   
     ${dep_name2}=  FakerLibrary.bs
     Set Suite Variable    ${dep_name2}
@@ -126,7 +126,7 @@ JD-TC-Add Service To Department-3
 JD-TC-Add Service To Department-4
     [Documentation]  provider creating and adding new services to existing department 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${total_amount}=  Random Int  min=100  max=500
     ${min_prepayment}=  Random Int   min=1   max=50
@@ -142,7 +142,7 @@ JD-TC-Add Service To Department-4
 JD-TC-Add Service To Department-5
     [Documentation]  Provider adding more services to a department
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Add Services To Department  ${depid01}  ${sid02}  ${sid03}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -158,7 +158,7 @@ JD-TC-Add Service To Department-5
 JD-TC-Add Service To Department-7
     [Documentation]  Provider adding same service to a another department
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200   
     ${dep_name3}=  FakerLibrary.bs
     ${dep_code3}=   Random Int  min=100   max=999
@@ -188,22 +188,22 @@ JD-TC-Add Service To Department-8
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_F}=  Evaluate  ${MUSERNAME}+423813
+    ${PUSERNAME_F}=  Evaluate  ${PUSERNAME}+423813
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_F}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_F}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_F}  0
+    ${resp}=  Account Activation  ${PUSERNAME_F}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_F}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_F}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_F}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_F}${\n}
-    Set Suite Variable  ${MUSERNAME_F}
-    ${id}=  get_id  ${MUSERNAME_F}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_F}${\n}
+    Set Suite Variable  ${PUSERNAME_F}
+    ${id}=  get_id  ${PUSERNAME_F}
     Set Suite Variable  ${id}
     
     ${resp}=   Toggle Department Enable
@@ -225,7 +225,7 @@ JD-TC-Add Service To Department-8
 JD-TC-Add Service To Department-UH1
     [Documentation]  Provider adding already added service
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Add Services To Department  ${depid01}  ${sid03}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -234,7 +234,7 @@ JD-TC-Add Service To Department-UH1
 JD-TC-Add Service To Department-UH2
     [Documentation]  Provider adding a invalid service
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Add Services To Department  ${depid01}  000
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -243,7 +243,7 @@ JD-TC-Add Service To Department-UH2
 JD-TC-Add Service To Department-UH3
     [Documentation]  Provider adding disabled service to department
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Disable service  ${sid04} 
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -254,7 +254,7 @@ JD-TC-Add Service To Department-UH3
 JD-TC-Add Service To Department-UH4
     [Documentation]  Provider adding service to department of another provider
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Add Services To Department  ${depid04}  ${sid03}
     Should Be Equal As Strings  ${resp.status_code}  401
@@ -279,7 +279,7 @@ JD-TC-Add Service To Department-UH6
 JD-TC-Add Service To Department-UH7
     [Documentation]  Provider using service of another provider
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Add Services To Department  ${depid03}  ${sid011}
     Should Be Equal As Strings  ${resp.status_code}  401
@@ -288,7 +288,7 @@ JD-TC-Add Service To Department-UH7
 JD-TC-Add Service To Department-UH8
     [Documentation]  provider created and added a service without specifying department
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200    
     ${total_amount}=  Random Int  min=100  max=500
     ${min_prepayment}=  Random Int   min=1   max=50
@@ -300,7 +300,7 @@ JD-TC-Add Service To Department-UH8
 JD-TC-Add Service To Department-UH9
 	[Documentation]  Provider adding services with same name to different department
 
-	${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+	${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200  
     ${total_amount}=  Random Int  min=100  max=500
     ${min_prepayment}=  Random Int   min=1   max=50

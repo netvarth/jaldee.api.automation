@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -29,7 +29,7 @@ JD-TC-Get Stock Adjustment By Id-1
 
     [Documentation]  create stock adjustment and get stock adjustment by id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -82,10 +82,10 @@ JD-TC-Get Stock Adjustment By Id-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME11}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME11}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -223,7 +223,7 @@ JD-TC-Get Stock Adjustment By Id-2
 
     [Documentation]  update stock adjustment by adding more  stockAdjustDetailsDtos then get stock adjustment by id
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -297,7 +297,7 @@ JD-TC-Get Stock Adjustment By Id-3
     [Documentation]  Create stock adjustment with multiple batch enabled item then get by id.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -432,7 +432,7 @@ JD-TC-Get Stock Adjustment By Id-UH2
 
     [Documentation]  Get stock adjustment By Id with invalid id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -13,8 +13,8 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -45,7 +45,7 @@ JD-TC-AppointmentGetInternalStsActivityLog-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -54,7 +54,7 @@ JD-TC-AppointmentGetInternalStsActivityLog-1
     Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
 #     Set Suite Variable  ${user_name}  ${resp.json()['userName']}
 
-     ${pid}=  get_acc_id  ${HLMUSERNAME16}
+     ${pid}=  get_acc_id  ${HLPUSERNAME16}
      Set Suite Variable  ${pid}
 
     ${resp2}=   Get Business Profile
@@ -62,9 +62,9 @@ JD-TC-AppointmentGetInternalStsActivityLog-1
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
   
-    clear_service   ${HLMUSERNAME16}
-    clear_appt_schedule   ${HLMUSERNAME16}
-    clear_customer   ${HLMUSERNAME16}
+    clear_service   ${HLPUSERNAME16}
+    clear_appt_schedule   ${HLPUSERNAME16}
+    clear_customer   ${HLPUSERNAME16}
 
 #     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     Set Suite Variable  ${DAY1}  ${DAY1}
@@ -215,7 +215,7 @@ JD-TC-AppointmentGetInternalStsActivityLog-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${encId}=  Set Variable   ${resp.json()}
 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -238,7 +238,7 @@ JD-TC-AppointmentGetInternalStsActivityLog-1
 JD-TC-AppointmentGetInternalStsActivityLog-2
      [Documentation]  Apply Internal statuses when user has permission for internal Status
 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
     ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+301601
@@ -332,7 +332,7 @@ JD-TC-AppointmentGetInternalStsActivityLog-2
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Appointment Apply Internal Status  ${apptid1}  ${internal_sts_name1}
@@ -352,7 +352,7 @@ JD-TC-AppointmentGetInternalStsActivityLog-2
 JD-TC-AppointmentGetInternalStsActivityLog-3
      [Documentation]  Apply Internal statuses when user has no permission for internal sts but he is ADMIN=TRUE
 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME15}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -361,16 +361,16 @@ JD-TC-AppointmentGetInternalStsActivityLog-3
      Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
 #      Set Suite Variable  ${user_name}  ${resp.json()['userName']}
 
-     ${pid}=  get_acc_id  ${HLMUSERNAME15}
+     ${pid}=  get_acc_id  ${HLPUSERNAME15}
 
     ${resp2}=   Get Business Profile
     Log  ${resp2.json()}
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
   
-    clear_service   ${HLMUSERNAME15}
-    clear_appt_schedule   ${HLMUSERNAME15}
-    clear_customer   ${HLMUSERNAME15}
+    clear_service   ${HLPUSERNAME15}
+    clear_appt_schedule   ${HLPUSERNAME15}
+    clear_customer   ${HLPUSERNAME15}
 
     ${resp}=  Get jaldeeIntegration Settings
     Log   ${resp.json()}

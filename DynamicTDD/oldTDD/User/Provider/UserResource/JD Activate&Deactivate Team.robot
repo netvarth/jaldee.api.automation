@@ -8,14 +8,14 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 ***Test Cases***
 
 JD-TC-Activate&DeactivateTeam-1
      [Documentation]  Deactivate a ACTIVE team at account level
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -39,7 +39,7 @@ JD-TC-Activate&DeactivateTeam-1
 
 JD-TC-Activate&DeactivateTeam-2
      [Documentation]  Activate a INACTIVE team at account level
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Activate&Deactivate Team  ${t_id1}  ${status[0]}
@@ -54,7 +54,7 @@ JD-TC-Activate&DeactivateTeam-2
 JD-TC-Activate&DeactivateTeam-3
      [Documentation]  Deactivate  and activate a team by user login with user type PROVIDER with admin privilage TRUE
 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -110,7 +110,7 @@ JD-TC-Activate&DeactivateTeam-3
 
 JD-TC-Activate&DeactivateTeam-4
      [Documentation]  Deactivate  and activate a team by user login with user type ADMIN
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+330099
@@ -172,7 +172,7 @@ JD-TC-Activate&DeactivateTeam-4
 
 JD-TC-Activate&DeactivateTeam-UH1
      [Documentation]  Deactivate  and activate a team by user login with user type PROVIDER with admin privilage FALSE
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+330098
@@ -222,7 +222,7 @@ JD-TC-Activate&DeactivateTeam-UH1
 
 JD-TC-Activate&DeactivateTeam-UH2
      [Documentation]  Activate a ACTIVE team
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Activate&Deactivate Team  ${t_id3}  ${status[0]}
@@ -232,7 +232,7 @@ JD-TC-Activate&DeactivateTeam-UH2
 
 JD-TC-Activate&DeactivateTeam-UH3
      [Documentation]  Deactivate a INACTIVE a team
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Activate&Deactivate Team  ${t_id3}  ${status[1]}

@@ -9,7 +9,7 @@ Library           OperatingSystem
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Library           /ebs/TDD/db.py
 Variables         /ebs/TDD/varfiles/providers.py
@@ -18,7 +18,7 @@ Resource          /ebs/TDD/Keywords.robot
 Variables         /ebs/TDD/varfiles/consumermail.py
 Library           /ebs/TDD/excelfuncs.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 
@@ -182,10 +182,10 @@ ${CUSERPH}      ${CUSERNAME}
 
 #   [Documentation]    a file  upload by user and delete file by user
 
-#     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}   ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}   ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${pid}=  get_acc_id  ${HLMUSERNAME16} 
+#     ${pid}=  get_acc_id  ${HLPUSERNAME16} 
 #     Set Suite variable     ${pid}
 
 #     ${highest_package}=  get_highest_license_pkg
@@ -197,8 +197,8 @@ ${CUSERPH}      ${CUSERNAME}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 
-#     clear_service   ${HLMUSERNAME16} 
-#     clear_appt_schedule   ${HLMUSERNAME16}
+#     clear_service   ${HLPUSERNAME16} 
+#     clear_appt_schedule   ${HLPUSERNAME16}
     
 #     ${resp2}=   Get Business Profile
 #     Log  ${resp2.json()}
@@ -518,11 +518,11 @@ JD-TC-DeleteJaldeedriveFile-UH2
     Should Be Equal As Strings    ${resp.status_code}    200
    
     
-    # clear_customer     ${HLMUSERNAME4}
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}   ${PASSWORD}
+    # clear_customer     ${HLPUSERNAME4}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${HLMUSERNAME4} 
+    ${pid}=  get_acc_id  ${HLPUSERNAME4} 
     Set Suite variable     ${pid}
 
     ${highest_package}=  get_highest_license_pkg
@@ -534,8 +534,8 @@ JD-TC-DeleteJaldeedriveFile-UH2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${HLMUSERNAME4} 
-    clear_appt_schedule   ${HLMUSERNAME4}
+    clear_service   ${HLPUSERNAME4} 
+    clear_appt_schedule   ${HLPUSERNAME4}
     
     ${resp2}=   Get Business Profile
     Log  ${resp2.json()}
@@ -746,12 +746,12 @@ JD-TC-DeleteJaldeedriveFile-UH6
 
   [Documentation]    a file upload to branch and delete user
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME14}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME14}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${HLMUSERNAME14} 
+    ${pid}=  get_acc_id  ${HLPUSERNAME14} 
     Set Suite variable     ${pid}
-    ${id}=  get_id  ${HLMUSERNAME14}
+    ${id}=  get_id  ${HLPUSERNAME14}
     Set Test Variable  ${id}
      
 

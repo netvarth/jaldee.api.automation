@@ -14,8 +14,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 ${xlFile}      ${EXECDIR}/TDD/ServiceoptionsQnr.xlsx   # DataSheet
@@ -127,7 +127,7 @@ JD-TC-ResubmitServiceOptionsForWaitlist-1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -176,7 +176,7 @@ JD-TC-ResubmitServiceOptionsForWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -201,7 +201,7 @@ JD-TC-ResubmitServiceOptionsForWaitlist-1
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${HLMUSERNAME10}
+    clear_queue   ${HLPUSERNAME10}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -306,9 +306,9 @@ JD-TC-ResubmitServiceOptionsForWaitlist-1
 JD-TC-ResubmitServiceOptionsForWaitlist-2
     [Documentation]  Resubmit service options for waitlist taken from provider side
 
-    clear_customer   ${HLMUSERNAME10}
+    clear_customer   ${HLPUSERNAME10}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -344,7 +344,7 @@ JD-TC-ResubmitServiceOptionsForWaitlist-2
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${HLMUSERNAME10}
+    clear_queue   ${HLPUSERNAME10}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -460,9 +460,9 @@ JD-TC-ResubmitServiceOptionsForWaitlist-2
 JD-TC-ResubmitServiceOptionsForWaitlist-3
     [Documentation]  Resubmit service options for waitlist after starting waitlist
 
-    clear_customer   ${HLMUSERNAME10}
+    clear_customer   ${HLPUSERNAME10}
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -487,7 +487,7 @@ JD-TC-ResubmitServiceOptionsForWaitlist-3
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${HLMUSERNAME10}
+    clear_queue   ${HLPUSERNAME10}
     
     ${list}=  Create List  1  2  3  4  5  6  7
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -625,9 +625,9 @@ JD-TC-ResubmitServiceOptionsForWaitlist-3
 JD-TC-ResubmitServiceOptionsForWaitlist-4
     [Documentation]  Resubmit service options for waitlist after completing waitlist
 
-    clear_customer   ${HLMUSERNAME10}
+    clear_customer   ${HLPUSERNAME10}
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -652,7 +652,7 @@ JD-TC-ResubmitServiceOptionsForWaitlist-4
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${HLMUSERNAME10}
+    clear_queue   ${HLPUSERNAME10}
 
     ${list}=  Create List  1  2  3  4  5  6  7
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -799,9 +799,9 @@ JD-TC-ResubmitServiceOptionsForWaitlist-4
 JD-TC-ResubmitServiceOptionsForWaitlist-UH1
     [Documentation]  Resubmit service options for cancelled appointment
     
-    clear_customer   ${HLMUSERNAME10}
+    clear_customer   ${HLPUSERNAME10}
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -826,7 +826,7 @@ JD-TC-ResubmitServiceOptionsForWaitlist-UH1
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${HLMUSERNAME10}
+    clear_queue   ${HLPUSERNAME10}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     

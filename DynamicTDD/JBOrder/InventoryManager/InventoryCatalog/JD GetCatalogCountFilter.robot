@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -67,10 +67,10 @@ JD-TC-Get Inventory catalog Filter Count-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME48}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME48}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Get Account Settings
@@ -131,7 +131,7 @@ JD-TC-Get Inventory catalog Filter Count-2
 
     [Documentation]  update inventory catalog then Get Inventory catalog Filter Count using accountid.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -149,7 +149,7 @@ JD-TC-Get Inventory catalog Filter Count-2
 JD-TC-Get Inventory catalog Filter Count-3
 
     [Documentation]  Update Inventory Catalog status as inactive then Get Inventory catalog Filter Count using catalogName
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -166,7 +166,7 @@ JD-TC-Get Inventory catalog Filter Count-4
 
     [Documentation]  create  inventory catalog from main account then get inventory catalog using encid from user login.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -262,7 +262,7 @@ JD-TC-Get Inventory catalog Filter Count-5
 
     [Documentation]  create  inventory catalog where name as invalid string then Get Inventory catalog Filter Count using encid.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -284,7 +284,7 @@ JD-TC-Get Inventory catalog Filter Count-6
 
     [Documentation]   update inventory catalog then Update Inventory Catalog status as disable and get with filter.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -308,7 +308,7 @@ JD-TC-Get Inventory catalog Filter Count-UH1
 
     [Documentation]    Get Inventory catalog Filter Count with invalid encid id
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

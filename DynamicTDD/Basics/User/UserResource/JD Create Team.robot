@@ -8,8 +8,8 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 ***Test Cases***
@@ -18,7 +18,7 @@ JD-TC-CreateTeam-1
 
      [Documentation]  Create team at account level
 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -44,7 +44,7 @@ JD-TC-CreateTeam-1
 
 JD-TC-CreateTeam-2
      [Documentation]  Create multiple team at account level
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${team_name2}=  FakerLibrary.name
@@ -69,7 +69,7 @@ JD-TC-CreateTeam-2
 
 JD-TC-CreateTeam-3
      [Documentation]  Create team by user login with user type PROVIDER with admin privilage TRUE
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -96,7 +96,7 @@ JD-TC-CreateTeam-3
           ${len}=  Get Length  ${resp.json()}
           FOR   ${i}  IN RANGE   0   ${len}
                Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-               IF   not '${user_phone}' == '${HLMUSERNAME8}'
+               IF   not '${user_phone}' == '${HLPUSERNAME8}'
                     clear_users  ${user_phone}
                END
           END
@@ -137,7 +137,7 @@ JD-TC-CreateTeam-3
 
 JD-TC-CreateTeam-4
      [Documentation]  Create team by user login with user type ADMIN
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+330061
@@ -188,7 +188,7 @@ JD-TC-CreateTeam-4
 
 JD-TC-CreateTeam-5
      [Documentation]  Create a team with empty team desc
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${team_name2}=  FakerLibrary.name
@@ -203,7 +203,7 @@ JD-TC-CreateTeam-5
 
 JD-TC-CreateTeam-UH1
      [Documentation]  Create team by user login with user type PROVIDER with admin privilage FALSE
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+3300558
@@ -250,7 +250,7 @@ JD-TC-CreateTeam-UH1
 
 JD-TC-CreateTeam-UH2
      [Documentation]  Create a team with existing team name
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Create Team For User  ${team_name1}  ${EMPTY}  ${desc}
@@ -260,7 +260,7 @@ JD-TC-CreateTeam-UH2
 
 JD-TC-CreateTeam-UH3
      [Documentation]  Create a team with empty team name
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${desc2}=   FakerLibrary.sentence

@@ -8,14 +8,14 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 ***Test Cases***
 
 JD-TC-UpdateTeam-1
      [Documentation]  Update team at account level
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -48,7 +48,7 @@ JD-TC-UpdateTeam-1
 
 JD-TC-UpdateTeam-2
      [Documentation]  Update team by user login with user type PROVIDER with admin privilage TRUE
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -103,7 +103,7 @@ JD-TC-UpdateTeam-2
 
 JD-TC-UpdateTeam-3
      [Documentation]  Update team by user login with user type ADMIN
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+330064
@@ -164,7 +164,7 @@ JD-TC-UpdateTeam-3
 
 JD-TC-UpdateTeam-UH1
      [Documentation]  Create team by user login with user type PROVIDER with admin privilage FALSE
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+330098
@@ -209,7 +209,7 @@ JD-TC-UpdateTeam-UH1
 
 JD-TC-UpdateTeam-UH2
      [Documentation]  Update a team with existing team name
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Update Team For User  ${t_id4}  ${team_name_a1}  ${empty}  ${desc_a}
@@ -219,7 +219,7 @@ JD-TC-UpdateTeam-UH2
 
 JD-TC-UpdateTeam-UH4
      [Documentation]  Update a team with empty team name
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${desc2}=   FakerLibrary.sentence
@@ -247,7 +247,7 @@ JD-TC-UpdateTeam -UH6
 
 JD-TC-UpdateTeam-UH7
      [Documentation]  Upadte a team with invalid team id
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${desc2}=   FakerLibrary.sentence

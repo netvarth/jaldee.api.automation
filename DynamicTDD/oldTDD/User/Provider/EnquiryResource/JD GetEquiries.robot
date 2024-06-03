@@ -6,8 +6,8 @@ Library           Collections
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 
@@ -18,14 +18,14 @@ ${self}      0
 *** Keywords ***
 Multiple Users branches
 
-    ${resp}=   Get File    /ebs/TDD/varfiles/musers.py
+    ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
     ${len}=   Split to lines  ${resp}
     ${length}=  Get Length   ${len}
     ${multiuser_list}=  Create List
     &{License_total}=  Create Dictionary
     
     FOR   ${a}  IN RANGE   ${length}   
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         
         ${resp1}=   Get Active License
@@ -37,7 +37,7 @@ Multiple Users branches
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         IF  ${resp.json()['metricUsageInfo'][8]['total']} > 1 and ${resp.json()['metricUsageInfo'][8]['used']} < ${resp.json()['metricUsageInfo'][8]['total']}
-            Append To List  ${multiuser_list}  ${MUSERNAME${a}}
+            Append To List  ${multiuser_list}  ${PUSERNAME${a}}
             Set To Dictionary 	${License_total} 	${name}=${resp.json()['metricUsageInfo'][8]['total']}
         END
     END
@@ -68,7 +68,7 @@ JD-TC-Get Enquiries For Branch-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -107,7 +107,7 @@ JD-TC-Get Enquiries For Branch-1
             Set Suite Variable  ${loc_name1}  ${resp.json()[${i}]['place']}
         END
     END
-    clear_customer   ${HLMUSERNAME6}
+    clear_customer   ${HLPUSERNAME6}
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}  
     Log  ${resp.content}
@@ -351,7 +351,7 @@ JD-TC-Get Enquiries For Branch-1
 JD-TC-Get Enquiries For Branch-2
     [Documentation]   Get Enquiries for a branch by id filter.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -405,7 +405,7 @@ JD-TC-Get Enquiries For Branch-2
 JD-TC-Get Enquiries For Branch-3
     [Documentation]   Get Enquiries for a branch by uuid filter.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -459,7 +459,7 @@ JD-TC-Get Enquiries For Branch-3
 JD-TC-Get Enquiries For Branch-4
     [Documentation]   Get Enquiries for a branch by title filter.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -517,7 +517,7 @@ JD-TC-Get Enquiries For Branch-4
 JD-TC-Get Enquiries For Branch-5
     [Documentation]   Get Enquiries for a branch by description filter.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1026,7 +1026,7 @@ JD-TC-Get Enquiries For Branch-8
 JD-TC-Get Enquiries For Branch-9
     [Documentation]   Get Enquiries for a branch by customer filter.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1080,7 +1080,7 @@ JD-TC-Get Enquiries For Branch-9
 JD-TC-Get Enquiries For Branch-10
     [Documentation]   Get Enquiries for a branch by customerFirstName filter.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1134,7 +1134,7 @@ JD-TC-Get Enquiries For Branch-10
 JD-TC-Get Enquiries For Branch-11
     [Documentation]   Get Enquiries for a branch by customerLastName filter.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1188,7 +1188,7 @@ JD-TC-Get Enquiries For Branch-11
 JD-TC-Get Enquiries For Branch-12
     [Documentation]   Get Enquiries for a branch by location filter.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1242,7 +1242,7 @@ JD-TC-Get Enquiries For Branch-12
 JD-TC-Get Enquiries For Branch-13
     [Documentation]   Get Enquiries for a branch by locationName filter.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1296,7 +1296,7 @@ JD-TC-Get Enquiries For Branch-13
 JD-TC-Get Enquiries For Branch-14
     [Documentation]   Get Enquiries for a branch by category filter.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1350,7 +1350,7 @@ JD-TC-Get Enquiries For Branch-14
 JD-TC-Get Enquiries For Branch-15
     [Documentation]   Get Enquiries for a branch by categoryName filter.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1404,7 +1404,7 @@ JD-TC-Get Enquiries For Branch-15
 JD-TC-Get Enquiries For Branch-16
     [Documentation]   Get Enquiries for a branch by type filter.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1458,7 +1458,7 @@ JD-TC-Get Enquiries For Branch-16
 JD-TC-Get Enquiries For Branch-17
     [Documentation]   Get Enquiries for a branch by typeName filter.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1512,7 +1512,7 @@ JD-TC-Get Enquiries For Branch-17
 JD-TC-Get Enquiries For Branch-18
     [Documentation]   Get Enquiries for a branch by priority filter.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1566,7 +1566,7 @@ JD-TC-Get Enquiries For Branch-18
 JD-TC-Get Enquiries For Branch-19
     [Documentation]   Get Enquiries for a branch by priorityName filter.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1621,7 +1621,7 @@ JD-TC-Get Enquiries For Branch-19
 JD-TC-Get Enquiries For Branch-20
     [Documentation]   Get Enquiries for a branch by status filter.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1675,7 +1675,7 @@ JD-TC-Get Enquiries For Branch-20
 JD-TC-Get Enquiries For Branch-21
     [Documentation]   Get Enquiries for a branch by statusName filter.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1729,7 +1729,7 @@ JD-TC-Get Enquiries For Branch-21
 JD-TC-Get Enquiries For Branch-22
     [Documentation]   Get Enquiries for a branch by originFrom filter.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1783,7 +1783,7 @@ JD-TC-Get Enquiries For Branch-22
 JD-TC-Get Enquiries For Branch-23
     [Documentation]   Get Enquiries for a branch by originId filter.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1837,7 +1837,7 @@ JD-TC-Get Enquiries For Branch-23
 JD-TC-Get Enquiries For Branch-24
     [Documentation]   Get Enquiries for a branch by originUid filter.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

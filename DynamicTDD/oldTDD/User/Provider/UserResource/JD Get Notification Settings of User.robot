@@ -14,7 +14,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 
@@ -41,10 +41,10 @@ JD-TC-GetNotificationSettings_of_User-1
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E1}=  Evaluate  ${MUSERNAME}+8810188
+     ${PUSERNAME_E1}=  Evaluate  ${PUSERNAME}+8810188
      ${highest_package}=  get_highest_license_pkg
-     Set Suite Variable  ${EMAIL_id0}   ${P_Email}${MUSERNAME_E1}.${test_mail}
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${EMAIL_id0}  ${domains}  ${sub_domains}  ${MUSERNAME_E1}    ${highest_package[0]}
+     Set Suite Variable  ${EMAIL_id0}   ${P_Email}${PUSERNAME_E1}.${test_mail}
+     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${EMAIL_id0}  ${domains}  ${sub_domains}  ${PUSERNAME_E1}    ${highest_package[0]}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Activation  ${EMAIL_id0}  0
@@ -52,12 +52,12 @@ JD-TC-GetNotificationSettings_of_User-1
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${EMAIL_id0}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Set Suite Variable   ${prov_id1}    ${resp.json()['id']}
-     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E1}${\n}
-     Set Suite Variable  ${MUSERNAME_E1}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E1}${\n}
+     Set Suite Variable  ${PUSERNAME_E1}
     sleep  03s
     Set Suite Variable  ${countryCode_CC0}    ${countryCodes[0]}
     ${resp1}=  Get Provider Notification Settings
@@ -68,54 +68,54 @@ JD-TC-GetNotificationSettings_of_User-1
     Should Be Equal As Strings  ${resp1.json()[0]['resourceType']}  ${NotificationResourceType[0]}
     Should Be Equal As Strings  ${resp1.json()[0]['eventType']}  ${EventType[0]}
     Should Be Equal As Strings  ${resp1.json()[0]['email'][0]}  ${EMAIL_id0}
-    Should Be Equal As Strings  ${resp1.json()[0]['sms'][0]['number']}           ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp1.json()[0]['sms'][0]['number']}           ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp1.json()[0]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp1.json()[0]['pushMsg'][0]['number']}       ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp1.json()[0]['pushMsg'][0]['number']}       ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp1.json()[0]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
 
     comment   WAITLIST-CANCEL
     Should Be Equal As Strings  ${resp1.json()[1]['resourceType']}  ${NotificationResourceType[0]}
     Should Be Equal As Strings  ${resp1.json()[1]['eventType']}  ${EventType[1]}
     Should Be Equal As Strings  ${resp1.json()[1]['email'][0]}  ${EMAIL_id0}
-    Should Be Equal As Strings  ${resp1.json()[1]['sms'][0]['number']}           ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp1.json()[1]['sms'][0]['number']}           ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp1.json()[1]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp1.json()[1]['pushMsg'][0]['number']}       ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp1.json()[1]['pushMsg'][0]['number']}       ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp1.json()[1]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
    
     comment   APPOINTMENTADD
     Should Be Equal As Strings  ${resp1.json()[2]['resourceType']}  ${NotificationResourceType[1]}
     Should Be Equal As Strings  ${resp1.json()[2]['eventType']}  ${EventType[7]}
     Should Be Equal As Strings  ${resp1.json()[2]['email'][0]}  ${EMAIL_id0}
-    Should Be Equal As Strings  ${resp1.json()[2]['sms'][0]['number']}           ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp1.json()[2]['sms'][0]['number']}           ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp1.json()[2]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp1.json()[2]['pushMsg'][0]['number']}       ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp1.json()[2]['pushMsg'][0]['number']}       ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp1.json()[2]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
    
     comment   APPOINTMENT-CANCEL
     Should Be Equal As Strings  ${resp1.json()[3]['resourceType']}  ${NotificationResourceType[1]}
     Should Be Equal As Strings  ${resp1.json()[3]['eventType']}  ${EventType[8]}
     Should Be Equal As Strings  ${resp1.json()[3]['email'][0]}  ${EMAIL_id0}
-    Should Be Equal As Strings  ${resp1.json()[3]['sms'][0]['number']}           ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp1.json()[3]['sms'][0]['number']}           ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp1.json()[3]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp1.json()[3]['pushMsg'][0]['number']}       ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp1.json()[3]['pushMsg'][0]['number']}       ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp1.json()[3]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
    
     comment   DONATION
     Should Be Equal As Strings  ${resp1.json()[4]['resourceType']}  ${NotificationResourceType[3]}
     Should Be Equal As Strings  ${resp1.json()[4]['eventType']}  ${EventType[10]}
     Should Be Equal As Strings  ${resp1.json()[4]['email'][0]}  ${EMAIL_id0}
-    Should Be Equal As Strings  ${resp1.json()[4]['sms'][0]['number']}           ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp1.json()[4]['sms'][0]['number']}           ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp1.json()[4]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp1.json()[4]['pushMsg'][0]['number']}       ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp1.json()[4]['pushMsg'][0]['number']}       ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp1.json()[4]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
 
     comment   LICENCE
     Should Be Equal As Strings  ${resp1.json()[5]['resourceType']}  ${NotificationResourceType[2]}
     Should Be Equal As Strings  ${resp1.json()[5]['eventType']}  ${EventType[9]}
     Should Be Equal As Strings  ${resp1.json()[5]['email'][0]}  ${EMAIL_id0}
-    Should Be Equal As Strings  ${resp1.json()[5]['sms'][0]['number']}           ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp1.json()[5]['sms'][0]['number']}           ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp1.json()[5]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp1.json()[5]['pushMsg'][0]['number']}       ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp1.json()[5]['pushMsg'][0]['number']}       ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp1.json()[5]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
 
 
@@ -123,10 +123,10 @@ JD-TC-GetNotificationSettings_of_User-1
 JD-TC-GetNotificationSettings_of_User-2
     [Documentation]   Getting notification settings of USER Without Updating notification settings
 
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${id}=  get_id  ${MUSERNAME_E1}
+     ${id}=  get_id  ${PUSERNAME_E1}
      Set Suite Variable  ${id}
      ${bs}=  FakerLibrary.bs
      Set Suite Variable  ${bs}
@@ -235,7 +235,7 @@ JD-TC-GetNotificationSettings_of_User-2
 JD-TC-GetNotificationSettings_of_User-3
     [Documentation]   Get Notification Settings of Provider Without Updating notification settings(after creating user,Verify notification settings related to LICENSE)
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -248,54 +248,54 @@ JD-TC-GetNotificationSettings_of_User-3
     Should Be Equal As Strings  ${resp.json()[0]['resourceType']}  ${NotificationResourceType[0]}
     Should Be Equal As Strings  ${resp.json()[0]['eventType']}  ${EventType[0]}
     Should Be Equal As Strings  ${resp.json()[0]['email'][0]}  ${EMAIL_id0}
-    Should Be Equal As Strings  ${resp.json()[0]['sms'][0]['number']}           ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp.json()[0]['sms'][0]['number']}           ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp.json()[0]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp.json()[0]['pushMsg'][0]['number']}       ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp.json()[0]['pushMsg'][0]['number']}       ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp.json()[0]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
   
     comment   WAITLIST-CANCEL
     Should Be Equal As Strings  ${resp.json()[1]['resourceType']}  ${NotificationResourceType[0]}
     Should Be Equal As Strings  ${resp.json()[1]['eventType']}  ${EventType[1]}
     Should Be Equal As Strings  ${resp.json()[1]['email'][0]}  ${EMAIL_id0}
-    Should Be Equal As Strings  ${resp.json()[1]['sms'][0]['number']}           ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp.json()[1]['sms'][0]['number']}           ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp.json()[1]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp.json()[1]['pushMsg'][0]['number']}       ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp.json()[1]['pushMsg'][0]['number']}       ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp.json()[1]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
 
     comment   APPOINTMENTADD
     Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[1]}
     Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[7]}
     Should Be Equal As Strings  ${resp.json()[2]['email'][0]}  ${EMAIL_id0}
-    Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['number']}           ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['number']}           ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]['number']}       ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]['number']}       ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
 
     comment   APPOINTMENT-CANCEL
     Should Be Equal As Strings  ${resp.json()[3]['resourceType']}  ${NotificationResourceType[1]}
     Should Be Equal As Strings  ${resp.json()[3]['eventType']}  ${EventType[8]}
     Should Be Equal As Strings  ${resp.json()[3]['email'][0]}  ${EMAIL_id0}
-    Should Be Equal As Strings  ${resp.json()[3]['sms'][0]['number']}           ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp.json()[3]['sms'][0]['number']}           ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp.json()[3]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp.json()[3]['pushMsg'][0]['number']}       ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp.json()[3]['pushMsg'][0]['number']}       ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp.json()[3]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
 
     comment   DONATION
     Should Be Equal As Strings  ${resp.json()[4]['resourceType']}  ${NotificationResourceType[3]}
     Should Be Equal As Strings  ${resp.json()[4]['eventType']}  ${EventType[10]}
     Should Be Equal As Strings  ${resp.json()[4]['email'][0]}  ${EMAIL_id0}
-    Should Be Equal As Strings  ${resp.json()[4]['sms'][0]['number']}           ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp.json()[4]['sms'][0]['number']}           ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp.json()[4]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp.json()[4]['pushMsg'][0]['number']}       ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp.json()[4]['pushMsg'][0]['number']}       ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp.json()[4]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
 
     comment   LICENCE
     Should Be Equal As Strings  ${resp.json()[5]['resourceType']}  ${NotificationResourceType[2]}
     Should Be Equal As Strings  ${resp.json()[5]['eventType']}  ${EventType[9]}
     Should Be Equal As Strings  ${resp.json()[5]['email'][0]}  ${EMAIL_id0}
-    Should Be Equal As Strings  ${resp.json()[5]['sms'][0]['number']}           ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp.json()[5]['sms'][0]['number']}           ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp.json()[5]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp.json()[5]['pushMsg'][0]['number']}       ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp.json()[5]['pushMsg'][0]['number']}       ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp.json()[5]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
 
 
@@ -303,7 +303,7 @@ JD-TC-GetNotificationSettings_of_User-3
 JD-TC-GetNotificationSettings_of_User-4
     [Documentation]   Update Notification Settings of USER for WAITLISTADD and then Get Notification Settings of USER
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -360,7 +360,7 @@ JD-TC-GetNotificationSettings_of_User-4
 JD-TC-GetNotificationSettings_of_User-5
     [Documentation]   Update Notification Settings of USER for WAITLIST-CANCEL and then Get Notification Settings of USER
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -413,7 +413,7 @@ JD-TC-GetNotificationSettings_of_User-5
 JD-TC-GetNotificationSettings_of_User-6
     [Documentation]   Update Notification Settings of USER for APPOINTMENTADD and then Get Notification Settings of USER
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -467,7 +467,7 @@ JD-TC-GetNotificationSettings_of_User-6
 JD-TC-GetNotificationSettings_of_User-7
     [Documentation]   Update Notification Settings of USER for APPOINTMENT-CANCEL and then Get Notification Settings of USER
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -517,7 +517,7 @@ JD-TC-GetNotificationSettings_of_User-7
 
 JD-TC-GetNotificationSettings_of_User-8
     [Documentation]   Updated all notification settings of one USER u_id1, then Get notification settings of another USER u_id2
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -564,7 +564,7 @@ JD-TC-GetNotificationSettings_of_User-8
 JD-TC-GetNotificationSettings_of_User-9
     [Documentation]   Update Notification Settings of USER for APPOINTMENTADD using PushMsg number of another user (two users are from same provider)
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -615,7 +615,7 @@ JD-TC-GetNotificationSettings_of_User-9
 JD-TC-GetNotificationSettings_of_User-10
     [Documentation]   Update Notification Settings of USER for WAITLISTADD using pushMSG number as EMPTY
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -654,7 +654,7 @@ JD-TC-GetNotificationSettings_of_User-10
 JD-TC-GetNotificationSettings_of_User-11
     [Documentation]   Update Notification Settings of USER for APPOINTMENT-CANCEL using SMS number as EMPTY
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -696,7 +696,7 @@ JD-TC-GetNotificationSettings_of_User-11
 JD-TC-GetNotificationSettings_of_User-12
     [Documentation]   Update Notification Settings of USER for WAITLIST-CANCEL using EMAIL_id as EMPTY
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -737,7 +737,7 @@ JD-TC-GetNotificationSettings_of_User-12
 JD-TC-GetNotificationSettings_of_User-13
     [Documentation]   Getting notification settings of PROVIDER  (After updating all notification settings of any user)
     
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      
@@ -757,60 +757,60 @@ JD-TC-GetNotificationSettings_of_User-13
     Should Be Equal As Strings  ${resp3.json()[0]['resourceType']}  ${NotificationResourceType[0]}
     Should Be Equal As Strings  ${resp3.json()[0]['eventType']}  ${EventType[0]}
     Should Be Equal As Strings  ${resp3.json()[0]['email'][0]}  ${EMAIL_id0}
-    Should Be Equal As Strings  ${resp3.json()[0]['sms'][0]['number']}           ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp3.json()[0]['sms'][0]['number']}           ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp3.json()[0]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp3.json()[0]['pushMsg'][0]['number']}       ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp3.json()[0]['pushMsg'][0]['number']}       ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp3.json()[0]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
     
     comment   WAITLIST-CANCEL
     Should Be Equal As Strings  ${resp3.json()[1]['resourceType']}  ${NotificationResourceType[0]}
     Should Be Equal As Strings  ${resp3.json()[1]['eventType']}  ${EventType[1]}
     Should Be Equal As Strings  ${resp3.json()[1]['email'][0]}  ${EMAIL_id0}
-    Should Be Equal As Strings  ${resp3.json()[1]['sms'][0]['number']}           ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp3.json()[1]['sms'][0]['number']}           ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp3.json()[1]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp3.json()[1]['pushMsg'][0]['number']}       ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp3.json()[1]['pushMsg'][0]['number']}       ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp3.json()[1]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
    
     comment   APPOINTMENTADD
     Should Be Equal As Strings  ${resp3.json()[2]['resourceType']}  ${NotificationResourceType[1]}
     Should Be Equal As Strings  ${resp3.json()[2]['eventType']}  ${EventType[7]}
     Should Be Equal As Strings  ${resp3.json()[2]['email'][0]}  ${EMAIL_id0}
-    Should Be Equal As Strings  ${resp3.json()[2]['sms'][0]['number']}           ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp3.json()[2]['sms'][0]['number']}           ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp3.json()[2]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp3.json()[2]['pushMsg'][0]['number']}       ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp3.json()[2]['pushMsg'][0]['number']}       ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp3.json()[2]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
     
     comment   APPOINTMENT-CANCEL
     Should Be Equal As Strings  ${resp3.json()[3]['resourceType']}  ${NotificationResourceType[1]}
     Should Be Equal As Strings  ${resp3.json()[3]['eventType']}  ${EventType[8]}
     Should Be Equal As Strings  ${resp3.json()[3]['email'][0]}  ${EMAIL_id0}
-    Should Be Equal As Strings  ${resp3.json()[3]['sms'][0]['number']}           ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp3.json()[3]['sms'][0]['number']}           ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp3.json()[3]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp3.json()[3]['pushMsg'][0]['number']}       ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp3.json()[3]['pushMsg'][0]['number']}       ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp3.json()[3]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
    
     comment   DONATION
     Should Be Equal As Strings  ${resp3.json()[4]['resourceType']}  ${NotificationResourceType[3]}
     Should Be Equal As Strings  ${resp3.json()[4]['eventType']}  ${EventType[10]}
     Should Be Equal As Strings  ${resp3.json()[4]['email'][0]}  ${EMAIL_id0}
-    Should Be Equal As Strings  ${resp3.json()[4]['sms'][0]['number']}           ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp3.json()[4]['sms'][0]['number']}           ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp3.json()[4]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp3.json()[4]['pushMsg'][0]['number']}       ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp3.json()[4]['pushMsg'][0]['number']}       ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp3.json()[4]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
 
     comment   LICENCE
     Should Be Equal As Strings  ${resp3.json()[5]['resourceType']}  ${NotificationResourceType[2]}
     Should Be Equal As Strings  ${resp3.json()[5]['eventType']}  ${EventType[9]}
     Should Be Equal As Strings  ${resp3.json()[5]['email'][0]}  ${EMAIL_id0}
-    Should Be Equal As Strings  ${resp3.json()[5]['sms'][0]['number']}           ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp3.json()[5]['sms'][0]['number']}           ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp3.json()[5]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp3.json()[5]['pushMsg'][0]['number']}       ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp3.json()[5]['pushMsg'][0]['number']}       ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp3.json()[5]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
 
    
 JD-TC-GetNotificationSettings_of_User-14
     [Documentation]   Use provider id to Get Notification Settings of User (provider is also a user)
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -821,42 +821,42 @@ JD-TC-GetNotificationSettings_of_User-14
     Should Be Equal As Strings  ${resp.json()[0]['resourceType']}  ${NotificationResourceType[0]}
     Should Be Equal As Strings  ${resp.json()[0]['eventType']}  ${EventType[0]}
     Should Be Equal As Strings  ${resp.json()[0]['email'][0]}  ${EMAIL_id0}
-    Should Be Equal As Strings  ${resp.json()[0]['sms'][0]['number']}           ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp.json()[0]['sms'][0]['number']}           ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp.json()[0]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp.json()[0]['pushMsg'][0]['number']}       ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp.json()[0]['pushMsg'][0]['number']}       ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp.json()[0]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
     
     comment   WAITLIST-CANCEL
     Should Be Equal As Strings  ${resp.json()[1]['resourceType']}  ${NotificationResourceType[0]}
     Should Be Equal As Strings  ${resp.json()[1]['eventType']}  ${EventType[1]}
     Should Be Equal As Strings  ${resp.json()[1]['email'][0]}  ${EMAIL_id0}
-    Should Be Equal As Strings  ${resp.json()[1]['sms'][0]['number']}           ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp.json()[1]['sms'][0]['number']}           ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp.json()[1]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp.json()[1]['pushMsg'][0]['number']}       ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp.json()[1]['pushMsg'][0]['number']}       ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp.json()[1]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
     
     comment   APPOINTMENTADD
     Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[1]}
     Should Be Equal As Strings  ${resp.json()[2]['eventType']}  ${EventType[7]}
     Should Be Equal As Strings  ${resp.json()[2]['email'][0]}  ${EMAIL_id0}
-    Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['number']}           ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['number']}           ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]['number']}       ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]['number']}       ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
   
     comment   APPOINTMENT-CANCEL
     Should Be Equal As Strings  ${resp.json()[3]['resourceType']}  ${NotificationResourceType[1]}
     Should Be Equal As Strings  ${resp.json()[3]['eventType']}  ${EventType[8]}
     Should Be Equal As Strings  ${resp.json()[3]['email'][0]}  ${EMAIL_id0}
-    Should Be Equal As Strings  ${resp.json()[3]['sms'][0]['number']}           ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp.json()[3]['sms'][0]['number']}           ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp.json()[3]['sms'][0]['countryCode']}      ${countryCode_CC0}
-    Should Be Equal As Strings  ${resp.json()[3]['pushMsg'][0]['number']}       ${MUSERNAME_E1} 
+    Should Be Equal As Strings  ${resp.json()[3]['pushMsg'][0]['number']}       ${PUSERNAME_E1} 
     Should Be Equal As Strings  ${resp.json()[3]['pushMsg'][0]['countryCode']}  ${countryCode_CC0}
 
 
 JD-TC-GetNotificationSettings_of_User-15
     [Documentation]   GetNotificationSettings_of_User after Update Notification Settings of provider in "account level"
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -940,7 +940,7 @@ JD-TC-GetNotificationSettings_of_User-15
 
 JD-TC-GetNotificationSettings_of_User-16
     [Documentation]   GetNotificationSettings_of_User after Update Notification Settings of provider in "User level"
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1069,7 +1069,7 @@ JD-TC-GetNotificationSettings_of_User-UH3
 JD-TC-GetNotificationSettings_of_User-UH4
     [Documentation]  invalid provider
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1081,7 +1081,7 @@ JD-TC-GetNotificationSettings_of_User-UH4
 
 JD-TC-GetNotificationSettings_of_User-UH5
     [Documentation]  Get Notification Settings of USER using Disabled USER_id
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${EMPTY_List2}=  Create List  @{EMPTY}
@@ -1132,22 +1132,22 @@ JD-TC-GetNotificationSettings_of_User-UH6
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E2}=  Evaluate  ${PUSERNAME}+7810187
+     ${PUSERNAME_E2}=  Evaluate  ${PUSERNAME}+7810187
      ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E2}    ${highest_package[0]}
+     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E2}    ${highest_package[0]}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Activation  ${MUSERNAME_E2}  0
+     ${resp}=  Account Activation  ${PUSERNAME_E2}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${MUSERNAME_E2}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${PUSERNAME_E2}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E2}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E2}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E2}${\n}
-     Set Suite Variable  ${MUSERNAME_E2}
-     ${id}=  get_id  ${MUSERNAME_E2}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E2}${\n}
+     Set Suite Variable  ${PUSERNAME_E2}
+     ${id}=  get_id  ${PUSERNAME_E2}
      Set Suite Variable  ${id}
      ${bs}=  FakerLibrary.bs
      Set Suite Variable  ${bs}
@@ -1186,7 +1186,7 @@ JD-TC-GetNotificationSettings_of_User-UH6
     Set Suite Variable   ${p0_id40}   ${resp.json()[1]['id']}
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1199,7 +1199,7 @@ JD-TC-GetNotificationSettings_of_User-UH6
 
 JD-TC-GetNotificationSettings_of_User-UH7
     [Documentation]   Updated all notification settings of one USER u_id1, then Get notification settings of another USER u_id2
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

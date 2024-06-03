@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Test Cases ***
 
@@ -22,7 +22,7 @@ JD-TC-GetItemHsnFilter-1
 
     [Documentation]  Get Item Hsn Filter
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME19}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -87,7 +87,7 @@ JD-TC-GetItemHsnFilter-2
 
     [Documentation]  Get Item hns Filter - hsnCode
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME19}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -104,7 +104,7 @@ JD-TC-GetItemHsnFilter-4
 
     [Documentation]  Get Item hns Filter - status
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME19}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -132,7 +132,7 @@ JD-TC-GetItemHsnFilter-5
 
     [Documentation]  Get Item hns Filter - with another provider login
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

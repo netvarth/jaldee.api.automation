@@ -13,8 +13,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Keywords ***
 
 Cancel Loan Application
@@ -60,7 +60,7 @@ JD-TC-AddGeneralNotes-1
                                   
     [Documentation]               Add General Notes
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -261,7 +261,7 @@ JD-TC-AddGeneralNotes-UH1
                                   
     [Documentation]  Add General Notes with empty loan uid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -290,7 +290,7 @@ JD-TC-AddGeneralNotes-UH2
                                   
     [Documentation]               Add General Notes with empty note uid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

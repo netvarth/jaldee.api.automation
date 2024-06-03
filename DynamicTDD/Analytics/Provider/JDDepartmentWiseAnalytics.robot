@@ -75,29 +75,29 @@ JD-TC-DepartmentWiseAnalytics-1
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
     ${PH_Number}    Random Number 	digits=6
-    ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+${PH_Number}
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+${PH_Number}
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_E}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
-    Set Suite Variable  ${MUSERNAME_E}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+    Set Suite Variable  ${PUSERNAME_E}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${ph1}=  Evaluate  ${MUSERNAME_E}+1000000000
-    ${ph2}=  Evaluate  ${MUSERNAME_E}+2000000000
+    ${ph1}=  Evaluate  ${PUSERNAME_E}+1000000000
+    ${ph2}=  Evaluate  ${PUSERNAME_E}+2000000000
     ${views}=  Random Element    ${Views}
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -163,9 +163,9 @@ JD-TC-DepartmentWiseAnalytics-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    ${id}=  get_id  ${MUSERNAME_E}
+    ${id}=  get_id  ${PUSERNAME_E}
     Set Suite Variable  ${id}
-    ${acc_id}=  get_acc_id  ${MUSERNAME_E}
+    ${acc_id}=  get_acc_id  ${PUSERNAME_E}
     
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
@@ -499,7 +499,7 @@ JD-TC-DepartmentWiseAnalytics-1
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${q_id1}  ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -688,7 +688,7 @@ JD-TC-DepartmentWiseAnalytics-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -772,7 +772,7 @@ JD-TC-DepartmentWiseAnalytics-2
 
     # sleep  05s
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -961,7 +961,7 @@ JD-TC-DepartmentWiseAnalytics-3
     
     END
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -986,7 +986,7 @@ JD-TC-DepartmentWiseAnalytics-3
 JD-TC-DepartmentWiseAnalytics-4
     [Documentation]   take online checkins for a user and check Department wise analytics for TOTAL_FOR_TOKEN and TOTAL_ON_TOKEN
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Business Profile
@@ -1058,7 +1058,7 @@ JD-TC-DepartmentWiseAnalytics-4
     ${online_token_len}=  Evaluate  len($online_waitlist_ids) 
     Set Suite Variable   ${online_token_len}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     sleep  01s
@@ -1095,7 +1095,7 @@ JD-TC-DepartmentWiseAnalytics-4
 JD-TC-DepartmentWiseAnalytics-5
     [Documentation]   take online checkins for a prepayment service for a user and check Department wise analytics for TOTAL_FOR_TOKEN and TOTAL_ON_TOKEN
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     comment  prepayment service for online check-ins 

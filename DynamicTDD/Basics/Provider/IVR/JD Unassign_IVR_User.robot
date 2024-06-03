@@ -13,8 +13,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -49,7 +49,7 @@ JD-TC-Unassign_IVR_User-1
     [Documentation]   Unassign IVR User
     
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -278,7 +278,7 @@ JD-TC-Unassign_IVR_User-1
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME7}  ${countryCodes[1]}${HLMUSERNAME7}  ${user_id}  ${user_name}
+    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLPUSERNAME7}  ${countryCodes[1]}${HLPUSERNAME7}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -305,7 +305,7 @@ JD-TC-Unassign_IVR_User-1
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME7}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME7}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -398,7 +398,7 @@ JD-TC-Unassign_IVR_User-2
     [Documentation]  After Unassign IVR User assigned the same user again.
     
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -613,7 +613,7 @@ JD-TC-Unassign_IVR_User-2
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME7}  ${countryCodes[1]}${HLMUSERNAME7}  ${user_id}  ${user_name}
+    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLPUSERNAME7}  ${countryCodes[1]}${HLPUSERNAME7}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -640,7 +640,7 @@ JD-TC-Unassign_IVR_User-2
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME7}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME7}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -771,7 +771,7 @@ JD-TC-Unassign_IVR_User-UH3
     [Documentation]   Unassign IVR User without assigning user
     
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -986,7 +986,7 @@ JD-TC-Unassign_IVR_User-UH3
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME7}  ${countryCodes[1]}${HLMUSERNAME7}  ${user_id}  ${user_name}
+    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLPUSERNAME7}  ${countryCodes[1]}${HLPUSERNAME7}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -1013,7 +1013,7 @@ JD-TC-Unassign_IVR_User-UH3
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME7}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME7}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -1102,7 +1102,7 @@ JD-TC-Unassign_IVR_User-UH4
     [Documentation]   Unassign IVR User where ivr uid is invalid
     
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -1317,7 +1317,7 @@ JD-TC-Unassign_IVR_User-UH4
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME7}  ${countryCodes[1]}${HLMUSERNAME7}  ${user_id}  ${user_name}
+    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLPUSERNAME7}  ${countryCodes[1]}${HLPUSERNAME7}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -1344,7 +1344,7 @@ JD-TC-Unassign_IVR_User-UH4
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME7}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME7}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -1439,7 +1439,7 @@ JD-TC-Unassign_IVR_User-UH5
     [Documentation]   Unassign IVR User where usertype is empty
     
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -1654,7 +1654,7 @@ JD-TC-Unassign_IVR_User-UH5
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME7}  ${countryCodes[1]}${HLMUSERNAME7}  ${user_id}  ${user_name}
+    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLPUSERNAME7}  ${countryCodes[1]}${HLPUSERNAME7}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -1681,7 +1681,7 @@ JD-TC-Unassign_IVR_User-UH5
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME7}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME7}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -1775,7 +1775,7 @@ JD-TC-Unassign_IVR_User-UH6
     [Documentation]   Unassign IVR User where user id is empty
     
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -1990,7 +1990,7 @@ JD-TC-Unassign_IVR_User-UH6
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME7}  ${countryCodes[1]}${HLMUSERNAME7}  ${user_id}  ${user_name}
+    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLPUSERNAME7}  ${countryCodes[1]}${HLPUSERNAME7}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -2017,7 +2017,7 @@ JD-TC-Unassign_IVR_User-UH6
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME7}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME7}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -2111,7 +2111,7 @@ JD-TC-Unassign_IVR_User-UH7
     [Documentation]   Unassign IVR User where assigned user and unassign user is different
     
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -2326,7 +2326,7 @@ JD-TC-Unassign_IVR_User-UH7
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME7}  ${countryCodes[1]}${HLMUSERNAME7}  ${user_id}  ${user_name}
+    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLPUSERNAME7}  ${countryCodes[1]}${HLPUSERNAME7}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -2353,7 +2353,7 @@ JD-TC-Unassign_IVR_User-UH7
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME7}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME7}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}

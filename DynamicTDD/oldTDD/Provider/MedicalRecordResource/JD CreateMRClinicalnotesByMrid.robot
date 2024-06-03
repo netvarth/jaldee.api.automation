@@ -1697,26 +1697,26 @@ JD-TC-Createclinicalnotes-13
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+8840215
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+8840215
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_E}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${userName3}    ${resp.json()['userName']}   
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
-    Set Suite Variable  ${MUSERNAME_E}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+    Set Suite Variable  ${PUSERNAME_E}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${ph1}=  Evaluate  ${MUSERNAME_E}+1000000000
-    ${ph2}=  Evaluate  ${MUSERNAME_E}+2000000000
+    ${ph1}=  Evaluate  ${PUSERNAME_E}+1000000000
+    ${ph2}=  Evaluate  ${PUSERNAME_E}+2000000000
     ${views}=  Random Element    ${Views}
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -1779,7 +1779,7 @@ JD-TC-Createclinicalnotes-13
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    ${id}=  get_id  ${MUSERNAME_E}
+    ${id}=  get_id  ${PUSERNAME_E}
     ${bs}=  FakerLibrary.bs
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}

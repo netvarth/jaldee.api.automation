@@ -9,7 +9,7 @@ Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 *** Keywords ***
@@ -63,7 +63,7 @@ ${requestedAmount1}    4000
 ***Test Cases***
 JD-TC-Enabling and Disabling User Availability-1
      [Documentation]  Create a user and Enabling and Disabling User Availability to Online status.
-    #  ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    #  ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     #  Log  ${resp.json()}
     #  Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -73,23 +73,23 @@ JD-TC-Enabling and Disabling User Availability-1
      Set Test Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
      ${firstname_A}=  FakerLibrary.first_name
      ${lastname_A}=  FakerLibrary.last_name
-     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+5859717
+     ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+5859717
      ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Activation  ${MUSERNAME_E}  0
+     ${resp}=  Account Activation  ${PUSERNAME_E}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
-     Set Suite Variable  ${MUSERNAME_E}
-     ${id}=  get_id  ${MUSERNAME_E}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+     Set Suite Variable  ${PUSERNAME_E}
+     ${id}=  get_id  ${PUSERNAME_E}
      Set Suite Variable  ${id}
      ${bs}=  FakerLibrary.bs
      Set Suite Variable  ${bs}
@@ -209,7 +209,7 @@ JD-TC-Enabling and Disabling User Availability-5
     Set Suite Variable  ${fname}   ${resp.json()['firstName']}
     Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -263,7 +263,7 @@ JD-TC-Enabling and Disabling User Availability-5
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
     Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
-    clear Customer  ${MUSERNAME_E}
+    clear Customer  ${PUSERNAME_E}
 
     Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
@@ -414,7 +414,7 @@ JD-TC-Enabling and Disabling User Availability-6
     Set Suite Variable  ${fname}   ${resp.json()['firstName']}
     Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -439,7 +439,7 @@ JD-TC-Enabling and Disabling User Availability-6
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    clear Customer  ${MUSERNAME_E}
+    clear Customer  ${PUSERNAME_E}
 
     Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}

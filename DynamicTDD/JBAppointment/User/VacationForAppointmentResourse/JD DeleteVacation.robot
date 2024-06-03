@@ -14,7 +14,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 *** Variables ***
 ${SERVICE1}   SERVICE1
@@ -35,27 +35,27 @@ JD-TC-DeleteVacation-1
     Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
     ${firstname_A}=  FakerLibrary.first_name
     ${lastname_A}=  FakerLibrary.last_name
-    ${MUSERNAME_E1}=  Evaluate  ${MUSERNAME}+718991816
+    ${PUSERNAME_E1}=  Evaluate  ${PUSERNAME}+718991816
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E1}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E1}    ${highest_package[0]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_E1}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E1}  0
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_E1}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E1}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E1}${\n}
-    Set Suite Variable  ${MUSERNAME_E1}
-    ${id}=  get_id  ${MUSERNAME_E1}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E1}${\n}
+    Set Suite Variable  ${PUSERNAME_E1}
+    ${id}=  get_id  ${PUSERNAME_E1}
     ${bs}=  FakerLibrary.bs
 
     
-    ${ph1}=  Evaluate  ${MUSERNAME_E1}+1099880000
-    ${ph2}=  Evaluate  ${MUSERNAME_E1}+2099880000
+    ${ph1}=  Evaluate  ${PUSERNAME_E1}+1099880000
+    ${ph2}=  Evaluate  ${PUSERNAME_E1}+2099880000
     ${views}=  Random Element    ${Views}
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -237,7 +237,7 @@ JD-TC-DeleteVacation-1
 JD-TC-DeleteVacation-3
     [Documentation]   Delete current day and future day Vacation after created vacation and Verifying
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -346,7 +346,7 @@ JD-TC-DeleteVacation-3
 JD-TC-DeleteVacation-5
     [Documentation]   Create and Delete Vacation after Created two users when Appointment is Enable
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -524,7 +524,7 @@ JD-TC-DeleteVacation-5
 
 JD-TC-DeleteVacation-UH1
     [Documentation]	   Delete Vacation ID, Login one branch and another branch User  
-    ${resp}=  Encrypted Provider Login      ${MUSERNAME13}     ${PASSWORD}
+    ${resp}=  Encrypted Provider Login      ${PUSERNAME13}     ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp} =   Delete Vacation   ${v_id_A}
@@ -535,7 +535,7 @@ JD-TC-DeleteVacation-UH1
 
 JD-TC-DeleteVacation-UH2
     [Documentation]	  Delete Vacation ID, Login one branch and another branch User 
-    ${resp}=  Encrypted Provider Login      ${MUSERNAME13}     ${PASSWORD}
+    ${resp}=  Encrypted Provider Login      ${PUSERNAME13}     ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp} =   Delete Vacation   ${v_id_Q}
@@ -545,7 +545,7 @@ JD-TC-DeleteVacation-UH2
 
 JD-TC-DeleteVacation-UH3
     [Documentation]	Verifying vacation Details after Deleted
-    ${resp}=  Encrypted Provider Login   ${MUSERNAME_E1}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME_E1}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp} =   Get Vacation     ${v_id_Q}
@@ -570,7 +570,7 @@ JD-TC-DeleteVacation-UH4
 
 JD-TC-DeleteVacation-UH5
     [Documentation]	  Checking Delete Vacation from another Branch
-    ${resp}=  Encrypted Provider Login      ${MUSERNAME_E1}     ${PASSWORD}
+    ${resp}=  Encrypted Provider Login      ${PUSERNAME_E1}     ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp} =   Delete Vacation   ${v_id}
@@ -581,7 +581,7 @@ JD-TC-DeleteVacation-UH5
 
 JD-TC-DeleteVacation-UH6
     [Documentation]	   Trying to Delete Vacation using Invalid ID
-    ${resp} =   Encrypted Provider Login   ${MUSERNAME_E1}    ${PASSWORD}
+    ${resp} =   Encrypted Provider Login   ${PUSERNAME_E1}    ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp} =    Delete Vacation    0
@@ -600,7 +600,7 @@ JD-TC-DeleteVacation-UH7
 JD-TC-DeleteVacation-6
     [Documentation]  Set user n account level holiday for same day and time and remove user level holiday 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME123}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -738,7 +738,7 @@ JD-TC-DeleteVacation-6
 JD-TC-DeleteVacation-7
     [Documentation]  Set user n account level holiday for same day and time and remove account level holiday
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME123}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -827,7 +827,7 @@ JD-TC-DeleteVacation-7
 JD-TC-DeleteVacation-8
     [Documentation]  2 users create vacation with same date and time, one user deletes vacation, other user's vacation should be intact.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME123}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

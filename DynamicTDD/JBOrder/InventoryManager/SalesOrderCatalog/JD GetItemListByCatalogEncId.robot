@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -29,7 +29,7 @@ JD-TC-Get item list by catalog encId-1
 
     [Documentation]  Test whether the system can successfully create items with all items having invMgmt set to false (with out Tax) Then it Get item list by catalog encId.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -75,10 +75,10 @@ JD-TC-Get item list by catalog encId-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME15}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME15}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -205,7 +205,7 @@ JD-TC-Get item list by catalog encId-2
 
     [Documentation]  Another provider to try Get item list by catalog encId.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -218,7 +218,7 @@ JD-TC-Get item list by catalog encId-3
 
     [Documentation]   try Get item list by invalid catalog encId .
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -11,8 +11,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -28,7 +28,7 @@ JD-TC-ChangeLeadAssignee-1
 
     [Documentation]  Create a lead and verify the default assignee.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME56}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -84,7 +84,7 @@ JD-TC-ChangeLeadAssignee-2
 
     [Documentation]  Create a lead to a user and change the assignee then verify.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -111,7 +111,7 @@ JD-TC-ChangeLeadAssignee-2
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    clear_customer   ${HLMUSERNAME5}
+    clear_customer   ${HLPUSERNAME5}
 
     ${resp}=  AddCustomer  ${CUSERNAME4}    
     Log   ${resp.json()}
@@ -146,7 +146,7 @@ JD-TC-ChangeLeadAssignee-2
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME5}'
+            IF   not '${user_phone}' == '${HLPUSERNAME5}'
                 clear_users  ${user_phone}
             END
         END
@@ -168,7 +168,7 @@ JD-TC-ChangeLeadAssignee-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${PUSERNAME_U2}  ${resp.json()['mobileNo']}
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -328,7 +328,7 @@ JD-TC-ChangeLeadAssignee-UH4
 
     [Documentation]  Change lead assignee with another branch's user id
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME56}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -342,7 +342,7 @@ JD-TC-ChangeLeadAssignee-
 
     [Documentation]  Change lead assignee after closed the lead.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME80}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

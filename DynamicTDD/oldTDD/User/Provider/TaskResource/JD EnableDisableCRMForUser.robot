@@ -9,7 +9,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 *** Test Cases ***
@@ -18,7 +18,7 @@ JD-TC-EnableDisableCRMforUser-1
 
     [Documentation]   Enable CRM for a valid provider.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -40,7 +40,7 @@ JD-TC-EnableDisableCRMforUser-2
 
     [Documentation]   Disable CRM After Enabling
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -70,7 +70,7 @@ JD-TC-EnableDisableCRMforUser-3
 
     [Documentation]   Enable CRM which is Disabled
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -123,7 +123,7 @@ JD-TC-EnableDisableCRMforUser-UH3
 
     [Documentation]   Enable CRM Which is already enabled
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -151,7 +151,7 @@ JD-TC-EnableDisableCRMforUser-UH4
 
     [Documentation]   Disable CRM Which is already Disabled
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     

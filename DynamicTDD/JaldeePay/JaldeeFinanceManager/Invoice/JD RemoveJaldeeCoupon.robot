@@ -14,8 +14,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -42,7 +42,7 @@ JD-TC-Remove JaldeeCoupon-1
 
     [Documentation]  Apply Jaldee coupon to invoice.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -259,7 +259,7 @@ JD-TC-Remove JaldeeCoupon-1
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -316,7 +316,7 @@ JD-TC-RemoveJaldeeCoupon-UH1
 
     [Documentation]  Remove jaldeecoupon after updating bill status as cancelled.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${billStatusNote}=   FakerLibrary.word

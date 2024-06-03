@@ -14,8 +14,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -46,7 +46,7 @@ JD-TC-Approve Partner-1
                                   
     [Documentation]              Approve Partner
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -403,7 +403,7 @@ JD-TC-Approved Partner-UH1
                                   
     [Documentation]               Approved Partner where partner is not created
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -422,7 +422,7 @@ JD-TC-Approved Partner-UH2
                                   
     [Documentation]               Approved Partner which is already approved
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -436,7 +436,7 @@ JD-TC-Approved Partner-UH3
                                   
     [Documentation]               Approved Partner without sending approval request
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -651,7 +651,7 @@ JD-TC-Approved Partner-UH4
                                   
     [Documentation]               Approved Partner without note
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}

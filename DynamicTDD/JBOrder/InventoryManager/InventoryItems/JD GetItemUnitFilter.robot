@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Test Cases ***
 
@@ -22,7 +22,7 @@ JD-TC-GetitemUitFilter-1
 
     [Documentation]  Get Item Unit Filter
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -85,7 +85,7 @@ JD-TC-GetitemUitFilter-2
 
     [Documentation]  Get Item Unit Filter - unitCode    
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -104,7 +104,7 @@ JD-TC-GetitemUitFilter-3
 
     [Documentation]  Get Item Unit Filter - unitName
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -123,7 +123,7 @@ JD-TC-GetitemUitFilter-4
 
     [Documentation]  Get Item Unit Filter - status
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -155,7 +155,7 @@ JD-TC-GetitemUitFilter-UH2
 
     [Documentation]  Get Item Unit Filter - with another provider login
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

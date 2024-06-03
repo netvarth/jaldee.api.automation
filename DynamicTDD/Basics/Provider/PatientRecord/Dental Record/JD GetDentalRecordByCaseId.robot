@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -38,7 +38,7 @@ JD-TC-Update Dental Record-1
 
     [Documentation]    Create a Dental Record and update the toothNo.
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -114,7 +114,7 @@ JD-TC-Update Dental Record-1
     Set Suite Variable    ${proconlname}    ${resp.json()['lastName']} 
     Set Suite Variable    ${fullname}       ${proconfname}${space}${proconlname}
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

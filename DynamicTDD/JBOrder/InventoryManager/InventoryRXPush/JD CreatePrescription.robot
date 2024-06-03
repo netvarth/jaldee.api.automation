@@ -15,7 +15,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -43,18 +43,18 @@ JD-TC-CreatePrescription-1
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+45788121
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+45788121
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_E}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -66,10 +66,10 @@ JD-TC-CreatePrescription-1
     Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
     Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
-    Set Suite Variable  ${MUSERNAME_E}
-    ${id}=  get_id  ${MUSERNAME_E}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+    Set Suite Variable  ${PUSERNAME_E}
+    ${id}=  get_id  ${PUSERNAME_E}
     Set Suite Variable  ${id}
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
@@ -148,11 +148,11 @@ JD-TC-CreatePrescription-1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${accountId}=  get_acc_id  ${HLMUSERNAME16}
+    # ${accountId}=  get_acc_id  ${HLPUSERNAME16}
     # Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -444,7 +444,7 @@ JD-TC-CreatePrescription-1
 
 # --------------------------- Create SalesOrder Inventory Catalog-InvMgr True --------------------------
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -554,7 +554,7 @@ JD-TC-CreatePrescription-2
 
     [Documentation]    Create Prescription -  with same details 
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -566,7 +566,7 @@ JD-TC-CreatePrescription-3
 
     [Documentation]    Create Prescription -  where provider consumer id is empty 
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -581,7 +581,7 @@ JD-TC-CreatePrescription-4
 
     [Documentation]    Create Prescription -  where doc id is empty
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -596,7 +596,7 @@ JD-TC-CreatePrescription-5
 
     [Documentation]    Create Prescription -  display name is empty
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -608,7 +608,7 @@ JD-TC-CreatePrescription-6
 
     [Documentation]    Create Prescription -  duration is empty
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -623,7 +623,7 @@ JD-TC-CreatePrescription-7
 
     [Documentation]    Create Prescription -  quantity is empty
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -635,7 +635,7 @@ JD-TC-CreatePrescription-8
 
     [Documentation]    Create Prescription -  description is empty 
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -647,7 +647,7 @@ JD-TC-CreatePrescription-9
 
     [Documentation]    Create Prescription -  item code is empty
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -659,7 +659,7 @@ JD-TC-CreatePrescription-10
 
     [Documentation]    Create Prescription -  Dosage is empty
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -674,7 +674,7 @@ JD-TC-CreatePrescription-11
 
     [Documentation]    Create Prescription -  frequency id is empty
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -689,7 +689,7 @@ JD-TC-CreatePrescription-12
 
     [Documentation]    Create Prescription -  html is empty
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

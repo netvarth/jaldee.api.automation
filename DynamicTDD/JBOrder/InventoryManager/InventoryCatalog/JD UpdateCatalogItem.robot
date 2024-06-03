@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -29,7 +29,7 @@ JD-TC-Update Inventory Catalog Item-1
 
     [Documentation]  update Inventory Catalog Item with valid details.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME46}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -82,10 +82,10 @@ JD-TC-Update Inventory Catalog Item-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME46}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME46}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME46}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -188,7 +188,7 @@ JD-TC-Update Inventory Catalog Item-2
 
     [Documentation]  Update Inventory Catalog Item from user login.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME46}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -267,7 +267,7 @@ JD-TC-Update Inventory Catalog Item-3
 
     [Documentation]  Update Inventory Catalog Item  with batch applicable is false 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME46}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -285,7 +285,7 @@ JD-TC-Update Inventory Catalog Item-4
 
     [Documentation]  Update Inventory Catalog Item  with lot number is false 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME46}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -304,7 +304,7 @@ JD-TC-Update Inventory Catalog Item-4
 
 #     [Documentation]  Update Inventory Catalog Item with invalid itemEncids.
 
-#     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME46}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME46}  ${PASSWORD}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${ITEM_NAME_EXIST}=  Format String  ${ITEM_NAME_EXIST}    ${categoryName}
@@ -317,7 +317,7 @@ JD-TC-Update Inventory Catalog Item-UH2
 
     [Documentation]  Update Inventory Catalog Item with invalid catalogid.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME46}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -331,7 +331,7 @@ JD-TC-Update Inventory Catalog Item-UH3
 
     [Documentation]  Update Inventory Catalog Item with invalid item catalog id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME46}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -370,7 +370,7 @@ JD-TC-Update Inventory Catalog Item-UH6
 
     [Documentation]  Create Inventory Catalog Item using another provider
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

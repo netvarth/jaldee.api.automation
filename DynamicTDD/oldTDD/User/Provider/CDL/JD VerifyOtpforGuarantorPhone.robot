@@ -15,8 +15,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -43,7 +43,7 @@ JD-TC-VerifyOtpForGuarantorPhone-1
 
     [Documentation]  Login to a multi account provider,then create a guarantor then verify it.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -143,7 +143,7 @@ JD-TC-VerifyOtpForGuarantorPhone-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME14}'
+            IF   not '${user_phone}' == '${HLPUSERNAME14}'
                 clear_users  ${user_phone}
             END
         END
@@ -606,7 +606,7 @@ JD-TC-VerifyOtpForGuarantorPhone-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

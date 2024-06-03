@@ -12,9 +12,9 @@ Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -90,7 +90,7 @@ JD-TC-UserSubmitQuestionnaire-1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME72}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME72}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1029,7 +1029,7 @@ JD-TC-UserSubmitQuestionnaire-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid1}  ${resp.json()}
 
-    clear_appt_schedule_user   ${P_U2}  ${MUSERNAME72}
+    clear_appt_schedule_user   ${P_U2}  ${PUSERNAME72}
     # ${resp}=  Create Sample Schedule   ${lid}   ${s_id1}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
@@ -1173,7 +1173,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1281,7 +1281,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1380,7 +1380,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${MUSERNAME10}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME10}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
@@ -1388,7 +1388,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    # ${resp}=  Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
     

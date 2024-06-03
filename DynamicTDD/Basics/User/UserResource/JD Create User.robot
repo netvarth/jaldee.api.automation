@@ -8,8 +8,8 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/providers.py
 
@@ -23,14 +23,14 @@ ${secid}     1
 Get branch by license
     [Arguments]   ${lic_id}
     
-    ${resp}=   Get File    ${EXECDIR}/TDD/varfiles/musers.py
+    ${resp}=   Get File    ${EXECDIR}/TDD/varfiles/providers.py
     ${len}=   Split to lines  ${resp}
     ${length}=  Get Length   ${len}
      
     FOR   ${a}  IN RANGE  ${length}
             
-        ${Branch_PH}=  Set Variable  ${MUSERNAME${a}}
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${Branch_PH}=  Set Variable  ${PUSERNAME${a}}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
 
         ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -63,23 +63,23 @@ JD-TC-CreateUser-1
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+55045300
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+55045300
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_E}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
-    Set Suite Variable  ${MUSERNAME_E}
-    ${id}=  get_id  ${MUSERNAME_E}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+    Set Suite Variable  ${PUSERNAME_E}
+    ${id}=  get_id  ${PUSERNAME_E}
     Set Suite Variable  ${id}
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
@@ -159,7 +159,7 @@ JD-TC-CreateUser-1
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      sleep  03s
@@ -216,7 +216,7 @@ JD-TC-CreateUser-1
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['lastName']}                        ${lastname_A} 
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[0]}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['mobileNo']}                        ${MUSERNAME_E}
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['mobileNo']}                        ${PUSERNAME_E}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          ${dep_id}    
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['subdomain']}                       1
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['admin']}                           ${bool[1]} 
@@ -226,7 +226,7 @@ JD-TC-CreateUser-1
   
 JD-TC-CreateUser-2
     [Documentation]  Create more users by branch login
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${PUSERNAME_U2}=  Evaluate  ${PUSERNAME}+336646
@@ -302,7 +302,7 @@ JD-TC-CreateUser-2
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      
@@ -340,7 +340,7 @@ JD-TC-CreateUser-2
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['lastName']}                        ${lastname_A} 
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[0]}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['mobileNo']}                        ${MUSERNAME_E}
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['mobileNo']}                        ${PUSERNAME_E}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          ${dep_id}    
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['subdomain']}                       1
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['admin']}                           ${bool[1]} 
@@ -385,7 +385,7 @@ JD-TC-CreateUser-3
 
     [Documentation]  Create a user for a different department by branch login
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -470,7 +470,7 @@ JD-TC-CreateUser-3
     
 JD-TC-CreateUser-4
     [Documentation]  Create a user for a different subdomain in same domain by branch login
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
@@ -538,7 +538,7 @@ JD-TC-CreateUser-4
     
 JD-TC-CreateUser-5
     [Documentation]  Create a user for a different usertype(ASSISTANT) by branch login
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
@@ -601,7 +601,7 @@ JD-TC-CreateUser-5
    
 JD-TC-CreateUser-6
     [Documentation]  Create a user for a different usertype(ADMIN) by branch login
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
@@ -665,7 +665,7 @@ JD-TC-CreateUser-6
 
 JD-TC-CreateUser-UH1
     [Documentation]  Create a user for a invalid subdomain by branch login
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${sub_domain_id2}=  Random Int   min=100  max=200
@@ -687,7 +687,7 @@ JD-TC-CreateUser-UH1
 
 JD-TC-CreateUser-UH2
     [Documentation]  Create a user for a invalid department by branch login
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${depid2}=  Random Int   min=100  max=200
@@ -705,7 +705,7 @@ JD-TC-CreateUser-UH2
 
 JD-TC-CreateUser-UH3
     [Documentation]  Create a user with already existing ph by branch login
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${PUSERNAME_U6}=  Evaluate  ${PUSERNAME}+336649
@@ -722,7 +722,7 @@ JD-TC-CreateUser-UH3
 
 JD-TC-CreateUser-UH4
     [Documentation]  Create a user with empty ph by branch login
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${firstname3}=  FakerLibrary.name
@@ -738,7 +738,7 @@ JD-TC-CreateUser-UH4
 
 JD-TC-CreateUser-UH5
     [Documentation]  Create a user with empty firstname by branch login
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${PUSERNAME_U6}=  Evaluate  ${PUSERNAME}+336652
@@ -754,7 +754,7 @@ JD-TC-CreateUser-UH5
 
 JD-TC-CreateUser-UH6
     [Documentation]  Create a user with empty lastname by branch login
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${PUSERNAME_U6}=  Evaluate  ${PUSERNAME}+336652
@@ -789,7 +789,7 @@ JD-TC-CreateUser -UH8
 
 JD-TC-CreateUser -7
     [Documentation]   Disable User and check his queue state and service state(they are in disabled state) 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -797,8 +797,8 @@ JD-TC-CreateUser -7
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${ph1}=  Evaluate  ${MUSERNAME_E}+1000000000
-    ${ph2}=  Evaluate  ${MUSERNAME_E}+2000000000
+    ${ph1}=  Evaluate  ${PUSERNAME_E}+1000000000
+    ${ph2}=  Evaluate  ${PUSERNAME_E}+2000000000
     ${views}=  Random Element    ${Views}
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -875,7 +875,7 @@ JD-TC-CreateUser -7
      ${state}=  FakerLibrary.state
 
     ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+651122
-    clear_users  ${MUSERNAME_E}
+    clear_users  ${PUSERNAME_E}
     ${firstname1}=  FakerLibrary.name
     ${lastname1}=  FakerLibrary.last_name
     ${address}=  get_address
@@ -893,7 +893,7 @@ JD-TC-CreateUser -7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
 
-    ${p_id}=  get_acc_id  ${MUSERNAME_E}
+    ${p_id}=  get_acc_id  ${PUSERNAME_E}
     Set Suite Variable   ${p_id}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -978,7 +978,7 @@ JD-TC-CreateUser -7
 JD-TC-CreateUser -UH9
     [Documentation]   Create user with international phone number
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1029,7 +1029,7 @@ JD-TC-CreateUser -UH9
 JD-TC-CreateUser -UH10
     [Documentation]   Create 2 users with same phone number, different country codes.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Test Variable  ${subdomain}  ${resp.json()['subSector']}
@@ -1132,7 +1132,7 @@ JD-TC-CreateUser -UH10
 JD-TC-CreateUser -UH11
     [Documentation]   create user with empty country code
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1865,7 +1865,7 @@ JD-TC-CreateUser -14
 JD-TC-CreateUser-UH16
     [Documentation]  Create user with invalid whatsapp number
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1891,11 +1891,11 @@ JD-TC-CreateUser-UH16
         END
     END
 
-    clear_queue      ${HLMUSERNAME18}
-    clear_service    ${HLMUSERNAME18}
-    clear_customer   ${HLMUSERNAME18}
+    clear_queue      ${HLPUSERNAME18}
+    clear_service    ${HLPUSERNAME18}
+    clear_customer   ${HLPUSERNAME18}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME18}
+    ${pid}=  get_acc_id  ${HLPUSERNAME18}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -1922,7 +1922,7 @@ JD-TC-CreateUser-UH16
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${dep_id54}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME18}+1000440022
+    ${ph1}=  Evaluate  ${HLPUSERNAME18}+1000440022
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -1943,8 +1943,8 @@ JD-TC-CreateUser-UH16
     Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
  
-    ${whpnum}=  Evaluate  ${HLMUSERNAME18}+336250
-    ${tlgnum}=  Evaluate  ${HLMUSERNAME18}+336351
+    ${whpnum}=  Evaluate  ${HLPUSERNAME18}+336250
+    ${tlgnum}=  Evaluate  ${HLPUSERNAME18}+336351
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${ph1}  ${dep_id54}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  00000  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
@@ -1964,7 +1964,7 @@ JD-TC-CreateUser-UH16
 JD-TC-CreateUser-16
     [Documentation]  Create user with already used whatsapp number
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1991,11 +1991,11 @@ JD-TC-CreateUser-16
         END
     END
 
-    clear_queue      ${HLMUSERNAME18}
-    clear_service    ${HLMUSERNAME18}
-    clear_customer   ${HLMUSERNAME18}
+    clear_queue      ${HLPUSERNAME18}
+    clear_service    ${HLPUSERNAME18}
+    clear_customer   ${HLPUSERNAME18}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME18}
+    ${pid}=  get_acc_id  ${HLPUSERNAME18}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -2048,7 +2048,7 @@ JD-TC-CreateUser-16
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${dep_id55}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME18}+1000211000
+    ${ph1}=  Evaluate  ${HLPUSERNAME18}+1000211000
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -2069,8 +2069,8 @@ JD-TC-CreateUser-16
     Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
  
-    ${whpnum}=  Evaluate  ${HLMUSERNAME18}+336245
-    ${tlgnum}=  Evaluate  ${HLMUSERNAME18}+336345
+    ${whpnum}=  Evaluate  ${HLPUSERNAME18}+336245
+    ${tlgnum}=  Evaluate  ${HLPUSERNAME18}+336345
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id55}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
@@ -2086,7 +2086,7 @@ JD-TC-CreateUser-16
     Should Be Equal As Strings  ${resp.json()['telegramNum']['countryCode']}      ${countryCodes[1]}
     Should Be Equal As Strings   ${resp.json()['city']}   ${city}   ignore_case=True
 
-    ${ph2}=  Evaluate  ${HLMUSERNAME18}+1000212010
+    ${ph2}=  Evaluate  ${HLPUSERNAME18}+1000212010
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -2109,7 +2109,7 @@ JD-TC-CreateUser-16
 JD-TC-CreateUser-UH13
     [Documentation]  Create user without countrycode in whatsapp
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2118,11 +2118,11 @@ JD-TC-CreateUser-UH13
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Test Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${HLMUSERNAME18}
-    clear_service    ${HLMUSERNAME18}
-    clear_customer   ${HLMUSERNAME18}
+    clear_queue      ${HLPUSERNAME18}
+    clear_service    ${HLPUSERNAME18}
+    clear_customer   ${HLPUSERNAME18}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME18}
+    ${pid}=  get_acc_id  ${HLPUSERNAME18}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -2149,7 +2149,7 @@ JD-TC-CreateUser-UH13
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${dep_id55}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME18}+1000440020
+    ${ph1}=  Evaluate  ${HLPUSERNAME18}+1000440020
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -2170,8 +2170,8 @@ JD-TC-CreateUser-UH13
     Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
  
-    ${whpnum}=  Evaluate  ${HLMUSERNAME18}+336246
-    ${tlgnum}=  Evaluate  ${HLMUSERNAME18}+336347
+    ${whpnum}=  Evaluate  ${HLPUSERNAME18}+336246
+    ${tlgnum}=  Evaluate  ${HLPUSERNAME18}+336347
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id55}  ${sub_domain_id}  ${bool[0]}  ${EMPTY}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
@@ -2182,7 +2182,7 @@ JD-TC-CreateUser-UH13
 JD-TC-CreateUser-UH14
     [Documentation]  Create user without country code in telegram number
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2191,11 +2191,11 @@ JD-TC-CreateUser-UH14
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Test Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${HLMUSERNAME18}
-    clear_service    ${HLMUSERNAME18}
-    clear_customer   ${HLMUSERNAME18}
+    clear_queue      ${HLPUSERNAME18}
+    clear_service    ${HLPUSERNAME18}
+    clear_customer   ${HLPUSERNAME18}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME18}
+    ${pid}=  get_acc_id  ${HLPUSERNAME18}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -2222,7 +2222,7 @@ JD-TC-CreateUser-UH14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${dep_id55}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME18}+1000440021
+    ${ph1}=  Evaluate  ${HLPUSERNAME18}+1000440021
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -2243,8 +2243,8 @@ JD-TC-CreateUser-UH14
     Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
  
-    ${whpnum}=  Evaluate  ${HLMUSERNAME18}+336248
-    ${tlgnum}=  Evaluate  ${HLMUSERNAME18}+336349
+    ${whpnum}=  Evaluate  ${HLPUSERNAME18}+336248
+    ${tlgnum}=  Evaluate  ${HLPUSERNAME18}+336349
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id55}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${EMPTY}  ${tlgnum}
     Log   ${resp.json()}
@@ -2485,7 +2485,7 @@ JD-TC-CreateUser-20
 
     [Documentation]   create 10 users for a multi user account.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2544,7 +2544,7 @@ JD-TC-CreateUser-20
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME10}'
+            IF   not '${user_phone}' == '${HLPUSERNAME10}'
                 clear_users  ${user_phone}
             END
         END
@@ -2554,7 +2554,7 @@ JD-TC-CreateUser-20
 
     FOR   ${i}  IN RANGE   0   10
 
-        ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -7,8 +7,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
@@ -741,7 +741,7 @@ JD-TC-CreateAppointmentSchedule-UH9
 
 JD-TC-CreateAppointmentSchedule-9
     [Documentation]    Create an appointment schedule for user
-    ${resp}=  Encrypted Provider Login   ${HLMUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${HLPUSERNAME0}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     

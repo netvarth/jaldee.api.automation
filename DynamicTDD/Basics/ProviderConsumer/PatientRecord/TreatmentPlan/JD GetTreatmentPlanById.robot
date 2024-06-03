@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 
@@ -40,7 +40,7 @@ JD-TC-Get Treatment Plan By Id-1
 
     [Documentation]    Get Treatment Plan By Id
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -129,7 +129,7 @@ JD-TC-Get Treatment Plan By Id-1
 
     
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -198,7 +198,7 @@ JD-TC-Get Treatment Plan By Id-2
 
     [Documentation]    Create 2 more Treatment Plan and Get Treatment Plan By Id
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -240,7 +240,7 @@ JD-TC-Get Treatment Plan By Id-3
 
     [Documentation]    Create Treatment Plan where treatment field contain 250 words and Get Treatment Plan By Id
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -277,7 +277,7 @@ JD-TC-Get Treatment Plan By Id-4
 
     [Documentation]    Create Treatment Plan where treatment is empty and Get Treatment Plan By Id
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -313,7 +313,7 @@ JD-TC-Get Treatment Plan By Id-5
 
     [Documentation]    Create Treatment Plan where works list is empty and Get Treatment Plan By Id
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -347,7 +347,7 @@ JD-TC-Get Treatment Plan By Id-UH1
 
     [Documentation]    Get Treatment Plan By Id using another provider login
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -374,7 +374,7 @@ JD-TC-Get Treatment Plan By Id-UH3
 
     [Documentation]    Get Treatment Plan By Id  where id is invalid
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
     ${fake_id}=  Random Int  min=500   max=1000

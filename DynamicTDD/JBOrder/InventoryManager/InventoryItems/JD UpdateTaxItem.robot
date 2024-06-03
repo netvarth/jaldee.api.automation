@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Test Cases ***
 
@@ -22,7 +22,7 @@ JD-TC-UpdateItemTax-1
 
     [Documentation]  Update Item tax
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -77,7 +77,7 @@ JD-TC-UpdateItemTax-2
 
     [Documentation]  Update Item tax - tax name is changed
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -99,7 +99,7 @@ JD-TC-UpdateItemTax-3
 
     [Documentation]  Update Item tax - tax name is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -111,7 +111,7 @@ JD-TC-UpdateItemTax-4
 
     [Documentation]  Update Item tax - tax code is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -124,7 +124,7 @@ JD-TC-UpdateItemTax-5
 
     [Documentation]  Update Item tax - tax cod is invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -139,7 +139,7 @@ JD-TC-UpdateItemTax-6
 
     [Documentation]  Update Item tax - type enum is changed 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -160,7 +160,7 @@ JD-TC-UpdateItemTax-8
 
     [Documentation]  Update Item tax - tax percentage is changed
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -182,7 +182,7 @@ JD-TC-UpdateItemTax-9
 
     [Documentation]  Update Item tax - tax percentage is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -195,7 +195,7 @@ JD-TC-UpdateItemTax-10
 
     [Documentation]  Update Item tax - cgst is changes
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -209,7 +209,7 @@ JD-TC-UpdateItemTax-11
 
     [Documentation]  Update Item tax - cgst is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -222,7 +222,7 @@ JD-TC-UpdateItemTax-12
 
     [Documentation]  Update Item tax - sgst is changed
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -236,7 +236,7 @@ JD-TC-UpdateItemTax-13
 
     [Documentation]  Update Item tax - sgst is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -249,7 +249,7 @@ JD-TC-UpdateItemTax-14
 
     [Documentation]  Update Item tax - igst is changed
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -263,7 +263,7 @@ JD-TC-UpdateItemTax-15
 
     [Documentation]  Update Item tax - igst is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -285,7 +285,7 @@ JD-TC-UpdateItemTax-17
 
     [Documentation]  Update Item tax - with another provider login wo dont have created tax
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

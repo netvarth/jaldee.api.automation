@@ -12,8 +12,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -27,7 +27,7 @@ JD-TC-GetManagerlistofUser-1
 
     [Documentation]  Create User With Roles And Scope then update his manager and verify the list.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -101,7 +101,7 @@ JD-TC-GetManagerlistofUser-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME50}'
+            IF   not '${user_phone}' == '${PUSERNAME50}'
                 clear_users  ${user_phone}
             END
         END

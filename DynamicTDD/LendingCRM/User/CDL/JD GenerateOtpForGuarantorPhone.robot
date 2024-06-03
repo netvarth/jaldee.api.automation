@@ -15,8 +15,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Test Cases ***
@@ -25,7 +25,7 @@ JD-TC-GenerateOtpForGuarantorPhone-1
 
     [Documentation]  Login to a multi account provider,then create a guarantor.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -43,7 +43,7 @@ JD-TC-GenerateOtpForGuarantorPhone-2
 
     [Documentation]   Create Guarantor with already added phone number.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -55,7 +55,7 @@ JD-TC-GenerateOtpForGuarantorPhone-UH1
 
     [Documentation]   Create Guarantor with invalid phone number.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -70,7 +70,7 @@ JD-TC-GenerateOtpForGuarantorPhone-UH2
 
     [Documentation]   Create Guarantor with empty phone number.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -84,7 +84,7 @@ JD-TC-GenerateOtpForGuarantorPhone-UH3
 
     [Documentation]   Create Guarantor with another country code.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -96,7 +96,7 @@ JD-TC-GenerateOtpForGuarantorPhone-UH5
 
     [Documentation]   Create Guarantor without country code.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    

@@ -15,7 +15,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -33,7 +33,7 @@ JD-TC-Get Sales Order Invoice-1
 
     [Documentation]   Create a sales Order with Valid Details then Genarate sales order invoice and verify.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -88,11 +88,11 @@ JD-TC-Get Sales Order Invoice-1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${accountId}=  get_acc_id  ${HLMUSERNAME31}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME31}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -219,7 +219,7 @@ JD-TC-Get Sales Order Invoice-1
 
 # ----------------------------- Provider take a Sales Order ------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -332,7 +332,7 @@ JD-TC-Get Sales Order Invoice-2
 
     [Documentation]   Create a sales Order with Create SalesOrder Inventory Catalog-InvMgr is True then create sales order invoice and verify.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -622,7 +622,7 @@ JD-TC-Get Sales Order Invoice-2
 
 # --------------------------- Create SalesOrder Inventory Catalog-InvMgr True --------------------------
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME31}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -776,7 +776,7 @@ JD-TC-Get Sales Order Invoice-3
 
     [Documentation]   After generation of invoice update the invoice status then try to get invoice.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -813,7 +813,7 @@ JD-TC-Get Sales Order Invoice-UH
 
     [Documentation]   Get Sales order invoice with invalid sales order invoice id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

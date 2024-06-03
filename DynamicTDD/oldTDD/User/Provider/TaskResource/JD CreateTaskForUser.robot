@@ -11,8 +11,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -26,11 +26,11 @@ JD-TC-CreateTaskforUser-1
 
     [Documentation]  Create a task for a branch.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${p_id}=  get_acc_id  ${MUSERNAME10}
+    ${p_id}=  get_acc_id  ${PUSERNAME10}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -80,23 +80,23 @@ JD-TC-CreateTaskforUser-2
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+55025788
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+55025788
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_E}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
-    Set Suite Variable  ${MUSERNAME_E}
-    ${id}=  get_id  ${MUSERNAME_E}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+    Set Suite Variable  ${PUSERNAME_E}
+    ${id}=  get_id  ${PUSERNAME_E}
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}
     
@@ -218,7 +218,7 @@ JD-TC-CreateTaskforUser-3
 
     [Documentation]  Create task for multiple users of a branch.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${PUSERNAME_U2}=  Evaluate  ${PUSERNAME}+3366458
@@ -333,7 +333,7 @@ JD-TC-CreateTaskforUser-6(UH)
 
     [Documentation]  Create a task for user with another users location.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${PUSERNAME_U3}=  Evaluate  ${PUSERNAME}+3366498
@@ -447,7 +447,7 @@ JD-TC-CreateTaskforUser-9
     [Documentation]  Create multiple tasks for a branch with different location.
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -513,7 +513,7 @@ JD-TC-CreateTaskforUser-11
     [Documentation]  Create multiple tasks for a branch with same location.
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -545,10 +545,10 @@ JD-TC-CreateTaskforUser-12
 
     [Documentation]  Create a task for a branch by giving status and priority.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${MUSERNAME2}
+    ${pid}=  get_acc_id  ${PUSERNAME2}
    
    
     ${resp}=    Get Locations
@@ -623,10 +623,10 @@ JD-TC-CreateTaskforUser-14
 
     [Documentation]   Create a consumer Task  for a branch.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${HLMUSERNAME2}
+    ${pid}=  get_acc_id  ${HLPUSERNAME2}
    
    
     ${resp}=    Get Locations
@@ -693,7 +693,7 @@ JD-TC-CreateTaskforUser-16
 
     [Documentation]  Create a task without title by user.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -708,10 +708,10 @@ JD-TC-CreateTaskforUser-17
 
     [Documentation]  Create a task without description by user.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${MUSERNAME51}
+    ${pid}=  get_acc_id  ${PUSERNAME51}
    
     ${title}=   FakerLibrary.word 
 
@@ -724,7 +724,7 @@ JD-TC-CreateTaskforUser-UH1
 
     [Documentation]  Create a task without giving user type by user.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -741,7 +741,7 @@ JD-TC-CreateTaskforUser-UH2
 
     [Documentation]  Create a task without giving user type by branch.
 
-     ${resp}=   Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD} 
+     ${resp}=   Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -760,7 +760,7 @@ JD-TC-CreateTaskforUser-UH3
 
     [Documentation]  Create a task without location by branch.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -806,10 +806,10 @@ JD-TC-CreateTaskforUser-UH5
 
     [Documentation]  Create a task without category by branch.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${HLMUSERNAME2}
+    ${pid}=  get_acc_id  ${HLPUSERNAME2}
    
     ${title}=  FakerLibrary.user name
     ${desc}=   FakerLibrary.Word
@@ -850,10 +850,10 @@ JD-TC-CreateTaskforUser-UH7
 
     [Documentation]  Create a task without task type by branch.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${HLMUSERNAME2}
+    ${pid}=  get_acc_id  ${HLPUSERNAME2}
    
     ${title}=  FakerLibrary.user name
     ${desc}=   FakerLibrary.Word
@@ -922,10 +922,10 @@ JD-TC-CreateTaskforUser-UH11
     [Documentation]  Create a task with status as empty by user.
 
    
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id   ${HLMUSERNAME2}
+    ${pid}=  get_acc_id   ${HLPUSERNAME2}
    
     ${title}=  FakerLibrary.user name
     ${desc}=   FakerLibrary.word 
@@ -963,10 +963,10 @@ JD-TC-CreateTaskforUser-UH13
 
     [Documentation]  Create a task with status as empty by branch.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${HLMUSERNAME2}
+    ${pid}=  get_acc_id  ${HLPUSERNAME2}
    
     ${title}=  FakerLibrary.user name
     ${desc}=   FakerLibrary.word 

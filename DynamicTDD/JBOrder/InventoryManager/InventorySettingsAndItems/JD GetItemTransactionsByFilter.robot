@@ -15,8 +15,8 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -37,7 +37,7 @@ ${originFrom}       NONE
 JD-TC-Get Item Transaction By Filter-1
     [Documentation]    1.Item Added to inventory catalog then check transaction----2.Purchase Item then check transaction----3.Add item to sales order catalog then check transcation----4.After sales order check transaction--
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -66,7 +66,7 @@ JD-TC-Get Item Transaction By Filter-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------   
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME50}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -75,7 +75,7 @@ JD-TC-Get Item Transaction By Filter-1
     Set Suite Variable  ${user_id}  ${decrypted_data['id']}
     Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
 
-   ${accountId}=  get_acc_id  ${MUSERNAME50}
+   ${accountId}=  get_acc_id  ${PUSERNAME50}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -508,7 +508,7 @@ JD-TC-Get Item Transaction By Filter-1
 
 # ----------------------------- Provider take a Sales Order ------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${Cg_encid}=  Create Dictionary   encId=${inv_order_encid}   

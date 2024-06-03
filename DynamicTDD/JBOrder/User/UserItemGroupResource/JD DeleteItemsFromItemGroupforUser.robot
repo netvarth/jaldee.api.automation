@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 *** Variables ***
@@ -26,7 +26,7 @@ JD-TC-DeleteItemsFromItemGroupforUser-1
 
     [Documentation]  Create an item and add that item to an item group, then delete item from that group.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME136}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME136}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -45,7 +45,7 @@ JD-TC-DeleteItemsFromItemGroupforUser-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableItemGroup']}  ${bool[1]}
 
-    clear_Item  ${MUSERNAME136}
+    clear_Item  ${PUSERNAME136}
 
     ${displayName1}=   FakerLibrary.name 
     ${shortDesc1}=  FakerLibrary.Sentence   nb_words=2 
@@ -129,7 +129,7 @@ JD-TC-DeleteItemsFromItemGroupforUser-2
 
     [Documentation]  Create multiple items and add that items to an item group, then delete one item from the group..
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME137}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME137}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -148,7 +148,7 @@ JD-TC-DeleteItemsFromItemGroupforUser-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableItemGroup']}  ${bool[1]}
 
-    clear_Item  ${MUSERNAME137}
+    clear_Item  ${PUSERNAME137}
 
     ${displayName1}=   FakerLibrary.name 
     ${shortDesc1}=  FakerLibrary.Sentence   nb_words=2 
@@ -268,7 +268,7 @@ JD-TC-DeleteItemsFromItemGroupforUser-3
 
     [Documentation]  delete items from the item group by passing empty list of item ids.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME80}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -287,7 +287,7 @@ JD-TC-DeleteItemsFromItemGroupforUser-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableItemGroup']}  ${bool[1]}
 
-    clear_Item  ${MUSERNAME80}
+    clear_Item  ${PUSERNAME80}
 
     ${displayName1}=   FakerLibrary.name 
     ${shortDesc1}=  FakerLibrary.Sentence   nb_words=2 
@@ -372,7 +372,7 @@ JD-TC-AddItemsToItemGroupforUser-7
 
     [Documentation]  Add items to item group by user.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME131}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME131}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -429,7 +429,7 @@ JD-TC-AddItemsToItemGroupforUser-7
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME131}'
+            IF   not '${user_phone}' == '${PUSERNAME131}'
                 clear_users  ${user_phone}
             END
         END
@@ -457,7 +457,7 @@ JD-TC-AddItemsToItemGroupforUser-7
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_Item  ${MUSERNAME131}
+    clear_Item  ${PUSERNAME131}
 
     ${displayName1}=   FakerLibrary.name 
     ${shortDesc1}=  FakerLibrary.Sentence   nb_words=2 
@@ -538,7 +538,7 @@ JD-TC-DeleteItemsFromItemGroupforUser-UH1
 
     [Documentation]  try to delete items from the item group but that item not added in the group.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME81}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME81}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -557,7 +557,7 @@ JD-TC-DeleteItemsFromItemGroupforUser-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableItemGroup']}  ${bool[1]}
 
-    clear_Item  ${MUSERNAME81}
+    clear_Item  ${PUSERNAME81}
 
     ${displayName1}=   FakerLibrary.name 
     ${shortDesc1}=  FakerLibrary.Sentence   nb_words=2 
@@ -654,7 +654,7 @@ JD-TC-DeleteItemsFromItemGroupforUser-UH2
 
     [Documentation]  delete items from group using another providers group id.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME82}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME82}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -673,7 +673,7 @@ JD-TC-DeleteItemsFromItemGroupforUser-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableItemGroup']}  ${bool[1]}
 
-    clear_Item  ${MUSERNAME82}
+    clear_Item  ${PUSERNAME82}
 
     ${displayName1}=   FakerLibrary.name 
     ${shortDesc1}=  FakerLibrary.Sentence   nb_words=2 
@@ -738,7 +738,7 @@ JD-TC-DeleteItemsFromItemGroupforUser-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME83}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -769,7 +769,7 @@ JD-TC-DeleteItemsFromItemGroupforUser-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME82}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME82}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -784,11 +784,11 @@ JD-TC-DeleteItemsFromItemGroupforUser-UH3
 
     [Documentation]  try to delete another providers items from the group.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME84}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME84}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_Item  ${MUSERNAME84}
+    clear_Item  ${PUSERNAME84}
 
     ${displayName1}=   FakerLibrary.name 
     ${shortDesc1}=  FakerLibrary.Sentence   nb_words=2 
@@ -818,7 +818,7 @@ JD-TC-DeleteItemsFromItemGroupforUser-UH3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME85}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME85}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -14,7 +14,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 *** Variables ***
@@ -45,22 +45,22 @@ JD-TC-General Communication with User-1
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E1}=  Evaluate  ${MUSERNAME}+695721796
+     ${PUSERNAME_E1}=  Evaluate  ${PUSERNAME}+695721796
      ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E1}    ${highest_package[0]}
+     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E1}    ${highest_package[0]}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Activation  ${MUSERNAME_E1}  0
+     ${resp}=  Account Activation  ${PUSERNAME_E1}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${MUSERNAME_E1}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${PUSERNAME_E1}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E1}${\n}
-     Set Suite Variable  ${MUSERNAME_E1}
-     ${id}=  get_id  ${MUSERNAME_E1}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E1}${\n}
+     Set Suite Variable  ${PUSERNAME_E1}
+     ${id}=  get_id  ${PUSERNAME_E1}
      Set Suite Variable  ${id}
      ${bs}=  FakerLibrary.bs
      Set Suite Variable  ${bs}
@@ -70,8 +70,8 @@ JD-TC-General Communication with User-1
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${ph1}=  Evaluate  ${MUSERNAME_E1}+1000000000
-    ${ph2}=  Evaluate  ${MUSERNAME_E1}+2000000000
+    ${ph1}=  Evaluate  ${PUSERNAME_E1}+1000000000
+    ${ph2}=  Evaluate  ${PUSERNAME_E1}+2000000000
     ${views}=  Random Element    ${Views}
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -174,11 +174,11 @@ JD-TC-General Communication with User-1
     Set Suite Variable   ${p0_id}   ${resp.json()[2]['id']}
 
 
-    ${p_id}=  get_acc_id  ${MUSERNAME_E1}
+    ${p_id}=  get_acc_id  ${PUSERNAME_E1}
     Set Suite Variable   ${p_id}
 
     clear_Consumermsg  ${CUSERNAME2}
-    clear_Providermsg  ${MUSERNAME_E1}
+    clear_Providermsg  ${PUSERNAME_E1}
 
     ${resp}=  Consumer Login  ${CUSERNAME2}   ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -202,7 +202,7 @@ JD-TC-General Communication with User-1
     Should Be Equal As Strings  ${resp.json()[0]['msg']}                ${msg2}
     Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}     ${p1_id}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -289,7 +289,7 @@ JD-TC-General Communication with User-UH3
 
 JD-TC-General Communication with User-UH5
     [Documentation]  General Communication with user, using disabled user_id
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

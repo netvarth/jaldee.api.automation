@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 
@@ -41,7 +41,7 @@ JD-TC-Remove Prescription Template-1
 
     [Documentation]    Remove Prescription Template
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -109,7 +109,7 @@ JD-TC-Remove Prescription Template-UH1
 
     [Documentation]   Delete already deleted prescription template
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -173,7 +173,7 @@ JD-TC-Remove Prescription Template-UH3
 
     [Documentation]   Remove Prescription Template with another login
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -201,7 +201,7 @@ JD-TC-Remove Prescription Template-UH5
 
     [Documentation]   Remove Prescription Template with  invalid id..
 
-     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login    ${HLPUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

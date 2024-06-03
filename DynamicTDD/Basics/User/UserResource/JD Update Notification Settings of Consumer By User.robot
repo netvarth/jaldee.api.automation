@@ -14,7 +14,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 
@@ -49,30 +49,30 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-1
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E1}=  Evaluate  ${MUSERNAME}+7710177
+     ${PUSERNAME_E1}=  Evaluate  ${PUSERNAME}+7710177
      ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E1}    ${highest_package[0]}
+     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E1}    ${highest_package[0]}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Activation  ${MUSERNAME_E1}  0
+     ${resp}=  Account Activation  ${PUSERNAME_E1}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${MUSERNAME_E1}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${PUSERNAME_E1}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E1}${\n}
-     Set Suite Variable  ${MUSERNAME_E1}
-     ${id}=  get_id  ${MUSERNAME_E1}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E1}${\n}
+     Set Suite Variable  ${PUSERNAME_E1}
+     ${id}=  get_id  ${PUSERNAME_E1}
      Set Suite Variable  ${id}
      ${bs}=  FakerLibrary.bs
      Set Suite Variable  ${bs}
     
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${ph1}=  Evaluate  ${MUSERNAME_E1}+1000000000
-    ${ph2}=  Evaluate  ${MUSERNAME_E1}+2000000000
+    ${ph1}=  Evaluate  ${PUSERNAME_E1}+1000000000
+    ${ph2}=  Evaluate  ${PUSERNAME_E1}+2000000000
     ${views}=  Random Element    ${Views}
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -270,7 +270,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-1
 JD-TC-Update_Notification_Settings_of_ConsumerByUser-2
     [Documentation]   Update Early Notification and Getting Notification Settings of Consumer By USER
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -298,7 +298,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-2
 JD-TC-Update_Notification_Settings_of_ConsumerByUser-3
     [Documentation]   Update Prefinal Notification and Getting Notification Settings of Consumer By USER
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -326,7 +326,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-3
 JD-TC-Update_Notification_Settings_of_ConsumerByUser-4
     [Documentation]   Update Final Notification and Getting Notification Settings of Consumer By USER
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -354,7 +354,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-4
 JD-TC-Update_Notification_Settings_of_ConsumerByUser-5
     [Documentation]   Update Final Notification and Getting Notification Settings of Consumer By USER
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -381,7 +381,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-5
 JD-TC-Update_Notification_Settings_of_ConsumerByUser-6
     [Documentation]   Update AppointmentAdd and Getting Notification Settings of Consumer By USER
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -407,7 +407,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-6
 JD-TC-Update_Notification_Settings_of_ConsumerByUser-7
     [Documentation]   Update Final Notification and Getting Notification Settings of Consumer By USER
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -434,7 +434,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-7
 JD-TC-Update_Notification_Settings_of_ConsumerByUser-8
     [Documentation]   Update prefinal Notification and Getting Notification Settings of Consumer By USER
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -460,7 +460,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-8
 JD-TC-Update_Notification_Settings_of_ConsumerByUser-9
     [Documentation]   Updated all notification settings of consumer By USER u_id1, then Get notification settings of consumer By another USER u_id2
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -543,7 +543,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-9
 JD-TC-Update_Notification_Settings_of_ConsumerByUser-10
     [Documentation]   Update Notification Settings and Verify push notifications of WAITLIST-CANCEL
     clear_Consumermsg   ${CUSERNAME20}
-    clear_Providermsg   ${MUSERNAME_E1}
+    clear_Providermsg   ${PUSERNAME_E1}
     ${resp}=  Consumer Login  ${CUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -561,7 +561,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-10
     Set Suite Variable  ${f_id1}   ${resp.json()}
     Set Suite Variable  ${uname_f_id1}   ${family_fname1} ${family_lname1}
    
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -569,7 +569,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-10
     Log  ${decrypted_data}
     Set Test Variable  ${P_Sector}  ${decrypted_data['sector']}
     # Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
-    ${p_id}=  get_acc_id  ${MUSERNAME_E1}
+    ${p_id}=  get_acc_id  ${PUSERNAME_E1}
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -677,7 +677,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-10
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${que_id}
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -764,7 +764,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-10
 
 JD-TC-Update_Notification_Settings_of_ConsumerByUser-11
     [Documentation]   Update Notification Settings and Verify push notifications of APPOINTMENT-CANCEL
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -772,7 +772,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-11
     Log  ${decrypted_data}
     Set Test Variable  ${P_Sector}  ${decrypted_data['sector']}
     # Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
-    ${p_id}=  get_acc_id  ${MUSERNAME_E1}
+    ${p_id}=  get_acc_id  ${PUSERNAME_E1}
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -784,7 +784,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-11
     Set Suite Variable  ${fid}  ${resp.json()[0]['id']}
 
     clear_consumer_msgs  ${CUSERNAME20}
-    clear_provider_msgs  ${MUSERNAME_E1}
+    clear_provider_msgs  ${PUSERNAME_E1}
    
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -901,7 +901,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-11
 
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1030,7 +1030,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser -UH1
 JD-TC-Update_Notification_Settings_of_ConsumerByUser -UH2
     [Documentation]   Use provider_id (admin user) to Update Notification Settings of Consumer By User 
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1075,7 +1075,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser -UH3
 JD-TC-Update_Notification_Settings_of_ConsumerByUser -UH4
 	[Documentation]  invalid provider
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1091,7 +1091,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser -UH4
 
 JD-TC-Update_Notification_Settings_of_ConsumerByUser -UH5
     [Documentation]  Update Notification Settings of Consumer By User using Disabled USER_id
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1113,22 +1113,22 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-UH6
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E2}=  Evaluate  ${PUSERNAME}+6718176
+     ${PUSERNAME_E2}=  Evaluate  ${PUSERNAME}+6718176
      ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E2}    ${highest_package[0]}
+     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E2}    ${highest_package[0]}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Activation  ${MUSERNAME_E2}  0
+     ${resp}=  Account Activation  ${PUSERNAME_E2}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${MUSERNAME_E2}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${PUSERNAME_E2}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E2}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E2}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E2}${\n}
-     Set Suite Variable  ${MUSERNAME_E2}
-     ${id}=  get_id  ${MUSERNAME_E2}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E2}${\n}
+     Set Suite Variable  ${PUSERNAME_E2}
+     ${id}=  get_id  ${PUSERNAME_E2}
      Set Suite Variable  ${id}
      ${bs}=  FakerLibrary.bs
      Set Suite Variable  ${bs}
@@ -1165,7 +1165,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-UH6
     Set Suite Variable   ${p0_id40}   ${resp.json()[1]['id']}
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

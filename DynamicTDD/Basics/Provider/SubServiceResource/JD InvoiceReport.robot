@@ -14,8 +14,8 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -33,7 +33,7 @@ JD-TC-InvoiceReport-1
                     ...   then verify the invoice report(with jaldee finance Enabled) 
                     ...   auto invoice generation enabled for main service only.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -126,7 +126,7 @@ JD-TC-InvoiceReport-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME45}'
+            IF   not '${user_phone}' == '${HLPUSERNAME45}'
                 clear_users  ${user_phone}
             END
         END
@@ -242,7 +242,7 @@ JD-TC-InvoiceReport-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -316,7 +316,7 @@ JD-TC-InvoiceReport-2
                     ...   then verify the invoice report(with jaldee finance Enabled) 
                     ...   auto invoice generation enabled for main service and sub service.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -365,7 +365,7 @@ JD-TC-InvoiceReport-2
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME45}'
+            IF   not '${user_phone}' == '${HLPUSERNAME45}'
                 clear_users  ${user_phone}
             END
         END
@@ -493,7 +493,7 @@ JD-TC-InvoiceReport-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -574,7 +574,7 @@ JD-TC-InvoiceReport-UH1
                     ...   then verify the invoice report(with jaldee finance Enabled) 
                     ...   auto invoice generation enabled for sub service only.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -623,7 +623,7 @@ JD-TC-InvoiceReport-UH1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME45}'
+            IF   not '${user_phone}' == '${HLPUSERNAME45}'
                 clear_users  ${user_phone}
             END
         END
@@ -743,7 +743,7 @@ JD-TC-InvoiceReport-UH1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -801,7 +801,7 @@ JD-TC-InvoiceReport-UH1
     [Documentation]  Create a sub service and add that sub service to an appointment(walkin) for a provider consumer
                     ...   then verify the invoice report(with jaldee finance disabled)
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -843,7 +843,7 @@ JD-TC-InvoiceReport-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -896,7 +896,7 @@ JD-TC-InvoiceReport-UH1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME45}'
+            IF   not '${user_phone}' == '${HLPUSERNAME45}'
                 clear_users  ${user_phone}
             END
         END
@@ -1002,7 +1002,7 @@ JD-TC-InvoiceReport-UH1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

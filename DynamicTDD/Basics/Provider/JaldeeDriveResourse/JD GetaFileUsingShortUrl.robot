@@ -9,7 +9,7 @@ Library           OperatingSystem
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Library           /ebs/TDD/db.py
 Variables         /ebs/TDD/varfiles/providers.py
@@ -18,8 +18,8 @@ Resource          /ebs/TDD/Keywords.robot
 Variables         /ebs/TDD/varfiles/consumermail.py
 Library           /ebs/TDD/excelfuncs.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
-Variables          /ebs/TDD/varfiles/hl_musers.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables          /ebs/TDD/varfiles/hl_providers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Library           /ebs/TDD/Imageupload.py
 
 
@@ -532,12 +532,12 @@ JD-TC-GetaFileusingShortUrl-UH1
 
 	[Documentation]    upload file to jaldeedrive and get using short url
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${id}=  get_id  ${HLMUSERNAME2}
+    ${id}=  get_id  ${HLPUSERNAME2}
     Set Test Variable  ${id}
-    ${p_id}=  get_acc_id  ${HLMUSERNAME2}
+    ${p_id}=  get_acc_id  ${HLPUSERNAME2}
     Set Test Variable   ${p_id}
 
     ${resp}=   Get Business Profile

@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -31,7 +31,7 @@ JD-TC-Create Inventory Catalog-1
 
     [Documentation]  create inventory catalog with valid details.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -84,10 +84,10 @@ JD-TC-Create Inventory Catalog-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME53}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME53}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -132,7 +132,7 @@ JD-TC-Create Inventory Catalog-2
 
     [Documentation]  create multiple inventory catalog with same store id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -145,7 +145,7 @@ JD-TC-Create Inventory Catalog-3
 
     [Documentation]  create inventory catalog using store nature as lab.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -168,7 +168,7 @@ JD-TC-Create Inventory Catalog-4
 
     [Documentation]  create  inventory catalog where name as number.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -180,7 +180,7 @@ JD-TC-Create Inventory Catalog-5
 
     [Documentation]  create  inventory catalog where name as invalid string.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -192,7 +192,7 @@ JD-TC-Create Inventory Catalog-6
 
     [Documentation]  create  inventory catalog with same  name with different store id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -209,7 +209,7 @@ JD-TC-Create Inventory Catalog-7
 
     [Documentation]  create  inventory catalog from main account then create catalog with same name from user login(without admin privilege)
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -292,7 +292,7 @@ JD-TC-Create Inventory Catalog-8
 
     [Documentation]  create  inventory catalog where name( length is 255).
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -307,7 +307,7 @@ JD-TC-Create Inventory Catalog-UH1
 
     [Documentation]  create  inventory catalog with empty name
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -322,7 +322,7 @@ JD-TC-Create Inventory Catalog-UH2
 
     [Documentation]  create  inventory catalog with invalid store id
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -363,7 +363,7 @@ JD-TC-Create Inventory Catalog-UH5
 
     [Documentation]  create  inventory catalog where name length is <1.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -378,7 +378,7 @@ JD-TC-Create Inventory Catalog-UH6
 
     [Documentation]  create  inventory catalog where name(word length is 256).
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -392,7 +392,7 @@ JD-TC-Create Inventory Catalog-UH7
 
     [Documentation]  create  inventory catalog with same name .
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

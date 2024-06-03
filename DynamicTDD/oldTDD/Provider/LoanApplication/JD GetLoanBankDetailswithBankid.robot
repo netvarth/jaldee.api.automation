@@ -14,8 +14,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -53,7 +53,7 @@ JD-TC-GetBankDetailswithId-1
                                   
     [Documentation]              Get Bank Details with Id
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME14}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}

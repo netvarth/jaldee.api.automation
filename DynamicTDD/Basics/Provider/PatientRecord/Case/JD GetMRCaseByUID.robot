@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
@@ -38,7 +38,7 @@ JD-TC-Get MR Case By UID-1
 
     [Documentation]    Get MR Case By UID
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME10}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -122,7 +122,7 @@ JD-TC-Get MR Case By UID-1
 
     
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME10}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

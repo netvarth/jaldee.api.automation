@@ -11,8 +11,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -26,11 +26,11 @@ JD-TC-AddLeadAppoinment-1
     [Documentation]  Create a lead and Add a Appoinment.
 
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME59}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${p_id}    ${resp.json()['id']}
-    # ${p_id}=  get_acc_id  ${MUSERNAME61}
+    # ${p_id}=  get_acc_id  ${PUSERNAME61}
 *** Comments ***
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}

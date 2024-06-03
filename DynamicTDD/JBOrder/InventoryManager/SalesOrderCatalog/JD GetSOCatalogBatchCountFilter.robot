@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -34,7 +34,7 @@ JD-TC-Get Catalog Batch Count Filter-1
 
     [Documentation]   Get count filter with salesorderItemEncid.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -118,7 +118,7 @@ JD-TC-Get Catalog Batch Count Filter-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -616,7 +616,7 @@ JD-TC-Get Catalog Batch Count Filter-1
 
 #     [Documentation]   Get count filter with salesorderItemEncid.
 
-#     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -659,10 +659,10 @@ JD-TC-Get Catalog Batch Count Filter-1
 #     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
 #     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-#     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${accountId}=  get_acc_id  ${HLMUSERNAME30}
+#     ${accountId}=  get_acc_id  ${HLPUSERNAME30}
 #     Set Suite Variable    ${accountId} 
 
 #     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -788,7 +788,7 @@ JD-TC-Get Catalog Batch Count Filter-2
 
     [Documentation]   Get count filter with price.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -806,7 +806,7 @@ JD-TC-Get Catalog Batch Count Filter-3
 
     [Documentation]   Get count filter with catalog item batch id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -825,7 +825,7 @@ JD-TC-Get Catalog Batch Count Filter-4
 
     [Documentation]   Get Catalog Item Batch  count List with enabled status
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -844,7 +844,7 @@ JD-TC-Get Catalog Batch Count Filter-5
 
     [Documentation]   Get Catalog Item Batch  count filter with enabled status
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -863,7 +863,7 @@ JD-TC-Get Catalog Batch Count Filter-6
 
     [Documentation]   Create Catalog Item Batch with same sales order item encid and then Get Catalog Item Batch count filter 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -892,7 +892,7 @@ JD-TC-Get Catalog Batch Count Filter-UH1
 
     [Documentation]   Get Catalog Item Batch  count filter with invalid catalog item id
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -911,7 +911,7 @@ JD-TC-Get Catalog Batch Count Filter-UH2
 
     [Documentation]   Get Catalog Item Batch count filter without catalogItemEncid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -924,7 +924,7 @@ JD-TC-Get Catalog Batch Count Filter-UH3
 
     [Documentation]   Get Catalog Item Batch count filter with status as disabled
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -942,7 +942,7 @@ JD-TC-Get Catalog Batch Count Filter-UH4
 
     [Documentation]   Get Catalog Item Batch count filter where price is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -960,7 +960,7 @@ JD-TC-Get Catalog Batch Count Filter-UH5
 
     [Documentation]   Get Catalog Item Batch count filter where sorderCatalogItemEncId is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

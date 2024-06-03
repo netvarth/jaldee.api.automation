@@ -15,11 +15,11 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ApiKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -91,7 +91,7 @@ JD-TC-BussinessHeadWithRBAC-1
                                   
     [Documentation]               createBranch Using Business Head Role with RBAC
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -199,7 +199,7 @@ JD-TC-BussinessHeadWithRBAC-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME22}'
+            IF   not '${user_phone}' == '${HLPUSERNAME22}'
                 clear_users  ${user_phone}
             END
         END
@@ -249,7 +249,7 @@ JD-TC-BussinessHeadWithRBAC-1
     ${resp}=  Get User By Id  ${bm_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${BMUSERNAME1}  ${resp.json()['mobileNo']}
+    Set Suite Variable  ${BPUSERNAME1}  ${resp.json()['mobileNo']}
 
     ${sh_id1}=  Create Sample User 
     Set Suite Variable  ${sh_id1}
@@ -373,7 +373,7 @@ JD-TC-BussinessHeadWithRBAC-2
                                   
     [Documentation]               Update Branch Using Business Head Role with RBAC
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -395,7 +395,7 @@ JD-TC-BussinessHeadWithRBAC-3
                                   
     [Documentation]               Create location Using Business Head Role with RBAC
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -434,7 +434,7 @@ JD-TC-BussinessHeadWithRBAC-4
                                   
     [Documentation]               Update location Using Business Head Role with RBAC
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -472,7 +472,7 @@ JD-TC-BussinessHeadWithRBAC-5
                                   
     [Documentation]               Update Sales Officer Using Business Head Role with RBAC
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -834,7 +834,7 @@ JD-TC-BussinessHeadWithRBAC-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -873,7 +873,7 @@ JD-TC-BussinessHeadWithRBAC-6
 
 # ...............activate dealer1 by Business Head................
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -889,7 +889,7 @@ JD-TC-BussinessHeadWithRBAC-7
                                   
     [Documentation]               Business Head - disablePartner
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -905,7 +905,7 @@ JD-TC-BussinessHeadWithRBAC-8
                                   
     [Documentation]               Business Head - viewPartner
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -918,7 +918,7 @@ JD-TC-BussinessHeadWithRBAC-9
                                   
     [Documentation]               Business Head - viewLoanApplication
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1129,7 +1129,7 @@ JD-TC-BussinessHeadWithRBAC-9
     Log    ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1143,7 +1143,7 @@ JD-TC-BusinessHeadWithRBAC-UH1
                                   
     [Documentation]               Business head - Create LoanApplication.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1176,7 +1176,7 @@ JD-TC-BusinessHeadWithRBAC-UH2
                                   
     [Documentation]               Business head -  create Dealer.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1200,7 +1200,7 @@ JD-TC-BusinessHeadWithRBAC-UH3
                                   
     [Documentation]               Business head -  Update Dealer.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1269,7 +1269,7 @@ JD-TC-SalesHeadWithRBAC-UH4
                                   
     [Documentation]               Sales head -  Reject loan Application.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

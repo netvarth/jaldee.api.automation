@@ -10,7 +10,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
       
 *** Test Cases ***
 
@@ -210,7 +210,7 @@ JD-TC-Provider Signup-UH5
 JD-TC-Provider Signup-4
     [Documentation]    sign up a provider with same number as a user's
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}

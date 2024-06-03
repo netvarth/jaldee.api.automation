@@ -14,8 +14,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -69,7 +69,7 @@ ${maxAmount}                         300000
 Account with Multiple Users in NBFC
 
 
-    ${resp}=   Get File    /ebs/TDD/varfiles/musers.py
+    ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
     ${len}=   Split to lines  ${resp}
     ${length}=  Get Length   ${len}
     ${multiuser_list}=  Create List
@@ -77,7 +77,7 @@ Account with Multiple Users in NBFC
     ${licid}  ${licname}=  get_highest_license_pkg
     
     FOR   ${a}  IN RANGE   ${length}   
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
@@ -98,7 +98,7 @@ Account with Multiple Users in NBFC
         END
     END
 
-    RETURN  ${MUSERNAME${a}}
+    RETURN  ${PUSERNAME${a}}
 
 
 *** Test Cases ***
@@ -107,11 +107,11 @@ JD-TC-UpdateFileToTemparyLocation-1
                                   
     [Documentation]               Update File to Tempary Location
 
-    ${NBFCMUSERNAME2}=  Account with Multiple Users in NBFC
-    Log  ${NBFCMUSERNAME2}
-    Set Suite Variable  ${NBFCMUSERNAME2}
+    ${NBFCPUSERNAME2}=  Account with Multiple Users in NBFC
+    Log  ${NBFCPUSERNAME2}
+    Set Suite Variable  ${NBFCPUSERNAME2}
     
-    ${resp}=  Encrypted Provider Login  ${NBFCMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${NBFCPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -302,7 +302,7 @@ JD-TC-UpdateFileToTemparyLocation-1
     ${resp}=  Get User By Id  ${bm_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${BMUSERNAME1}  ${resp.json()['mobileNo']}
+    Set Test Variable  ${BPUSERNAME1}  ${resp.json()['mobileNo']}
 
     ${sh_id1}=  Create Sample User 
     

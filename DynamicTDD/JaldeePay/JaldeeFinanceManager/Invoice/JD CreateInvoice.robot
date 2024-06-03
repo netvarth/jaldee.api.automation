@@ -14,7 +14,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -607,7 +607,7 @@ JD-TC-CreateInvoice-5
 
     [Documentation]  Provider take one walking checkin and create invoice using that waitlist id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -831,7 +831,7 @@ JD-TC-CreateInvoice-6
 
     [Documentation]  Provider take one online checkin and create invoice using that waitlist id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -847,7 +847,7 @@ JD-TC-CreateInvoice-6
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid1}  ${wid[0]}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -903,7 +903,7 @@ JD-TC-CreateInvoice-7
 
     [Documentation]  Again try to create invoice using that waitlist id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -933,11 +933,11 @@ JD-TC-CreateInvoice-8
 
     [Documentation]  Provider take one walkin Appointment and create invoice using that Appointment id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_appt_schedule   ${HLMUSERNAME1}
+    clear_appt_schedule   ${HLPUSERNAME1}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -1101,7 +1101,7 @@ JD-TC-CreateInvoice-9
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${loc_id1}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1129,7 +1129,7 @@ JD-TC-CreateInvoice-10
 
     [Documentation]  Again try to create invoice using that Appointment id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2889,11 +2889,11 @@ JD-TC-CreateInvoice-19
     [Documentation]  Taking appointment from consumer side and the consumer doing the prepayment - check invoice(auto-invoice generation flag is on) (Tax Disabled)
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_appt_schedule   ${HLMUSERNAME2}
+    clear_appt_schedule   ${HLPUSERNAME2}
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
@@ -3093,7 +3093,7 @@ JD-TC-CreateInvoice-19
 
     sleep   01s
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3161,7 +3161,7 @@ JD-TC-CreateInvoice-20
 
     sleep   01s
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -12,8 +12,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Library           /ebs/TDD/excelfuncs.py
 
 
@@ -22,14 +22,14 @@ Library           /ebs/TDD/excelfuncs.py
 *** Keywords ***
 Multiple Users branches
 
-    ${resp}=   Get File    /ebs/TDD/varfiles/musers.py
+    ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
     ${len}=   Split to lines  ${resp}
     ${length}=  Get Length   ${len}
     ${multiuser_list}=  Create List
     &{License_total}=  Create Dictionary
     
     FOR   ${a}  IN RANGE   ${length}   
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         
         ${resp1}=   Get Active License
@@ -41,7 +41,7 @@ Multiple Users branches
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         IF  ${resp.json()['metricUsageInfo'][8]['total']} > 1 and ${resp.json()['metricUsageInfo'][8]['used']} < ${resp.json()['metricUsageInfo'][8]['total']}
-            Append To List  ${multiuser_list}  ${MUSERNAME${a}}
+            Append To List  ${multiuser_list}  ${PUSERNAME${a}}
             Set To Dictionary 	${License_total} 	${name}=${resp.json()['metricUsageInfo'][8]['total']}
         END
     END
@@ -104,7 +104,7 @@ JD-TC-Remove Co-Applicant -1
     Set Suite Variable   ${unique_lnames}
 
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -415,7 +415,7 @@ JD-TC-Remove Co-Applicant -1
 JD-TC-Remove Co-Applicant -UH1
     [Documentation]  Create Kyc with Co-Applicants then Remove two time one Co-Applicant .
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -438,7 +438,7 @@ JD-TC-Remove Co-Applicant -UH1
 JD-TC-Remove Co-Applicant -UH2
     [Documentation]  Try to remove Applicant(parant id).
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -450,7 +450,7 @@ JD-TC-Remove Co-Applicant -UH2
 JD-TC-Remove Co-Applicant -UH3
     [Documentation]  Try to pass invalid Id.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -462,7 +462,7 @@ JD-TC-Remove Co-Applicant -UH3
 JD-TC-Remove Co-Applicant -UH4
     [Documentation]  Try to pass invalid uid.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -474,11 +474,11 @@ JD-TC-Remove Co-Applicant -UH4
 JD-TC-Remove Co-Applicant -2
     [Documentation]  proceed Kyc after remove co-applicent.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
-    clear_customer   ${HLMUSERNAME4}
+    clear_customer   ${HLPUSERNAME4}
 
     ${resp}=    Get Locations
     Log  ${resp.content}

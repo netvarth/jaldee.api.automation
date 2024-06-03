@@ -1,0 +1,37 @@
+Basics.Consumer.ConsentForm.JD ConsumerConsentFormResubmitQnr - JD-TC-ConsentFormResubmitQnr-1 - 5550030493
+Basics.Consumer.ConsentForm.JD ConsentFormGetReleasedQuestionnaireByUuid - JD-TC-ConsentFormsubmitQnr-1 - 5550095287
+Basics.Consumer.ConsentForm.JD ConsentFormSendOtp - JD-TC-ConsentFormSendOtp-1 - 5550014324
+Basics.Consumer.ConsentForm.JD ConsentFormVerifySign - JD-TC-GetConsentFormByUid-1 - 5550046608
+Basics.Consumer.ConsentForm.JD ConsentFormVerifyOtp - JD-TC-ConsentFormVerifyOtp-1 - 5550019044
+Basics.Consumer.ConsentForm.JD ConsentFormSendOtp - JD-TC-ConsentFormSendOtp-UH7 - 5550012622
+Basics.Consumer.ConsentForm.JD ConsumerConsentFormResubmitQnr - JD-TC-ConsentFormReubmitQnr-UH4 - 5550036440
+Basics.Consumer.ConsentForm.JD ConsumerConsentFormSubmitQnr - JD-TC-ConsentFormsubmitQnr-1 - 5550021247
+Basics.Consumer.ConsentForm.JD GetConsentFormByUid - JD-TC-GetConsentFormByUid-1 - 5550002489
+Basics.Consumer.ConsentForm.JD GetVerifyStatusOfConsentFormByUid - JD-TC-GetConsentFormByUid-1 - 5550041351
+Basics.Provider.ConsentForm.JD ConsentFormGetReleasedQuestionnaireByUuid - JD-TC-GetReleasedQuestionnaireByUuid-1 - 5550045518
+Basics.Provider.ConsentForm.JD ConsentFormResubmitQnr - JD-TC-ConsentFormReubmitQnr-1 - 5550023397
+Basics.Provider.ConsentForm.JD ConsentFormResubmitQnr - JD-TC-ConsentFormReubmitQnr-UH4 - 5550038015
+Basics.Provider.ConsentForm.JD ConsentFormSendOtp - JD-TC-ConsentFormSendOtp-1 - 5550032939
+Basics.Provider.ConsentForm.JD ConsentFormSubmitQnr - JD-TC-ConsentFormSubmitQnr-1 - 5550039874
+Basics.Provider.ConsentForm.JD ConsentFormVerifyOtp - JD-TC-ConsentFormVerifyOtp-1 - 5550091695
+Basics.Provider.ConsentForm.JD ConsentFormVerifySign - JD-TC-ConsentFormVerifySign-1 - 5550051775
+Basics.Provider.ConsentForm.JD GetConsentFormByProviderConsumerId - JD-TC-GetConsentFormByProviderConsumerId-1 - 5550054888
+Basics.Provider.ConsentForm.JD GetConsentFormByUid - JD-TC-GetConsentFormByUid-1 - 5550055767
+Basics.Provider.ConsentForm.JD GetVerifyStatusOfConsentFormByUid - JD-TC-GetVerifyStatusOfConsentFormByUid-1 - 5550067252
+Basics.Provider.ConsentForm.JD GetConsentFormByProviderConsumerId - JD-TC-GetConsentFormByProviderConsumerId-Uh6 - 5550091075
+Basics.Provider.ConsentForm.JD GetVerifyStatusOfConsentFormByUid - JD-TC-GetVerifyStatusOfConsentFormByUid-UH1 - 5550061669
+Basics.Provider.ConsentForm.JD ShareConsentForm - JD-TC-ShareConsentForm-1 - 5550004858
+Basics.ProviderConsumer.CustomerResource.JD ProviderConsumerProfilePhoto - JD-TC-Add_Profile_Photo-1 - 5550058100
+JBQueue.Provider.ProviderWaitlistResource.JD GetfolloUpDetailsofWl - JD-TC-GetFollowUpDetailsWl-1 - 5550043415
+JBQueue.Provider.QueueResource.JD GetQueueAvaliablility - JD-TC-GetQueueAvaliability-13 - 5550068471
+JBQueue.Provider.QueueResource.JD GetQueueAvaliablilitybyLoc,SerAndDate - JD-TC-GETQueueAvailabilityByLocation,ServiceAndDate-13 - 5550084043
+JBAppointment.Provider.AppointmentResource.JD GetfollowUpDetails - JD-TC-GetFollowUpDetails-1 - 5550071972
+JBAppointment.ProviderConsumer.ProviderConsumerAppointmentResource.JD AddAppointmentRating - JD-TC-PCAddAppointmentRating-1 - 5550047556
+JBAppointment.ProviderConsumer.ProviderConsumerAppointmentResource.JD AddAppointmentRating - JD-TC-PCAddAppointmentRating-1 - 5550047556
+JBAppointment.ProviderConsumer.ProviderConsumerAppointmentResource.JD AppointmentCancelByConsumer - JD-TC-AppointmentCancelByConsumer-1 - 5550080001
+JBAppointment.ProviderConsumer.ProviderConsumerAppointmentResource.JD ProviderConsumer AppointmentCommunication - JD-TC-ConsumerAppointmentCommunication-1 - 5550042169
+JBAppointment.ProviderConsumer.ProviderConsumerAppointmentResource.JD ProviderConsumer AppointmentCommunication - JD-TC-ConsumerAppointmentCommunication-1 - 5550097703
+JBAppointment.ProviderConsumer.ProviderConsumerAppointmentResource.JD AppointmentCancelByConsumer - JD-TC-AppointmentCancelByConsumer-2 - 5550054143
+JBAppointment.ProviderConsumer.ProviderConsumerAppointmentResource.JD ProviderConsumer AppointmentCommunication - JD-TC-ConsumerAppointmentCommunication-1 - 5550008511
+JBAppointment.ProviderConsumer.ProviderConsumerAppointmentResource.JD ProviderConsumer AppointmentCommunication - JD-TC-ConsumerAppointmentCommunication-1 - 5550058973
+Communications.Consumer.JD SendMessageAppmtConsumer - JD-TC-SendMessageWithAppmt-1 - 5550092008

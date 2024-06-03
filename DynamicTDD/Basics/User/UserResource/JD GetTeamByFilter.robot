@@ -8,8 +8,8 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 *** Keywords ***
@@ -26,11 +26,11 @@ JD-TC-GetTeamByFilter-1
 
      [Documentation]  Create team at account level and Get Team By Filter- (status-eq).
 
-    #  ${resp}=  Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    #  ${resp}=  Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     #  Log  ${resp.json()}
     #  Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -69,7 +69,7 @@ JD-TC-GetTeamByFilter-2
 
     [Documentation]  Create team at account level and Get Team By Filter- (id-eq).
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -85,7 +85,7 @@ JD-TC-GetTeamByFilter-3
 
     [Documentation]  Create team at account level and Get Team By Filter- (name-eq).
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -101,7 +101,7 @@ JD-TC-GetTeamByFilter-4
 
     [Documentation]  Create team at account level and Get Team By Filter- (size-eq).
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -117,7 +117,7 @@ JD-TC-GetTeamByFilter-5
 
     [Documentation]  Create another team at account level and Get Team By Filter- (status-eq).
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -146,7 +146,7 @@ JD-TC-GetTeamByFilter-6
 
     [Documentation]  User try to create team (admin is true)
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -223,7 +223,7 @@ JD-TC-GetTeamByFilter-UH1
 
     [Documentation]  User try to create team (admin is false)
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

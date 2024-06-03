@@ -12,8 +12,8 @@ Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 
@@ -28,7 +28,7 @@ JD-TC-CreateItemGroupforUser-1
 
     [Documentation]  Create Item Group for an existing multi user account.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -58,7 +58,7 @@ JD-TC-CreateItemGroupforUser-2
 
     [Documentation]  Create multiple Item Group for an existing provider.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -73,7 +73,7 @@ JD-TC-CreateItemGroupforUser-3
 
     [Documentation]  Create multiple Item Group with same name for an existing provider.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME38}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME38}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -107,7 +107,7 @@ JD-TC-CreateItemGroupforUser-4
 
     [Documentation]  Create Item Group with group name as numbers
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -121,7 +121,7 @@ JD-TC-CreateItemGroupforUser-5
 
     [Documentation]  Create Item Group for a provider without group decscription.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -149,7 +149,7 @@ JD-TC-CreateItemGroupforUser-6
 
     [Documentation]  Create Item Group by user.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -206,7 +206,7 @@ JD-TC-CreateItemGroupforUser-6
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME12}'
+            IF   not '${user_phone}' == '${PUSERNAME12}'
                 clear_users  ${user_phone}
             END
         END
@@ -244,7 +244,7 @@ JD-TC-CreateItemGroupforUser-7
 
     [Documentation]  Create Item Group by user(admin).
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -301,7 +301,7 @@ JD-TC-CreateItemGroupforUser-7
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME13}'
+            IF   not '${user_phone}' == '${PUSERNAME13}'
                 clear_users  ${user_phone}
             END
         END
@@ -340,7 +340,7 @@ JD-TC-CreateItemGroupforUser-UH1
 
     [Documentation]  Create Item Group for a provider without enable item group flag in account settings.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -370,7 +370,7 @@ JD-TC-CreateItemGroupforUser-UH2
 
     [Documentation]  Create Item Group for a provider without group name.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

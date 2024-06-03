@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -30,7 +30,7 @@ JD-TC-GetItemDetails-1
 
     [Documentation]  Get item Details.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -114,7 +114,7 @@ JD-TC-GetItemDetails-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -486,7 +486,7 @@ JD-TC-GetItemDetails-UH1
 
     [Documentation]  Get item Details - store id is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -501,7 +501,7 @@ JD-TC-GetItemDetails-UH2
 
     [Documentation]  Get item Details - store id is invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -518,7 +518,7 @@ JD-TC-GetItemDetails-UH3
 
     [Documentation]  Get item Details - vendor id is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -533,7 +533,7 @@ JD-TC-GetItemDetails-UH4
 
     [Documentation]  Get item Details - vendor id is inv
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -550,7 +550,7 @@ JD-TC-GetItemDetails-UH5
 
     [Documentation]  Get item Details - inventory Catalog Item is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -567,7 +567,7 @@ JD-TC-GetItemDetails-UH6
 
     [Documentation]  Get item Details - inventory Catalog item is invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -585,7 +585,7 @@ JD-TC-GetItemDetails-2
 
     [Documentation]  Get item Details - quantity id is 0
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -626,7 +626,7 @@ JD-TC-GetItemDetails-3
 
     [Documentation]  Get item Details - free quantity is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -666,7 +666,7 @@ JD-TC-GetItemDetails-3
 
 #     [Documentation]  Get item Details - amount is empty
 
-#     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -678,7 +678,7 @@ JD-TC-GetItemDetails-4
 
     [Documentation]  Get item Details - amount is negative
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -690,7 +690,7 @@ JD-TC-GetItemDetails-5
 
     [Documentation]  Get item Details - fixed discount is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -730,7 +730,7 @@ JD-TC-GetItemDetails-5
 
 #     [Documentation]  Get item Details - discount percentage is empty
 
-#     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 

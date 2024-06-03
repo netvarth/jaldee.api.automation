@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Library           /ebs/TDD/db.py
 Library           /ebs/TDD/Imageupload.py
 
@@ -47,18 +47,18 @@ JD-TC-Share Prescription To ThirdParty-1
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+97788121
+     ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+97788121
      ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Activation  ${MUSERNAME_E}  0
+     ${resp}=  Account Activation  ${PUSERNAME_E}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -70,10 +70,10 @@ JD-TC-Share Prescription To ThirdParty-1
     Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
     Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
-     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
-     Set Suite Variable  ${MUSERNAME_E}
-     ${id}=  get_id  ${MUSERNAME_E}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+     Set Suite Variable  ${PUSERNAME_E}
+     ${id}=  get_id  ${PUSERNAME_E}
      Set Suite Variable  ${id}
      ${bs}=  FakerLibrary.bs
      Set Suite Variable  ${bs}
@@ -95,7 +95,7 @@ JD-TC-Share Prescription To ThirdParty-1
      Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
      Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     # Log  ${resp.json()}         
     # Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -185,7 +185,7 @@ JD-TC-Share Prescription To ThirdParty-1
 
     
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -270,7 +270,7 @@ JD-TC-Share Prescription To ThirdParty-1
     ${mrPrescriptions}=  Create Dictionary  medicineName=${med_name}  frequency=${frequency}  duration=${duration}  instructions=${instrn}  dosage=${dosage}
     Set Suite Variable    ${mrPrescriptions}
 
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${MUSERNAME_E}  ${PASSWORD}  
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME_E}  ${PASSWORD}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -338,7 +338,7 @@ JD-TC-Share Prescription To ThirdParty-2
 
     [Documentation]    Create Prescription with Empty dentalRecordId and Share Prescription To third party.
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -389,7 +389,7 @@ JD-TC-Share Prescription To ThirdParty-3
 
     [Documentation]    upload paper Prescription with Empty html and Share Prescription To third party.
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -425,7 +425,7 @@ JD-TC-Share Prescription To ThirdParty -4
 
     [Documentation]    Share multiple  Prescription To third party.
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -471,7 +471,7 @@ JD-TC-Share Prescription To ThirdParty-5
 
     [Documentation]    Share Prescription To third party with empty whatsapp number.
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -487,7 +487,7 @@ JD-TC-Share Prescription To ThirdParty-6
 
     [Documentation]    Share Prescription To third party with empty sms.
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -503,7 +503,7 @@ JD-TC-Share Prescription To ThirdParty-7
 
     [Documentation]    Share Prescription To ThirdParty with empty whatsapp number.
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -519,7 +519,7 @@ JD-TC-Share Prescription To ThirdParty-8
 
     [Documentation]    Share Prescription To third party with empty email ,whatsapp and sms.
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -536,7 +536,7 @@ JD-TC-Share Prescription To ThirdParty-UH1
 
     [Documentation]    Share Prescription To ThirdParty with invalid uid.
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -558,7 +558,7 @@ JD-TC-Share Prescription To ThirdParty-UH2
 
     [Documentation]    Share Prescription To ThirdParty with empty message.
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -572,7 +572,7 @@ JD-TC-Share Prescription To ThirdParty-UH3
 
     [Documentation]    Try to remove shared prescription.
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -593,7 +593,7 @@ JD-TC-Share Prescription To ThirdParty-UH4
 
     [Documentation]     Share Prescription To ThirdParty where all medium is empty.
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -609,7 +609,7 @@ JD-TC-Share Prescription To ThirdParty-UH5
 
     [Documentation]   Share Prescription To ThirdParty where all medium is given as false.
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -635,7 +635,7 @@ JD-TC-Share Prescription To ThirdParty-UH6
 
     [Documentation]    Share Prescription To third party with empty email.
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -651,7 +651,7 @@ JD-TC-Share Prescription To ThirdParty-UH7
 
     [Documentation]   Share Prescription To ThirdParty  with another provider login
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
     

@@ -15,7 +15,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -33,7 +33,7 @@ JD-TC-Generate SalesOrder Payment Link-1
 
     [Documentation]   Create a sales Order with Valid Details then Generate SalesOrder Payment Link.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -89,11 +89,11 @@ JD-TC-Generate SalesOrder Payment Link-1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${accountId}=  get_acc_id  ${HLMUSERNAME30}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME30}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -220,7 +220,7 @@ JD-TC-Generate SalesOrder Payment Link-1
 
 # ----------------------------- Provider take a Sales Order ------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -345,7 +345,7 @@ JD-TC-Generate SalesOrder Payment Link-2
 
     [Documentation]   Try to Generate SalesOrder Payment Link second time .
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -361,7 +361,7 @@ JD-TC-Generate SalesOrder Payment Link-3
 
     [Documentation]   Try to Generate SalesOrder Payment Link with EMPTY primaryMobileNo.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -377,7 +377,7 @@ JD-TC-Generate SalesOrder Payment Link-4
 
     [Documentation]   Try to Generate SalesOrder Payment Link with countryCodes is 91.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -393,7 +393,7 @@ JD-TC-Generate SalesOrder Payment Link-5
 
     [Documentation]   Try to Generate SalesOrder Payment Link with EMPTY email_id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -409,7 +409,7 @@ JD-TC-Generate SalesOrder Payment Link-UH1
 
     [Documentation]   Try to Generate SalesOrder Payment Link with enable whatsapp notification but number is empty.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -422,7 +422,7 @@ JD-TC-Generate SalesOrder Payment Link-UH2
 
     [Documentation]   Try to Generate SalesOrder Payment Link with enable whatsapp notification but number is empty and countryCodes is 48.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -435,7 +435,7 @@ JD-TC-Generate SalesOrder Payment Link-UH3
 
     [Documentation]   Try to Generate SalesOrder Payment Link with all the notification are enabled  but numbers are empty.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -448,7 +448,7 @@ JD-TC-Generate SalesOrder Payment Link-UH4
 
     [Documentation]   Try to Generate SalesOrder Payment Link with smsNotification is enabled  but number empty.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

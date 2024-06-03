@@ -15,7 +15,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 *** Variables ***
 
@@ -291,7 +291,7 @@ JD-TC-Get Bill By UUId -2
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
-        ${resp}=   Get File    /ebs/TDD/varfiles/musers.py
+        ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
         ${len}=   Split to lines  ${resp}
         ${length}=  Get Length   ${len}
         ${max_party}=  get_maxpartysize_subdomain
@@ -300,7 +300,7 @@ JD-TC-Get Bill By UUId -2
         Set Test Variable  ${sd1}  ${max_party['subdomain']}
         
         FOR   ${a}  IN RANGE    ${length}    
-                ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+                ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
                 Should Be Equal As Strings    ${resp.status_code}    200
 
                 ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -340,10 +340,10 @@ JD-TC-Get Bill By UUId -2
         # Log  ${resp.json()}
         # Should Be Equal As Strings    ${resp.status_code}    200 
 
-        clear_queue      ${MUSERNAME${a}}
-        clear_location   ${MUSERNAME${a}}
-        clear_service    ${MUSERNAME${a}}
-        clear_customer   ${MUSERNAME${a}}
+        clear_queue      ${PUSERNAME${a}}
+        clear_location   ${PUSERNAME${a}}
+        clear_service    ${PUSERNAME${a}}
+        clear_customer   ${PUSERNAME${a}}
 
         ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
         Log   ${resp.json()}
@@ -615,7 +615,7 @@ JD-TC-Get Bill By UUId -3
         # Log   ${resp.json()}
         # Should Be Equal As Strings    ${resp.status_code}    200
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
 
         ${resp}=  Get Consumer By Id  ${CUSERNAME9}
@@ -625,11 +625,11 @@ JD-TC-Get Bill By UUId -3
         Set Test Variable  ${Con_firstName}   ${resp.json()['userProfile']['firstName']}
         Set Test Variable  ${Con_lastName}   ${resp.json()['userProfile']['lastName']}
 
-        clear_service   ${MUSERNAME${a}}
-        clear_location  ${MUSERNAME${a}}
-        clear_queue      ${MUSERNAME${a}}
-        clear_appt_schedule   ${MUSERNAME${a}}
-        clear_customer   ${MUSERNAME${a}}
+        clear_service   ${PUSERNAME${a}}
+        clear_location  ${PUSERNAME${a}}
+        clear_queue      ${PUSERNAME${a}}
+        clear_appt_schedule   ${PUSERNAME${a}}
+        clear_customer   ${PUSERNAME${a}}
 
         ${resp}=   Get Appointment Settings
         Log   ${resp.json()}
@@ -835,7 +835,7 @@ JD-TC-Get Bill By UUId -4
         # Log   ${resp.json()}
         # Should Be Equal As Strings    ${resp.status_code}    200
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
 
         ${resp}=  Get Consumer By Id  ${CUSERNAME9}
@@ -845,11 +845,11 @@ JD-TC-Get Bill By UUId -4
         Set Test Variable  ${Con_firstName}   ${resp.json()['userProfile']['firstName']}
         Set Test Variable  ${Con_lastName}   ${resp.json()['userProfile']['lastName']}
 
-        clear_service   ${MUSERNAME${a}}
-        clear_location  ${MUSERNAME${a}}
-        clear_queue      ${MUSERNAME${a}}
-        clear_appt_schedule   ${MUSERNAME${a}}
-        clear_customer   ${MUSERNAME${a}}
+        clear_service   ${PUSERNAME${a}}
+        clear_location  ${PUSERNAME${a}}
+        clear_queue      ${PUSERNAME${a}}
+        clear_appt_schedule   ${PUSERNAME${a}}
+        clear_customer   ${PUSERNAME${a}}
 
         ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
         Log   ${resp.json()}

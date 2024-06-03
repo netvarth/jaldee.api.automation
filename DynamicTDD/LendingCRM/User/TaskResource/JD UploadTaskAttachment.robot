@@ -11,11 +11,11 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Resource          /ebs/TDD/Keywords.robot
 Library           /ebs/TDD/Imageupload.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -668,11 +668,11 @@ JD-TC-UploadTaskAttachment-8
 
     [Documentation]  Upload a file to a subtask.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME61}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME61}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${p_id}=  get_acc_id  ${MUSERNAME61}
+    ${p_id}=  get_acc_id  ${PUSERNAME61}
     Set Suite Variable   ${p_id}
 
     ${resp}=    Get Locations
@@ -738,7 +738,7 @@ JD-TC-UploadTaskAttachment-8
     Should Be Equal As Strings  ${resp.json()['id']}                  ${task_id2}
     Should Be Equal As Strings  ${resp.json()['taskUid']}             ${task_uid2}
 
-    ${cookie}   ${resp}=    Imageupload.spLogin     ${MUSERNAME61}    ${PASSWORD}
+    ${cookie}   ${resp}=    Imageupload.spLogin     ${PUSERNAME61}    ${PASSWORD}
     Log     ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}     200
 
@@ -771,7 +771,7 @@ JD-TC-UploadTaskAttachment-9
 
     [Documentation]  Upload a file by branch for a users task.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -804,7 +804,7 @@ JD-TC-UploadTaskAttachment-9
         FOR   ${i}  IN RANGE   0   ${len}
         
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME0}'
+            IF   not '${user_phone}' == '${HLPUSERNAME0}'
                 clear_users  ${user_phone}
             END
         END
@@ -825,7 +825,7 @@ JD-TC-UploadTaskAttachment-9
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -895,7 +895,7 @@ JD-TC-UploadTaskAttachment-9
     Should Be Equal As Strings    ${p_id}       ${resp.json()}[accountId]
     Should Be Equal As Strings    []       ${resp.json()}[notes]
 
-    ${cookie}   ${resp}=    Imageupload.spLogin     ${HLMUSERNAME0}    ${PASSWORD}
+    ${cookie}   ${resp}=    Imageupload.spLogin     ${HLPUSERNAME0}    ${PASSWORD}
     Log     ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}     200
 
@@ -1077,7 +1077,7 @@ JD-TC-UploadTaskAttachment-12
 
     [Documentation]  Upload a file by branch after assign it to a user.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1120,7 +1120,7 @@ JD-TC-UploadTaskAttachment-12
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings    ${resp.json()['assignee']['id']}                ${u_id1}
 
-    ${cookie}   ${resp}=    Imageupload.spLogin     ${HLMUSERNAME0}    ${PASSWORD}
+    ${cookie}   ${resp}=    Imageupload.spLogin     ${HLPUSERNAME0}    ${PASSWORD}
     Log     ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}     200
 
@@ -1154,11 +1154,11 @@ JD-TC-UploadTaskAttachment-12
 JD-TC-UploadTaskAttachment-13
     [Documentation]  create a task and then disable task in account settings then try to upload a file to that task.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME61}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME61}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${p_id}=  get_acc_id  ${MUSERNAME61}
+    ${p_id}=  get_acc_id  ${PUSERNAME61}
     Set Suite Variable   ${p_id}
 
     ${resp}=    Get Locations
@@ -1213,7 +1213,7 @@ JD-TC-UploadTaskAttachment-13
     Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
     Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}   ${resp}=    Imageupload.spLogin     ${MUSERNAME61}    ${PASSWORD}
+    ${cookie}   ${resp}=    Imageupload.spLogin     ${PUSERNAME61}    ${PASSWORD}
     Log     ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}     200
 

@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 
@@ -41,7 +41,7 @@ JD-TC-Get Prescription Template By Account Id-1
 
     [Documentation]     Get Prescription Template By Account Id
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -102,7 +102,7 @@ JD-TC-Get Prescription Template By Account Id-UH1
 
     [Documentation]   Get Prescription Template By Account Id with another provider login
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -126,7 +126,7 @@ JD-TC-Get Prescription Template By Account Id-2
 
     [Documentation]   Adding second  Template and Get Prescription Template By Account Id
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -170,7 +170,7 @@ JD-TC-Get Prescription Template By Account Id-3
 
     [Documentation]   Create MedicalRecordPrescription Template where template name contain  255 words and Get Prescription Template By Account Id
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -211,7 +211,7 @@ JD-TC-Get Prescription Template By Account Id-4
 
     [Documentation]   Create MedicalRecordPrescription Template where instructions contain 255 words and Get Prescription Template By Account Id
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -252,7 +252,7 @@ JD-TC-Get Prescription Template By Account Id-5
 
     [Documentation]   Create MedicalRecordPrescription Template where medicine name contain  255 words and Get Prescription Template By Account Id
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -293,7 +293,7 @@ JD-TC-Get Prescription Template By Account Id-6
 
     [Documentation]   Create MedicalRecordPrescription Template where template name contain  numbers and Get Prescription Template By Account Id
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -334,7 +334,7 @@ JD-TC-Get Prescription Template By Account Id-7
 
     [Documentation]   Create MedicalRecordPrescription Template contain empty prescription list and Get Prescription Template By Account Id
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -361,7 +361,7 @@ JD-TC-Get Prescription Template By Account Id-8
 
     [Documentation]   Get Prescription Template By Account Id-Create MedicalRecordPrescription Template where template name contain title contain numbers 
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -418,7 +418,7 @@ JD-TC-Get Prescription Template By Account Id-9
 
     [Documentation]    Update MedicalRecordPrescription Template and Get Prescription Template By Account Id
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

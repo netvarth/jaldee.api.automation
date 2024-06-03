@@ -1595,7 +1595,7 @@ JD-TC-Update Enquiry For SP-UH1
 #     [Documentation]   Update Enquiry with isLeadAutogenerate as true, leadMasterId & enquireMasterId.
 #     comment  Task and Lead doesn't get generated.
 
-#     ${resp}=   Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD}
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME28}  ${PASSWORD}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 

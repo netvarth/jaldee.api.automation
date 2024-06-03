@@ -15,7 +15,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -28,7 +28,7 @@ JD-TC-GetItemInvCountByFilter-1
 
     [Documentation]   Get Item Inv Count By Filter
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -81,7 +81,7 @@ JD-TC-GetItemInvCountByFilter-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -289,7 +289,7 @@ JD-TC-GetItemInvFilter-2
 
     [Documentation]   Get Item Inv Count By Filter - status filter
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -302,7 +302,7 @@ JD-TC-GetItemInvFilter-3
 
     [Documentation]   Get Item Inv Count By Filter - status filter
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -337,7 +337,7 @@ JD-TC-GetItemInvFilter-UH3
 
     [Documentation]   Get Item Inv Count By Filter - another provider trying to get
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -14,8 +14,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 ${xlFile}      ${EXECDIR}/TDD/ServiceoptionsQnr.xlsx   # DataSheet
@@ -84,7 +84,7 @@ JD-TC-ResubmitServiceOptionsForWaitlist-1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -133,7 +133,7 @@ JD-TC-ResubmitServiceOptionsForWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -169,7 +169,7 @@ JD-TC-ResubmitServiceOptionsForWaitlist-1
     Log         ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -247,7 +247,7 @@ JD-TC-ResubmitServiceOptionsForWaitlist-1
     Log  ${data}
     Set Suite Variable   ${data}
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLMUSERNAME19}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLPUSERNAME19}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
   
@@ -284,7 +284,7 @@ JD-TC-ResubmitServiceoptionsForWaitlist-2
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -333,7 +333,7 @@ JD-TC-ResubmitServiceoptionsForWaitlist-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -369,7 +369,7 @@ JD-TC-ResubmitServiceoptionsForWaitlist-2
     Log         ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -466,7 +466,7 @@ JD-TC-ResubmitServiceoptionsForWaitlist-2
     Log  ${data}
     Set Suite Variable   ${data}
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLMUSERNAME12}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLPUSERNAME12}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
   
@@ -503,7 +503,7 @@ JD-TC-ResubmitServiceoptionsForWaitlist-3
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -552,7 +552,7 @@ JD-TC-ResubmitServiceoptionsForWaitlist-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -588,7 +588,7 @@ JD-TC-ResubmitServiceoptionsForWaitlist-3
     Log         ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -691,7 +691,7 @@ JD-TC-ResubmitServiceoptionsForWaitlist-3
     Log  ${data}
     Set Suite Variable   ${data}
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLMUSERNAME16}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLPUSERNAME16}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
   
@@ -728,7 +728,7 @@ JD-TC-ResubmitServiceoptionsForWaitlist-UH1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -777,7 +777,7 @@ JD-TC-ResubmitServiceoptionsForWaitlist-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -813,7 +813,7 @@ JD-TC-ResubmitServiceoptionsForWaitlist-UH1
     Log         ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -906,7 +906,7 @@ JD-TC-ResubmitServiceoptionsForWaitlist-UH1
     Log  ${data}
     Set Suite Variable   ${data}
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLMUSERNAME22}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLPUSERNAME22}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
   

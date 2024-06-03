@@ -11,7 +11,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Resource          /ebs/TDD/SuperAdminKeywords.robot
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 ${nods}  0
@@ -21,11 +21,11 @@ ${nods}  0
 JD-TC-Delete addon -1
        [Documentation]   Provider adding 2 Multi User addon (Same),then delete one addon.
 
-       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD} 
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}   200
 
-       ${p_id1}=  get_acc_id  ${HLMUSERNAME7}
+       ${p_id1}=  get_acc_id  ${HLPUSERNAME7}
        Set Suite Variable   ${p_id1}
 
     
@@ -190,7 +190,7 @@ JD-TC-Delete addon -2
 	# should be equal as strings  ${resp.json()[0]['name']}  ${addon_name}	   	  
 	# Should Be Equal As Strings  ${resp.status_code}  200
 
-       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD} 
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -221,11 +221,11 @@ JD-TC-Delete addon -2
 JD-TC-Delete addon -3
        [Documentation]   Provider adding 2 Multi User addon,then delete active addon.
 
-       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD} 
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}   200
 
-       ${p_id1}=  get_acc_id  ${HLMUSERNAME8}
+       ${p_id1}=  get_acc_id  ${HLPUSERNAME8}
        Set Suite Variable   ${p_id1}
 
     
@@ -352,7 +352,7 @@ JD-TC-Delete addon -3
 JD-TC-Delete addon -UH1
        [Documentation]   Try to delete using addon.
 
-       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD} 
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -461,7 +461,7 @@ JD-TC-Delete addon -UH2
 	Should Be Equal As Strings  ${resp.status_code}  200
 	Set Suite Variable    ${addon_id}      ${resp.json()[0]['accountLicId']}
 
-       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD} 
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}   200
 

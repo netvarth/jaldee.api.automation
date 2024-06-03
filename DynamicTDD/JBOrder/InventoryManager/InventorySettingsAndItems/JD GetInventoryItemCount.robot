@@ -14,8 +14,8 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 
@@ -35,7 +35,7 @@ JD-TC-Get Inventory Item Count-1
 
     [Documentation]  Get Inventory Item Count
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME319}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME319}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -119,7 +119,7 @@ JD-TC-Get Inventory Item Count-1
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME319}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME319}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -599,7 +599,7 @@ JD-TC-Get Inventory Item Count-2
 
     [Documentation]  Get Inventory Item Count
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME319}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME319}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -612,7 +612,7 @@ JD-TC-Get Inventory Item Count-UH1
 
     [Documentation]  Get Inventory Item Count
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME319}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME319}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -625,7 +625,7 @@ JD-TC-Get Inventory Item Count-UH1
 JD-TC-Get Inventory Item Count-3
     [Documentation]    Get Item count after successfull order
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME318}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME318}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -654,7 +654,7 @@ JD-TC-Get Inventory Item Count-3
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------   
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME318}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME318}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -663,7 +663,7 @@ JD-TC-Get Inventory Item Count-3
     Set Suite Variable  ${user_id}  ${decrypted_data['id']}
     Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
 
-   ${accountId}=  get_acc_id  ${MUSERNAME318}
+   ${accountId}=  get_acc_id  ${PUSERNAME318}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -1096,7 +1096,7 @@ JD-TC-Get Inventory Item Count-3
 
 # ----------------------------- Provider take a Sales Order ------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME318}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME318}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${Cg_encid}=  Create Dictionary   encId=${inv_order_encid}   

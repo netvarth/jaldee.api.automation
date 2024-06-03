@@ -12,8 +12,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -25,7 +25,7 @@ JD-TC-GetDefaultCapabilities-1
 
     [Documentation]  Get default capabilities of an existing provider.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -48,26 +48,26 @@ JD-TC-GetDefaultCapabilities-2
     ${lastname_A}=  FakerLibrary.last_name
    
     ${PO_Number}    Generate random string    5    123456789
-    ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+${PO_Number}
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+${PO_Number}
 
     ${highest_package}=  get_highest_license_pkg
 
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Activation  ${MUSERNAME_E}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
     
     ${resp}=  Get Default Capabilities  ${rbac_feature[0]}
     Log  ${resp.content}
@@ -78,7 +78,7 @@ JD-TC-GetDefaultCapabilities-3
 
     [Documentation]  Get default capabilities by user login.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -136,7 +136,7 @@ JD-TC-GetDefaultCapabilities-3
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME63}'
+            IF   not '${user_phone}' == '${PUSERNAME63}'
                 clear_users  ${user_phone}
             END
         END

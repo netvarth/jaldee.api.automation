@@ -14,8 +14,8 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -34,7 +34,7 @@ JD-TC-Get Catalog Batch by Encid-1
 
     [Documentation]  creating batch item when inventory manager is on
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -118,7 +118,7 @@ JD-TC-Get Catalog Batch by Encid-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -634,7 +634,7 @@ JD-TC-Get Catalog Batch by Encid-2
 
     [Documentation]  creating multiple batch item for same catalog item batch when inventory manager is on
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -812,7 +812,7 @@ JD-TC-Get Catalog Batch by Encid-3
 
     [Documentation]    update batch and get catalog batch by encid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -868,7 +868,7 @@ JD-TC-Get Catalog Batch by Encid-4
 
     [Documentation]    update batch status as disable and get catalog batch by encid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -888,7 +888,7 @@ JD-TC-Get Catalog Batch by Encid-UH1
 
     [Documentation]   Get Catalog Item Batch By Encid with invalid catalog batch id
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -926,7 +926,7 @@ JD-TC-Get Catalog Batch by Encid-1
 
     [Documentation]   create of a batch of catalog items then get catalog batch by encid.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -979,10 +979,10 @@ JD-TC-Get Catalog Batch by Encid-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME32}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME32}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -1127,7 +1127,7 @@ JD-TC-Get Catalog Batch by Encid-2
 
     [Documentation]   create salesorder catalog items where inventory management is true then create catalog item batch where invmgnt is false then get batch by encid.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1194,7 +1194,7 @@ JD-TC-Get Catalog Batch by Encid-3
 
     [Documentation]    create new catalog item batch and get catalog batch by encid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

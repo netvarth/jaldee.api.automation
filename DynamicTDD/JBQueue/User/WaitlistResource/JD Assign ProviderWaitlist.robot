@@ -13,8 +13,8 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -37,7 +37,7 @@ ${waitlistedby}           PROVIDER
 JD-TC-AssignproviderWaitlist-1
     [Documentation]  Assingn waitlist to user
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -46,11 +46,11 @@ JD-TC-AssignproviderWaitlist-1
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${HLMUSERNAME2}
-    clear_service    ${HLMUSERNAME2}
-    clear_customer   ${HLMUSERNAME2}
+    clear_queue      ${HLPUSERNAME2}
+    clear_service    ${HLPUSERNAME2}
+    clear_customer   ${HLPUSERNAME2}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME2}
+    ${pid}=  get_acc_id  ${HLPUSERNAME2}
 
     
 
@@ -144,7 +144,7 @@ JD-TC-AssignproviderWaitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME4}+1000440000
+    ${ph1}=  Evaluate  ${HLPUSERNAME4}+1000440000
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -163,8 +163,8 @@ JD-TC-AssignproviderWaitlist-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${whpnum}=  Evaluate  ${HLMUSERNAME4}+336245
-    ${tlgnum}=  Evaluate  ${HLMUSERNAME4}+336345
+    ${whpnum}=  Evaluate  ${HLPUSERNAME4}+336245
+    ${tlgnum}=  Evaluate  ${HLPUSERNAME4}+336345
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCode[1]}  ${whpnum}  ${countryCode[1]}  ${tlgnum}
     Log   ${resp.json()}
@@ -200,7 +200,7 @@ JD-TC-AssignproviderWaitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${que_id1}  ${resp.json()}
 
-    ${ph2}=  Evaluate  ${HLMUSERNAME4}+1000440001
+    ${ph2}=  Evaluate  ${HLPUSERNAME4}+1000440001
     clear_users  ${ph2}
     ${firstname1}=  FakerLibrary.name
     ${lastname1}=  FakerLibrary.last_name
@@ -229,7 +229,7 @@ JD-TC-AssignproviderWaitlist-1
     Set Test Variable  ${que_id2}  ${resp.json()}
 
     
-    ${ph3}=  Evaluate  ${HLMUSERNAME4}+1000440003
+    ${ph3}=  Evaluate  ${HLPUSERNAME4}+1000440003
     clear_users  ${ph3}
     ${firstname2}=  FakerLibrary.name
     ${lastname2}=  FakerLibrary.last_name
@@ -337,13 +337,13 @@ JD-TC-AssignproviderWaitlist-1
 JD-TC-AssignproviderWaitlist-2
     [Documentation]  Assingn waitlist to user and then it again assign to another user
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_queue      ${HLMUSERNAME2}
-    clear_service    ${HLMUSERNAME2}
-    clear_customer   ${HLMUSERNAME2}
+    clear_queue      ${HLPUSERNAME2}
+    clear_service    ${HLPUSERNAME2}
+    clear_customer   ${HLPUSERNAME2}
 
     # ${resp}=    Get Locations
     # Log   ${resp.json()}
@@ -397,7 +397,7 @@ JD-TC-AssignproviderWaitlist-2
     Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
-    ${ph1}=  Evaluate  ${HLMUSERNAME2}+1000448764
+    ${ph1}=  Evaluate  ${HLPUSERNAME2}+1000448764
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -429,7 +429,7 @@ JD-TC-AssignproviderWaitlist-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${que_id1}  ${resp.json()}
 
-    ${ph2}=  Evaluate  ${HLMUSERNAME2}+1000455405
+    ${ph2}=  Evaluate  ${HLPUSERNAME2}+1000455405
     ${firstname2}=  FakerLibrary.name
     ${lastname2}=  FakerLibrary.last_name
     ${dob2}=  FakerLibrary.Date
@@ -510,13 +510,13 @@ JD-TC-AssignproviderWaitlist-2
 JD-TC-AssignproviderWaitlist-3
     [Documentation]  Assingn waitlist to user here user doesn't have any service and queue
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_queue      ${HLMUSERNAME2}
-    clear_service    ${HLMUSERNAME2}
-    clear_customer   ${HLMUSERNAME2}
+    clear_queue      ${HLPUSERNAME2}
+    clear_service    ${HLPUSERNAME2}
+    clear_customer   ${HLPUSERNAME2}
 
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -571,7 +571,7 @@ JD-TC-AssignproviderWaitlist-3
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
 
-    ${ph1}=  Evaluate  ${HLMUSERNAME2}+1000440006
+    ${ph1}=  Evaluate  ${HLPUSERNAME2}+1000440006
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -615,13 +615,13 @@ JD-TC-AssignproviderWaitlist-3
 JD-TC-AssignproviderWaitlist-4
     [Documentation]  Assingn waitlist to user and it reAssingn to the same user 
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_queue      ${HLMUSERNAME2}
-    clear_service    ${HLMUSERNAME2}
-    clear_customer   ${HLMUSERNAME2}
+    clear_queue      ${HLPUSERNAME2}
+    clear_service    ${HLPUSERNAME2}
+    clear_customer   ${HLPUSERNAME2}
 
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -676,7 +676,7 @@ JD-TC-AssignproviderWaitlist-4
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
 
-    ${ph1}=  Evaluate  ${HLMUSERNAME2}+1000440011
+    ${ph1}=  Evaluate  ${HLPUSERNAME2}+1000440011
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -708,7 +708,7 @@ JD-TC-AssignproviderWaitlist-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${que_id1}  ${resp.json()}
 
-    ${ph2}=  Evaluate  ${HLMUSERNAME2}+1000440012
+    ${ph2}=  Evaluate  ${HLPUSERNAME2}+1000440012
     ${firstname2}=  FakerLibrary.name
     ${lastname2}=  FakerLibrary.last_name
     ${dob2}=  FakerLibrary.Date
@@ -813,13 +813,13 @@ JD-TC-AssignproviderWaitlist-4
 JD-TC-AssignproviderWaitlist-5
     [Documentation]  Assingn waitlist to user and user generate bill
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_queue      ${HLMUSERNAME2}
-    clear_service    ${HLMUSERNAME2}
-    clear_customer   ${HLMUSERNAME2}
+    clear_queue      ${HLPUSERNAME2}
+    clear_service    ${HLPUSERNAME2}
+    clear_customer   ${HLPUSERNAME2}
 
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -874,7 +874,7 @@ JD-TC-AssignproviderWaitlist-5
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
 
-    ${ph1}=  Evaluate  ${HLMUSERNAME2}+1000440013
+    ${ph1}=  Evaluate  ${HLPUSERNAME2}+1000440013
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -906,7 +906,7 @@ JD-TC-AssignproviderWaitlist-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${que_id1}  ${resp.json()}
 
-    ${ph2}=  Evaluate  ${HLMUSERNAME2}+1000440014
+    ${ph2}=  Evaluate  ${HLPUSERNAME2}+1000440014
     ${firstname2}=  FakerLibrary.name
     ${lastname2}=  FakerLibrary.last_name
     ${dob2}=  FakerLibrary.Date
@@ -994,7 +994,7 @@ JD-TC-AssignproviderWaitlist-5
 JD-TC-AssignproviderWaitlist-6
     [Documentation]  Assingn 3 waitlist to the same user and get count
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1004,9 +1004,9 @@ JD-TC-AssignproviderWaitlist-6
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
 
-    clear_queue      ${HLMUSERNAME2}
-    clear_service    ${HLMUSERNAME2}
-    clear_customer   ${HLMUSERNAME2}
+    clear_queue      ${HLPUSERNAME2}
+    clear_service    ${HLPUSERNAME2}
+    clear_customer   ${HLPUSERNAME2}
 
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -1138,7 +1138,7 @@ JD-TC-AssignproviderWaitlist-6
     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      
 
-    ${ph1}=  Evaluate  ${HLMUSERNAME2}+1000440016
+    ${ph1}=  Evaluate  ${HLPUSERNAME2}+1000440016
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -1170,7 +1170,7 @@ JD-TC-AssignproviderWaitlist-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${que_id1}  ${resp.json()}
 
-    ${ph2}=  Evaluate  ${HLMUSERNAME2}+1000440017
+    ${ph2}=  Evaluate  ${HLPUSERNAME2}+1000440017
     ${firstname2}=  FakerLibrary.name
     ${lastname2}=  FakerLibrary.last_name
     ${dob2}=  FakerLibrary.Date
@@ -1292,7 +1292,7 @@ JD-TC-AssignproviderWaitlist-6
 JD-TC-AssignproviderWaitlist-7
     [Documentation]  Assingn waitlist to user here user contain user side waitlist and assigned waitlist 
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1301,11 +1301,11 @@ JD-TC-AssignproviderWaitlist-7
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sud_domain_id3}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${HLMUSERNAME11}
-    clear_service    ${HLMUSERNAME11}
-    clear_customer   ${HLMUSERNAME11}
+    clear_queue      ${HLPUSERNAME11}
+    clear_service    ${HLPUSERNAME11}
+    clear_customer   ${HLPUSERNAME11}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME11}
+    ${pid}=  get_acc_id  ${HLPUSERNAME11}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
@@ -1396,7 +1396,7 @@ JD-TC-AssignproviderWaitlist-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id3}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME11}+1000440000
+    ${ph1}=  Evaluate  ${HLPUSERNAME11}+1000440000
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -1415,8 +1415,8 @@ JD-TC-AssignproviderWaitlist-7
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${whpnum}=  Evaluate  ${HLMUSERNAME11}+336945
-    ${tlgnum}=  Evaluate  ${HLMUSERNAME11}+336845
+    ${whpnum}=  Evaluate  ${HLPUSERNAME11}+336945
+    ${tlgnum}=  Evaluate  ${HLPUSERNAME11}+336845
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id3}  ${sud_domain_id3}  ${bool[0]}  ${countryCode[1]}  ${whpnum}  ${countryCode[1]}  ${tlgnum}
     Log   ${resp.json()}
@@ -1555,7 +1555,7 @@ JD-TC-AssignproviderWaitlist-7
 JD-TC-AssignproviderWaitlist-8
     [Documentation]  Assingn waitlist to a assistant user
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1564,11 +1564,11 @@ JD-TC-AssignproviderWaitlist-8
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sud_domain_id3}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${HLMUSERNAME11}
-    clear_service    ${HLMUSERNAME11}
-    clear_customer   ${HLMUSERNAME11}
+    clear_queue      ${HLPUSERNAME11}
+    clear_service    ${HLPUSERNAME11}
+    clear_customer   ${HLPUSERNAME11}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME11}
+    ${pid}=  get_acc_id  ${HLPUSERNAME11}
 
     
 
@@ -1660,7 +1660,7 @@ JD-TC-AssignproviderWaitlist-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id3}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME11}+1000450000
+    ${ph1}=  Evaluate  ${HLPUSERNAME11}+1000450000
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -1679,8 +1679,8 @@ JD-TC-AssignproviderWaitlist-8
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${whpnum}=  Evaluate  ${HLMUSERNAME11}+336745
-    ${tlgnum}=  Evaluate  ${HLMUSERNAME11}+336645
+    ${whpnum}=  Evaluate  ${HLPUSERNAME11}+336745
+    ${tlgnum}=  Evaluate  ${HLPUSERNAME11}+336645
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[1]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id3}  ${sud_domain_id3}  ${bool[0]}  ${countryCode[1]}  ${whpnum}  ${countryCode[1]}  ${tlgnum}
     Log   ${resp.json()}
@@ -1753,7 +1753,7 @@ JD-TC-AssignproviderWaitlist-8
 JD-TC-AssignproviderWaitlist-9
     [Documentation]  Try to Assingn a done state waitlist
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1762,11 +1762,11 @@ JD-TC-AssignproviderWaitlist-9
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sud_domain_id3}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${HLMUSERNAME11}
-    clear_service    ${HLMUSERNAME11}
-    clear_customer   ${HLMUSERNAME11}
+    clear_queue      ${HLPUSERNAME11}
+    clear_service    ${HLPUSERNAME11}
+    clear_customer   ${HLPUSERNAME11}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME11}
+    ${pid}=  get_acc_id  ${HLPUSERNAME11}
 
     
 
@@ -1865,7 +1865,7 @@ JD-TC-AssignproviderWaitlist-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id3}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME11}+1000470000
+    ${ph1}=  Evaluate  ${HLPUSERNAME11}+1000470000
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -1884,8 +1884,8 @@ JD-TC-AssignproviderWaitlist-9
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${whpnum}=  Evaluate  ${HLMUSERNAME11}+336245
-    ${tlgnum}=  Evaluate  ${HLMUSERNAME11}+336345
+    ${whpnum}=  Evaluate  ${HLPUSERNAME11}+336245
+    ${tlgnum}=  Evaluate  ${HLPUSERNAME11}+336345
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id3}  ${sud_domain_id3}  ${bool[0]}  ${countryCode[1]}  ${whpnum}  ${countryCode[1]}  ${tlgnum}
     Log   ${resp.json()}
@@ -1978,7 +1978,7 @@ JD-TC-AssignproviderWaitlist-9
 JD-TC-AssignproviderWaitlist-10
     [Documentation]  Assingn waitlist to a admin user
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1987,11 +1987,11 @@ JD-TC-AssignproviderWaitlist-10
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sud_domain_id3}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${HLMUSERNAME11}
-    clear_service    ${HLMUSERNAME11}
-    clear_customer   ${HLMUSERNAME11}
+    clear_queue      ${HLPUSERNAME11}
+    clear_service    ${HLPUSERNAME11}
+    clear_customer   ${HLPUSERNAME11}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME11}
+    ${pid}=  get_acc_id  ${HLPUSERNAME11}
 
 
     ${resp}=  Get jaldeeIntegration Settings
@@ -2082,7 +2082,7 @@ JD-TC-AssignproviderWaitlist-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id3}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME11}+1000650000
+    ${ph1}=  Evaluate  ${HLPUSERNAME11}+1000650000
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -2101,8 +2101,8 @@ JD-TC-AssignproviderWaitlist-10
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${whpnum}=  Evaluate  ${HLMUSERNAME11}+335745
-    ${tlgnum}=  Evaluate  ${HLMUSERNAME11}+335645
+    ${whpnum}=  Evaluate  ${HLPUSERNAME11}+335745
+    ${tlgnum}=  Evaluate  ${HLPUSERNAME11}+335645
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[2]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id3}  ${sud_domain_id3}  ${bool[0]}  ${countryCode[1]}  ${whpnum}  ${countryCode[1]}  ${tlgnum}
     Log   ${resp.json()}
@@ -2174,13 +2174,13 @@ JD-TC-AssignproviderWaitlist-10
 JD-TC-AssignproviderWaitlist-UH1
     [Documentation]  User take checkin and try to assign another user
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_queue      ${HLMUSERNAME2}
-    clear_service    ${HLMUSERNAME2}
-    clear_customer   ${HLMUSERNAME2}
+    clear_queue      ${HLPUSERNAME2}
+    clear_service    ${HLPUSERNAME2}
+    clear_customer   ${HLPUSERNAME2}
 
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -2192,7 +2192,7 @@ JD-TC-AssignproviderWaitlist-UH1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ph1}=  Evaluate  ${HLMUSERNAME2}+1000410011
+    ${ph1}=  Evaluate  ${HLPUSERNAME2}+1000410011
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -2260,7 +2260,7 @@ JD-TC-AssignproviderWaitlist-UH1
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
 
-    ${ph2}=  Evaluate  ${HLMUSERNAME2}+1000410013
+    ${ph2}=  Evaluate  ${HLPUSERNAME2}+1000410013
     ${firstname2}=  FakerLibrary.name
     ${lastname2}=  FakerLibrary.last_name
     ${dob2}=  FakerLibrary.Date
@@ -2295,13 +2295,13 @@ JD-TC-AssignproviderWaitlist-UH1
 JD-TC-AssignproviderWaitlist-UH3
     [Documentation]  Assingn waitlist to a invalid user
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_queue      ${HLMUSERNAME2}
-    clear_service    ${HLMUSERNAME2}
-    clear_customer   ${HLMUSERNAME2}
+    clear_queue      ${HLPUSERNAME2}
+    clear_service    ${HLPUSERNAME2}
+    clear_customer   ${HLPUSERNAME2}
 
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -2357,7 +2357,7 @@ JD-TC-AssignproviderWaitlist-UH3
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
 
-    ${ph2}=  Evaluate  ${HLMUSERNAME2}+1000441019
+    ${ph2}=  Evaluate  ${HLPUSERNAME2}+1000441019
     clear_users  ${ph2}
     ${firstname2}=  FakerLibrary.name
     ${lastname2}=  FakerLibrary.last_name
@@ -2394,13 +2394,13 @@ JD-TC-AssignproviderWaitlist-UH3
 JD-TC-AssignproviderWaitlist-UH4
     [Documentation]  Assingn waitlist to user by using invalid waitlist id
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_queue      ${HLMUSERNAME2}
-    clear_service    ${HLMUSERNAME2}
-    clear_customer   ${HLMUSERNAME2}
+    clear_queue      ${HLPUSERNAME2}
+    clear_service    ${HLPUSERNAME2}
+    clear_customer   ${HLPUSERNAME2}
 
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -2456,7 +2456,7 @@ JD-TC-AssignproviderWaitlist-UH4
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
 
-    ${ph2}=  Evaluate  ${HLMUSERNAME2}+1000440118
+    ${ph2}=  Evaluate  ${HLPUSERNAME2}+1000440118
     ${firstname2}=  FakerLibrary.name
     ${lastname2}=  FakerLibrary.last_name
     ${dob2}=  FakerLibrary.Date
@@ -2492,7 +2492,7 @@ JD-TC-AssignproviderWaitlist-UH4
 JD-TC-AssignproviderWaitlist-UH5 
     [Documentation]  Assingn waitlist to another account's user
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2501,11 +2501,11 @@ JD-TC-AssignproviderWaitlist-UH5
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sud_domain_id1}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${HLMUSERNAME10}
-    clear_service    ${HLMUSERNAME10}
-    clear_customer   ${HLMUSERNAME10}
+    clear_queue      ${HLPUSERNAME10}
+    clear_service    ${HLPUSERNAME10}
+    clear_customer   ${HLPUSERNAME10}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME10}
+    ${pid}=  get_acc_id  ${HLPUSERNAME10}
 
     ${resp}=  Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -2563,7 +2563,7 @@ JD-TC-AssignproviderWaitlist-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id1}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME10}+1000440130
+    ${ph1}=  Evaluate  ${HLPUSERNAME10}+1000440130
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${pin}=  get_pincode
@@ -2600,13 +2600,13 @@ JD-TC-AssignproviderWaitlist-UH5
     Set Test Variable  ${que_id1}  ${resp.json()}
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_queue      ${HLMUSERNAME2}
-    clear_service    ${HLMUSERNAME2}
-    clear_customer   ${HLMUSERNAME2}
+    clear_queue      ${HLPUSERNAME2}
+    clear_service    ${HLPUSERNAME2}
+    clear_customer   ${HLPUSERNAME2}
 
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -2662,7 +2662,7 @@ JD-TC-AssignproviderWaitlist-UH5
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
 
-    ${ph2}=  Evaluate  ${HLMUSERNAME2}+1000440120
+    ${ph2}=  Evaluate  ${HLPUSERNAME2}+1000440120
     ${firstname2}=  FakerLibrary.name
     ${lastname2}=  FakerLibrary.last_name
     ${dob2}=  FakerLibrary.Date
@@ -2698,13 +2698,13 @@ JD-TC-AssignproviderWaitlist-UH5
 JD-TC-AssignproviderWaitlist-UH6
     [Documentation]  Try to Assingn a canceled waitlist
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_queue      ${HLMUSERNAME2}
-    clear_service    ${HLMUSERNAME2}
-    clear_customer   ${HLMUSERNAME2}
+    clear_queue      ${HLPUSERNAME2}
+    clear_service    ${HLPUSERNAME2}
+    clear_customer   ${HLPUSERNAME2}
 
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -2763,7 +2763,7 @@ JD-TC-AssignproviderWaitlist-UH6
     ${resp}=  Waitlist Action Cancel  ${wid}  ${cncl_resn}  ${desc}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ph2}=  Evaluate  ${HLMUSERNAME2}+1000440221
+    ${ph2}=  Evaluate  ${HLPUSERNAME2}+1000440221
     clear_users  ${ph2}
     ${firstname2}=  FakerLibrary.name
     ${lastname2}=  FakerLibrary.last_name
@@ -2802,13 +2802,13 @@ JD-TC-AssignproviderWaitlist-UH6
 JD-TC-AssignproviderWaitlist-UH7
     [Documentation]  Try to Assingn waitlist through consumer login
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_queue      ${HLMUSERNAME2}
-    clear_service    ${HLMUSERNAME2}
-    clear_customer   ${HLMUSERNAME2}
+    clear_queue      ${HLPUSERNAME2}
+    clear_service    ${HLPUSERNAME2}
+    clear_customer   ${HLPUSERNAME2}
 
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -2863,7 +2863,7 @@ JD-TC-AssignproviderWaitlist-UH7
     Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
-    ${ph2}=  Evaluate  ${HLMUSERNAME2}+1000440022
+    ${ph2}=  Evaluate  ${HLPUSERNAME2}+1000440022
     ${firstname2}=  FakerLibrary.name
     ${lastname2}=  FakerLibrary.last_name
     ${dob2}=  FakerLibrary.Date
@@ -2912,7 +2912,7 @@ JD-TC-AssignproviderWaitlist-UH8
 JD-TC-AssignproviderWaitlist-UH9
     [Documentation]  Try to Assingn a started waitlist
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2921,11 +2921,11 @@ JD-TC-AssignproviderWaitlist-UH9
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sud_domain_id3}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${HLMUSERNAME11}
-    clear_service    ${HLMUSERNAME11}
-    clear_customer   ${HLMUSERNAME11}
+    clear_queue      ${HLPUSERNAME11}
+    clear_service    ${HLPUSERNAME11}
+    clear_customer   ${HLPUSERNAME11}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME11}
+    ${pid}=  get_acc_id  ${HLPUSERNAME11}
 
 
     ${resp}=  Get jaldeeIntegration Settings
@@ -3024,7 +3024,7 @@ JD-TC-AssignproviderWaitlist-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id3}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME11}+1000460000
+    ${ph1}=  Evaluate  ${HLPUSERNAME11}+1000460000
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -3043,8 +3043,8 @@ JD-TC-AssignproviderWaitlist-UH9
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${whpnum}=  Evaluate  ${HLMUSERNAME11}+336545
-    ${tlgnum}=  Evaluate  ${HLMUSERNAME11}+336445
+    ${whpnum}=  Evaluate  ${HLPUSERNAME11}+336545
+    ${tlgnum}=  Evaluate  ${HLPUSERNAME11}+336445
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id3}  ${sud_domain_id3}  ${bool[0]}  ${countryCode[1]}  ${whpnum}  ${countryCode[1]}  ${tlgnum}
     Log   ${resp.json()}
@@ -3118,7 +3118,7 @@ JD-TC-AssignproviderWaitlist-UH9
 
 JD-TC-CreateUser -0
     [Documentation]  Create 20 users by branch login and assign waitlist
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3127,11 +3127,11 @@ JD-TC-CreateUser -0
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${MUSERNAME58}
-    clear_service    ${MUSERNAME58}
-    clear_customer   ${MUSERNAME58}
+    clear_queue      ${PUSERNAME58}
+    clear_service    ${PUSERNAME58}
+    clear_customer   ${PUSERNAME58}
 
-    ${pid}=  get_acc_id  ${MUSERNAME58}
+    ${pid}=  get_acc_id  ${PUSERNAME58}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
@@ -3223,7 +3223,7 @@ JD-TC-CreateUser -0
     FOR   ${a}  IN RANGE   10
             
         ${cons_num}    Random Int  min=123456   max=999999
-        ${ph1}=  Evaluate  ${HLMUSERNAME2}+${cons_num}
+        ${ph1}=  Evaluate  ${HLPUSERNAME2}+${cons_num}
         Set Test Variable  ${ph1${a}}  ${ph1}
         ${firstname}=  FakerLibrary.first_name
         ${lastname}=  FakerLibrary.last_name
@@ -3249,7 +3249,7 @@ JD-TC-CreateUser -0
 JD-TC-CreateUser -01
 
     [Documentation]  take 20 waitlist and Create 20 users by branch login and assign each waitlist 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME66}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME66}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3258,11 +3258,11 @@ JD-TC-CreateUser -01
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${MUSERNAME66}
-    clear_service    ${MUSERNAME66}
-    clear_customer   ${MUSERNAME66}
+    clear_queue      ${PUSERNAME66}
+    clear_service    ${PUSERNAME66}
+    clear_customer   ${PUSERNAME66}
 
-    ${pid}=  get_acc_id  ${MUSERNAME66}
+    ${pid}=  get_acc_id  ${PUSERNAME66}
 
     # ${up_addons}=   Get upgradable addons
     # Log  ${up_addons.json()}
@@ -3359,7 +3359,7 @@ JD-TC-CreateUser -01
     FOR   ${a}  IN RANGE   20
             
         ${cons_num}    Random Int  min=123456   max=999999
-        ${ph1}=  Evaluate  ${HLMUSERNAME2}+${cons_num}
+        ${ph1}=  Evaluate  ${HLPUSERNAME2}+${cons_num}
         Set Test Variable  ${ph1${a}}  ${ph1}
         ${firstname}=  FakerLibrary.first_name
         ${lastname}=  FakerLibrary.last_name
@@ -3400,13 +3400,13 @@ JD-TC-CreateUser -01
 JD-TC-AssignproviderWaitlist-4
     [Documentation]  Assingn waitlist to user here user doesn't have any service and queue
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_queue      ${HLMUSERNAME2}
-    clear_service    ${HLMUSERNAME2}
-    clear_customer   ${HLMUSERNAME2}
+    clear_queue      ${HLPUSERNAME2}
+    clear_service    ${HLPUSERNAME2}
+    clear_customer   ${HLPUSERNAME2}
 
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -3461,7 +3461,7 @@ JD-TC-AssignproviderWaitlist-4
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
 
-    ${ph1}=  Evaluate  ${HLMUSERNAME2}+1000440007
+    ${ph1}=  Evaluate  ${HLPUSERNAME2}+1000440007
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${address}=  get_address
@@ -3494,7 +3494,7 @@ JD-TC-AssignproviderWaitlist-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${que_id1}  ${resp.json()}
 
-    ${ph2}=  Evaluate  ${HLMUSERNAME2}+1000440008
+    ${ph2}=  Evaluate  ${HLPUSERNAME2}+1000440008
     ${firstname2}=  FakerLibrary.name
     ${lastname2}=  FakerLibrary.last_name
     ${address2}=  get_address
@@ -3534,13 +3534,13 @@ JD-TC-AssignproviderWaitlist-4
 JD-TC-AssignproviderWaitlist-UH2
     [Documentation]  Assingn waitlist to user but didn't create any user in this id
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_queue      ${HLMUSERNAME2}
-    clear_service    ${HLMUSERNAME2}
-    clear_customer   ${HLMUSERNAME2}
+    clear_queue      ${HLPUSERNAME2}
+    clear_service    ${HLPUSERNAME2}
+    clear_customer   ${HLPUSERNAME2}
 
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -3596,7 +3596,7 @@ JD-TC-AssignproviderWaitlist-UH2
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
 
-    ${ph2}=  Evaluate  ${HLMUSERNAME2}+1000410020
+    ${ph2}=  Evaluate  ${HLPUSERNAME2}+1000410020
     ${firstname2}=  FakerLibrary.name
     ${lastname2}=  FakerLibrary.last_name
     ${dob2}=  FakerLibrary.Date

@@ -12,8 +12,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -47,12 +47,12 @@ JD-TC-Get_User_Specified_Schedules-1
 
     [Documentation]   Get all IVR user details
 
-    clear_queue      ${HLMUSERNAME6}
-    # clear_location   ${HLMUSERNAME6}
-    clear_service    ${HLMUSERNAME6}
-    clear_customer   ${HLMUSERNAME6}
+    clear_queue      ${HLPUSERNAME6}
+    # clear_location   ${HLPUSERNAME6}
+    clear_service    ${HLPUSERNAME6}
+    clear_customer   ${HLPUSERNAME6}
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -174,7 +174,7 @@ JD-TC-Get_User_Specified_Schedules-2
 
     [Documentation]  Get schedules using id  ,without creating schedule for same provider
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -267,7 +267,7 @@ JD-TC-Get_User_Specified_Schedules-UH1
 
     [Documentation]   Get user specified schedules where user id is invalid
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}

@@ -14,7 +14,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 
 
@@ -41,27 +41,27 @@ JD-TC-CreateVacation-1
     Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
     ${firstname_A}=  FakerLibrary.first_name
     ${lastname_A}=  FakerLibrary.last_name
-    ${MUSERNAME_E1}=  Evaluate  ${MUSERNAME}+778806576
+    ${PUSERNAME_E1}=  Evaluate  ${PUSERNAME}+778806576
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E1}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E1}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_E1}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E1}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_E1}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E1}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E1}${\n}
-    Set Suite Variable  ${MUSERNAME_E1}
-    ${id}=  get_id  ${MUSERNAME_E1}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E1}${\n}
+    Set Suite Variable  ${PUSERNAME_E1}
+    ${id}=  get_id  ${PUSERNAME_E1}
     ${bs}=  FakerLibrary.bs
 
     
-    ${ph1}=  Evaluate  ${MUSERNAME_E1}+1000880000
-    ${ph2}=  Evaluate  ${MUSERNAME_E1}+2000880000
+    ${ph1}=  Evaluate  ${PUSERNAME_E1}+1000880000
+    ${ph2}=  Evaluate  ${PUSERNAME_E1}+2000880000
     ${views}=  Random Element    ${Views}
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -252,7 +252,7 @@ JD-TC-CreateVacation-1
 
 JD-TC-CreateVacation-2
     [Documentation]    Using Multiple Appointment solts when Appointment is Enable
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -369,7 +369,7 @@ JD-TC-CreateVacation-2
 JD-TC-CreateVacation-3
     [Documentation]     Using Multiple Appointment slots and given the future date to create vacation
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
      
@@ -415,7 +415,7 @@ JD-TC-CreateVacation-3
 JD-TC-CreateVacation-4
     [Documentation]    Multiple Appointment Solts and Appointment is Enable and given the future date to create vacation
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -534,7 +534,7 @@ JD-TC-CreateVacation-4
 
 JD-TC-CreateVacation-5
     [Documentation]  Creating a Vacation with out of timeframe schedule
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -565,7 +565,7 @@ JD-TC-CreateVacation-5
 JD-TC-CreateVacation-UH1
     [Documentation]  Create an already existing Vacation
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -584,7 +584,7 @@ JD-TC-CreateVacation-UH1
 
 JD-TC-CreateVacation-UH2
     [Documentation]   Provider ID is Empty when Creating Vacation
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -603,7 +603,7 @@ JD-TC-CreateVacation-UH2
     
 JD-TC-CreateVacation-UH3
     [Documentation]   Giving Invalid Provider ID when Creating Vacation
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${start_time}=  add_timezone_time  ${tz}  1  00  
@@ -624,7 +624,7 @@ JD-TC-CreateVacation-UH3
 JD-TC-CreateVacation-UH4
     [Documentation]  create a past date  vacation for a valid provider
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -647,7 +647,7 @@ JD-TC-CreateVacation-UH4
 JD-TC-CreateVacation-UH5
     [Documentation]  create  an overlapping end time for an existing vacation
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -674,7 +674,7 @@ JD-TC-CreateVacation-UH5
 JD-TC-CreateVacation-UH6
     [Documentation]  create  an overlapping start time for an existing vacation
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -695,7 +695,7 @@ JD-TC-CreateVacation-UH6
 JD-TC-CreateVacation-UH7
     [Documentation]  create a vacation with starttime less than already existing  and endtime greater than existing one
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -718,7 +718,7 @@ JD-TC-CreateVacation-UH7
 JD-TC-CreateVacation-UH8
     [Documentation]  create a past time  vacation for a valid provider on current day
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -750,7 +750,7 @@ JD-TC-CreateVacation-UH9
 JD-TC-CreateVacation-UH10
     [Documentation]    Take a appointment, then try to create vacation
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -883,7 +883,7 @@ JD-TC-CreateVacation-UH10
 # JD-TC-CreateVacation-UH13
 #     [Documentation]    Create vacation, then try to take an appointment
     
-#     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -899,7 +899,7 @@ JD-TC-CreateVacation-UH10
 JD-TC-CreateVacation-UH11
     [Documentation]    Add consumer to Future day appointment, then try to create vacation
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -976,7 +976,7 @@ JD-TC-CreateVacation-UH11
 
 JD-TC-CreateVacation-UH12
     [Documentation]    overlapped start time
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1080,7 +1080,7 @@ JD-TC-CreateVacation-UH12
    
 JD-TC-CreateVacation-UH13
     [Documentation]    overlapped end time
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1139,7 +1139,7 @@ JD-TC-CreateVacation-UH13
 JD-TC-CreateVacation-UH15
     [Documentation]    Create vacation, then try to Add consumer to Future Day appointment
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1154,10 +1154,10 @@ JD-TC-CreateVacation-UH15
 JD-TC-CreateVacation-UH16
     [Documentation]    Consumer completes prepayment, then provider create vacation
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${p_id}=  get_acc_id  ${MUSERNAME_E1}
+    ${p_id}=  get_acc_id  ${PUSERNAME_E1}
 
     ${GST_num}  ${pan_num}=   db.Generate_gst_number   ${Container_id}
     ${resp}=  Update Tax Percentage  ${gstpercentage[3]}  ${GST_num} 
@@ -1173,12 +1173,12 @@ JD-TC-CreateVacation-UH16
     ${bank_name}=  FakerLibrary.company
     ${name}=  FakerLibrary.name
     ${branch}=   db.get_place
-    ${resp}=   Update Account Payment Settings   ${bool[0]}  ${bool[0]}  ${bool[1]}  ${MUSERNAME_E1}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
+    ${resp}=   Update Account Payment Settings   ${bool[0]}  ${bool[0]}  ${bool[1]}  ${PUSERNAME_E1}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  payuVerify  ${pid}
     Log  ${resp}
-    ${resp}=   Update Account Payment Settings   ${bool[1]}  ${bool[0]}  ${bool[1]}  ${MUSERNAME_E1}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}    
+    ${resp}=   Update Account Payment Settings   ${bool[1]}  ${bool[0]}  ${bool[1]}  ${PUSERNAME_E1}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}    
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  SetMerchantId  ${pid}  ${merchantid}
@@ -1312,7 +1312,7 @@ JD-TC-CreateVacation-UH16
     Verify Response  ${resp}  paymentStatus=${paymentStatus[1]}     waitlistStatus=${wl_status[0]}
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
  

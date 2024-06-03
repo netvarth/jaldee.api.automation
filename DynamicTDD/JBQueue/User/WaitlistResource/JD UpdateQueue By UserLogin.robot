@@ -8,9 +8,9 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 ${SERVICE1}  Makeup1  
@@ -28,11 +28,11 @@ JD-TC-UpdateQueueByUserLogin-1
 
      [Documentation]  Create a queue for user and Update that queue
 
-     ${resp}=   Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD} 
+     ${resp}=   Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${p_id1}=  get_acc_id  ${HLMUSERNAME3}
+    ${p_id1}=  get_acc_id  ${HLPUSERNAME3}
     Set Suite Variable   ${p_id1}
 
     # ${resp}=    Get Locations
@@ -225,7 +225,7 @@ JD-TC-UpdateQueueByUserLogin-2
 JD-TC-UpdateQueueByUserLogin-UH1
     [Documentation]    Create a queue and update that queue with  same details of another user queue
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${u_id1}=  Create Sample User
@@ -276,7 +276,7 @@ JD-TC-UpdateQueueByUserLogin-UH2
 
      [Documentation]  Create a queue for a user with branch's service id
 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${desc}=   FakerLibrary.sentence

@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Test Cases ***
 
@@ -22,7 +22,7 @@ JD-TC-GetItemManufactureCountByFilter-1
 
     [Documentation]  Get Item Manufacture Count Filter
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME25}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -76,7 +76,7 @@ JD-TC-GetItemManufactureCountByFilter-2
 
     [Documentation]   Get Item Manufacture Count Filter - with manufactureCode
  
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME25}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -90,7 +90,7 @@ JD-TC-GetItemManufactureCountByFilter-3
 
     [Documentation]   Get Item Manufacture Count Filter - with manufactureName
  
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME25}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -103,7 +103,7 @@ JD-TC-GetItemManufactureCountByFilter-4
 
     [Documentation]   Get Item Manufacture Count Filter - with status enable
  
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME25}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -116,7 +116,7 @@ JD-TC-GetItemManufactureCountByFilter-5
 
     [Documentation]   Get Item Manufacture Count Filter - with status Disable
  
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME25}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

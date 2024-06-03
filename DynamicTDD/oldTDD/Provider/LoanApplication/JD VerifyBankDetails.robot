@@ -13,8 +13,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -55,7 +55,7 @@ JD-TC-Verify Bank Details-1
                                   
     [Documentation]             create loan and Verify bank details.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -446,7 +446,7 @@ JD-TC-Verify Bank Details-UH1
                                   
     [Documentation]               Verify bank details with loanid as empty
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -460,7 +460,7 @@ JD-TC-Verify Bank Details-UH2
 
     [Documentation]               Verify bank details with loan product as empty
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -473,7 +473,7 @@ JD-TC-Verify Bank Details-UH3
                                   
     [Documentation]               Verify bank details with loan category as empty
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -486,7 +486,7 @@ JD-TC-Verify Bank Details-UH4
                                   
     [Documentation]               Verify bank details with loan type as empty
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -499,7 +499,7 @@ JD-TC-Verify Bank Details-UH5
                                   
     [Documentation]               Verify bank details with loan loanscheme as empty
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -512,7 +512,7 @@ JD-TC-Verify Bank Details-UH6
                                   
     [Documentation]               Verify bank details with loan invoice amount as empty
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -526,7 +526,7 @@ JD-TC-Verify Bank Details-UH7
                                   
     [Documentation]               Verify bank details with loan down payment Amount as empty
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -540,7 +540,7 @@ JD-TC-Verify Bank Details-UH8
                                   
     [Documentation]               Verify bank details with loan requested Amount as empty
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -554,7 +554,7 @@ JD-TC-Verify Bank Details-UH9
                                   
     [Documentation]               Verify bank details with montly Income as empty
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -567,7 +567,7 @@ JD-TC-Verify Bank Details-UH10
                                   
     [Documentation]               Verify bank details with emi Paid Amount Monthly as empty
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -580,7 +580,7 @@ JD-TC-Verify Bank Details-UH11
                                   
     [Documentation]               Verify bank details with Loan Application Kyc List as empty
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -593,7 +593,7 @@ JD-TC-Verify Bank Details-UH12
                                   
     [Documentation]               Verify bank details with employment Status as empty
     
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     # Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -624,7 +624,7 @@ JD-TC-Verify Bank Details-UH13
                                   
     [Documentation]               Verify bank details with monthlyIncome as empty
     
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     # Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -655,7 +655,7 @@ JD-TC-Verify Bank Details-UH14
                                   
     [Documentation]               Verify bank details with nomineeType as empty
     
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     # Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -685,7 +685,7 @@ JD-TC-Verify Bank Details-UH15
                                   
     [Documentation]               Verify bank details with nomineeName as empty
     
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     # Set Test Variable  ${provider_id}  ${resp.json()['id']}

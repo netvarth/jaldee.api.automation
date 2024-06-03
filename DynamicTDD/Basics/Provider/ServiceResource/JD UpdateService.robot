@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 *** Variables ***
 
@@ -642,13 +642,13 @@ Billable
 
 Non Billable
 
-    ${resp}=   Get File    /ebs/TDD/varfiles/musers.py
+    ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
         ${len}=   Split to lines  ${resp}
         ${length}=  Get Length   ${len}
 
      FOR    ${a}   IN RANGE    ${length}
-        clear_service       ${MUSERNAME${a}}
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        clear_service       ${PUSERNAME${a}}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
 
         ${decrypted_data}=  db.decrypt_data  ${resp.content}

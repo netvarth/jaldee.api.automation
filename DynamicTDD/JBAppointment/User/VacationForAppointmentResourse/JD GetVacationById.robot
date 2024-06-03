@@ -14,7 +14,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 *** Variables ***
@@ -36,26 +36,26 @@ JD-TC-GetByIdVacation-1
     Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
     ${firstname_A}=  FakerLibrary.first_name
     ${lastname_A}=  FakerLibrary.last_name
-    ${MUSERNAME_E1}=  Evaluate  ${MUSERNAME}+710993018
+    ${PUSERNAME_E1}=  Evaluate  ${PUSERNAME}+710993018
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E1}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E1}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_E1}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E1}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_E1}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E1}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E1}${\n}
-    Set Suite Variable  ${MUSERNAME_E1}
-    ${id}=  get_id  ${MUSERNAME_E1}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E1}${\n}
+    Set Suite Variable  ${PUSERNAME_E1}
+    ${id}=  get_id  ${PUSERNAME_E1}
     ${bs}=  FakerLibrary.bs
     
-    ${ph1}=  Evaluate  ${MUSERNAME_E1}+1099880111
-    ${ph2}=  Evaluate  ${MUSERNAME_E1}+2099880111
+    ${ph1}=  Evaluate  ${PUSERNAME_E1}+1099880111
+    ${ph2}=  Evaluate  ${PUSERNAME_E1}+2099880111
     ${views}=  Random Element    ${Views}
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -240,7 +240,7 @@ JD-TC-GetByIdVacation-1
 JD-TC-GetByIdVacation-2
     [Documentation]   Get By Id after Created a Vacation
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -315,7 +315,7 @@ JD-TC-GetByIdVacation-2
 
 JD-TC-GetByIdVacation-UH1
     [Documentation]    GetById is Zero after Created a Vacation
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Get Vacation By Id   0
@@ -326,7 +326,7 @@ JD-TC-GetByIdVacation-UH1
 
 JD-TC-GetByIdVacation-UH2
     [Documentation]  Verifying Get By id Using Existing Branch Number
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -370,7 +370,7 @@ JD-TC-GetByIdVacation-UH4
 *** Comments ***
 JD-TC-GetByIdVacation-4
     [Documentation]   GetById is Empty after Created a Vacation   
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Get Vacation By Id  ${EMPTY}

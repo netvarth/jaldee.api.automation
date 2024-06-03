@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Test Cases ***
 
@@ -22,7 +22,7 @@ JD-TC-GetItemTax-1
 
     [Documentation]  Get Item tax
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME27}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME27}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -62,7 +62,7 @@ JD-TC-GetItemTax-UH1
 
     [Documentation]  Get Item tax - where item tax id is invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME27}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME27}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -86,7 +86,7 @@ JD-TC-GetItemTax-UH3
 
     [Documentation]  Get Item tax - another provider who didnt created item tax
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

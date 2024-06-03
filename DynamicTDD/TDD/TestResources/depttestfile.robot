@@ -12,7 +12,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 *** Variables ***
 
@@ -28,7 +28,7 @@ JD-TC-CheckDepartment-2
 
     [Documentation]  Get Bill settings for Multi-User Account
 
-    ${providers}=   Get File    /ebs/TDD/varfiles/musers.py
+    ${providers}=   Get File    /ebs/TDD/varfiles/providers.py
     ${pro_list}=   Split to lines  ${providers}
     ${length}=  Get Length   ${pro_list}
 
@@ -136,11 +136,11 @@ JD-TC-CheckDepartment-2
 JD-TC-CreateVirtualService-(Billable Subdomain)-17
     [Documentation]   create virtual service for a user
     
-    delete_virtual_service  ${MUSERNAME27}
-    clear_service  ${MUSERNAME27}
-    # clear_Department    ${MUSERNAME27}
+    delete_virtual_service  ${PUSERNAME27}
+    clear_service  ${PUSERNAME27}
+    # clear_Department    ${PUSERNAME27}
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -211,14 +211,14 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-17
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ZOOM_id0}=  Format String  ${ZOOM_url}  ${MUSERNAME5}
+    ${ZOOM_id0}=  Format String  ${ZOOM_url}  ${PUSERNAME5}
     Set Suite Variable   ${ZOOM_id0}
 
     ${instructions1}=   FakerLibrary.sentence
     ${instructions2}=   FakerLibrary.sentence
 
     ${VirtualcallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_id0}   status=ACTIVE    instructions=${instructions1} 
-    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${MUSERNAME5}   countryCode=${countryCodes[0]}  status=ACTIVE    instructions=${instructions2} 
+    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME5}   countryCode=${countryCodes[0]}  status=ACTIVE    instructions=${instructions2} 
     ${vcm1}=  Create List  ${VirtualcallingMode1}   ${VirtualcallingMode2}
 
     ${resp}=  Update Virtual Calling Mode   ${vcm1}

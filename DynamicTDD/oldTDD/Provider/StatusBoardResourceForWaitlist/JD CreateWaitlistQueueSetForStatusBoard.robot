@@ -30,21 +30,21 @@ JD-TC-CreateQueueSet-1
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_K}=  Evaluate  ${MUSERNAME}+433726
+    ${PUSERNAME_K}=  Evaluate  ${PUSERNAME}+433726
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_K}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_K}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_K}  0
+    ${resp}=  Account Activation  ${PUSERNAME_K}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_K}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_K}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_K}${\n}
-    Set Suite Variable  ${MUSERNAME_K}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_K}${\n}
+    Set Suite Variable  ${PUSERNAME_K}
 
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
@@ -264,21 +264,21 @@ JD-TC-CreateQueueSet-5
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_G}=  Evaluate  ${MUSERNAME}+434726
+    ${PUSERNAME_G}=  Evaluate  ${PUSERNAME}+434726
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_G}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_G}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_G}  0
+    ${resp}=  Account Activation  ${PUSERNAME_G}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_G}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_G}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_G}${\n}
-    Set Suite Variable  ${MUSERNAME_G}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_G}${\n}
+    Set Suite Variable  ${PUSERNAME_G}
     
 
     ${s_id3}=  Create Sample Service  ${SERVICE3}
@@ -341,7 +341,7 @@ JD-TC-CreateQueueSet-5
 JD-TC-CreateQueueSet-6
 
 	[Documentation]  Create a QueueSet for same department with another QueueSet details
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${order1}=   Random Int   min=0   max=1
     ${Values}=  FakerLibrary.Words  	nb=3
@@ -410,7 +410,7 @@ JD-TC-CreateQueueSet -UH2
 
 JD-TC-CreateQueueSet-UH3
     [Documentation]  Create a QueueSet which is already created
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dept1}=   Create Dictionary  departmentId=${depid1}
     ${dept}=  Create List   ${dept1}

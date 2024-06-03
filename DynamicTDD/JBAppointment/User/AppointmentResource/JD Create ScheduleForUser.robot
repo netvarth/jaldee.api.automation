@@ -8,9 +8,9 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -23,13 +23,13 @@ ${self}   0
 JD-TC-CreateScheduleForUser-1
     [Documentation]    Create an appointment schedule for user
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${HLMUSERNAME19}
-    # clear_location  ${HLMUSERNAME19}
-    clear_appt_schedule   ${HLMUSERNAME19}
+    clear_service   ${HLPUSERNAME19}
+    # clear_location  ${HLPUSERNAME19}
+    clear_appt_schedule   ${HLPUSERNAME19}
     
     ${resp2}=   Get Business Profile
     Log  ${resp2.json()}
@@ -81,8 +81,8 @@ JD-TC-CreateScheduleForUser-1
     Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Test Variable  ${pin}  ${resp.json()[0]['PostOffice'][0]['Pincode']}    
 
-    ${whpnum}=  Evaluate  ${HLMUSERNAME19}+336245
-    ${tlgnum}=  Evaluate  ${HLMUSERNAME19}+336345
+    ${whpnum}=  Evaluate  ${HLPUSERNAME19}+336245
+    ${tlgnum}=  Evaluate  ${HLPUSERNAME19}+336345
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERPH0}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
@@ -93,7 +93,7 @@ JD-TC-CreateScheduleForUser-1
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME19}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -150,7 +150,7 @@ JD-TC-CreateScheduleForUser-1
 
 JD-TC-CreateScheduleForUser-2
     [Documentation]    Create an appointment schedule with multiple services for user
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -266,7 +266,7 @@ JD-TC-CreateScheduleForUser-2
 
 JD-TC-CreateScheduleForUser-3
     [Documentation]    Create multiple appointment schedules with different services for user
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -372,7 +372,7 @@ JD-TC-CreateScheduleForUser-4
 
     [Documentation]  User create a queue with base location and verify get locations by user id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -417,7 +417,7 @@ JD-TC-CreateScheduleForUser-4
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME10}'
+            IF   not '${user_phone}' == '${HLPUSERNAME10}'
                 clear_users  ${user_phone}
             END
         END
@@ -481,7 +481,7 @@ JD-TC-CreateScheduleForUser-5
     [Documentation]  User create an appt schedule and take appointment for consumer with base location and verify get locations by user id.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

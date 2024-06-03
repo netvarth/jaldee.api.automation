@@ -15,11 +15,11 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ApiKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -91,7 +91,7 @@ JD-TC-SalesHeadWithRBAC-1
                                   
     [Documentation]               createBranch Using Sales Head Role with RBAC
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -199,7 +199,7 @@ JD-TC-SalesHeadWithRBAC-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME22}'
+            IF   not '${user_phone}' == '${HLPUSERNAME22}'
                 clear_users  ${user_phone}
             END
         END
@@ -249,7 +249,7 @@ JD-TC-SalesHeadWithRBAC-1
     ${resp}=  Get User By Id  ${bm_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${BMUSERNAME1}  ${resp.json()['mobileNo']}
+    Set Suite Variable  ${BPUSERNAME1}  ${resp.json()['mobileNo']}
 
     ${sh_id1}=  Create Sample User 
     Set Suite Variable  ${sh_id1}
@@ -430,7 +430,7 @@ JD-TC-SalesHeadWithRBAC-3
                                   
     [Documentation]               Create location Using Sales Head Role with RBAC
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -525,7 +525,7 @@ JD-TC-SalesHeadWithRBAC-5
                                   
     [Documentation]               Update Sales Officer Using Sales Head Role with RBAC
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -896,7 +896,7 @@ JD-TC-SalesHeadWithRBAC-5
     # ${resp}=  Encrypted Provider Login  ${BOHUSERNAME1}  ${PASSWORD}
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

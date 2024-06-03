@@ -8,14 +8,14 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 ***Test Cases***
 
 JD-TC-WaitlistGetInternalStsActivityLog-1
      [Documentation]  Apply Internal statuses when user has ADMIN=TRUE
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -24,7 +24,7 @@ JD-TC-WaitlistGetInternalStsActivityLog-1
      Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
      
      # Set Suite Variable  ${user_name}  ${resp.json()['userName']}
-     ${pid}=  get_acc_id  ${HLMUSERNAME12}
+     ${pid}=  get_acc_id  ${HLPUSERNAME12}
      Set Suite Variable  ${pid}
 
      ${resp}=  View Waitlist Settings
@@ -223,7 +223,7 @@ JD-TC-WaitlistGetInternalStsActivityLog-1
      ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -270,7 +270,7 @@ JD-TC-WaitlistGetInternalStsActivityLog-2
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
-      ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -286,7 +286,7 @@ JD-TC-WaitlistGetInternalStsActivityLog-2
 
 JD-TC-WaitlistGetInternalStsActivityLog-3
      [Documentation]  Apply Internal statuses when user has no permission for internal sts but he is ADMIN=TRUE
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -342,7 +342,7 @@ JD-TC-WaitlistGetInternalStsActivityLog-3
 
 JD-TC-WaitlistGetInternalStsActivityLog-4
      [Documentation]  Apply Internal statuses when team has permission
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -394,7 +394,7 @@ JD-TC-WaitlistGetInternalStsActivityLog-4
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 

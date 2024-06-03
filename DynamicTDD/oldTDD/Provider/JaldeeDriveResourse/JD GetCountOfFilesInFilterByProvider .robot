@@ -9,7 +9,7 @@ Library           OperatingSystem
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Library           /ebs/TDD/db.py
 Variables         /ebs/TDD/varfiles/providers.py
@@ -17,7 +17,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Resource          /ebs/TDD/Keywords.robot
 Variables         /ebs/TDD/varfiles/consumermail.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
-Variables          /ebs/TDD/varfiles/hl_musers.py
+Variables          /ebs/TDD/varfiles/hl_providers.py
 
 
 
@@ -285,12 +285,12 @@ JD-TC-GetCountinFilterByProvider-4
 
     [Documentation]    get count of files by user
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${HLMUSERNAME18} 
+    ${pid}=  get_acc_id  ${HLPUSERNAME18} 
     Set Suite variable     ${pid}
-    ${id2}=  get_id  ${HLMUSERNAME18}
+    ${id2}=  get_id  ${HLPUSERNAME18}
     Set Suite Variable    ${id2}
 
     ${highest_package}=  get_highest_license_pkg
@@ -302,8 +302,8 @@ JD-TC-GetCountinFilterByProvider-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${HLMUSERNAME18} 
-    clear_appt_schedule   ${HLMUSERNAME18}
+    clear_service   ${HLPUSERNAME18} 
+    clear_appt_schedule   ${HLPUSERNAME18}
     
     ${resp2}=   Get Business Profile
     Log  ${resp2.json()}
@@ -457,12 +457,12 @@ JD-TC-GetCountinFilterByProvider-5
 
     [Documentation]    upload file by branch and get count of files number by using user login
    
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${HLMUSERNAME18} 
+    ${pid}=  get_acc_id  ${HLPUSERNAME18} 
     Set Suite variable     ${pid}
-    ${id2}=  get_id  ${HLMUSERNAME18}
+    ${id2}=  get_id  ${HLPUSERNAME18}
     Set Suite Variable    ${id2}
 
 
@@ -526,14 +526,14 @@ JD-TC-GetCountinFilterByProvider-6
     Should Be Equal As Strings                 ${resp.status_code}                200
  
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_Providermsg   ${HLMUSERNAME18} 
+    clear_Providermsg   ${HLPUSERNAME18} 
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME18} 
+    ${pid}=  get_acc_id  ${HLPUSERNAME18} 
     Set Suite variable     ${pid}
-    ${id2}=  get_id  ${HLMUSERNAME18}
+    ${id2}=  get_id  ${HLPUSERNAME18}
     Set Suite Variable    ${id2}
     
     ${resp}=   Get Count File In a filter By provider     ${u_id}     

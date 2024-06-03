@@ -11,7 +11,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 *** Variables ***
 ${SERVICE1}  Makeup  
@@ -31,22 +31,22 @@ JD-TC-Is AvailableQueueNow ByProviderId-1
 
     ${firstname_A}=  FakerLibrary.first_name
     ${lastname_A}=  FakerLibrary.last_name
-    ${MUSERNAME_E1}=  Evaluate  ${MUSERNAME}+778805578
+    ${PUSERNAME_E1}=  Evaluate  ${PUSERNAME}+778805578
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E1}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E1}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_E1}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E1}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_E1}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E1}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E1}${\n}
-    Set Suite Variable  ${MUSERNAME_E1}
-    ${id}=  get_id  ${MUSERNAME_E1}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E1}${\n}
+    Set Suite Variable  ${PUSERNAME_E1}
+    ${id}=  get_id  ${PUSERNAME_E1}
     Set Suite Variable  ${id}
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
@@ -55,8 +55,8 @@ JD-TC-Is AvailableQueueNow ByProviderId-1
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${ph1}=  Evaluate  ${MUSERNAME_E1}+1000880000
-    ${ph2}=  Evaluate  ${MUSERNAME_E1}+2000880000
+    ${ph1}=  Evaluate  ${PUSERNAME_E1}+1000880000
+    ${ph2}=  Evaluate  ${PUSERNAME_E1}+2000880000
     ${views}=  Random Element    ${Views}
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -228,13 +228,13 @@ JD-TC-Is AvailableQueueNow ByProviderId-1
 JD-TC-Is AvailableQueueNow ByProviderId-2
     [Documentation]    AvailableNow is False, when vacation create
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${subdomain}  ${resp.json()['subSector']}
 
-    # clear_service   ${MUSERNAME_E1}
-    # clear_location  ${MUSERNAME_E1}
+    # clear_service   ${PUSERNAME_E1}
+    # clear_location  ${PUSERNAME_E1}
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
     Log  ${iscorp_subdomains}
@@ -250,7 +250,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-2
     END
   
     ${numbers}=     Random Int   min=501   max=7000
-    ${PUSERPH0}=  Evaluate  ${MUSERNAME_E1}+${numbers}
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME_E1}+${numbers}
     clear_users  ${PUSERPH0}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -341,12 +341,12 @@ JD-TC-Is AvailableQueueNow ByProviderId-2
 JD-TC-Is AvailableQueueNow ByProviderId-3
     [Documentation]    AvailableNow is False, when queue is Future timeslot
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${MUSERNAME_E1}
-    # clear_location  ${MUSERNAME_E1}
+    # clear_service   ${PUSERNAME_E1}
+    # clear_location  ${PUSERNAME_E1}
   
     ${dep_name1}=  FakerLibrary.bs
     ${dep_code1}=   Random Int  min=100   max=999
@@ -357,7 +357,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-3
     Set Suite Variable  ${dep_id1}  ${resp.json()}
     
     ${numbers}=     Random Int   min=501   max=7000
-    ${PUSERPH0}=  Evaluate  ${MUSERNAME_E1}+${numbers}
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME_E1}+${numbers}
     clear_users  ${PUSERPH0}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -420,12 +420,12 @@ JD-TC-Is AvailableQueueNow ByProviderId-3
 JD-TC-Is AvailableQueueNow ByProviderId-4
     [Documentation]    AvailableNow is False, when queue is a Non working day
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME68}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${MUSERNAME68}
-    clear_location  ${MUSERNAME68}
+    clear_service   ${PUSERNAME68}
+    clear_location  ${PUSERNAME68}
     ${highest_package}=  get_highest_license_pkg
     Log  ${highest_package}
     Set Suite variable  ${lic2}  ${highest_package[0]}
@@ -473,7 +473,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-4
     Set Suite Variable  ${dep_id2}  ${resp.json()}
 
      ${numbers}=     Random Int   min=701   max=9000
-    ${PUSERPH0}=  Evaluate  ${MUSERNAME}+${numbers}
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${numbers}
     clear_users  ${PUSERPH0}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -535,7 +535,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-4
    
 JD-TC-Is AvailableQueueNow ByProviderId-5
     [Documentation]    check Queue is AvailableNow By ProviderId with location disable
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME69}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${subdomain}  ${resp.json()['subSector']}
@@ -553,8 +553,8 @@ JD-TC-Is AvailableQueueNow ByProviderId-5
         END
     END
 
-    clear_service   ${MUSERNAME69}
-    # clear_location  ${MUSERNAME69}
+    clear_service   ${PUSERNAME69}
+    # clear_location  ${PUSERNAME69}
 
     ${highest_package}=  get_highest_license_pkg
     Log  ${highest_package}
@@ -600,7 +600,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-5
     Set Test Variable  ${dep_id3}  ${resp.json()}
 
     ${numbers}=     Random Int   min=701   max=9000
-    ${PUSERPH0}=  Evaluate  ${MUSERNAME}+${numbers}
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${numbers}
     clear_users  ${PUSERPH0}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -681,7 +681,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-5
 
 JD-TC-Is AvailableQueueNow ByProviderId-6
     [Documentation]   check  Queue is AvailableNow By ProviderId with queue disable
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME69}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${subdomain}  ${resp.json()['subSector']}
@@ -699,8 +699,8 @@ JD-TC-Is AvailableQueueNow ByProviderId-6
         END
     END
 
-    clear_service   ${MUSERNAME69}
-    clear_location  ${MUSERNAME69}
+    clear_service   ${PUSERNAME69}
+    clear_location  ${PUSERNAME69}
     ${highest_package}=  get_highest_license_pkg
     Log  ${highest_package}
     Set Suite variable  ${lic2}  ${highest_package[0]}
@@ -734,7 +734,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-6
     Set Suite Variable  ${dep_id4}  ${resp.json()}
 
      ${numbers}=     Random Int   min=701   max=9000
-    ${PUSERPH0}=  Evaluate  ${MUSERNAME}+${numbers}
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${numbers}
     clear_users  ${PUSERPH0}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -808,12 +808,12 @@ JD-TC-Is AvailableQueueNow ByProviderId-6
   
 JD-TC-Is AvailableQueueNow ByProviderId-7
     [Documentation]    check Queue is AvailableNow By ProviderId with multile queues and one queue is disabled
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME69}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${MUSERNAME69}
-    clear_location  ${MUSERNAME69}
+    clear_service   ${PUSERNAME69}
+    clear_location  ${PUSERNAME69}
     ${highest_package}=  get_highest_license_pkg
     Log  ${highest_package}
     Set Suite variable  ${lic2}  ${highest_package[0]}
@@ -847,7 +847,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-7
     Set Test Variable  ${dep_id3}  ${resp.json()}
 
      ${numbers}=     Random Int   min=701   max=9000
-    ${PUSERPH0}=  Evaluate  ${MUSERNAME}+${numbers}
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${numbers}
     clear_users  ${PUSERPH0}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -929,12 +929,12 @@ JD-TC-Is AvailableQueueNow ByProviderId-7
 
 JD-TC-Is AvailableQueueNow ByProviderId-8
     [Documentation]    check Queue is AvailableNow By ProviderId with no queues are there 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME69}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_queue   ${MUSERNAME69}
-    clear_location  ${MUSERNAME69}
+    clear_queue   ${PUSERNAME69}
+    clear_location  ${PUSERNAME69}
 
     ${highest_package}=  get_highest_license_pkg
     Log  ${highest_package}
@@ -969,7 +969,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-8
     Set Test Variable  ${dep_id3}  ${resp.json()}
 
      ${numbers}=     Random Int   min=701   max=9000
-    ${PUSERPH0}=  Evaluate  ${MUSERNAME}+${numbers}
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${numbers}
     clear_users  ${PUSERPH0}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -1031,7 +1031,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-UH1
 JD-TC-Is AvailableQueueNow ByProviderId-UH2
     [Documentation]   Another  Provider login 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -38,7 +38,7 @@ JD-TC-Update Dental Record Status-1
 
     [Documentation]    Create a Dental Record then verify it's status.
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -114,7 +114,7 @@ JD-TC-Update Dental Record Status-1
     Set Suite Variable    ${proconlname}    ${resp.json()['lastName']} 
     Set Suite Variable    ${fullname}       ${proconfname}${space}${proconlname}
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -164,7 +164,7 @@ JD-TC-Update Dental Record Status-2
 
     [Documentation]    Create a Dental Record and Update it's status to COMPLETED, then verify it's status.
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -184,7 +184,7 @@ JD-TC-Update Dental Record Status-UH1
 
     [Documentation]    Update Dental Record status with another provider login.
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -220,7 +220,7 @@ JD-TC-Update Dental Record Status-UH1
 
     [Documentation]    Update Dental record status with invalid dental record status.
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -234,7 +234,7 @@ JD-TC-Update Dental Record Status-UH2
 
     [Documentation]    Update Dental record status with invalid dental id.
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

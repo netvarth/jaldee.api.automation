@@ -12,8 +12,8 @@ Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 
@@ -30,7 +30,7 @@ JD-TC-DeleteItemGroupImageforUser-1
 
     [Documentation]  delete item group image after uploading it..
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -63,7 +63,7 @@ JD-TC-DeleteItemGroupImageforUser-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['itemGroupImages']}    []
 
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${MUSERNAME87}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME87}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -71,7 +71,7 @@ JD-TC-DeleteItemGroupImageforUser-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -101,11 +101,11 @@ JD-TC-DeleteItemGroupImageforUser-2
 
     [Documentation]  upload mutiple item images to the same group and then delete one of them.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${MUSERNAME87}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME87}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -117,7 +117,7 @@ JD-TC-DeleteItemGroupImageforUser-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -150,7 +150,7 @@ JD-TC-DeleteItemGroupImageforUser-3
 
     [Documentation]  Create Item Group by user and upload item group image then delete it.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME134}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -207,7 +207,7 @@ JD-TC-DeleteItemGroupImageforUser-3
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME134}'
+            IF   not '${user_phone}' == '${PUSERNAME134}'
                 clear_users  ${user_phone}
             END
         END
@@ -284,7 +284,7 @@ JD-TC-DeleteItemGroupImageforUser-UH1
 
     [Documentation]  delete already deleted item image.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -297,7 +297,7 @@ JD-TC-DeleteItemGroupImageforUser-UH2
 
     [Documentation]  delete using another providers item group id.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -327,7 +327,7 @@ JD-TC-DeleteItemGroupImageforUser-UH2
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -364,7 +364,7 @@ JD-TC-DeleteItemGroupImageforUser-UH5
 
     [Documentation]  upload an image to an item group , then delete that item group and try to delete item image.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -379,7 +379,7 @@ JD-TC-DeleteItemGroupImageforUser-UH5
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${MUSERNAME87}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME87}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -387,7 +387,7 @@ JD-TC-DeleteItemGroupImageforUser-UH5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

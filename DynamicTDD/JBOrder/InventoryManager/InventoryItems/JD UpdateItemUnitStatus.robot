@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Test Cases ***
 
@@ -22,7 +22,7 @@ JD-TC-UpdateItemUnitStatus-1
 
     [Documentation]  Update Item Unit Status
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME52}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME52}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -69,7 +69,7 @@ JD-TC-UpdateItemUnitStatus-2
 
     [Documentation]  Update Item Unit Status as already disabled.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME52}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME52}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -82,7 +82,7 @@ JD-TC-UpdateItemUnitStatus-3
 
     [Documentation]  try to Enable ,Disabled Status.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME52}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME52}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

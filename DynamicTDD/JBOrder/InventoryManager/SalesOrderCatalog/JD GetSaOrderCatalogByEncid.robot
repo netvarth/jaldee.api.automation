@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -29,7 +29,7 @@ JD-TC-Get SalesOrder Catalog By Encid-1
 
     [Documentation]  create sales order catalog.(inventory manager is false) then get that catalog by encid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -72,10 +72,10 @@ JD-TC-Get SalesOrder Catalog By Encid-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME37}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME37}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -142,7 +142,7 @@ JD-TC-Get SalesOrder Catalog By Encid-2
 
     [Documentation]  update sales order catalog .(inventory manager is false) then get sales order catalog by encid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -178,7 +178,7 @@ JD-TC-Get SalesOrder Catalog By Encid-3
 
     [Documentation]  Disable sales order catalog.(inventory manager is false).Then get salesorder catalog by encid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -211,7 +211,7 @@ JD-TC-Get SalesOrder Catalog By Encid-4
 
     [Documentation]  create  sales order catalog where name as number.(inventory manager is false).then get sales order catalog by encid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -260,7 +260,7 @@ JD-TC-Get SalesOrder Catalog By Encid-5
 
     [Documentation]  create  sales order  catalog where name as invalid string.(inventory manager is false).then get catalog by encid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -296,7 +296,7 @@ JD-TC-Get SalesOrder Catalog By Encid-6
 
     [Documentation]  create sales order inventory catalog from main account then get catalog by encid  from user login(without admin privilege).(inventory manager is false)
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -395,7 +395,7 @@ JD-TC-Get SalesOrder Catalog By Encid-7
 
     [Documentation]  create  sales order catalog where name as invalid string.(inventory manager is true)
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -438,7 +438,7 @@ JD-TC-Get SalesOrder Catalog By Encid-UH1
 
     [Documentation]  Get SalesOrder Catalog By Encid  with invalid catalog id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -476,7 +476,7 @@ JD-TC-Get SalesOrder Catalog By Encid-UH4
 
     [Documentation]  Get SalesOrder Catalog By Encid using another provider login
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

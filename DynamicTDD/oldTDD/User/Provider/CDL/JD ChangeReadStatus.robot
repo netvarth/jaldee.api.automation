@@ -15,11 +15,11 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ApiKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -50,7 +50,7 @@ JD-TC-ChangeReadStatus-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME90}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME90}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -94,7 +94,7 @@ JD-TC-ChangeReadStatus-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME91}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME91}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -145,12 +145,12 @@ JD-TC-ChangeReadStatus-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME92}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME92}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
 
-    clear_Providermsg  ${MUSERNAME92}
+    clear_Providermsg  ${PUSERNAME92}
     
     ${comm_msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
@@ -198,7 +198,7 @@ JD-TC-ChangeReadStatus-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME94}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME94}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -242,7 +242,7 @@ JD-TC-ChangeReadStatus-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME95}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME95}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -285,7 +285,7 @@ JD-TC-ChangeReadStatus-6
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME96}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME96}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -328,7 +328,7 @@ JD-TC-ChangeReadStatus-7
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME97}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME97}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -375,7 +375,7 @@ JD-TC-ChangeReadStatus-8
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME98}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME98}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -422,7 +422,7 @@ JD-TC-ChangeReadStatus-9
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME99}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME99}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -469,7 +469,7 @@ JD-TC-ChangeReadStatus-10
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -507,7 +507,7 @@ JD-TC-ChangeReadStatus-11
     ...   change the read status of that communication.
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -561,7 +561,7 @@ JD-TC-ChangeReadStatus-12
     ...   change the read status of that communication.
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -615,7 +615,7 @@ JD-TC-ChangeReadStatus-13
     ...   change the read status of that communication.
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -669,7 +669,7 @@ JD-TC-ChangeReadStatus-14
     ...   change the read status of that communication.
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -721,7 +721,7 @@ JD-TC-ChangeReadStatus-15
     [Documentation]   Provider send a message(chat) to a partner with one attachment.
     ...   change the read status of that communication.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -822,7 +822,7 @@ JD-TC-ChangeReadStatus-16
     [Documentation]   Provider send a message(enquiry) to a partner with one attachment.
     ...   change the read status of that communication.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -918,7 +918,7 @@ JD-TC-ChangeReadStatus-17
     [Documentation]   Provider send a message(alert) to a partner with one attachment.
     ...   change the read status of that communication.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1014,7 +1014,7 @@ JD-TC-ChangeReadStatus-18
     [Documentation]   Provider send a message(bookings) to a partner with one attachment.
     ...   change the read status of that communication.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1122,7 +1122,7 @@ JD-TC-ChangeReadStatus-19
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME90}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME90}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}

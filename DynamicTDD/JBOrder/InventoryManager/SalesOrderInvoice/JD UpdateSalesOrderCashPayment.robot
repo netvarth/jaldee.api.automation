@@ -15,7 +15,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -33,7 +33,7 @@ JD-TC-Update Cash Payment For Sales Order-1
 
     [Documentation]   Create a sales Order with Valid Details then pay full amount by cash payment and update with same sales amount.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -88,11 +88,11 @@ JD-TC-Update Cash Payment For Sales Order-1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${accountId}=  get_acc_id  ${HLMUSERNAME11}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME11}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -220,7 +220,7 @@ JD-TC-Update Cash Payment For Sales Order-1
 
 # ----------------------------- Provider take a Sales Order ------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -372,7 +372,7 @@ JD-TC-Update Cash Payment For Sales Order-2
 
     [Documentation]    update cash payment amount as half of the total .
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -401,7 +401,7 @@ JD-TC-Update Cash Payment For Sales Order-UH1
 
     [Documentation]    update cash payment amount as higher amount.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -419,7 +419,7 @@ JD-TC-Update Cash Payment For Sales Order-UH2
 
     [Documentation]    update cash payment with EMPTY Invoice id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -434,7 +434,7 @@ JD-TC-Update Cash Payment For Sales Order-UH3
 
     [Documentation]    update cash payment with negative amount.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -449,7 +449,7 @@ JD-TC-Update Cash Payment For Sales Order-UH4
 
     [Documentation]    update cash payment with EMPTY note.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -462,7 +462,7 @@ JD-TC-Update Cash Payment For Sales Order-UH5
 
     [Documentation]    update cash payment with EMPTY paymentRefId.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -488,7 +488,7 @@ JD-TC-Update Cash Payment For Sales Order-UH7
 
     [Documentation]    update cash payment with another provider login.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

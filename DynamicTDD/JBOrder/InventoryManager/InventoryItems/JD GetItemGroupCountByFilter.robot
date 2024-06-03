@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Test Cases ***
 
@@ -22,7 +22,7 @@ JD-TC-GetItemGroupCount-1
 
     [Documentation]   Create Item Group
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -68,7 +68,7 @@ JD-TC-GetItemGroupCount-2
 
     [Documentation]  Get Item group Count Filter - groupName
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -81,7 +81,7 @@ JD-TC-GetItemGroupCount-3
 
     [Documentation]  Get Item group Count Filter - groupDesc
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -94,7 +94,7 @@ JD-TC-GetItemGroupCount-4
 
     [Documentation]  Get Item group Count Filter - status
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -117,7 +117,7 @@ JD-TC-GetItemGroupCount-5
 
     [Documentation]  Get Item group Count Filter - with another provider login
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME0}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

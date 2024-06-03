@@ -12,7 +12,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 *** Variables ***
 
@@ -2221,7 +2221,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-16
 
 JD-TC-CreateVirtualService-(Billable Subdomain)-17
     [Documentation]   create virtual service for a user
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2240,8 +2240,8 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-17
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    # delete_virtual_service  ${MUSERNAME27}
-    # clear_service  ${MUSERNAME27}
+    # delete_virtual_service  ${PUSERNAME27}
+    # clear_service  ${PUSERNAME27}
     reset_user_metric  ${account_id}
 
     ${resp}=   Get Service
@@ -2298,7 +2298,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-17
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ZOOM_id0}=  Format String  ${ZOOM_url}  ${MUSERNAME5}
+    ${ZOOM_id0}=  Format String  ${ZOOM_url}  ${PUSERNAME5}
     Set Suite Variable   ${ZOOM_id0}
 
     ${instructions1}=   FakerLibrary.sentence
@@ -2380,7 +2380,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-18
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service  ${MUSERNAME27}
+    clear_service  ${PUSERNAME27}
 
     ${resp}=   Get License UsageInfo 
     Log  ${resp.content}
@@ -2785,8 +2785,8 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-23
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    delete_virtual_service  ${MUSERNAME27}
-    clear_service  ${MUSERNAME27}
+    delete_virtual_service  ${PUSERNAME27}
+    clear_service  ${PUSERNAME27}
 
     ${resp}=   Get License UsageInfo 
     Log  ${resp.content}
@@ -2840,8 +2840,8 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-24
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    delete_virtual_service  ${MUSERNAME27}
-    clear_service  ${MUSERNAME27}
+    delete_virtual_service  ${PUSERNAME27}
+    clear_service  ${PUSERNAME27}
 
     ${resp}=   Get License UsageInfo 
     Log  ${resp.content}

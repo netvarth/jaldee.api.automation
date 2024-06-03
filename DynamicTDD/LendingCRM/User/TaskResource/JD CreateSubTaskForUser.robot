@@ -11,8 +11,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -27,11 +27,11 @@ JD-TC-CreatesubTaskForUser-1
     [Documentation]  Create subTask for branch
 
  
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${p_id}=  get_acc_id  ${MUSERNAME58}
+    ${p_id}=  get_acc_id  ${PUSERNAME58}
     Set Suite Variable   ${p_id}
 
     ${resp}=    Get Locations
@@ -102,11 +102,11 @@ JD-TC-CreatesubTaskForUser-2
 
     [Documentation]  Create multiple  subTask for branch same details
 
-     ${resp}=   Encrypted Provider Login  ${MUSERNAME59}  ${PASSWORD} 
+     ${resp}=   Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${p_id1}=  get_acc_id  ${MUSERNAME59}
+    ${p_id1}=  get_acc_id  ${PUSERNAME59}
     Set Suite Variable   ${p_id1}
 
     ${resp}=    Get Locations
@@ -205,11 +205,11 @@ JD-TC-CreatesubTaskForUser-3
 
     [Documentation]  Create multiple  subTask for branch different details
 
-     ${resp}=   Encrypted Provider Login  ${MUSERNAME60}  ${PASSWORD} 
+     ${resp}=   Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${p_id3}=  get_acc_id  ${MUSERNAME60}
+    ${p_id3}=  get_acc_id  ${PUSERNAME60}
     Set Suite Variable   ${p_id3}
 
     ${resp}=    Get Locations
@@ -331,10 +331,10 @@ JD-TC-CreatesubTaskForUser-4
 
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${HLMUSERNAME4} 
+    ${pid}=  get_acc_id  ${HLPUSERNAME4} 
     Set Suite variable     ${pid}
 
     ${highest_package}=  get_highest_license_pkg
@@ -346,8 +346,8 @@ JD-TC-CreatesubTaskForUser-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${HLMUSERNAME4} 
-    clear_appt_schedule   ${MUSERNAME4}
+    clear_service   ${HLPUSERNAME4} 
+    clear_appt_schedule   ${PUSERNAME4}
     reset_user_metric  ${pid}
     
     ${resp2}=   Get Business Profile
@@ -562,10 +562,10 @@ JD-TC-CreatesubTaskForUser-UH6
 
     [Documentation]  Create  task for branch and create   subTask for  user
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${HLMUSERNAME4} 
+    ${pid}=  get_acc_id  ${HLPUSERNAME4} 
     Set Suite variable     ${pid}
 
     ${resp}=    Create Task   ${title}  ${desc}   ${userType[0]}  ${category_id1}  ${type_id1}   ${lid}
@@ -605,7 +605,7 @@ JD-TC-CreatesubTaskForUser-UH7
 
     [Documentation]  Create  task for user and create   subTask for  another user
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -801,7 +801,7 @@ JD-TC-CreatesubTaskForUser-UH4
     Set Suite Variable  ${task_uid19}  ${task_id[1]}
 
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -823,7 +823,7 @@ JD-TC-CreatesubTaskForUser-UH5
     [Documentation]    create task by branch and subtask create by another branch user
    
     
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

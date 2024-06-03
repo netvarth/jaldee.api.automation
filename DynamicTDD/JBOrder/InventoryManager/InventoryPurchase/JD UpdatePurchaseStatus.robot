@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -30,7 +30,7 @@ JD-TC-UpdatePurchaseStatus-1
 
     [Documentation]  Update Purchase Status - change status to IN REVIEW
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -113,7 +113,7 @@ JD-TC-UpdatePurchaseStatus-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -604,7 +604,7 @@ JD-TC-UpdatePurchaseStatus-2
 
     [Documentation]  Update Purchase Status - change status to IN REVIEW to IN REVIEW
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -624,7 +624,7 @@ JD-TC-UpdatePurchaseStatus-3
 
     [Documentation]  Update Purchase Status - change status to IN REVIEW to Draft
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -646,7 +646,7 @@ JD-TC-UpdatePurchaseStatus-4
 
     [Documentation]  Update Purchase Status - change status DRAFT to DRAFT
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -666,7 +666,7 @@ JD-TC-UpdatePurchaseStatus-5
 
     [Documentation]  Update Purchase Status - change status DRAFT to DRAFT
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -686,7 +686,7 @@ JD-TC-UpdatePurchaseStatus-6
 
     [Documentation]  Update Purchase Status - change status DRAFT to APPROVED
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -709,7 +709,7 @@ JD-TC-UpdatePurchaseStatus-7
 
     [Documentation]  Update Purchase Status - change status DRAFT to IN REVIEW and then change to APPROVED
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -744,7 +744,7 @@ JD-TC-UpdatePurchaseStatus-8
 
     [Documentation]  Update Purchase Status - change status APPROVED to APPROVED
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -762,7 +762,7 @@ JD-TC-UpdatePurchaseStatus-9
 
     [Documentation]  Update Purchase Status - change status APPROVED to Draft
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -780,7 +780,7 @@ JD-TC-UpdatePurchaseStatus-10
 
     [Documentation]  Update Purchase Status - change status APPROVED to IN REVIEW
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

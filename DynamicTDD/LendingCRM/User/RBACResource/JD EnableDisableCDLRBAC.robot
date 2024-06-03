@@ -12,8 +12,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Test Cases ***
 
@@ -21,7 +21,7 @@ JD-TC-EnableDisableCDLRbac-1
 
     [Documentation]  Get default rbac settings of an existing provider.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -39,7 +39,7 @@ JD-TC-EnableDisableCDLRbac-2
 
     [Documentation]  enable rbac.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -68,7 +68,7 @@ JD-TC-EnableDisableRbac-3
 
     [Documentation]  disable rbac.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -93,7 +93,7 @@ JD-TC-EnableDisableRbac-4
 
     [Documentation]  enable rbac  which is disabled.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -115,7 +115,7 @@ JD-TC-EnableDisableRbac-UH1
 
     [Documentation]  enable already enabled rbac.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -151,7 +151,7 @@ JD-TC-EnableDisableRbac-UH4
 
     [Documentation]  disable rbac which is already disabled.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

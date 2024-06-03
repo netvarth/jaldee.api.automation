@@ -12,8 +12,8 @@ Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 *** Variables ***
@@ -26,7 +26,7 @@ JD-TC-GetItemGroupByIdforUser-1
 
     [Documentation]  Create Item Group for an existing provider and get the details.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -65,7 +65,7 @@ JD-TC-GetItemGroupByIdforUser-2
 
     [Documentation]  Create multiple Item Group for an existing provider.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -94,7 +94,7 @@ JD-TC-GetItemGroupByIdforUser-3
 
     [Documentation]  Create multiple Item Group with same name for an existing provider.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -143,7 +143,7 @@ JD-TC-GetItemGroupByIdforUser-4
 
     [Documentation]  Create Item Group for a provider without group decscription.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -180,7 +180,7 @@ JD-TC-GetItemGroupByIdforUser-5
 
     [Documentation]  Create Item Group by a user and get the details.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME145}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME145}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -237,7 +237,7 @@ JD-TC-GetItemGroupByIdforUser-5
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME145}'
+            IF   not '${user_phone}' == '${PUSERNAME145}'
                 clear_users  ${user_phone}
             END
         END
@@ -283,7 +283,7 @@ JD-TC-GetItemGroupByIdforUser-UH1
 
     [Documentation]  Get Item Group with invalid item group id.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     

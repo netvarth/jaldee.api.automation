@@ -13,8 +13,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -52,7 +52,7 @@ JD-TC-Update loan Application Kyc Details-1
                                   
     [Documentation]               Create Loan Application and Update loan Application Kyc Details.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -311,7 +311,7 @@ JD-TC-Update loan Application Kyc Details-2
                                   
     [Documentation]              Update loan Application Kyc Details again with same details.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -388,7 +388,7 @@ JD-TC-Update loan Application Kyc Details-4
     [Documentation]             Try to Update loan Application Kyc Details with another provider loan uid.
 
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -425,7 +425,7 @@ JD-TC-Update loan Application Kyc Details-5
     [Documentation]             Try to Update loan Application Kyc Details with EMPTY phoneNo.
 
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -450,7 +450,7 @@ JD-TC-Update loan Application Kyc Details-6
     [Documentation]             Try to Update loan Application Kyc Details with EMPTY aadhaar.
 
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -475,7 +475,7 @@ JD-TC-Update loan Application Kyc Details-7
     [Documentation]             Try to Update loan Application Kyc Details with EMPTY pan.
 
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -500,7 +500,7 @@ JD-TC-Update loan Application Kyc Details-8
     [Documentation]             Try to Update loan Application Kyc Details with EMPTY aadhaarAttachments.
 
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -525,7 +525,7 @@ JD-TC-Update loan Application Kyc Details-9
     [Documentation]             Try to Update loan Application Kyc Details with EMPTY panAttachments.
 
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

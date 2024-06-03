@@ -14,8 +14,8 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -35,7 +35,7 @@ JD-TC-Update Catalog Item Batch-1
 
     [Documentation]  update batch item when inventory manager is on
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME33}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -120,7 +120,7 @@ JD-TC-Update Catalog Item Batch-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME33}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -715,7 +715,7 @@ JD-TC-Update Catalog Item Batch-UH1
 
     [Documentation]   create catalog item batch where name is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME33}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -728,7 +728,7 @@ JD-TC-Update Catalog Item Batch-UH1
 JD-TC-Update Catalog Item Batch-UH2
     [Documentation]   create catalog item batch where price is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME33}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -766,7 +766,7 @@ JD-TC-Update Catalog Item Batch-UH5
 
     [Documentation]  update catalog item batch where invalid SO_Cata_Item_Batch_Encid1
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME33}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -780,7 +780,7 @@ JD-TC-Update Catalog Item Batch-UH6
 
     [Documentation]  update catalog item batch without giving batch id-"Inventory Item Batch Id required"
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME33}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -793,7 +793,7 @@ JD-TC-Update Catalog Item Batch-UH7
 
     [Documentation]  update catalog item batch using same name
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME33}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -809,7 +809,7 @@ JD-TC-Update Catalog Item Batch-2
 
     [Documentation]  creating batch item when inventory manager is on
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME33}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -893,7 +893,7 @@ JD-TC-Update Catalog Item Batch-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME33}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1398,7 +1398,7 @@ JD-TC-Update Catalog Item Batch-1
 
     [Documentation]  Tests the updation of a batch of catalog items.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME33}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1453,10 +1453,10 @@ JD-TC-Update Catalog Item Batch-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME33}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME33}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME33}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -1572,7 +1572,7 @@ JD-TC-Update Catalog Item Batch-2
 
     [Documentation]    create catalog item batch where invmgnt is false then update catalog item batch where invmgmt is off
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME33}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 *** Variables ***
 @{multiples}  10  20  30   40   50
@@ -155,19 +155,19 @@ Non Billable
         ${length}=  Get Length   ${len}
 
         FOR    ${a}   IN RANGE   ${min}   ${max}
-                ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+                ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
                 Should Be Equal As Strings    ${resp.status_code}    200
                 ${domain}=   Set Variable    ${resp.json()['sector']}
                 ${subdomain}=    Set Variable      ${resp.json()['subSector']}
-                ${acc_id}=  get_acc_id  ${MUSERNAME${a}}
+                ${acc_id}=  get_acc_id  ${PUSERNAME${a}}
                 Set Suite Variable   ${acc_id}
                 ${resp}=  View Waitlist Settings
                 Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable  
                 ${resp2}=   Get Sub Domain Settings    ${domain}    ${subdomain}
                 Should Be Equal As Strings    ${resp.status_code}    200
-                delete_donation_service  ${MUSERNAME${a}}
+                delete_donation_service  ${PUSERNAME${a}}
                 Set Suite Variable  ${check}    ${resp2.json()['serviceBillable']} 
-                Run Keyword IF   '${check}' == 'False'   clear_service       ${MUSERNAME${a}}
+                Run Keyword IF   '${check}' == 'False'   clear_service       ${PUSERNAME${a}}
                 Exit For Loop IF     '${check}' == 'False'
         
         END 

@@ -13,8 +13,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Keywords ***
 
@@ -93,7 +93,7 @@ JD-TC-LoanApplication-1
                                   
     [Documentation]               Create Loan Application  
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -563,7 +563,7 @@ JD-TC-LoanApplication-1
     Should Be Equal As Strings     ${resp.status_code}    200
     
 
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${HLMUSERNAME16}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${HLPUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   loanDigitalSignUpload      ${cookie}    ${account_id}    ${loanuid}    ${kycid}   DPN   ${caption}

@@ -14,7 +14,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 *** Variables ***
@@ -44,22 +44,22 @@ JD-TC-User Consumer Communication-1
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E1}=  Evaluate  ${MUSERNAME}+6057217
+     ${PUSERNAME_E1}=  Evaluate  ${PUSERNAME}+6057217
      ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E1}    ${highest_package[0]}
+     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E1}    ${highest_package[0]}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Activation  ${MUSERNAME_E1}  0
+     ${resp}=  Account Activation  ${PUSERNAME_E1}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${MUSERNAME_E1}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${PUSERNAME_E1}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E1}${\n}
-     Set Suite Variable  ${MUSERNAME_E1}
-     ${id}=  get_id  ${MUSERNAME_E1}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E1}${\n}
+     Set Suite Variable  ${PUSERNAME_E1}
+     ${id}=  get_id  ${PUSERNAME_E1}
      Set Suite Variable  ${id}
      ${bs}=  FakerLibrary.bs
      Set Suite Variable  ${bs}
@@ -69,8 +69,8 @@ JD-TC-User Consumer Communication-1
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${ph1}=  Evaluate  ${MUSERNAME_E1}+1000000000
-    ${ph2}=  Evaluate  ${MUSERNAME_E1}+2000000000
+    ${ph1}=  Evaluate  ${PUSERNAME_E1}+1000000000
+    ${ph2}=  Evaluate  ${PUSERNAME_E1}+2000000000
     ${views}=  Random Element    ${Views}
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -168,7 +168,7 @@ JD-TC-User Consumer Communication-1
     Set Suite Variable   ${p1_id}   ${resp.json()[1]['id']}
     Set Suite Variable   ${p0_id}   ${resp.json()[2]['id']}
 
-    ${p_id}=  get_acc_id  ${MUSERNAME_E1}
+    ${p_id}=  get_acc_id  ${PUSERNAME_E1}
     Set Suite Variable   ${p_id}
 
     ${cR_id15}=  get_id  ${CUSERNAME15}
@@ -179,10 +179,10 @@ JD-TC-User Consumer Communication-1
     clear_Consumermsg  ${CUSERNAME17}
     
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${account_id1}=  get_acc_id  ${MUSERNAME_E1}
+    ${account_id1}=  get_acc_id  ${PUSERNAME_E1}
 
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
@@ -200,7 +200,7 @@ JD-TC-User Consumer Communication-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    clear_customer   ${MUSERNAME_E1}
+    clear_customer   ${PUSERNAME_E1}
     ${resp}=  AddCustomer  ${CUSERNAME15}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -212,7 +212,7 @@ JD-TC-User Consumer Communication-1
     ${msg1}=   FakerLibrary.Word
     ${caption1}=  Fakerlibrary.sentence
     
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${MUSERNAME_E1}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -259,14 +259,14 @@ JD-TC-User Consumer Communication-1
 
 JD-TC-User Consumer Communication-UH1
     [Documentation]  User communicate with consumer, using another Provider account
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${msg1}=   FakerLibrary.Word
     ${caption1}=  Fakerlibrary.sentence
     
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${MUSERNAME30}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME30}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -296,14 +296,14 @@ JD-TC-User Consumer Communication-UH2
 
 JD-TC-User Consumer Communication-UH3
     [Documentation]  User communicate with consumer, using invalid provider id
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${msg1}=   FakerLibrary.Word
     ${caption1}=  Fakerlibrary.sentence
     
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${MUSERNAME_E1}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -315,14 +315,14 @@ JD-TC-User Consumer Communication-UH3
 
 JD-TC-User Consumer Communication-UH4
     [Documentation]  User communicate with consumer, using invalid consumer id
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${msg1}=   FakerLibrary.Word
     ${caption1}=  Fakerlibrary.sentence
     
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${MUSERNAME_E1}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -344,7 +344,7 @@ JD-TC-User Consumer Communication-UH4
 
 JD-TC-User Consumer Communication-UH6
     [Documentation]  User communicate with consumer, using disabled user_id
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -359,7 +359,7 @@ JD-TC-User Consumer Communication-UH6
     ${msg1}=   FakerLibrary.Word
     ${caption1}=  Fakerlibrary.sentence
     
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${MUSERNAME_E1}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -372,7 +372,7 @@ JD-TC-User Consumer Communication-UH6
     
 JD-TC-User Consumer Communication-UH7
     [Documentation]  User communicate with consumer, using disabled user_id by consumer
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

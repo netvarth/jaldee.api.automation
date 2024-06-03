@@ -15,11 +15,11 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ApiKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -56,7 +56,7 @@ ${emiPaidAmountMonthly}    2000
 # Account with Multiple Users in NBFC
 
 
-#     ${resp}=   Get File    /ebs/TDD/varfiles/musers.py
+#     ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
 #     ${len}=   Split to lines  ${resp}
 #     ${length}=  Get Length   ${len}
 #     ${multiuser_list}=  Create List
@@ -64,7 +64,7 @@ ${emiPaidAmountMonthly}    2000
 #     ${licid}  ${licname}=  get_highest_license_pkg
     
 #     FOR   ${a}  ${start}  IN RANGE   ${length}   
-#         ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+#         ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
 #         Should Be Equal As Strings    ${resp.status_code}    200
 #         Set Test Variable  ${pkgId}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 #         Set Test Variable  ${Dom}   ${resp.json()['sector']}
@@ -83,7 +83,7 @@ ${emiPaidAmountMonthly}    2000
 #         END
 #     END
    
-#     RETURN  ${MUSERNAME${a}}
+#     RETURN  ${PUSERNAME${a}}
 
 
 *** Test Cases ***
@@ -94,11 +94,11 @@ JD-TC-GetLoanApplicationsCount-1
     ...   branch1 and dealer1(credit approved status)
     ...   and check Get Loan Applications Count count with user token 
     
-    # ${HLMUSERNAME20}=  Account with Multiple Users in NBFC
-    # Log  ${HLMUSERNAME20}
-    # Set Suite Variable  ${HLMUSERNAME20}
+    # ${HLPUSERNAME20}=  Account with Multiple Users in NBFC
+    # Log  ${HLPUSERNAME20}
+    # Set Suite Variable  ${HLPUSERNAME20}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -212,7 +212,7 @@ JD-TC-GetLoanApplicationsCount-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME20}'
+            IF   not '${user_phone}' == '${HLPUSERNAME20}'
                 clear_users  ${user_phone}
             END
         END

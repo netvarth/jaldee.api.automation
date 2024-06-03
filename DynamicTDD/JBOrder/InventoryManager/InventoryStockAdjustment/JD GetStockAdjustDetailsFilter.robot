@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -29,7 +29,7 @@ JD-TC-Get Item Stock adjust Details Filter-1
 
     [Documentation]  Get Item Stock adjust Details Filter  using account.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -82,10 +82,10 @@ JD-TC-Get Item Stock adjust Details Filter-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME10}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME10}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -235,7 +235,7 @@ JD-TC-Get Item Stock adjust Details Filter-2
 
     [Documentation]  Get Item Stock adjust Details Filter  using invCatalogEncId.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -265,7 +265,7 @@ JD-TC-Get Item Stock adjust Details Filter-3
 
     [Documentation]  Get Item Stock adjust Details Filter  using invCatalogItemEncId.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -295,7 +295,7 @@ JD-TC-Get Item Stock adjust Details Filter-4
 
     [Documentation]   Get Item Stock adjust Details Filter  using quantity.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -327,7 +327,7 @@ JD-TC-Get Item Stock adjust Details Filter-5
 
     [Documentation]  Get Item Stock adjust Details Filter  using stockAdjust.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -356,7 +356,7 @@ JD-TC-Get Item Stock adjust Details Filter-6
 
     [Documentation]  Update Item Stock adjust Details Filter  using stockAdjust then Get Item Stock adjust Details Filter.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -456,7 +456,7 @@ JD-TC-Get Item Stock adjust Details Filter-7
 
     [Documentation]  create Item Stock adjust   then Get Item Stock adjust Details Filter.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -595,7 +595,7 @@ JD-TC-Get Item Stock adjust Details Filter-UH1
 
     [Documentation]  remove all Stock adjust Details then Get Item Stock adjust Details Filter.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -612,7 +612,7 @@ JD-TC-Get Item Stock adjust Details Filter-UH2
 
     [Documentation]   Get Item Stock adjust Details Filter using invalid invCatalogEncId.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -639,7 +639,7 @@ JD-TC-Get Item Stock adjust Details Filter-UH3
 
     [Documentation]   Get Item Stock adjust Details Filter using invalid stockAdjust.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -654,7 +654,7 @@ JD-TC-Get Item Stock adjust Details Filter-UH4
 
     [Documentation]   Get Item Stock adjust Details Filter using invalid qty.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -668,7 +668,7 @@ JD-TC-Get Item Stock adjust Details Filter-UH5
 
     [Documentation]   Get Item Stock adjust Details Filter using invalid invCatalogItemEncId.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

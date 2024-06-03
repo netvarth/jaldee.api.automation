@@ -14,9 +14,9 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -40,22 +40,22 @@ JD-TC-UpdateVacation-1
     Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
     ${firstname_A}=  FakerLibrary.first_name
     ${lastname_A}=  FakerLibrary.last_name
-    ${MUSERNAME_E3}=  Evaluate  ${MUSERNAME}+98704078
+    ${PUSERNAME_E3}=  Evaluate  ${PUSERNAME}+98704078
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E3}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E3}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_E3}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E3}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_E3}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E3}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E3}${\n}
-    Set Suite Variable  ${MUSERNAME_E3}
-    ${id}=  get_id  ${MUSERNAME_E3}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E3}${\n}
+    Set Suite Variable  ${PUSERNAME_E3}
+    ${id}=  get_id  ${PUSERNAME_E3}
     Set Suite Variable  ${id}
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
@@ -63,8 +63,8 @@ JD-TC-UpdateVacation-1
     
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${ph1}=  Evaluate  ${MUSERNAME_E3}+1099844421
-    ${ph2}=  Evaluate  ${MUSERNAME_E3}+2099844432
+    ${ph1}=  Evaluate  ${PUSERNAME_E3}+1099844421
+    ${ph2}=  Evaluate  ${PUSERNAME_E3}+2099844432
     ${views}=  Random Element    ${Views}
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -261,7 +261,7 @@ JD-TC-UpdateVacation-1
 JD-TC-UpdateVacation-2
     [Documentation]   Again Update Vacation when Waitlist is Enabled
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -288,7 +288,7 @@ JD-TC-UpdateVacation-2
 JD-TC-UpdateVacation-3
     [Documentation]   Waitlist is Enabled and given the future date to Update Vacation
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200  
 
@@ -364,7 +364,7 @@ JD-TC-UpdateVacation-3
 JD-TC-UpdateVacation-4
     [Documentation]   Update Vacation after Created a Vacation when Appointment is Enable
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -470,7 +470,7 @@ JD-TC-UpdateVacation-4
 JD-TC-UpdateVacation-5
     [Documentation]   Again Update Vacation when Appointment is Enable
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -496,7 +496,7 @@ JD-TC-UpdateVacation-5
 JD-TC-UpdateVacation-6
     [Documentation]   Waitlist is Enable and given the future date to create and update vacation
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -568,7 +568,7 @@ JD-TC-UpdateVacation-6
 JD-TC-UpdateVacation-7
     [Documentation]   Waitlist is Enable and given the future date to create and update vacation (Set StartTime as todays Past Time)
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -642,7 +642,7 @@ JD-TC-UpdateVacation-7
 JD-TC-UpdateVacation-8
     [Documentation]   Update Vacation with multiple users with Future Date
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -797,7 +797,7 @@ JD-TC-UpdateVacation-8
          
 JD-TC-UpdateVacation-9
     [Documentation]   update with different user and Different Branch with out of Time Frame
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200    
     
@@ -823,7 +823,7 @@ JD-TC-UpdateVacation-9
 
 JD-TC-UpdateVacation-10
     [Documentation]   update with different Branch and different user with outof Time Frame
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200  
 
@@ -849,7 +849,7 @@ JD-TC-UpdateVacation-10
 
 # JD-TC-UpdateVacation-UH1
 #     [Documentation]  changing the Date in the Update Vacation
-#     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${start_time7}=  add_timezone_time  ${tz}  2  15  
@@ -868,7 +868,7 @@ JD-TC-UpdateVacation-10
 
 JD-TC-UpdateVacation-UH1
     [Documentation]  Provider ID is Empty in the Update Vacation
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${start_time5}=  add_timezone_time  ${tz}   2  18
@@ -882,7 +882,7 @@ JD-TC-UpdateVacation-UH1
 
 JD-TC-UpdateVacation-UH2
     [Documentation]   Vacation ID is Empty in the Update Vacation
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${start_time6}=  add_timezone_time  ${tz}  2  15  
@@ -897,7 +897,7 @@ JD-TC-UpdateVacation-UH2
 
 JD-TC-UpdateVacation-UH3
     [Documentation]  Trying Update Vacation Using Existing Branch Number
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME76}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME76}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -934,7 +934,7 @@ JD-TC-UpdateVacation-UH4
 
 JD-TC-UpdateVacation-UH5
     [Documentation]  changing the User ID in the Update Vacation, another user_id of that same provider is used
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -958,7 +958,7 @@ JD-TC-UpdateVacation-UH5
 
 JD-TC-UpdateVacation-UH6
     [Documentation]   Update Vacation with same vacation_id and user_id, But Different Branch login
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200    
     
@@ -977,7 +977,7 @@ JD-TC-UpdateVacation-UH6
 
 JD-TC-UpdateVacation-UH7
     [Documentation]   Update Vacation with Different Branch and Different user 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200  
 
@@ -995,7 +995,7 @@ JD-TC-UpdateVacation-UH7
 JD-TC-UpdateVacation-UH8
     [Documentation]  Update vacation using a past time for a valid provider
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1099,7 +1099,7 @@ JD-TC-UpdateVacation-UH8
 JD-TC-UpdateVacation-UH9
     [Documentation]    Add consumer to waitlist, After that create and update vacation
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -1253,7 +1253,7 @@ JD-TC-UpdateVacation-UH9
 JD-TC-UpdateVacation-UH10
     [Documentation]    Update vacation, then try to Add consumer to waitlist
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1275,7 +1275,7 @@ JD-TC-UpdateVacation-UH10
 JD-TC-UpdateVacation-UH11
     [Documentation]    Add consumer to Future day waitlist, then try to create vacation
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1351,7 +1351,7 @@ JD-TC-UpdateVacation-UH11
 JD-TC-UpdateVacation-UH12
     [Documentation]    Create vacation, then try to Add consumer to Future Day waitlist
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1367,11 +1367,11 @@ JD-TC-UpdateVacation-UH12
 JD-TC-UpdateVacation-UH13
     [Documentation]    Consumer completes prepayment, then provider create and update vacation, and again change checkin status of consumer
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${p_id}=  get_acc_id  ${MUSERNAME_E3}
-    clear_customer   ${MUSERNAME_E3}
+    ${p_id}=  get_acc_id  ${PUSERNAME_E3}
+    clear_customer   ${PUSERNAME_E3}
 
     # ${resp}=  Toggle Department Enable
     # Log   ${resp.json()}
@@ -1553,7 +1553,7 @@ JD-TC-UpdateVacation-UH13
     Verify Response  ${resp}  paymentStatus=${paymentStatus[1]}     waitlistStatus=${wl_status[0]}
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -1603,7 +1603,7 @@ JD-TC-UpdateVacation-UH13
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  paymentStatus=${paymentStatus[3]}   waitlistStatus=${wl_status[4]}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1637,7 +1637,7 @@ JD-TC-UpdateVacation-UH14
     [Documentation]   create vacation and then creating another vacation and update vacation between this day(start date is already a holiday)
 
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1760,7 +1760,7 @@ JD-TC-UpdateVacation-UH15
     [Documentation]     create vacation and then update that vacation with overlapping the last date(last date is already a holiday)
 
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1835,7 +1835,7 @@ JD-TC-UpdateVacation-11
     [Documentation]    create a future holiday and then update the holiday's start date to current day
 
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1946,7 +1946,7 @@ JD-TC-UpdateVacation-12
     [Documentation]   create 3  vacation and then updating the holiday here extending the last date
 
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2011,29 +2011,29 @@ JD-TC-UpdateVacation-13
     Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
     ${firstname_A}=  FakerLibrary.first_name
     ${lastname_A}=  FakerLibrary.last_name
-    ${MUSERNAME_E2}=  Evaluate  ${PUSERNAME}+788105177
+    ${PUSERNAME_E2}=  Evaluate  ${PUSERNAME}+788105177
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E2}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E2}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_E2}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E2}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_E2}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E2}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E2}${\n}
-    Set Suite Variable  ${MUSERNAME_E2}
-    ${id}=  get_id  ${MUSERNAME_E2}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E2}${\n}
+    Set Suite Variable  ${PUSERNAME_E2}
+    ${id}=  get_id  ${PUSERNAME_E2}
     ${bs}=  FakerLibrary.bs
 
     
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  
-    ${ph1}=  Evaluate  ${MUSERNAME_E2}+1000810001
-    ${ph2}=  Evaluate  ${MUSERNAME_E2}+2000810001
+    ${ph1}=  Evaluate  ${PUSERNAME_E2}+1000810001
+    ${ph2}=  Evaluate  ${PUSERNAME_E2}+2000810001
     ${views}=  Random Element    ${Views}
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -2425,7 +2425,7 @@ JD-TC-UpdateVacation-13
 JD-TC-UpdateVacation-14
     [Documentation]  Take user level chekins and update vactions time and cancel one waitlist then check service time and waiting time
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2439,7 +2439,7 @@ JD-TC-UpdateVacation-14
     clear_users  ${ph2}
     Set Suite Variable  ${ph2}
 
-    clear_customer   ${MUSERNAME_E2}
+    clear_customer   ${PUSERNAME_E2}
     clear_customer   ${ph2}
 
     ${firstname}=  FakerLibrary.name
@@ -2645,7 +2645,7 @@ JD-TC-UpdateVacation-14
 JD-TC-UpdateVacation-15
     [Documentation]  Take user level chekins and update vactions time and cancel one waitlist then revert it to checkin state then check service time and waiting time
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2659,7 +2659,7 @@ JD-TC-UpdateVacation-15
     clear_users  ${ph3}
     Set Suite Variable  ${ph3}
 
-    clear_customer   ${MUSERNAME_E2}
+    clear_customer   ${PUSERNAME_E2}
     clear_customer   ${ph3}
 
     ${firstname}=  FakerLibrary.name
@@ -2883,7 +2883,7 @@ JD-TC-UpdateVacation-15
 JD-TC-UpdateVacation-16
     [Documentation]  Activate Vacation to user in account level and check both acoount and user level checkins
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2897,12 +2897,12 @@ JD-TC-UpdateVacation-16
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_queue      ${HLMUSERNAME2}
-    clear_service    ${HLMUSERNAME2}
-    clear_customer   ${HLMUSERNAME2}
+    clear_queue      ${HLPUSERNAME2}
+    clear_service    ${HLPUSERNAME2}
+    clear_customer   ${HLPUSERNAME2}
     reset_user_metric   ${account_id}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME2}
+    ${pid}=  get_acc_id  ${HLPUSERNAME2}
 
     ${resp}=  Update Waitlist Settings  ${calc_mode[3]}   ${EMPTY}  ${bool[1]}  ${bool[0]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -3035,13 +3035,13 @@ JD-TC-UpdateVacation-16
         FOR   ${i}  IN RANGE   0   ${len}
         
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME2}'
+            IF   not '${user_phone}' == '${HLPUSERNAME2}'
                 clear_users  ${user_phone}
             END
         END
     END
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME2}+100044990
+    ${ph1}=  Evaluate  ${HLPUSERNAME2}+100044990
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -3059,8 +3059,8 @@ JD-TC-UpdateVacation-16
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${whpnum}=  Evaluate  ${HLMUSERNAME2}+336245
-    ${tlgnum}=  Evaluate  ${HLMUSERNAME2}+336345
+    ${whpnum}=  Evaluate  ${HLPUSERNAME2}+336245
+    ${tlgnum}=  Evaluate  ${HLPUSERNAME2}+336345
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
@@ -3184,7 +3184,7 @@ JD-TC-UpdateVacation-16
 JD-TC-UpdateVacation-17
     [Documentation]  Activate delete account level holiday
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3193,11 +3193,11 @@ JD-TC-UpdateVacation-17
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${HLMUSERNAME1}
-    clear_service    ${HLMUSERNAME1}
-    clear_customer   ${HLMUSERNAME1}
+    clear_queue      ${HLPUSERNAME1}
+    clear_service    ${HLPUSERNAME1}
+    clear_customer   ${HLPUSERNAME1}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME1}
+    ${pid}=  get_acc_id  ${HLPUSERNAME1}
 
     ${resp}=  Update Waitlist Settings  ${calc_mode[3]}   ${EMPTY}  ${bool[1]}  ${bool[0]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -3329,14 +3329,14 @@ JD-TC-UpdateVacation-17
         FOR   ${i}  IN RANGE   0   ${len}
        
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME1}'
+            IF   not '${user_phone}' == '${HLPUSERNAME1}'
                 clear_users  ${user_phone}
             END
         END
     END
     
    
-    ${ph1}=  Evaluate  ${HLMUSERNAME1}+1000440000
+    ${ph1}=  Evaluate  ${HLPUSERNAME1}+1000440000
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -3354,8 +3354,8 @@ JD-TC-UpdateVacation-17
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${whpnum}=  Evaluate  ${HLMUSERNAME1}+336245
-    ${tlgnum}=  Evaluate  ${HLMUSERNAME1}+336345
+    ${whpnum}=  Evaluate  ${HLPUSERNAME1}+336245
+    ${tlgnum}=  Evaluate  ${HLPUSERNAME1}+336345
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
@@ -3483,7 +3483,7 @@ JD-TC-UpdateVacation-17
 JD-TC-UpdateVacation-18
     [Documentation]  Assingn waitlist to user
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME74}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME74}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3492,11 +3492,11 @@ JD-TC-UpdateVacation-18
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${MUSERNAME74}
-    clear_service    ${MUSERNAME74}
-    clear_customer   ${MUSERNAME74}
+    clear_queue      ${PUSERNAME74}
+    clear_service    ${PUSERNAME74}
+    clear_customer   ${PUSERNAME74}
 
-    ${pid}=  get_acc_id  ${MUSERNAME74}
+    ${pid}=  get_acc_id  ${PUSERNAME74}
 
     ${resp}=  Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -3572,7 +3572,7 @@ JD-TC-UpdateVacation-18
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${MUSERNAME74}+1000440000
+    ${ph1}=  Evaluate  ${PUSERNAME74}+1000440000
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -3590,8 +3590,8 @@ JD-TC-UpdateVacation-18
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${whpnum}=  Evaluate  ${MUSERNAME74}+336245
-    ${tlgnum}=  Evaluate  ${MUSERNAME74}+336345
+    ${whpnum}=  Evaluate  ${PUSERNAME74}+336245
+    ${tlgnum}=  Evaluate  ${PUSERNAME74}+336345
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
@@ -3686,11 +3686,11 @@ JD-TC-UpdateVacation-13
     [Documentation]    Take a appointment and then create vacation on after that appointment time
 
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${pid_B15}=  get_acc_id  ${MUSERNAME_E3}
+    ${pid_B15}=  get_acc_id  ${PUSERNAME_E3}
     Set Suite variable  ${pid_B15}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -3866,7 +3866,7 @@ JD-TC-UpdateVacation-13
 
 JD-TC-UpdateVacation-UH2
     [Documentation]  Given date is Empty in the Update Vacation
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${start_time2}=  add_timezone_time  ${tz}   2  10
@@ -3885,7 +3885,7 @@ JD-TC-UpdateVacation-UH2
 
 JD-TC-UpdateVacation-UH8
     [Documentation]  StartTime is Empty in the Update Vacation
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${start_time3}=  add_timezone_time  ${tz}   2  25
@@ -3903,7 +3903,7 @@ JD-TC-UpdateVacation-UH8
 
 JD-TC-UpdateVacation-UH9
     [Documentation]  EndTime is Empty in the Update Vacation
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${start_time4}=  add_timezone_time  ${tz}   2  20
@@ -3922,7 +3922,7 @@ JD-TC-UpdateVacation-UH9
 JD-TC-UpdateVacation-4
     [Documentation]   Waitlist is Enabled and given the future date to Update Vacation (Set StartTime as todays Past Time)
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -11,7 +11,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 *** Variables ***
 ${SERVICE1}  Makeup  
@@ -378,14 +378,14 @@ JD-TC-UpdateQueue-UH10
 JD-TC-UpdateQueue-7
     [Documentation]  Update Queue for Branch
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-UpdateQueue-8
     [Documentation]  Update Queue for User
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     

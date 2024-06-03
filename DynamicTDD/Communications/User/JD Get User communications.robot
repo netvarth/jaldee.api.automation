@@ -14,7 +14,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 *** Variables ***
@@ -59,28 +59,28 @@ JD-TC-Get User communications-1
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_E1}=  Evaluate  ${MUSERNAME}+6900196
+    ${PUSERNAME_E1}=  Evaluate  ${PUSERNAME}+6900196
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E1}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E1}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_E1}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E1}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_E1}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E1}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E1}${\n}
-    Set Suite Variable  ${MUSERNAME_E1}
-    ${id}=  get_id  ${MUSERNAME_E1}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E1}${\n}
+    Set Suite Variable  ${PUSERNAME_E1}
+    ${id}=  get_id  ${PUSERNAME_E1}
     Set Suite Variable  ${id}
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
 
-    ${ph1}=  Evaluate  ${MUSERNAME_E1}+1000000000
-    ${ph2}=  Evaluate  ${MUSERNAME_E1}+2000000000
+    ${ph1}=  Evaluate  ${PUSERNAME_E1}+1000000000
+    ${ph2}=  Evaluate  ${PUSERNAME_E1}+2000000000
     ${views}=  Random Element    ${Views}
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -218,7 +218,7 @@ JD-TC-Get User communications-1
     # Set Suite Variable   ${p0_id}   ${resp.json()[2]['id']}
 
 
-    ${p_id}=  get_acc_id  ${MUSERNAME_E1}
+    ${p_id}=  get_acc_id  ${PUSERNAME_E1}
     Set Suite Variable   ${p_id}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -283,7 +283,7 @@ JD-TC-Get User communications-1
     Set Suite Variable  ${lname1}   ${resp.json()['userProfile']['lastName']}
 
     clear_Consumermsg  ${CUSERNAME25}
-    clear_Providermsg  ${MUSERNAME_E1}
+    clear_Providermsg  ${PUSERNAME_E1}
 
 
     ${resp}=  Consumer Login  ${CUSERNAME25}  ${PASSWORD}
@@ -307,7 +307,7 @@ JD-TC-Get User communications-1
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
     Set Suite Variable  ${estTime}  ${resp.json()['serviceTime']}
    
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -322,7 +322,7 @@ JD-TC-Get User communications-1
     
     Set Suite Variable  ${W_encId}  ${resp.json()}
 
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${MUSERNAME_E1}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
@@ -398,7 +398,7 @@ JD-TC-Get User communications-2
     ${cid}=  get_id  ${CUSERNAME25}
 
     clear_Consumermsg  ${CUSERNAME25}
-    clear_Providermsg  ${MUSERNAME_E1}
+    clear_Providermsg  ${PUSERNAME_E1}
 
     ${resp}=  Cancel Waitlist  ${cwid0}  ${p_id}
     Log  ${resp.json()}
@@ -406,7 +406,7 @@ JD-TC-Get User communications-2
 
     sleep  04s
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
      
@@ -442,11 +442,11 @@ JD-TC-Get User communications-2
     Should Be Equal As Strings  ${resp.json()[0]['msg']}                ${WaitlistNotify_msg}
     Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}     ${cid}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${MUSERNAME_E1}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
@@ -498,7 +498,7 @@ JD-TC-Get User communications-3
     ${cid2}=  get_id  ${CUSERNAME2}
     
     clear_Consumermsg  ${CUSERNAME2}
-    clear_Providermsg  ${MUSERNAME_E1}
+    clear_Providermsg  ${PUSERNAME_E1}
 
     ${msg2}=   FakerLibrary.Word
     ${caption2}=  Fakerlibrary.sentence
@@ -519,7 +519,7 @@ JD-TC-Get User communications-3
     Should Be Equal As Strings  ${resp.json()[0]['msg']}                ${msg2}
     Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}     ${u_id1}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -551,10 +551,10 @@ JD-TC-Get User communications-4
     clear_Consumermsg  ${CUSERNAME27}
     clear_Consumermsg  ${CUSERNAME25}
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${account_id1}=  get_acc_id  ${MUSERNAME_E1}
+    ${account_id1}=  get_acc_id  ${PUSERNAME_E1}
 
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
@@ -572,7 +572,7 @@ JD-TC-Get User communications-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    clear_customer   ${MUSERNAME_E1}
+    clear_customer   ${PUSERNAME_E1}
     ${resp}=  AddCustomer  ${CUSERNAME27} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -584,7 +584,7 @@ JD-TC-Get User communications-4
     ${msg1}=   FakerLibrary.Word
     ${caption1}=  Fakerlibrary.sentence
     
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${MUSERNAME_E1}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -634,7 +634,7 @@ JD-TC-Get User communications-4
 JD-TC-Get User communications-5
 	[Documentation]   User communicate with consumer after Appointment_Add operation
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -690,7 +690,7 @@ JD-TC-Get User communications-5
     Set Test Variable  ${uname}  ${resp.json()['userName']}
     ${cid}=  get_id  ${CUSERNAME25} 
     clear_Consumermsg  ${CUSERNAME25}
-    clear_Providermsg  ${MUSERNAME_E1}
+    clear_Providermsg  ${PUSERNAME_E1}
 
     ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${p_id}
     Log   ${resp.json()}
@@ -721,7 +721,7 @@ JD-TC-Get User communications-5
     Set Suite Variable  ${apptid1}  ${apptid[0]}
     # sleep  02s 
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -740,7 +740,7 @@ JD-TC-Get User communications-5
     ${msg3}=   FakerLibrary.Word
     ${caption1}=  Fakerlibrary.sentence
     
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${MUSERNAME_E1}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -817,7 +817,7 @@ JD-TC-Get User communications-6
 
     ${cid}=  get_id  ${CUSERNAME25}
     clear_Consumermsg  ${CUSERNAME25}
-    clear_Providermsg  ${MUSERNAME_E1}
+    clear_Providermsg  ${PUSERNAME_E1}
     
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME25}   ${PASSWORD}
     Log   ${resp.json()}
@@ -839,7 +839,7 @@ JD-TC-Get User communications-6
     Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}     ${u_id1}
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}          ${p_id}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -859,7 +859,7 @@ JD-TC-Get User communications-7
 	[Documentation]   Communication between provider and consumer after Appointment_Cancel operation
 
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -880,7 +880,7 @@ JD-TC-Get User communications-7
     ${cid}=  get_id  ${CUSERNAME25}
 
     clear_Consumermsg  ${CUSERNAME25}
-    clear_Providermsg  ${MUSERNAME_E1}
+    clear_Providermsg  ${PUSERNAME_E1}
 
 
     ${resp}=  Cancel Appointment By Consumer  ${apptid1}   ${p_id}
@@ -935,7 +935,7 @@ JD-TC-Get User communications-7
     Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}   ${cid}
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -979,7 +979,7 @@ JD-TC-Get User communications-UH2
     ${cid2}=  get_id  ${CUSERNAME2}
     
     clear_Consumermsg  ${CUSERNAME2}
-    clear_Providermsg  ${MUSERNAME_E1}
+    clear_Providermsg  ${PUSERNAME_E1}
     
     ${msg2}=   FakerLibrary.Word
     ${caption2}=  Fakerlibrary.sentence
@@ -1002,7 +1002,7 @@ JD-TC-Get User communications-UH2
     Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}     ${u_id1}
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1023,7 +1023,7 @@ JD-TC-Get User communications-UH2
 
 JD-TC-Get User communications-UH3
     [Documentation]  Get User communications using Provider id
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${cid2}=  get_id  ${CUSERNAME2}
@@ -1043,7 +1043,7 @@ JD-TC-Get User communications-UH3
 
 JD-TC-Get User communications-UH4
     [Documentation]  verify 'Get_User_communications' using another user id of same provider
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${cid2}=  get_id  ${CUSERNAME2}
@@ -1064,7 +1064,7 @@ JD-TC-Get User communications-UH4
 
 JD-TC-Get User communications-UH5
     [Documentation]  Get User communications using invalid Provider id
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${cid2}=  get_id  ${CUSERNAME2}
@@ -1097,7 +1097,7 @@ JD-TC-Get User communications-UH7
     ${cid23}=  get_id  ${CUSERNAME23}
     
     clear_Consumermsg  ${CUSERNAME23}
-    clear_Providermsg  ${MUSERNAME_E1}
+    clear_Providermsg  ${PUSERNAME_E1}
 
     ${msg2}=   FakerLibrary.Word
     ${caption2}=  Fakerlibrary.sentence
@@ -1120,7 +1120,7 @@ JD-TC-Get User communications-UH7
     Should Be Equal As Strings  ${resp.json()[0]['msg']}                ${msg2}
     Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}     ${u_id1}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

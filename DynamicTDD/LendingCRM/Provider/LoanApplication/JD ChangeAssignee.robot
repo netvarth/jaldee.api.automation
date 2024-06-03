@@ -13,8 +13,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -91,22 +91,22 @@ JD-TC-Change Assignee-1
 
 # ..... SignUp Business Head
 
-    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+8745785
-    Set Suite Variable  ${NBFCMUSERNAME1}
+    ${NBFCPUSERNAME1}=  Evaluate  ${PUSERNAME}+8745785
+    Set Suite Variable  ${NBFCPUSERNAME1}
     ${highest_package}=  get_highest_license_pkg
 
-    ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCMUSERNAME1}    ${highest_package[0]}
+    ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCPUSERNAME1}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings            ${resp.status_code}    200
     
-    ${resp}=  Account Activation          ${NBFCMUSERNAME1}  0
+    ${resp}=  Account Activation          ${NBFCPUSERNAME1}  0
     Log   ${resp.json()}
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential      ${NBFCMUSERNAME1}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential      ${NBFCPUSERNAME1}  ${PASSWORD}  0
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login    ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -1371,7 +1371,7 @@ JD-TC-Change Assignee-1
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[4]}
 
-    ${resp}=  Encrypted Provider Login    ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -1405,7 +1405,7 @@ JD-TC-Change Assignee-2
                                   
     [Documentation]   Change Assignee Two times with same id.
 
-    ${resp}=  Encrypted Provider Login  ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${NBFCPUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1463,7 +1463,7 @@ JD-TC-Change Assignee-UH1
     [Documentation]               Create Loan Application and try to Change Assignee multiple time different user id.
 
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME8}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1546,7 +1546,7 @@ JD-TC-Change Assignee-UH1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

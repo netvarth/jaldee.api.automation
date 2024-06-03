@@ -317,28 +317,28 @@ JD-TC-Get Unread Message Count-BRANCH-5
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_E1}=  Evaluate  ${MUSERNAME}+40333907
+    ${PUSERNAME_E1}=  Evaluate  ${PUSERNAME}+40333907
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E1}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E1}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_E1}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E1}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_E1}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E1}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E1}${\n}
-    Set Suite Variable  ${MUSERNAME_E1}
-    ${id}=  get_id  ${MUSERNAME_E1}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E1}${\n}
+    Set Suite Variable  ${PUSERNAME_E1}
+    ${id}=  get_id  ${PUSERNAME_E1}
     Set Suite Variable  ${id}
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
   
-    ${ph1}=  Evaluate  ${MUSERNAME_E1}+1000000000
-    ${ph2}=  Evaluate  ${MUSERNAME_E1}+2000000000
+    ${ph1}=  Evaluate  ${PUSERNAME_E1}+1000000000
+    ${ph2}=  Evaluate  ${PUSERNAME_E1}+2000000000
     ${views}=  Random Element    ${Views}
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -473,7 +473,7 @@ JD-TC-Get Unread Message Count-BRANCH-5
     Set Suite Variable  ${cR_id1}  ${cR_id1}
     clear_Consumermsg  ${CUSERNAME8}
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -481,7 +481,7 @@ JD-TC-Get Unread Message Count-BRANCH-5
     Log  ${decrypted_data}
     Set Suite Variable  ${pR_id1}  ${decrypted_data['id']}
     # Set Suite Variable  ${pR_id1}  ${resp.json()['id']}
-    ${account_id1}=  get_acc_id  ${MUSERNAME_E1}
+    ${account_id1}=  get_acc_id  ${PUSERNAME_E1}
     Set Suite Variable  ${account_id1}
 
     ${resp}=   Get jaldeeIntegration Settings
@@ -500,7 +500,7 @@ JD-TC-Get Unread Message Count-BRANCH-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    clear_customer   ${MUSERNAME_E1}
+    clear_customer   ${PUSERNAME_E1}
     ${resp}=  AddCustomer  ${CUSERNAME8}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -510,7 +510,7 @@ JD-TC-Get Unread Message Count-BRANCH-5
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${MUSERNAME_E1}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -590,11 +590,11 @@ JD-TC-Get Unread Message Count-BRANCH-6
     clear_Consumermsg  ${CUSERNAME7}
     clear_Consumermsg  ${CUSERNAME5}
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    clear_customer   ${MUSERNAME_E1}
+    clear_customer   ${PUSERNAME_E1}
     ${resp}=  AddCustomer  ${CUSERNAME7}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -608,7 +608,7 @@ JD-TC-Get Unread Message Count-BRANCH-6
     # ${resp}=  User Consumer Communication    ${p1_id}   ${cR_id7}  ${msg1}   
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200 
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${MUSERNAME_E1}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 

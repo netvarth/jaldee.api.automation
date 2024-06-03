@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -29,7 +29,7 @@ JD-TC-Update Stock Adjustment-1
 
     [Documentation]  update stock adjustment with same details.
     comment  NOTE-------------UPDATE STOCK ADJUSTMENT ---WE CAN ONLY UPDATE REMARKS AND STOCK ADJUSTMENT DTO
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -82,10 +82,10 @@ JD-TC-Update Stock Adjustment-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME12}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME12}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -225,7 +225,7 @@ JD-TC-Update Stock Adjustment-2
 
     [Documentation]  Create stock adjustment with multiple stockAdjustDetailsDtos. then update stock adjustment by adding one more  stockAdjustDetailsDtos
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -307,7 +307,7 @@ JD-TC-Update Stock Adjustment-3
 
     [Documentation]  create one remarks and update stock adjustment
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -356,7 +356,7 @@ JD-TC-Update Stock Adjustment-4
 
     [Documentation]  Create stock adjustment with one batch disabled item then update stock adjustment with batch enable item.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -488,7 +488,7 @@ JD-TC-Update Stock Adjustment-UH2
 
     [Documentation]  update stock adjustment with empty store id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -503,7 +503,7 @@ JD-TC-Update Stock Adjustment-UH3
 
     [Documentation]  Update stock adjustment with empty inventory_catalog_encid.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -517,7 +517,7 @@ JD-TC-Update Stock Adjustment-UH4
 
     [Documentation]  Update stock adjustment with empty remarks_encid1.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -531,7 +531,7 @@ JD-TC-Update Stock Adjustment-UH5
 
     [Documentation]  update stock adjustment with empty quantity.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

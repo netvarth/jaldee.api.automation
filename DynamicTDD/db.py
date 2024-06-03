@@ -6324,10 +6324,11 @@ def decrypt_data(data):
         # print(data)
         final_data=  data + unpadder.finalize()
         string_data = final_data.decode()
-        print(type(string_data))
-        print(string_data)
+        # print(type(string_data))
+        # print(string_data)
         json_object = json.loads(string_data)
-        print(type(json_object))
+        # print(type(json_object))
+        print(json_object)
         return  json_object
     except Exception as e:
             print ("Exception:", e)

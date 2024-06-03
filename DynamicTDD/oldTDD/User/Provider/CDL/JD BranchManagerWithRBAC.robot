@@ -15,11 +15,11 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ApiKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -66,7 +66,7 @@ JD-TC-BranchManager-1
     [Documentation]   Create Branch manager and Create a partner by sales officer
     ...   then branch manager - view partner.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -166,7 +166,7 @@ JD-TC-BranchManager-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME21}'
+            IF   not '${user_phone}' == '${HLPUSERNAME21}'
                 clear_users  ${user_phone}
             END
         END
@@ -192,7 +192,7 @@ JD-TC-BranchManager-1
     ${resp}=  Get User By Id  ${bm_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${BMUSERNAME1}  ${resp.json()['mobileNo']}
+    Set Suite Variable  ${BPUSERNAME1}  ${resp.json()['mobileNo']}
 
 # ....User  :Bussiness Head...
 
@@ -602,14 +602,14 @@ JD-TC-BranchManager-1
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
-    ${resp}=  SendProviderResetMail   ${BMUSERNAME1}
+    ${resp}=  SendProviderResetMail   ${BPUSERNAME1}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    @{resp}=  ResetProviderPassword  ${BMUSERNAME1}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
+    @{resp}=  ResetProviderPassword  ${BPUSERNAME1}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${BMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BPUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -622,7 +622,7 @@ JD-TC-BranchManager-2
 
     [Documentation]  branch manager -approve partner.
 
-    ${resp}=  Encrypted Provider Login  ${BMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BPUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -640,7 +640,7 @@ JD-TC-BranchManager-3
 
     [Documentation]   branch manager- update SalesOfficerr.
 
-    ${resp}=  Encrypted Provider Login  ${BMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BPUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -659,7 +659,7 @@ JD-TC-BranchManager-4
 
     [Documentation]  branch manager- update Partner Settings.
 
-    ${resp}=  Encrypted Provider Login  ${BMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BPUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -677,7 +677,7 @@ JD-TC-BranchManager-5
 
     [Documentation]   branch manager- enable partner.
 
-    ${resp}=  Encrypted Provider Login  ${BMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BPUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -694,7 +694,7 @@ JD-TC-BranchManager-6
 
     [Documentation]  branch manager- disable partner.
 
-    ${resp}=  Encrypted Provider Login  ${BMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BPUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -832,7 +832,7 @@ JD-TC-BranchManager-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${BMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BPUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -978,7 +978,7 @@ JD-TC-BranchManager-8
 
     [Documentation]  branch manager- view LoanApplication.
 
-    ${resp}=  Encrypted Provider Login  ${BMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BPUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1125,7 +1125,7 @@ JD-TC-BranchManager-9
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${BMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BPUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1205,7 +1205,7 @@ JD-TC-BranchManager-10
     Should Be Equal As Strings     ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[9]}
 
-    ${resp}=  Encrypted Provider Login  ${BMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BPUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1225,7 +1225,7 @@ JD-TC-BranchManager-11
 
     [Documentation]  branch manager- reject LoanApplication.
 
-    ${resp}=  Encrypted Provider Login  ${BMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BPUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1243,7 +1243,7 @@ JD-TC-BranchManager-UH1
 
     [Documentation]  branch manager- create location.
 
-    ${resp}=  Encrypted Provider Login  ${BMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BPUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1273,7 +1273,7 @@ JD-TC-BranchManager-UH2
 
     [Documentation]  branch manager- update location.
 
-    ${resp}=  Encrypted Provider Login  ${BMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BPUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1294,7 +1294,7 @@ JD-TC-BranchManager-UH3
 
     [Documentation]  branch manager- create branch.
 
-    ${resp}=  Encrypted Provider Login  ${BMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BPUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1311,7 +1311,7 @@ JD-TC-BranchManager-UH4
 
     [Documentation]  branch manager- update branch.
 
-    ${resp}=  Encrypted Provider Login  ${BMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BPUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1327,7 +1327,7 @@ JD-TC-BranchManager-UH5
 
     [Documentation]  branch manager- create partner.
 
-    ${resp}=  Encrypted Provider Login  ${BMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BPUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

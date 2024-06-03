@@ -11,8 +11,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Library           /ebs/TDD/excelfuncs.py
 
 *** Variables ***
@@ -80,25 +80,25 @@ JD-TC-AddLeadNotes-1
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+550279
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+550279
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_E}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
  
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
-    Set Suite Variable  ${MUSERNAME_E}
-    ${id}=  get_id  ${MUSERNAME_E}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+    Set Suite Variable  ${PUSERNAME_E}
+    ${id}=  get_id  ${PUSERNAME_E}
 
 
     ${resp}=  Get Business Profile
@@ -390,7 +390,7 @@ JD-TC-AddLeadNotes-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -596,13 +596,13 @@ JD-TC-AddLeadNotes-1
 JD-TC-AddLeadNotes-2
 
     [Documentation]  Create a lead to a branch and add notes , verify.
-    clear_customer    ${MUSERNAME_E}
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    clear_customer    ${PUSERNAME_E}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
  
-    clear_customer   ${MUSERNAME_E}
+    clear_customer   ${PUSERNAME_E}
 
     ${resp}=  AddCustomer  ${CUSERNAME8}    
     Log   ${resp.json()}
@@ -921,13 +921,13 @@ JD-TC-AddLeadNotes-2
 JD-TC-AddLeadNotes-3
 
     [Documentation]  Add same note to multiple leads.
-    clear_customer    ${MUSERNAME_E}
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    clear_customer    ${PUSERNAME_E}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
  
-    clear_customer   ${MUSERNAME_E}
+    clear_customer   ${PUSERNAME_E}
 
     ${locId}=  Create Sample Location
     ${title}=  FakerLibrary.user name
@@ -1243,7 +1243,7 @@ JD-TC-AddLeadNotes-3
 
     #  ${resp}=    updateEnquiryStatus  ${account_id}
     # sleep  01s
-    clear_customer   ${HLMUSERNAME5}
+    clear_customer   ${HLPUSERNAME5}
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME15}  
     Log  ${resp.content}
@@ -1585,12 +1585,12 @@ JD-TC-AddLeadNotes-4
 
     [Documentation]  add same note to muliple times to the same lead.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
  
-    clear_customer   ${MUSERNAME_E}
+    clear_customer   ${PUSERNAME_E}
 
     ${locId}=  Create Sample Location
     ${title}=  FakerLibrary.user name
@@ -1928,13 +1928,13 @@ JD-TC-AddLeadNotes-5
 
     [Documentation]  add numbers as notes to a lead.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
  
 
-    clear_customer   ${MUSERNAME_E}
+    clear_customer   ${PUSERNAME_E}
 
     ${locId}=  Create Sample Location
     ${title}=  FakerLibrary.user name
@@ -2267,10 +2267,10 @@ JD-TC-AddLeadNotes-6
 
     [Documentation]  add notes to a lead   after crifscore generation
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${p_id}=  get_acc_id  ${MUSERNAME_E}
+    ${p_id}=  get_acc_id  ${PUSERNAME_E}
     
     ${resp}=  categorytype  ${p_id}
     ${resp}=  tasktype      ${p_id}

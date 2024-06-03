@@ -15,11 +15,11 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ApiKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -72,7 +72,7 @@ JD-TC-BranchOperationHead-1
     [Documentation]   Create Branch operation Head(with append role) and Create a partner by sales officer
     ...   then branch operation head - view partner.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -172,7 +172,7 @@ JD-TC-BranchOperationHead-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME18}'
+            IF   not '${user_phone}' == '${HLPUSERNAME18}'
                 clear_users  ${user_phone}
             END
         END
@@ -914,7 +914,7 @@ JD-TC-BranchOperationHead-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -948,7 +948,7 @@ JD-TC-BranchOperationHead-3
 
     [Documentation]  branch operation head -try to approve partner who is already approved.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -970,7 +970,7 @@ JD-TC-BranchOperationHead-4
 
     [Documentation]  disable branch operation head by bussiness head then try to approve partner.
    
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -985,7 +985,7 @@ JD-TC-BranchOperationHead-4
 
 # ....again activate the user for further cases....
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1875,7 +1875,7 @@ JD-TC-BranchOperationHead-12
     [Documentation]   Create Branch operation Head(create user with role) and Create a partner by sales officer
     ...   then branch operation head - view partner.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id2}  ${resp.json()['id']}
@@ -1952,7 +1952,7 @@ JD-TC-BranchOperationHead-12
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME17}'
+            IF   not '${user_phone}' == '${HLPUSERNAME17}'
                 clear_users  ${user_phone}
             END
         END

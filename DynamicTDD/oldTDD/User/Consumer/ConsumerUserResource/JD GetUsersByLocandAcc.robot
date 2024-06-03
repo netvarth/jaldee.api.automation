@@ -12,7 +12,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 
@@ -27,7 +27,7 @@ JD-TC-GetUsers-1
 
     [Documentation]  Get users by branch login
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME45}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -74,7 +74,7 @@ JD-TC-GetUsers-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME45}'
+            IF   not '${user_phone}' == '${PUSERNAME45}'
                 clear_users  ${user_phone}
             END
         END

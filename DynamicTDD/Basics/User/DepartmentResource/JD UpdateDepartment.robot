@@ -9,7 +9,7 @@ Library           FakerLibrary
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
 *** Variables ***
@@ -32,22 +32,22 @@ JD-TC-Update Department-1
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_K}=  Evaluate  ${MUSERNAME}+423825
+    ${PUSERNAME_K}=  Evaluate  ${PUSERNAME}+423825
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_K}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_K}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_K}  0
+    ${resp}=  Account Activation  ${PUSERNAME_K}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_K}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_K}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_K}${\n}
-    Set Suite Variable  ${MUSERNAME_K}
-    ${id}=  get_id  ${MUSERNAME_K}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_K}${\n}
+    Set Suite Variable  ${PUSERNAME_K}
+    ${id}=  get_id  ${PUSERNAME_K}
     Set Suite Variable  ${id}
 
     ${ser_desc}=   FakerLibrary.word
@@ -94,7 +94,7 @@ JD-TC-Update Department-1
 JD-TC-Update Department-2
     [Documentation]  Provider Update department using same Service ids
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Update Department  ${depid1}  ${dep_name2}  ${dep_code2}  ${dep_desc}    ${sid1}  ${sid1}  ${sid1} 
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -107,7 +107,7 @@ JD-TC-Update Department-2
 JD-TC-Update Department-3
     [Documentation]  Provider Update a department with no service details
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Update Department  ${depid1}  ${dep_name2}  ${dep_code2}  ${dep_desc}  
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -121,7 +121,7 @@ JD-TC-Update Department-3
 JD-TC-Update Department-4
     [Documentation]  Provider Update department using same Service names
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dep_name3}=  FakerLibrary.bs
     Set Suite Variable   ${dep_name3}
@@ -148,7 +148,7 @@ JD-TC-Update Department-4
 JD-TC-Update Department-UH1
     [Documentation]  Provider Update a department to already existing department name
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dep_name}=  FakerLibrary.bs
     ${dep_code}=   Random Int  min=100   max=999
@@ -162,7 +162,7 @@ JD-TC-Update Department-UH1
 JD-TC-Update Department-UH2
     [Documentation]  Provider Create already existing department code
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dep_name}=  FakerLibrary.bs
     ${resp}=  Update Department  ${depid2}  ${dep_name}   ${dep_code2}  ${dep_desc}   ${sid2}
@@ -172,7 +172,7 @@ JD-TC-Update Department-UH2
 JD-TC-Update Department-UH3
     [Documentation]  Provider Update a department with another providers service name
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -204,7 +204,7 @@ JD-TC-Update Department-UH6
 
 JD-TC-Update Department-UH7
     [Documentation]  Provider Update a department with Invalid service id
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dep_name}=  FakerLibrary.bs
     ${dep_code}=   Random Int  min=100   max=999

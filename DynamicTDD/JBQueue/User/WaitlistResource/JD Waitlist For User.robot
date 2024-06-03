@@ -8,7 +8,7 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 *** Variables ***
@@ -34,28 +34,28 @@ JD-TC-WaitlistForUser-1
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+884550
+     ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+884550
      ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Activation  ${MUSERNAME_E}  0
+     ${resp}=  Account Activation  ${PUSERNAME_E}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
-     Set Suite Variable  ${MUSERNAME_E}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+     Set Suite Variable  ${PUSERNAME_E}
 
      
      ${list}=  Create List  1  2  3  4  5  6  7
      Set Suite Variable  ${list}  ${list}
-     ${ph1}=  Evaluate  ${MUSERNAME_E}+1000000000
-     ${ph2}=  Evaluate  ${MUSERNAME_E}+2000000000
+     ${ph1}=  Evaluate  ${PUSERNAME_E}+1000000000
+     ${ph2}=  Evaluate  ${PUSERNAME_E}+2000000000
      ${views}=  Random Element    ${Views}
      ${name1}=  FakerLibrary.name
      ${name2}=  FakerLibrary.name
@@ -131,7 +131,7 @@ JD-TC-WaitlistForUser-1
      Should Be Equal As Strings    ${resp.status_code}    200
 
 
-      ${id}=  get_id  ${MUSERNAME_E}
+      ${id}=  get_id  ${PUSERNAME_E}
       Set Suite Variable  ${id}
       ${bs}=  FakerLibrary.bs
       Set Suite Variable  ${bs}
@@ -260,7 +260,7 @@ JD-TC-WaitlistForUser-1
 JD-TC-WaitlistForUser-2
       [Documentation]   Add a consumer to a different user's service on same Queue
 
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist By User  ${cid}  ${s_id2}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${u_id}  ${cid}
@@ -284,7 +284,7 @@ JD-TC-WaitlistForUser-2
 JD-TC-WaitlistForUser-3
       [Documentation]   Add a consumer to the waitlist for a future date for the same service of current day
 
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${FUT_DAY}=  db.add_timezone_date  ${tz}  2  
       Set Suite Variable   ${FUT_DAY}
@@ -306,7 +306,7 @@ JD-TC-WaitlistForUser-3
 JD-TC-WaitlistForUser-4
       [Documentation]   Add a consumer to the waitlist for a different service in a future date 
 
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist By User  ${cid}  ${s_id}  ${q_id}  ${FUT_DAY}  ${desc}  ${bool[1]}  ${u_id}  ${cid}
@@ -326,7 +326,7 @@ JD-TC-WaitlistForUser-4
 JD-TC-WaitlistForUser-5
     [Documentation]   Add a consumer to a different queue 
 
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Create Service For User  ${SERVICE3}  ${description}   ${dur}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  0  ${amt}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${u_id}
       Log  ${resp.json()}
@@ -357,7 +357,7 @@ JD-TC-WaitlistForUser-5
 JD-TC-WaitlistForUser-6
       [Documentation]   Add a consumer to same service on same date to a different queue
 
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
 
       ${desc}=   FakerLibrary.word
@@ -369,7 +369,7 @@ JD-TC-WaitlistForUser-6
 JD-TC-WaitlistForUser-7
       [Documentation]   Add to waitlist after disabling online checkin (Walkin checkins possible)
 
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Disable Online Checkin
       Log   ${resp.json()}
@@ -402,7 +402,7 @@ JD-TC-WaitlistForUser-7
 
 JD-TC-WaitlistForUser-8
       [Documentation]   Add family members to the waitlist
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
 
       ${wait_time1}=  Evaluate  ${wait_time}+${wait_time}
@@ -449,7 +449,7 @@ JD-TC-WaitlistForUser-8
 JD-TC-WaitlistForUser-9
       [Documentation]   Add again to the same queue and service after cancelling the waitlist
 
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  AddCustomer  ${CUSERNAME12}  countryCode=${country_code}
       Log   ${resp.json()}
@@ -495,7 +495,7 @@ JD-TC-WaitlistForUser-UH2
 JD-TC-WaitlistForUser-UH3
       [Documentation]   Add To Waitlist by using another provider's user details
 
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME2}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Add To Waitlist By User  ${id}  ${s_id3}  ${q_id2}  ${DAY1}  ${desc}  ${bool[1]}  ${u_id}  ${id}
       Log   ${resp.json()}
@@ -505,7 +505,7 @@ JD-TC-WaitlistForUser-UH3
 JD-TC-WaitlistForUser-UH4
       [Documentation]   Add To Waitlist by passing invalid consumer
 
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
 
       ${resp}=  Add To Waitlist By User  000  ${s_id3}  ${q_id2}  ${DAY1}  ${desc}  ${bool[1]}  ${u_id}  ${id}
@@ -516,7 +516,7 @@ JD-TC-WaitlistForUser-UH4
 JD-TC-WaitlistForUser-UH5
       [Documentation]   Waitlist for a non family member
 
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
 
       ${resp}=  AddCustomer  ${CUSERNAME4}   countryCode=${country_code}
@@ -537,7 +537,7 @@ JD-TC-WaitlistForUser-UH5
 JD-TC-WaitlistForUser-UH6
       [Documentation]   Add a consumer to the same queue for the same service repeatedly
 
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  AddCustomer  ${CUSERNAME15}   countryCode=${country_code}
       Log   ${resp.json()}
@@ -561,7 +561,7 @@ JD-TC-WaitlistForUser-UH6
 JD-TC-WaitlistForUser-UH7
       [Documentation]   Add to waitlist after disabling queue
 
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Create Service For User  ${SERVICE4}  ${description}   ${dur}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  0  ${amt}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${u_id}
       Log  ${resp.json()}
@@ -597,7 +597,7 @@ JD-TC-WaitlistForUser-UH7
 JD-TC-WaitlistForUser-UH9
       [Documentation]   Add to waitlist after disabling service
 
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Disable Service  ${s_id4}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -610,7 +610,7 @@ JD-TC-WaitlistForUser-UH9
 JD-TC-WaitlistForUser-10
       [Documentation]   Add to waitlist after disabling future checkin
 
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=   Disable Future Checkin
       Log  ${resp.json()}
@@ -628,7 +628,7 @@ JD-TC-WaitlistForUser-10
 JD-TC-WaitlistForUser-UH11
       [Documentation]   Add to waitlist after disabling waitlist for current day
 
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Disable Waitlist
       Log  ${resp.json()}
@@ -645,7 +645,7 @@ JD-TC-WaitlistForUser-UH11
 JD-TC-WaitlistForUser-UH12
       [Documentation]   Add to waitlist on a holiday
       
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${strt_time}=  add_timezone_time  ${tz}  0  20
       Set Suite Variable   ${strt_time}
@@ -729,7 +729,7 @@ JD-TC-WaitlistForUser-UH14
 JD-TC-WaitlistForUser-UH15
       [Documentation]   Add a consumer to a waitlist after working time
 
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${queue2}=    FakerLibrary.name
       Set Suite Variable    ${queue2} 
@@ -752,7 +752,7 @@ JD-TC-WaitlistForUser-UH15
 JD-TC-WaitlistForUser-UH16
       [Documentation]   Add to waitlist on a non scheduled day
 
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${list}=  Create List  1  2  3  4  5  6
       ${stime}=   db.subtract_timezone_time  ${tz}   2   00  
@@ -782,7 +782,7 @@ JD-TC-WaitlistForUser-UH16
 JD-TC-WaitlistForUser-UH17
       [Documentation]  update maximum capacity and check
 
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Update Queue  ${que_id7}  ${queue2}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${stime}  ${etime}  ${parallel}  2  ${loc_id1}  ${ser_id1}  ${ser_id2}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -825,7 +825,7 @@ JD-TC-WaitlistForUser-UH17
 JD-TC-WaitlistForUser-UH18
       [Documentation]  update maximum capacity and check
 
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings    ${resp.status_code}    200
       ${queue4}=    FakerLibrary.name
       Set Suite Variable    ${queue4}    
@@ -899,7 +899,7 @@ JD-TC-WaitlistForUser-UH18
 JD-TC-Verify WaitlistForUser-2
       [Documentation]   Verify Add a consumer to a different service on same Queue
 
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Waitlist By Id  ${wid1} 
       Log   ${resp.json()}
@@ -914,7 +914,7 @@ JD-TC-Verify WaitlistForUser-2
 JD-TC-Verify WaitlistForUser-3
       [Documentation]   Verify Add a consumer to the waitlist for a future date for the same service of current day
 
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Waitlist By Id  ${wid2} 
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -926,7 +926,7 @@ JD-TC-Verify WaitlistForUser-3
 JD-TC-Verify WaitlistForUser-4
       [Documentation]   Verify Add a consumer to the waitlist for a different service in a future date 
 
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Waitlist By Id  ${wid3} 
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -939,7 +939,7 @@ JD-TC-Verify WaitlistForUser-4
 JD-TC-Verify WaitlistForUser-5
     [Documentation]   Verify Add a consumer to a different queue 
 
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Waitlist By Id  ${wid4} 
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -952,7 +952,7 @@ JD-TC-Verify WaitlistForUser-5
 JD-TC-Verify WaitlistForUser-6
       [Documentation]   Verify Add a consumer to same service on same date to a different queue
 
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Waitlist By Id  ${wid5} 
       Log  ${resp.json()}
@@ -994,7 +994,7 @@ JD-TC-Verify WaitlistForUser-8
 JD-TC-Verify WaitlistForUser-9
     [Documentation]   Verify Add a provider to the waitlist
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Waitlist By Id  ${wid6} 
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1029,7 +1029,7 @@ JD-TC-Verify WaitlistForUser-11
 JD-TC-Verify WaitlistForUser-12
       [Documentation]   Verify Add again to the same queue and service after cancelling the waitlist
 
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Waitlist By Id  ${wait_id3} 
       Should Be Equal As Strings  ${resp.status_code}  200

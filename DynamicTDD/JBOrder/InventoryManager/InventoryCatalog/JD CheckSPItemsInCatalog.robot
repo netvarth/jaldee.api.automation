@@ -14,8 +14,8 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -45,7 +45,7 @@ JD-TC-Check SP Items In Catalog-1
 
     [Documentation]  Create two Inventory Catalog Item then check SP Items In Catalog .
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -98,10 +98,10 @@ JD-TC-Check SP Items In Catalog-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${MUSERNAME20}
+    ${accountId}=  get_acc_id  ${PUSERNAME20}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -215,7 +215,7 @@ JD-TC-Check SP Items In Catalog-UH1
 
     [Documentation]  Check SP Items In Catalog
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -242,7 +242,7 @@ JD-TC-Check SP Items In Catalog-UH3
 
     [Documentation]  Check SP Items In Catalog with invalid catalog id.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -257,7 +257,7 @@ JD-TC-Check SP Items In Catalog-UH4
 
     [Documentation]  Item is not added in catalog then check sp item in catalog
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

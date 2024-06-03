@@ -14,8 +14,8 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 
@@ -38,7 +38,7 @@ JD-TC-Get Inventory Item Summary-1
 
     [Documentation]  Get Inventory Item Summary
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME317}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME317}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -122,7 +122,7 @@ JD-TC-Get Inventory Item Summary-1
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME317}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME317}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -627,7 +627,7 @@ JD-TC-Get Inventory Item Summary-UH1
 
     [Documentation]  Get Inventory Item Summary
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME317}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME317}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -640,7 +640,7 @@ JD-TC-Get Inventory Item Summary-UH2
 
     [Documentation]  Get Inventory Item Summary where from is not passed
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME317}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME317}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

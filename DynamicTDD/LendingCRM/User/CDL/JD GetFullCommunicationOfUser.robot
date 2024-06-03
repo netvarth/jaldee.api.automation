@@ -15,11 +15,11 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ApiKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -48,7 +48,7 @@ JD-TC-GetFullCommunicationOfUser-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME55}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME55}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -60,7 +60,7 @@ JD-TC-GetFullCommunicationOfUser-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id1}  ${resp.json()['id']}
 
-    clear_customer  ${MUSERNAME55} 
+    clear_customer  ${PUSERNAME55} 
 
     ${comm_msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
@@ -97,7 +97,7 @@ JD-TC-GetFullCommunicationOfUser-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME60}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -109,7 +109,7 @@ JD-TC-GetFullCommunicationOfUser-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id1}  ${resp.json()['id']}
 
-    clear_customer  ${MUSERNAME60} 
+    clear_customer  ${PUSERNAME60} 
 
     ${comm_msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
@@ -146,7 +146,7 @@ JD-TC-GetFullCommunicationOfUser-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME61}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME61}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -158,7 +158,7 @@ JD-TC-GetFullCommunicationOfUser-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id1}  ${resp.json()['id']}
 
-    clear_customer  ${MUSERNAME61} 
+    clear_customer  ${PUSERNAME61} 
 
     ${comm_msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
@@ -195,7 +195,7 @@ JD-TC-GetFullCommunicationOfUser-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME62}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -207,7 +207,7 @@ JD-TC-GetFullCommunicationOfUser-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id1}  ${resp.json()['id']}
 
-    clear_customer  ${MUSERNAME62} 
+    clear_customer  ${PUSERNAME62} 
 
     ${comm_msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
@@ -244,7 +244,7 @@ JD-TC-GetFullCommunicationOfUser-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -284,7 +284,7 @@ JD-TC-GetFullCommunicationOfUser-6
 
     [Documentation]   verify communication details without sending any msg.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME56}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -312,7 +312,7 @@ JD-TC-GetFullCommunicationOfUser-7
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME25}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -364,7 +364,7 @@ JD-TC-GetFullCommunicationOfUser-8
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -416,7 +416,7 @@ JD-TC-GetFullCommunicationOfUser-9
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -468,7 +468,7 @@ JD-TC-GetFullCommunicationOfUser-10
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME28}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -527,7 +527,7 @@ JD-TC-GetFullCommunicationOfUser-11
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -577,7 +577,7 @@ JD-TC-GetFullCommunicationOfUser-12
     ...   then verify the communication details.
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -636,7 +636,7 @@ JD-TC-GetFullCommunicationOfUser-13
     ...   then verify the communication details.
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -694,7 +694,7 @@ JD-TC-GetFullCommunicationOfUser-14
     ...   then verify the communication details.
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME33}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME33}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -802,7 +802,7 @@ JD-TC-GetFullCommunicationOfUser-15
     ...   then verify the communication details.
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -910,7 +910,7 @@ JD-TC-GetFullCommunicationOfUser-16
     ...   then verify the communication details.
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME54}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME54}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -1018,7 +1018,7 @@ JD-TC-GetFullCommunicationOfUser-17
     ...   then verify the communication details.
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME55}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME55}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}

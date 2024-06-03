@@ -15,7 +15,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -34,7 +34,7 @@ JD-TC-Update Sales Order Status-1
 
     [Documentation]   Create a sales Order then change it's order status to ORDER_CONFIRMED.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -89,11 +89,11 @@ JD-TC-Update Sales Order Status-1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${accountId}=  get_acc_id  ${HLMUSERNAME16}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME16}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -220,7 +220,7 @@ JD-TC-Update Sales Order Status-1
 
 # ----------------------------- Provider take a Sales Order ------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -327,7 +327,7 @@ JD-TC-Update Sales Order Status-2
 
     [Documentation]   Update order status ORDER_CONFIRMED to ORDER_CANCELED.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -345,7 +345,7 @@ JD-TC-Update Sales Order Status-3
 
     [Documentation]   Update order status ORDER_CANCELED to ORDER_DRAFT.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -363,7 +363,7 @@ JD-TC-Update Sales Order Status-4
 
     [Documentation]   Update order status ORDER_DRAFT to ORDER_CONFIRMED then change to ORDER_COMPLETED.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -386,7 +386,7 @@ JD-TC-Update Sales Order Status-5
 
     [Documentation]   Update order status ORDER_COMPLETED to ORDER_DRAFT.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -402,7 +402,7 @@ JD-TC-Update Sales Order Status-6
 
     [Documentation]   Update order status ORDER_COMPLETED to ORDER_CONFIRMED.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -417,7 +417,7 @@ JD-TC-Update Sales Order Status-7
 
     [Documentation]   Update order status ORDER_COMPLETED to ORDER_CANCELED.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -433,7 +433,7 @@ JD-TC-Update Sales Order Status-8
 
     [Documentation]   Update order status ORDER_COMPLETED to ORDER_DISCARDED.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -448,7 +448,7 @@ JD-TC-Update Sales Order Status-9
 
     [Documentation]   Update order status ORDER_COMPLETED to ORDER_COMPLETED.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -463,7 +463,7 @@ JD-TC-Update Sales Order Status-10
 
     [Documentation]   Update order status ORDER_DRAFT to ORDER_COMPLETED.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -493,7 +493,7 @@ JD-TC-Update Sales Order Status-11
 
     [Documentation]   Update order status ORDER_DRAFT to ORDER_CANCELED.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -508,7 +508,7 @@ JD-TC-Update Sales Order Status-12
 
     [Documentation]   Update order status ORDER_DRAFT to ORDER_CONFIRMED then try to change ORDER_DRAFT.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -530,7 +530,7 @@ JD-TC-Update Sales Order Status-13
 
     [Documentation]   Update order status ORDER_CONFIRMED to ORDER_DISCARDED.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

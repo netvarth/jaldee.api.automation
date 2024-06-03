@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 
@@ -40,7 +40,7 @@ JD-TC-Update MedicalRecordPrescription Template-1
 
     [Documentation]    Update MedicalRecordPrescription Template
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -111,7 +111,7 @@ JD-TC-Update MedicalRecordPrescription Template-2
 
     [Documentation]   UPdate Prescription Template where template name contain  255 words
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -153,7 +153,7 @@ JD-TC-Update MedicalRecordPrescription Template-3
 
     [Documentation]   update Prescription Template where instructions contain  255 words
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -193,7 +193,7 @@ JD-TC-Update MedicalRecordPrescription Template-4
 
     [Documentation]   Create MedicalRecordPrescription Template where medicine name contain  255 words
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -234,7 +234,7 @@ JD-TC-Update MedicalRecordPrescription Template-5
 
     [Documentation]   update Prescription Template where template name contain  numbers
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -276,7 +276,7 @@ JD-TC-Update MedicalRecordPrescription Template-6
 
     [Documentation]   update Prescription Template where empty prescription list
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -303,7 +303,7 @@ JD-TC-Update MedicalRecordPrescription Template-7
 
     [Documentation]   update Prescription Template where template name is empty
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -339,7 +339,7 @@ JD-TC-Update MedicalRecordPrescription Template-8
 
     [Documentation]    Update template with same details
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -380,7 +380,7 @@ JD-TC-Update MedicalRecordPrescription Template-UH1
 
     [Documentation]   update Prescription Template with another provider login
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

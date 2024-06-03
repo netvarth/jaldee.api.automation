@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -38,7 +38,7 @@ JD-TC-Get Dental Record-1
 
     [Documentation]    Create a Dental Record and verify .
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -114,7 +114,7 @@ JD-TC-Get Dental Record-1
     Set Suite Variable    ${proconlname}    ${resp.json()['lastName']} 
     Set Suite Variable    ${fullname}       ${proconfname}${space}${proconlname}
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -172,7 +172,7 @@ JD-TC-Get Dental Record-2
 
     [Documentation]    Create a Dental Record then update toothType and verify .
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -243,7 +243,7 @@ JD-TC-Get Dental Record-3
 
     [Documentation]    Delete Dental Record and Get that record using id.
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -260,7 +260,7 @@ JD-TC-Get Dental Record-4
 
     [Documentation]    Creating a Dental record with multiple  tooth surfaces and Get that record using id.
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -297,7 +297,7 @@ JD-TC-Get Dental Record-UH1
 
     [Documentation]    Get Dental records using invalid id.
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -311,7 +311,7 @@ JD-TC-Get Dental Record-UH2
 
     [Documentation]    Get Dental Record with another provider login.
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

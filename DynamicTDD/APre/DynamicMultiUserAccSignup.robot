@@ -14,18 +14,18 @@ Library           FakerLibrary
 ${nods}  0
 @{Views}  self  all  customersOnly
 # ${defaultCount}  80
-${BUSER}      ${MUSERNAME}
+${PUSER}      ${PUSERNAME}
 
 
 *** Test Cases ***
 
 Remove Files
    
-    Remove File   ${EXECDIR}/TDD/varfiles/musers.py
-    Create File   ${EXECDIR}/TDD/varfiles/musers.py
+    # Remove File   ${EXECDIR}/TDD/varfiles/musers.py
+    # Create File   ${EXECDIR}/TDD/varfiles/musers.py
 
-    Remove File   ${EXECDIR}/TDD/varfiles/hl_musers.py
-    Create File   ${EXECDIR}/TDD/varfiles/hl_musers.py
+    # Remove File   ${EXECDIR}/TDD/varfiles/hl_musers.py
+    # Create File   ${EXECDIR}/TDD/varfiles/hl_musers.py
 
     Remove File   ${EXECDIR}/TDD/varfiles/providers.py
     Create File   ${EXECDIR}/TDD/varfiles/providers.py
@@ -56,8 +56,8 @@ JD-TC-Branch_Signup-1
     # ${totiscorpnods}=   Evaluate  ${liclen}*${iscorpnods}
 
 
-    # ${usercount}=  Set Variable If  ${branch_count}>${defaultCount}  ${branch_count}   ${defaultCount} 
-    ${count}=  Set Variable If  ${branch_count}>${totnods}  ${branch_count}   ${totnods}
+    # ${usercount}=  Set Variable If  ${provider_count}>${defaultCount}  ${provider_count}   ${defaultCount} 
+    ${count}=  Set Variable If  ${provider_count}>${totnods}  ${provider_count}   ${totnods}
     Set Global Variable  ${count}   
     #${newrange}=  Set Variable If  ${newlen}>${liclen}  ${newlen}   ${liclen}  
     # ${licresp}=   Get Licensable Packages
@@ -70,19 +70,19 @@ JD-TC-Branch_Signup-1
         Exit For Loop If    '${US}' == '${count}'
         License Loop  ${liclen}  ${licresp}
     END
-    Log Many  ${BUSER}  ${count}  ${US}
+    Log Many  ${PUSER}  ${count}  ${US}
 
-    ${count}=  Set Variable If  ${count}==${totnods}  ${totnods}   ${branch_count}
+    ${count}=  Set Variable If  ${count}==${totnods}  ${totnods}   ${provider_count}
     Log  ${count}
 
     Log  \n${count} multiuser accounts signed up   console=yes
 
-    ${BUSER}=  Evaluate  ${BUSER}-${count}
+    ${PUSER}=  Evaluate  ${PUSER}-${count}
     
     sleep  01s
     FOR  ${no}  IN RANGE  ${count}
-        ${BUSER}=  Evaluate  ${BUSER}+1
-        ${resp}=  Encrypted Provider Login  ${BUSER}  ${PASSWORD}
+        ${PUSER}=  Evaluate  ${PUSER}+1
+        ${resp}=  Encrypted Provider Login  ${PUSER}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -138,7 +138,7 @@ JD-TC-Branch_Signup-1
         Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['enableOrder']}     ${bool[0]}
         Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['storeContactInfo']['firstName']}    ${fname}
         Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['storeContactInfo']['lastName']}     ${lname}
-        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['storeContactInfo']['phone']}        ${BUSER}
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['storeContactInfo']['phone']}        ${PUSER}
     END
 
      
@@ -153,49 +153,49 @@ SignUp Account
         ${is_corp}=  check_is_corp  ${sd}
         Log  ${is_corp}
         Continue For Loop If  '${is_corp}' == 'False'
-         ${BUSER}=  Evaluate   ${BUSER}+1
-        Set Global Variable   ${BUSER}
+         ${PUSER}=  Evaluate   ${PUSER}+1
+        Set Global Variable   ${PUSER}
         ${firstname}=  FakerLibrary.name
         ${lastname}=  FakerLibrary.last_name
-        ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d}  ${sd}   ${BUSER}  ${pkgId}
+        ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d}  ${sd}   ${PUSER}  ${pkgId}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${resp}=  Account Activation   ${BUSER}  0
+        ${resp}=  Account Activation   ${PUSER}  0
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${resp}=  Account Set Credential   ${BUSER}  ${PASSWORD}  0
+        ${resp}=  Account Set Credential   ${PUSER}  ${PASSWORD}  0
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         # ${is_corp}=  check_is_corp  ${sd}
         # Log  ${is_corp}
-        # Run Keyword If  '${is_corp}' == 'True'  Append To File  ${EXECDIR}/TDD/varfiles/branches.py  BUSERNAME${BC}= ${BUSER}${\n}
+        # Run Keyword If  '${is_corp}' == 'True'  Append To File  ${EXECDIR}/TDD/varfiles/branches.py  BUSERNAME${BC}= ${PUSER}${\n}
         # Run Keyword If  '${is_corp}' == 'False'  Append To File  ${EXECDIR}/TDD/varfiles/providers.py  PUSERNAME${PC}=${PUSERNAME}${\n}
-        # Append To File  ${EXECDIR}/TDD/varfiles/branches.py  BUSERNAME${US}= ${BUSER}${\n}
-        # Append To File  ${EXECDIR}/TDD/varfiles/musers.py  MUSERNAME${US}= ${BUSER}${\n}
-        # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt   ${BUSER}${\n}
+        # Append To File  ${EXECDIR}/TDD/varfiles/branches.py  BUSERNAME${US}= ${PUSER}${\n}
+        # Append To File  ${EXECDIR}/TDD/varfiles/musers.py  PUSERNAME${US}= ${PUSER}${\n}
+        # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt   ${PUSER}${\n}
         ${highest_pkg}=  get_highest_license_pkg
-        # Run Keyword If  '${pkgId}' == '${highest_pkg[0]}'   Append To File  ${EXECDIR}/TDD/varfiles/branches_highestlic.py  BHUSERNAME${BR}= ${BUSER}${\n}
+        # Run Keyword If  '${pkgId}' == '${highest_pkg[0]}'   Append To File  ${EXECDIR}/TDD/varfiles/branches_highestlic.py  BHUSERNAME${BR}= ${PUSER}${\n}
         IF  '${pkgId}' == '${highest_pkg[0]}'
-        # Append To File  ${EXECDIR}/TDD/varfiles/branches_highestlic.py  BHUSERNAME${BR}= ${BUSER}${\n}
-        Append To File  ${EXECDIR}/TDD/varfiles/hl_musers.py  HLMUSERNAME${BR}= ${BUSER}${\n}
-        Append To File  ${EXECDIR}/TDD/varfiles/hl_providers.py  HLPUSERNAME${BR}= ${BUSER}${\n}
+        # Append To File  ${EXECDIR}/TDD/varfiles/branches_highestlic.py  BHUSERNAME${BR}= ${PUSER}${\n}
+        # Append To File  ${EXECDIR}/TDD/varfiles/hl_musers.py  HLPUSERNAME${BR}= ${PUSER}${\n}
+        Append To File  ${EXECDIR}/TDD/varfiles/hl_providers.py  HLPUSERNAME${BR}= ${PUSER}${\n}
         END
         ${BR} =	Set Variable If	 '${pkgId}' == '${highest_pkg[0]}'	${BR+1}	 ${BR}
         Set Global Variable  ${BR}
 
         sleep  01s
 
-        ${resp}=  Encrypted Provider Login   ${BUSER}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login   ${PUSER}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${decrypted_data}=  db.decrypt_data  ${resp.content}
         Log  ${decrypted_data}
         Set Suite Variable  ${pid}  ${decrypted_data['id']}
 
-        Append To File  ${EXECDIR}/TDD/varfiles/musers.py  MUSERNAME${US}= ${BUSER}${\n}
-        Append To File  ${EXECDIR}/TDD/varfiles/providers.py  PUSERNAME${US}=${BUSER}${\n}
-        Append To File  ${EXECDIR}/TDD/varfiles/aprenumbers.txt  ${BUSER}${\n}
+        # Append To File  ${EXECDIR}/TDD/varfiles/musers.py  PUSERNAME${US}= ${PUSER}${\n}
+        Append To File  ${EXECDIR}/TDD/varfiles/providers.py  PUSERNAME${US}=${PUSER}${\n}
+        Append To File  ${EXECDIR}/TDD/varfiles/aprenumbers.txt  ${PUSER}${\n}
         
-        Set Test Variable  ${email_id}  ${B_Email}${BUSER}.${test_mail}
+        Set Test Variable  ${email_id}  ${P_Email}${PUSER}.${test_mail}
         ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
@@ -210,15 +210,15 @@ SignUp Account
         # Set Suite Variable  ${DAY1}  ${DAY1}
         ${list}=  Create List  1  2  3  4  5  6  7
         Set Suite Variable  ${list}  ${list}
-        ${ph1}=  Evaluate   ${BUSER}+1000000000
-        ${ph2}=  Evaluate   ${BUSER}+2000000000
+        ${ph1}=  Evaluate   ${PUSER}+1000000000
+        ${ph2}=  Evaluate   ${PUSER}+2000000000
         ${views}=  Evaluate  random.choice($Views)  random
         ${name1}=  FakerLibrary.name
         ${name2}=  FakerLibrary.name
         ${name3}=  FakerLibrary.name
         ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
         ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-        ${emails1}=  Emails  ${name3}  Email  ${B_EMAIL}${US}.${test_mail}  ${views}
+        ${emails1}=  Emails  ${name3}  Email  ${P_Email}${US}.${test_mail}  ${views}
         ${bs}=  FakerLibrary.bs
         ${companySuffix}=  FakerLibrary.companySuffix
         # ${city}=   get_place
@@ -249,11 +249,11 @@ SignUp Account
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${account_id}  ${resp.json()['id']}
-        Verify Response  ${resp}  businessName=${bs}  businessDesc=${bs} Desc  shortName=${companySuffix}  status=ACTIVE  createdDate=${DAY1}  licence=${pkg_name}  verifyLevel=NONE  enableSearch=False  accountLinkedPhNo=${BUSER}  licensePkgID=${pkgId}  #accountType=INDEPENDENT_SP
+        Verify Response  ${resp}  businessName=${bs}  businessDesc=${bs} Desc  shortName=${companySuffix}  status=ACTIVE  createdDate=${DAY1}  licence=${pkg_name}  verifyLevel=NONE  enableSearch=False  accountLinkedPhNo=${PUSER}  licensePkgID=${pkgId}  #accountType=INDEPENDENT_SP
         Should Be Equal As Strings  ${resp.json()['serviceSector']['domain']}  ${d}
         Should Be Equal As Strings  ${resp.json()['serviceSubSector']['subDomain']}  ${sd}
         Should Be Equal As Strings  ${resp.json()['emails'][0]['label']}  ${name3}
-        Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}  ${B_EMAIL}${US}.${test_mail}
+        Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}  ${P_Email}${US}.${test_mail}
         Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['label']}  ${name1}
         Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['instance']}  ${ph1}
         Should Be Equal As Strings  ${resp.json()['phoneNumbers'][1]['label']}  ${name2}
@@ -271,7 +271,7 @@ SignUp Account
         #Should Be Equal As Strings  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timeSlots'][0]['sTime']}  ${sTime}
         #Should Be Equal As Strings  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timeSlots'][0]['eTime']}  ${eTime}
 
-        #${resp}=  pyproviderlogin  ${BUSER}  ${PASSWORD}
+        #${resp}=  pyproviderlogin  ${PUSER}  ${PASSWORD}
        # Should Be Equal As Strings  ${resp}  200      
         #@{resp}=  uploadLogoImages 
         #Should Be Equal As Strings  ${resp[1]}  200

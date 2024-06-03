@@ -13,8 +13,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -57,7 +57,7 @@ JD-TC-Change Assignee-1
                                   
     [Documentation]               Create Loan Application and Change Assignee.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -686,7 +686,7 @@ JD-TC-Change Assignee-2
                                   
     [Documentation]   Change Assignee Two times with same id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -701,7 +701,7 @@ JD-TC-Change Assignee-3
     [Documentation]               Create Loan Application and try to Change Assignee with another user login.
 
     
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -828,7 +828,7 @@ JD-TC-Change Assignee-UH1
     [Documentation]               Create Loan Application and try to Change Assignee multiple time different user id.
 
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME8}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -911,7 +911,7 @@ JD-TC-Change Assignee-UH1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

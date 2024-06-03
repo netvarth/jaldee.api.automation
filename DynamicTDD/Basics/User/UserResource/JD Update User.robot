@@ -8,8 +8,8 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 *** Variables ***
@@ -31,23 +31,23 @@ JD-TC-UpdateUser-1
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+550617
+     ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+550617
      ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Activation  ${MUSERNAME_E}  0
+     ${resp}=  Account Activation  ${PUSERNAME_E}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}   
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}   
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
-     Set Suite Variable  ${MUSERNAME_E}
-     ${id}=  get_id  ${MUSERNAME_E}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+     Set Suite Variable  ${PUSERNAME_E}
+     ${id}=  get_id  ${PUSERNAME_E}
      Set Suite Variable  ${id}
      ${bs}=  FakerLibrary.bs
      Set Suite Variable  ${bs}
@@ -98,7 +98,7 @@ JD-TC-UpdateUser-1
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      sleep  2s
@@ -164,7 +164,7 @@ JD-TC-UpdateUser-1
 
 JD-TC-UpdateUser-2
      [Documentation]  Update a user with different department id by branch login
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=   Get Service
@@ -197,7 +197,7 @@ JD-TC-UpdateUser-2
 
 JD-TC-UpdateUser-3
      [Documentation]  Update a user with a different subdomain in same domain by branch login
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
     #  ${iscorp_subdomains}=  get_iscorp_subdomains  1
@@ -218,7 +218,7 @@ JD-TC-UpdateUser-3
 
 JD-TC-UpdateUser-4
      [Documentation]  Update ph of a user by branch login
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U6}=  Evaluate  ${PUSERNAME}+336146
@@ -239,7 +239,7 @@ JD-TC-UpdateUser-4
     
 JD-TC-UpdateUser-5
      [Documentation]   Update users department id to another one here that user services also changed with that changed department services.
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${dep_desc1}=   FakerLibrary.word  
@@ -340,7 +340,7 @@ JD-TC-UpdateUser-5
 
 JD-TC-UpdateUser-6
      [Documentation]  Update a user from PROVIDER to ADMIN usertype by branch login, when checkin doesn't exist
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      
@@ -356,7 +356,7 @@ JD-TC-UpdateUser-6
 
 JD-TC-UpdateUser-7
      [Documentation]  Update a user from ADMIN to PROVIDER usertype by branch login
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -372,7 +372,7 @@ JD-TC-UpdateUser-7
      
 JD-TC-UpdateUser-8
      [Documentation]  Update a user from PROVIDER to ASSISTANT usertype by branch login
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -387,7 +387,7 @@ JD-TC-UpdateUser-8
 
 JD-TC-UpdateUser-9
      [Documentation]  Update a user from ASSISTANT to PROVIDER usertype by branch login
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -422,7 +422,7 @@ JD-TC-UpdateUser -UH2
 
 JD-TC-UpdateUser-UH3
      [Documentation]  Update a user with invalid id by branch login
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -433,7 +433,7 @@ JD-TC-UpdateUser-UH3
 
 JD-TC-UpdateUser-UH4
      [Documentation]  Update a user for a invalid subdomain by branch login
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${sub_domain_id2}=  Random Int   min=100  max=200
@@ -446,7 +446,7 @@ JD-TC-UpdateUser-UH4
 
 JD-TC-UpdateUser-UH5
      [Documentation]  Update a user for a invalid department by branch login
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${depid2}=  Random Int   min=1000  max=2000
@@ -459,7 +459,7 @@ JD-TC-UpdateUser-UH5
 
 JD-TC-UpdateUser-UH6
      [Documentation]  Update a user with Empty ph by branch login
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -471,7 +471,7 @@ JD-TC-UpdateUser-UH6
 
 JD-TC-UpdateUser-UH7
      [Documentation]  Update a user with empty firstname by branch login
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      
@@ -482,7 +482,7 @@ JD-TC-UpdateUser-UH7
 
 JD-TC-UpdateUser-UH8
      [Documentation]  Update a user with empty last name by branch login
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      
@@ -503,26 +503,26 @@ JD-TC-UpdateUser-UH9
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E2}=  Evaluate  ${PUSERNAME}+8546115
+     ${PUSERNAME_E2}=  Evaluate  ${PUSERNAME}+8546115
      ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E2}    ${highest_package[0]}
+     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E2}    ${highest_package[0]}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Activation  ${MUSERNAME_E2}  0
+     ${resp}=  Account Activation  ${PUSERNAME_E2}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${MUSERNAME_E2}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${PUSERNAME_E2}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E2}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E2}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E2}${\n}
-     Set Suite Variable  ${MUSERNAME_E2}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E2}${\n}
+     Set Suite Variable  ${PUSERNAME_E2}
 
      ${list}=  Create List  1  2  3  4  5  6  7
      Set Suite Variable  ${list}  ${list}
-     ${ph1}=  Evaluate  ${MUSERNAME_E2}+1000000000
-     ${ph2}=  Evaluate  ${MUSERNAME_E2}+2000000000
+     ${ph1}=  Evaluate  ${PUSERNAME_E2}+1000000000
+     ${ph2}=  Evaluate  ${PUSERNAME_E2}+2000000000
      ${views}=  Random Element    ${Views}
      ${name1}=  FakerLibrary.name
      ${name2}=  FakerLibrary.name
@@ -599,7 +599,7 @@ JD-TC-UpdateUser-UH9
      Should Be Equal As Strings  ${resp.status_code}  200
      Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-     ${id}=  get_id  ${MUSERNAME_E2}
+     ${id}=  get_id  ${PUSERNAME_E2}
      Set Suite Variable  ${id}
      ${bs}=  FakerLibrary.bs
      Set Suite Variable  ${bs}
@@ -745,7 +745,7 @@ JD-TC-UpdateUser-UH9
 JD-TC-UpdateUser-UH10
      [Documentation]  Update a user with international country code
 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${domain}=   Set Variable    ${resp.json()['sector']}
@@ -806,7 +806,7 @@ JD-TC-UpdateUser-UH10
 JD-TC-UpdateUser-UH11
      [Documentation]  Update a user with empty country code
 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${domain}=   Set Variable    ${resp.json()['sector']}
@@ -896,7 +896,7 @@ JD-TC-UpdateUser -10
     Set Test Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
     ${PO_Number}    Generate random string    4    123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
-    ${BUSERPH0}=  Evaluate  ${MUSERNAME}+${PO_Number}
+    ${BUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
     clear_users  ${BUSERPH0}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -1003,7 +1003,7 @@ JD-TC-UpdateUser -11
     Set Test Variable  ${userSubDomain}  ${iscorp_subdomains[0]['userSubDomain']}
     ${PO_Number}    Generate random string    4    123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
-    ${BUSERPH0}=  Evaluate  ${MUSERNAME}+${PO_Number}
+    ${BUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
     clear_users  ${BUSERPH0}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -1162,7 +1162,7 @@ JD-TC-UpdateUser -12
     Set Test Variable  ${userSubDomain}  ${iscorp_subdomains[0]['userSubDomain']}
     ${PO_Number}    Generate random string    4    123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
-    ${BUSERPH0}=  Evaluate  ${MUSERNAME}+${PO_Number}
+    ${BUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
     clear_users  ${BUSERPH0}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -1316,7 +1316,7 @@ JD-TC-UpdateUser -13
     Set Test Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
     ${PO_Number}    Generate random string    4    123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
-    ${BUSERPH0}=  Evaluate  ${MUSERNAME}+${PO_Number}
+    ${BUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
     clear_users  ${BUSERPH0}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -1397,7 +1397,7 @@ JD-TC-UpdateUser -14
     Set Test Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
     ${PO_Number}    Generate random string    4    123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
-    ${BUSERPH0}=  Evaluate  ${MUSERNAME}+${PO_Number}
+    ${BUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
     clear_users  ${BUSERPH0}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -1480,7 +1480,7 @@ JD-TC-UpdateUser -15
     Set Test Variable  ${userSubDomain}  ${iscorp_subdomains[0]['userSubDomain']}
     ${PO_Number}    Generate random string    4    123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
-    ${BUSERPH0}=  Evaluate  ${MUSERNAME}+${PO_Number}
+    ${BUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
     clear_users  ${BUSERPH0}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -1571,7 +1571,7 @@ JD-TC-UpdateUser -16
     Set Test Variable  ${userSubDomain}  ${iscorp_subdomains[0]['userSubDomain']}
     ${PO_Number}    Generate random string    4    123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
-    ${BUSERPH0}=  Evaluate  ${MUSERNAME}+${PO_Number}
+    ${BUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
     clear_users  ${BUSERPH0}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -1662,7 +1662,7 @@ JD-TC-UpdateUser -17
     Set Test Variable  ${userSubDomain}  ${iscorp_subdomains[0]['userSubDomain']}
     ${PO_Number}    Generate random string    4    123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
-    ${BUSERPH0}=  Evaluate  ${MUSERNAME}+${PO_Number}
+    ${BUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
     clear_users  ${BUSERPH0}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -1757,7 +1757,7 @@ JD-TC-UpdateUser -18
     Set Test Variable  ${userSubDomain}  ${iscorp_subdomains[0]['userSubDomain']}
     ${PO_Number}    Generate random string    4    123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
-    ${BUSERPH0}=  Evaluate  ${MUSERNAME}+${PO_Number}
+    ${BUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
     clear_users  ${BUSERPH0}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -1848,7 +1848,7 @@ JD-TC-UpdateUser -19
     Set Test Variable  ${userSubDomain}  ${iscorp_subdomains[0]['userSubDomain']}
     ${PO_Number}    Generate random string    4    123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
-    ${BUSERPH0}=  Evaluate  ${MUSERNAME}+${PO_Number}
+    ${BUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
     clear_users  ${BUSERPH0}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -1939,7 +1939,7 @@ JD-TC-UpdateUser -20
     Set Test Variable  ${userSubDomain}  ${iscorp_subdomains[0]['userSubDomain']}
     ${PO_Number}    Generate random string    4    123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
-    ${BUSERPH0}=  Evaluate  ${MUSERNAME}+${PO_Number}
+    ${BUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
     clear_users  ${BUSERPH0}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -2031,7 +2031,7 @@ JD-TC-UpdateUser -21
     Set Test Variable  ${userSubDomain}  ${iscorp_subdomains[0]['userSubDomain']}
     ${PO_Number}    Generate random string    4    123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
-    ${BUSERPH0}=  Evaluate  ${MUSERNAME}+${PO_Number}
+    ${BUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
     clear_users  ${BUSERPH0}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name

@@ -15,11 +15,11 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ApiKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -90,7 +90,7 @@ JD-TC-BranchCreditOfficerWithRBAC-1
                                   
     [Documentation]               Create Loan Using Sales officer Role and view loan and approve loan with BranchCreditOfficer.
 
-   ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+   ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -208,7 +208,7 @@ JD-TC-BranchCreditOfficerWithRBAC-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME20}'
+            IF   not '${user_phone}' == '${HLPUSERNAME20}'
                 clear_users  ${user_phone}
             END
         END
@@ -252,7 +252,7 @@ JD-TC-BranchCreditOfficerWithRBAC-1
     ${resp}=  Get User By Id  ${bm_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${BMUSERNAME1}  ${resp.json()['mobileNo']}
+    Set Suite Variable  ${BPUSERNAME1}  ${resp.json()['mobileNo']}
 
     ${sh_id1}=  Create Sample User 
     
@@ -827,7 +827,7 @@ JD-TC-BranchCreditOfficerWithRBAC-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1338,19 +1338,19 @@ JD-TC-BranchCreditOfficerWithRBAC-5
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
 
-    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+8747822
-    Set Suite Variable  ${NBFCMUSERNAME1} 
+    ${NBFCPUSERNAME1}=  Evaluate  ${PUSERNAME}+8747822
+    Set Suite Variable  ${NBFCPUSERNAME1} 
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCMUSERNAME1}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCPUSERNAME1}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${NBFCMUSERNAME1}  0
+    ${resp}=  Account Activation  ${NBFCPUSERNAME1}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${NBFCMUSERNAME1}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${NBFCPUSERNAME1}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -1459,7 +1459,7 @@ JD-TC-BranchCreditOfficerWithRBAC-5
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${NBFCMUSERNAME1}'
+            IF   not '${user_phone}' == '${NBFCPUSERNAME1}'
                 clear_users  ${user_phone}
             END
         END
@@ -1503,7 +1503,7 @@ JD-TC-BranchCreditOfficerWithRBAC-5
     ${resp}=  Get User By Id  ${bm_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${BMUSERNAME1}  ${resp.json()['mobileNo']}
+    Set Suite Variable  ${BPUSERNAME1}  ${resp.json()['mobileNo']}
 
     ${sh_id1}=  Create Sample User 
     
@@ -2083,7 +2083,7 @@ JD-TC-BranchCreditOfficerWithRBAC-5
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2265,7 +2265,7 @@ JD-TC-BranchCreditOfficerWithRBAC-5
     # ${resp}=  Encrypted Provider Login  ${BOHUSERNAME1}  ${PASSWORD}
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Encrypted Provider Login  ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2739,7 +2739,7 @@ JD-TC-BranchCreditOfficerWithRBAC-6
                                   
     [Documentation]               Create two sales officer then both officer create loan then we passing (all) users in branch scop.
 
-    ${resp}=  Encrypted Provider Login  ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2794,7 +2794,7 @@ JD-TC-BranchCreditOfficerWithRBAC-7
                                   
     [Documentation]               Branch set a location in scope and try to create loan for another location.
 
-    ${resp}=  Encrypted Provider Login  ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

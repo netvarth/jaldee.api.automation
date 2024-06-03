@@ -13,8 +13,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Test Cases ***
@@ -23,7 +23,7 @@ JD-TC-UnAssign User-1
 
     [Documentation]  Create a invoice and assign the invoice to a user then unassign that user.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -50,7 +50,7 @@ JD-TC-UnAssign User-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME18}+1000411224
+    ${ph1}=  Evaluate  ${HLPUSERNAME18}+1000411224
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${address}=  get_address

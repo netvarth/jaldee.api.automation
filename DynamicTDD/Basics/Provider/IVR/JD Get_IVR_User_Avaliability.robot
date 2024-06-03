@@ -12,8 +12,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -47,12 +47,12 @@ JD-TC-GET_All_IVR_USer_Avaliability-1
 
     [Documentation]   Get all IVR user avaliability
 
-    clear_queue      ${HLMUSERNAME2}
-    # clear_location   ${HLMUSERNAME2}
-    clear_service    ${HLMUSERNAME2}
-    clear_customer   ${HLMUSERNAME2}
+    clear_queue      ${HLPUSERNAME2}
+    # clear_location   ${HLPUSERNAME2}
+    clear_service    ${HLPUSERNAME2}
+    clear_customer   ${HLPUSERNAME2}
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -285,7 +285,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-1
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME2}  ${countryCodes[1]}${HLMUSERNAME2}  ${user_id}  ${user_name}
+    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLPUSERNAME2}  ${countryCodes[1]}${HLPUSERNAME2}  ${user_id}  ${user_name}
 
     ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${SOUSERNAME1}  ${countryCodes[1]}${SOUSERNAME1}  ${so_id1}  ${name}
 
@@ -315,7 +315,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-1
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME2}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME2}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -400,7 +400,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-2
 
     [Documentation]   Create sample user -that not add to ivr table and get the user availability
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -461,11 +461,11 @@ JD-TC-GET_All_IVR_USer_Avaliability-2
     ${lastName}=    FakerLibrary.lastName
     Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
     ${numbers}=     Random Int   min=100   max=5000
-    ${PUSERNAME_U1}=  Evaluate  ${MUSERNAME}+${numbers}
+    ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+${numbers}
     clear_users  ${PUSERNAME_U1}
     ${random_ph}=   Random Int   min=20000   max=30000
-    ${whpnum}=  Evaluate  ${MUSERNAME}+${random_ph}
-    ${tlgnum}=  Evaluate  ${MUSERNAME}+${random_ph}
+    ${whpnum}=  Evaluate  ${PUSERNAME}+${random_ph}
+    ${tlgnum}=  Evaluate  ${PUSERNAME}+${random_ph}
 
     ${so_id1}=  Create Sample User   
     Set Suite Variable  ${so_id1}
@@ -506,7 +506,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-2
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    # ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME2}  ${countryCodes[1]}${HLMUSERNAME2}  ${user_id}  ${user_name}
+    # ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLPUSERNAME2}  ${countryCodes[1]}${HLPUSERNAME2}  ${user_id}  ${user_name}
 
     # ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${SOUSERNAME1}  ${countryCodes[1]}${SOUSERNAME1}  ${so_id1}  ${name}
 
@@ -536,7 +536,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-2
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME2}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME2}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -621,7 +621,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-3
 
     [Documentation]   Delete users from ivr table ang get ivr user availability
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -682,11 +682,11 @@ JD-TC-GET_All_IVR_USer_Avaliability-3
     ${lastName}=    FakerLibrary.lastName
     Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
     ${numbers}=     Random Int   min=100   max=5000
-    ${PUSERNAME_U1}=  Evaluate  ${MUSERNAME}+${numbers}
+    ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+${numbers}
     clear_users  ${PUSERNAME_U1}
     ${random_ph}=   Random Int   min=20000   max=30000
-    ${whpnum}=  Evaluate  ${MUSERNAME}+${random_ph}
-    ${tlgnum}=  Evaluate  ${MUSERNAME}+${random_ph}
+    ${whpnum}=  Evaluate  ${PUSERNAME}+${random_ph}
+    ${tlgnum}=  Evaluate  ${PUSERNAME}+${random_ph}
 
     ${so_id1}=  Create Sample User   
     Set Suite Variable  ${so_id1}
@@ -727,7 +727,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-3
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME2}  ${countryCodes[1]}${HLMUSERNAME2}  ${user_id}  ${user_name}
+    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLPUSERNAME2}  ${countryCodes[1]}${HLPUSERNAME2}  ${user_id}  ${user_name}
 
     ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${SOUSERNAME1}  ${countryCodes[1]}${SOUSERNAME1}  ${so_id1}  ${name}
 
@@ -752,7 +752,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-4
 
     [Documentation]  already deleted user details update  and get ivr user availability
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -817,7 +817,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-UH3
 
     [Documentation]   Update user availability(without user schedule) from ivr table and get ivr user availability
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -878,11 +878,11 @@ JD-TC-GET_All_IVR_USer_Avaliability-UH3
     ${lastName}=    FakerLibrary.lastName
     Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
     ${numbers}=     Random Int   min=100   max=5000
-    ${PUSERNAME_U1}=  Evaluate  ${MUSERNAME}+${numbers}
+    ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+${numbers}
     clear_users  ${PUSERNAME_U1}
     ${random_ph}=   Random Int   min=20000   max=30000
-    ${whpnum}=  Evaluate  ${MUSERNAME}+${random_ph}
-    ${tlgnum}=  Evaluate  ${MUSERNAME}+${random_ph}
+    ${whpnum}=  Evaluate  ${PUSERNAME}+${random_ph}
+    ${tlgnum}=  Evaluate  ${PUSERNAME}+${random_ph}
 
     ${so_id1}=  Create Sample User   
     Set Suite Variable  ${so_id1}
@@ -923,7 +923,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-UH3
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME2}  ${countryCodes[1]}${HLMUSERNAME2}  ${user_id}  ${user_name}
+    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLPUSERNAME2}  ${countryCodes[1]}${HLPUSERNAME2}  ${user_id}  ${user_name}
 
     ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${SOUSERNAME1}  ${countryCodes[1]}${SOUSERNAME1}  ${so_id1}  ${name}
 

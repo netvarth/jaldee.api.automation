@@ -698,28 +698,28 @@ JD-TC-Update Account Contact information-5
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_K}=  Evaluate  ${MUSERNAME}+406014222
+    ${PUSERNAME_K}=  Evaluate  ${PUSERNAME}+406014222
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_K}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_K}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_K}  0
+    ${resp}=  Account Activation  ${PUSERNAME_K}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_K}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_K}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_K}${\n}
-    Set Suite Variable  ${MUSERNAME_K}
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_K}${\n}
-    ${pid2}=  get_acc_id  ${MUSERNAME_K}  
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_K}${\n}
+    Set Suite Variable  ${PUSERNAME_K}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_K}${\n}
+    ${pid2}=  get_acc_id  ${PUSERNAME_K}  
     ${resp}=  Get Account contact information
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['account']}             ${pid2}
-    Should Be Equal As Strings  ${resp.json()['primaryPhoneNumber']}  ${MUSERNAME_K}
+    Should Be Equal As Strings  ${resp.json()['primaryPhoneNumber']}  ${PUSERNAME_K}
     Should Be Equal As Strings  ${resp.json()['contactFirstName']}    ${firstname_A}
     Should Be Equal As Strings  ${resp.json()['contactLastName']}     ${lastname_A}
     Should Be Equal As Strings  ${resp.json()['emailVerified']}       ${bool[0]} 
@@ -729,15 +729,15 @@ JD-TC-Update Account Contact information-5
     ${firstname2}=  FakerLibrary.first_name
     ${lastname2}=  FakerLibrary.last_name
     ${whatsapp2}=   Evaluate  ${PUSERNAME}+406000224
-    Set Test Variable  ${email2}  ${firstname2}${MUSERNAME_K}${C_Email}.${test_mail}
-    ${resp}=  Update Account contact information   ${MUSERNAME_K}   ${email2}  ${None}   ${whatsapp2}  ${None}  ${salutation}  ${firstname2}  ${lastname2}  ${country_code}   ${country_code}  ${country_code}
+    Set Test Variable  ${email2}  ${firstname2}${PUSERNAME_K}${C_Email}.${test_mail}
+    ${resp}=  Update Account contact information   ${PUSERNAME_K}   ${email2}  ${None}   ${whatsapp2}  ${None}  ${salutation}  ${firstname2}  ${lastname2}  ${country_code}   ${country_code}  ${country_code}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Get Account contact information
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['account']}               ${pid2}
-    Should Be Equal As Strings  ${resp.json()['primaryPhoneNumber']}    ${MUSERNAME_K}
+    Should Be Equal As Strings  ${resp.json()['primaryPhoneNumber']}    ${PUSERNAME_K}
     Should Be Equal As Strings  ${resp.json()['contactFirstName']}      ${firstname2}
     Should Be Equal As Strings  ${resp.json()['contactLastName']}       ${lastname2}
     Should Be Equal As Strings  ${resp.json()['salutation']}            ${salutation}
@@ -755,30 +755,30 @@ JD-TC-Update Account Contact information-6
 
     ${firstname_B}=  FakerLibrary.first_name
     ${lastname_B}=  FakerLibrary.last_name
-    ${MUSERNAME_L}=  Evaluate  ${MUSERNAME}+406817222
+    ${PUSERNAME_L}=  Evaluate  ${PUSERNAME}+406817222
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_B}  ${lastname_B}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_L}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_B}  ${lastname_B}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_L}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_L}  0
+    ${resp}=  Account Activation  ${PUSERNAME_L}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_L}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_L}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_L}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_L}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${subdomain}  ${resp.json()['subSector']}
     Set Test Variable  ${pro_id3}  ${resp.json()['id']}
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_L}${\n}
-    Set Suite Variable  ${MUSERNAME_L}
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_L}${\n}
-    ${pid4}=  get_acc_id  ${MUSERNAME_L}  
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_L}${\n}
+    Set Suite Variable  ${PUSERNAME_L}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_L}${\n}
+    ${pid4}=  get_acc_id  ${PUSERNAME_L}  
     ${resp}=  Get Account contact information
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['account']}      ${pid4}
-    Should Be Equal As Strings  ${resp.json()['primaryPhoneNumber']}  ${MUSERNAME_L}
+    Should Be Equal As Strings  ${resp.json()['primaryPhoneNumber']}  ${PUSERNAME_L}
     Should Be Equal As Strings  ${resp.json()['contactFirstName']}  ${firstname_B}
     Should Be Equal As Strings  ${resp.json()['contactLastName']}  ${lastname_B}
     Should Be Equal As Strings  ${resp.json()['emailVerified']}   ${bool[0]} 
@@ -857,7 +857,7 @@ JD-TC-Update Account Contact information-6
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['account']}              ${pid4}
-    Should Be Equal As Strings  ${resp.json()['primaryPhoneNumber']}  ${MUSERNAME_L}
+    Should Be Equal As Strings  ${resp.json()['primaryPhoneNumber']}  ${PUSERNAME_L}
     Should Be Equal As Strings  ${resp.json()['contactFirstName']}  ${firstname_B}
     Should Be Equal As Strings  ${resp.json()['contactLastName']}   ${lastname_B}
     Should Be Equal As Strings  ${resp.json()['emailVerified']}     ${bool[0]} 
@@ -915,7 +915,7 @@ JD-TC-Update Account Contact information-6
     ${firstname3}=  FakerLibrary.first_name
     ${lastname3}=  FakerLibrary.last_name
     ${whatsapp3}=   Evaluate  ${PUSERNAME}+407000225
-    Set Test Variable  ${email2}  ${firstname3}${MUSERNAME_L}${C_Email}.${test_mail}
+    Set Test Variable  ${email2}  ${firstname3}${PUSERNAME_L}${C_Email}.${test_mail}
     ${resp}=  Update Account contact information   ${PUSERNAME_U1}   ${email2}  ${None}   ${whatsapp3}  ${None}  ${salutation}  ${firstname3}  ${lastname3}  ${country_code}  ${country_code}  ${country_code}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -955,7 +955,7 @@ JD-TC-Update Account Contact information-7
     ${firstname3}=  FakerLibrary.first_name
     ${lastname3}=  FakerLibrary.last_name
     ${whatsapp3}=   Evaluate  ${PUSERNAME}+406000225
-    # Set Test Variable  ${email2}  ${firstname1}${MUSERNAME_K}${C_Email}.${test_mail}
+    # Set Test Variable  ${email2}  ${firstname1}${PUSERNAME_K}${C_Email}.${test_mail}
     ${resp}=  Update Account contact information   ${PUSERNAME5}   ${email1}  ${None}   ${whatsapp3}  ${None}  ${salutation}  ${firstname3}  ${lastname3}   ${country_code}  ${country_code}  ${country_code}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200

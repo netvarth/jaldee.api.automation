@@ -10,7 +10,7 @@ Library         FakerLibrary
 Resource        /ebs/TDD/ProviderKeywords.robot
 Resource        /ebs/TDD/ConsumerKeywords.robot
 Variables       /ebs/TDD/varfiles/providers.py
-Variables       /ebs/TDD/varfiles/musers.py
+Variables       /ebs/TDD/varfiles/providers.py
 Variables       /ebs/TDD/varfiles/consumerlist.py 
 
 *** Test Cases ***
@@ -329,9 +329,9 @@ JD-TC-CreateLocation-5
 
 JD-TC-CreateLocation-6
 	[Documentation]  Create a location by a branch login
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME6}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      clear_location   ${MUSERNAME6}
+      clear_location   ${PUSERNAME6}
       # ${city8}=   get_place
       # Set Suite Variable  ${city8}
       # ${latti8}=  get_latitude
@@ -465,9 +465,9 @@ JD-TC-CreateLocation-UH4
 
 JD-TC-CreateLocation-7
 	[Documentation]  Create a location using another provider langitude and lattitude details
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME7}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      clear_location   ${MUSERNAME7}
+      clear_location   ${PUSERNAME7}
 
       ${latti9}  ${longi9}  ${city9}  ${postcode9}=  get_lat_long_city_pin
       ${tz9}=   db.get_Timezone_by_lat_long   ${latti9}  ${longi9}
@@ -502,9 +502,9 @@ JD-TC-CreateLocation-7
 
 JD-TC-CreateLocation-UH5
 	[Documentation]  Create a location with empty  longitude
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME9}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      clear_location   ${MUSERNAME9}
+      clear_location   ${PUSERNAME9}
 
       ${latti11}  ${longi11}  ${city11}  ${postcode11}=  get_lat_long_city_pin
       ${resp}=  Get Locations
@@ -517,9 +517,9 @@ JD-TC-CreateLocation-UH5
 
 JD-TC-CreateLocation-UH6
 	[Documentation]  Create a location with empty lattitude 
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME9}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      clear_location   ${MUSERNAME9}
+      clear_location   ${PUSERNAME9}
 
       ${latti12}  ${longi12}  ${city12}  ${postcode12}=  get_lat_long_city_pin
       ${resp}=  Get Locations
@@ -532,9 +532,9 @@ JD-TC-CreateLocation-UH6
 
 JD-TC-CreateLocation-UH7
 	[Documentation]  User without admin privilege try to create location
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      clear_location   ${MUSERNAME10}
+      clear_location   ${PUSERNAME10}
       
       ${latti13}  ${longi13}  ${city13}  ${postcode13}=  get_lat_long_city_pin
       Set Suite Variable  ${city13}
@@ -585,7 +585,7 @@ JD-TC-CreateLocation-UH7
             ${len}=  Get Length  ${resp.json()}
             FOR   ${i}  IN RANGE   0   ${len}
                   Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-                  IF   not '${user_phone}' == '${MUSERNAME10}'
+                  IF   not '${user_phone}' == '${PUSERNAME10}'
                         clear_users  ${user_phone}
                   END
             END
@@ -620,9 +620,9 @@ JD-TC-CreateLocation-UH7
 
 JD-TC-CreateLocation-UH8
 	[Documentation]  Disable one location then try to create disabled location .
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME11}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      clear_location   ${MUSERNAME11}
+      clear_location   ${PUSERNAME11}
 
       ${latti15}  ${longi15}  ${city15}  ${postcode15}=  get_lat_long_city_pin
       ${tz15}=   db.get_Timezone_by_lat_long   ${latti15}  ${longi15}
@@ -659,9 +659,9 @@ JD-TC-CreateLocation-UH8
 
 JD-TC-CreateLocation-8
 	[Documentation]  Create a location with empty postcode
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME8}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      clear_location   ${MUSERNAME8}
+      clear_location   ${PUSERNAME8}
       
       ${latti10}  ${longi10}  ${city10}  ${postcode10}=  get_lat_long_city_pin
       ${tz10}=   db.get_Timezone_by_lat_long   ${latti10}  ${longi10}
@@ -688,9 +688,9 @@ JD-TC-CreateLocation-8
 
 JD-TC-CreateLocation-9
 	[Documentation]  Create a location with empty address
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME9}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      clear_location   ${MUSERNAME9}
+      clear_location   ${PUSERNAME9}
 
       ${latti14}  ${longi14}  ${city14}  ${postcode14}=  get_lat_long_city_pin
       ${tz14}=   db.get_Timezone_by_lat_long   ${latti14}  ${longi14}
@@ -713,9 +713,9 @@ JD-TC-CreateLocation-9
 
 JD-TC-CreateLocation-10
 	[Documentation]   Auto detect your location then  create  location using that data.
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME11}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      clear_location   ${MUSERNAME11}
+      clear_location   ${PUSERNAME11}
 
       ${latti16}  ${longi16}  ${city16}  ${postcode16}=  get_lat_long_city_pin
       ${tz16}=   db.get_Timezone_by_lat_long   ${latti16}  ${longi16}
@@ -882,7 +882,7 @@ JD-TC-VerifyCreateLocation-5
 
 JD-TC-VerifyCreateLocation-6
 	[Documentation]  Verify location details by branch login
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME6}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Location ById  ${lid8}
       Log  ${resp.json()}
@@ -896,7 +896,7 @@ JD-TC-VerifyCreateLocation-6
 
 JD-TC-VerifyCreateLocation-7
 	[Documentation]  Verify location details by branch login
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME7}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Location ById  ${lid9}
       Log  ${resp.json()}
@@ -910,7 +910,7 @@ JD-TC-VerifyCreateLocation-7
 
 JD-TC-VerifyCreateLocation-8
 	[Documentation]  Verify location details by branch login
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME8}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Location ById  ${lid10}
       Log  ${resp.json()}
@@ -924,7 +924,7 @@ JD-TC-VerifyCreateLocation-8
 
 JD-TC-VerifyCreateLocation-9
 	[Documentation]  Verify location details by branch login
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME9}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Location ById  ${lid11}
       Log  ${resp.json()}
@@ -938,7 +938,7 @@ JD-TC-VerifyCreateLocation-9
 
 JD-TC-VerifyCreateLocation-10
 	[Documentation]  Verify location details by branch login
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME11}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Location ById  ${lid12}
       Log  ${resp.json()}

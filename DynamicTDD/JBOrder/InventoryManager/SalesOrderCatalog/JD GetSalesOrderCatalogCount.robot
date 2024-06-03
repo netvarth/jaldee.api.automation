@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -29,7 +29,7 @@ JD-TC-Get SalesOrder Catalog Count-1
 
     [Documentation]  create sales order catalog.(inventory manager is false) then get  catalog count by encid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -72,10 +72,10 @@ JD-TC-Get SalesOrder Catalog Count-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME35}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME35}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -129,7 +129,7 @@ JD-TC-Get SalesOrder Catalog Count-2
 
     [Documentation]  update sales order catalog .(inventory manager is false) then get sales order count by status
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -153,7 +153,7 @@ JD-TC-Get SalesOrder Catalog Count-3
 
     [Documentation]  Disable sales order catalog.(inventory manager is false).Then Get SalesOrder Catalog count by location
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -175,7 +175,7 @@ JD-TC-Get SalesOrder Catalog Count-4
 
     [Documentation]  create  sales order catalog where name as number.(inventory manager is false).then get sales order count by name
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -212,7 +212,7 @@ JD-TC-Get SalesOrder Catalog Count-5
 
     [Documentation]  create  sales order  catalog where name as invalid string.(inventory manager is false).then get catalog count by store
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -236,7 +236,7 @@ JD-TC-Get SalesOrder Catalog Count-6
 
     [Documentation]  create  sales order catalog where name as invalid string.(inventory manager is true).then get catalog count by invmgr
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -266,7 +266,7 @@ JD-TC-Get SalesOrder Catalog Count-7
 
     [Documentation]  create  sales order catalog where name as invalid string.(inventory manager is true).then get catalog count by invmgr
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -285,7 +285,7 @@ JD-TC-Get SalesOrder Catalog Count-UH1
 
     [Documentation]  Get SalesOrder Catalog Count  with invalid catalog id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -328,7 +328,7 @@ JD-TC-Get SalesOrder Catalog Count-UH4
 
     [Documentation]  Get SalesOrder Catalog Count using another provider login
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -346,7 +346,7 @@ JD-TC-Get SalesOrder Catalog Count-UH5
 
     [Documentation]  Get SalesOrder Catalog Count using inventory manager  and with invcatalog encid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

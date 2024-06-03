@@ -10,7 +10,7 @@ Library         FakerLibrary
 Resource        /ebs/TDD/ProviderKeywords.robot
 Resource        /ebs/TDD/ConsumerKeywords.robot
 Variables       /ebs/TDD/varfiles/providers.py
-Variables       /ebs/TDD/varfiles/musers.py
+Variables       /ebs/TDD/varfiles/providers.py
 Variables       /ebs/TDD/varfiles/consumerlist.py 
 
 *** Test Cases ***
@@ -329,9 +329,9 @@ JD-TC-CreateLocation-5
 
 JD-TC-CreateLocation-6
 	[Documentation]  Create a location by a branch login
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME6}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      clear_location   ${MUSERNAME6}
+      clear_location   ${PUSERNAME6}
       # ${city8}=   get_place
       # Set Suite Variable  ${city8}
       # ${latti8}=  get_latitude
@@ -598,7 +598,7 @@ JD-TC-VerifyCreateLocation-5
 
 JD-TC-VerifyCreateLocation-6
 	[Documentation]  Verify location details by branch login
-      ${resp}=  Encrypted Provider Login  ${MUSERNAME6}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Location ById  ${lid8}
       Log  ${resp.json()}

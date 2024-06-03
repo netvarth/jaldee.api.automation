@@ -185,20 +185,20 @@ JD-TC-GetAppointmentQueueSetById-2
     END 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    ${MUSERNAME_M}=  Evaluate  ${MUSERNAME}+9638
+    ${PUSERNAME_M}=  Evaluate  ${PUSERNAME}+9638
     ${pkg_id}=   get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd}  ${MUSERNAME_M}   ${pkg_id[0]}
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd}  ${PUSERNAME_M}   ${pkg_id[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_M}  0
+    ${resp}=  Account Activation  ${PUSERNAME_M}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_M}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_M}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_M}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_M}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_M}${\n}
-    Set Suite Variable  ${MUSERNAME_M}  
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_M}${\n}
+    Set Suite Variable  ${PUSERNAME_M}  
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}

@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 *** Variables ***
@@ -25,7 +25,7 @@ JD-TC-AddItemsToItemGroupforUser-1
 
     [Documentation]  Create an item and add that item to an item group.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME150}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -44,7 +44,7 @@ JD-TC-AddItemsToItemGroupforUser-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableItemGroup']}  ${bool[1]}
 
-    clear_Item  ${MUSERNAME150}
+    clear_Item  ${PUSERNAME150}
 
     ${displayName1}=   FakerLibrary.name 
     ${shortDesc1}=  FakerLibrary.Sentence   nb_words=2 
@@ -110,7 +110,7 @@ JD-TC-AddItemsToItemGroupforUser-2
 
     [Documentation]  Create multiple items and add that items to an item group.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -129,7 +129,7 @@ JD-TC-AddItemsToItemGroupforUser-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableItemGroup']}  ${bool[1]}
 
-    clear_Item  ${MUSERNAME151}
+    clear_Item  ${PUSERNAME151}
 
     ${displayName1}=   FakerLibrary.name 
     ${shortDesc1}=  FakerLibrary.Sentence   nb_words=2 
@@ -225,7 +225,7 @@ JD-TC-AddItemsToItemGroupforUser-3
 
     [Documentation]  Create 4 items and add 3 items in one group and one item in another group.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME152}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -244,7 +244,7 @@ JD-TC-AddItemsToItemGroupforUser-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableItemGroup']}  ${bool[1]}
 
-    clear_Item  ${MUSERNAME152}
+    clear_Item  ${PUSERNAME152}
 
     ${itemdata}=   FakerLibrary.words    	nb=8
     ${itemdata}=    Remove Duplicates    ${itemdata}
@@ -383,7 +383,7 @@ JD-TC-AddItemsToItemGroupforUser-4
     [Documentation]  Create 4 items and add 3 items in one group and one item in another group.
     ...   and add all these items to a catalog and verify the group details in catalog
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME121}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME121}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -406,7 +406,7 @@ JD-TC-AddItemsToItemGroupforUser-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableItemGroup']}  ${bool[1]}
 
-    clear_Item  ${MUSERNAME121}
+    clear_Item  ${PUSERNAME121}
 
     ${itemdata}=   FakerLibrary.words    	nb=8
     ${itemdata}=    Remove Duplicates    ${itemdata}
@@ -630,7 +630,7 @@ JD-TC-AddItemsToItemGroupforUser-5
 
     [Documentation]  add items to item group with empty list of item ids.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME150}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -649,7 +649,7 @@ JD-TC-AddItemsToItemGroupforUser-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableItemGroup']}  ${bool[1]}
 
-    clear_Item  ${MUSERNAME150}
+    clear_Item  ${PUSERNAME150}
 
     ${groupName1}=    FakerLibrary.word
     ${groupDesc1}=    FakerLibrary.sentence
@@ -685,7 +685,7 @@ JD-TC-AddItemsToItemGroupforUser-6
 
     [Documentation]  add a disabled item to a group.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -704,7 +704,7 @@ JD-TC-AddItemsToItemGroupforUser-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableItemGroup']}  ${bool[1]}
 
-    clear_Item  ${MUSERNAME122}
+    clear_Item  ${PUSERNAME122}
 
     ${displayName1}=   FakerLibrary.name 
     ${shortDesc1}=  FakerLibrary.Sentence   nb_words=2 
@@ -777,7 +777,7 @@ JD-TC-AddItemsToItemGroupforUser-7
 
     [Documentation]  Add items to item group by user.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME140}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -834,7 +834,7 @@ JD-TC-AddItemsToItemGroupforUser-7
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME140}'
+            IF   not '${user_phone}' == '${PUSERNAME140}'
                 clear_users  ${user_phone}
             END
         END
@@ -863,7 +863,7 @@ JD-TC-AddItemsToItemGroupforUser-7
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_Item  ${MUSERNAME140}
+    clear_Item  ${PUSERNAME140}
 
     ${displayName1}=   FakerLibrary.name 
     ${shortDesc1}=  FakerLibrary.Sentence   nb_words=2 
@@ -928,7 +928,7 @@ JD-TC-AddItemsToItemGroupforUser-UH1
 
     [Documentation]  add a deleted item to a group.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME123}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -947,7 +947,7 @@ JD-TC-AddItemsToItemGroupforUser-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableItemGroup']}  ${bool[1]}
 
-    clear_Item  ${MUSERNAME123}
+    clear_Item  ${PUSERNAME123}
 
     ${displayName1}=   FakerLibrary.name 
     ${shortDesc1}=  FakerLibrary.Sentence   nb_words=2 
@@ -1004,11 +1004,11 @@ JD-TC-AddItemsToItemGroupforUser-UH2
 
     [Documentation]  add another providers item to a group.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME123}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_Item  ${MUSERNAME123}
+    clear_Item  ${PUSERNAME123}
 
     ${displayName1}=   FakerLibrary.name 
     ${shortDesc1}=  FakerLibrary.Sentence   nb_words=2 
@@ -1038,7 +1038,7 @@ JD-TC-AddItemsToItemGroupforUser-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME156}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME156}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1085,11 +1085,11 @@ JD-TC-AddItemsToItemGroupforUser-UH3
 
     [Documentation]  try to add items to a group with another providers item group id.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME123}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_Item  ${MUSERNAME123}
+    clear_Item  ${PUSERNAME123}
 
     ${displayName1}=   FakerLibrary.name 
     ${shortDesc1}=  FakerLibrary.Sentence   nb_words=2 
@@ -1119,7 +1119,7 @@ JD-TC-AddItemsToItemGroupforUser-UH3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME156}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME156}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1158,7 +1158,7 @@ JD-TC-AddItemsToItemGroupforUser-UH3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME123}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1197,7 +1197,7 @@ JD-TC-AddItemsToItemGroupforUser-UH6
 
     [Documentation]  Add same items multiple times to a group.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME124}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME124}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1216,7 +1216,7 @@ JD-TC-AddItemsToItemGroupforUser-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableItemGroup']}  ${bool[1]}
 
-    clear_Item  ${MUSERNAME124}
+    clear_Item  ${PUSERNAME124}
 
     ${itemdata}=   FakerLibrary.words    	nb=2
     ${itemdata}=    Remove Duplicates    ${itemdata}
@@ -1277,7 +1277,7 @@ JD-TC-AddItemsToItemGroupforUser-UH7
 
     [Documentation]  try to add items to a deleted item group.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1296,7 +1296,7 @@ JD-TC-AddItemsToItemGroupforUser-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableItemGroup']}  ${bool[1]}
 
-    clear_Item  ${MUSERNAME151}
+    clear_Item  ${PUSERNAME151}
 
     ${itemdata}=   FakerLibrary.words    	nb=2
     ${itemdata}=    Remove Duplicates    ${itemdata}

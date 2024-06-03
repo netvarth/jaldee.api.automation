@@ -8,8 +8,8 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/hl_musers.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 ***Test Cases***
@@ -19,14 +19,14 @@ JD-TC-AssignBussinessLocationsToUser-1
 
     [Documentation]  Assign bussiness locations to users multiple users have same multiple locations 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_queue      ${HLMUSERNAME17}
-    clear_location   ${HLMUSERNAME17}
-    clear_service    ${HLMUSERNAME17}
-    clear_customer   ${HLMUSERNAME17}
+    clear_queue      ${HLPUSERNAME17}
+    clear_location   ${HLPUSERNAME17}
+    clear_service    ${HLPUSERNAME17}
+    clear_customer   ${HLPUSERNAME17}
 
     IF  ${resp.json()['enableRbac']}==${bool[1]}
         ${resp1}=  Enable Disable CDL RBAC  ${toggle[1]}
@@ -170,7 +170,7 @@ JD-TC-AssignBussinessLocationsToUser-1
 JD-TC-AssignBussinessLocationsToUser-2
 
     [Documentation]  Assign bussiness locations to user ,user also have team here same team members have different locations
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -281,7 +281,7 @@ JD-TC-AssignBussinessLocationsToUser-2
 JD-TC-AssignBussinessLocationsToUser-3
 
     [Documentation]  Assign bussiness locations to user one user have multiple location(account level)
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -332,7 +332,7 @@ JD-TC-AssignBussinessLocationsToUser-3
 JD-TC-AssignBussinessLocationsToUser-4
     [Documentation]  Assign bussiness locations to assistant users multiple locations (account level)
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -402,7 +402,7 @@ JD-TC-AssignBussinessLocationsToUser-4
 JD-TC-AssignBussinessLocationsToUser-5
     [Documentation]  Assign bussiness locations to users by user login
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -465,7 +465,7 @@ JD-TC-AssignBussinessLocationsToUser-5
 JD-TC-AssignBussinessLocationsToUser-UH1
     [Documentation]  Assign bussiness disabled locations to users (account level)
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -579,7 +579,7 @@ JD-TC-AssignBussinessLocationsToUser-UH3
 JD-TC-AssignBussinessLocationsToUser-UH4
     [Documentation]  Assign bussiness locations to users by user login location created in user level
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -665,7 +665,7 @@ JD-TC-AssignBussinessLocationsToUser-UH4
 JD-TC-AssignBussinessLocationsToUser-UH5
     [Documentation]  Assign another provider bussiness locations to users 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME75}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME75}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -676,7 +676,7 @@ JD-TC-AssignBussinessLocationsToUser-UH5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -752,7 +752,7 @@ JD-TC-AssignBussinessLocationsToUser-UH5
 JD-TC-AssignBussinessLocationsToUser-UH6
     [Documentation]  Assign bussiness locations to epmty users list 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -812,7 +812,7 @@ JD-TC-AssignBussinessLocationsToUser-UH6
 JD-TC-AssignBussinessLocationsToUser-UH7
     [Documentation]  Assign bussiness locations to disabled user
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -888,7 +888,7 @@ JD-TC-AssignBussinessLocationsToUser-UH7
 JD-TC-AssignBussinessLocationsToUser-UH8
     [Documentation]  Assign bussiness locations to mutiple times to same user
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

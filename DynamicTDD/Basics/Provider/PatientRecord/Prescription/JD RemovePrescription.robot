@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -43,18 +43,18 @@ JD-TC-Remove Prescription-1
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+9778810
+     ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+9778810
      ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Activation  ${MUSERNAME_E}  0
+     ${resp}=  Account Activation  ${PUSERNAME_E}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -66,10 +66,10 @@ JD-TC-Remove Prescription-1
     Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
     Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
-     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
-     Set Suite Variable  ${MUSERNAME_E}
-     ${id}=  get_id  ${MUSERNAME_E}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+     Set Suite Variable  ${PUSERNAME_E}
+     ${id}=  get_id  ${PUSERNAME_E}
      Set Suite Variable  ${id}
      ${bs}=  FakerLibrary.bs
      Set Suite Variable  ${bs}
@@ -91,7 +91,7 @@ JD-TC-Remove Prescription-1
      Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
      Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     # Log  ${resp.json()}         
     # Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -181,7 +181,7 @@ JD-TC-Remove Prescription-1
 
     
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -310,7 +310,7 @@ JD-TC-Remove Prescription-2
 
     [Documentation]    Create Prescription with Empty caseId and Remove that Prescription
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -334,7 +334,7 @@ JD-TC-Remove Prescription-3
 
     [Documentation]    Create Prescription with Empty dentalRecordId and Remove that Prescription
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -358,7 +358,7 @@ JD-TC-Remove Prescription-4
 
     [Documentation]    Create Prescription with Empty html  and Remove that Prescription.
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -382,7 +382,7 @@ JD-TC-Remove Prescription-UH1
 
     [Documentation]    Remove that Prescription that already removed
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -398,7 +398,7 @@ JD-TC-Remove Prescription-UH1
 JD-TC-Remove Prescription-UH2
 
     [Documentation]     Remove Prescription with invalid id.
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -413,7 +413,7 @@ JD-TC-Remove Prescription-UH3
 
     [Documentation]    Remove Prescription with another provider login.
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -438,7 +438,7 @@ JD-TC-Remove Prescription-UH4
 JD-TC-Remove Prescription-UH5
 
     [Documentation]     Remove Prescription with userid.
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

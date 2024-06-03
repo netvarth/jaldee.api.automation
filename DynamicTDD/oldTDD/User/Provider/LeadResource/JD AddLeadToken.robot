@@ -11,8 +11,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Library           /ebs/TDD/excelfuncs.py
 
 
@@ -81,17 +81,17 @@ JD-TC-AddLeadToken-1
     Set Suite Variable   ${unique_lnames}
 
 
-    clear_service    ${MUSERNAME61}
-    clear_customer   ${MUSERNAME61}
-    clear_location   ${MUSERNAME61}
-    clear_queue      ${MUSERNAME61}
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME61}  ${PASSWORD} 
+    clear_service    ${PUSERNAME61}
+    clear_customer   ${PUSERNAME61}
+    clear_location   ${PUSERNAME61}
+    clear_queue      ${PUSERNAME61}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME61}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${p_id}    ${resp.json()['id']}
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
  
-    # ${p_id}=  get_acc_id  ${MUSERNAME61}
+    # ${p_id}=  get_acc_id  ${PUSERNAME61}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -592,30 +592,30 @@ JD-TC-AddLeadToken-2
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+550299
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+550299
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_E}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
      
-    Set Suite Variable  ${MUSERNAME_E}
+    Set Suite Variable  ${PUSERNAME_E}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  
-    ${ph1}=  Evaluate  ${MUSERNAME_E}+1000000000
-    ${ph2}=  Evaluate  ${MUSERNAME_E}+2000000000
+    ${ph1}=  Evaluate  ${PUSERNAME_E}+1000000000
+    ${ph2}=  Evaluate  ${PUSERNAME_E}+2000000000
     ${views}=  Random Element    ${Views}
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -667,7 +667,7 @@ JD-TC-AddLeadToken-2
     ${resp}=  Update Waitlist Settings  ${calc_mode[0]}   ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${id}=  get_id  ${MUSERNAME_E}
+    ${id}=  get_id  ${PUSERNAME_E}
     Set Suite Variable  ${id}
 
     ${lid}=  Create Sample Location
@@ -794,7 +794,7 @@ JD-TC-AddLeadToken-2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -935,10 +935,10 @@ JD-TC-AddLeadToken-2
 JD-TC-AddLeadToken-3
 
     [Documentation]  Create a lead for user Then Add a consumer to the waitlist for the current day .
-    # clear_service    ${MUSERNAME61}
-    # clear_customer   ${MUSERNAME61}
-    # clear_location   ${MUSERNAME61}
-    # clear_queue      ${MUSERNAME61}
+    # clear_service    ${PUSERNAME61}
+    # clear_customer   ${PUSERNAME61}
+    # clear_location   ${PUSERNAME61}
+    # clear_queue      ${PUSERNAME61}
     ${resp}=   Encrypted Provider Login  ${PUSERNAME_U4}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -1079,7 +1079,7 @@ JD-TC-AddLeadToken-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
-    ${pid1}=  get_acc_id    ${MUSERNAME_E}
+    ${pid1}=  get_acc_id    ${PUSERNAME_E}
 
     ${resp}=  Consumer Login  ${CUSERNAME4}  ${PASSWORD}
     Log  ${resp.json()}

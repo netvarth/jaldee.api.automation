@@ -13,7 +13,7 @@ Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Keywords ***
 Get Billable Subdomain
@@ -286,11 +286,11 @@ JD-TC-Update cash payment- booking level-3
 
     [Documentation]  Provider take one walkin Appointment and update cash payment .
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_appt_schedule   ${HLMUSERNAME1}
+    clear_appt_schedule   ${HLPUSERNAME1}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -421,7 +421,7 @@ JD-TC-Update cash payment- booking level-4
 
     [Documentation]  update cash payment of appointment,where payment mode is other.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

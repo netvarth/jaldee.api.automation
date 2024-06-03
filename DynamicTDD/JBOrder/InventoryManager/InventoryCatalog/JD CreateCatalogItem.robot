@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -29,7 +29,7 @@ JD-TC-Create Inventory Catalog Item-1
 
     [Documentation]  Create Inventory Catalog Item with valid details.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME47}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -82,10 +82,10 @@ JD-TC-Create Inventory Catalog Item-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME47}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME47}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME47}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -168,7 +168,7 @@ JD-TC-Create Inventory Catalog Item-2
 
     [Documentation]  Create Inventory Catalog Item from user login.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME47}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -237,7 +237,7 @@ JD-TC-Create Inventory Catalog Item-3
 
     [Documentation]  Create 50 items and add that items to catalog 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME47}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -263,7 +263,7 @@ JD-TC-Create Inventory Catalog Item-UH1
 
     [Documentation]  adding existing item to the existing catalog.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME47}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${ITEM_NAME_EXIST}=  Format String  ${ITEM_NAME_EXIST}    ${categoryName}
@@ -277,7 +277,7 @@ JD-TC-Create Inventory Catalog Item-UH2
 
     [Documentation]  Create Inventory Catalog Item using invalid encid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME47}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -292,7 +292,7 @@ JD-TC-Create Inventory Catalog Item-UH3
 
     [Documentation]  Create Inventory Catalog Item using invalid itemencid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME47}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -331,7 +331,7 @@ JD-TC-Create Inventory Catalog Item-UH6
 
     [Documentation]  Create Inventory Catalog Item using another provider
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -346,7 +346,7 @@ JD-TC-Create Inventory Catalog Item-UH7
 
     [Documentation]  Create Inventory Catalog Item that item is not an inventory item
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME47}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

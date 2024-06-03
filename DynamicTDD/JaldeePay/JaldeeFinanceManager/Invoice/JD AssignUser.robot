@@ -13,8 +13,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Test Cases ***
 
@@ -22,7 +22,7 @@ JD-TC-Assign User-1
 
     [Documentation]  Create a invoice then assign the invoice to a user.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -54,7 +54,7 @@ JD-TC-Assign User-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME19}+1000410224
+    ${ph1}=  Evaluate  ${HLPUSERNAME19}+1000410224
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${address}=  get_address
@@ -246,11 +246,11 @@ JD-TC-Assign User-2
 
     [Documentation]  Assign another user to  created invoice.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${ph1}=  Evaluate  ${HLMUSERNAME19}+1000410223
+    ${ph1}=  Evaluate  ${HLPUSERNAME19}+1000410223
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${address}=  get_address
@@ -286,7 +286,7 @@ JD-TC-Assign User-UH1
 
     [Documentation]  Assign User with invalid user id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -300,7 +300,7 @@ JD-TC-Assign User-UH2
 
     [Documentation]  Assign User with already assigned one.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -323,7 +323,7 @@ JD-TC-Assign User-UH4
 
     [Documentation]  Assign User with another Encrypted Provider Login.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -355,7 +355,7 @@ JD-TC-Assign User-UH5
 
     [Documentation]  Assign User with invalid invoice  id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -369,7 +369,7 @@ JD-TC-Assign User-UH6
 
     [Documentation]  update bill status as settled and then try to assign user.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -395,7 +395,7 @@ JD-TC-Assign User-UH7
 
     [Documentation]  bill status is in draft and then try to assign user.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -434,7 +434,7 @@ JD-TC-Assign User-UH8
 
     [Documentation]  update bill status as cancelled and then try to assign user.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

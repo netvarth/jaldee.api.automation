@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ApiKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
@@ -29,7 +29,7 @@ JD-TC-EnableDisableApiGateway-1
 
     [Documentation]   Enable Api Gateway for a branch(account level).
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -51,7 +51,7 @@ JD-TC-EnableDisableApiGateway-2
 
     [Documentation]   Disable Api Gateway for a branch(account level).
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -82,7 +82,7 @@ JD-TC-EnableDisableApiGateway-3
 
     [Documentation]   Enable Api Gateway for a user(user level) with admin previlage.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -124,7 +124,7 @@ JD-TC-EnableDisableApiGateway-3
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME1}'
+            IF   not '${user_phone}' == '${PUSERNAME1}'
                 clear_users  ${user_phone}
             END
         END
@@ -170,7 +170,7 @@ JD-TC-EnableDisableApiGateway-4
 
     [Documentation]   Enable Api Gateway for a user(user level) without admin previlage.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -212,7 +212,7 @@ JD-TC-EnableDisableApiGateway-4
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME2}'
+            IF   not '${user_phone}' == '${PUSERNAME2}'
                 clear_users  ${user_phone}
             END
         END
@@ -254,7 +254,7 @@ JD-TC-EnableDisableApiGateway-UH1
 
     [Documentation]   Enable Api Gateway for a branch(account level) which is already enabled.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

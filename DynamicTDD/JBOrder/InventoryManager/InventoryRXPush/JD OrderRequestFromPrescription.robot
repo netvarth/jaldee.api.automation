@@ -15,7 +15,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -43,18 +43,18 @@ JD-TC-OrderRequest-1
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+4548754
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+4548754
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_E}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -66,10 +66,10 @@ JD-TC-OrderRequest-1
     Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
     Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
-    Set Suite Variable  ${MUSERNAME_E}
-    ${id}=  get_id  ${MUSERNAME_E}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+    Set Suite Variable  ${PUSERNAME_E}
+    ${id}=  get_id  ${PUSERNAME_E}
     Set Suite Variable  ${id}
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
@@ -151,11 +151,11 @@ JD-TC-OrderRequest-1
 
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${accountId}=  get_acc_id  ${HLMUSERNAME16}
+    # ${accountId}=  get_acc_id  ${HLPUSERNAME16}
     # Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -459,7 +459,7 @@ JD-TC-OrderRequest-1
 
 # --------------------------- Create SalesOrder Inventory Catalog-InvMgr True --------------------------
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -618,7 +618,7 @@ JD-TC-OrderRequest-UH3
 
     [Documentation]    Order Request - same request after order Declined 
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -634,7 +634,7 @@ JD-TC-OrderRequest-UH1
 
     [Documentation]    Order Request - with same details  
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -648,7 +648,7 @@ JD-TC-OrderRequest-UH2
 
     [Documentation]    Order Request - after order approvel  
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -681,7 +681,7 @@ JD-TC-OrderRequest-UH3
 
     [Documentation]    Order Request - where store id is invalid  
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -704,7 +704,7 @@ JD-TC-OrderRequest-UH4
 
     [Documentation]    Order Request - same request after order Declined 
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -720,7 +720,7 @@ JD-TC-OrderRequest-UH5
 
     [Documentation]    Order Request - where prescription id is invalid  
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

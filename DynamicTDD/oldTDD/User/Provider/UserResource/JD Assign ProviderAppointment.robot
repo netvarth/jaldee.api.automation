@@ -13,8 +13,8 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -45,7 +45,7 @@ JD-TC-AssignproviderAppointment-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -54,9 +54,9 @@ JD-TC-AssignproviderAppointment-1
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
   
-    clear_service   ${HLMUSERNAME1}
-    clear_appt_schedule   ${HLMUSERNAME1}
-    clear_customer   ${HLMUSERNAME1}
+    clear_service   ${HLPUSERNAME1}
+    clear_appt_schedule   ${HLPUSERNAME1}
+    clear_customer   ${HLPUSERNAME1}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
@@ -186,7 +186,7 @@ JD-TC-AssignproviderAppointment-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME1}+1000450000
+    ${ph1}=  Evaluate  ${HLPUSERNAME1}+1000450000
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -205,8 +205,8 @@ JD-TC-AssignproviderAppointment-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${whpnum}=  Evaluate  ${HLMUSERNAME1}+336245
-    ${tlgnum}=  Evaluate  ${HLMUSERNAME1}+336345
+    ${whpnum}=  Evaluate  ${HLPUSERNAME1}+336245
+    ${tlgnum}=  Evaluate  ${HLPUSERNAME1}+336345
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
@@ -242,7 +242,7 @@ JD-TC-AssignproviderAppointment-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response List  ${resp}  0  id=${sch_id1}   name=${schedule_name}   apptState=${Qstate[0]}
 
-    ${ph2}=  Evaluate  ${HLMUSERNAME1}+1000450001
+    ${ph2}=  Evaluate  ${HLPUSERNAME1}+1000450001
     ${firstname1}=  FakerLibrary.name
     ${lastname1}=  FakerLibrary.last_name
     ${dob1}=  FakerLibrary.Date
@@ -271,7 +271,7 @@ JD-TC-AssignproviderAppointment-1
     Verify Response List  ${resp}  0  id=${sch_id2}   name=${schedule_name}   apptState=${Qstate[0]}
 
 
-    ${ph3}=  Evaluate  ${HLMUSERNAME1}+1000450002
+    ${ph3}=  Evaluate  ${HLPUSERNAME1}+1000450002
     ${firstname2}=  FakerLibrary.name
     ${lastname2}=  FakerLibrary.last_name
     ${dob2}=  FakerLibrary.Date
@@ -364,7 +364,7 @@ JD-TC-AssignproviderAppointment-2
     Should Be Equal As Strings    ${resp.status_code}    200
     
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -373,11 +373,11 @@ JD-TC-AssignproviderAppointment-2
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_service   ${HLMUSERNAME1}
-    clear_appt_schedule   ${HLMUSERNAME1}
-    clear_customer   ${HLMUSERNAME1}
+    clear_service   ${HLPUSERNAME1}
+    clear_appt_schedule   ${HLPUSERNAME1}
+    clear_customer   ${HLPUSERNAME1}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME1}
+    ${pid}=  get_acc_id  ${HLPUSERNAME1}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
@@ -484,7 +484,7 @@ JD-TC-AssignproviderAppointment-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME1}+1000460001
+    ${ph1}=  Evaluate  ${HLPUSERNAME1}+1000460001
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -521,7 +521,7 @@ JD-TC-AssignproviderAppointment-2
     Verify Response List  ${resp}  0  id=${sch_id1}   name=${schedule_name}   apptState=${Qstate[0]}
 
 
-    ${ph2}=  Evaluate  ${HLMUSERNAME1}+1000460002
+    ${ph2}=  Evaluate  ${HLPUSERNAME1}+1000460002
     ${firstname1}=  FakerLibrary.name
     ${lastname1}=  FakerLibrary.last_name
     ${address1}=  get_address
@@ -616,7 +616,7 @@ JD-TC-AssignproviderAppointment-3
     Should Be Equal As Strings    ${resp.status_code}    200
     
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -625,11 +625,11 @@ JD-TC-AssignproviderAppointment-3
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_service   ${HLMUSERNAME1}
-    clear_appt_schedule   ${HLMUSERNAME1}
-    clear_customer   ${HLMUSERNAME1}
+    clear_service   ${HLPUSERNAME1}
+    clear_appt_schedule   ${HLPUSERNAME1}
+    clear_customer   ${HLPUSERNAME1}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME1}
+    ${pid}=  get_acc_id  ${HLPUSERNAME1}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
@@ -737,7 +737,7 @@ JD-TC-AssignproviderAppointment-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME1}+1000460004
+    ${ph1}=  Evaluate  ${HLPUSERNAME1}+1000460004
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -795,7 +795,7 @@ JD-TC-AssignproviderAppointment-5
     Should Be Equal As Strings    ${resp.status_code}    200
     
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -804,11 +804,11 @@ JD-TC-AssignproviderAppointment-5
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_service   ${HLMUSERNAME1}
-    clear_appt_schedule   ${HLMUSERNAME1}
-    clear_customer   ${HLMUSERNAME1}
+    clear_service   ${HLPUSERNAME1}
+    clear_appt_schedule   ${HLPUSERNAME1}
+    clear_customer   ${HLPUSERNAME1}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME1}
+    ${pid}=  get_acc_id  ${HLPUSERNAME1}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
@@ -915,7 +915,7 @@ JD-TC-AssignproviderAppointment-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME1}+1000460005
+    ${ph1}=  Evaluate  ${HLPUSERNAME1}+1000460005
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -952,7 +952,7 @@ JD-TC-AssignproviderAppointment-5
     Verify Response List  ${resp}  0  id=${sch_id1}   name=${schedule_name}   apptState=${Qstate[0]}
 
 
-    ${ph2}=  Evaluate  ${HLMUSERNAME1}+1000460006
+    ${ph2}=  Evaluate  ${HLPUSERNAME1}+1000460006
     ${firstname1}=  FakerLibrary.name
     ${lastname1}=  FakerLibrary.last_name
     ${dob1}=  FakerLibrary.Date
@@ -1074,7 +1074,7 @@ JD-TC-AssignproviderAppointment-6
     Should Be Equal As Strings    ${resp.status_code}    200
     
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1083,11 +1083,11 @@ JD-TC-AssignproviderAppointment-6
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_service   ${HLMUSERNAME1}
-    clear_appt_schedule   ${HLMUSERNAME1}
-    clear_customer   ${HLMUSERNAME1}
+    clear_service   ${HLPUSERNAME1}
+    clear_appt_schedule   ${HLPUSERNAME1}
+    clear_customer   ${HLPUSERNAME1}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME1}
+    ${pid}=  get_acc_id  ${HLPUSERNAME1}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
@@ -1194,7 +1194,7 @@ JD-TC-AssignproviderAppointment-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME1}+1000460007
+    ${ph1}=  Evaluate  ${HLPUSERNAME1}+1000460007
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -1230,7 +1230,7 @@ JD-TC-AssignproviderAppointment-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response List  ${resp}  0  id=${sch_id1}   name=${schedule_name}   apptState=${Qstate[0]}
 
-    ${ph2}=  Evaluate  ${HLMUSERNAME1}+1000460008
+    ${ph2}=  Evaluate  ${HLPUSERNAME1}+1000460008
     ${firstname1}=  FakerLibrary.name
     ${lastname1}=  FakerLibrary.last_name
     ${dob1}=  FakerLibrary.Date
@@ -1335,7 +1335,7 @@ JD-TC-AssignproviderAppointment-7
     Should Be Equal As Strings    ${resp.status_code}    200
     
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1344,11 +1344,11 @@ JD-TC-AssignproviderAppointment-7
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_service   ${HLMUSERNAME1}
-    clear_appt_schedule   ${HLMUSERNAME1}
-    clear_customer   ${HLMUSERNAME1}
+    clear_service   ${HLPUSERNAME1}
+    clear_appt_schedule   ${HLPUSERNAME1}
+    clear_customer   ${HLPUSERNAME1}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME1}
+    ${pid}=  get_acc_id  ${HLPUSERNAME1}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
@@ -1532,7 +1532,7 @@ JD-TC-AssignproviderAppointment-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME1}+1000460009
+    ${ph1}=  Evaluate  ${HLPUSERNAME1}+1000460009
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -1643,7 +1643,7 @@ JD-TC-AssignproviderAppointment-8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1652,9 +1652,9 @@ JD-TC-AssignproviderAppointment-8
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sud_domain_id3}  ${resp2.json()['serviceSubSector']['id']}
   
-    clear_service   ${HLMUSERNAME17}
-    clear_appt_schedule   ${HLMUSERNAME17}
-    clear_customer   ${HLMUSERNAME17}
+    clear_service   ${HLPUSERNAME17}
+    clear_appt_schedule   ${HLPUSERNAME17}
+    clear_customer   ${HLPUSERNAME17}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
@@ -1763,7 +1763,7 @@ JD-TC-AssignproviderAppointment-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id3}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME17}+1000350000
+    ${ph1}=  Evaluate  ${HLPUSERNAME17}+1000350000
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -1782,8 +1782,8 @@ JD-TC-AssignproviderAppointment-8
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${whpnum}=  Evaluate  ${HLMUSERNAME17}+336245
-    ${tlgnum}=  Evaluate  ${HLMUSERNAME17}+336345
+    ${whpnum}=  Evaluate  ${HLPUSERNAME17}+336245
+    ${tlgnum}=  Evaluate  ${HLPUSERNAME17}+336345
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id3}  ${sud_domain_id3}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
@@ -1918,7 +1918,7 @@ JD-TC-AssignproviderAppointment-9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1927,9 +1927,9 @@ JD-TC-AssignproviderAppointment-9
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sud_domain_id3}  ${resp2.json()['serviceSubSector']['id']}
   
-    clear_service   ${HLMUSERNAME17}
-    clear_appt_schedule   ${HLMUSERNAME17}
-    clear_customer   ${HLMUSERNAME17}
+    clear_service   ${HLPUSERNAME17}
+    clear_appt_schedule   ${HLPUSERNAME17}
+    clear_customer   ${HLPUSERNAME17}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
@@ -2038,7 +2038,7 @@ JD-TC-AssignproviderAppointment-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id3}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME17}+1000310000
+    ${ph1}=  Evaluate  ${HLPUSERNAME17}+1000310000
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -2057,8 +2057,8 @@ JD-TC-AssignproviderAppointment-9
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${whpnum}=  Evaluate  ${HLMUSERNAME17}+316245
-    ${tlgnum}=  Evaluate  ${HLMUSERNAME17}+316345
+    ${whpnum}=  Evaluate  ${HLPUSERNAME17}+316245
+    ${tlgnum}=  Evaluate  ${HLPUSERNAME17}+316345
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[1]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id3}  ${sud_domain_id3}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
@@ -2120,7 +2120,7 @@ JD-TC-AssignproviderAppointment-10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2129,9 +2129,9 @@ JD-TC-AssignproviderAppointment-10
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sud_domain_id3}  ${resp2.json()['serviceSubSector']['id']}
   
-    clear_service   ${HLMUSERNAME17}
-    clear_appt_schedule   ${HLMUSERNAME17}
-    clear_customer   ${HLMUSERNAME17}
+    clear_service   ${HLPUSERNAME17}
+    clear_appt_schedule   ${HLPUSERNAME17}
+    clear_customer   ${HLPUSERNAME17}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
@@ -2245,7 +2245,7 @@ JD-TC-AssignproviderAppointment-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id3}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME17}+1000340000
+    ${ph1}=  Evaluate  ${HLPUSERNAME17}+1000340000
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -2264,8 +2264,8 @@ JD-TC-AssignproviderAppointment-10
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${whpnum}=  Evaluate  ${HLMUSERNAME1}+336245
-    ${tlgnum}=  Evaluate  ${HLMUSERNAME1}+336345
+    ${whpnum}=  Evaluate  ${HLPUSERNAME1}+336245
+    ${tlgnum}=  Evaluate  ${HLPUSERNAME1}+336345
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id3}  ${sud_domain_id3}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
@@ -2343,7 +2343,7 @@ JD-TC-AssignproviderAppointment-11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2352,9 +2352,9 @@ JD-TC-AssignproviderAppointment-11
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sud_domain_id3}  ${resp2.json()['serviceSubSector']['id']}
   
-    clear_service   ${HLMUSERNAME17}
-    clear_appt_schedule   ${HLMUSERNAME17}
-    clear_customer   ${HLMUSERNAME17}
+    clear_service   ${HLPUSERNAME17}
+    clear_appt_schedule   ${HLPUSERNAME17}
+    clear_customer   ${HLPUSERNAME17}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
@@ -2463,7 +2463,7 @@ JD-TC-AssignproviderAppointment-11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id3}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME17}+1000320000
+    ${ph1}=  Evaluate  ${HLPUSERNAME17}+1000320000
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -2482,8 +2482,8 @@ JD-TC-AssignproviderAppointment-11
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${whpnum}=  Evaluate  ${HLMUSERNAME17}+316245
-    ${tlgnum}=  Evaluate  ${HLMUSERNAME17}+316345
+    ${whpnum}=  Evaluate  ${HLPUSERNAME17}+316245
+    ${tlgnum}=  Evaluate  ${HLPUSERNAME17}+316345
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[2]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id3}  ${sud_domain_id3}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
@@ -2544,15 +2544,15 @@ JD-TC-AssignproviderAppointment-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${HLMUSERNAME1}
-    clear_appt_schedule   ${HLMUSERNAME1}
-    clear_customer   ${HLMUSERNAME1}
+    clear_service   ${HLPUSERNAME1}
+    clear_appt_schedule   ${HLPUSERNAME1}
+    clear_customer   ${HLPUSERNAME1}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME1}
+    ${pid}=  get_acc_id  ${HLPUSERNAME1}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
@@ -2590,7 +2590,7 @@ JD-TC-AssignproviderAppointment-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME1}+1000460011
+    ${ph1}=  Evaluate  ${HLPUSERNAME1}+1000460011
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -2664,11 +2664,11 @@ JD-TC-AssignproviderAppointment-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${ph2}=  Evaluate  ${HLMUSERNAME1}+1000460012
+    ${ph2}=  Evaluate  ${HLPUSERNAME1}+1000460012
     ${firstname1}=  FakerLibrary.name
     ${lastname1}=  FakerLibrary.last_name
     ${dob1}=  FakerLibrary.Date
@@ -2717,13 +2717,13 @@ JD-TC-AssignproviderAppointment-UH2
     Should Be Equal As Strings    ${resp.status_code}    200
     
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${HLMUSERNAME1}
-    clear_appt_schedule   ${HLMUSERNAME1}
-    clear_customer   ${HLMUSERNAME1}
+    clear_service   ${HLPUSERNAME1}
+    clear_appt_schedule   ${HLPUSERNAME1}
+    clear_customer   ${HLPUSERNAME1}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
@@ -2828,7 +2828,7 @@ JD-TC-AssignproviderAppointment-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME1}+1000460043
+    ${ph1}=  Evaluate  ${HLPUSERNAME1}+1000460043
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -2885,15 +2885,15 @@ JD-TC-AssignproviderAppointment-UH3
     Should Be Equal As Strings    ${resp.status_code}    200
     
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${HLMUSERNAME1}
-    clear_appt_schedule   ${HLMUSERNAME1}
-    clear_customer   ${HLMUSERNAME1}
+    clear_service   ${HLPUSERNAME1}
+    clear_appt_schedule   ${HLPUSERNAME1}
+    clear_customer   ${HLPUSERNAME1}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME1}
+    ${pid}=  get_acc_id  ${HLPUSERNAME1}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
@@ -2998,7 +2998,7 @@ JD-TC-AssignproviderAppointment-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME1}+1000460014
+    ${ph1}=  Evaluate  ${HLPUSERNAME1}+1000460014
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -3043,7 +3043,7 @@ JD-TC-AssignproviderAppointment-UH3
 JD-TC-AssignproviderAppointment-UH4
     [Documentation]  Assingn appointment to another account's user
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3053,9 +3053,9 @@ JD-TC-AssignproviderAppointment-UH4
     Set Suite Variable  ${sud_domain_id2}  ${resp2.json()['serviceSubSector']['id']}
 
 
-    clear_service   ${MUSERNAME1}
-    clear_appt_schedule   ${MUSERNAME1}
-    clear_customer   ${MUSERNAME1}
+    clear_service   ${PUSERNAME1}
+    clear_appt_schedule   ${PUSERNAME1}
+    clear_customer   ${PUSERNAME1}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
@@ -3096,7 +3096,7 @@ JD-TC-AssignproviderAppointment-UH4
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${dep_id1}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${MUSERNAME1}+1000160015
+    ${ph1}=  Evaluate  ${PUSERNAME1}+1000160015
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -3146,7 +3146,7 @@ JD-TC-AssignproviderAppointment-UH4
     Should Be Equal As Strings    ${resp.status_code}    200
     
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3155,11 +3155,11 @@ JD-TC-AssignproviderAppointment-UH4
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_service   ${HLMUSERNAME1}
-    clear_appt_schedule   ${HLMUSERNAME1}
-    clear_customer   ${HLMUSERNAME1}
+    clear_service   ${HLPUSERNAME1}
+    clear_appt_schedule   ${HLPUSERNAME1}
+    clear_customer   ${HLPUSERNAME1}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME1}
+    ${pid}=  get_acc_id  ${HLPUSERNAME1}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
@@ -3265,7 +3265,7 @@ JD-TC-AssignproviderAppointment-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME1}+1000160016
+    ${ph1}=  Evaluate  ${HLPUSERNAME1}+1000160016
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -3302,7 +3302,7 @@ JD-TC-AssignproviderAppointment-UH5
     Should Be Equal As Strings    ${resp.status_code}    200
     
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3311,11 +3311,11 @@ JD-TC-AssignproviderAppointment-UH5
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_service   ${HLMUSERNAME1}
-    clear_appt_schedule   ${HLMUSERNAME1}
-    clear_customer   ${HLMUSERNAME1}
+    clear_service   ${HLPUSERNAME1}
+    clear_appt_schedule   ${HLPUSERNAME1}
+    clear_customer   ${HLPUSERNAME1}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME1}
+    ${pid}=  get_acc_id  ${HLPUSERNAME1}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
@@ -3438,7 +3438,7 @@ JD-TC-AssignproviderAppointment-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME1}+1000460025
+    ${ph1}=  Evaluate  ${HLPUSERNAME1}+1000460025
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -3498,7 +3498,7 @@ JD-TC-AssignproviderAppointment-UH6
     Should Be Equal As Strings    ${resp.status_code}    200
     
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3507,11 +3507,11 @@ JD-TC-AssignproviderAppointment-UH6
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_service   ${HLMUSERNAME1}
-    clear_appt_schedule   ${HLMUSERNAME1}
-    clear_customer   ${HLMUSERNAME1}
+    clear_service   ${HLPUSERNAME1}
+    clear_appt_schedule   ${HLPUSERNAME1}
+    clear_customer   ${HLPUSERNAME1}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME1}
+    ${pid}=  get_acc_id  ${HLPUSERNAME1}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
@@ -3617,7 +3617,7 @@ JD-TC-AssignproviderAppointment-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME1}+1000460024
+    ${ph1}=  Evaluate  ${HLPUSERNAME1}+1000460024
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date

@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
@@ -3852,7 +3852,7 @@ JD-TC-Verify-3-Token_Report-13
 JD-TC-Token_Report-14
     
     [Documentation]  Token report before completing prepayment of a Physical service (BRANCH)
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME23}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3861,12 +3861,12 @@ JD-TC-Token_Report-14
         Set Test Variable  ${P_Sector}   ${decrypted_data['sector']}
 
         # Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
-        ${pid_B28}=  get_acc_id  ${MUSERNAME23}
+        ${pid_B28}=  get_acc_id  ${PUSERNAME23}
         Set Suite variable  ${pid_B28}
 
-        clear_Department    ${MUSERNAME23}
-        clear_service       ${MUSERNAME23}
-        clear_location      ${MUSERNAME23}
+        clear_Department    ${PUSERNAME23}
+        clear_service       ${PUSERNAME23}
+        clear_location      ${PUSERNAME23}
 
         ${resp}=  Update Waitlist Settings  ${calc_mode[1]}   ${duration}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${Empty}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -4027,7 +4027,7 @@ JD-TC-Token_Report-14
         Verify Response  ${resp}  paymentStatus=${paymentStatus[0]}   waitlistStatus=${wl_status[3]}
 
     
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME23}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4092,7 +4092,7 @@ JD-TC-Verify-1-Token_Report-14
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        ${resp}=   Encrypted Provider Login   ${MUSERNAME23}  ${PASSWORD} 
+        ${resp}=   Encrypted Provider Login   ${PUSERNAME23}  ${PASSWORD} 
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -4114,7 +4114,7 @@ JD-TC-Verify-1-Token_Report-14
 
         Verify Response  ${resp}  uuid=${cwid_C17}  netTotal=${totalamt}  billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[1]}  netRate=${totalamt}   totalAmountPaid=${pre_float1}  amountDue=${balamount}
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME23}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4167,7 +4167,7 @@ JD-TC-Verify-2-Token_Report-14
         Should Be Equal As Strings  ${resp.status_code}  200
         sleep   02s
       
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME23}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4207,7 +4207,7 @@ JD-TC-Verify-2-Token_Report-14
 JD-TC-Token_Report-15
         [Documentation]  Token report before completing prepayment of a Virtual service (BRANCH)
         
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME21}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4215,13 +4215,13 @@ JD-TC-Token_Report-15
         Log  ${decrypted_data}
         Set Test Variable  ${P_Sector}   ${decrypted_data['sector']}
         # Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
-        ${pid_B5}=  get_acc_id  ${MUSERNAME21}
+        ${pid_B5}=  get_acc_id  ${PUSERNAME21}
         Set Suite variable  ${pid_B5}
 
 
-        clear_Department    ${MUSERNAME21}
-        clear_service       ${MUSERNAME21}
-        clear_location      ${MUSERNAME21}
+        clear_Department    ${PUSERNAME21}
+        clear_service       ${PUSERNAME21}
+        clear_location      ${PUSERNAME21}
 
         ${resp}=  Update Waitlist Settings  ${calc_mode[1]}   ${duration}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${Empty}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -4273,7 +4273,7 @@ JD-TC-Token_Report-15
         Set Suite Variable  ${dep_id}  ${resp.json()}
     
         # ${number}=  Random Int  min=100  max=200
-        ${PUSERNAME_U32}=  Evaluate  ${MUSERNAME21}+7654321
+        ${PUSERNAME_U32}=  Evaluate  ${PUSERNAME21}+7654321
         clear_users  ${PUSERNAME_U32}
         Set Suite Variable  ${PUSERNAME_U32}
         ${firstname}=  FakerLibrary.name
@@ -4312,14 +4312,14 @@ JD-TC-Token_Report-15
         # Log  ${resp.json()}
         # Should Be Equal As Strings  ${resp.status_code}  200
 
-        ${ZOOM_id0}=  Format String  ${ZOOM_url}  ${MUSERNAME21}
+        ${ZOOM_id0}=  Format String  ${ZOOM_url}  ${PUSERNAME21}
         Set Suite Variable   ${ZOOM_id0}
 
         ${instructions1}=   FakerLibrary.sentence
         ${instructions2}=   FakerLibrary.sentence
 
         ${VirtualcallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_id0}   status=ACTIVE    instructions=${instructions1} 
-        ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${MUSERNAME21}   countryCode=${countryCodes[0]}  status=ACTIVE    instructions=${instructions2} 
+        ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME21}   countryCode=${countryCodes[0]}  status=ACTIVE    instructions=${instructions2} 
         ${vcm1}=  Create List  ${VirtualcallingMode1}   ${VirtualcallingMode2}
 
         ${resp}=  Update Virtual Calling Mode   ${vcm1}
@@ -4335,11 +4335,11 @@ JD-TC-Token_Report-15
         Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['instructions']}    ${instructions1}
 
         Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['callingMode']}     ${CallingModes[1]}
-        Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['value']}           ${MUSERNAME21}
+        Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['value']}           ${PUSERNAME21}
         Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['status']}          ACTIVE
         Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['instructions']}    ${instructions2}
 
-        ${PUSERPH_id0}=  Evaluate  ${MUSERNAME21}+10101
+        ${PUSERPH_id0}=  Evaluate  ${PUSERNAME21}+10101
         ${ZOOM_Pid0}=  Format String  ${ZOOM_url}  ${PUSERPH_id0}
         Set Suite Variable   ${ZOOM_Pid0}
 
@@ -4471,7 +4471,7 @@ JD-TC-Token_Report-15
         Should Be Equal As Strings  ${resp.status_code}  200
         Verify Response  ${resp}  paymentStatus=${paymentStatus[0]}   waitlistStatus=${wl_status[3]}
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME21}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4537,7 +4537,7 @@ JD-TC-Verify-1-Token_Report-15
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        ${resp}=   Encrypted Provider Login   ${MUSERNAME21}  ${PASSWORD} 
+        ${resp}=   Encrypted Provider Login   ${PUSERNAME21}  ${PASSWORD} 
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -4564,7 +4564,7 @@ JD-TC-Verify-1-Token_Report-15
         Verify Response  ${resp}  paymentStatus=${paymentStatus[1]}     waitlistStatus=${wl_status[0]}
 
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME21}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4604,7 +4604,7 @@ JD-TC-Verify-1-Token_Report-15
 
 JD-TC-Verify-2-Token_Report-15
         [Documentation]  Token report When cancel waitlist after completing prepayment of a virtual service (BRANCH) 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME21}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         

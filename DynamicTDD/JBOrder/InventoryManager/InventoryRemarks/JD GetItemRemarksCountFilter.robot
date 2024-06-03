@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -29,10 +29,10 @@ JD-TC-GetItemRemarksCountFilter-1
     [Documentation]   Get Item Remark  count Filter using account id. 
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME5}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME5}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Get Account Settings
@@ -68,7 +68,7 @@ JD-TC-GetItemRemarksCountFilter-2
     [Documentation]   Get Item Remark count Filter using encid.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -93,7 +93,7 @@ JD-TC-GetItemRemarksCountFilter-3
     [Documentation]   Get Item Remark count Filter using transaction enum.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -121,7 +121,7 @@ JD-TC-GetItemRemarksCountFilter-4
     [Documentation]   Get Item Remark count Filter using id.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -152,7 +152,7 @@ JD-TC-GetItemRemarksCountFilter-5
     [Documentation]   update item remarks  and Get Item Remark  count filter using accountid.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -178,7 +178,7 @@ JD-TC-GetItemRemarksCountFilter-6
     [Documentation]    Get Item Remark count filter using transactionTypeEnum.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -206,7 +206,7 @@ JD-TC-GetItemRemarksCountFilter-UH2
     [Documentation]    Get Item Remark count filter using invalid data.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -220,7 +220,7 @@ JD-TC-GetItemRemarksCountFilter-UH3
     [Documentation]    Get Item Remark count filter using EMPTY ID.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

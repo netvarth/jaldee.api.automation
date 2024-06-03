@@ -11,8 +11,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -25,10 +25,10 @@ JD-TC-RemoveTaskAssignee-1
 
     [Documentation]  Create a task for a  branch then change assignee and then remove that assignee.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME21}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${HLMUSERNAME21} 
+    ${pid}=  get_acc_id  ${HLPUSERNAME21} 
     Set Suite variable     ${pid}
 
     ${highest_package}=  get_highest_license_pkg
@@ -40,9 +40,9 @@ JD-TC-RemoveTaskAssignee-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${HLMUSERNAME21} 
-    clear_appt_schedule   ${MUSERNAME21}
-    clear_Department    ${MUSERNAME21}
+    clear_service   ${HLPUSERNAME21} 
+    clear_appt_schedule   ${PUSERNAME21}
+    clear_Department    ${PUSERNAME21}
 
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}
@@ -168,7 +168,7 @@ JD-TC-RemoveTaskAssignee-1
    
     
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME21}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
   
@@ -193,12 +193,12 @@ JD-TC-RemoveTaskAssignee-3
 
     [Documentation]  Create a task for a user then change assignee and then remove that assignee.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${HLMUSERNAME4} 
+    ${pid}=  get_acc_id  ${HLPUSERNAME4} 
     Set Suite variable     ${pid}
-    ${id1}=  get_id  ${HLMUSERNAME4}
+    ${id1}=  get_id  ${HLPUSERNAME4}
     Set Test Variable  ${id1} 
     
 
@@ -211,9 +211,9 @@ JD-TC-RemoveTaskAssignee-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${HLMUSERNAME4} 
-    clear_appt_schedule   ${MUSERNAME4}
-    clear_Department    ${MUSERNAME4}
+    clear_service   ${HLPUSERNAME4} 
+    clear_appt_schedule   ${PUSERNAME4}
+    clear_Department    ${PUSERNAME4}
     
     ${resp2}=   Get Business Profile
     Log  ${resp2.json()}
@@ -347,7 +347,7 @@ JD-TC-RemoveTaskAssignee-3
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -363,12 +363,12 @@ JD-TC-RemoveTaskAssignee-4
 
     [Documentation]  remove the assignee of another users task of same branch.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${HLMUSERNAME4} 
+    ${pid}=  get_acc_id  ${HLPUSERNAME4} 
     Set Suite variable     ${pid}
-    ${id}=  get_id  ${HLMUSERNAME4}
+    ${id}=  get_id  ${HLPUSERNAME4}
     Set Test Variable  ${id} 
     
      FOR  ${p}  IN RANGE  5
@@ -461,11 +461,11 @@ JD-TC-RemoveTaskAssignee-UH1
 
     [Documentation]  Create a task for a  branch and remove the assignee without assign.
 
-     ${resp}=   Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD} 
+     ${resp}=   Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${p_id}=  get_acc_id  ${MUSERNAME58}
+    ${p_id}=  get_acc_id  ${PUSERNAME58}
     Set Suite Variable   ${p_id}
 
     ${resp}=    Get Locations
@@ -622,7 +622,7 @@ JD-TC-RemoveTaskAssignee-UH6
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME40}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

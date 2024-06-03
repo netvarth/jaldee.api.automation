@@ -14,7 +14,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -36,11 +36,11 @@ JD-TC-GetTemplateByAccount-1
 
     [Documentation]   Create a Template with isDefaultTemp as false then try to get template by account.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${p_id1}=  get_acc_id  ${HLMUSERNAME2}
+    ${p_id1}=  get_acc_id  ${HLPUSERNAME2}
     Set Suite Variable   ${p_id1}
 
     ${resp}=   Get Templates By Account
@@ -88,7 +88,7 @@ JD-TC-GetTemplateByAccount-2
 
     [Documentation]   Create a Template with isDefaultTemp as true then try to get template by account.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

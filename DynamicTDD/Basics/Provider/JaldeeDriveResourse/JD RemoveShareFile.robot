@@ -9,7 +9,7 @@ Library           OperatingSystem
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Library           /ebs/TDD/db.py
 Variables         /ebs/TDD/varfiles/providers.py
@@ -18,7 +18,7 @@ Resource          /ebs/TDD/Keywords.robot
 Variables         /ebs/TDD/varfiles/consumermail.py
 Library           /ebs/TDD/excelfuncs.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 
@@ -217,10 +217,10 @@ JD-TC-RemoveShareFiles-3
     clear_Consumermsg   ${CUSERNAME3}
   
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${p_id}=  get_acc_id  ${HLMUSERNAME3}
+    ${p_id}=  get_acc_id  ${HLPUSERNAME3}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -267,7 +267,7 @@ JD-TC-RemoveShareFiles-3
         FOR   ${i}  IN RANGE   0   ${len}
         
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME3}'
+            IF   not '${user_phone}' == '${HLPUSERNAME3}'
                 clear_users  ${user_phone}
             END
         END
@@ -289,7 +289,7 @@ JD-TC-RemoveShareFiles-3
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
     
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -365,10 +365,10 @@ JD-TC-RemoveShareFiles-4
 
     [Documentation]   branch remove share file from consumer
    
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${p_id}=  get_acc_id  ${HLMUSERNAME3}
+    ${p_id}=  get_acc_id  ${HLPUSERNAME3}
 
     ${caption4}=  Fakerlibrary.Sentence
  
@@ -390,7 +390,7 @@ JD-TC-RemoveShareFiles-4
     Log                                     ${resp.content}
     Set Suite Variable     ${fileid44}      ${resp.json()['${p_id}']['files'][0]['id']} 
      
-    ${cookie}   ${resp}=    Imageupload.spLogin    ${HLMUSERNAME3}   ${PASSWORD}
+    ${cookie}   ${resp}=    Imageupload.spLogin    ${HLPUSERNAME3}   ${PASSWORD}
     Log     ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}     200
 
@@ -426,10 +426,10 @@ JD-TC-RemoveShareFiles-5
 
     [Documentation]   branch  share file  and user remove file
    
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${p_id}=  get_acc_id  ${HLMUSERNAME3}
+    ${p_id}=  get_acc_id  ${HLPUSERNAME3}
    
     ${caption4}=  Fakerlibrary.Sentence
  
@@ -451,7 +451,7 @@ JD-TC-RemoveShareFiles-5
     Log                                     ${resp.content}
     Set Suite Variable     ${fileid66}      ${resp.json()['${p_id}']['files'][0]['id']} 
      
-    ${cookie}   ${resp}=    Imageupload.spLogin    ${HLMUSERNAME3}   ${PASSWORD}
+    ${cookie}   ${resp}=    Imageupload.spLogin    ${HLPUSERNAME3}   ${PASSWORD}
     Log     ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}     200
 
@@ -534,7 +534,7 @@ JD-TC-RemoveShareFiles-6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
    

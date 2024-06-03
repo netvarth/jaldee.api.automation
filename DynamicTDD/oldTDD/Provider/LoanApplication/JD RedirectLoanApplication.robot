@@ -13,8 +13,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -532,7 +532,7 @@ JD-TC-RedirectLoanApplication-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1007,7 +1007,7 @@ JD-TC-RedirectLoanApplication-6
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME8}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}

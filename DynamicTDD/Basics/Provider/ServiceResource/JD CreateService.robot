@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 #Suite Setup       Run Keyword    wlsettings
 *** Variables ***
@@ -712,11 +712,11 @@ JD-TC-CreateService-8
 JD-TC-CreateService-9
         [Documentation]   Create service for a branch in default department
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${MUSERNAME27}
+        clear_service   ${PUSERNAME27}
 
         ${resp}=  View Waitlist Settings
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -771,11 +771,11 @@ JD-TC-CreateService-9
 JD-TC-CreateService-10
         [Documentation]   Create service for a branch in custom department
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${MUSERNAME27}
+        clear_service   ${PUSERNAME27}
 
         ${resp}=  Get Service
         Log  ${resp.json()}
@@ -827,11 +827,11 @@ JD-TC-CreateService-10
 
 JD-TC-CreateService-11
         [Documentation]   Create service for a branch in default department & custom department
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${MUSERNAME27}
+        clear_service   ${PUSERNAME27}
 
         ${resp}=  Get Departments 
         Log  ${resp.json()}
@@ -881,11 +881,11 @@ JD-TC-CreateService-11
 JD-TC-CreateService-12
         [Documentation]   Create multiple services for a branch in default department
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${MUSERNAME27}
+        clear_service   ${PUSERNAME27}
 
         ${resp}=  Get Service
         Log  ${resp.json()}
@@ -929,11 +929,11 @@ JD-TC-CreateService-12
 
 JD-TC-CreateService-13
         [Documentation]   Create multiple services for a branch in custom department 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${MUSERNAME27}
+        clear_service   ${PUSERNAME27}
 
         
         ${resp}=  Get Service
@@ -985,11 +985,11 @@ JD-TC-CreateService-13
 JD-TC-CreateService-UH4
         [Documentation]   Create service with same name as existing service for a branch in default department
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${MUSERNAME27}
+        clear_service   ${PUSERNAME27}
 
         ${resp}=  View Waitlist Settings
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -1043,11 +1043,11 @@ JD-TC-CreateService-UH4
 JD-TC-CreateService-UH5
         [Documentation]   Create multiple services with same name for a branch in default department
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${MUSERNAME27}
+        clear_service   ${PUSERNAME27}
 
         ${resp}=  Get Service
         Log  ${resp.json()}
@@ -1176,11 +1176,11 @@ JD-TC-CreateService-15
 JD-TC-CreateService-UH7
 
         [Documentation]   Create service for a branch in default department & custom department with same service name
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${MUSERNAME27}
+        clear_service   ${PUSERNAME27}
 
         
         ${resp}=  Get Departments 
@@ -1231,11 +1231,11 @@ JD-TC-CreateService-UH7
 JD-TC-CreateService-UH8
 
         [Documentation]   Create same service for a branch in default department & custom department
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${MUSERNAME27}
+        clear_service   ${PUSERNAME27}
 
         
         ${resp}=  Get Service
@@ -1498,7 +1498,7 @@ JD-TC-CreateService-20
 
         [Documentation]   Create Service for a user
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1507,7 +1507,7 @@ JD-TC-CreateService-20
         Should Be Equal As Strings    ${resp2.status_code}    200
         Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-        # clear_service    ${MUSERNAME10}
+        # clear_service    ${PUSERNAME10}
 
         ${resp}=  View Waitlist Settings
         Log  ${resp.json()}
@@ -1550,16 +1550,16 @@ JD-TC-CreateService-20
         ${resp}=  Get User By Id  ${u_id1}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${MUSERNAME4_U1}  ${resp.json()['mobileNo']}
+        Set Suite Variable  ${PUSERNAME4_U1}  ${resp.json()['mobileNo']}
 
-        ${resp}=  SendProviderResetMail   ${MUSERNAME4_U1}
+        ${resp}=  SendProviderResetMail   ${PUSERNAME4_U1}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        @{resp}=  ResetProviderPassword  ${MUSERNAME4_U1}  ${PASSWORD}  2
+        @{resp}=  ResetProviderPassword  ${PUSERNAME4_U1}  ${PASSWORD}  2
         Should Be Equal As Strings  ${resp[0].status_code}  200
         Should Be Equal As Strings  ${resp[1].status_code}  200
         
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME4_U1}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME4_U1}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         ${SERVICE1}=    FakerLibrary.Word
@@ -1583,9 +1583,9 @@ JD-TC-CreateService-21
 
         [Documentation]   Create multiple Services for a user
 
-        clear_service    ${MUSERNAME10}
+        clear_service    ${PUSERNAME10}
         
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME4_U1}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME4_U1}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         
         ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -1636,9 +1636,9 @@ JD-TC-CreateService-UH12
 
         [Documentation]   Create Service for an invalid user id
 
-        clear_service    ${MUSERNAME10}
+        clear_service    ${PUSERNAME10}
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME4_U1}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME4_U1}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -1669,7 +1669,7 @@ JD-TC-CreateService-UH13
 
         [Documentation]   Create Service for a user from another account 
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME4_U1}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME4_U1}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -1681,7 +1681,7 @@ JD-TC-CreateService-UH13
         ${resp}=  ProviderLogout   
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME5}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1728,7 +1728,7 @@ JD-TC-CreateService-UH14
 
         [Documentation]   Create Service for an invalid department id 
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME4_U1}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME4_U1}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -1758,7 +1758,7 @@ JD-TC-CreateService-UH15
 
         [Documentation]   Create Service with department id as empty
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME4_U1}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME4_U1}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -1788,7 +1788,7 @@ JD-TC-CreateService-UH16
 
         [Documentation]   Create Service with user id as empty
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME4_U1}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME4_U1}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -1819,7 +1819,7 @@ JD-TC-CreateService-UH17
 
         [Documentation]   Create Service for user without department
 
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME4_U1}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME4_U1}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -2155,13 +2155,13 @@ Billable
 
 Non Billable
 
-    ${resp}=   Get File    /ebs/TDD/varfiles/musers.py
+    ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
         ${len}=   Split to lines  ${resp}
         ${length}=  Get Length   ${len}
 
      FOR    ${a}   IN RANGE  ${start1}    ${length}
         # clear_service       ${PUSERNAME${a}}
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
 
         ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -2188,7 +2188,7 @@ Non Billable
         Exit For Loop IF     '${check}' == 'False'
        
      END 
-     RETURN   ${MUSERNAME${a}}
+     RETURN   ${PUSERNAME${a}}
 
 
 Disable Services

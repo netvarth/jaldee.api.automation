@@ -121,7 +121,7 @@ JD-TC-Create Enquiry For SP-1
     # FOR   ${i}  IN RANGE   0   ${len}
        
     #     Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-    #     IF   not '${user_phone}' == '${HLMUSERNAME2}'
+    #     IF   not '${user_phone}' == '${HLPUSERNAME2}'
     #         clear_users  ${user_phone}
     #     END
     # END

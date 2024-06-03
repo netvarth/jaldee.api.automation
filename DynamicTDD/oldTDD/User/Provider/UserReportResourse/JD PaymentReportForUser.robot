@@ -14,7 +14,7 @@ Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 *** Variables ***
@@ -31,14 +31,14 @@ JD-TC-paymentReportForUser-1
     [Documentation]   take a walkin checkin(today, without prepayment, for physical service) by multi user(account level) then 
     ...   do the bill payment through jaldee bank, then verify the payment report by provider.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_location  ${MUSERNAME30}
-    clear_service    ${MUSERNAME30}
-    clear_queue     ${MUSERNAME30}
-    clear_customer   ${MUSERNAME30}
+    clear_location  ${PUSERNAME30}
+    clear_service    ${PUSERNAME30}
+    clear_queue     ${PUSERNAME30}
+    clear_customer   ${PUSERNAME30}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -153,7 +153,7 @@ JD-TC-paymentReportForUser-1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -173,7 +173,7 @@ JD-TC-paymentReportForUser-2
     ...   do the bill payment through jaldee bank, then verify the reimburse report by SA.
     ...   then reimburse partial amount to the provider.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
@@ -256,7 +256,7 @@ JD-TC-paymentReportForUser-2
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME40}'
+            IF   not '${user_phone}' == '${PUSERNAME40}'
                 clear_users  ${user_phone}
             END
         END
@@ -385,7 +385,7 @@ JD-TC-paymentReportForUser-3
     [Documentation]   take a walkin checkin(today, without prepayment, for physical service) by multi user(account level, then assign to a user) then 
     ...   do the bill payment through jaldee bank, then verify the payment report by provider.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
@@ -521,7 +521,7 @@ JD-TC-paymentReportForUser-3
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME50}'
+            IF   not '${user_phone}' == '${PUSERNAME50}'
                 clear_users  ${user_phone}
             END
         END
@@ -556,7 +556,7 @@ JD-TC-paymentReportForUser-3
     ${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

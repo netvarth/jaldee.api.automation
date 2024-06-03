@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Test Cases ***
 
@@ -22,7 +22,7 @@ JD-TC-GetItemType-1
 
     [Documentation]  Provider Create a Item Type then try to get that item.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -55,7 +55,7 @@ JD-TC-GetItemType-2
 
     [Documentation]  Provider Create another Item Type then try to get that item.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -78,7 +78,7 @@ JD-TC-GetItemType-3
 
     [Documentation]  Provider Create another Item Type with number then try to get that item.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

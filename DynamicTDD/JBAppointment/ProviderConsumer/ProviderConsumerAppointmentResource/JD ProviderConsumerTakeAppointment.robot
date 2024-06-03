@@ -9,7 +9,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 *** Variables ***
 
@@ -4832,7 +4832,7 @@ JD-TC-providerConsumerAppointment-20
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4842,9 +4842,9 @@ JD-TC-providerConsumerAppointment-20
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
     
-    clear_service   ${MUSERNAME7}
-    clear_location  ${MUSERNAME7}
-    clear_customer   ${MUSERNAME7}
+    clear_service   ${PUSERNAME7}
+    clear_location  ${PUSERNAME7}
+    clear_customer   ${PUSERNAME7}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -4862,7 +4862,7 @@ JD-TC-providerConsumerAppointment-20
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
-    clear_appt_schedule   ${MUSERNAME7}
+    clear_appt_schedule   ${PUSERNAME7}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.content}
@@ -4990,7 +4990,7 @@ JD-TC-providerConsumerAppointment-21
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4999,10 +4999,10 @@ JD-TC-providerConsumerAppointment-21
     Set Test Variable   ${P_Sector}    ${decrypted_data['sector']}
     # Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
 
-    clear_Department    ${MUSERNAME7}
-    clear_service   ${MUSERNAME7}
-    # clear_location  ${MUSERNAME7}
-    # clear_customer   ${MUSERNAME7}
+    clear_Department    ${PUSERNAME7}
+    clear_service   ${PUSERNAME7}
+    # clear_location  ${PUSERNAME7}
+    # clear_customer   ${PUSERNAME7}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -5029,7 +5029,7 @@ JD-TC-providerConsumerAppointment-21
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id}  ${resp.json()}
 
-    ${BUSERPH0}=  Evaluate  ${MUSERNAME}+${dep_code1}
+    ${BUSERPH0}=  Evaluate  ${PUSERNAME}+${dep_code1}
     clear_users  ${BUSERPH0}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -5070,7 +5070,7 @@ JD-TC-providerConsumerAppointment-21
         Exit For Loop IF  '${iscorp_subdomains[${i}]['subdomains']}' == '${P_Sector}'
     END
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${B_Email}${BUSERPH0}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${BUSERPH0}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${BUSERPH0}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${BUSERPH0}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
@@ -5094,7 +5094,7 @@ JD-TC-providerConsumerAppointment-21
 
     # ${lid}=  Create Sample Location  
 
-    clear_appt_schedule   ${MUSERNAME7}
+    clear_appt_schedule   ${PUSERNAME7}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.content}

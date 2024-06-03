@@ -12,22 +12,22 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Library           /ebs/TDD/excelfuncs.py
 
 
 *** Keywords ***
 Multiple Users branches
 
-    ${resp}=   Get File    /ebs/TDD/varfiles/musers.py
+    ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
     ${len}=   Split to lines  ${resp}
     ${length}=  Get Length   ${len}
     ${multiuser_list}=  Create List
     &{License_total}=  Create Dictionary
     
     FOR   ${a}  IN RANGE   ${length}   
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         
         ${resp1}=   Get Active License
@@ -39,7 +39,7 @@ Multiple Users branches
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         IF  ${resp.json()['metricUsageInfo'][8]['total']} > 1 and ${resp.json()['metricUsageInfo'][8]['used']} < ${resp.json()['metricUsageInfo'][8]['total']}
-            Append To List  ${multiuser_list}  ${MUSERNAME${a}}
+            Append To List  ${multiuser_list}  ${PUSERNAME${a}}
             Set To Dictionary 	${License_total} 	${name}=${resp.json()['metricUsageInfo'][8]['total']}
         END
     END
@@ -105,7 +105,7 @@ JD-TC-CreateKyc-1
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -310,7 +310,7 @@ JD-TC-CreateKyc-1
 JD-TC-CreateKyc-2
     [Documentation]  create Kyc with Co-applicent.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -467,7 +467,7 @@ JD-TC-CreateKyc-3
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -608,13 +608,13 @@ JD-TC-CreateKyc-4
     [Documentation]  User Create Kyc .
 
   
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
-    clear_customer   ${HLMUSERNAME6}
+    clear_customer   ${HLPUSERNAME6}
     ${resp}=   Get Active License
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -661,7 +661,7 @@ JD-TC-CreateKyc-4
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME6}'
+            IF   not '${user_phone}' == '${HLPUSERNAME6}'
                 clear_users  ${user_phone}
             END
         END
@@ -805,11 +805,11 @@ JD-TC-CreateKyc-4
 JD-TC-CreateKyc-5
     [Documentation]  Create Kyc With Incorrect Phone Number.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     # Set Suite Variable  ${provider_id}  ${resp.json()['id']}
-    clear_customer   ${HLMUSERNAME6}
+    clear_customer   ${HLPUSERNAME6}
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME15}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
@@ -934,7 +934,7 @@ JD-TC-CreateKyc-5
 JD-TC-CreateKyc-UH1
     [Documentation]  Create Kyc with Invalid Customer Id .
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -1170,7 +1170,7 @@ JD-TC-CreateKyc-UH4
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable  ${provider_idu1}  ${decrypted_data['id']}
-    clear_customer   ${HLMUSERNAME6}
+    clear_customer   ${HLPUSERNAME6}
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1317,7 +1317,7 @@ JD-TC-CreateKyc-UH5
     ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    clear_customer   ${HLMUSERNAME6}
+    clear_customer   ${HLPUSERNAME6}
 
       ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME15}  
     Log  ${resp.content}

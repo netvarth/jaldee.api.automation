@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -39,7 +39,7 @@ JD-TC-Create Treatment Plan-1
 
     [Documentation]    Create MedicalRecordPrescription Template
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -98,7 +98,7 @@ JD-TC-Create Treatment Plan-2
 
     [Documentation]   Adding second  Template
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -142,7 +142,7 @@ JD-TC-Create Treatment Plan-3
 
     [Documentation]   Create MedicalRecordPrescription Template where template name contain  255 words
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -183,7 +183,7 @@ JD-TC-Create Treatment Plan-4
 
     [Documentation]   Create MedicalRecordPrescription Template where instructions contain 255 words
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -224,7 +224,7 @@ JD-TC-Create Treatment Plan-5
 
     [Documentation]   Create MedicalRecordPrescription Template where medicine name contain  255 words
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -265,7 +265,7 @@ JD-TC-Create Treatment Plan-6
 
     [Documentation]   Create MedicalRecordPrescription Template where template name contain  numbers
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -306,7 +306,7 @@ JD-TC-Create Treatment Plan-7
 
     [Documentation]   Create MedicalRecordPrescription Template contain empty prescription list
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -333,7 +333,7 @@ JD-TC-Create Treatment Plan-8
 
     [Documentation]   Create MedicalRecordPrescription Template where template name contain title contain numbers
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -390,7 +390,7 @@ JD-TC-Create Treatment Plan-9
 
     [Documentation]     Create prescription Template Where medicine name as empty
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -431,7 +431,7 @@ JD-TC-Create Treatment Plan-10
 
     [Documentation]     Create prescription Template Where dosage as empty
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -472,7 +472,7 @@ JD-TC-Create Treatment Plan-11
 
     [Documentation]     Create prescription Template Where instructions empty
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -513,7 +513,7 @@ JD-TC-Create Treatment Plan-12
 
     [Documentation]     Create prescription Template Where duration is empty
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -554,7 +554,7 @@ JD-TC-Create Treatment Plan-13
 
     [Documentation]     Create prescription Template Where frequency is empty
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -634,7 +634,7 @@ JD-TC-Create Treatment Plan-UH3
 
     [Documentation]   Create MedicalRecordPrescription Template where template name is empty
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -664,7 +664,7 @@ JD-TC-Create Treatment Plan-UH4
 
     [Documentation]   Create MedicalRecordPrescription Template where prescription dictionary is empty
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -687,7 +687,7 @@ JD-TC-Create Treatment Plan-UH5
 
     [Documentation]    Created same Prescription Template 
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

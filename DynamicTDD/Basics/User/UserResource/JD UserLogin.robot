@@ -8,9 +8,9 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -29,11 +29,11 @@ JD-TC-UserLoginwithEmail-1
 
     [Documentation]  Create an user and user  login with email
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${p_id1}=  get_acc_id  ${HLMUSERNAME4}
+    ${p_id1}=  get_acc_id  ${HLPUSERNAME4}
     Set Suite Variable   ${p_id1}
 
     ${resp}=    Get Locations

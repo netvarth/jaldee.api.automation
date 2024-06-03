@@ -11,8 +11,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -34,17 +34,17 @@ JD-TC-GetLeadToken-1
 
     [Documentation]  Create a lead  Token Then get the Token .
 
-    clear_service    ${MUSERNAME63}
-    clear_customer   ${MUSERNAME63}
-    clear_location   ${MUSERNAME63}
-    clear_queue      ${MUSERNAME63}
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME63}  ${PASSWORD} 
+    clear_service    ${PUSERNAME63}
+    clear_customer   ${PUSERNAME63}
+    clear_location   ${PUSERNAME63}
+    clear_queue      ${PUSERNAME63}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME63}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable    ${p_id}    ${decrypted_data['id']}
-    # ${p_id}=  get_acc_id  ${MUSERNAME63}
+    # ${p_id}=  get_acc_id  ${PUSERNAME63}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -145,8 +145,8 @@ JD-TC-GetLeadToken-2
 
     [Documentation]  Create Two lead Token with diffrent waitlist id Then get the Token .
 
-    clear_queue      ${MUSERNAME63}
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME63}  ${PASSWORD} 
+    clear_queue      ${PUSERNAME63}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME63}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}

@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/AppKeywords.robot
 Resource          /ebs/TDD/iphoneKeywords.robot
@@ -53,37 +53,37 @@ JD-TC-UserLevelAnalyticsForWaitlistForWaitlist-1
 
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
-    ${MUSERNAME_E}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
     ${firstname_A}=  FakerLibrary.name
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    #  ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+668813
+    #  ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+668813
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_E}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
-    Set Suite Variable  ${MUSERNAME_E}
-    ${accid}=   get_acc_id   ${MUSERNAME_E}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+    Set Suite Variable  ${PUSERNAME_E}
+    ${accid}=   get_acc_id   ${PUSERNAME_E}
     Set Suite Variable  ${accid}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${ph1}=  Evaluate  ${MUSERNAME_E}+1000000000
-    ${ph2}=  Evaluate  ${MUSERNAME_E}+2000000000
+    ${ph1}=  Evaluate  ${PUSERNAME_E}+1000000000
+    ${ph2}=  Evaluate  ${PUSERNAME_E}+2000000000
     ${views}=  Random Element    ${Views}
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -158,7 +158,7 @@ JD-TC-UserLevelAnalyticsForWaitlistForWaitlist-1
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${id}=  get_id  ${MUSERNAME_E}
+    ${id}=  get_id  ${PUSERNAME_E}
     Set Suite Variable  ${id}
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
@@ -394,17 +394,17 @@ JD-TC-UserLevelAnalyticsForWaitlistForWaitlist-1
 JD-TC-UserLevelAnalyticsForWaitlist-2
     [Documentation]   take checkins for teleservice for a provider and check user level analytics
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${ZOOM_id0}=  Format String  ${ZOOM_url}  ${MUSERNAME_E}
+    ${ZOOM_id0}=  Format String  ${ZOOM_url}  ${PUSERNAME_E}
     Set Suite Variable   ${ZOOM_id0}
 
     ${instructions1}=   FakerLibrary.sentence
     ${instructions2}=   FakerLibrary.sentence
 
-    ${resp}=  Update Virtual Calling Mode   ${CallingModes[0]}  ${ZOOM_id0}   ACTIVE  ${instructions1}   ${CallingModes[1]}  ${MUSERNAME_E}   ACTIVE   ${instructions2}
+    ${resp}=  Update Virtual Calling Mode   ${CallingModes[0]}  ${ZOOM_id0}   ACTIVE  ${instructions1}   ${CallingModes[1]}  ${PUSERNAME_E}   ACTIVE   ${instructions2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -417,7 +417,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-2
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['instructions']}    ${instructions1}
 
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['callingMode']}     ${CallingModes[1]}
-    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['value']}           ${MUSERNAME_E}
+    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['value']}           ${PUSERNAME_E}
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['status']}          ACTIVE
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['instructions']}    ${instructions2}
 
@@ -598,7 +598,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-2
 
 JD-TC-UserLevelAnalyticsForWaitlist-3
     [Documentation]   take online checkins, for a provider and check user level analytics 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -804,7 +804,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-3
 
 JD-TC-UserLevelAnalyticsForWaitlist-4
     [Documentation]   take checkins,for a provider and check user level analytics for waitlist actions
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -995,9 +995,9 @@ JD-TC-UserLevelAnalyticsForWaitlist-4
 
 JD-TC-UserLevelAnalyticsForWaitlist-5
     [Documentation]   take checkins,for a provider and check user level analytics for waitlistactions
-    # [Setup]  Run Keywords  clear_queue  ${MUSERNAME_E}   AND  clear_service    ${MUSERNAME_E}  AND  clear_appt_schedule   ${MUSERNAME_E}
+    # [Setup]  Run Keywords  clear_queue  ${PUSERNAME_E}   AND  clear_service    ${PUSERNAME_E}  AND  clear_appt_schedule   ${PUSERNAME_E}
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1062,7 +1062,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-5
 
     Log List   ${waitlist_id}
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1141,9 +1141,9 @@ JD-TC-UserLevelAnalyticsForWaitlist-5
 
 JD-TC-UserLevelAnalyticsForWaitlist-6
     [Documentation]     take checkins, for a provider from consumer side and check user level analytics after reschedule it
-    # [Setup]  Run Keywords  clear_queue  ${MUSERNAME_E}   AND  clear_service    ${MUSERNAME_E}  AND  clear_appt_schedule   ${MUSERNAME_E}
+    # [Setup]  Run Keywords  clear_queue  ${PUSERNAME_E}   AND  clear_service    ${PUSERNAME_E}  AND  clear_appt_schedule   ${PUSERNAME_E}
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1268,30 +1268,30 @@ JD-TC-UserLevelAnalyticsForWaitlist-7
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+668833
+     ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+668833
      ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Activation  ${MUSERNAME_E}  0
+     ${resp}=  Account Activation  ${PUSERNAME_E}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
-     Set Suite Variable  ${MUSERNAME_E}
-     ${accid}=   get_acc_id   ${MUSERNAME_E}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+     Set Suite Variable  ${PUSERNAME_E}
+     ${accid}=   get_acc_id   ${PUSERNAME_E}
      Set Suite Variable  ${accid}
      ${DAY1}=  db.get_date_by_timezone  ${tz}
      Set Suite Variable  ${DAY1}  ${DAY1}
      ${list}=  Create List  1  2  3  4  5  6  7
      Set Suite Variable  ${list}  ${list}
-     ${ph1}=  Evaluate  ${MUSERNAME_E}+1000000000
-     ${ph2}=  Evaluate  ${MUSERNAME_E}+2000000000
+     ${ph1}=  Evaluate  ${PUSERNAME_E}+1000000000
+     ${ph2}=  Evaluate  ${PUSERNAME_E}+2000000000
      ${views}=  Random Element    ${Views}
      ${name1}=  FakerLibrary.name
      ${name2}=  FakerLibrary.name
@@ -1365,7 +1365,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-7
      Should Be Equal As Strings    ${resp.status_code}    200
 
 
-     ${id}=  get_id  ${MUSERNAME_E}
+     ${id}=  get_id  ${PUSERNAME_E}
      Set Suite Variable  ${id}
      ${bs}=  FakerLibrary.bs
      Set Suite Variable  ${bs}
@@ -1556,7 +1556,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-8
     [Documentation]    take checkins for a provider and check user level analytics for payment matrics
     # [Setup]  Run Keywords  clear_queue  ${PUSERPH0}   AND  clear_service    ${PUSERPH0}  AND  clear_appt_schedule   ${PUSERPH0}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -1746,7 +1746,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-8
        
 JD-TC-UserLevelAnalyticsForWaitlist-4
     [Documentation]   take online checkins for prepayment services and check analytics 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

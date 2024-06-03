@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
@@ -38,7 +38,7 @@ JD-TC-Change Case Status-1
 
     [Documentation]    Change Case Status
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME13}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -123,7 +123,7 @@ JD-TC-Change Case Status-1
 
     
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME13}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -163,7 +163,7 @@ JD-TC-Change Case Status-2
 
     [Documentation]    Update MR Case and then change status
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME13}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -247,7 +247,7 @@ JD-TC-Change Case Status-2
 
     
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME13}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -296,7 +296,7 @@ JD-TC-Change Case Status-UH2
 
     [Documentation]    change Case Status with another login
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME12}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -309,7 +309,7 @@ JD-TC-Change Case Status-UH3
 
     [Documentation]    change Case Status with    INVALID_CASE_ID
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME13}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -325,7 +325,7 @@ JD-TC-Change Case Status-UH4
 
     [Documentation]    update already updated status
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME13}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

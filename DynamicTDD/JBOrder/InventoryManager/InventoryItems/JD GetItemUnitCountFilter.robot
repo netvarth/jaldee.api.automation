@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Test Cases ***
 
@@ -22,7 +22,7 @@ JD-TC-GetitemUitCountFilter-1
 
     [Documentation]  Get Item Unit Count Filter
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME34}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -80,7 +80,7 @@ JD-TC-GetitemUitCountFilter-2
 
     [Documentation]  Get Item Unit Count Filter - unitCode    
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME34}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -93,7 +93,7 @@ JD-TC-GetitemUitCountFilter-3
 
     [Documentation]  Get Item Unit Count Filter - unitName
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME34}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -106,7 +106,7 @@ JD-TC-GetitemUitCountFilter-4
 
     [Documentation]  Get Item Unit Count Filter - status
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME34}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -128,7 +128,7 @@ JD-TC-GetitemUitCountFilter-UH2
 
     [Documentation]  Get Item Unit Count Filter - with another provider login
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

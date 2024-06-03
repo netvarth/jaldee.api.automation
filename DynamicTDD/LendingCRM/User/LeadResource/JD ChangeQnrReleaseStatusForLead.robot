@@ -13,8 +13,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -119,7 +119,7 @@ JD-TC-ChangeQnrReleaseStatusForLead-1
     Log  ${unique_lnames}
     Set Suite Variable   ${unique_lnames}
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 # *** Comments ***
@@ -168,7 +168,7 @@ JD-TC-ChangeQnrReleaseStatusForLead-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -227,7 +227,7 @@ JD-TC-ChangeQnrReleaseStatusForLead-1
         FOR   ${i}  IN RANGE   0   ${len}
         
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME2}'
+            IF   not '${user_phone}' == '${HLPUSERNAME2}'
                 clear_users  ${user_phone}
             END
         END
@@ -247,7 +247,7 @@ JD-TC-ChangeQnrReleaseStatusForLead-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -303,7 +303,7 @@ JD-TC-ChangeQnrReleaseStatusForLead-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLMUSERNAME2}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLPUSERNAME2}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
@@ -319,11 +319,11 @@ JD-TC-ChangeQnrReleaseStatusForLead-1
 JD-TC-ChangeQnrReleaseStatusForLead-UH1
     [Documentation]  change questinare release status for a canceled Lead.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${p_id}=  get_acc_id  ${HLMUSERNAME2}
+    ${p_id}=  get_acc_id  ${HLPUSERNAME2}
 
     ${resp}=    Get Locations
     Log   ${resp.json()}

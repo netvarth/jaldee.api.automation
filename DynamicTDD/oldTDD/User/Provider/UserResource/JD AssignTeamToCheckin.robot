@@ -13,8 +13,8 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -30,7 +30,7 @@ JD-TC-AssignTeamToWaitlist-1
 
     [Documentation]  Assign team to an account level waitlist.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -39,11 +39,11 @@ JD-TC-AssignTeamToWaitlist-1
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${HLMUSERNAME20}
-    clear_service    ${HLMUSERNAME20}
-    clear_customer   ${HLMUSERNAME20}
+    clear_queue      ${HLPUSERNAME20}
+    clear_service    ${HLPUSERNAME20}
+    clear_customer   ${HLPUSERNAME20}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME20}
+    ${pid}=  get_acc_id  ${HLPUSERNAME20}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
@@ -123,7 +123,7 @@ JD-TC-AssignTeamToWaitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${USERNAME1}=  Evaluate  ${HLMUSERNAME20}+100044
+    ${USERNAME1}=  Evaluate  ${HLPUSERNAME20}+100044
     Set Suite Variable  ${USERNAME1}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -142,8 +142,8 @@ JD-TC-AssignTeamToWaitlist-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${whpnum}=  Evaluate  ${HLMUSERNAME20}+77487
-    ${tlgnum}=  Evaluate  ${HLMUSERNAME20}+65874
+    ${whpnum}=  Evaluate  ${HLPUSERNAME20}+77487
+    ${tlgnum}=  Evaluate  ${HLPUSERNAME20}+65874
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${USERNAME1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${USERNAME1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
@@ -154,7 +154,7 @@ JD-TC-AssignTeamToWaitlist-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
-    ${USERNAME2}=  Evaluate  ${HLMUSERNAME20}+10458721
+    ${USERNAME2}=  Evaluate  ${HLPUSERNAME20}+10458721
     Set Suite Variable  ${USERNAME2}
     clear_users  ${USERNAME2}
     ${firstname1}=  FakerLibrary.name
@@ -167,7 +167,7 @@ JD-TC-AssignTeamToWaitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id2}  ${resp.json()}
     
-    ${USERNAME3}=  Evaluate  ${HLMUSERNAME20}+10458722
+    ${USERNAME3}=  Evaluate  ${HLPUSERNAME20}+10458722
     Set Suite Variable  ${USERNAME3}
     clear_users  ${USERNAME3}
     ${firstname2}=  FakerLibrary.name
@@ -278,7 +278,7 @@ JD-TC-AssignTeamToWaitlist-3
 
     [Documentation]  Assign team to an account level waitlist then assign the same waitlist another team with same users.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -326,7 +326,7 @@ JD-TC-AssignTeamToWaitlist-UH1
 
     [Documentation]  Assign same waitlist to the same team multiple times.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -340,7 +340,7 @@ JD-TC-AssignTeamToWaitlist-UH2
 
     [Documentation]  Assign a waitlist to a team which has no users.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -363,7 +363,7 @@ JD-TC-AssignTeamToWaitlist-UH3
 
     [Documentation]  Assign team to an user level waitlist.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -374,11 +374,11 @@ JD-TC-AssignTeamToWaitlist-UH3
     Set Suite Variable  ${sub_domains}    ${resp2.json()['serviceSubSector']['subDomain']}
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${HLMUSERNAME20}
-    clear_service    ${HLMUSERNAME20}
-    clear_customer   ${HLMUSERNAME20}
+    clear_queue      ${HLPUSERNAME20}
+    clear_service    ${HLPUSERNAME20}
+    clear_customer   ${HLPUSERNAME20}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME20}
+    ${pid}=  get_acc_id  ${HLPUSERNAME20}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -428,7 +428,7 @@ JD-TC-AssignTeamToWaitlist-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${USERNAME1}=  Evaluate  ${HLMUSERNAME20}+1047789
+    ${USERNAME1}=  Evaluate  ${HLPUSERNAME20}+1047789
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -446,8 +446,8 @@ JD-TC-AssignTeamToWaitlist-UH3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${whpnum}=  Evaluate  ${HLMUSERNAME20}+77487
-    ${tlgnum}=  Evaluate  ${HLMUSERNAME20}+65874
+    ${whpnum}=  Evaluate  ${HLPUSERNAME20}+77487
+    ${tlgnum}=  Evaluate  ${HLPUSERNAME20}+65874
      ${user_dis_name}=  FakerLibrary.last_name
      Set Suite Variable  ${user_dis_name}
      ${employee_id}=  FakerLibrary.last_name
@@ -536,11 +536,11 @@ JD-TC-AssignTeamToWaitlist-UH3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${USERNAME2}=  Evaluate  ${HLMUSERNAME20}+104500147
+    ${USERNAME2}=  Evaluate  ${HLPUSERNAME20}+104500147
     clear_users  ${USERNAME2}
     ${firstname1}=  FakerLibrary.name
     ${lastname1}=  FakerLibrary.last_name
@@ -552,7 +552,7 @@ JD-TC-AssignTeamToWaitlist-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
     
-    ${USERNAME3}=  Evaluate  ${HLMUSERNAME20}+104581564
+    ${USERNAME3}=  Evaluate  ${HLPUSERNAME20}+104581564
     clear_users  ${USERNAME3}
     ${firstname2}=  FakerLibrary.name
     ${lastname2}=  FakerLibrary.last_name
@@ -589,7 +589,7 @@ JD-TC-AssignTeamToWaitlist-UH4
 
     [Documentation]  Assign team to an account level waitlist then tries to disable the service.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -598,11 +598,11 @@ JD-TC-AssignTeamToWaitlist-UH4
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${HLMUSERNAME20}
-    clear_service    ${HLMUSERNAME20}
-    clear_customer   ${HLMUSERNAME20}
+    clear_queue      ${HLPUSERNAME20}
+    clear_service    ${HLPUSERNAME20}
+    clear_customer   ${HLPUSERNAME20}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME20}
+    ${pid}=  get_acc_id  ${HLPUSERNAME20}
 
     ${resp}=  Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -677,7 +677,7 @@ JD-TC-AssignTeamToWaitlist-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id1}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${USERNAME11}=  Evaluate  ${HLMUSERNAME20}+177895
+    ${USERNAME11}=  Evaluate  ${HLPUSERNAME20}+177895
     Set Suite Variable   ${USERNAME11}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -696,8 +696,8 @@ JD-TC-AssignTeamToWaitlist-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${whpnum}=  Evaluate  ${HLMUSERNAME20}+77488
-    ${tlgnum}=  Evaluate  ${HLMUSERNAME20}+65872
+    ${whpnum}=  Evaluate  ${HLPUSERNAME20}+77488
+    ${tlgnum}=  Evaluate  ${HLPUSERNAME20}+65872
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${USERNAME11}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${USERNAME11}  ${dep_id1}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
@@ -708,7 +708,7 @@ JD-TC-AssignTeamToWaitlist-UH4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
-    ${USERNAME21}=  Evaluate  ${HLMUSERNAME20}+10458700
+    ${USERNAME21}=  Evaluate  ${HLPUSERNAME20}+10458700
     Set Suite Variable   ${USERNAME21}
     clear_users  ${USERNAME21}
     ${firstname1}=  FakerLibrary.name
@@ -721,7 +721,7 @@ JD-TC-AssignTeamToWaitlist-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id21}  ${resp.json()}
      
-    ${USERNAME31}=  Evaluate  ${HLMUSERNAME20}+10458705
+    ${USERNAME31}=  Evaluate  ${HLPUSERNAME20}+10458705
     Set Suite Variable   ${USERNAME31}
     clear_users  ${USERNAME31}
     ${firstname1}=  FakerLibrary.name
@@ -806,7 +806,7 @@ JD-TC-AssignTeamToWaitlist-UH4
     Should Be Equal As Strings  ${resp.json()[0]['waitlistStatus']}  ${wl_status[1]}
     Should Be Equal As Strings  ${resp.json()[0]['teamId']}          ${t_id11}
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -820,7 +820,7 @@ JD-TC-AssignTeamToWaitlist-UH5
 
     [Documentation]   disable the location which has a waitlist and Assign team to an account level waitlist then.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -890,7 +890,7 @@ JD-TC-AssignTeamToWaitlist-UH6
 
     [Documentation]  Assign team to an account level waitlist then tries to disable the queue.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -905,7 +905,7 @@ JD-TC-AssignTeamToWaitlist-UH7
 
     [Documentation]  Assign team to an account level waitlist then cancel the waitlist and check the status.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -944,7 +944,7 @@ JD-TC-AssignTeamToWaitlist-UH8
 
     [Documentation]  Assign a team to a cancelled waitlist.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -960,7 +960,7 @@ JD-TC-AssignTeamToWaitlist-UH9
 
     [Documentation]   Assign team to an account level waitlist then disable the location and check the status.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1064,7 +1064,7 @@ JD-TC-AssignTeamToWaitlist-UH10
 
     [Documentation]    Assign team to an account level waitlist then disable the location and again assign the same waitlist to another team.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     

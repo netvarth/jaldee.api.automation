@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -67,10 +67,10 @@ JD-TC-Get Inventory Catalog By account id-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME49}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME49}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME49}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME49}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Get Account Settings
@@ -138,7 +138,7 @@ JD-TC-Get Inventory Catalog By account id-2
 
     [Documentation]  update inventory catalog then Get Inventory Catalog By account id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME49}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME49}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -161,7 +161,7 @@ JD-TC-Get Inventory Catalog By account id-2
 JD-TC-Get Inventory Catalog By account id-3
 
     [Documentation]  Update Inventory Catalog status as inactive then Get Inventory Catalog By account id
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME49}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME49}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -183,7 +183,7 @@ JD-TC-Get Inventory Catalog By account id-4
 
     [Documentation]  create  inventory catalog from main account then get inventory catalog using encid from user login.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME49}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME49}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -276,7 +276,7 @@ JD-TC-Get Inventory Catalog By account id-5
 
     [Documentation]  create  inventory catalog where name as invalid string then Get Inventory Catalog By account id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME49}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME49}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

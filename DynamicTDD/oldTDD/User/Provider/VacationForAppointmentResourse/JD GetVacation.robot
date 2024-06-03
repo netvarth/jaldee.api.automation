@@ -14,7 +14,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 
@@ -37,30 +37,30 @@ JD-TC-GetVacation-1
      Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
      ${firstname_A}=  FakerLibrary.first_name
      ${lastname_A}=  FakerLibrary.last_name
-     ${MUSERNAME_E1}=  Evaluate  ${MUSERNAME}+98709171
+     ${PUSERNAME_E1}=  Evaluate  ${PUSERNAME}+98709171
      ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E1}    ${highest_package[0]}
+     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E1}    ${highest_package[0]}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Activation  ${MUSERNAME_E1}  0
+     ${resp}=  Account Activation  ${PUSERNAME_E1}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${MUSERNAME_E1}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${PUSERNAME_E1}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E1}${\n}
-     Set Suite Variable  ${MUSERNAME_E1}
-     ${id}=  get_id  ${MUSERNAME_E1}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E1}${\n}
+     Set Suite Variable  ${PUSERNAME_E1}
+     ${id}=  get_id  ${PUSERNAME_E1}
      ${bs}=  FakerLibrary.bs
      
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${ph1}=  Evaluate  ${MUSERNAME_E1}+1099855531
-    ${ph2}=  Evaluate  ${MUSERNAME_E1}+2099855541
+    ${ph1}=  Evaluate  ${PUSERNAME_E1}+1099855531
+    ${ph2}=  Evaluate  ${PUSERNAME_E1}+2099855541
     ${views}=  Random Element    ${Views}
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -231,7 +231,7 @@ JD-TC-GetVacation-1
        
 JD-TC-GetVacation-2
     [Documentation]  Get Vacation Details With multiple Users 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -314,7 +314,7 @@ JD-TC-GetVacation-2
        
 JD-TC-GetVacation-UH1
     [Documentation]   Get vacation Using Existing Branch Number
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Get Vacation    ${u_id}

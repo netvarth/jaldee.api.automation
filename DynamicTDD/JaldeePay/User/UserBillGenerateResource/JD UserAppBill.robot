@@ -8,7 +8,7 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 *** Variables ***
@@ -40,22 +40,22 @@ JD-TC-AppointmentByUserLoginAndBillGenarate -1
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+998914
+     ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+998914
      ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Activation  ${MUSERNAME_E}  0
+     ${resp}=  Account Activation  ${PUSERNAME_E}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
-     Set Suite Variable  ${MUSERNAME_E}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+     Set Suite Variable  ${PUSERNAME_E}
      ${resp}=  Get Business Profile
      Log  ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
@@ -63,8 +63,8 @@ JD-TC-AppointmentByUserLoginAndBillGenarate -1
      
      ${list}=  Create List  1  2  3  4  5  6  7
      Set Suite Variable  ${list}  ${list}
-     ${ph1}=  Evaluate  ${MUSERNAME_E}+1000000000
-     ${ph2}=  Evaluate  ${MUSERNAME_E}+2000000000
+     ${ph1}=  Evaluate  ${PUSERNAME_E}+1000000000
+     ${ph2}=  Evaluate  ${PUSERNAME_E}+2000000000
      ${views}=  Random Element    ${Views}
      ${name1}=  FakerLibrary.name
      ${name2}=  FakerLibrary.name
@@ -202,7 +202,7 @@ JD-TC-AppointmentByUserLoginAndBillGenarate -1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}
 
-    ${id}=  get_id  ${MUSERNAME_E}
+    ${id}=  get_id  ${PUSERNAME_E}
     Set Suite Variable  ${id}
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
@@ -250,7 +250,7 @@ JD-TC-AppointmentByUserLoginAndBillGenarate -1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME_E}'
+            IF   not '${user_phone}' == '${PUSERNAME_E}'
                 clear_users  ${user_phone}
             END
         END
@@ -403,10 +403,10 @@ JD-TC-AppointmentByUserLoginAndBillGenarate -2
     [Documentation]  Create AppointmentByUserLogin and consumer do the prepayment (Tax is disable).
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear Customer  ${MUSERNAME_E}
+    clear Customer  ${PUSERNAME_E}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200    
@@ -524,10 +524,10 @@ JD-TC-AppointmentByUserLoginAndBillGenarate -2
 JD-TC-AppointmentByUserLoginAndBillGenarate -3
     [Documentation]  Create AppointmentByUserLogin and consumer do the prepayment and bill payment (Tax is disable).
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear Customer  ${MUSERNAME_E}
+    clear Customer  ${PUSERNAME_E}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200    
@@ -658,10 +658,10 @@ JD-TC-AppointmentByUserLoginAndBillGenarate -3
 JD-TC-AppointmentByUserLoginAndBillGenarate -4
     [Documentation]  Create AppointmentByUserLogin and consumer do the bill payment (prepayment is off and Tax Enable).
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear Customer  ${MUSERNAME_E}
+    clear Customer  ${PUSERNAME_E}
 
     ${resp}=  Get Account Payment Settings
     Log  ${resp.json()}
@@ -792,10 +792,10 @@ JD-TC-AppointmentByUserLoginAndBillGenarate -5
     [Documentation]  Create AppointmentByUserLogin and consumer do the prepayment (Tax is Enable).
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear Customer  ${MUSERNAME_E}
+    clear Customer  ${PUSERNAME_E}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -913,10 +913,10 @@ JD-TC-AppointmentByUserLoginAndBillGenarate -5
 JD-TC-AppointmentByUserLoginAndBillGenarate -6
     [Documentation]  Create AppointmentByUserLogin and consumer do the prepayment and bill payment (Tax is Enable).
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear Customer  ${MUSERNAME_E}
+    clear Customer  ${PUSERNAME_E}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200    

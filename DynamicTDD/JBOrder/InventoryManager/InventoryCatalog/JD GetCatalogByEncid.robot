@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -67,10 +67,10 @@ JD-TC-Get Inventory Catalog By EncId-1
 
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME50}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME50}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Get Account Settings
@@ -139,7 +139,7 @@ JD-TC-Get Inventory Catalog By EncId-2
 
     [Documentation]  update inventory catalog then Get Inventory Catalog By EncId.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -168,7 +168,7 @@ JD-TC-Get Inventory Catalog By EncId-3
 
     [Documentation]  create  inventory catalog from main account then get inventory catalog using encid from user login.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -264,7 +264,7 @@ JD-TC-Get Inventory Catalog By EncId-4
 
     [Documentation]  create  inventory catalog where name as invalid string then get inventory catalog by encid.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -290,7 +290,7 @@ JD-TC-Get Inventory Catalog By EncId-4
 JD-TC-Get Inventory Catalog By EncId-5
 
     [Documentation]  Update Inventory Catalog status as inactive then get inventory catalog by encid
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -308,7 +308,7 @@ JD-TC-Get Inventory Catalog By EncId-UH1
 
     [Documentation]    Get Inventory Catalog By EncId with invalid encid id
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

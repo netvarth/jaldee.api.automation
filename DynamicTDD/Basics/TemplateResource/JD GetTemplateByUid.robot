@@ -14,7 +14,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -36,11 +36,11 @@ JD-TC-GetTemplateByUid-1
 
     [Documentation]   Create a Template with valid details,then try to get template by id.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${p_id1}=  get_acc_id  ${HLMUSERNAME3}
+    ${p_id1}=  get_acc_id  ${HLPUSERNAME3}
     Set Suite Variable   ${p_id1}
 
     ${resp}=   Get Templates By Account

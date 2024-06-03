@@ -13,8 +13,8 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -45,11 +45,11 @@ JD-TC-AppointmentApplyInternalSts-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${pid}=  get_acc_id  ${HLMUSERNAME10}
+     ${pid}=  get_acc_id  ${HLPUSERNAME10}
      Set Suite Variable  ${pid}
 
     ${resp2}=   Get Business Profile
@@ -57,9 +57,9 @@ JD-TC-AppointmentApplyInternalSts-1
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
   
-    clear_service   ${HLMUSERNAME10}
-    clear_appt_schedule   ${HLMUSERNAME10}
-    clear_customer   ${HLMUSERNAME10}
+    clear_service   ${HLPUSERNAME10}
+    clear_appt_schedule   ${HLPUSERNAME10}
+    clear_customer   ${HLPUSERNAME10}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -218,7 +218,7 @@ JD-TC-AppointmentApplyInternalSts-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${encId}=  Set Variable   ${resp.json()}
 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -238,7 +238,7 @@ JD-TC-AppointmentApplyInternalSts-1
 
 JD-TC-AppointmentApplyInternalSts-UH1
      [Documentation]  Apply Internal statuses when user has no permission for internal Status
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
     ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+301601
@@ -378,7 +378,7 @@ JD-TC-AppointmentApplyInternalSts-UH2
 JD-TC-AppointmentApplyInternalSts-UH3
      [Documentation]  Trying to apply Internal statuses when one user applied internal sts already
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Appointment Apply Internal Status  ${apptid2}  ${internal_sts_name2}
@@ -388,7 +388,7 @@ JD-TC-AppointmentApplyInternalSts-UH3
 JD-TC-AppointmentApplyInternalSts-3
      [Documentation]  Apply Internal statuses when user has no permission for internal sts but he is ADMIN=TRUE
 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
     ${PUSERNAME_U2}=  Evaluate  ${PUSERNAME}+301602

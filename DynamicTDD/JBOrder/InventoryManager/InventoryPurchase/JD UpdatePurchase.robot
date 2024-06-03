@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -30,7 +30,7 @@ JD-TC-UpdatePurchase-1
 
     [Documentation]  Update Purchase - invoice Reference No Updated
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -113,7 +113,7 @@ JD-TC-UpdatePurchase-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -639,7 +639,7 @@ JD-TC-UpdatePurchase-2
 
     [Documentation]  Update Purchase - invoice date Updated
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -694,7 +694,7 @@ JD-TC-UpdatePurchase-3
 
     [Documentation]  Update Purchase - purchaseNote Updated
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -750,7 +750,7 @@ JD-TC-UpdatePurchase-4
 
     [Documentation]  Update Purchase - round off Updated
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -806,7 +806,7 @@ JD-TC-UpdatePurchase-5
 
     [Documentation]  Update Purchase - purchaseId is invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -823,7 +823,7 @@ JD-TC-UpdatePurchase-6
 
     [Documentation]  Update Purchase - inventory catalogue encid in invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -842,7 +842,7 @@ JD-TC-UpdatePurchase-8
 
     [Documentation]  Update Purchase - quantity is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -859,7 +859,7 @@ JD-TC-UpdatePurchase-9
 
     [Documentation]  Update Purchase - ifree quantity as empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -873,7 +873,7 @@ JD-TC-UpdatePurchase-10
 
     [Documentation]  Update Purchase - total quantity is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -887,7 +887,7 @@ JD-TC-UpdatePurchase-11
 
     [Documentation]  Update Purchase - total quantity is invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -903,7 +903,7 @@ JD-TC-UpdatePurchase-12
 
     [Documentation]  Update Purchase - amount is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -917,7 +917,7 @@ JD-TC-UpdatePurchase-12.1
 
     [Documentation]  Update Purchase - amount is null
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -931,7 +931,7 @@ JD-TC-UpdatePurchase-12.2
 
     [Documentation]  Update Purchase - amount is negative
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200    
 
@@ -948,7 +948,7 @@ JD-TC-UpdatePurchase-13
 
     [Documentation]  Update Purchase - amount is changed
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -964,7 +964,7 @@ JD-TC-UpdatePurchase-14
 
     [Documentation]  Update Purchase - discount amount is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -980,7 +980,7 @@ JD-TC-UpdatePurchase-15
 
     [Documentation]  Update Purchase - discount amount is updated
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -996,7 +996,7 @@ JD-TC-UpdatePurchase-16
 
     [Documentation]  Update Purchase - discount Percentage is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -1010,7 +1010,7 @@ JD-TC-UpdatePurchase-16.1
 
     [Documentation]  Update Purchase - discount Percentage is null
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -1024,7 +1024,7 @@ JD-TC-UpdatePurchase-16.2
 
     [Documentation]  Update Purchase - discount Percentage is negative
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200    
 
@@ -1041,7 +1041,7 @@ JD-TC-UpdatePurchase-17
 
     [Documentation]  Update Purchase - discount percentage is above 100
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -1058,7 +1058,7 @@ JD-TC-UpdatePurchase-18
 
     [Documentation]  Update Purchase - fixed discount is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -1074,7 +1074,7 @@ JD-TC-UpdatePurchase-18.1
 
     [Documentation]  Update Purchase - fixed discount is null
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -1090,7 +1090,7 @@ JD-TC-UpdatePurchase-18.2
 
     [Documentation]  Update Purchase - fixed discount is negative
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -1109,7 +1109,7 @@ JD-TC-UpdatePurchase-19
 
     [Documentation]  Update Purchase - fixed discount is above total
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -1125,7 +1125,7 @@ JD-TC-UpdatePurchase-21
 
     [Documentation]  Update Purchase - taxable amount is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -1141,7 +1141,7 @@ JD-TC-UpdatePurchase-22
 
     [Documentation]  Update Purchase - taxable amount is updated
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -1157,7 +1157,7 @@ JD-TC-UpdatePurchase-23
 
     [Documentation]  Update Purchase - tax amount is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -1173,7 +1173,7 @@ JD-TC-UpdatePurchase-24
 
     [Documentation]  Update Purchase - tax amount is updated
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -1189,7 +1189,7 @@ JD-TC-UpdatePurchase-25
 
     [Documentation]  Update Purchase - net total is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -1203,7 +1203,7 @@ JD-TC-UpdatePurchase-26
 
     [Documentation]  Update Purchase - net total is updated
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -1219,7 +1219,7 @@ JD-TC-UpdatePurchase-27
 
     [Documentation]  Update Purchase - expairy date is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -1238,7 +1238,7 @@ JD-TC-UpdatePurchase-28
 
     [Documentation]  Update Purchase - expairy date is changed
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -1254,7 +1254,7 @@ JD-TC-UpdatePurchase-29
 
     [Documentation]  Update Purchase - expairy date is past date
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -1270,7 +1270,7 @@ JD-TC-UpdatePurchase-30
 
     [Documentation]  Update Purchase - mrp is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -1284,7 +1284,7 @@ JD-TC-UpdatePurchase-30.1
 
     [Documentation]  Update Purchase - mrp is null
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -1298,7 +1298,7 @@ JD-TC-UpdatePurchase-30.2
 
     [Documentation]  Update Purchase - mrp is negative
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -1315,7 +1315,7 @@ JD-TC-UpdatePurchase-31
 
     [Documentation]  Update Purchase - mrp is changed
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -1331,7 +1331,7 @@ JD-TC-UpdatePurchase-34
 
     [Documentation]  Update Purchase - batch number is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -1348,7 +1348,7 @@ JD-TC-UpdatePurchase-35
 
     [Documentation]  Update Purchase - batch number is updated
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -1364,7 +1364,7 @@ JD-TC-UpdatePurchase-36
 
     [Documentation]  Update Purchase - cgst is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -1378,7 +1378,7 @@ JD-TC-UpdatePurchase-37
 
     [Documentation]  Update Purchase - cgst is above 100
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -1394,7 +1394,7 @@ JD-TC-UpdatePurchase-38
 
     [Documentation]  Update Purchase - sgst is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -1408,7 +1408,7 @@ JD-TC-UpdatePurchase-39
 
     [Documentation]  Update Purchase - sgst above 100
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -1424,7 +1424,7 @@ JD-TC-UpdatePurchase-40
 
     [Documentation]  Update Purchase - unit code is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
@@ -1443,7 +1443,7 @@ JD-TC-UpdatePurchase-41
 
     [Documentation]  Update Purchase - unit code is invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 

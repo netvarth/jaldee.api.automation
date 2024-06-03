@@ -12,7 +12,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -323,7 +323,7 @@ JD-TC-Get_IVR_USER_DETAILS-2
 
     [Documentation]   Delete users from ivr table and get ivr details
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -349,11 +349,11 @@ JD-TC-Get_IVR_USER_DETAILS-2
     ${lastName}=    FakerLibrary.lastName
     Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
     ${numbers}=     Random Int   min=100   max=5000
-    ${PUSERNAME_U1}=  Evaluate  ${MUSERNAME}+${numbers}
+    ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+${numbers}
     clear_users  ${PUSERNAME_U1}
     ${random_ph}=   Random Int   min=20000   max=30000
-    ${whpnum}=  Evaluate  ${MUSERNAME}+${random_ph}
-    ${tlgnum}=  Evaluate  ${MUSERNAME}+${random_ph}
+    ${whpnum}=  Evaluate  ${PUSERNAME}+${random_ph}
+    ${tlgnum}=  Evaluate  ${PUSERNAME}+${random_ph}
 
     
     
@@ -371,7 +371,7 @@ JD-TC-Get_IVR_USER_DETAILS-2
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME3}  ${countryCodes[1]}${HLMUSERNAME3}  ${user_id3}  ${user_name}
+    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLPUSERNAME3}  ${countryCodes[1]}${HLPUSERNAME3}  ${user_id3}  ${user_name}
 
    # ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${SOUSERNAME1}  ${countryCodes[1]}${SOUSERNAME1}  ${so_id1}  ${name}
 
@@ -601,11 +601,11 @@ JD-TC-Get_IVR_USER_DETAILS-UH7
     ${lastName}=    FakerLibrary.lastName
     Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
     ${numbers}=     Random Int   min=100   max=5000
-    ${PUSERNAME_U1}=  Evaluate  ${MUSERNAME}+${numbers}
+    ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+${numbers}
     clear_users  ${PUSERNAME_U1}
     ${random_ph}=   Random Int   min=20000   max=30000
-    ${whpnum}=  Evaluate  ${MUSERNAME}+${random_ph}
-    ${tlgnum}=  Evaluate  ${MUSERNAME}+${random_ph}
+    ${whpnum}=  Evaluate  ${PUSERNAME}+${random_ph}
+    ${tlgnum}=  Evaluate  ${PUSERNAME}+${random_ph}
 
     ${so_id1}=  Create Sample User   
     Set Suite Variable  ${so_id1}
@@ -643,7 +643,7 @@ JD-TC-Get_IVR_USER_DETAILS-UH7
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-     ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME3}  ${countryCodes[1]}${HLMUSERNAME3}  ${user_id}  ${user_name}
+     ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLPUSERNAME3}  ${countryCodes[1]}${HLPUSERNAME3}  ${user_id}  ${user_name}
 
     # ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${SOUSERNAME1}  ${countryCodes[1]}${SOUSERNAME1}  ${so_id1}  ${name}
 
@@ -673,7 +673,7 @@ JD-TC-Get_IVR_USER_DETAILS-UH7
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME3}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLPUSERNAME3}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}

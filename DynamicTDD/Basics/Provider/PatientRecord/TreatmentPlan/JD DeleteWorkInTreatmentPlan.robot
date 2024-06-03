@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -39,7 +39,7 @@ JD-TC-Delete Work in Treatment Plan-1
 
     [Documentation]    Delete Work in Treatment Plan using work id.
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -128,7 +128,7 @@ JD-TC-Delete Work in Treatment Plan-1
 
     
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

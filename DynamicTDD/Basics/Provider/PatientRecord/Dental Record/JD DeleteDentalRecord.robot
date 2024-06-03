@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -38,7 +38,7 @@ JD-TC-Delete Dental Record-1
 
     [Documentation]    Create a Dental Record then delete that record.
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -114,7 +114,7 @@ JD-TC-Delete Dental Record-1
     Set Suite Variable    ${proconlname}    ${resp.json()['lastName']} 
     Set Suite Variable    ${fullname}       ${proconfname}${space}${proconlname}
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -172,7 +172,7 @@ JD-TC-Delete Dental Record-2
 
     [Documentation]    Create Dental record with tooth type as adult and delete that one.
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -208,7 +208,7 @@ JD-TC-Delete Dental Record-UH1
 
     [Documentation]    try to delete already deleted record.
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -221,7 +221,7 @@ JD-TC-Delete Dental Record-UH2
 
     [Documentation]    Delete dental record with invalid id.
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -236,7 +236,7 @@ JD-TC-Delete Dental Record-UH3
 
     [Documentation]    Delete Dental Record with another provider login.
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

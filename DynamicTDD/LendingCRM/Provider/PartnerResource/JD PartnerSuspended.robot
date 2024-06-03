@@ -13,8 +13,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -45,7 +45,7 @@ JD-TC-partner_Suspended-1
                                   
     [Documentation]              partner suspended
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME13}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -443,7 +443,7 @@ JD-TC-partner_Suspended-1
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME13}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -464,7 +464,7 @@ JD-TC-partner_Suspended-UH1
                                   
     [Documentation]              partner suspended which is already suspended
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME13}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -488,7 +488,7 @@ JD-TC-partner_Suspended-UH3
                                   
     [Documentation]              partner suspended with empty partner uid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME14}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -833,7 +833,7 @@ JD-TC-partner_Suspended-UH3
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME13}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -850,7 +850,7 @@ JD-TC-partner_Suspended-UH4
                                   
     [Documentation]              partner suspended with invalid partner uid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME14}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -866,7 +866,7 @@ JD-TC-partner_Suspended-UH5
                                   
     [Documentation]              partner suspended with another user logined
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME13}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

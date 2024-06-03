@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Test Cases ***
 
@@ -22,7 +22,7 @@ JD-TC-GetItemCategory-1
 
     [Documentation]  Provider Create a Item Category then try to get that item.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -55,7 +55,7 @@ JD-TC-GetItemCategory-2
 
     [Documentation]  Provider Create another Item Category then try to get that item.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -78,7 +78,7 @@ JD-TC-GetItemCategory-3
 
     [Documentation]  Provider Create another Item Category with number then try to get that item.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

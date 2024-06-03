@@ -13,8 +13,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Test Cases ***
@@ -23,7 +23,7 @@ JD-TC-UnAssign User-1
 
     [Documentation]  Create a invoice and assign the invoice to a user then unassign that user.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -56,7 +56,7 @@ JD-TC-UnAssign User-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME18}+1000411224
+    ${ph1}=  Evaluate  ${HLPUSERNAME18}+1000411224
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${address}=  get_address
@@ -253,11 +253,11 @@ JD-TC-UnAssign User-2
 
     [Documentation]  Create a user and try to assign that user to already assigned invoice,then unassign that user.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${ph1}=  Evaluate  ${HLMUSERNAME18}+1000411234
+    ${ph1}=  Evaluate  ${HLPUSERNAME18}+1000411234
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${address}=  get_address
@@ -298,7 +298,7 @@ JD-TC-UnAssign User-UH1
 
     [Documentation]  UnAssign User with invalid invoice id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -312,7 +312,7 @@ JD-TC-UnAssign User-UH2
 
     [Documentation]  UnAssign User that already unassigned.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -334,7 +334,7 @@ JD-TC-UnAssign User-UH4
 
     [Documentation]  UnAssign User with another Encrypted Provider Login.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -364,11 +364,11 @@ JD-TC-UnAssign User-UH5
 
     [Documentation]  Create a user ,that not assigned to invoice and then try to unassign that user .
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${ph1}=  Evaluate  ${HLMUSERNAME18}+1000411244
+    ${ph1}=  Evaluate  ${HLPUSERNAME18}+1000411244
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${address}=  get_address
@@ -399,11 +399,11 @@ JD-TC-UnAssign User-UH6
 
     [Documentation]  update bill status as settled then try to unassign user.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${ph1}=  Evaluate  ${HLMUSERNAME18}+1000411237
+    ${ph1}=  Evaluate  ${HLPUSERNAME18}+1000411237
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${address}=  get_address
@@ -445,7 +445,7 @@ JD-TC-UnAssign User-UH7
 
     [Documentation]  bill status in is in draft stage then try to unassign user.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

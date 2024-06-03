@@ -14,8 +14,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -38,7 +38,7 @@ JD-TC-Verify Partner Bank-1
                                   
     [Documentation]              Verify Partner Bank
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -259,7 +259,7 @@ JD-TC-Verify Partner Bank-UH1
                                   
     [Documentation]              Verify Partner Bank where pid is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -272,7 +272,7 @@ JD-TC-Verify Partner Bank-UH2
                                   
     [Documentation]              Verify Partner Bank where pid is invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -287,7 +287,7 @@ JD-TC-Verify Partner Bank-UH3
                                   
     [Documentation]              Verify Partner Bank where uid is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -302,7 +302,7 @@ JD-TC-Verify Partner Bank-UH4
                                   
     [Documentation]              Verify Partner Bank where uid is invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -318,7 +318,7 @@ JD-TC-Verify Partner Bank-UH5
                                   
     [Documentation]              Verify Partner Bank where bankname is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -331,7 +331,7 @@ JD-TC-Verify Partner Bank-UH6
                                   
     [Documentation]              Verify Partner Bank where bank account number is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -347,7 +347,7 @@ JD-TC-Verify Partner Bank-UH7
 
     # which account number or ifsc code we are using while verifing that will be updated as partner ac num and ifsc
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -367,7 +367,7 @@ JD-TC-Verify Partner Bank-UH8
                                   
     [Documentation]              Verify Partner Bank where bank ifsc is invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

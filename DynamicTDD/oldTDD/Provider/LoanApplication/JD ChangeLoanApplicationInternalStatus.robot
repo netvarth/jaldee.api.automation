@@ -14,8 +14,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Keywords ***
 Enable Disable CDL
@@ -78,7 +78,7 @@ JD-TC-Change SpInternal Status-1
                                   
     [Documentation]               Create Loan Application and Loan Approval with branch login then change sp internal status to ConsumerAccepted.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -702,7 +702,7 @@ JD-TC-Change SpInternal Status-2
                                   
     [Documentation]                change sp internal status ConsumerAccepted to PartnerAccepted.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -720,7 +720,7 @@ JD-TC-Change SpInternal Status-3
                                   
     [Documentation]                change sp internal status  PartnerAccepted to ConsumerAccepted.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -740,7 +740,7 @@ JD-TC-Change SpInternal Status-4
                                   
     [Documentation]                change sp internal status  PartnerAccepted to Sanctioned.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -756,7 +756,7 @@ JD-TC-Change SpInternal Status-5
                                   
     [Documentation]                change sp internal status  NEW to Sanctioned.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -894,7 +894,7 @@ JD-TC-Change SpInternal Status-6
                                   
     [Documentation]                try change sp internal status two time  NEW to ConsumerAccepted.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -913,7 +913,7 @@ JD-TC-Change SpInternal Status-7
                                   
     [Documentation]                change sp internal status  Approved to Sanctioned.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1049,7 +1049,7 @@ JD-TC-Change SpInternal Status-7
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings   ${resp.json()[0]['spInternalStatusDisplyName']}  Approval Required
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

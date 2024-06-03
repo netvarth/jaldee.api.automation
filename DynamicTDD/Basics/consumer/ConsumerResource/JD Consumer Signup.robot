@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 *** Variables ***
@@ -26,14 +26,14 @@ ${CUSERPH}      ${CUSERNAME}
 Get branch by license
     [Arguments]   ${lic_id}
     
-    ${resp}=   Get File    ${EXECDIR}/TDD/varfiles/musers.py
+    ${resp}=   Get File    ${EXECDIR}/TDD/varfiles/providers.py
     ${len}=   Split to lines  ${resp}
     ${length}=  Get Length   ${len}
      
     FOR   ${a}  IN RANGE  ${length}
             
-        ${Branch_PH}=  Set Variable  ${MUSERNAME${a}}
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${Branch_PH}=  Set Variable  ${PUSERNAME${a}}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
 
         ${decrypted_data}=  db.decrypt_data  ${resp.content}

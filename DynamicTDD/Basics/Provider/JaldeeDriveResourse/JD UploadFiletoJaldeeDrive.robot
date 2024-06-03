@@ -12,8 +12,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Library           /ebs/TDD/db.py
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables          /ebs/TDD/varfiles/hl_musers.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables          /ebs/TDD/varfiles/hl_providers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 Resource          /ebs/TDD/Keywords.robot
 Library           /ebs/TDD/Imageupload.py
@@ -342,12 +342,12 @@ JD-TC-Uploadfiletojaldeedrive-9
 
 	[Documentation]    upload pdf file to user by branch login
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${HLMUSERNAME11}
-    Set Test Variable  ${HLMUSERNAME11}
-    ${id}=  get_id  ${HLMUSERNAME11}
+    ${pid}=  get_acc_id  ${HLPUSERNAME11}
+    Set Test Variable  ${HLPUSERNAME11}
+    ${id}=  get_id  ${HLPUSERNAME11}
     Set Test Variable  ${id}
     ${resp}=   Get Business Profile
     Log  ${resp.content}
@@ -406,7 +406,7 @@ JD-TC-Uploadfiletojaldeedrive-9
    # Set Test Variable   ${p0_id}   ${resp.json()[2]['id']}
 
 
-    ${p_id}=  get_acc_id  ${HLMUSERNAME11}
+    ${p_id}=  get_acc_id  ${HLPUSERNAME11}
     Set Test Variable   ${p_id}
   
 
@@ -436,12 +436,12 @@ JD-TC-Uploadfiletojaldeedrive-10
 
 	[Documentation]    upload pdf file by  user 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${HLMUSERNAME12}
-    Set Test Variable  ${HLMUSERNAME12}
-    ${id}=  get_id  ${HLMUSERNAME12}
+    ${pid}=  get_acc_id  ${HLPUSERNAME12}
+    Set Test Variable  ${HLPUSERNAME12}
+    ${id}=  get_id  ${HLPUSERNAME12}
     Set Test Variable  ${id}
      
     ${resp}=   Get Business Profile
@@ -523,7 +523,7 @@ JD-TC-Uploadfiletojaldeedrive-10
 
 
 
-    ${p_id}=  get_acc_id  ${HLMUSERNAME12}
+    ${p_id}=  get_acc_id  ${HLPUSERNAME12}
     Set Test Variable   ${p_id}
 
     ${caption1}=  Fakerlibrary.Sentence

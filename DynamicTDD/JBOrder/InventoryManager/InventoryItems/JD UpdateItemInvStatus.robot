@@ -15,7 +15,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -28,7 +28,7 @@ JD-TC-UpdateItemInvStatus-1
 
     [Documentation]   Update Item Inv Status
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -81,7 +81,7 @@ JD-TC-UpdateItemInvStatus-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -253,7 +253,7 @@ JD-TC-UpdateItemInvStatus-2
 
     [Documentation]  Update Item Inv Status - Disable to Disable
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -270,7 +270,7 @@ JD-TC-UpdateItemInvStatus-3
 
     [Documentation]  Update Item Inv Status - Disable to Enable
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -292,7 +292,7 @@ JD-TC-UpdateItemInvStatus-4
 
     [Documentation]  Update Item Inv Status - Enable to Enable
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -319,7 +319,7 @@ JD-TC-UpdateItemInvStatus-6
 
     [Documentation]  Update Item Inv Status - where id is invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

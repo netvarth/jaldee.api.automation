@@ -9,7 +9,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 *** Test Cases ***
@@ -18,7 +18,7 @@ JD-TC-EnableDisableLeadforUser-1
 
     [Documentation]   Enable Lead.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -40,7 +40,7 @@ JD-TC-EnableDisableLeadforUser-2
 
     [Documentation]   Disable Lead After Enabling
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -70,7 +70,7 @@ JD-TC-EnableDisableLeadforUser-3
 
     [Documentation]   Enable Lead which is Disabled
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -123,7 +123,7 @@ JD-TC-EnableDisableLeadforUser-UH3
 
     [Documentation]   Enable Lead Which is already enabled
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -149,7 +149,7 @@ JD-TC-EnableDisableLeadforUser-UH4
 
     [Documentation]   Disable Lead Which is already Disabled
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     

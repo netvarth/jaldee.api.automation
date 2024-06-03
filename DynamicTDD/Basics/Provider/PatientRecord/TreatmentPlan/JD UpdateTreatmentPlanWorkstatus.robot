@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -39,7 +39,7 @@ JD-TC-Update Treatment Plan Work status-1
 
     [Documentation]    Update Treatment Plan Work status
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -128,7 +128,7 @@ JD-TC-Update Treatment Plan Work status-1
 
     
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -205,7 +205,7 @@ JD-TC-Update Treatment Plan Work status-2
 
     [Documentation]    Update Treatment Plan Work status as CLOSED
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -226,7 +226,7 @@ JD-TC-Update Treatment Plan Work status-UH1
 
     [Documentation]    Update Treatment Plan Work status that already complete status
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -249,7 +249,7 @@ JD-TC-Update Treatment Plan Work status-UH3
 
     [Documentation]    Update Treatment Plan Work status with another login
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME12}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -262,7 +262,7 @@ JD-TC-Update Treatment Plan Work status-UH4
 
     [Documentation]    Update Treatment Plan Work status where treatment id is invalid
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -278,7 +278,7 @@ JD-TC-Update Treatment Plan Work status-UH5
 
     [Documentation]    Update Treatment Plan Work status where work id is invalid
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -293,7 +293,7 @@ JD-TC-Update Treatment Plan Work status-UH6
 
     [Documentation]    Update Treatment Plan Work status that already open status
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -330,7 +330,7 @@ JD-TC-Update Treatment Plan Work status-UH6
 
     [Documentation]    Update Treatment Plan Work status where status invalid
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

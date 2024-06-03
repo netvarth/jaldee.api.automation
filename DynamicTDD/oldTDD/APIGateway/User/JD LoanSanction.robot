@@ -15,11 +15,11 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ApiKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Keywords ***
@@ -92,7 +92,7 @@ JD-TC-LoanSanction-1
 
     [Documentation]   Get api lead details for a user having one lead.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -134,7 +134,7 @@ JD-TC-LoanSanction-1
     Log  ${unique_lnames}
     Set Suite Variable   ${unique_lnames}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -143,7 +143,7 @@ JD-TC-LoanSanction-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    clear_customer   ${MUSERNAME42}
+    clear_customer   ${PUSERNAME42}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -464,7 +464,7 @@ JD-TC-LoanSanction-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME42}'
+            IF   not '${user_phone}' == '${PUSERNAME42}'
                 clear_users  ${user_phone}
             END
         END
@@ -889,7 +889,7 @@ JD-TC-GetLeadsWithFilterForUser-2
     Log  ${unique_lnames}
     Set Suite Variable   ${unique_lnames}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME43}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -900,7 +900,7 @@ JD-TC-GetLeadsWithFilterForUser-2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    clear_customer   ${MUSERNAME43}
+    clear_customer   ${PUSERNAME43}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -1113,7 +1113,7 @@ JD-TC-GetLeadsWithFilterForUser-2
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME42}'
+            IF   not '${user_phone}' == '${PUSERNAME42}'
                 clear_users  ${user_phone}
             END
         END

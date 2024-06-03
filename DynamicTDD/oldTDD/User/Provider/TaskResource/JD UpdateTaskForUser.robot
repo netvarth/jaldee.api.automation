@@ -11,7 +11,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 *** Variables ***
 
@@ -24,11 +24,11 @@ JD-TC-UpdateTaskForUser-1
 
     [Documentation]  Create a task for a branch and update the task with same details.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${p_id}=  get_acc_id  ${MUSERNAME10}
+    ${p_id}=  get_acc_id  ${PUSERNAME10}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -161,25 +161,25 @@ JD-TC-UpdateTaskForUser-2
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+550648
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+550648
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_E}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
-    Set Suite Variable  ${MUSERNAME_E}
-    ${p_id}=  get_acc_id  ${MUSERNAME_E}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+    Set Suite Variable  ${PUSERNAME_E}
+    ${p_id}=  get_acc_id  ${PUSERNAME_E}
     Set Suite Variable    ${p_id}
-    ${id}=  get_id  ${MUSERNAME_E}
+    ${id}=  get_id  ${PUSERNAME_E}
 
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}
@@ -616,7 +616,7 @@ JD-TC-UpdateTaskForUser-UH8
     Set Suite Variable  ${task_uid10}  ${task_id[1]}
     Set Suite Variable  ${task_id10}  ${task_id[0]}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -644,7 +644,7 @@ JD-TC-UpdateTaskForUser-UH9
 
     [Documentation]  Create a task for a user and update the task by another user of same branch.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -768,24 +768,24 @@ JD-TC-UpdateTaskForUser-UH7
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_A}=  Evaluate  ${MUSERNAME}+550296
+    ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+550296
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_A}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_A}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_A}  0
+    ${resp}=  Account Activation  ${PUSERNAME_A}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_A}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_A}${\n}
-    Set Suite Variable  ${MUSERNAME_A}
-    ${p_id}=  get_acc_id  ${MUSERNAME_A}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
+    Set Suite Variable  ${PUSERNAME_A}
+    ${p_id}=  get_acc_id  ${PUSERNAME_A}
     Set Suite Variable    ${p_id}
-    ${id}=  get_id  ${MUSERNAME_A}
+    ${id}=  get_id  ${PUSERNAME_A}
     Set Suite Variable   ${id}
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}
@@ -907,7 +907,7 @@ JD-TC-UpdateTaskForUser-UH7
     Set Suite Variable  ${task_uid5}  ${task_id[1]}
     Set Suite Variable  ${task_id5}  ${task_id[0]}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -927,11 +927,11 @@ JD-TC-UpdateTaskForUser-14
     [Documentation]  Create a task for a branch then change assignee  to user and try to update the task by branch login.
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${p_id}=  get_acc_id  ${MUSERNAME_E}
+    ${p_id}=  get_acc_id  ${PUSERNAME_E}
      ${locId}=  Create Sample Location
 
     ${resp}=   Get Location ById  ${locId}

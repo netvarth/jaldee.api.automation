@@ -9,7 +9,7 @@ Library           random
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 ***Test Cases***
@@ -24,23 +24,23 @@ JD-TC-GetUsers-1
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+550117
+     ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+550117
      ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Activation  ${MUSERNAME_E}  0
+     ${resp}=  Account Activation  ${PUSERNAME_E}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
-     Set Suite Variable  ${MUSERNAME_E}
-     ${id}=  get_id  ${MUSERNAME_E}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+     Set Suite Variable  ${PUSERNAME_E}
+     ${id}=  get_id  ${PUSERNAME_E}
      Set Suite Variable  ${id}
      ${bs}=  FakerLibrary.bs
      Set Suite Variable  ${bs}
@@ -173,7 +173,7 @@ JD-TC-GetUsers-1
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -257,7 +257,7 @@ JD-TC-GetUsers-1
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['lastName']}                        ${lastname_A} 
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[0]}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['mobileNo']}                        ${MUSERNAME_E}
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['mobileNo']}                        ${PUSERNAME_E}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          ${dep_id}    
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['subdomain']}                       1
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['admin']}                           ${bool[1]} 
@@ -285,7 +285,7 @@ JD-TC-GetUsers-1
 JD-TC-GetUsers-13
      [Documentation]  Get users by specialization
     
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -298,7 +298,7 @@ JD-TC-GetUsers-13
 JD-TC-GetUsers-14
      [Documentation]  Get users by businesslocation
     
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -311,7 +311,7 @@ JD-TC-GetUsers-14
 JD-TC-GetUsers-15
      [Documentation]  Get users by Language spoken
     
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -324,7 +324,7 @@ JD-TC-GetUsers-15
 JD-TC-GetUsers-16
      [Documentation]  Get users by Language spoken
     
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -337,7 +337,7 @@ JD-TC-GetUsers-16
 JD-TC-GetUsers-17
      [Documentation]  Get users by employee id
     
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -350,7 +350,7 @@ JD-TC-GetUsers-17
 JD-TC-GetUsers-18
      [Documentation]  Get users by email id
     
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -364,7 +364,7 @@ JD-TC-GetUsers-18
 JD-TC-GetUsers-2
      [Documentation]  Get users by userType 
     
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -380,7 +380,7 @@ JD-TC-GetUsers-2
 JD-TC-GetUsers-3
      [Documentation]  Get users by firstName
 
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -392,7 +392,7 @@ JD-TC-GetUsers-3
 JD-TC-GetUsers-4
      [Documentation]  Get users by lastName
 
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200   
 
@@ -404,7 +404,7 @@ JD-TC-GetUsers-4
 JD-TC-GetUsers-5
      [Documentation]  Get users by status
 
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200   
 
@@ -436,7 +436,7 @@ JD-TC-GetUsers-5
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['lastName']}                        ${lastname_A} 
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[0]}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['mobileNo']}                        ${MUSERNAME_E}
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['mobileNo']}                        ${PUSERNAME_E}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          ${dep_id}    
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['subdomain']}                       1
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['admin']}                           ${bool[1]} 
@@ -462,7 +462,7 @@ JD-TC-GetUsers-5
 JD-TC-GetUsers-6
      [Documentation]  Get users by departmentId
 
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200   
 
@@ -494,7 +494,7 @@ JD-TC-GetUsers-6
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['lastName']}                        ${lastname_A} 
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[0]}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['mobileNo']}                        ${MUSERNAME_E}
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['mobileNo']}                        ${PUSERNAME_E}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          ${dep_id}    
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['subdomain']}                       1
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['admin']}                           ${bool[1]} 
@@ -504,7 +504,7 @@ JD-TC-GetUsers-6
 JD-TC-GetUsers-7
      [Documentation]  Get users by primaryMobileNo
 
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200   
 
@@ -516,7 +516,7 @@ JD-TC-GetUsers-7
 JD-TC-GetUsers-9
      [Documentation]  Get users by state
 
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200   
 
@@ -528,7 +528,7 @@ JD-TC-GetUsers-9
 JD-TC-GetUsers-10
      [Documentation]  Get users by isAdmin
 
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200   
 
@@ -541,7 +541,7 @@ JD-TC-GetUsers-10
 JD-TC-GetUsers-11
      [Documentation]  Get users by locationName
 
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200  
 
@@ -553,7 +553,7 @@ JD-TC-GetUsers-11
 JD-TC-GetUsers-12
      [Documentation]  Get users by pinCode
 
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200  
 
@@ -586,7 +586,7 @@ JD-TC-GetUsers -UH2
 
 JD-TC-GetUsers-13
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME57}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME57}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -595,11 +595,11 @@ JD-TC-GetUsers-13
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Test Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${MUSERNAME57}
-    clear_service    ${MUSERNAME57}
-    clear_customer   ${MUSERNAME57}
+    clear_queue      ${PUSERNAME57}
+    clear_service    ${PUSERNAME57}
+    clear_customer   ${PUSERNAME57}
 
-    ${pid}=  get_acc_id  ${MUSERNAME57}
+    ${pid}=  get_acc_id  ${PUSERNAME57}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -626,7 +626,7 @@ JD-TC-GetUsers-13
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${dep_id1}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${ph5}=  Evaluate  ${MUSERNAME57}+1000440000
+    ${ph5}=  Evaluate  ${PUSERNAME57}+1000440000
     ${firstname5}=  FakerLibrary.name
     ${lastname5}=  FakerLibrary.last_name
     ${dob5}=  FakerLibrary.Date
@@ -647,8 +647,8 @@ JD-TC-GetUsers-13
     Set Test Variable  ${state5}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Test Variable  ${pin5}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
  
-    ${whpnum5}=  Evaluate  ${MUSERNAME67}+336245
-    ${tlgnum5}=  Evaluate  ${MUSERNAME67}+336345
+    ${whpnum5}=  Evaluate  ${PUSERNAME67}+336245
+    ${tlgnum5}=  Evaluate  ${PUSERNAME67}+336345
 
     ${resp}=  Create User  ${firstname5}  ${lastname5}  ${dob5}  ${Genderlist[0]}  ${P_Email}${ph5}.${test_mail}   ${userType[0]}  ${pin5}  ${countryCodes[1]}  ${ph5}  ${dep_id1}  ${sub_domain_id}  ${bool[1]}  ${countryCodes[1]}  ${whpnum5}  ${countryCodes[1]}  ${tlgnum5}
     Log   ${resp.json()}
@@ -660,7 +660,7 @@ JD-TC-GetUsers-13
     Set Test Variable   ${p1_id}   ${resp.json()[0]['id']}
     Set Test Variable   ${p2_id}   ${resp.json()[1]['id']}
    
-    ${ph6}=  Evaluate  ${MUSERNAME67}+1000440001
+    ${ph6}=  Evaluate  ${PUSERNAME67}+1000440001
     clear_users  ${ph6}
     ${firstname6}=  FakerLibrary.name
     ${lastname6}=  FakerLibrary.last_name
@@ -672,7 +672,7 @@ JD-TC-GetUsers-13
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id6}  ${resp.json()}
     
-    ${ph7}=  Evaluate  ${MUSERNAME67}+1000440003
+    ${ph7}=  Evaluate  ${PUSERNAME67}+1000440003
     clear_users  ${ph7}
     ${firstname7}=  FakerLibrary.name
     ${lastname7}=  FakerLibrary.last_name

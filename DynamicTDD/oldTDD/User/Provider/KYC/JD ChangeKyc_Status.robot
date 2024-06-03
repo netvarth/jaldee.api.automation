@@ -12,8 +12,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/messagesapi.py
 Library           /ebs/TDD/excelfuncs.py
 
@@ -22,7 +22,7 @@ Library           /ebs/TDD/excelfuncs.py
 
 Multiple Users branches
 
-    ${resp}=   Get File    /ebs/TDD/varfiles/musers.py
+    ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
     ${lines}=   Split to lines  ${resp}
     Log   ${lines}
     ${length}=  Get Length   ${lines}
@@ -30,7 +30,7 @@ Multiple Users branches
     &{License_total}=  Create Dictionary
     
     FOR   ${a}  IN RANGE   ${length}   
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         
         ${resp1}=   Get Active License
@@ -42,7 +42,7 @@ Multiple Users branches
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         IF  ${resp.json()['metricUsageInfo'][8]['total']} > 1 and ${resp.json()['metricUsageInfo'][8]['used']} < ${resp.json()['metricUsageInfo'][8]['total']}
-            Append To List  ${multiuser_list}  ${MUSERNAME${a}}
+            Append To List  ${multiuser_list}  ${PUSERNAME${a}}
             Set To Dictionary 	${License_total} 	${name}=${resp.json()['metricUsageInfo'][8]['total']}
         END
     END
@@ -403,14 +403,14 @@ JD-TC-ChangeKyc_Status-1
     Log  ${unique_lnames}
     Set Suite Variable   ${unique_lnames}
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
      Set Suite Variable  ${provider_id}  ${resp.json()['id']}
     ${resp}=   Get Active License
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    clear_customer   ${HLMUSERNAME9}
+    clear_customer   ${HLPUSERNAME9}
 
     ${resp}=   Get License UsageInfo 
     Log  ${resp.content}
@@ -470,7 +470,7 @@ JD-TC-ChangeKyc_Status-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME9}'
+            IF   not '${user_phone}' == '${HLPUSERNAME9}'
                 clear_users  ${user_phone}
             END
         END
@@ -713,10 +713,10 @@ JD-TC-ChangeKyc_Status-1
 JD-TC-ChangeKyc_Status-2
     [Documentation]  Create a  Kyc with Co-Applicant and Change it Status.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    clear_customer   ${HLMUSERNAME9}
+    clear_customer   ${HLPUSERNAME9}
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}  
     Log  ${resp.content}
@@ -893,11 +893,11 @@ JD-TC-ChangeKyc_Status-2
 JD-TC-ChangeKyc_Status-3
     [Documentation]  Create a  Kyc two times and Change it status.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    clear_customer   ${HLMUSERNAME9}
+    clear_customer   ${HLPUSERNAME9}
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}  
     Log  ${resp.content}
@@ -1084,11 +1084,11 @@ JD-TC-ChangeKyc_Status-3
 JD-TC-ChangeKyc_Status-4
     [Documentation]  Create Kyc With three Attachment then change it's status.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    clear_customer   ${HLMUSERNAME9}
+    clear_customer   ${HLPUSERNAME9}
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}  
     Log  ${resp.content}
@@ -1309,11 +1309,11 @@ JD-TC-ChangeKyc_Status-4
 JD-TC-ChangeKyc_Status-UH1
     [Documentation]  Create a  Kyc With Empty Attachment  and Check it status and Update.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    clear_customer   ${HLMUSERNAME9}
+    clear_customer   ${HLPUSERNAME9}
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}  
     Log  ${resp.content}
@@ -1551,11 +1551,11 @@ JD-TC-ChangeKyc_Status-UH1
 JD-TC-ChangeKyc_Status-UH2
     [Documentation]  Create a  Kyc With Co-applicant and Check it status and Update permanentPhone to Empty.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    clear_customer   ${HLMUSERNAME9}
+    clear_customer   ${HLPUSERNAME9}
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}  
     Log  ${resp.content}
@@ -1809,10 +1809,10 @@ JD-TC-ChangeKyc_Status-UH2
 JD-TC-ChangeKyc_Status-UH3
     [Documentation]  Create a  Kyc  and Check it status then Updatekyc with empty attachment .again check status.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    clear_customer   ${HLMUSERNAME9}
+    clear_customer   ${HLPUSERNAME9}
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}  
     Log  ${resp.content}
@@ -2085,11 +2085,11 @@ JD-TC-ChangeKyc_Status-UH3
 JD-TC-ChangeKyc_Status-UH4
     [Documentation]  Create a  Kyc  with attachment it's idvalue is empty.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-   clear_customer   ${HLMUSERNAME9}
+   clear_customer   ${HLPUSERNAME9}
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}  
     Log  ${resp.content}

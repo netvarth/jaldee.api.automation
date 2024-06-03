@@ -10,7 +10,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 ***Variables***
@@ -35,12 +35,12 @@ JD-TC-Update Tax Percentage-1
 
 JD-TC-Update Tax Percentage-2
        [Documentation]  Update Tax in non billable domain provider
-       ${resp}=   Get File    /ebs/TDD/varfiles/musers.py
+       ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
        ${len}=   Split to lines  ${resp}
        ${length}=  Get Length   ${len}
      
        FOR   ${a}  IN RANGE   ${length}
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${domain}=   Set Variable    ${resp.json()['sector']}
         ${subdomain}=    Set Variable      ${resp.json()['subSector']}

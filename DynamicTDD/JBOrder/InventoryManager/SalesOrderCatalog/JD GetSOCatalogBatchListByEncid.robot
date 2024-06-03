@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -32,7 +32,7 @@ ${order}        0
 JD-TC-Get list by item encId-1
     [Documentation]   create of a batch of catalog items then Get list by item encId.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -116,7 +116,7 @@ JD-TC-Get list by item encId-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -622,7 +622,7 @@ JD-TC-Get list by item encId-1
 # JD-TC-Get list by item encId-1
 #     [Documentation]   create of a batch of catalog items then Get list by item encId.
 
-#     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -665,10 +665,10 @@ JD-TC-Get list by item encId-1
 #     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
 #     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-#     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${accountId}=  get_acc_id  ${HLMUSERNAME29}
+#     ${accountId}=  get_acc_id  ${HLPUSERNAME29}
 #     Set Suite Variable    ${accountId} 
 
 #     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -795,7 +795,7 @@ JD-TC-Get list by item encId-1
 
 #     [Documentation]   create salesorder catalog items where inventory management is true then create catalog item batch where invmgnt is false then Get list by item encId.
 
-#     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -845,7 +845,7 @@ JD-TC-Get list by item encId-1
 
 #     [Documentation]    create new catalog item batch and then Get list by item encId.
 
-#     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -912,7 +912,7 @@ JD-TC-Get list by item encId-1
 
 #     [Documentation]    update batch and Get list by item encId.
 
-#     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -965,7 +965,7 @@ JD-TC-Get list by item encId-5
 
     [Documentation]    update batch status as disable and Get list by item encId.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1018,7 +1018,7 @@ JD-TC-Get list by item encId-UH1
 
     [Documentation]   Get list by item encId  with invalid catalog item id
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

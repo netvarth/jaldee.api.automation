@@ -12,8 +12,8 @@ Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 
@@ -28,7 +28,7 @@ JD-TC-DeleteItemGroupByIdforUser-1
 
     [Documentation]  Create Item Group for an existing provider and get the details then delete item group.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -76,7 +76,7 @@ JD-TC-DeleteItemGroupByIdforUser-2
 
     [Documentation]  Create multiple Item Group for an existing provider then delete one group.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -148,7 +148,7 @@ JD-TC-DeleteItemGroupByIdforUser-3
 
     [Documentation]  create an item group by user , then delete it.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -205,7 +205,7 @@ JD-TC-DeleteItemGroupByIdforUser-3
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME20}'
+            IF   not '${user_phone}' == '${HLPUSERNAME20}'
                 clear_users  ${user_phone}
             END
         END
@@ -261,7 +261,7 @@ JD-TC-DeleteItemGroupByIdforUser-4
 
     [Documentation]  create an item group by user (admin), then delete it.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -318,7 +318,7 @@ JD-TC-DeleteItemGroupByIdforUser-4
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME14}'
+            IF   not '${user_phone}' == '${PUSERNAME14}'
                 clear_users  ${user_phone}
             END
         END
@@ -373,7 +373,7 @@ JD-TC-DeleteItemGroupByIdforUser-5
 
     [Documentation]  create an item group by a user , then try to delete it by account level.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -430,7 +430,7 @@ JD-TC-DeleteItemGroupByIdforUser-5
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME8}'
+            IF   not '${user_phone}' == '${HLPUSERNAME8}'
                 clear_users  ${user_phone}
             END
         END
@@ -483,7 +483,7 @@ JD-TC-DeleteItemGroupByIdforUser-5
     ${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -500,7 +500,7 @@ JD-TC-DeleteItemGroupByIdforUser-UH1
 
     [Documentation]  Get Item Group with invalid item group id.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -537,7 +537,7 @@ JD-TC-DeleteItemGroupByIdforUser-UH4
 
     [Documentation]  create an item group by a user , then try to delete it by another user.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -594,7 +594,7 @@ JD-TC-DeleteItemGroupByIdforUser-UH4
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME15}'
+            IF   not '${user_phone}' == '${HLPUSERNAME15}'
                 clear_users  ${user_phone}
             END
         END

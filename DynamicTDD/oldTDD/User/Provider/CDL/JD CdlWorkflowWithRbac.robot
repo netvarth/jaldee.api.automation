@@ -13,8 +13,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -66,7 +66,7 @@ ${autoApprovalUptoAmount2}    70000
 Account with Multiple Users in NBFC
 
 
-    ${resp}=   Get File    /ebs/TDD/varfiles/musers.py
+    ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
     ${len}=   Split to lines  ${resp}
     ${length}=  Get Length   ${len}
     ${multiuser_list}=  Create List
@@ -74,7 +74,7 @@ Account with Multiple Users in NBFC
     ${licid}  ${licname}=  get_highest_license_pkg
     
     FOR   ${a}  ${start}   IN RANGE   ${length}   
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         # Set Test Variable  ${pkgId}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
         # Set Test Variable  ${Dom}   ${resp.json()['sector']}
@@ -99,7 +99,7 @@ Account with Multiple Users in NBFC
         END
     END
    
-    RETURN  ${MUSERNAME${a}}
+    RETURN  ${PUSERNAME${a}}
 
 Loan Application Branchapproval
 
@@ -257,9 +257,9 @@ JD-TC-MafilWorkflow-1
 
     [Documentation]  Login to a multi account provider, enable rbac and create users.
 
-    # ${NBFCMUSERNAME1}=  Account with Multiple Users in NBFC
-    # Log  ${NBFCMUSERNAME1}
-    # Set Suite Variable  ${NBFCMUSERNAME1}
+    # ${NBFCPUSERNAME1}=  Account with Multiple Users in NBFC
+    # Log  ${NBFCPUSERNAME1}
+    # Set Suite Variable  ${NBFCPUSERNAME1}
 
     ${resp}=  Get BusinessDomainsConf
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -282,18 +282,18 @@ JD-TC-MafilWorkflow-1
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
 
-    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+8745922
+    ${NBFCPUSERNAME1}=  Evaluate  ${PUSERNAME}+8745922
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCMUSERNAME1}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCPUSERNAME1}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${NBFCMUSERNAME1}  0
+    ${resp}=  Account Activation  ${NBFCPUSERNAME1}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${NBFCMUSERNAME1}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${NBFCPUSERNAME1}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -440,7 +440,7 @@ JD-TC-MafilWorkflow-1
     ${resp}=  Get User By Id  ${bm_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${BMUSERNAME1}  ${resp.json()['mobileNo']}
+    Set Suite Variable  ${BPUSERNAME1}  ${resp.json()['mobileNo']}
 
     ${sh_id1}=  Create Sample User 
     
@@ -1019,7 +1019,7 @@ JD-TC-MafilWorkflow-1
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1320,14 +1320,14 @@ JD-TC-MafilWorkflow-1
     ${note}=      FakerLibrary.sentence
     Set Suite Variable    ${note}
 
-    ${resp}=  SendProviderResetMail   ${BMUSERNAME1}
+    ${resp}=  SendProviderResetMail   ${BPUSERNAME1}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    @{resp}=  ResetProviderPassword  ${BMUSERNAME1}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
+    @{resp}=  ResetProviderPassword  ${BPUSERNAME1}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${BMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BPUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -1594,11 +1594,11 @@ JD-TC-MafilWorkflow-3
 
     [Documentation]  Login to a multi account provider, enable rbac and create users With Roles And Scope.
 
-    ${NBFCMUSERNAME1}=  Account with Multiple Users in NBFC
-    Log  ${NBFCMUSERNAME1}
-    Set Suite Variable  ${NBFCMUSERNAME1}
+    ${NBFCPUSERNAME1}=  Account with Multiple Users in NBFC
+    Log  ${NBFCPUSERNAME1}
+    Set Suite Variable  ${NBFCPUSERNAME1}
     
-    ${resp}=  Encrypted Provider Login  ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -2146,7 +2146,7 @@ JD-TC-MafilWorkflow-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2465,11 +2465,11 @@ JD-TC-MafilWorkflow-4
 
     [Documentation]  Login to a multi account provider, Disable rbac and create users With Roles And Scope.
 
-    ${NBFCMUSERNAME1}=  Account with Multiple Users in NBFC
-    Log  ${NBFCMUSERNAME1}
-    Set Suite Variable  ${NBFCMUSERNAME1}
+    ${NBFCPUSERNAME1}=  Account with Multiple Users in NBFC
+    Log  ${NBFCPUSERNAME1}
+    Set Suite Variable  ${NBFCPUSERNAME1}
     
-    ${resp}=  Encrypted Provider Login  ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -3216,7 +3216,7 @@ JD-TC-MafilWorkflow-5
 
     [Documentation]  Login to a multi account provider, create loan appliction with cdl Settings (enable all).
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -3361,7 +3361,7 @@ JD-TC-MafilWorkflow-5
     ${resp}=  Get User By Id  ${bm_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${BMUSERNAME1}  ${resp.json()['mobileNo']}
+    Set Suite Variable  ${BPUSERNAME1}  ${resp.json()['mobileNo']}
 
     ${sh_id1}=  Create Sample User 
     
@@ -3875,7 +3875,7 @@ JD-TC-MafilWorkflow-5
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -4160,14 +4160,14 @@ JD-TC-MafilWorkflow-5
     ${note}=      FakerLibrary.sentence
     Set Suite Variable    ${note}
 
-    ${resp}=  SendProviderResetMail   ${BMUSERNAME1}
+    ${resp}=  SendProviderResetMail   ${BPUSERNAME1}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    @{resp}=  ResetProviderPassword  ${BMUSERNAME1}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
+    @{resp}=  ResetProviderPassword  ${BPUSERNAME1}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${BMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BPUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -4188,7 +4188,7 @@ JD-TC-MafilWorkflow-5
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${BMUSERNAME1}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${BPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   loanDigitalSignUpload      ${cookie}    ${account_id}    ${loanuid}    ${kycid}   DPN   ${caption}
@@ -4236,7 +4236,7 @@ JD-TC-MafilWorkflow-5
 
     [Documentation]  create a loan application and add co-applicant for that loan application.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -4389,7 +4389,7 @@ JD-TC-MafilWorkflow-5
     ${resp}=  Get User By Id  ${bm_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${BMUSERNAME1}  ${resp.json()['mobileNo']}
+    Set Suite Variable  ${BPUSERNAME1}  ${resp.json()['mobileNo']}
 
     ${sh_id1}=  Create Sample User 
     
@@ -4964,7 +4964,7 @@ JD-TC-MafilWorkflow-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5270,7 +5270,7 @@ JD-TC-MafilWorkflow-6
 
     [Documentation]  Delete co-applicant 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

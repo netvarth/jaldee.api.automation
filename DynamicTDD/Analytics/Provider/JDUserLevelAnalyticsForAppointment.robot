@@ -14,7 +14,7 @@ Variables         /ebs/TDD/varfiles/providers.py
 # Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/AppKeywords.robot
 Resource          /ebs/TDD/iphoneKeywords.robot
@@ -40,33 +40,33 @@ JD-TC-UserLevelAnalyticsForAppointment-1
 
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
-    ${MUSERNAME_E}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
     ${firstname_A}=  FakerLibrary.first_name
     ${lastname_A}=  FakerLibrary.last_name
-    # ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+833550
+    # ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+833550
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_E}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200    
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
-    Set Suite Variable  ${MUSERNAME_E}
-    ${accid}=   get_acc_id   ${MUSERNAME_E}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+    Set Suite Variable  ${PUSERNAME_E}
+    ${accid}=   get_acc_id   ${PUSERNAME_E}
     Set Suite Variable  ${accid} 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${ph1}=  Evaluate  ${MUSERNAME_E}+1000000000
-    ${ph2}=  Evaluate  ${MUSERNAME_E}+2000000000
+    ${ph1}=  Evaluate  ${PUSERNAME_E}+1000000000
+    ${ph2}=  Evaluate  ${PUSERNAME_E}+2000000000
     ${views}=  Random Element    ${Views}
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -363,11 +363,11 @@ JD-TC-UserLevelAnalyticsForAppointment-1
 JD-TC-UserLevelAnalyticsForAppointment-2
     [Documentation]   take appointments for teleservice for a user and check user level analytics
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${ZOOM_id0}=  Format String  ${ZOOM_url}  ${MUSERNAME_E}
+    ${ZOOM_id0}=  Format String  ${ZOOM_url}  ${PUSERNAME_E}
     Set Suite Variable   ${ZOOM_id0}
 
 
@@ -375,7 +375,7 @@ JD-TC-UserLevelAnalyticsForAppointment-2
     ${instructions2}=   FakerLibrary.sentence
 
     ${VirtualcallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_id0}   status=ACTIVE    instructions=${instructions1} 
-    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${MUSERNAME_E}   countryCode=${countryCodes[0]}  status=ACTIVE    instructions=${instructions2} 
+    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_E}   countryCode=${countryCodes[0]}  status=ACTIVE    instructions=${instructions2} 
     ${vcm1}=  Create List  ${VirtualcallingMode1}   ${VirtualcallingMode2}
 
     ${resp}=  Update Virtual Calling Mode   ${vcm1}
@@ -391,7 +391,7 @@ JD-TC-UserLevelAnalyticsForAppointment-2
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['instructions']}    ${instructions1}
 
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['callingMode']}     ${CallingModes[1]}
-    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['value']}           ${MUSERNAME_E}
+    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['value']}           ${PUSERNAME_E}
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['status']}          ACTIVE
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['instructions']}    ${instructions2}
 
@@ -576,9 +576,9 @@ JD-TC-UserLevelAnalyticsForAppointment-2
 
 JD-TC-UserLevelAnalyticsForAppointment-3
     [Documentation]   take appointments for normal service and virtual service  and check user level analytics for online appointments
-    # [Setup]  Run Keywords  clear_queue  ${MUSERNAME_E}   AND  clear_appt_schedule   ${MUSERNAME_E}
+    # [Setup]  Run Keywords  clear_queue  ${PUSERNAME_E}   AND  clear_appt_schedule   ${PUSERNAME_E}
 
-    ${resp}= Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}= Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -734,7 +734,7 @@ JD-TC-UserLevelAnalyticsForAppointment-3
 
     ${tele_ser_app_ids}=  Get Length  ${online_vertualids}
  
-    ${resp}= Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}= Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

@@ -11,8 +11,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Library           /ebs/TDD/excelfuncs.py
 
 
@@ -114,7 +114,7 @@ JD-TC-RedirectLeadStatus-1
     Set Suite Variable   ${unique_lnames}
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -127,7 +127,7 @@ JD-TC-RedirectLeadStatus-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    clear_customer   ${MUSERNAME39}
+    clear_customer   ${PUSERNAME39}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -448,7 +448,7 @@ JD-TC-RedirectLeadStatus-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME39}'
+            IF   not '${user_phone}' == '${PUSERNAME39}'
                 clear_users  ${user_phone}
             END
         END

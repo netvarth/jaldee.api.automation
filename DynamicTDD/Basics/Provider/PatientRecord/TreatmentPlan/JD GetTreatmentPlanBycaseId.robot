@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -39,7 +39,7 @@ JD-TC-Get Treatment Plan By case Id-1
 
     [Documentation]    Get Treatment Plan By case Id
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -128,7 +128,7 @@ JD-TC-Get Treatment Plan By case Id-1
 
     
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -196,7 +196,7 @@ JD-TC-Get Treatment Plan By case Id-UH1
 
     [Documentation]    Get Treatment Plan By case Id using another provider login
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -219,7 +219,7 @@ JD-TC-Get Treatment Plan By case Id-UH3
 
     [Documentation]    Get Treatment Plan By case Id where id is invalid
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
     ${fake_id}=  Random Int  min=500   max=1000

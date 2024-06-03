@@ -15,11 +15,11 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ApiKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Keywords ***
 
@@ -121,7 +121,7 @@ JD-TC-GetLeadsWithFilterForUser-1
     Set Suite Variable   ${unique_lnames}
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Test Variable  ${provider_id1}  ${resp.json()['id']}
@@ -136,7 +136,7 @@ JD-TC-GetLeadsWithFilterForUser-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    clear_customer   ${MUSERNAME46}
+    clear_customer   ${PUSERNAME46}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -370,7 +370,7 @@ JD-TC-GetLeadsWithFilterForUser-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME46}'
+            IF   not '${user_phone}' == '${PUSERNAME46}'
                 clear_users  ${user_phone}
             END
         END

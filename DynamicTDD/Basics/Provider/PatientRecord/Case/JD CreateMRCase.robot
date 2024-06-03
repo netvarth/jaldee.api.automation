@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -39,7 +39,7 @@ JD-TC-Create MR Case-1
 
     [Documentation]    Create MR Case
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -128,7 +128,7 @@ JD-TC-Create MR Case-1
 
     
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -158,7 +158,7 @@ JD-TC-Create MR Case-2
 
     [Documentation]    Create MR Case with title contain 250 words
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -217,7 +217,7 @@ JD-TC-Create MR Case-2
     Set Suite Variable    ${proconlname1}    ${resp.json()['lastName']} 
     Set Suite Variable    ${fullname1}       ${proconfname}${space}${proconlname}
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -245,7 +245,7 @@ JD-TC-Create MR Case-3
 
     [Documentation]    Create MR Case with description contain 250 words
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -293,7 +293,7 @@ JD-TC-Create MR Case-4
 
     [Documentation]    Create MR Case where title contain number 
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -349,7 +349,7 @@ JD-TC-Create MR Case-5
 
     [Documentation]    Create MR Case where description contain number 
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -402,7 +402,7 @@ JD-TC-Create MR Case-6
 
     [Documentation]    Create MR Case where title is empty
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200 
 
@@ -429,7 +429,7 @@ JD-TC-Create MR Case-7
 
     [Documentation]    Create MR Case where description is empty
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -459,7 +459,7 @@ JD-TC-Create MR Case-8
 
     [Documentation]    Create MR Case where category id is empty
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -490,7 +490,7 @@ JD-TC-Create MR Case-9
 
     [Documentation]    Create MR Case where type id is empty
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -520,7 +520,7 @@ JD-TC-Create MR Case-10
 
     [Documentation]    Create MR Case passing user id
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
     
@@ -587,7 +587,7 @@ JD-TC-Create MR Case-11
 
     [Documentation]    Get MR case with another user login (This user is not added in any case)
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -654,7 +654,7 @@ JD-TC-Create MR Case-12
 
     [Documentation]    Create a MR case, then assign a user. 
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -688,7 +688,7 @@ JD-TC-Create MR Case-UH1
 
     [Documentation]    Create MR Case where category id is invalid
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -744,7 +744,7 @@ JD-TC-Create MR Case-UH2
 
     [Documentation]   Create MR Case where type id is invalid
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -798,7 +798,7 @@ JD-TC-Create MR Case-UH3
 
     [Documentation]    Create MR Case where doctor id is invalid
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -840,7 +840,7 @@ JD-TC-Create MR Case-UH4
 
     [Documentation]    Create MR Case where consumer id is invalid
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -883,7 +883,7 @@ JD-TC-Create MR Case-UH5
 
     [Documentation]    Create MR Case using another provider login
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME10}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
     
@@ -906,7 +906,7 @@ JD-TC-Create MR Case-UH7
 
     [Documentation]    Create MR Case where doctor id is empty
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -922,7 +922,7 @@ JD-TC-Create MR Case-UH8
 
     [Documentation]    Create MR Case where consumer id is empty
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -943,7 +943,7 @@ JD-TC-Create MR Case-UH1
 
     [Documentation]    Create MR Case where category id is invalid(string)
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -999,7 +999,7 @@ JD-TC-Create MR Case-UH2
 
     [Documentation]   Create MR Case where type id is invalid(string)
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -1053,7 +1053,7 @@ JD-TC-Create MR Case-UH3
 
     [Documentation]    Create MR Case where doctor id is invalid(string)
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -1095,7 +1095,7 @@ JD-TC-Create MR Case-UH4
 
     [Documentation]    Create MR Case where consumer id is invalid(string)
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

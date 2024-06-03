@@ -13,8 +13,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -54,7 +54,7 @@ JD-TC-AddLoanBankDetails-1
                                   
     [Documentation]               Create Loan Application and add loan bank details.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME0}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -419,7 +419,7 @@ JD-TC-AddLoanBankDetails-2
                                   
     [Documentation]               Create Loan Application and add loan bank Details without Requst For Aadhar Validation and pan.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME0}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -483,7 +483,7 @@ JD-TC-AddLoanBankDetails-3
                                   
     [Documentation]               Create Loan Application and add loan bank Details invalid orginfrom.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME0}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

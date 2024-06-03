@@ -10,7 +10,7 @@ Library           OperatingSystem
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Library           /ebs/TDD/db.py
 Variables         /ebs/TDD/varfiles/providers.py
@@ -20,8 +20,8 @@ Variables         /ebs/TDD/varfiles/consumermail.py
 Library           /ebs/TDD/excelfuncs.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Library           /ebs/TDD/Imageupload.py
-Variables          /ebs/TDD/varfiles/hl_musers.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables          /ebs/TDD/varfiles/hl_providers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 
@@ -541,10 +541,10 @@ JD-TC-ShareFiles-5
     clear_Consumermsg   ${CUSERNAME3}
   
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${p_id}=  get_acc_id  ${HLMUSERNAME0}
+    ${p_id}=  get_acc_id  ${HLPUSERNAME0}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -591,7 +591,7 @@ JD-TC-ShareFiles-5
         FOR   ${i}  IN RANGE   0   ${len}
         
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME0}'
+            IF   not '${user_phone}' == '${HLPUSERNAME0}'
                 clear_users  ${user_phone}
             END
         END
@@ -613,7 +613,7 @@ JD-TC-ShareFiles-5
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
     
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -705,11 +705,11 @@ JD-TC-ShareFiles-6
     Log                                     ${resp.content}
     Set Suite Variable     ${fileid22}      ${resp.json()['${u_id}']['files'][0]['id']} 
    
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${cookie}   ${resp}=    Imageupload.spLogin    ${HLMUSERNAME0}    ${PASSWORD}
+    ${cookie}   ${resp}=    Imageupload.spLogin    ${HLPUSERNAME0}    ${PASSWORD}
     Log     ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}     200
 
@@ -735,11 +735,11 @@ JD-TC-ShareFiles-7
 
     [Documentation]   branch  upload file to drive  and  that file  share  by user to a consumer
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${p_id}=  get_acc_id  ${HLMUSERNAME0}
-    ${id33}=  get_id  ${HLMUSERNAME0}
+    ${p_id}=  get_acc_id  ${HLPUSERNAME0}
+    ${id33}=  get_id  ${HLPUSERNAME0}
     Set Suite Variable  ${id33}
 
 
@@ -958,10 +958,10 @@ JD-TC-ShareFiles-8
     [Documentation]  share file user to user
 
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${p_id}=  get_acc_id  ${HLMUSERNAME0}
+    ${p_id}=  get_acc_id  ${HLPUSERNAME0}
 
 
     ${resp}=   Get Business Profile

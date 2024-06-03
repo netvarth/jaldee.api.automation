@@ -11,8 +11,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -25,11 +25,11 @@ JD-TC-AddNotesToTaskForUser-1
 
     [Documentation]  Create a task for a branch and add notes to task.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${p_id}=  get_acc_id  ${MUSERNAME58}
+    ${p_id}=  get_acc_id  ${PUSERNAME58}
     Set Suite Variable   ${p_id}
 
     ${resp}=    Get Locations
@@ -94,7 +94,7 @@ JD-TC-AddNotesToTaskForUser-2
 
     [Documentation]  Create a task for a consumer and add notes to task.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -130,11 +130,11 @@ JD-TC-AddNotesToTaskForUser-3
 
     [Documentation]  Add same notes to a task multiple times.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME60}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${p_id}=  get_acc_id  ${MUSERNAME60}
+    ${p_id}=  get_acc_id  ${PUSERNAME60}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -200,11 +200,11 @@ JD-TC-AddNotesToTaskForUser-4
 
     [Documentation]  Add different notes to a task multiple times.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME60}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${p_id1}=  get_acc_id  ${MUSERNAME60}
+    ${p_id1}=  get_acc_id  ${PUSERNAME60}
 
     ${notes1}=   FakerLibrary.sentence 
     ${resp}=   Add Notes To Task    ${task_uid3}   ${notes1}
@@ -223,7 +223,7 @@ JD-TC-AddNotesToTaskForUser-5
 
     [Documentation]  Add numbers as notes to a task.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -249,15 +249,15 @@ JD-TC-AddNotesToTaskForUser-6
 
     [Documentation]  Create a task for a branch and user try to add notes for that task after assign the task to user.
 
-    clear_service   ${HLMUSERNAME4}
-    clear_location  ${HLMUSERNAME4}
-    clear_appt_schedule   ${HLMUSERNAME4}
+    clear_service   ${HLPUSERNAME4}
+    clear_location  ${HLPUSERNAME4}
+    clear_appt_schedule   ${HLPUSERNAME4}
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${p_id1}=  get_acc_id  ${HLMUSERNAME4}
+    ${p_id1}=  get_acc_id  ${HLPUSERNAME4}
     Set Suite Variable   ${p_id1}
 
     ${resp}=    Get Locations
@@ -355,7 +355,7 @@ JD-TC-AddNotesToTaskForUser-UH1
 
     [Documentation]  Add notes to a task without giving notes.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -394,7 +394,7 @@ JD-TC-AddNotesToTaskForUser-UH4
 
     [Documentation]  Add notes to a task with another providers task id.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -409,7 +409,7 @@ JD-TC-AddNotesToTaskForUser-UH5
 
     [Documentation]  Create a task for a branch and user try to add notes for that task.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -478,7 +478,7 @@ JD-TC-AddNotesToTaskForUser-UH6
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -498,7 +498,7 @@ JD-TC-AddNotesToTaskForUser-UH7
 
     [Documentation]  Create a task for a user try to add notes for that task after closing the task.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     

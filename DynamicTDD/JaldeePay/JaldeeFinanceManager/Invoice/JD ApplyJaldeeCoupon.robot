@@ -14,8 +14,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -59,7 +59,7 @@ JD-TC-Apply JaldeeCoupon-1
 
     [Documentation]  Apply Jaldee coupon to invoice.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -293,7 +293,7 @@ JD-TC-Apply JaldeeCoupon-1
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -347,7 +347,7 @@ JD-TC-Apply JaldeeCoupon-1
 
 #     [Documentation]  Create a invoice and assign the invoice to a user then unassign that user.
 
-#     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -403,7 +403,7 @@ JD-TC-ApplyJaldeeCoupon-2
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Jaldee Coupons By Coupon_code  ${cupn_code03}
@@ -536,7 +536,7 @@ JD-TC-ApplyJaldeeCoupon-3
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Jaldee Coupons By Coupon_code  ${cupn_code04}
@@ -632,7 +632,7 @@ JD-TC-ApplyJaldeeCoupon-3
 JD-TC-Apply ProviderCoupon-2
 	[Documentation]  Create two jaldee coupons and provider coupons and apply in a bill and also add discount
     
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -709,10 +709,10 @@ JD-TC-Apply ProviderCoupon-2
     ${resp}=  SuperAdmin Logout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_customer   ${HLMUSERNAME5}
+    clear_customer   ${HLPUSERNAME5}
 
     ${resp}=  AddCustomer  ${CUSERNAME4}
     Log   ${resp.json()}

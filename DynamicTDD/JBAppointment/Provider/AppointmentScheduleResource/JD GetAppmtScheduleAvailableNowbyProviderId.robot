@@ -12,7 +12,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 *** Variables ***
@@ -24,12 +24,12 @@ ${start}        50
 JD-TC-Appointment Schedule AvailableNow By ProviderId-1
     [Documentation]    Appointment Schedule is AvailableNow By User ProviderId
     
-    ${resp}=   Get File    /ebs/TDD/varfiles/musers.py
+    ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
     ${len}=   Split to lines  ${resp}
     ${length}=  Get Length   ${len}
     ${licId}  ${licname}=  get_highest_license_pkg
     FOR   ${a}  IN RANGE   ${start}  ${length}
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -48,11 +48,11 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-1
     Run Keyword If  "${check}"=="True" and "${pkgId}"=="${licId}"  Exit For Loop
     END
     Set Suite Variable  ${a}
-    clear_service   ${MUSERNAME${a}}
-    clear_location  ${MUSERNAME${a}}
+    clear_service   ${PUSERNAME${a}}
+    clear_location  ${PUSERNAME${a}}
 
-    clear_service   ${MUSERNAME${a}}
-    clear_location  ${MUSERNAME${a}}
+    clear_service   ${PUSERNAME${a}}
+    clear_location  ${PUSERNAME${a}}
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -84,7 +84,7 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-1
     Set Suite Variable  ${dep_id}  ${resp.json()}
 
     ${numbers}=     Random Int   min=100   max=5000
-    ${PUSERPH0}=  Evaluate  ${MUSERNAME}+${numbers}
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${numbers}
     clear_users  ${PUSERPH0}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -127,7 +127,7 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${MUSERNAME${a}}    
+    clear_appt_schedule   ${PUSERNAME${a}}    
     # ${sTime1}=  db.get_time_by_timezone   ${tz}
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${eTime1}=  add_timezone_time  ${tz}  0  60  
@@ -170,7 +170,7 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-1
 JD-TC-Appointment Schedule AvailableNow By ProviderId-2
     [Documentation]    AvailableNow is False, when Appointment Schedule is Future timeslot
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME69}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -178,8 +178,8 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-2
     Log  ${decrypted_data}
     ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
 
-    clear_service   ${MUSERNAME69}
-    clear_location  ${MUSERNAME69}
+    clear_service   ${PUSERNAME69}
+    clear_location  ${PUSERNAME69}
 
     ${highest_package}=  get_highest_license_pkg
     Log  ${highest_package}
@@ -240,7 +240,7 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-2
     Set Suite Variable  ${dep_id}  ${resp.json()}
     
     ${numbers}=     Random Int   min=501   max=7000
-    ${PUSERPH0}=  Evaluate  ${MUSERNAME}+${numbers}
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${numbers}
     clear_users  ${PUSERPH0}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -283,7 +283,7 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${MUSERNAME69}
+    clear_appt_schedule   ${PUSERNAME69}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -324,15 +324,15 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-2
 JD-TC-Appointment Schedule AvailableNow By ProviderId-3
     [Documentation]    AvailableNow is False, when Appointment Schedule is a Non working day
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME68}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
    
-    clear_service   ${MUSERNAME68}
-    clear_location  ${MUSERNAME68}
+    clear_service   ${PUSERNAME68}
+    clear_location  ${PUSERNAME68}
     ${highest_package}=  get_highest_license_pkg
     Log  ${highest_package}
     Set Suite variable  ${lic2}  ${highest_package[0]}
@@ -378,7 +378,7 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-3
     Set Suite Variable  ${dep_id}  ${resp.json()}
 
     ${numbers}=     Random Int   min=701   max=9000
-    ${PUSERPH0}=  Evaluate  ${MUSERNAME}+${numbers}
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${numbers}
     clear_users  ${PUSERPH0}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -416,7 +416,7 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${MUSERNAME68}     
+    clear_appt_schedule   ${PUSERNAME68}     
     ${list}=  Create List    1  2  3  4  5  6
 
     ${curr_weekday}=  get_timezone_weekday  ${tz}
@@ -468,7 +468,7 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-UH1
 JD-TC-Appointment Schedule AvailableNow By ProviderId-UH2
     [Documentation]   Another  Provider login 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -491,13 +491,13 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-UH3
 JD-TC-Appointment Schedule AvailableNow By ProviderId-4
     [Documentation]    AvailableNow is False, when Appointment Schedule is Holiday
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${subdomain}=  Set Variable  ${resp.json()['subSector']}
 
-    clear_service   ${MUSERNAME67}
-    clear_location  ${MUSERNAME67}
+    clear_service   ${PUSERNAME67}
+    clear_location  ${PUSERNAME67}
 
     ${highest_package}=  get_highest_license_pkg
     Log  ${highest_package}
@@ -547,7 +547,7 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-4
     Set Suite Variable  ${dep_id}  ${resp.json()}
     
     ${numbers}=     Random Int   min=901   max=12000
-    ${PUSERPH0}=  Evaluate  ${MUSERNAME}+${numbers}
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${numbers}
     clear_users  ${PUSERPH0}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -569,7 +569,7 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${MUSERNAME67}
+    clear_appt_schedule   ${PUSERNAME67}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1} 

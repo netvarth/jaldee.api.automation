@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -33,7 +33,7 @@ JD-TC-Update Catalog Item Batch Status-1
 
     [Documentation]  Create Catalog Item Batch then disable the batch status.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -117,7 +117,7 @@ JD-TC-Update Catalog Item Batch Status-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -601,7 +601,7 @@ JD-TC-Update Catalog Item Batch Status-2
 
     [Documentation]   enable batch status
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -618,7 +618,7 @@ JD-TC-Update Catalog Item Batch Status-UH1
 
     [Documentation]   enable batch status thats already enabled.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -632,7 +632,7 @@ JD-TC-Update Catalog Item Batch Status-UH2
 
     [Documentation]   disable batch status thats already disabled.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -649,7 +649,7 @@ JD-TC-Update Catalog Item Batch Status-UH3
 
     [Documentation]   change batch status with invalid encid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -689,7 +689,7 @@ JD-TC-Update Catalog Item Batch Status-UH5
 
 #     [Documentation]  Create Catalog Item Batch then disable the batch status.
 
-#     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME32}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -732,10 +732,10 @@ JD-TC-Update Catalog Item Batch Status-UH5
 #     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
 #     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-#     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME32}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${accountId}=  get_acc_id  ${HLMUSERNAME32}
+#     ${accountId}=  get_acc_id  ${HLPUSERNAME32}
 #     Set Suite Variable    ${accountId} 
 
 #     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -846,7 +846,7 @@ JD-TC-Update Catalog Item Batch Status-2
 
     [Documentation]   create salesorder catalog items where inventory management is true then create catalog item batch where invmgnt is false then disable the status
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

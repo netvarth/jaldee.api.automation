@@ -14,8 +14,8 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 
@@ -27,7 +27,7 @@ JD-TC-Create Batch-1
 
     [Documentation]  create Batch.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME320}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME320}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -80,10 +80,10 @@ JD-TC-Create Batch-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME320}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME320}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${MUSERNAME320}
+    ${accountId}=  get_acc_id  ${PUSERNAME320}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -164,7 +164,7 @@ JD-TC-Create Batch-UH1
 
     [Documentation]  disbale inventory catalog and then create batch using that catalog.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME320}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME320}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -186,7 +186,7 @@ JD-TC-Create Batch-UH2
 
     [Documentation]  Disbale inventory catalog item and then create batch using that catalog.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME320}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME320}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -211,7 +211,7 @@ JD-TC-Create Batch-UH3
 
     [Documentation]  Disbale store then create batch using that catalog.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME320}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME320}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -238,7 +238,7 @@ JD-TC-Create Batch-UH4
 
     [Documentation]  Disbale sp item then create batch using that catalog.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME320}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME320}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

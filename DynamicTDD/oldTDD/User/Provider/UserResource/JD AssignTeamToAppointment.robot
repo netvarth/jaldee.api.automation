@@ -13,8 +13,8 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -30,7 +30,7 @@ JD-TC-AssignTeamToAppointment-1
 
     [Documentation]  Assingn team to appointment.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -39,11 +39,11 @@ JD-TC-AssignTeamToAppointment-1
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${HLMUSERNAME7}
-    clear_service    ${HLMUSERNAME7}
-    clear_customer   ${HLMUSERNAME7}
+    clear_queue      ${HLPUSERNAME7}
+    clear_service    ${HLPUSERNAME7}
+    clear_customer   ${HLPUSERNAME7}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME7}
+    ${pid}=  get_acc_id  ${HLPUSERNAME7}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
@@ -146,7 +146,7 @@ JD-TC-AssignTeamToAppointment-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${USERNAME1}=  Evaluate  ${HLMUSERNAME7}+144557005
+    ${USERNAME1}=  Evaluate  ${HLPUSERNAME7}+144557005
     Set Suite Variable  ${USERNAME1}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -165,8 +165,8 @@ JD-TC-AssignTeamToAppointment-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${whpnum}=  Evaluate  ${HLMUSERNAME7}+77480
-    ${tlgnum}=  Evaluate  ${HLMUSERNAME7}+65876
+    ${whpnum}=  Evaluate  ${HLPUSERNAME7}+77480
+    ${tlgnum}=  Evaluate  ${HLPUSERNAME7}+65876
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${USERNAME1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${USERNAME1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
@@ -177,7 +177,7 @@ JD-TC-AssignTeamToAppointment-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${USERNAME2}=  Evaluate  ${HLMUSERNAME7}+144556874
+    ${USERNAME2}=  Evaluate  ${HLPUSERNAME7}+144556874
     Set Suite Variable  ${USERNAME2}
     clear_users  ${USERNAME2}
     ${firstname1}=  FakerLibrary.name
@@ -190,7 +190,7 @@ JD-TC-AssignTeamToAppointment-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id2}  ${resp.json()}
     
-    ${USERNAME3}=  Evaluate  ${HLMUSERNAME7}+144557893
+    ${USERNAME3}=  Evaluate  ${HLPUSERNAME7}+144557893
     Set Suite Variable  ${USERNAME3}
     clear_users  ${USERNAME3}
     ${firstname2}=  FakerLibrary.name
@@ -286,11 +286,11 @@ JD-TC-AssignTeamToAppointment-3
 
     [Documentation]  Assign team to an account level appointment then assign the same appointment to another team.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${USERNAME4}=  Evaluate  ${HLMUSERNAME7}+1445575081
+    ${USERNAME4}=  Evaluate  ${HLPUSERNAME7}+1445575081
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -308,8 +308,8 @@ JD-TC-AssignTeamToAppointment-3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${whpnum}=  Evaluate  ${HLMUSERNAME7}+77481
-    ${tlgnum}=  Evaluate  ${HLMUSERNAME7}+65877
+    ${whpnum}=  Evaluate  ${HLPUSERNAME7}+77481
+    ${tlgnum}=  Evaluate  ${HLPUSERNAME7}+65877
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${USERNAME4}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${USERNAME4}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
@@ -391,7 +391,7 @@ JD-TC-AssignTeamToAppointment-4
 
     [Documentation]  Assign team to an account level appointment of multiple consumers.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -503,7 +503,7 @@ JD-TC-AssignTeamToAppointment-UH1
 
     [Documentation]  Assign same appointment to the same team multiple times.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -517,7 +517,7 @@ JD-TC-AssignTeamToAppointment-UH2
 
     [Documentation]  Assign a appointment to a team which has no users.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -540,7 +540,7 @@ JD-TC-AssignTeamToAppointment-UH3
 
     [Documentation]  Try to assign another branch's appointment to the team.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -14,8 +14,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 
 
@@ -49,29 +49,29 @@ JD-TC-UserStatInfo-1
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+995523
+     ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+995523
      ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Activation  ${MUSERNAME_E}  0
+     ${resp}=  Account Activation  ${PUSERNAME_E}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
-     Set Suite Variable  ${MUSERNAME_E}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+     Set Suite Variable  ${PUSERNAME_E}
      ${DAY1}=  db.get_date_by_timezone  ${tz}
      Set Suite Variable  ${DAY1}  
      ${list}=  Create List  1  2  3  4  5  6  7
      Set Suite Variable  ${list}  
-     ${ph1}=  Evaluate  ${MUSERNAME_E}+1000000001
-     ${ph2}=  Evaluate  ${MUSERNAME_E}+2000000002
+     ${ph1}=  Evaluate  ${PUSERNAME_E}+1000000001
+     ${ph2}=  Evaluate  ${PUSERNAME_E}+2000000002
      ${views}=  Random Element    ${Views}
      ${name1}=  FakerLibrary.name
      ${name2}=  FakerLibrary.name
@@ -147,7 +147,7 @@ JD-TC-UserStatInfo-1
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    ${pid}=  get_acc_id  ${MUSERNAME_E}
+    ${pid}=  get_acc_id  ${PUSERNAME_E}
 
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -217,7 +217,7 @@ JD-TC-UserStatInfo-1
     ${random_ph}=   Random Int   min=10000   max=20000
     ${ph1}=  Evaluate  ${PUSERNAME}+${random_ph}
     clear_users  ${ph1}
-    # ${ph1}=  Evaluate  ${MUSERNAME_E}+175486
+    # ${ph1}=  Evaluate  ${PUSERNAME_E}+175486
     Set Suite Variable  ${ph1}
     ${firstname}=  FakerLibrary.name
     Set Suite Variable    ${firstname}
@@ -242,10 +242,10 @@ JD-TC-UserStatInfo-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${whpnum}=  Evaluate  ${MUSERNAME_E}+336247
+    ${whpnum}=  Evaluate  ${PUSERNAME_E}+336247
     Set Suite Variable   ${whpnum}
 
-    ${tlgnum}=  Evaluate  ${MUSERNAME_E}+336349
+    ${tlgnum}=  Evaluate  ${PUSERNAME_E}+336349
     Set Suite Variable     ${tlgnum}
 
 
@@ -283,7 +283,7 @@ JD-TC-UserStatInfo-1
 
     ${random_ph}=   Random Int   min=10000   max=20000
     ${ph2}=  Evaluate  ${PUSERNAME}+${random_ph}
-    # ${ph2}=  Evaluate  ${MUSERNAME_E}+103049
+    # ${ph2}=  Evaluate  ${PUSERNAME_E}+103049
     Set Suite Variable  ${ph2}
     clear_users  ${ph2}
     ${firstname1}=  FakerLibrary.name
@@ -317,7 +317,7 @@ JD-TC-UserStatInfo-1
 
     ${random_ph}=   Random Int   min=10000   max=20000
     ${ph3}=  Evaluate  ${PUSERNAME}+${random_ph}
-    # ${ph3}=  Evaluate  ${MUSERNAME_E}+1000640517
+    # ${ph3}=  Evaluate  ${PUSERNAME_E}+1000640517
     Set Suite Variable  ${ph3}
     clear_users  ${ph3}
     ${firstname2}=  FakerLibrary.name
@@ -375,7 +375,7 @@ JD-TC-UserStatInfo-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -395,7 +395,7 @@ JD-TC-UserStatInfo-1
 JD-TC-UserStatInfo-2
     [Documentation]  Assingn waitlist to more users and check user stat count
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

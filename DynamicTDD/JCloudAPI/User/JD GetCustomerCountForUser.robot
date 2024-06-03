@@ -14,11 +14,11 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ApiKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 @{emptylist}
@@ -30,7 +30,7 @@ JD-TC-GetCustomerCountForUser-1
 
     [Documentation]   Get customer count for a branch having one lead.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
@@ -40,7 +40,7 @@ JD-TC-GetCustomerCountForUser-1
     Set Test Variable  ${prov_id1}  ${decrypted_data['id']}
     Set Test Variable  ${prov_fname1}  ${decrypted_data['firstName']}
 
-    ${p_id1}=  get_acc_id  ${MUSERNAME20}
+    ${p_id1}=  get_acc_id  ${PUSERNAME20}
 
     ${resp}=  Get Account Settings
     Log  ${resp.content}
@@ -62,7 +62,7 @@ JD-TC-GetCustomerCountForUser-1
     Should Be Equal As Strings  ${resp.json()['apiGateway']}   ${toggle[0]}
     Set Suite Variable    ${sp_token}   ${resp.json()['spToken']} 
 
-    ${resp}=   Create User Token   ${MUSERNAME20}  ${PASSWORD}   ${sp_token}   ${countryCodes[0]}  
+    ${resp}=   Create User Token   ${PUSERNAME20}  ${PASSWORD}   ${sp_token}   ${countryCodes[0]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${user_token}   ${resp.json()['userToken']} 
@@ -109,12 +109,12 @@ JD-TC-GetCustomerCountForUser-2
 
     [Documentation]   Get customer count for a user having one lead(with admin previlage).
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${prov_id}  ${resp.json()['id']}
 
-    ${p_id}=  get_acc_id  ${HLMUSERNAME5}
+    ${p_id}=  get_acc_id  ${HLPUSERNAME5}
     Set Suite Variable  ${p_id}
 
     ${resp}=  Get Account Settings
@@ -175,7 +175,7 @@ JD-TC-GetCustomerCountForUser-2
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME5}'
+            IF   not '${user_phone}' == '${HLPUSERNAME5}'
                 clear_users  ${user_phone}
             END
         END
@@ -257,7 +257,7 @@ JD-TC-GetCustomerCountForUser-3
 
     [Documentation]   Get customer count for a branch without add customer.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
   
@@ -281,7 +281,7 @@ JD-TC-GetCustomerCountForUser-3
     Should Be Equal As Strings  ${resp.json()['apiGateway']}   ${toggle[0]}
     Set Test Variable    ${sp_token}   ${resp.json()['spToken']} 
 
-    ${resp}=   Create User Token   ${MUSERNAME19}  ${PASSWORD}   ${sp_token}   ${countryCodes[0]}  
+    ${resp}=   Create User Token   ${PUSERNAME19}  ${PASSWORD}   ${sp_token}   ${countryCodes[0]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${user_token}   ${resp.json()['userToken']} 
@@ -296,7 +296,7 @@ JD-TC-GetCustomerCountForUser-4
 
     [Documentation]   Get customer count for a branch without create a lead.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -318,7 +318,7 @@ JD-TC-GetCustomerCountForUser-5
 
     [Documentation]   Get customer count for a branch having multiple customers.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -340,7 +340,7 @@ JD-TC-GetCustomerCountForUser-6
 
     [Documentation]   Get customer count for a branch having customers and family members.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -415,7 +415,7 @@ JD-TC-GetCustomerCountForUser-UH2
 
     [Documentation]   Get lead count with sp token.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME20}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

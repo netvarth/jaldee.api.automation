@@ -8,9 +8,9 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 ***Variables***
@@ -22,11 +22,11 @@ JD-TC-GetLabelPremissions-1
 
     [Documentation]  Getting Label Permissions when usertype is PROVIDER.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME9}
+    ${pid}=  get_acc_id  ${HLPUSERNAME9}
     Set Suite Variable   ${pid}
 
     ${resp}=  View Waitlist Settings
@@ -190,7 +190,7 @@ JD-TC-GetLabelPremissions-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id2}  ${resp.json()}
     
-    clear_Label  ${HLMUSERNAME9}
+    clear_Label  ${HLPUSERNAME9}
     ${l_id1}=  Create Sample Label
     Set Suite Variable   ${l_id1}
 
@@ -258,7 +258,7 @@ JD-TC-GetLabelPremissions-1
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -392,7 +392,7 @@ JD-TC-GetLabelPremissions-3
 
     [Documentation]  Getting Label Permissions for the default user without setting label permissions.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -418,11 +418,11 @@ JD-TC-GetLabelPremissions-4
 
     [Documentation]  Getting Label Permissions for a team.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME6}
+    ${pid}=  get_acc_id  ${HLPUSERNAME6}
 
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
@@ -549,7 +549,7 @@ JD-TC-GetLabelPremissions-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_Label  ${HLMUSERNAME6}
+    clear_Label  ${HLPUSERNAME6}
     ${l_id1}=  Create Sample Label
 
     ${resp}=  Get Label By Id  ${l_id1}
@@ -585,7 +585,7 @@ JD-TC-GetLabelPremissions-4
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -644,7 +644,7 @@ JD-TC-GetLabelPremissions-4
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -717,7 +717,7 @@ JD-TC-GetLabelPremissions-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -745,7 +745,7 @@ JD-TC-GetLabelPremissions-4
 
     ${label}=    Create Dictionary  ${lbl_name1}=${lbl_value1}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -758,16 +758,16 @@ JD-TC-GetLabelPremissions-5
 
     [Documentation]  Getting Label Permissions when usertype is ASSISTANT.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_queue      ${HLMUSERNAME0}
-    clear_location   ${HLMUSERNAME0}
-    clear_service    ${HLMUSERNAME0}
-    clear_customer   ${HLMUSERNAME0}
+    clear_queue      ${HLPUSERNAME0}
+    clear_location   ${HLPUSERNAME0}
+    clear_service    ${HLPUSERNAME0}
+    clear_customer   ${HLPUSERNAME0}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME0}
+    ${pid}=  get_acc_id  ${HLPUSERNAME0}
 
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
@@ -835,7 +835,7 @@ JD-TC-GetLabelPremissions-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${s_id2}  ${resp.json()}
     
-    clear_Label  ${HLMUSERNAME0}
+    clear_Label  ${HLPUSERNAME0}
     ${l_id1}=  Create Sample Label
 
     ${resp}=  Get Label By Id  ${l_id1}
@@ -862,7 +862,7 @@ JD-TC-GetLabelPremissions-5
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -947,7 +947,7 @@ JD-TC-GetLabelPremissions-5
 
     ${label}=    Create Dictionary  ${lbl_name1}=${lbl_value1}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -961,7 +961,7 @@ JD-TC-GetLabelPremissions-UH1
 
     [Documentation]  Getting Label Permissions for a user not in the team.
 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -974,7 +974,7 @@ JD-TC-GetLabelPremissions-UH1
         FOR   ${i}  IN RANGE   0   ${len}
         
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME12}'
+            IF   not '${user_phone}' == '${HLPUSERNAME12}'
                 clear_users  ${user_phone}
             END
         END
@@ -984,7 +984,7 @@ JD-TC-GetLabelPremissions-UH1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME12}
+    ${pid}=  get_acc_id  ${HLPUSERNAME12}
 
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
@@ -1014,7 +1014,7 @@ JD-TC-GetLabelPremissions-UH1
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Test Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_Label  ${HLMUSERNAME12}
+    clear_Label  ${HLPUSERNAME12}
     FOR  ${i}  IN RANGE   5
         ${Values}=  FakerLibrary.Words  	nb=3
         ${status}=  Run Keyword And Return Status   List Should Not Contain Duplicates   ${Values}
@@ -1172,7 +1172,7 @@ JD-TC-GetLabelPremissions-UH1
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1245,7 +1245,7 @@ JD-TC-GetLabelPremissions-UH1
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1277,7 +1277,7 @@ JD-TC-GetLabelPremissions-UH2
 
     [Documentation]  try to add label in a waitlist without giving any label permissions.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1290,7 +1290,7 @@ JD-TC-GetLabelPremissions-UH2
         FOR   ${i}  IN RANGE   0   ${len}
         
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME12}'
+            IF   not '${user_phone}' == '${HLPUSERNAME12}'
                 clear_users  ${user_phone}
             END
         END
@@ -1300,7 +1300,7 @@ JD-TC-GetLabelPremissions-UH2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME12}
+    ${pid}=  get_acc_id  ${HLPUSERNAME12}
 
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -1420,7 +1420,7 @@ JD-TC-GetLabelPremissions-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_Label  ${HLMUSERNAME12}
+        clear_Label  ${HLPUSERNAME12}
     FOR  ${i}  IN RANGE   5
         ${Values}=  FakerLibrary.Words  	nb=3
         ${status}=  Run Keyword And Return Status   List Should Not Contain Duplicates   ${Values}
@@ -1476,7 +1476,7 @@ JD-TC-GetLabelPremissions-UH2
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1564,7 +1564,7 @@ JD-TC-GetLabelPremissions-UH3
 
     [Documentation]  try to add a label for a user who is not in the label permission list.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1587,7 +1587,7 @@ JD-TC-GetLabelPremissions-UH3
         FOR   ${i}  IN RANGE   0   ${len}
         
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME22}'
+            IF   not '${user_phone}' == '${HLPUSERNAME22}'
                 clear_users  ${user_phone}
             END
         END
@@ -1597,7 +1597,7 @@ JD-TC-GetLabelPremissions-UH3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME22}
+    ${pid}=  get_acc_id  ${HLPUSERNAME22}
 
     ${resp}=  Get Departments
     Log  ${resp.content}
@@ -1731,7 +1731,7 @@ JD-TC-GetLabelPremissions-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_Label  ${HLMUSERNAME22}
+    clear_Label  ${HLPUSERNAME22}
     FOR  ${i}  IN RANGE   5
         ${Values}=  FakerLibrary.Words  	nb=3
         ${status}=  Run Keyword And Return Status   List Should Not Contain Duplicates   ${Values}
@@ -1787,7 +1787,7 @@ JD-TC-GetLabelPremissions-UH3
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
@@ -38,7 +38,7 @@ JD-TC-Get Case Count Filter-1
 
     [Documentation]   Get Case Count Filter
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -125,7 +125,7 @@ JD-TC-Get Case Count Filter-1
 
     
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -175,7 +175,7 @@ JD-TC-Get Case Count Filter-2
 
     [Documentation]    Update MR Case title contain 250 words and Get Case Count Filter
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -196,7 +196,7 @@ JD-TC-Get Case Count Filter-3
 
     [Documentation]    Update MR Case description contain 250 words  and Get Case Count Filter
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -218,7 +218,7 @@ JD-TC-Get Case Count Filter-4
 
     [Documentation]    Update MR Case title contain numbers  and Get Case Count Filter
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -240,7 +240,7 @@ JD-TC-Get Case Count Filter-5
 
     [Documentation]    Update MR Case description contain numbers  and Get Case Count Filter
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -262,7 +262,7 @@ JD-TC-Get Case Count Filter-6
 
     [Documentation]    Update MR Case title is empty  and Get Case Count Filter
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -283,7 +283,7 @@ JD-TC-Get Case Count Filter-7
 
     [Documentation]    Update MR Case from user login and Get Case Count Filter
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -360,7 +360,7 @@ JD-TC-Get Case Count Filter-UH1
 D-TC-Get Case Filter-UH2
 
     [Documentation]    Get Case Count Filter- with another provider login
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME13}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

@@ -14,8 +14,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -71,7 +71,7 @@ ${autoApprovalUptoAmount2}    70000
 Account with Multiple Users in NBFC
 
 
-    ${resp}=   Get File    /ebs/TDD/varfiles/musers.py
+    ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
     ${len}=   Split to lines  ${resp}
     ${length}=  Get Length   ${len}
     ${multiuser_list}=  Create List
@@ -79,7 +79,7 @@ Account with Multiple Users in NBFC
     ${licid}  ${licname}=  get_highest_license_pkg
     
     FOR   ${a}  IN RANGE   ${length}   
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         # Set Test Variable  ${pkgId}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
         # Set Test Variable  ${Dom}   ${resp.json()['sector']}
@@ -104,7 +104,7 @@ Account with Multiple Users in NBFC
         END
     END
 
-    RETURN  ${MUSERNAME${a}}
+    RETURN  ${PUSERNAME${a}}
 
 
 *** Test Cases ***
@@ -113,7 +113,7 @@ JD-TC-SalesExecutiveWithRBAC-1
                                   
     [Documentation]               Create Partner Using Sales Executive Role with RBAC
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -245,7 +245,7 @@ JD-TC-SalesExecutiveWithRBAC-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME20}'
+            IF   not '${user_phone}' == '${HLPUSERNAME20}'
                 clear_users  ${user_phone}
             END
         END
@@ -323,7 +323,7 @@ JD-TC-SalesExecutiveWithRBAC-1
     ${resp}=  Get User By Id  ${bm_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${BMUSERNAME1}  ${resp.json()['mobileNo']}
+    Set Test Variable  ${BPUSERNAME1}  ${resp.json()['mobileNo']}
 
     ${sh_id1}=  Create Sample User 
     
@@ -1065,7 +1065,7 @@ JD-TC-SalesExecutiveWithRBAC-5
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

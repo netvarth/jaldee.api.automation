@@ -12,8 +12,8 @@ Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 
@@ -26,7 +26,7 @@ JD-TC-UpdateItemGroupforUser-1
 
     [Documentation]  Create Item Group for a provider then update the item group name.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME150}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -76,7 +76,7 @@ JD-TC-UpdateItemGroupforUser-2
 
     [Documentation]  Create Item Group for a provider then update the item group description.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -126,7 +126,7 @@ JD-TC-UpdateItemGroupforUser-3
 
     [Documentation]  update item group without Group ame.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -161,7 +161,7 @@ JD-TC-UpdateItemGroupforUser-4
 
     [Documentation]  update item group without Group description.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -210,7 +210,7 @@ JD-TC-UpdateItemGroupforUser-5
 
     [Documentation]  Create Item Group by a user and update it.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME146}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME146}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -267,7 +267,7 @@ JD-TC-UpdateItemGroupforUser-5
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME146}'
+            IF   not '${user_phone}' == '${PUSERNAME146}'
                 clear_users  ${user_phone}
             END
         END
@@ -313,7 +313,7 @@ JD-TC-UpdateItemGroupforUser-UH1
 
     [Documentation]  update item group with another providers item group id.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -335,7 +335,7 @@ JD-TC-UpdateItemGroupforUser-UH1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

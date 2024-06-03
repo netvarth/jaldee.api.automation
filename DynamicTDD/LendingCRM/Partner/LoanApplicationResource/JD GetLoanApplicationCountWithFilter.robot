@@ -13,8 +13,8 @@ Resource           /ebs/TDD/ConsumerKeywords.robot
 Resource           /ebs/TDD/ProviderPartnerKeywords.robot
 Variables          /ebs/TDD/varfiles/providers.py
 Variables          /ebs/TDD/varfiles/consumerlist.py 
-Variables          /ebs/TDD/varfiles/musers.py
-Variables          /ebs/TDD/varfiles/hl_musers.py
+Variables          /ebs/TDD/varfiles/providers.py
+Variables          /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -67,7 +67,7 @@ ${maxAmount}                         300000
 JD-TC-GetLoanApplicationCountwithFilter-1
                                   
     [Documentation]              Get Loan Application Count with Filter
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

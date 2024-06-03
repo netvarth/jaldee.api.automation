@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Test Cases ***
@@ -23,7 +23,7 @@ JD-TC-UpdateItemCategoryStatus-1
 
     [Documentation]  Provider Create a Item Category then try to Update Item Category Status.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -67,7 +67,7 @@ JD-TC-UpdateItemCategoryStatus-2
 
     [Documentation]  Update Item Category Status as already disabled.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -80,7 +80,7 @@ JD-TC-UpdateItemCategoryStatus-3
 
     [Documentation]  try to Enable ,Disabled Status.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

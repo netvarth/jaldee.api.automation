@@ -11,8 +11,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -26,11 +26,11 @@ JD-TC-CreateTaskMaster-1
 
     [Documentation]  Create a task master for a branch.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME36}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 *** Comments ***
-    ${p_id}=  get_acc_id  ${MUSERNAME36}
+    ${p_id}=  get_acc_id  ${PUSERNAME36}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -79,10 +79,10 @@ JD-TC-CreateTaskMaster-2
 
     [Documentation]  Create a task master and a task, sub task for a branch.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME36}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${p_id}=  get_acc_id  ${MUSERNAME36}
+    ${p_id}=  get_acc_id  ${PUSERNAME36}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -148,10 +148,10 @@ JD-TC-CreateTaskMaster-3
 
     [Documentation]  Create a task master and task with same details for a branch.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME36}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${p_id}=  get_acc_id  ${MUSERNAME36}
+    ${p_id}=  get_acc_id  ${PUSERNAME36}
 
     ${title1}=  FakerLibrary.user name
     ${templateName1} =   FakerLibrary.user name
@@ -175,12 +175,12 @@ JD-TC-CreateTaskMaster-4
 
     [Documentation]  Create a task master and a task, sub task for a user.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${HLMUSERNAME4} 
+    ${pid}=  get_acc_id  ${HLPUSERNAME4} 
     Set Suite variable     ${pid}
-    ${id}=  get_id  ${HLMUSERNAME4} 
+    ${id}=  get_id  ${HLPUSERNAME4} 
     Set Suite Variable  ${id}
   
 
@@ -193,8 +193,8 @@ JD-TC-CreateTaskMaster-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${HLMUSERNAME4} 
-    clear_appt_schedule   ${MUSERNAME4}
+    clear_service   ${HLPUSERNAME4} 
+    clear_appt_schedule   ${PUSERNAME4}
     
     ${resp2}=   Get Business Profile
     Log  ${resp2.json()}

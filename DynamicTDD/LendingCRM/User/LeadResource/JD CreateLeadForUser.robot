@@ -11,7 +11,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 *** Variables ***
 
@@ -24,11 +24,11 @@ JD-TC-CreateLeadforUser-1
 
     [Documentation]   Create Lead to a valid provider.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME53}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${p_id}=  get_acc_id  ${MUSERNAME53}
+    ${p_id}=  get_acc_id  ${PUSERNAME53}
 
     ${resp}=   enquiryStatus  ${p_id}
     ${resp}=   leadStatus     ${p_id}
@@ -73,8 +73,8 @@ JD-TC-CreateLeadforUser-2
 
     [Documentation]   Create multiple Lead for same location.  
 
-    clear_customer   ${MUSERNAME53}
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME53}  ${PASSWORD} 
+    clear_customer   ${PUSERNAME53}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -99,8 +99,8 @@ JD-TC-CreateLeadforUser-2
 JD-TC-CreateLeadforUser-3
     [Documentation]   Create multiple Lead with same details.
 
-    clear_customer   ${MUSERNAME53}
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME53}  ${PASSWORD} 
+    clear_customer   ${PUSERNAME53}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -141,11 +141,11 @@ JD-TC-CreateLeadforUser-3
 JD-TC-CreateLeadforUser-4
     [Documentation]  Create a Lead for a provider by giving status and priority.
 
-    clear_customer   ${MUSERNAME53}
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME53}  ${PASSWORD} 
+    clear_customer   ${PUSERNAME53}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${p_id}=  get_acc_id  ${MUSERNAME53}
+    ${p_id}=  get_acc_id  ${PUSERNAME53}
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -210,10 +210,10 @@ JD-TC-CreateLeadforUser-4
 JD-TC-CreateLeadforUser-5
     [Documentation]  Create a Lead without description.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME53}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${p_id}=  get_acc_id  ${MUSERNAME53}
+    ${p_id}=  get_acc_id  ${PUSERNAME53}
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -242,10 +242,10 @@ JD-TC-CreateLeadforUser-5
 JD-TC-CreateLeadforUser-6
     [Documentation]  Create a Lead with status as empty.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME53}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${p_id}=  get_acc_id  ${MUSERNAME53}
+    ${p_id}=  get_acc_id  ${PUSERNAME53}
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -277,10 +277,10 @@ JD-TC-CreateLeadforUser-6
 JD-TC-CreateLeadforUser-7
     [Documentation]  Create a Lead with priority as empty.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME53}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${p_id}=  get_acc_id  ${MUSERNAME53}
+    ${p_id}=  get_acc_id  ${PUSERNAME53}
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -320,22 +320,22 @@ JD-TC-CreateLeadforUser-8
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+550258
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+550258
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_E}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
-    Set Suite Variable  ${MUSERNAME_E}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+    Set Suite Variable  ${PUSERNAME_E}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -483,9 +483,9 @@ JD-TC-CreateLeadforUser-9
     Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-CreateLeadforUser-10
-    clear_customer   ${MUSERNAME_E}
+    clear_customer   ${PUSERNAME_E}
     [Documentation]   Create multiple leads to multiple users in same branch.
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${PUSERNAME_U2}=  Evaluate  ${PUSERNAME}+3366462
@@ -585,10 +585,10 @@ JD-TC-CreateLeadforUser-10
 JD-TC-CreateLeadforUser-UH1
     [Documentation]  Create a Lead without title.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME53}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${p_id}=  get_acc_id  ${MUSERNAME53}
+    ${p_id}=  get_acc_id  ${PUSERNAME53}
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -617,10 +617,10 @@ JD-TC-CreateLeadforUser-UH1
 
 JD-TC-CreateLeadforUser-UH2
     [Documentation]  Create a Lead with another providers location.
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME54}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME54}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${p_id}=  get_acc_id  ${MUSERNAME54}
+    ${p_id}=  get_acc_id  ${PUSERNAME54}
     ${title}=   FakerLibrary.word
     ${desc}=   FakerLibrary.word
     ${targetPotential}=    FakerLibrary.Building Number
@@ -643,10 +643,10 @@ JD-TC-CreateLeadforUser-UH2
 JD-TC-CreateLeadforUser-UH3
     [Documentation]  Create a Lead without customer id.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME53}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${p_id}=  get_acc_id  ${MUSERNAME53}
+    ${p_id}=  get_acc_id  ${PUSERNAME53}
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -680,21 +680,21 @@ JD-TC-CreateLeadforUser-UH4
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_E1}=  Evaluate  ${MUSERNAME}+550260
+    ${PUSERNAME_E1}=  Evaluate  ${PUSERNAME}+550260
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E1}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E1}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_E1}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E1}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_E1}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E1}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E1}${\n}
-    Set Suite Variable  ${MUSERNAME_E1}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E1}${\n}
+    Set Suite Variable  ${PUSERNAME_E1}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -781,7 +781,7 @@ JD-TC-CreateLeadforUser-UH4
     Set Test Variable  ${pcons_id5}  ${resp.json()[0]['id']}
     Set Test Variable  ${jaldeeId}  ${resp.json()[0]['jaldeeId']}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -816,7 +816,7 @@ JD-TC-CreateLeadforUser-UH5
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${cons_id9}  ${resp.json()['id']}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

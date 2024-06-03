@@ -11,8 +11,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Resource          /ebs/TDD/SuperAdminKeywords.robot
-Variables         /ebs/TDD/varfiles/hl_musers.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 *** Variables ***
 ${nods}  0
@@ -230,11 +230,11 @@ JD-TC-Addaddon -UH6
 JD-TC-Addaddon -UH7
        [Documentation]   Provider adding 2 Multi User addon then use one full.
 
-       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}   200
 
-       ${p_id1}=  get_acc_id  ${HLMUSERNAME6}
+       ${p_id1}=  get_acc_id  ${HLPUSERNAME6}
        Set Suite Variable   ${p_id1}
 
     
@@ -357,7 +357,7 @@ JD-TC-Addaddon -UH7
        # Log  ${resp.json()}
        # Should Be Equal As Strings    ${resp.status_code}   200
 
-       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -423,7 +423,7 @@ JD-TC-Addaddon -UH7
        Log   ${resp.json()}
        Should Be Equal As Strings   ${resp.status_code}   200
 
-       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -483,7 +483,7 @@ JD-TC-Addaddon -UH7
        Log   ${resp.json()}
        Should Be Equal As Strings   ${resp.status_code}   200
 
-       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -514,7 +514,7 @@ JD-TC-Addaddon -UH7
 JD-TC-Addaddon -UH
        [Documentation]   Try to use both addon fully .
 
-       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -552,7 +552,7 @@ JD-TC-Addaddon -UH
        Log   ${resp.json()}
        Should Be Equal As Strings   ${resp.status_code}   200
 
-       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -583,7 +583,7 @@ JD-TC-Addaddon -UH
 JD-TC-Addaddon -UH
        [Documentation]   Try to create extra one user without adding addon .
 
-       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -621,7 +621,7 @@ JD-TC-Addaddon -UH
        Log   ${resp.json()}
        Should Be Equal As Strings   ${resp.status_code}   200
 
-       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -669,7 +669,7 @@ JD-TC-Addaddon -UH
 	should be equal as strings  ${resp.json()[0]['name']}  ${addon_name}	   	  
 	Should Be Equal As Strings  ${resp.status_code}  200
 
-       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -707,7 +707,7 @@ JD-TC-Addaddon -UH
        Log   ${resp.json()}
        Should Be Equal As Strings   ${resp.status_code}   200
 
-       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -722,11 +722,11 @@ JD-TC-Addaddon -UH
 JD-TC-Addaddon -UH
        [Documentation]   Adding 2 Queues/Schedules/Services Addon.
 
-       ${resp}=   Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD} 
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}   200
 
-       ${p_id1}=  get_acc_id  ${MUSERNAME10}
+       ${p_id1}=  get_acc_id  ${PUSERNAME10}
        Set Suite Variable   ${p_id1}
 
     
@@ -838,7 +838,7 @@ JD-TC-Addaddon -UH
        should be equal as strings  ${resp.json()[1]['licPkgOrAddonId']}  ${addon_id} 
 	should be equal as strings  ${resp.json()[1]['name']}  ${addon_name}	
 
-       ${resp}=   Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD} 
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -870,7 +870,7 @@ JD-TC-Addaddon -UH
        Log   ${resp.json()}
        Should Be Equal As Strings   ${resp.status_code}   200
 
-       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD} 
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}   200
 

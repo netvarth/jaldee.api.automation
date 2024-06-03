@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -39,7 +39,7 @@ JD-TC-Create Treatment Plan-1
 
     [Documentation]    Create Treatment Plan
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -128,7 +128,7 @@ JD-TC-Create Treatment Plan-1
 
     
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -197,7 +197,7 @@ JD-TC-Create Treatment Plan-2
 
     [Documentation]    Create 2 more Treatment Plan
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -239,7 +239,7 @@ JD-TC-Create Treatment Plan-3
 
     [Documentation]    Create Treatment Plan where treatment field contain 250 words
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -275,7 +275,7 @@ JD-TC-Create Treatment Plan-4
 
     [Documentation]    Create Treatment Plan where work field contain 250 words
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -311,7 +311,7 @@ JD-TC-Create Treatment Plan-5
 
     [Documentation]    Create Treatment Plan where treatment is empty
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -347,7 +347,7 @@ JD-TC-Create Treatment Plan-6
 
     [Documentation]    Create Treatment Plan where works list is empty
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -381,7 +381,7 @@ JD-TC-Create Treatment Plan-UH1
 
     [Documentation]    Create Treatment Plan using another provider login
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -415,7 +415,7 @@ JD-TC-Create Treatment Plan-UH4
 
     [Documentation]    Create Treatment Plan where case dto uid is invalid
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -457,7 +457,7 @@ JD-TC-Create Treatment Plan-UH3
 
     [Documentation]    Create Treatment Plan where casedto is empty            #cant able to pass empty dto.need a an empty dictionary insteadvb
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

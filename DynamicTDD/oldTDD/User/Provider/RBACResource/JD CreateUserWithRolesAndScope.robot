@@ -12,8 +12,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -27,7 +27,7 @@ JD-TC-CreateUserWithRolesAndScope-1
 
     [Documentation]  Create User With Roles And Scope for an existing provider.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME41}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
@@ -118,7 +118,7 @@ JD-TC-CreateUserWithRolesAndScope-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME41}'
+            IF   not '${user_phone}' == '${PUSERNAME41}'
                 clear_users  ${user_phone}
             END
         END
@@ -204,7 +204,7 @@ JD-TC-CreateUserWithRolesAndScope-2
 
     [Documentation]  Create multiple Users With same Role for an existing provider.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME41}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -262,7 +262,7 @@ JD-TC-CreateUserWithRolesAndScope-3
 
     [Documentation]  Create User With Role and location scope.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME60}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
@@ -327,7 +327,7 @@ JD-TC-CreateUserWithRolesAndScope-3
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME60}'
+            IF   not '${user_phone}' == '${PUSERNAME60}'
                 clear_users  ${user_phone}
             END
         END
@@ -389,7 +389,7 @@ JD-TC-CreateUserWithRolesAndScope-4
 
     [Documentation]  Create User With multiple Roles and verify the default role without any scope.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME41}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -400,7 +400,7 @@ JD-TC-CreateUserWithRolesAndScope-4
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME41}'
+            IF   not '${user_phone}' == '${PUSERNAME41}'
                 clear_users  ${user_phone}
             END
         END
@@ -467,7 +467,7 @@ JD-TC-CreateUserWithRolesAndScope-5
 
     [Documentation]  Create User With multiple Roles and multiple scope.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME41}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -478,7 +478,7 @@ JD-TC-CreateUserWithRolesAndScope-5
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME41}'
+            IF   not '${user_phone}' == '${PUSERNAME41}'
                 clear_users  ${user_phone}
             END
         END
@@ -550,7 +550,7 @@ JD-TC-CreateUserWithRolesAndScope-6
 
     [Documentation]  add create loan capability to a bussiness head role.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME41}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -561,7 +561,7 @@ JD-TC-CreateUserWithRolesAndScope-6
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME41}'
+            IF   not '${user_phone}' == '${PUSERNAME41}'
                 clear_users  ${user_phone}
             END
         END
@@ -624,11 +624,11 @@ JD-TC-CreateUserWithRolesAndScope-UH1
 
     [Documentation]  Create User With same role multiple times.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME41}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME41}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -639,7 +639,7 @@ JD-TC-CreateUserWithRolesAndScope-UH1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME41}'
+            IF   not '${user_phone}' == '${PUSERNAME41}'
                 clear_users  ${user_phone}
             END
         END
@@ -688,7 +688,7 @@ JD-TC-CreateUserWithRolesAndScope-UH2
 
     [Documentation]  Create User With invalid location id as scope.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME41}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -699,7 +699,7 @@ JD-TC-CreateUserWithRolesAndScope-UH2
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME41}'
+            IF   not '${user_phone}' == '${PUSERNAME41}'
                 clear_users  ${user_phone}
             END
         END
@@ -750,7 +750,7 @@ JD-TC-CreateUserWithRolesAndScope-UH3
 
     [Documentation]  Create User With another providers location id as scope.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -772,7 +772,7 @@ JD-TC-CreateUserWithRolesAndScope-UH3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME41}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -783,7 +783,7 @@ JD-TC-CreateUserWithRolesAndScope-UH3
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME41}'
+            IF   not '${user_phone}' == '${PUSERNAME41}'
                 clear_users  ${user_phone}
             END
         END

@@ -11,7 +11,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 *** Variables ***
 ${SERVICE1}  Makeup  
@@ -998,14 +998,14 @@ JD-TC-CreateQueue-UH10
 JD-TC-CreateQueue-13
     [Documentation]  Create Queue for Branch
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-CreateQueue-14
     [Documentation]  Create Queue for User
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 *** Comments ***

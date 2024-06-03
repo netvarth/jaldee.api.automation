@@ -7,7 +7,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 *** Variables ***
 ${SERVICE1}  manicure 
@@ -174,7 +174,7 @@ JD-TC-Get Appointment schedules-3
 JD-TC-Get Appointment schedules-4
     [Documentation]  Get appointment schedule by provider
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME70}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${subdomain}=    Set Variable      ${resp.json()['subSector']}

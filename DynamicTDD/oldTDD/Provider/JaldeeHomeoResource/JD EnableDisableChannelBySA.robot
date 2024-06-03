@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 *** Variables ***
@@ -192,11 +192,11 @@ JD-SA-TC-EnableDisableChannel-3
     [Documentation]   Enable Channel for a multi user account by super admin(web_jaldee_homeo).
 
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME99}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME99}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_Label  ${MUSERNAME99}  
+    clear_Label  ${PUSERNAME99}  
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -225,7 +225,7 @@ JD-SA-TC-EnableDisableChannel-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME99}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME99}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -241,11 +241,11 @@ JD-SA-TC-EnableDisableChannel-UH1
     [Documentation]   Enable Channel for a user by super admin(web_jaldee_homeo).
 
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
    
-    clear_Label  ${MUSERNAME100}  
+    clear_Label  ${PUSERNAME100}  
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -285,7 +285,7 @@ JD-SA-TC-EnableDisableChannel-UH1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME100}'
+            IF   not '${user_phone}' == '${PUSERNAME100}'
                 clear_users  ${user_phone}
             END
         END

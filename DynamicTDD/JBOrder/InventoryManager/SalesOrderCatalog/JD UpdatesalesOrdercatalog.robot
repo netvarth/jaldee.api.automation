@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -29,7 +29,7 @@ JD-TC-Update SalesOrder Catalog-1
 
     [Documentation]  update sales order catalog with valid details.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -72,10 +72,10 @@ JD-TC-Update SalesOrder Catalog-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME39}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME39}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -122,7 +122,7 @@ JD-TC-Update SalesOrder Catalog-2
 
     [Documentation]  update multiple sales order catalog with same store id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -135,7 +135,7 @@ JD-TC-Update SalesOrder Catalog-3
 
     [Documentation]  update sales order  catalog using all data.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -162,7 +162,7 @@ JD-TC-Update SalesOrder Catalog-4
 
     [Documentation]  update sales order  catalog where name as number.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -175,7 +175,7 @@ JD-TC-Update SalesOrder Catalog-5
 
     [Documentation]  update sales order catalog with empty name
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -187,7 +187,7 @@ JD-TC-Update SalesOrder Catalog-6
 
     [Documentation]  update  sales order  catalog where name length is <1.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -200,7 +200,7 @@ JD-TC-Update SalesOrder Catalog-7
 
     [Documentation]  create sales order catalog where invmgr is true then update that sales order catalog.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -235,7 +235,7 @@ JD-TC-Update SalesOrder Catalog-UH1
 
     [Documentation]  update sales order inventory catalog with invalid catalog id
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -276,7 +276,7 @@ JD-TC-Update SalesOrder Catalog-UH4
 
     [Documentation]  update  sales order  catalog where name(word length is 256).
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -289,7 +289,7 @@ JD-TC-Update SalesOrder Catalog-UH5
 
     [Documentation]  update  sales order  catalog .
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

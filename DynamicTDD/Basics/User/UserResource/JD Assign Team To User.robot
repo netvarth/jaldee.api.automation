@@ -8,14 +8,14 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 ***Test Cases***
 
 JD-TC-AssignTeamToUser-1
      [Documentation]  Assign team to multiple users
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -154,7 +154,7 @@ JD-TC-AssignTeamToUser-1
 
 JD-TC-AssignTeamToUser-2
      [Documentation]  Assign  multiple team to multiple users
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U3}=  Evaluate  ${PUSERNAME}+601197
@@ -303,7 +303,7 @@ JD-TC-AssignTeamToUser-2
 
 JD-TC-AssignTeamToUser-3
      [Documentation]  Create team by user login with user type PROVIDER with admin privilage TRUE and assign team
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -358,7 +358,7 @@ JD-TC-AssignTeamToUser-3
 
 JD-TC-AssignTeamToUser-4
      [Documentation]  Create team by user login with user type ADMIN then assign team to user
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+330099
@@ -430,7 +430,7 @@ JD-TC-AssignTeamToUser-4
 
 JD-TC-AssignTeamToUser-5
      [Documentation]  Create team by user login with user type ASSISTANT with admin privilage TRUE then try to assign team
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+330081
@@ -492,7 +492,7 @@ JD-TC-AssignTeamToUser-5
 
 JD-TC-AssignTeamToUser-6
      [Documentation]  Assign  multiple users with same mutiple team 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U3}=  Evaluate  ${PUSERNAME}+601121
@@ -648,7 +648,7 @@ JD-TC-AssignTeamToUser-6
 
 JD-TC-AssignTeamToUser-UH1
      [Documentation]  Create team by user login with user type ASSISTANT with admin privilage FALSE then try to assign team
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+330082
@@ -695,7 +695,7 @@ JD-TC-AssignTeamToUser-UH1
     
 JD-TC-AssignTeamToUser-UH2
      [Documentation]  Create team by user login with user type PROVIDER with admin privilage FALSE then try to assign team
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+330098
@@ -742,7 +742,7 @@ JD-TC-AssignTeamToUser-UH2
 
 JD-TC-AssignTeamToUser-UH3
      [Documentation]  Assign a user to empty team 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${user_ids}=  Create List  ${u_id3}
@@ -753,7 +753,7 @@ JD-TC-AssignTeamToUser-UH3
 
 JD-TC-AssignTeamToUser-UH4
      [Documentation]  Assign empty users to a team
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${user_ids}=  Create List  
@@ -783,7 +783,7 @@ JD-TC-AssignTeamToUser -UH6
 
 JD-TC-AssignTeamToUser-UH7
      [Documentation]  Assign a disabled user to team
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+330032
@@ -843,7 +843,7 @@ JD-TC-AssignTeamToUser-UH7
 *** Comments ***
 JD-TC-AssignTeamToUser-UH8
      [Documentation]  Assign a same user to same team multiple times
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+330033

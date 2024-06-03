@@ -11,7 +11,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 *** Variables ***
@@ -24,11 +24,11 @@ JD-TC-ChangeTaskStatusTOClosed-1
 
     [Documentation]     add closing details to a task.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${p_id}=  get_acc_id  ${MUSERNAME65}
+    ${p_id}=  get_acc_id  ${PUSERNAME65}
     Set Suite Variable  ${p_id}
 
     ${resp}=    Get Locations
@@ -96,7 +96,7 @@ JD-TC-ChangeTaskStatusTOClosed-2
 
     [Documentation]     try to add closing details without closing the task.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

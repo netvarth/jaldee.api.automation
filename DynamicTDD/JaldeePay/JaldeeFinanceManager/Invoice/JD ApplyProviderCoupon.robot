@@ -13,8 +13,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -65,7 +65,7 @@ JD-TC-Apply ProviderCoupon-1
 
     [Documentation]  Apply provider coupon to invoice having non taxable service.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -333,7 +333,7 @@ JD-TC-ProviderCouponBill-2
     # clear_customer   ${PUSERNAME114}
     # clear_Coupon     ${PUSERNAME114}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 

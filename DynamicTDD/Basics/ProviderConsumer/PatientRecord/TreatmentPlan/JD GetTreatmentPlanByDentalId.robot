@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
@@ -38,7 +38,7 @@ JD-TC-Get Treatment Plan By Dental Id-1
 
     [Documentation]    Get Treatment Plan By Dental Id
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -127,7 +127,7 @@ JD-TC-Get Treatment Plan By Dental Id-1
 
     
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

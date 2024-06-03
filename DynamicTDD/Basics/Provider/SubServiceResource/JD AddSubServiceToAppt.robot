@@ -13,8 +13,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -39,7 +39,7 @@ JD-TC-AddSubServicesToAppt-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -116,7 +116,7 @@ JD-TC-AddSubServicesToAppt-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME172}'
+            IF   not '${user_phone}' == '${PUSERNAME172}'
                 clear_users  ${user_phone}
             END
         END
@@ -266,7 +266,7 @@ JD-TC-AddSubServicesToAppt-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -368,7 +368,7 @@ JD-TC-AddSubServicesToAppt-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -440,7 +440,7 @@ JD-TC-AddSubServicesToAppt-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME173}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME173}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -643,7 +643,7 @@ JD-TC-AddSubServicesToAppt-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME173}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME173}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -701,7 +701,7 @@ JD-TC-AddSubServicesToAppt-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME174}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME174}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -792,7 +792,7 @@ JD-TC-AddSubServicesToAppt-4
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME174}'
+            IF   not '${user_phone}' == '${PUSERNAME174}'
                 clear_users  ${user_phone}
             END
         END
@@ -924,7 +924,7 @@ JD-TC-AddSubServicesToAppt-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME174}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME174}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1015,7 +1015,7 @@ JD-TC-AddSubServicesToAppt-5
 
     [Documentation]  Create a sub service and add that sub service to multiple appointments(walkin).
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1094,7 +1094,7 @@ JD-TC-AddSubServicesToAppt-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1202,7 +1202,7 @@ JD-TC-AddSubServicesToAppt-6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1274,7 +1274,7 @@ JD-TC-AddSubServicesToAppt-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME176}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME176}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1365,7 +1365,7 @@ JD-TC-AddSubServicesToAppt-7
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME176}'
+            IF   not '${user_phone}' == '${PUSERNAME176}'
                 clear_users  ${user_phone}
             END
         END
@@ -1548,7 +1548,7 @@ JD-TC-AddSubServicesToAppt-8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1639,7 +1639,7 @@ JD-TC-AddSubServicesToAppt-8
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME18}'
+            IF   not '${user_phone}' == '${HLPUSERNAME18}'
                 clear_users  ${user_phone}
             END
         END
@@ -1834,7 +1834,7 @@ JD-TC-AddSubServicesToAppt-9
 
     [Documentation]  created a sub-service with a specified amount, adding the sub-service to the appointment with a different service amount.
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1884,7 +1884,7 @@ JD-TC-AddSubServicesToAppt-10
 
     [Documentation]  add a subservice that conflicts with an existing one.
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1926,7 +1926,7 @@ JD-TC-AddSubServicesToAppt-11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME165}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME165}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2187,7 +2187,7 @@ JD-TC-AddSubServicesToAppt-12
 
     [Documentation]  add a subservice to an appointment without service price.
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2400,7 +2400,7 @@ JD-TC-AddSubServicesToAppt-12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2490,7 +2490,7 @@ JD-TC-AddSubServicesToAppt-UH3
 
     [Documentation]  add an inactive subservice to an appointment
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2521,7 +2521,7 @@ JD-TC-AddSubServicesToAppt-UH4
 
     [Documentation]  add another providers subservice to an appointment
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME175}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2545,7 +2545,7 @@ JD-TC-AddSubServicesToAppt-UH4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2561,7 +2561,7 @@ JD-TC-AddSubServicesToAppt-UH5
 
     [Documentation]  add a service to an appointment using sub service url.
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2580,7 +2580,7 @@ JD-TC-AddSubServicesToAppt-UH6
 
     [Documentation]  add a subservice to an appointment without service id.
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2598,7 +2598,7 @@ JD-TC-AddSubServicesToAppt-UH7
 
     [Documentation]  add subservice to an inactive appointment.
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2618,7 +2618,7 @@ JD-TC-AddSubServicesToAppt-UH8
 
     [Documentation]  add subservice to an invalid appointment id.
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2635,7 +2635,7 @@ JD-TC-AddSubServicesToAppt-UH9
 
     [Documentation]  add subservice to another providers appointment.
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME169}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME169}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2659,7 +2659,7 @@ JD-TC-AddSubServicesToAppt-UH9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2675,7 +2675,7 @@ JD-TC-AddSubServicesToAppt-UH10
 
     [Documentation]  add subservice to an inactive user.
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

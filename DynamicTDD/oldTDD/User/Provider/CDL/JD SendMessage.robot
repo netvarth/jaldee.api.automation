@@ -15,11 +15,11 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ApiKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -47,7 +47,7 @@ JD-TC-SendMessage-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -73,7 +73,7 @@ JD-TC-SendMessage-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id2}  ${resp.json()['id']}
@@ -104,7 +104,7 @@ JD-TC-SendMessage-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id3}  ${resp.json()['id']}
@@ -132,7 +132,7 @@ JD-TC-SendMessage-4
     [Documentation]   Provider send a message to a provider consumer with one attachment.
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME34}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME34}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -169,7 +169,7 @@ JD-TC-SendMessage-5
 
     [Documentation]   Provider send a message to a partner with one attachment.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME34}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME34}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -264,7 +264,7 @@ JD-TC-SendMessage-6
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME95}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME95}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -307,7 +307,7 @@ JD-TC-SendMessage-6
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME95}'
+            IF   not '${user_phone}' == '${PUSERNAME95}'
                 clear_users  ${user_phone}
             END
         END
@@ -361,12 +361,12 @@ JD-TC-SendMessage-7
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id1}  ${resp.json()['id']}
 
-    clear_customer   ${MUSERNAME20}
+    clear_customer   ${PUSERNAME20}
 
     ${caption}=  Fakerlibrary.sentence
     ${resp}=  Send Message   ${user[2]}  ${EMPTY}  ${provider_id1}  ${userType[0]}  ${consumer_id2}  ${userType[3]}  ${messageType[0]}  
@@ -378,7 +378,7 @@ JD-TC-SendMessage-UH1
 
     [Documentation]   Provider send a message to another provider with one attachment.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME25}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider1}  ${resp.json()['id']}
@@ -387,7 +387,7 @@ JD-TC-SendMessage-UH1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME26}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -419,7 +419,7 @@ JD-TC-SendMessage-UH2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
   
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -442,7 +442,7 @@ JD-TC-SendMessage-UH3
     [Documentation]   Provider send a message to another providers provider consumer.
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME45}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
   
@@ -466,12 +466,12 @@ JD-TC-SendMessage-UH3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME68}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
 
-    clear_customer   ${MUSERNAME68}
+    clear_customer   ${PUSERNAME68}
 
     ${caption}=  Fakerlibrary.Sentence
     ${resp}=  db.getType   ${jpgfile}
@@ -491,7 +491,7 @@ JD-TC-SendMessage-UH4
     [Documentation]   create a user in one location and partner in another location , then user try to send message to that partner.
 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -566,7 +566,7 @@ JD-TC-SendMessage-UH4
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME87}'
+            IF   not '${user_phone}' == '${PUSERNAME87}'
                 clear_users  ${user_phone}
             END
         END
@@ -657,12 +657,12 @@ JD-TC-SendMessage-UH5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id1}  ${resp.json()['id']}
 
-    clear_customer   ${MUSERNAME20}
+    clear_customer   ${PUSERNAME20}
 
     ${comm_msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
@@ -686,12 +686,12 @@ JD-TC-SendMessage-UH6
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id1}  ${resp.json()['id']}
 
-    clear_customer   ${MUSERNAME20}
+    clear_customer   ${PUSERNAME20}
 
     ${comm_msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence

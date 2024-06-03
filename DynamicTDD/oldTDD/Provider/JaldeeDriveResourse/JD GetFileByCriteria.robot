@@ -9,7 +9,7 @@ Library           OperatingSystem
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Library           /ebs/TDD/db.py
 Variables         /ebs/TDD/varfiles/providers.py
@@ -397,12 +397,12 @@ JD-TC-GetFileByCriteria-11
 
 	[Documentation]   user get  - filetype: jpg
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME7}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME7}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${MUSERNAME7} 
+    ${pid}=  get_acc_id  ${PUSERNAME7} 
     Set Suite variable     ${pid}
-    ${id2}=  get_id  ${MUSERNAME7}
+    ${id2}=  get_id  ${PUSERNAME7}
     Set Suite Variable  ${id2}
    
 
@@ -414,8 +414,8 @@ JD-TC-GetFileByCriteria-11
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${MUSERNAME7} 
-    clear_appt_schedule   ${MUSERNAME7}
+    clear_service   ${PUSERNAME7} 
+    clear_appt_schedule   ${PUSERNAME7}
     
     ${resp2}=   Get Business Profile
     Log  ${resp2.json()}

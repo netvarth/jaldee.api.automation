@@ -15,7 +15,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 *** Variables ***
 ${SERVICE1}   CONSULTATION1
@@ -1716,7 +1716,7 @@ JD-TC- Create Bill -26
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
-        ${resp}=   Get File    /ebs/TDD/varfiles/musers.py
+        ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
         ${len}=   Split to lines  ${resp}
         ${length}=  Get Length   ${len}
         ${max_party}=  get_maxpartysize_subdomain

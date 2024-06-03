@@ -13,8 +13,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -39,7 +39,7 @@ JD-TC-UpdateSubServicesToAppt-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME240}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME240}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -130,7 +130,7 @@ JD-TC-UpdateSubServicesToAppt-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME240}'
+            IF   not '${user_phone}' == '${PUSERNAME240}'
                 clear_users  ${user_phone}
             END
         END
@@ -344,7 +344,7 @@ JD-TC-UpdateSubServicesToAppt-2
 
     [Documentation]  add sub service to an appointment(walkin) without any users then assign one user to that service.
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME240}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME240}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -389,7 +389,7 @@ JD-TC-UpdateSubServicesToAppt-3
 
     [Documentation]  update the subservice with more than one user as assignee.
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME240}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME240}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -433,7 +433,7 @@ JD-TC-UpdateSubServicesToAppt-4
 
     [Documentation]  update the subservice with assignee conflicting with the existing one.
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME240}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME240}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -504,7 +504,7 @@ JD-TC-UpdateSubServicesToAppt-UH3
 
     [Documentation]  update an inactive subservice to an appointment
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME240}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME240}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -535,7 +535,7 @@ JD-TC-UpdateSubServicesToAppt-UH4
 
     [Documentation]  update the subservice with inactive user.
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME240}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME240}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

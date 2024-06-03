@@ -6,9 +6,9 @@ Library           Collections
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -22,14 +22,14 @@ ${en_temp_name}   EnquiryName
 *** Keywords ***
 Multiple Users branches
 
-    ${resp}=   Get File    /ebs/TDD/varfiles/musers.py
+    ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
     ${len}=   Split to lines  ${resp}
     ${length}=  Get Length   ${len}
     ${multiuser_list}=  Create List
     &{License_total}=  Create Dictionary
     
     FOR   ${a}  IN RANGE   ${length}   
-        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         
         ${resp1}=   Get Active License
@@ -41,7 +41,7 @@ Multiple Users branches
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         IF  ${resp.json()['metricUsageInfo'][8]['total']} > 1 and ${resp.json()['metricUsageInfo'][8]['used']} < ${resp.json()['metricUsageInfo'][8]['total']}
-            Append To List  ${multiuser_list}  ${MUSERNAME${a}}
+            Append To List  ${multiuser_list}  ${PUSERNAME${a}}
             Set To Dictionary 	${License_total} 	${name}=${resp.json()['metricUsageInfo'][8]['total']}
         END
     END
@@ -2088,7 +2088,7 @@ JD-TC-Create Enquiry For User-UH1
 JD-TC-Create Enquiry For User-UH3
     [Documentation]   Create Enquiry with another branch's location
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME23}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2561,7 +2561,7 @@ JD-TC-Create Enquiry For User-UH13
 JD-TC-Create Enquiry For User-UH14
     [Documentation]   Create Enquiry with another branch's category
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME23}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2638,7 +2638,7 @@ JD-TC-Create Enquiry For User-UH14
 JD-TC-Create Enquiry For User-UH15
     [Documentation]   Create Enquiry with another branch's type
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME23}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2716,7 +2716,7 @@ JD-TC-Create Enquiry For User-UH15
 JD-TC-Create Enquiry For User-UH16
     [Documentation]   Create Enquiry with another branch's enquiry template id
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME23}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -2821,7 +2821,7 @@ JD-TC-Create Enquiry For User-UH16
 JD-TC-Create Enquiry For User-UH17
     [Documentation]   Create Enquiry with another branch's lead template id
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME23}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}

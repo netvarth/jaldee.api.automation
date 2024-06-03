@@ -14,7 +14,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -36,11 +36,11 @@ JD-TC-UpdateTemplateConfig-1
 
     [Documentation]  Create a Template with valid details and isDefaultTemp is true then update it's template name.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${p_id1}=  get_acc_id  ${HLMUSERNAME5}
+    ${p_id1}=  get_acc_id  ${HLPUSERNAME5}
     Set Suite Variable   ${p_id1}
 
     ${resp}=   Get Templates By Account
@@ -96,7 +96,7 @@ JD-TC-UpdateTemplateConfig-2
 
     [Documentation]  Update that Template with Empty templateHeader.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -122,7 +122,7 @@ JD-TC-UpdateTemplateConfig-3
 
     [Documentation]  Update that Template with invalid templateHeader.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -150,7 +150,7 @@ JD-TC-UpdateTemplateConfig-4
 
     [Documentation]  Update that Template with Empty templateContent.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -176,7 +176,7 @@ JD-TC-UpdateTemplateConfig-5
 
     [Documentation]  Update that Template with Empty templateFooter.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -203,7 +203,7 @@ JD-TC-UpdateTemplateConfig-6
 
     [Documentation]  Update that Template with inactive printTemplateStatus.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -230,7 +230,7 @@ JD-TC-UpdateTemplateConfig-7
 
     [Documentation]  Update that Template with case printTemplateType.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -258,7 +258,7 @@ JD-TC-UpdateTemplateConfig-8
 
     [Documentation]  create a new template with isDefaultTemp is false then Update first Template with isDefaultTemp is false,again upadate new template isDefaultTemp as true.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

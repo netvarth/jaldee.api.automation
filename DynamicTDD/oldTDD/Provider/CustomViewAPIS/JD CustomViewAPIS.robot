@@ -14,7 +14,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 *** Variables ***
@@ -26,9 +26,9 @@ ${type1}  Appointment
 
 JD-TC-CustomViewAPIS-1
     [Documentation]  Creating a CustomView using DepartmentId, ServicesId, QueuesId and UsersId
-    clear_service      ${MUSERNAME0}
-    clear_location    ${MUSERNAME0}
-    clear_queue         ${MUSERNAME0}
+    clear_service      ${PUSERNAME0}
+    clear_location    ${PUSERNAME0}
+    clear_queue         ${PUSERNAME0}
     
     # Set Test Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
     # Set Test Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
@@ -47,7 +47,7 @@ JD-TC-CustomViewAPIS-1
     # Log  ${d1}
     # Log  ${sd1}
     
-    ${resp}=  Encrypted Provider Login   ${MUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME0}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${subdomain}  ${resp.json()['subSector']}
@@ -67,7 +67,7 @@ JD-TC-CustomViewAPIS-1
 
 # *** Comments ***
 
-    ${pid}=  get_acc_id  ${MUSERNAME0}
+    ${pid}=  get_acc_id  ${PUSERNAME0}
     Set Suite Variable  ${pid}
    
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -149,7 +149,7 @@ JD-TC-CustomViewAPIS-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${que_id1}   ${resp.json()}
 
-    ${BUSER0}=  Evaluate  ${MUSERNAME0}+321651
+    ${BUSER0}=  Evaluate  ${PUSERNAME0}+321651
     clear_users  ${BUSER0}
     Set Suite Variable  ${BUSER0}
     ${firstname}=  FakerLibrary.name
@@ -210,7 +210,7 @@ JD-TC-CustomViewAPIS-1
 
 JD-TC-CreateCustomViewApis-H2
     [Documentation]  Trying to Create CustomView With Appointment
-    ${resp}=  Encrypted Provider Login   ${MUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME0}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${name2}=  FakerLibrary.name
@@ -223,15 +223,15 @@ JD-TC-CreateCustomViewApis-H2
 ***Comments***
 JD-TC-CustomViewAPIS-2
     [Documentation]  Creating a CustomView using DepartmentId, ServicesId, QueuesId and UsersId
-    clear_service      ${MUSERNAME0}
-    clear_location    ${MUSERNAME0}
-    clear_queue         ${MUSERNAME0}
+    clear_service      ${PUSERNAME0}
+    clear_location    ${PUSERNAME0}
+    clear_queue         ${PUSERNAME0}
     # ${iscorp_subdomains}=  get_iscorp_subdomains  1
     # Log  ${iscorp_subdomains}
     # Set Test Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
     # Set Test Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
     # Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
-    ${resp}=  Encrypted Provider Login   ${MUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME0}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${subdomain}  ${resp.json()['subSector']}
@@ -250,7 +250,7 @@ JD-TC-CustomViewAPIS-2
     END
     
 
-    ${pid}=  get_acc_id  ${MUSERNAME0}
+    ${pid}=  get_acc_id  ${PUSERNAME0}
     Set Suite Variable  ${pid}
    
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -330,9 +330,9 @@ JD-TC-CustomViewAPIS-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${que_id1}   ${resp.json()}
 
-    ${MUSERNAME0}=  Evaluate  ${MUSERNAME0}+321650
-    clear_users  ${MUSERNAME0}
-    Set Suite Variable  ${MUSERNAME0}
+    ${PUSERNAME0}=  Evaluate  ${PUSERNAME0}+321650
+    clear_users  ${PUSERNAME0}
+    Set Suite Variable  ${PUSERNAME0}
     ${firstname}=  FakerLibrary.name
     Set Suite Variable  ${firstname}
     ${lastname}=  FakerLibrary.last_name
@@ -346,14 +346,14 @@ JD-TC-CustomViewAPIS-2
     ${state}=  FakerLibrary.state
     Set Suite Variable  ${state}
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${address}  ${MUSERNAME0}  ${dob}    ${Genderlist[0]}  ${userType[0]}  ${P_Email}${MUSERNAME0}.${test_mail}  ${location}  ${state}  ${depid02}  ${sub_domain_id}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${address}  ${PUSERNAME0}  ${dob}    ${Genderlist[0]}  ${userType[0]}  ${P_Email}${PUSERNAME0}.${test_mail}  ${location}  ${state}  ${depid02}  ${sub_domain_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
     ${resp}=  Get User By Id  ${u_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}  address=${address}  mobileNo=${MUSERNAME0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${MUSERNAME0}.${test_mail}  city=${location}  state=${state}  deptId=${depid02}  subdomain=${userSubDomain}
+    Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}  address=${address}  mobileNo=${PUSERNAME0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME0}.${test_mail}  city=${location}  state=${state}  deptId=${depid02}  subdomain=${userSubDomain}
 
     ${name}=   FakerLibrary.word
     ${resp}=   Create CustomeView   ${name}  ${bool[1]}  ${depid02}  ${sid05}  ${que_id1}  ${u_id}

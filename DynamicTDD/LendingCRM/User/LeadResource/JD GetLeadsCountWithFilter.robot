@@ -11,7 +11,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 *** Variables ***
 
@@ -44,28 +44,28 @@ JD-TC-GetLeadCount
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+580268
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+580268
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_E}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable  ${id}  ${decrypted_data['id']}
 
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
-    Set Suite Variable  ${MUSERNAME_E}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+    Set Suite Variable  ${PUSERNAME_E}
 
-    ${p_id}=  get_acc_id  ${MUSERNAME_E}
+    ${p_id}=  get_acc_id  ${PUSERNAME_E}
 
     ${resp}=   enquiryStatus  ${p_id}
     ${resp}=   leadStatus     ${p_id}
@@ -162,7 +162,7 @@ JD-TC-GetLeadCount
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -346,11 +346,11 @@ JD-TC-GetLeadCount-1
 
     [Documentation]   Create one lead to a branch and get the lead count.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME54}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME54}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${p_id}=  get_acc_id  ${MUSERNAME54}
+    ${p_id}=  get_acc_id  ${PUSERNAME54}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -395,10 +395,10 @@ JD-TC-GetLeadCount-2
 
     [Documentation]   Create multiple leads to a branch and get the lead count.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME55}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME55}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${p_id}=  get_acc_id  ${MUSERNAME55}
+    ${p_id}=  get_acc_id  ${PUSERNAME55}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -483,7 +483,7 @@ JD-TC-GetLeadCount-5
 
     [Documentation]   get the lead count with id filter.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -497,7 +497,7 @@ JD-TC-GetLeadCount-6
 
     [Documentation]   get the lead count with uid filter.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=    Get Lead Count  uid-eq=${leUid}
@@ -509,7 +509,7 @@ JD-TC-GetLeadCount-7
 
     [Documentation]   get the lead count with title filter.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=    Get Lead Count  title-eq=${title}
@@ -521,7 +521,7 @@ JD-TC-GetLeadCount-8
 
     [Documentation]   get the lead count with description filter.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=    Get Lead Count  description-eq=${desc2}
@@ -533,7 +533,7 @@ JD-TC-GetLeadCount-9
 
     [Documentation]   get the lead count with targetPotential filter.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=    Get Lead Count  targetPotential-eq=${targetPotential}
@@ -545,7 +545,7 @@ JD-TC-GetLeadCount-10
 
     [Documentation]   get the lead count with actualPotential filter.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME55}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME55}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=    Get Lead Count  actualPotential-eq=${actualPotential1}
@@ -557,7 +557,7 @@ JD-TC-GetLeadCount-11
 
     [Documentation]   get the lead count with assignee filter.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=    Get Lead Count  assignee-eq=${u_id}
@@ -569,7 +569,7 @@ JD-TC-GetLeadCount-12
 
     [Documentation]   get the lead count with assigneeFirstName filter.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=    Get Lead Count  assigneeFirstName-eq=${firstname}
@@ -581,7 +581,7 @@ JD-TC-GetLeadCount-13
 
     [Documentation]   get the lead count with assigneeLastName filter.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=    Get Lead Count  assigneeLastName-eq=${lastname}
@@ -593,7 +593,7 @@ JD-TC-GetLeadCount-14
 
     [Documentation]   get the lead count with manager filter.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=    Get Lead Count  manager-eq=${id}
@@ -605,7 +605,7 @@ JD-TC-GetLeadCount-15
 
     [Documentation]   get the lead count with managerFirstName filter.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=    Get Lead Count  managerFirstName-eq=${firstname_A}
@@ -617,7 +617,7 @@ JD-TC-GetLeadCount-16
 
     [Documentation]   get the lead count with managerLastName filter.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=    Get Lead Count  managerLastName-eq=${lastname_A}
@@ -631,7 +631,7 @@ JD-TC-GetLeadCount-17
 
     [Documentation]   get the lead count with customer filter.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=    Get Lead Count  customer-eq=${pcons_id4}
@@ -643,7 +643,7 @@ JD-TC-GetLeadCount-18
 
     [Documentation]   get the lead count with customerFirstName filter.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=    Get Lead Count  customerFirstName-eq=${fname}
@@ -655,7 +655,7 @@ JD-TC-GetLeadCount-19
 
     [Documentation]   get the lead count with customerLastName filter.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=    Get Lead Count  customerLastName-eq=${lname}
@@ -667,7 +667,7 @@ JD-TC-GetLeadCount-20
 
     [Documentation]   get the lead count with location filter.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=    Get Lead Count  location-eq=${lid}
@@ -679,7 +679,7 @@ JD-TC-GetLeadCount-21
 
     [Documentation]   get the lead count with locationName filter.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=    Get Lead Count  locationName-eq=${lidname}
@@ -691,7 +691,7 @@ JD-TC-GetLeadCount-22
 
     [Documentation]   get the lead count with category filter.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=    Get Lead Count  category-eq=${category_id2}
@@ -703,7 +703,7 @@ JD-TC-GetLeadCount-23
 
     [Documentation]   get the lead count with categoryName filter.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=    Get Lead Count  categoryName-eq=${category_name1}
@@ -715,7 +715,7 @@ JD-TC-GetLeadCount-24
 
     [Documentation]   get the lead count with type filter.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=    Get Lead Count  type-eq=${type_id1}
@@ -727,7 +727,7 @@ JD-TC-GetLeadCount-25
 
     [Documentation]   get the lead count with typeName filter.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=    Get Lead Count  typeName-eq=${type_name1}
@@ -739,7 +739,7 @@ JD-TC-GetLeadCount-26
 
     [Documentation]   get the lead count with priority filter.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=    Get Lead Count  priority-eq=${priority_id2}
@@ -751,7 +751,7 @@ JD-TC-GetLeadCount-27
 
     [Documentation]   get the lead count with priorityName filter.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=    Get Lead Count  priorityName-eq=${priority_name2}
@@ -763,7 +763,7 @@ JD-TC-GetLeadCount-28
 
     [Documentation]   get the lead count with status filter.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=    Get Lead Count  status-eq=${status_id1}
@@ -775,7 +775,7 @@ JD-TC-GetLeadCount-29
 
     [Documentation]   get the lead count with statusName filter.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=    Get Lead Count  statusName-eq=${status_name1}
@@ -810,7 +810,7 @@ JD-TC-GetLeadCount-
 
     [Documentation]   get the lead count after change the lead status to closed.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME53}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -818,7 +818,7 @@ JD-TC-GetLeadCount-30
 
     [Documentation]   get the lead count with generatedBy filter.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=    Get Lead Count  generatedBy-eq=${p_id1}
@@ -830,7 +830,7 @@ JD-TC-GetLeadCount-31
 
     [Documentation]   get the lead count with generatedByFirstName filter.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=    Get Lead Count  generatedByFirstName-eq=${firstname}
@@ -842,7 +842,7 @@ JD-TC-GetLeadCount-32
 
     [Documentation]   get the lead count with generatedByLastName filter.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=    Get Lead Count  generatedByLastName-eq=${lastname}

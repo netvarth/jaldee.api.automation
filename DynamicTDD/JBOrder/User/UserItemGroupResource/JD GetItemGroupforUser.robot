@@ -12,8 +12,8 @@ Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 
@@ -27,7 +27,7 @@ JD-TC-GetItemGroupforUser-1
 
     [Documentation]  Create Item Group for an existing provider and get the details.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -66,7 +66,7 @@ JD-TC-GetItemGroupforUser-2
 
     [Documentation]  Create multiple Item Group for an existing provider.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -91,7 +91,7 @@ JD-TC-GetItemGroupforUser-3
 
     [Documentation]  Create multiple Item Group with same name for an existing provider.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME138}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -144,7 +144,7 @@ JD-TC-GetItemGroupforUser-4
 
     [Documentation]  Create Item Group for a provider without group decscription.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME144}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME144}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -181,7 +181,7 @@ JD-TC-GetItemGroupforUser-5
 
     [Documentation]  Get Item Group without creating item group.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME117}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME117}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -195,7 +195,7 @@ JD-TC-GetItemGroupforUser-6
 
     [Documentation]  Get Item group by user.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME129}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -252,7 +252,7 @@ JD-TC-GetItemGroupforUser-6
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME129}'
+            IF   not '${user_phone}' == '${PUSERNAME129}'
                 clear_users  ${user_phone}
             END
         END
@@ -299,7 +299,7 @@ JD-TC-GetItemGroupforUser-7
 
     [Documentation]  Create item group in account level then Get Item group by user.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -356,7 +356,7 @@ JD-TC-GetItemGroupforUser-7
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME130}'
+            IF   not '${user_phone}' == '${PUSERNAME130}'
                 clear_users  ${user_phone}
             END
         END
@@ -403,7 +403,7 @@ JD-TC-GetItemGroupforUser-8
 
     [Documentation]  Create item group in user level then Get Item group by account level.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME131}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME131}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -460,7 +460,7 @@ JD-TC-GetItemGroupforUser-8
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME131}'
+            IF   not '${user_phone}' == '${PUSERNAME131}'
                 clear_users  ${user_phone}
             END
         END
@@ -498,7 +498,7 @@ JD-TC-GetItemGroupforUser-8
     ${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME131}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME131}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -535,7 +535,7 @@ JD-TC-GetItemGroupforUser-UH3
 
     [Documentation]  Create item group y a user and another providers user try to get that group.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -592,7 +592,7 @@ JD-TC-GetItemGroupforUser-UH3
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME132}'
+            IF   not '${user_phone}' == '${PUSERNAME132}'
                 clear_users  ${user_phone}
             END
         END
@@ -630,7 +630,7 @@ JD-TC-GetItemGroupforUser-UH3
     ${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME150}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -687,7 +687,7 @@ JD-TC-GetItemGroupforUser-UH3
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME132}'
+            IF   not '${user_phone}' == '${PUSERNAME132}'
                 clear_users  ${user_phone}
             END
         END

@@ -9,7 +9,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -23,7 +23,7 @@ JD-TC-CreateUser-1
 
     [Documentation]   create 10 users by a multi user.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
@@ -79,7 +79,7 @@ JD-TC-CreateUser-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME10}'
+            IF   not '${user_phone}' == '${HLPUSERNAME10}'
                 clear_users  ${user_phone}
             END
         END
@@ -89,7 +89,7 @@ JD-TC-CreateUser-1
 
     FOR   ${i}  IN RANGE   0   10
 
-        ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 

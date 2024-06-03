@@ -15,7 +15,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -33,7 +33,7 @@ JD-TC-Share Sales Order Invoice-1
 
     [Documentation]   Create a sales Order with Valid Details then generate and Share Sales Order.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -88,11 +88,11 @@ JD-TC-Share Sales Order Invoice-1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${accountId}=  get_acc_id  ${HLMUSERNAME37}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME37}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -219,7 +219,7 @@ JD-TC-Share Sales Order Invoice-1
 
 # ----------------------------- Provider take a Sales Order ------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -360,7 +360,7 @@ JD-TC-Share Sales Order Invoice-UH1
 
     [Documentation]   Share Sales Order invoice With Empty email Id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -378,7 +378,7 @@ JD-TC-Share Sales Order Invoice-UH2
 
     [Documentation]   Share Sales Order invoice With  email Notification is true but email is EMPTY.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -396,7 +396,7 @@ JD-TC-Share Sales Order Invoice-UH3
 
     [Documentation]   Share Sales Order invoice With  SMS Notification is true but phone is EMPTY.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -414,7 +414,7 @@ JD-TC-Share Sales Order Invoice-UH4
 
     [Documentation]   Share Sales Order invoice With  SMS Notification is false but phonenumber is active.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -432,7 +432,7 @@ JD-TC-Share Sales Order Invoice-UH5
 
     [Documentation]   Share Sales Order invoice With  whatsappPhNo Notification is true but whatsappPhNo is EMPTY.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -450,7 +450,7 @@ JD-TC-Share Sales Order Invoice-UH6
 
     [Documentation]   Share Sales Order invoice With  telegramPhNo Notification is true but telegramPhNo is EMPTY.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -482,7 +482,7 @@ JD-TC-Share Sales Order Invoice-UH8
 
     [Documentation]   Share Sales Order invoice With EMPTY HTML.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

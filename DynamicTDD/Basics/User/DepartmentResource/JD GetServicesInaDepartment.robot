@@ -9,7 +9,7 @@ Library           FakerLibrary
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
@@ -35,22 +35,22 @@ JD-TC-Get Services in Department-1
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_K}=  Evaluate  ${MUSERNAME}+423824
+    ${PUSERNAME_K}=  Evaluate  ${PUSERNAME}+423824
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_K}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_K}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_K}  0
+    ${resp}=  Account Activation  ${PUSERNAME_K}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_K}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_K}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_K}${\n}
-    Set Suite Variable  ${MUSERNAME_K}
-    ${id}=  get_id  ${MUSERNAME_K}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_K}${\n}
+    Set Suite Variable  ${PUSERNAME_K}
+    ${id}=  get_id  ${PUSERNAME_K}
     Set Suite Variable  ${id}
     
     ${ser_desc}=   FakerLibrary.word
@@ -113,7 +113,7 @@ JD-TC-Get Services in Department-1
 JD-TC-Get Services in Department-2
     [Documentation]  Provider Create department using Service names then Get Services in Department
     
-    ${resp}=  Encrypted Provider Login   ${MUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME39}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Enable service   ${sid1} 
@@ -175,7 +175,7 @@ JD-TC-Get Services in Department-UH2
 JD-TC-Get Services in Department-UH3
     [Documentation]  Get Services in Department using invalid department id
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Services in Department  000
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -184,7 +184,7 @@ JD-TC-Get Services in Department-UH3
 JD-TC-Get Services in Department-UH4
     [Documentation]  Get Services in Department using another provider department id
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Services in Department  ${depid2}
     Should Be Equal As Strings  ${resp.status_code}  401

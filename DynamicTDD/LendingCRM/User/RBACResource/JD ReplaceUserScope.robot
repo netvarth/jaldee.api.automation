@@ -13,8 +13,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -30,7 +30,7 @@ JD-TC-ReplaceUserScope-1
 
     [Documentation]  create a user without role and append a role then replace that role to another.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME140}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -145,7 +145,7 @@ JD-TC-ReplaceUserScope-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME140}'
+            IF   not '${user_phone}' == '${PUSERNAME140}'
                 clear_users  ${user_phone}
             END
         END
@@ -239,7 +239,7 @@ JD-TC-ReplaceUserScope-2
 
     [Documentation]  create a user as sales officer and create a loan then replace the role to bussiness operation head then try to create loan.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME140}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

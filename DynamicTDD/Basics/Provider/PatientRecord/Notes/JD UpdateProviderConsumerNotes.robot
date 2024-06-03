@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -391,7 +391,7 @@ JD-TC-Update Provider Consumer Notes-8
 
     [Documentation]  Update Provider consumer notes with valid user login
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME4}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -401,11 +401,11 @@ JD-TC-Update Provider Consumer Notes-8
     Set Suite Variable  ${pdrname}  ${decrypted_data['userName']}
 
 
-    # ${resp}=   ProviderLogin  ${HLMUSERNAME4}  ${PASSWORD} 
+    # ${resp}=   ProviderLogin  ${HLPUSERNAME4}  ${PASSWORD} 
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}   200
 
-    # ${p_id1}=  get_acc_id  ${HLMUSERNAME4}
+    # ${p_id1}=  get_acc_id  ${HLPUSERNAME4}
     # Set Suite Variable   ${p_id1}
 
     ${resp}=    Get Locations
@@ -478,7 +478,7 @@ JD-TC-Update Provider Consumer Notes-8
     Set Suite Variable    ${jconid1}         ${resp.json()['id']}
    
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME4}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

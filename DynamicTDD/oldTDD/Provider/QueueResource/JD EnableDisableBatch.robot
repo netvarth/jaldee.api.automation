@@ -476,23 +476,23 @@ JD-TC-EnableDisableBatch-8
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_K}=  Evaluate  ${MUSERNAME}+423726
+    ${PUSERNAME_K}=  Evaluate  ${PUSERNAME}+423726
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_K}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_K}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_K}  0
+    ${resp}=  Account Activation  ${PUSERNAME_K}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_K}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_K}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_K}${\n}
-    Set Suite Variable  ${MUSERNAME_K}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_K}${\n}
+    Set Suite Variable  ${PUSERNAME_K}
     
-    ${acc_id}=  get_acc_id  ${MUSERNAME_K}
+    ${acc_id}=  get_acc_id  ${PUSERNAME_K}
     Set Suite Variable  ${acc_id}
 
     # ${resp}=   Create Sample Location
@@ -502,8 +502,8 @@ JD-TC-EnableDisableBatch-8
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${ph1}=  Evaluate  ${MUSERNAME_K}+1000000000
-    ${ph2}=  Evaluate  ${MUSERNAME_K}+2000000000
+    ${ph1}=  Evaluate  ${PUSERNAME_K}+1000000000
+    ${ph2}=  Evaluate  ${PUSERNAME_K}+2000000000
     ${views}=  Random Element    ${Views}
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -691,7 +691,7 @@ JD-TC-EnableDisableBatch-UH3
 JD-TC-EnableDisableBatch-UH4
     [Documentation]  Disable batch when it is not enabled
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Disable Waitlist Batch   ${p1_q1}
@@ -702,7 +702,7 @@ JD-TC-EnableDisableBatch-UH4
 JD-TC-EnableDisableBatch-UH5
     [Documentation]  Enable already enabled batch
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Enable Waitlist Batch   ${p1_q1}

@@ -11,8 +11,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -24,7 +24,7 @@ Variables         /ebs/TDD/varfiles/hl_musers.py
 JD-TC-GetLeadTemplates-1
     [Documentation]    Create a lead to a branch and get the lead template.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -82,7 +82,7 @@ JD-TC-GetLeadTemplates-1
     Set Suite Variable   ${leid}        ${resp.json()['id']}
     Set Suite Variable   ${leUid}        ${resp.json()['uid']}
     
-    ${p_id1}=  get_acc_id  ${MUSERNAME1}
+    ${p_id1}=  get_acc_id  ${PUSERNAME1}
     Set Suite Variable    ${p_id1}
 
     ${resp}=  categorytype  ${p_id1}
@@ -165,7 +165,7 @@ JD-TC-GetLeadTemplates-1
 JD-TC-GetLeadTemplates-2
     [Documentation]    Create a lead for a user and get the lead template.
 
-    ${resp}=    Encrypted Provider Login    ${MUSERNAME1}    ${PASSWORD}    
+    ${resp}=    Encrypted Provider Login    ${PUSERNAME1}    ${PASSWORD}    
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -193,7 +193,7 @@ JD-TC-GetLeadTemplates-2
         FOR   ${i}  IN RANGE   0   ${len}
         
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME1}'
+            IF   not '${user_phone}' == '${HLPUSERNAME1}'
                 clear_users  ${user_phone}
             END
         END
@@ -480,7 +480,7 @@ JD-TC-GetLeadTemplates-9
 JD-TC-AddLeadToken-UH4
     [Documentation]  GetLeadToken with consumer login.
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -537,7 +537,7 @@ JD-TC-AddLeadToken-UH4
     Set Suite Variable   ${leid}        ${resp.json()['id']}
     Set Suite Variable   ${leUid}        ${resp.json()['uid']}
     
-    ${p_id1}=  get_acc_id  ${MUSERNAME1}
+    ${p_id1}=  get_acc_id  ${PUSERNAME1}
     Set Suite Variable    ${p_id1}
 
     ${resp}=  categorytype  ${p_id1}

@@ -14,7 +14,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 
@@ -32,22 +32,22 @@ JD-TC-Upload Logo Image of USER-1
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E1}=  Evaluate  ${MUSERNAME}+267906702
+     ${PUSERNAME_E1}=  Evaluate  ${PUSERNAME}+267906702
      ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E1}    ${highest_package[0]}
+     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E1}    ${highest_package[0]}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Activation  ${MUSERNAME_E1}  0
+     ${resp}=  Account Activation  ${PUSERNAME_E1}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${MUSERNAME_E1}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${PUSERNAME_E1}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E1}${\n}
-     Set Suite Variable  ${MUSERNAME_E1}
-     ${id}=  get_id  ${MUSERNAME_E1}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E1}${\n}
+     Set Suite Variable  ${PUSERNAME_E1}
+     ${id}=  get_id  ${PUSERNAME_E1}
      Set Suite Variable  ${id}
      ${bs}=  FakerLibrary.bs
      Set Suite Variable  ${bs}
@@ -124,7 +124,7 @@ JD-TC-Upload Logo Image of USER-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id2}  ${resp.json()}
 
-    # ${resp}=  pyproviderlogin  ${MUSERNAME_E1}  ${PASSWORD}
+    # ${resp}=  pyproviderlogin  ${PUSERNAME_E1}  ${PASSWORD}
     # Should Be Equal As Strings  ${resp}  200  
     # # @{resp}=  uploadLogoImages 
     # # Should Be Equal As Strings  ${resp[1]}  200
@@ -174,13 +174,13 @@ JD-TC-Upload Logo Image of USER-1
 
 JD-TC-Upload Logo Image of USER-UH1
     [Documentation]   Provider check to  Upload Logo image of USER
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${p_id}=  get_acc_id  ${MUSERNAME_E1}
-    # ${resp}=  pyproviderlogin  ${MUSERNAME_E1}  ${PASSWORD}
+    ${p_id}=  get_acc_id  ${PUSERNAME_E1}
+    # ${resp}=  pyproviderlogin  ${PUSERNAME_E1}  ${PASSWORD}
     # Should Be Equal As Strings  ${resp}  200  
 
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${MUSERNAME_E1}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -227,13 +227,13 @@ JD-TC-Upload Logo Image of USER-UH3
 
 JD-TC-Upload Logo Image of USER-UH4
     [Documentation]   User Upload Logo image without creating user profile
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME43}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${p_id}=  get_acc_id  ${MUSERNAME43}
-    # ${resp}=  pyproviderlogin  ${MUSERNAME43}  ${PASSWORD}
+    ${p_id}=  get_acc_id  ${PUSERNAME43}
+    # ${resp}=  pyproviderlogin  ${PUSERNAME43}  ${PASSWORD}
     # Should Be Equal As Strings  ${resp}  200
 
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${MUSERNAME43}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME43}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

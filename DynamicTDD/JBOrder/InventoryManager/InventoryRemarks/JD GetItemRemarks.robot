@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -29,7 +29,7 @@ JD-TC-GetItemRemarks-1
     [Documentation]  create item remarks with transaction type as adjustment and Get Item Remark. 
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -63,7 +63,7 @@ JD-TC-GetItemRemarks-2
     [Documentation]  create item remarks with transaction type as opening and Get Item Remark.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -84,7 +84,7 @@ JD-TC-GetItemRemarks-3
     [Documentation]  create item remarks with transaction type as PURCHASE_ORDER and Get Item Remark.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -106,7 +106,7 @@ JD-TC-GetItemRemarks-4
     [Documentation]  create item remarks with transaction type as PURCHASE and Get Item Remark.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -128,7 +128,7 @@ JD-TC-GetItemRemarks-5
     [Documentation]  create item remarks with transaction type as PURCHASE_RETURN and Get Item Remark.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -150,7 +150,7 @@ JD-TC-GetItemRemarks-6
     [Documentation]  create item remarks with transaction type as SALES_ORDER and Get Item Remark.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -172,7 +172,7 @@ JD-TC-GetItemRemarks-7
     [Documentation]  create item remarks with transaction type as SALES_ORDER_CANCEL and Get Item Remark.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -194,7 +194,7 @@ JD-TC-GetItemRemarks-8
     [Documentation]  create item remarks with transaction type as SALES and Get Item Remark.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -216,7 +216,7 @@ JD-TC-GetItemRemarks-9
     [Documentation]  create item remarks with transaction type as SALES_RETURN and Get Item Remark.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -238,7 +238,7 @@ JD-TC-GetItemRemarks-10
     [Documentation]  create item remarks with transaction type as TRANSFER_IN and Get Item Remark.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -261,7 +261,7 @@ JD-TC-GetItemRemarks-11
     [Documentation]  create item remarks with transaction type as TRANSFER_OUT and Get Item Remark.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -282,7 +282,7 @@ JD-TC-GetItemRemarks-12
     [Documentation]  create item remarks where remarks character as 500 and Get Item Remark.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${Text}=  Generate Random String  256
@@ -305,7 +305,7 @@ JD-TC-GetItemRemarks-UH1
     [Documentation]  Get Item Remark with invalid encid.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

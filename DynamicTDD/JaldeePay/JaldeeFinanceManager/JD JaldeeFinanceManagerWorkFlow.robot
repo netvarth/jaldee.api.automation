@@ -14,8 +14,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -39,7 +39,7 @@ JD-TC-FinanceWorkFlow-1
 
     [Documentation]  Basic work flow-
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME52}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME52}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -293,10 +293,10 @@ JD-TC-FinanceWorkFlow-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME52}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME52}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${HLMUSERNAME52}
+    clear_service   ${HLPUSERNAME52}
 
     ${providerConsumerIdList}=  Create List  ${pcid18}
     Set Suite Variable  ${providerConsumerIdList} 

@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 *** Variables ***
 
@@ -2057,7 +2057,7 @@ JD-TC-Take Appointment in Different Timezone-4
 
     ${fname}=  FakerLibrary.name
     ${lname}=  FakerLibrary.lastname
-    ${US_M_Email}  Set Variable  ${B_Email}${US_MultiUser}.${test_mail}
+    ${US_M_Email}  Set Variable  ${P_Email}${US_MultiUser}.${test_mail}
     ${resp}=  Account SignUp  ${fname}  ${lname}  ${US_M_Email}  ${domain}  ${subdomain}  ${US_MultiUser}  ${licpkgid}  countryCode=${CC1}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2547,7 +2547,7 @@ JD-TC-Take Appointment in Different Timezone-4
 
     ${fname}=  FakerLibrary.name
     ${lname}=  FakerLibrary.lastname
-    ${ME_M_Email}  Set Variable  ${B_Email}${ME_MultiUser}.${test_mail}
+    ${ME_M_Email}  Set Variable  ${P_Email}${ME_MultiUser}.${test_mail}
     ${resp}=  Account SignUp  ${fname}  ${lname}  ${ME_M_Email}  ${domain}  ${subdomain}  ${ME_MultiUser}  ${licpkgid}  countryCode=${CC1}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3019,7 +3019,7 @@ JD-TC-Take Appointment in Different Timezone-4
 
     ${fname}=  FakerLibrary.name
     ${lname}=  FakerLibrary.lastname
-    ${IN_MU_Email}  Set Variable  ${B_Email}${IN_MultiUser}.${test_mail}
+    ${IN_MU_Email}  Set Variable  ${P_Email}${IN_MultiUser}.${test_mail}
     ${resp}=  Account SignUp  ${fname}  ${lname}  ${IN_MU_Email}  ${domain}  ${subdomain}  ${IN_MultiUser}  ${licpkgid}  countryCode=${CC1}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -44,22 +44,22 @@ JD-TC-Get Prescription By Provider Consumer Id-1
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
      ${PH_Number}    Random Number 	digits=5
-     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+${PH_Number}
+     ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+${PH_Number}
      ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Activation  ${MUSERNAME_E}  0
+     ${resp}=  Account Activation  ${PUSERNAME_E}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
 
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
@@ -69,10 +69,10 @@ JD-TC-Get Prescription By Provider Consumer Id-1
     Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
     Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
-     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
-     Set Suite Variable  ${MUSERNAME_E}
-     ${id}=  get_id  ${MUSERNAME_E}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+     Set Suite Variable  ${PUSERNAME_E}
+     ${id}=  get_id  ${PUSERNAME_E}
      Set Suite Variable  ${id}
      ${bs}=  FakerLibrary.bs
      Set Suite Variable  ${bs}
@@ -94,7 +94,7 @@ JD-TC-Get Prescription By Provider Consumer Id-1
      Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
      Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     # Log  ${resp.json()}         
     # Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -190,7 +190,7 @@ JD-TC-Get Prescription By Provider Consumer Id-1
 
     
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -303,7 +303,7 @@ JD-TC-Get Prescription By Provider Consumer Id-2
 
     [Documentation]   update Prescription with Empty caseId and Get Prescription By Provider Consumer Id.
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -350,7 +350,7 @@ JD-TC-Get Prescription By Provider Consumer Id-3
 
     [Documentation]    Get Prescription By Provider Consumer Id using 2 provider consumer.
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -476,7 +476,7 @@ JD-TC-Get Prescription By Provider Consumer Id-3
     Set Suite Variable    ${proconlname1}    ${resp.json()['lastName']} 
     Set Suite Variable    ${fullname1}       ${proconfname}${space}${proconlname}
 
-     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
     
@@ -507,7 +507,7 @@ JD-TC-Get Prescription By Provider Consumer Id-4
 
     [Documentation]    Remove Prescription and get prescription By Provider consumer Id  .
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -526,7 +526,7 @@ JD-TC-Get Prescription By Provider Consumer Id-UH1
 
     [Documentation]   Get Prescription By Provider Consumer Id with another provider login
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME4}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
    
@@ -549,7 +549,7 @@ JD-TC-Get Prescription By Provider Consumer Id-UH3
 
     [Documentation]   Get Prescription By Provider Consumer Idwith invalid id
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
         

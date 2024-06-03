@@ -13,8 +13,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Test Cases ***
@@ -24,7 +24,7 @@ JD-TC-CreateSubService-1
 
     [Documentation]  Create a sub service in account level. 
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME25}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -80,7 +80,7 @@ JD-TC-CreateSubService-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME25}'
+            IF   not '${user_phone}' == '${HLPUSERNAME25}'
                 clear_users  ${user_phone}
             END
         END
@@ -253,7 +253,7 @@ JD-TC-CreateSubService-5
 
     [Documentation]  Create a service and sub service in account level. 
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME25}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -349,7 +349,7 @@ JD-TC-CreateSubService-7
 
     [Documentation]  Create a sub service with zero as the service price. 
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME25}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -375,7 +375,7 @@ JD-TC-CreateSubService-8
 
     [Documentation]  Create a sub service with pre payment. 
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME25}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -404,7 +404,7 @@ JD-TC-CreateSubService-UH1
 
     [Documentation]  Create a sub service without name. 
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME25}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -424,7 +424,7 @@ JD-TC-CreateSubService-UH2
 
     [Documentation]  Create a sub service without price. 
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME25}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -442,7 +442,7 @@ JD-TC-CreateSubService-UH3
 
     [Documentation]  Create sub services with same name. 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME25}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -473,7 +473,7 @@ JD-TC-CreateSubService-UH4
 
     [Documentation]  Create a sub service with pre payment greater than the sub service amount. 
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME25}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

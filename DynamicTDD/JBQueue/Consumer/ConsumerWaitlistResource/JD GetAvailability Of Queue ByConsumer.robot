@@ -646,35 +646,35 @@ JD-TC-Get Next Available Dates-8
     Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
     ${firstname_B}=  FakerLibrary.first_name
     ${lastname_B}=  FakerLibrary.last_name
-    ${MUSERNAME_L}=  Evaluate  ${MUSERNAME}+4053143333
+    ${PUSERNAME_L}=  Evaluate  ${PUSERNAME}+4053143333
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_B}  ${lastname_B}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_L}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_B}  ${lastname_B}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_L}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_L}  0
+    ${resp}=  Account Activation  ${PUSERNAME_L}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_L}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_L}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_L}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_L}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable  ${pid}  ${decrypted_data['id']}
     # Set Test Variable  ${pid}  ${resp.json()['id']}
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_L}${\n}
-    Set Suite Variable  ${MUSERNAME_L}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_L}${\n}
+    Set Suite Variable  ${PUSERNAME_L}
     
-    ${accid1}=  get_acc_id  ${MUSERNAME_L} 
+    ${accid1}=  get_acc_id  ${PUSERNAME_L} 
     Set Suite Variable    ${accid1}
     
 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${ph1}=  Evaluate  ${MUSERNAME_L}+1000000000
-    ${ph2}=  Evaluate  ${MUSERNAME_L}+2000000000
+    ${ph1}=  Evaluate  ${PUSERNAME_L}+1000000000
+    ${ph2}=  Evaluate  ${PUSERNAME_L}+2000000000
     ${views}=  Random Element    ${Views}
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -728,7 +728,7 @@ JD-TC-Get Next Available Dates-8
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${MUSERNAME_L}.${test_mail}
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_L}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname_B}  ${lastname_B}   ${email_id}
     Log  ${resp.json()}
@@ -847,7 +847,7 @@ JD-TC-Get Next Available Dates-8
     
 JD-TC-Get Next Available Dates-9
 	[Documentation]  create a vacation
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_L}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_L}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -908,7 +908,7 @@ JD-TC-Get Next Available Dates-9
  
     END
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_L}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_L}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -921,7 +921,7 @@ JD-TC-Get Next Available Dates-9
 JD-TC-Get Next Available Dates-UH1
 
 	[Documentation]  provider Disable department
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_L}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_L}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -971,7 +971,7 @@ JD-TC-Get Next Available Dates-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response List   ${resp}   0  date=${DAY1}  serviceTime=${sTime_2}  queueStartTime=${sTime_2}  queueEndTime=${eTime_2}  isAvailable=${bool[1]}  queueId=${uq_id1} 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_L}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_L}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -986,7 +986,7 @@ JD-TC-Get Next Available Dates-UH1
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${INVALID_SERVICE}"
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_L}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_L}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

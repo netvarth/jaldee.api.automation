@@ -14,7 +14,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -36,11 +36,11 @@ JD-TC-JD GetAccountDefaultTemplateForType-1
 
     [Documentation]  Create a Template with valid details and isDefaultTemp is true then try to get default template for the type.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${p_id1}=  get_acc_id  ${HLMUSERNAME1}
+    ${p_id1}=  get_acc_id  ${HLPUSERNAME1}
     Set Suite Variable   ${p_id1}
 
     ${resp}=   Get Templates By Account
@@ -101,7 +101,7 @@ JD-TC-JD GetAccountDefaultTemplateForType-2
 
     [Documentation]  Create a Template with valid details and isDefaultTemp is true then try to get default template for the type.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -141,7 +141,7 @@ JD-TC-JD GetAccountDefaultTemplateForType-3
 
     [Documentation]  Update first Template with isDefaultTemp is false,again upadate new template isDefaultTemp as true.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

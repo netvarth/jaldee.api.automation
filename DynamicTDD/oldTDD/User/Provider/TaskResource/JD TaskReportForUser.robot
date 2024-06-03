@@ -11,8 +11,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -27,11 +27,11 @@ JD-TC-TaskReport-1
 
     [Documentation]  Generate Task Report For Location Filter
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     
-    ${p_id}=  get_acc_id            ${HLMUSERNAME7}
+    ${p_id}=  get_acc_id            ${HLPUSERNAME7}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -167,11 +167,11 @@ JD-TC-TaskReport-2
 
     [Documentation]  Generate Task Report For Title Filter
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     
-    ${p_id}=  get_acc_id            ${HLMUSERNAME7}
+    ${p_id}=  get_acc_id            ${HLPUSERNAME7}
 
     ${title1}=  FakerLibrary.user name
     Set Suite Variable  ${title1}
@@ -217,11 +217,11 @@ JD-TC-TaskReport-3
 
     [Documentation]  Generate Task Report For Assignee Filter
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     
-    ${p_id}=  get_acc_id            ${HLMUSERNAME7}
+    ${p_id}=  get_acc_id            ${HLPUSERNAME7}
 
     ${title2}=  FakerLibrary.user name
     Set Suite variable      ${title2}
@@ -287,11 +287,11 @@ JD-TC-TaskReport-4
 
     [Documentation]     Generate Task Report For Users Having Multiple Location
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
-    ${p_id}=  get_acc_id            ${HLMUSERNAME7}
+    ${p_id}=  get_acc_id            ${HLPUSERNAME7}
 
     ${resp}=  View Waitlist Settings
     Log   ${resp.json()}
@@ -505,7 +505,7 @@ JD-TC-TaskReport-4
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -608,11 +608,11 @@ JD-TC-TaskReport-5
 
     [Documentation]     Generate Task Report  By multiple Title
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME8}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
-    ${p_idA}=  get_acc_id            ${HLMUSERNAME8}
+    ${p_idA}=  get_acc_id            ${HLPUSERNAME8}
 
     ${resp}=  View Waitlist Settings
     Log   ${resp.json()}
@@ -817,7 +817,7 @@ JD-TC-TaskReport-5
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME8}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -906,11 +906,11 @@ JD-TC-TaskReport-6
 
     [Documentation]     Generate Task Report multiple Assignee
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
-    ${p_idB}=  get_acc_id            ${HLMUSERNAME9}
+    ${p_idB}=  get_acc_id            ${HLPUSERNAME9}
 
     ${resp}=  View Waitlist Settings
     Log   ${resp.json()}
@@ -1108,7 +1108,7 @@ JD-TC-TaskReport-6
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -1202,11 +1202,11 @@ JD-TC-TaskReport-7
 
     [Documentation]  Generate Task Report For Account Level With EMPTY
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME10}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     
-    ${p_id}=  get_acc_id            ${HLMUSERNAME10}
+    ${p_id}=  get_acc_id            ${HLPUSERNAME10}
 
     ${resp}=  View Waitlist Settings
     Log   ${resp.json()}
@@ -1334,11 +1334,11 @@ JD-TC-TaskReport-8
 
     [Documentation]  Generate Task Report For Account Level With EMPTY For Date Range
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     
-    ${p_id}=  get_acc_id            ${HLMUSERNAME11}
+    ${p_id}=  get_acc_id            ${HLPUSERNAME11}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1464,7 +1464,7 @@ JD-TC-TaskReport-9
 
     [Documentation]  Generate Task Report For Account Level With Location Filter In Date Range
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -1512,11 +1512,11 @@ JD-TC-TaskReport-10
 
     [Documentation]  Generate Task Report For Account Level With Title Filter In Date Range
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     
-    ${p_id}=  get_acc_id            ${HLMUSERNAME11}
+    ${p_id}=  get_acc_id            ${HLPUSERNAME11}
 
     ${title2}=  FakerLibrary.user name
     Set Suite Variable  ${title2}
@@ -1565,11 +1565,11 @@ JD-TC-TaskReport-11
 
     [Documentation]  Generate Task Report For Account Level With Assignee Filter In Date Range
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     
-    ${p_id}=  get_acc_id            ${HLMUSERNAME11}
+    ${p_id}=  get_acc_id            ${HLPUSERNAME11}
 
     ${title2}=  FakerLibrary.user name
     Set Suite variable      ${title2}
@@ -1645,11 +1645,11 @@ JD-TC-TaskReport-12
 
     [Documentation]     Generate Task Report For User Using Location In Date Range
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
-    ${p_id}=  get_acc_id            ${HLMUSERNAME11}
+    ${p_id}=  get_acc_id            ${HLPUSERNAME11}
 
     ${resp}=  View Waitlist Settings
     Log   ${resp.json()}
@@ -1863,7 +1863,7 @@ JD-TC-TaskReport-12
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -1970,11 +1970,11 @@ JD-TC-TaskReport-13
 
     [Documentation]     Generate Task Report For User Using title In Date Range
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME12}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
-    ${p_idA}=  get_acc_id            ${HLMUSERNAME12}
+    ${p_idA}=  get_acc_id            ${HLPUSERNAME12}
 
     ${resp}=  View Waitlist Settings
     Log   ${resp.json()}
@@ -2181,7 +2181,7 @@ JD-TC-TaskReport-13
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME12}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -2272,11 +2272,11 @@ JD-TC-TaskReport-14
 
     [Documentation]     Generate Task Report For User Using Assignee
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME13}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
-    ${p_idB}=  get_acc_id            ${HLMUSERNAME13}
+    ${p_idB}=  get_acc_id            ${HLPUSERNAME13}
 
     ${resp}=  View Waitlist Settings
     Log   ${resp.json()}
@@ -2474,7 +2474,7 @@ JD-TC-TaskReport-14
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME13}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -2571,11 +2571,11 @@ JD-TC-TaskReport-15
 
     [Documentation]     Generate Task Report For User with loc and title where datecategory in TODAY
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
-    ${p_idA}=  get_acc_id            ${HLMUSERNAME14}
+    ${p_idA}=  get_acc_id            ${HLPUSERNAME14}
 
     ${resp}=  View Waitlist Settings
     Log   ${resp.json()}
@@ -2803,7 +2803,7 @@ JD-TC-TaskReport-15
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -2852,11 +2852,11 @@ JD-TC-TaskReport-16
 
     [Documentation]     Generate Task Report For User with loc and assignee where datecategory in TODAY
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
-    ${p_idB}=  get_acc_id            ${HLMUSERNAME15}
+    ${p_idB}=  get_acc_id            ${HLPUSERNAME15}
 
     ${resp}=  View Waitlist Settings
     Log   ${resp.json()}
@@ -3077,7 +3077,7 @@ JD-TC-TaskReport-16
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -3131,11 +3131,11 @@ JD-TC-TaskReport-17
 
     [Documentation]     Generate Task Report For User using title and assignee where datecategory in TODAY
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
-    ${p_idB}=  get_acc_id            ${HLMUSERNAME16}
+    ${p_idB}=  get_acc_id            ${HLPUSERNAME16}
 
     ${resp}=  View Waitlist Settings
     Log   ${resp.json()}
@@ -3333,7 +3333,7 @@ JD-TC-TaskReport-17
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -3386,11 +3386,11 @@ JD-TC-TaskReport-18
 
     [Documentation]     Generate Task Report For User by location id, item and assignee where datecategory in TODAY
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
-    ${p_idB}=  get_acc_id            ${HLMUSERNAME17}
+    ${p_idB}=  get_acc_id            ${HLPUSERNAME17}
 
     ${resp}=  View Waitlist Settings
     Log   ${resp.json()}
@@ -3618,7 +3618,7 @@ JD-TC-TaskReport-18
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -3672,11 +3672,11 @@ JD-TC-TaskReport-19
 
     [Documentation]     Generate Task Report For User with loc and title where datecategory in Date Range
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
-    ${p_idA}=  get_acc_id            ${HLMUSERNAME18}
+    ${p_idA}=  get_acc_id            ${HLPUSERNAME18}
 
     ${resp}=  View Waitlist Settings
     Log   ${resp.json()}
@@ -3904,7 +3904,7 @@ JD-TC-TaskReport-19
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -3957,11 +3957,11 @@ JD-TC-TaskReport-20
 
     [Documentation]     Generate Task Report For User with loc and assignee where datecategory in Date Range
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
-    ${p_idB}=  get_acc_id            ${HLMUSERNAME19}
+    ${p_idB}=  get_acc_id            ${HLPUSERNAME19}
 
     ${resp}=  View Waitlist Settings
     Log   ${resp.json()}
@@ -4182,7 +4182,7 @@ JD-TC-TaskReport-20
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -4240,11 +4240,11 @@ JD-TC-TaskReport-21
 
     [Documentation]     Generate Task Report For User using title and assignee where datecategory in Date Range
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
-    ${p_idB}=  get_acc_id            ${HLMUSERNAME20}
+    ${p_idB}=  get_acc_id            ${HLPUSERNAME20}
 
     ${resp}=  View Waitlist Settings
     Log   ${resp.json()}
@@ -4442,7 +4442,7 @@ JD-TC-TaskReport-21
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -4498,11 +4498,11 @@ JD-TC-TaskReport-22
 
     [Documentation]     Generate Task Report For User by location id, item and assignee where datecategory in Date Range
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
-    ${p_idB}=  get_acc_id            ${HLMUSERNAME21}
+    ${p_idB}=  get_acc_id            ${HLPUSERNAME21}
 
     ${resp}=  View Waitlist Settings
     Log   ${resp.json()}
@@ -4730,7 +4730,7 @@ JD-TC-TaskReport-22
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -4787,11 +4787,11 @@ JD-TC-TaskReport-23
 
     [Documentation]  Generate Task Report with Location Area
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     
-    ${p_id}=  get_acc_id            ${HLMUSERNAME3}
+    ${p_id}=  get_acc_id            ${HLPUSERNAME3}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -4919,11 +4919,11 @@ JD-TC-TaskReport-24
 
     [Documentation]  Generate Task Report with Location Area in Date Range
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     
-    ${p_id}=  get_acc_id            ${HLMUSERNAME4}
+    ${p_id}=  get_acc_id            ${HLPUSERNAME4}
 
     ${resp}=    Get Locations
     Log  ${resp.content}

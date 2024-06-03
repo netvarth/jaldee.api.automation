@@ -11,8 +11,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Library           /ebs/TDD/excelfuncs.py
 
 *** Keywords ***
@@ -112,7 +112,7 @@ JD-TC-ChangeLeadStatusbyuser-1
     Log  ${unique_lnames}
     Set Suite Variable   ${unique_lnames}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -125,7 +125,7 @@ JD-TC-ChangeLeadStatusbyuser-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    clear_customer   ${MUSERNAME42}
+    clear_customer   ${PUSERNAME42}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -449,7 +449,7 @@ JD-TC-ChangeLeadStatusbyuser-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME42}'
+            IF   not '${user_phone}' == '${PUSERNAME42}'
                 clear_users  ${user_phone}
             END
         END
@@ -1454,7 +1454,7 @@ JD-TC-ChangeLeadStatusbyuser-8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1508,7 +1508,7 @@ JD-TC-ChangeLeadStatusbyuser-9
 
     [Documentation]  lead created by branch then change status by user
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1723,7 +1723,7 @@ JD-TC-ChangeLeadStatusbyuser-10
 
     [Documentation]  lead created by one  user then change status by another user same branch
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1851,7 +1851,7 @@ JD-TC-ChangeLeadStatusbyuser-UH1
 
     [Documentation]  lead created by one  user then change status by another provider
 
-    ${resp}=   Encrypted Provider Login  ${MUSERNAME63}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME63}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}

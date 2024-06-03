@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Test Cases ***
 
@@ -22,7 +22,7 @@ JD-TC-GetItemCompositionCountFilter-1
 
     [Documentation]  Get Item Composition Count Filter
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME13}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -101,7 +101,7 @@ JD-TC-GetItemCompositionCountFilter-2
 
     [Documentation]  Get Item Composition Count Filter - compositionCode
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME13}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -114,7 +114,7 @@ JD-TC-GetItemCompositionCountFilter-3
 
     [Documentation]  Get Item Composition Count Filter - compositionName
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME13}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -127,7 +127,7 @@ JD-TC-GetItemCompositionCountFilter-4
 
     [Documentation]  Get Item Composition Count Filter - status
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME13}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -151,7 +151,7 @@ JD-TC-GetItemCompositionCountFilter-6
 
     [Documentation]  Get Item Composition Count Filter - with another provider login
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

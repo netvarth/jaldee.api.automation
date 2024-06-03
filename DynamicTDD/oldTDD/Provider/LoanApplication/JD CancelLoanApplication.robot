@@ -13,8 +13,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -73,7 +73,7 @@ JD-TC-CancelLoanApplication-1
                                   
     [Documentation]               Create Loan Application and cancel loanapplication
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -1129,7 +1129,7 @@ JD-TC-CancelLoanApplication-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1390,7 +1390,7 @@ JD-TC-CancelLoanApplication-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1684,7 +1684,7 @@ JD-TC-CancelLoanApplication-8
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1950,7 +1950,7 @@ JD-TC-CancelLoanApplication-9
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLPUSERNAME8}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}

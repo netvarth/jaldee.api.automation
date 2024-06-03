@@ -8,14 +8,14 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 ***Test Cases***
 
 JD-TC-GetTeamById-1
      [Documentation]  Get Team by id at account level
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -36,7 +36,7 @@ JD-TC-GetTeamById-1
 
 JD-TC-GetTeamById-2
      [Documentation]  Get team by id by user who has usertype PROVIDER and admin privilage TRUE
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -79,7 +79,7 @@ JD-TC-GetTeamById-2
 
 JD-TC-GetTeamById-3
      [Documentation]  Get team by id by  user login with user type ADMIN
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+330062
@@ -125,7 +125,7 @@ JD-TC-GetTeamById-3
 
 JD-TC-GetTeamById-4
      [Documentation]  Get team by id by user who has usertype PROVIDER and admin privilage FALSE(Evaery user can see teams)
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+338097

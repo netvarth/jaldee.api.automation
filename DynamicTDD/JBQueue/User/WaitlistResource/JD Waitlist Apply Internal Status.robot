@@ -8,7 +8,7 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 ***Test Cases***
@@ -17,15 +17,15 @@ JD-TC-WaitlistApplyInternalSts-1
 
      [Documentation]  Apply Internal statuses when user has ADMIN=TRUE
 
-     clear_customer   ${HLMUSERNAME21}
-     clear_queue      ${HLMUSERNAME21}
-     clear_service    ${HLMUSERNAME21}
-     clear_location   ${HLMUSERNAME21}
+     clear_customer   ${HLPUSERNAME21}
+     clear_queue      ${HLPUSERNAME21}
+     clear_service    ${HLPUSERNAME21}
+     clear_location   ${HLPUSERNAME21}
 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME21}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${pid}=  get_acc_id  ${HLMUSERNAME21}
+     ${pid}=  get_acc_id  ${HLPUSERNAME21}
      Set Suite Variable  ${pid}
 
      ${resp}=  View Waitlist Settings
@@ -193,7 +193,7 @@ JD-TC-WaitlistApplyInternalSts-1
     Set Suite Variable  ${sts}
     ${internal_sts}=  MultiUser_InternalStatus  ${sts}  ${pid}
 
-    clear_customer   ${HLMUSERNAME21}
+    clear_customer   ${HLPUSERNAME21}
 
     ${resp}=  AddCustomer  ${CUSERNAME1}
     Log   ${resp.json()}
@@ -236,7 +236,7 @@ JD-TC-WaitlistApplyInternalSts-1
      ${resp}=   ProviderLogout
      Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME21}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -280,7 +280,7 @@ JD-TC-WaitlistApplyInternalSts-2
      ${resp}=   ProviderLogout
      Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME21}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -291,7 +291,7 @@ JD-TC-WaitlistApplyInternalSts-2
 
 JD-TC-WaitlistApplyInternalSts-3
      [Documentation]  Apply Internal statuses when user has no permission for internal sts but he is ADMIN=TRUE
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME21}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -348,7 +348,7 @@ JD-TC-WaitlistApplyInternalSts-UH1
 
 JD-TC-WaitlistApplyInternalSts-UH2
      [Documentation]  Apply Internal statuses when user has no permission for internal Status
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME21}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -373,7 +373,7 @@ JD-TC-WaitlistApplyInternalSts-UH3
 
 JD-TC-WaitlistApplyInternalSts-UH4
      [Documentation]  User again apply already applied status
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME21}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -384,7 +384,7 @@ JD-TC-WaitlistApplyInternalSts-UH4
 
 JD-TC-WaitlistApplyInternalSts-UH5
      [Documentation]  User aaply invalid status
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME21}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${invalid_sts}=  FakerLibrary.name
@@ -395,7 +395,7 @@ JD-TC-WaitlistApplyInternalSts-UH5
      
 JD-TC-WaitlistApplyInternalSts-4
      [Documentation]  Apply Internal statuses when team has permission
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME21}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -445,7 +445,7 @@ JD-TC-WaitlistApplyInternalSts-4
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME21}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -454,7 +454,7 @@ JD-TC-WaitlistApplyInternalSts-4
      Should Be Equal As Strings  ${resp.status_code}  200
      Verify Response  ${resp}  internalStatus=${internal_sts_dis_name1}
 
-     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME21}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Waitlist Apply Internal Status  ${wid3}  ${internal_sts_name1}

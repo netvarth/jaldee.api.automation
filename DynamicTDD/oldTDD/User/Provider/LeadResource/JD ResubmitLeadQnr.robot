@@ -14,8 +14,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -120,11 +120,11 @@ JD-TC-ResubmitQuestionnaireForLead-1
     Log  ${unique_lnames}
     Set Suite Variable   ${unique_lnames}
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 # *** Comments ***
-    # ${p_id}=  get_acc_id  ${HLMUSERNAME4}
+    # ${p_id}=  get_acc_id  ${HLPUSERNAME4}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -171,7 +171,7 @@ JD-TC-ResubmitQuestionnaireForLead-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -230,7 +230,7 @@ JD-TC-ResubmitQuestionnaireForLead-1
     FOR   ${i}  IN RANGE   0   ${len}
        
         Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-        IF   not '${user_phone}' == '${HLMUSERNAME4}'
+        IF   not '${user_phone}' == '${HLPUSERNAME4}'
             clear_users  ${user_phone}
         END
     END
@@ -249,7 +249,7 @@ JD-TC-ResubmitQuestionnaireForLead-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -294,7 +294,7 @@ JD-TC-ResubmitQuestionnaireForLead-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLMUSERNAME4}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLPUSERNAME4}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
@@ -302,7 +302,7 @@ JD-TC-ResubmitQuestionnaireForLead-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     

@@ -14,9 +14,9 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -42,30 +42,30 @@ JD-TC-ActivateVacation-1
     Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
     ${firstname_A}=  FakerLibrary.first_name
     ${lastname_A}=  FakerLibrary.last_name
-    ${MUSERNAME_E1}=  Evaluate  ${MUSERNAME}+778805678
+    ${PUSERNAME_E1}=  Evaluate  ${PUSERNAME}+778805678
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E1}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E1}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_E1}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E1}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_E1}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E1}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E1}${\n}
-    Set Suite Variable  ${MUSERNAME_E1}
-    ${id}=  get_id  ${MUSERNAME_E1}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E1}${\n}
+    Set Suite Variable  ${PUSERNAME_E1}
+    ${id}=  get_id  ${PUSERNAME_E1}
     ${bs}=  FakerLibrary.bs
 
-    ${pid_B15}=  get_acc_id  ${MUSERNAME_E1}
+    ${pid_B15}=  get_acc_id  ${PUSERNAME_E1}
     Set Suite Variable  ${pid_B15}
 
     
-    ${ph1}=  Evaluate  ${MUSERNAME_E1}+1000880000
-    ${ph2}=  Evaluate  ${MUSERNAME_E1}+2000880000
+    ${ph1}=  Evaluate  ${PUSERNAME_E1}+1000880000
+    ${ph2}=  Evaluate  ${PUSERNAME_E1}+2000880000
     ${views}=  Random Element    ${Views}
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -265,7 +265,7 @@ JD-TC-ActivateVacation-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid01}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -306,7 +306,7 @@ JD-TC-ActivateVacation-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -324,11 +324,11 @@ JD-TC-ActivateVacation-2
 
     [Documentation]  Take a appointment and then create a vacation and try to check appointmentstatus
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${pid_B15}=  get_acc_id  ${MUSERNAME_E1}
+    ${pid_B15}=  get_acc_id  ${PUSERNAME_E1}
     Set Suite variable  ${pid_B15}
 
     ${resp}=  Get Accountsettings  
@@ -382,7 +382,7 @@ JD-TC-ActivateVacation-2
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -422,7 +422,7 @@ JD-TC-ActivateVacation-2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -439,14 +439,14 @@ JD-TC-ActivateVacation-3
 
     [Documentation]  Take a appointment and then create a  vacation and try to check appointmentstatus activate vacation is false
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_customer   ${MUSERNAME_E1}
-    clear_appt_schedule   ${MUSERNAME_E1}
+    clear_customer   ${PUSERNAME_E1}
+    clear_appt_schedule   ${PUSERNAME_E1}
 
-    ${pid_B15}=  get_acc_id  ${MUSERNAME_E1}
+    ${pid_B15}=  get_acc_id  ${PUSERNAME_E1}
     Set Suite variable  ${pid_B15}
 
     ${resp}=  Get Accountsettings  
@@ -513,7 +513,7 @@ JD-TC-ActivateVacation-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid01}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -554,7 +554,7 @@ JD-TC-ActivateVacation-3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -570,7 +570,7 @@ JD-TC-ActivateVacation-3
 
 JD-TC-ActivateVacation-UH1
     [Documentation]    Using Multiple Appointment solts when Appointment is Enable and create a 1 hour vacation and try to take checkin
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -721,7 +721,7 @@ JD-TC-ActivateVacation-UH4
 JD-TC-ActivateVacation-UH5
     [Documentation]  Activate an invalid Vacation details
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Activate Vacation   ${boolean[1]}    0
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -731,7 +731,7 @@ JD-TC-ActivateVacation-4
 
     [Documentation]  Take account level and user level appointment and create a user level vacation and check account level appointment status
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -755,11 +755,11 @@ JD-TC-ActivateVacation-4
 
     END
 
-    clear_queue      ${HLMUSERNAME6}
-    clear_service    ${HLMUSERNAME6}
-    clear_customer   ${HLMUSERNAME6}
+    clear_queue      ${HLPUSERNAME6}
+    clear_service    ${HLPUSERNAME6}
+    clear_customer   ${HLPUSERNAME6}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME6}
+    ${pid}=  get_acc_id  ${HLPUSERNAME6}
 
     ${resp}=  Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -868,13 +868,13 @@ JD-TC-ActivateVacation-4
         FOR   ${i}  IN RANGE   0   ${len}
         
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME6}'
+            IF   not '${user_phone}' == '${HLPUSERNAME6}'
                 clear_users  ${user_phone}
             END
         END
     END
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME6}+1000310000
+    ${ph1}=  Evaluate  ${HLPUSERNAME6}+1000310000
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -892,8 +892,8 @@ JD-TC-ActivateVacation-4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${whpnum}=  Evaluate  ${HLMUSERNAME6}+336245
-    ${tlgnum}=  Evaluate  ${HLMUSERNAME6}+336345
+    ${whpnum}=  Evaluate  ${HLPUSERNAME6}+336245
+    ${tlgnum}=  Evaluate  ${HLPUSERNAME6}+336345
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
@@ -1003,7 +1003,7 @@ JD-TC-ActivateVacation-4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1025,7 +1025,7 @@ JD-TC-ActivateVacation-4
 JD-TC-ActivateVacation-5
     [Documentation]  Take account level and user level appointment and create a account level vacation and check account level appointment status and try to take appointment in user level
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1034,11 +1034,11 @@ JD-TC-ActivateVacation-5
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${HLMUSERNAME6}
-    clear_service    ${HLMUSERNAME6}
-    clear_customer   ${HLMUSERNAME6}
+    clear_queue      ${HLPUSERNAME6}
+    clear_service    ${HLPUSERNAME6}
+    clear_customer   ${HLPUSERNAME6}
 
-    ${pid}=  get_acc_id  ${HLMUSERNAME6}
+    ${pid}=  get_acc_id  ${HLPUSERNAME6}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
@@ -1163,13 +1163,13 @@ JD-TC-ActivateVacation-5
         FOR   ${i}  IN RANGE   0   ${len}
         
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME6}'
+            IF   not '${user_phone}' == '${HLPUSERNAME6}'
                 clear_users  ${user_phone}
             END
         END
     END
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME6}+1000440000
+    ${ph1}=  Evaluate  ${HLPUSERNAME6}+1000440000
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -1187,8 +1187,8 @@ JD-TC-ActivateVacation-5
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${whpnum}=  Evaluate  ${HLMUSERNAME6}+999580
-    ${tlgnum}=  Evaluate  ${HLMUSERNAME6}+920795
+    ${whpnum}=  Evaluate  ${HLPUSERNAME6}+999580
+    ${tlgnum}=  Evaluate  ${HLPUSERNAME6}+920795
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
@@ -1275,7 +1275,7 @@ JD-TC-ActivateVacation-6
     Should Be Equal As Strings    ${resp.status_code}    200
     
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1284,7 +1284,7 @@ JD-TC-ActivateVacation-6
     Set Test Variable  ${pro_id}  ${decrypted_data['id']}
     # Set Test Variable  ${pro_id}  ${resp.json()['id']}
 
-    ${pid_B}=  get_acc_id  ${HLMUSERNAME7}
+    ${pid_B}=  get_acc_id  ${HLPUSERNAME7}
     Set Suite Variable  ${pid_B}
 
 
@@ -1293,9 +1293,9 @@ JD-TC-ActivateVacation-6
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
   
-    clear_service   ${HLMUSERNAME7}
-    clear_appt_schedule   ${HLMUSERNAME7}
-    clear_customer   ${HLMUSERNAME7}
+    clear_service   ${HLPUSERNAME7}
+    clear_appt_schedule   ${HLPUSERNAME7}
+    clear_customer   ${HLPUSERNAME7}
 
     ${resp}=  Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -1397,13 +1397,13 @@ JD-TC-ActivateVacation-6
         FOR   ${i}  IN RANGE   0   ${len}
         
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME7}'
+            IF   not '${user_phone}' == '${HLPUSERNAME7}'
                 clear_users  ${user_phone}
             END
         END
     END
      
-    ${ph1}=  Evaluate  ${HLMUSERNAME7}+1000260000
+    ${ph1}=  Evaluate  ${HLPUSERNAME7}+1000260000
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -1421,8 +1421,8 @@ JD-TC-ActivateVacation-6
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${whpnum}=  Evaluate  ${HLMUSERNAME7}+336245
-    ${tlgnum}=  Evaluate  ${HLMUSERNAME7}+336345
+    ${whpnum}=  Evaluate  ${HLPUSERNAME7}+336245
+    ${tlgnum}=  Evaluate  ${HLPUSERNAME7}+336345
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
@@ -1529,7 +1529,7 @@ JD-TC-ActivateVacation-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid01}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1577,7 +1577,7 @@ JD-TC-ActivateVacation-6
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1605,7 +1605,7 @@ JD-TC-ActivateVacation-6
 JD-TC-ActivateVacation-7
     [Documentation]  create vacation for user and try taking account level and user level appt.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1619,9 +1619,9 @@ JD-TC-ActivateVacation-7
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
   
-    clear_service   ${HLMUSERNAME7}
-    clear_appt_schedule   ${HLMUSERNAME7}
-    clear_customer   ${HLMUSERNAME7}
+    clear_service   ${HLPUSERNAME7}
+    clear_appt_schedule   ${HLPUSERNAME7}
+    clear_customer   ${HLPUSERNAME7}
 
     ${resp}=  Get User
     Log  ${resp.content}
@@ -1632,7 +1632,7 @@ JD-TC-ActivateVacation-7
         FOR   ${i}  IN RANGE   0   ${len}
         
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME7}'
+            IF   not '${user_phone}' == '${HLPUSERNAME7}'
                 clear_users  ${user_phone}
             END
         END
@@ -1796,30 +1796,30 @@ JD-TC-ActivateVacation-UH6
     Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
     ${firstname_A}=  FakerLibrary.first_name
     ${lastname_A}=  FakerLibrary.last_name
-    ${MUSERNAME_E2}=  Evaluate  ${MUSERNAME}+778805876
+    ${PUSERNAME_E2}=  Evaluate  ${PUSERNAME}+778805876
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E2}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E2}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_E2}  0
+    ${resp}=  Account Activation  ${PUSERNAME_E2}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_E2}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E2}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E2}${\n}
-    Set Suite Variable  ${MUSERNAME_E2}
-    ${id}=  get_id  ${MUSERNAME_E2}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E2}${\n}
+    Set Suite Variable  ${PUSERNAME_E2}
+    ${id}=  get_id  ${PUSERNAME_E2}
     ${bs}=  FakerLibrary.bs
 
-    ${pid_B16}=  get_acc_id  ${MUSERNAME_E2}
+    ${pid_B16}=  get_acc_id  ${PUSERNAME_E2}
     Set Suite Variable  ${pid_B16}
 
     
-    ${ph1}=  Evaluate  ${MUSERNAME_E2}+1000880001
-    ${ph2}=  Evaluate  ${MUSERNAME_E2}+2000880001
+    ${ph1}=  Evaluate  ${PUSERNAME_E2}+1000880001
+    ${ph2}=  Evaluate  ${PUSERNAME_E2}+2000880001
     ${views}=  Random Element    ${Views}
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -2019,7 +2019,7 @@ JD-TC-ActivateVacation-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid02}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2096,7 +2096,7 @@ JD-TC-ActivateVacation-UH7
 JD-TC-ActivateVacation-UH8
     [Documentation]  Disable user and try to take appointment for that user in a non working day.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2165,7 +2165,7 @@ JD-TC-ActivateVacation-8
 JD-TC-ActivateVacation-UH7
     [Documentation]   Take waitlist and then create a  holiday for the 3 days and try to check waitliststatus and delete holiday
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2180,7 +2180,7 @@ JD-TC-ActivateVacation-UH7
     # Set Suite Variable  ${sud_domain_id1}   ${serviceSubSector[0]['id']}
 
 
-    ${ACC_ID25}=  get_acc_id    ${MUSERNAME9}
+    ${ACC_ID25}=  get_acc_id    ${PUSERNAME9}
     ${resp}=    Get Locations
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

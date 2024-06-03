@@ -15,7 +15,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -33,7 +33,7 @@ JD-TC-Create Sales Order Invoice-1
 
     [Documentation]   Create a sales Order with Valid Details then Genarate sales order invoice.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -89,11 +89,11 @@ JD-TC-Create Sales Order Invoice-1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${accountId}=  get_acc_id  ${HLMUSERNAME29}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME29}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -220,7 +220,7 @@ JD-TC-Create Sales Order Invoice-1
 
 # ----------------------------- Provider take a Sales Order ------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -309,7 +309,7 @@ JD-TC-Create Sales Order Invoice-2
 
     [Documentation]    Genarate sales order invoice multiple times.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -325,7 +325,7 @@ JD-TC-Create Sales Order Invoice-3
 
     [Documentation]    order assign to a user then user Genarate sales order invoice.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -394,7 +394,7 @@ JD-TC-Create Sales Order Invoice-UH1
 
     [Documentation]    Genarate  invoice with invalid Sales order Uid.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -407,7 +407,7 @@ JD-TC-Create Sales Order Invoice-UH2
 
     [Documentation]    Genarate  invoice with not assigned user.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -440,7 +440,7 @@ JD-TC-Create Sales Order Invoice-UH3
 
     [Documentation]    Genarate invoice with another provider.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME19}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -452,7 +452,7 @@ JD-TC-Create Sales Order Invoice-4
 
     [Documentation]    Update sales order status as ORDER_CANCELED then Genarate invoice .
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -477,7 +477,7 @@ JD-TC-Create Sales Order Invoice-5
 
     [Documentation]    Update sales order status as ORDER_DISCARDED then Genarate invoice .
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -515,7 +515,7 @@ JD-TC-Create Sales Order Invoice-6
 
     [Documentation]    Update sales order status as ORDER_COMPLETED then Genarate invoice .
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

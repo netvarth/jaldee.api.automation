@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -29,7 +29,7 @@ JD-TC-Update Inventory Catalog Item Status-1
 
     [Documentation]  create Inventory Catalog Item then update status.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -82,10 +82,10 @@ JD-TC-Update Inventory Catalog Item Status-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME45}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME45}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -172,7 +172,7 @@ JD-TC-Update Inventory Catalog Item Status-2
 
     [Documentation]  Update Inventory Catalog Item status as inactive from user login.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -249,7 +249,7 @@ JD-TC-Update Inventory Catalog Item Status-3
 
     [Documentation]  update inventory catalog item and Update Inventory Catalog Item status as inactive from user login.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -270,7 +270,7 @@ JD-TC-Update Inventory Catalog Item Status-UH1
 
     [Documentation]  Update Inventory Catalog Item status with invalid itemEncids.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${ITEM_NAME_EXIST}=  Format String  ${ITEM_NAME_EXIST}    ${categoryName}
@@ -310,7 +310,7 @@ JD-TC-Update Inventory Catalog Item Status-UH6
 
     [Documentation]  Create Inventory Catalog Item using another provider
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

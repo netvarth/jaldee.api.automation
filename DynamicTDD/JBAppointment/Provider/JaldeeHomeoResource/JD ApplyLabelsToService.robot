@@ -14,7 +14,7 @@ Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/AppKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 *** Variables ***
@@ -603,11 +603,11 @@ JD-TC-ApplyLabelToService-9
     ...    then apply channel label to a service in account level.
 
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
    
-    clear_Label  ${MUSERNAME110}  
+    clear_Label  ${PUSERNAME110}  
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -652,7 +652,7 @@ JD-TC-ApplyLabelToService-9
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -699,11 +699,11 @@ JD-TC-ApplyLabelToService-10
     ...    then apply channel label to a service in user level.
 
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME111}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
    
-    clear_Label  ${MUSERNAME111}  
+    clear_Label  ${PUSERNAME111}  
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -749,7 +749,7 @@ JD-TC-ApplyLabelToService-10
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME111}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -794,7 +794,7 @@ JD-TC-ApplyLabelToService-10
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME111}'
+            IF   not '${user_phone}' == '${PUSERNAME111}'
                 clear_users  ${user_phone}
             END
         END

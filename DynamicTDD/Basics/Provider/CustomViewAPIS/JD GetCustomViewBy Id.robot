@@ -14,7 +14,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 *** Variables ***
@@ -33,22 +33,22 @@ JD-TC-GetCustomViewById-1
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_B}=  Evaluate  ${MUSERNAME}+555499
+    ${PUSERNAME_B}=  Evaluate  ${PUSERNAME}+555499
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_B}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_B}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_B}  0
+    ${resp}=  Account Activation  ${PUSERNAME_B}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_B}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_B}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_B}${\n}
-    Set Suite Variable  ${MUSERNAME_B}
-    ${id}=  get_id  ${MUSERNAME_B}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_B}${\n}
+    Set Suite Variable  ${PUSERNAME_B}
+    ${id}=  get_id  ${PUSERNAME_B}
     Set Suite Variable  ${id}
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
@@ -139,7 +139,7 @@ JD-TC-GetCustomViewById-1
 
 JD-TC-GetCustomViewApis-UH1
     [Documentation]  Checking CustomView details with Wrong CustomView ID Number
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${name}=   FakerLibrary.word
@@ -151,7 +151,7 @@ JD-TC-GetCustomViewApis-UH1
 
 JD-TC-GetCustomViewApis-UH2
     [Documentation]   Login with Different Branch Number 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${name}=   FakerLibrary.word

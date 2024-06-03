@@ -14,8 +14,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 ${xlFile}      ${EXECDIR}/TDD/ServiceoptionsQnr.xlsx   # DataSheet
@@ -81,7 +81,7 @@ Check Answers
 
 JD-TC-ServiceOptionsPaymentForWaitlist-1
     [Documentation]  Submit service option payment
-    clear Queue     ${HLMUSERNAME4}
+    clear Queue     ${HLPUSERNAME4}
 
     ${wb}=  readWorkbook  ${xlFile}
     ${sheet1}  GetCurrentSheet   ${wb}
@@ -180,7 +180,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -216,7 +216,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-1
     Log         ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -301,7 +301,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-1
     Log  ${data}
     Set Suite Variable   ${data}
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLMUSERNAME4}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLPUSERNAME4}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
@@ -325,7 +325,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-1
 
 JD-TC-ServiceOptionsPaymentForWaitlist-2
     [Documentation]  service option payment for Waitlist with GST
-    clear Queue     ${HLMUSERNAME6}
+    clear Queue     ${HLPUSERNAME6}
 
     ${wb}=  readWorkbook  ${xlFile}
     ${sheet1}  GetCurrentSheet   ${wb}
@@ -343,7 +343,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-2
     Log  ${unique_snames}
     Set Suite Variable   ${unique_snames}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -434,7 +434,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -470,7 +470,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-2
     Log         ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -555,7 +555,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-2
     Log  ${data}
     Set Suite Variable   ${data}
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLMUSERNAME6}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLPUSERNAME6}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
@@ -583,7 +583,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-2
 
 JD-TC-ServiceOptionPaymentForWaitlist-3
     [Documentation]  service option payment for Waitlist with GST And Coupon
-    clear Queue     ${HLMUSERNAME11}
+    clear Queue     ${HLPUSERNAME11}
 
     ${wb}=  readWorkbook  ${xlFile}
     ${sheet1}  GetCurrentSheet   ${wb}
@@ -601,7 +601,7 @@ JD-TC-ServiceOptionPaymentForWaitlist-3
     Log  ${unique_snames}
     Set Suite Variable   ${unique_snames}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -742,7 +742,7 @@ JD-TC-ServiceOptionPaymentForWaitlist-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -778,7 +778,7 @@ JD-TC-ServiceOptionPaymentForWaitlist-3
     Log         ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -863,7 +863,7 @@ JD-TC-ServiceOptionPaymentForWaitlist-3
     Log  ${data}
     Set Suite Variable   ${data}
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLMUSERNAME11}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLPUSERNAME11}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
@@ -910,7 +910,7 @@ JD-TC-ServiceOptionPaymentForWaitlist-3
 
 JD-TC-ServiceOptionsPaymentForWaitlist-4
     [Documentation]  Resubmit service option payment
-    clear Queue     ${HLMUSERNAME13}
+    clear Queue     ${HLPUSERNAME13}
 
     ${wb}=  readWorkbook  ${xlFile}
     ${sheet1}  GetCurrentSheet   ${wb}
@@ -928,7 +928,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-4
     Log  ${unique_snames}
     Set Suite Variable   ${unique_snames}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -1001,7 +1001,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1037,7 +1037,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-4
     Log         ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1122,7 +1122,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-4
     Log  ${data}
     Set Suite Variable   ${data}
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLMUSERNAME13}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLPUSERNAME13}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
@@ -1170,7 +1170,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-4
 
 JD-TC-ServiceOptionPaymentForWaitlist-5
     [Documentation]  service option payment for Waitlist with Coupon
-    clear Queue     ${HLMUSERNAME18}
+    clear Queue     ${HLPUSERNAME18}
 
     ${wb}=  readWorkbook  ${xlFile}
     ${sheet1}  GetCurrentSheet   ${wb}
@@ -1188,7 +1188,7 @@ JD-TC-ServiceOptionPaymentForWaitlist-5
     Log  ${unique_snames}
     Set Suite Variable   ${unique_snames}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -1328,7 +1328,7 @@ JD-TC-ServiceOptionPaymentForWaitlist-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1364,7 +1364,7 @@ JD-TC-ServiceOptionPaymentForWaitlist-5
     Log         ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1449,7 +1449,7 @@ JD-TC-ServiceOptionPaymentForWaitlist-5
     Log  ${data}
     Set Suite Variable   ${data}
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLMUSERNAME18}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLPUSERNAME18}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 

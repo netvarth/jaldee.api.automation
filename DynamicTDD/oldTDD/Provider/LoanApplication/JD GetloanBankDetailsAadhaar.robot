@@ -13,8 +13,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -52,7 +52,7 @@ JD-TC-Get loan Bank Details Aadhaar-1
                                   
     [Documentation]               Create Loan Application and Get loan Bank Details Aadhaar.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME13}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -250,7 +250,7 @@ JD-TC-Get loan Bank Details Aadhaar-2
                                   
     [Documentation]               Create Loan Application and without Requst For Aadhar Validation Get loan Bank Details Aadhaar.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME13}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -305,7 +305,7 @@ JD-TC-Get loan Bank Details Aadhaar-3
                                   
     [Documentation]               Create Loan Application and try two time Get loan Bank Details Aadhaar.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME13}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -323,7 +323,7 @@ JD-TC-Get loan Bank Details Aadhaar-UH1
                                   
     [Documentation]               try to Get loan Bank Details Aadhaar with invalid loan id.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME13}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -338,7 +338,7 @@ JD-TC-Get loan Bank Details Aadhaar-5
                                   
     [Documentation]               try to Get loan Bank Details Aadhaar with EMPTY loan id.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME13}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

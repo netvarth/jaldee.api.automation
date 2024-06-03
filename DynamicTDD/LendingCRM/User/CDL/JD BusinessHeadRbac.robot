@@ -13,8 +13,8 @@ Resource           /ebs/TDD/ConsumerKeywords.robot
 Resource           /ebs/TDD/ProviderPartnerKeywords.robot
 Variables          /ebs/TDD/varfiles/providers.py
 Variables          /ebs/TDD/varfiles/consumerlist.py 
-Variables          /ebs/TDD/varfiles/musers.py
-Variables          /ebs/TDD/varfiles/hl_musers.py
+Variables          /ebs/TDD/varfiles/providers.py
+Variables          /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -92,23 +92,23 @@ JD-TC-BussinessHeadWithRBAC-1
 
 # ..... SignUp Business Head
 
-    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+3579485
+    ${NBFCPUSERNAME1}=  Evaluate  ${PUSERNAME}+3579485
     ${highest_package}=  get_highest_license_pkg
 
-    Set Suite Variable     ${NBFCMUSERNAME1}
+    Set Suite Variable     ${NBFCPUSERNAME1}
 
-    ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCMUSERNAME1}    ${highest_package[0]}
+    ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCPUSERNAME1}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings            ${resp.status_code}    200
     
-    ${resp}=  Account Activation          ${NBFCMUSERNAME1}  0
+    ${resp}=  Account Activation          ${NBFCPUSERNAME1}  0
     Log   ${resp.json()}
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential      ${NBFCMUSERNAME1}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential      ${NBFCPUSERNAME1}  ${PASSWORD}  0
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login    ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -433,7 +433,7 @@ JD-TC-BussinessHeadWithRBAC-2
                                   
     [Documentation]               Create Branch - Business Head
 
-    ${resp}=  Encrypted Provider Login    ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -474,7 +474,7 @@ JD-TC-BussinessHeadWithRBAC-UH1
                                   
     [Documentation]               create Partner - Business Head
 
-    ${resp}=  Encrypted Provider Login    ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -947,7 +947,7 @@ JD-TC-BussinessHeadWithRBAC-3
 
 # ....... Approval Request .......
 
-    ${resp}=  Encrypted Provider Login    ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -959,7 +959,7 @@ JD-TC-BussinessHeadWithRBAC-4
                                   
     [Documentation]               Partner Approved - Business Head
 
-    ${resp}=  Encrypted Provider Login     ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login     ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}      200
 
@@ -975,7 +975,7 @@ JD-TC-BussinessHeadWithRBAC-5
                                   
     [Documentation]               Update sales and Credit officer - Business Head
 
-    ${resp}=  Encrypted Provider Login     ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login     ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}      200
 
@@ -996,7 +996,7 @@ JD-TC-BussinessHeadWithRBAC-6
                                   
     [Documentation]               Activate Partner - Business Head
 
-    ${resp}=  Encrypted Provider Login     ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login     ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}      200
 
@@ -1009,7 +1009,7 @@ JD-TC-BussinessHeadWithRBAC-UH2
                                   
     [Documentation]               Create Loan - Business Head
 
-    ${resp}=  Encrypted Provider Login     ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login     ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}      200
 
@@ -1307,7 +1307,7 @@ JD-TC-BussinessHeadWithRBAC-UH3
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login     ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login     ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}      200
 
@@ -1380,7 +1380,7 @@ JD-TC-BussinessHeadWithRBAC-UH4
     ${note}=                               FakerLibrary.sentence
     Set Suite Variable                     ${note}
 
-    ${resp}=  Encrypted Provider Login     ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login     ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}      200
 
@@ -1524,7 +1524,7 @@ JD-TC-BussinessHeadWithRBAC-7
     Log  ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}      200
 
-    ${resp}=  Encrypted Provider Login     ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login     ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}      200
 
@@ -1558,7 +1558,7 @@ JD-TC-BussinessHeadWithRBAC-UH5
 
     ${note}=                               FakerLibrary.bs
 
-    ${resp}=  Encrypted Provider Login     ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login     ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}      200
 
@@ -1626,7 +1626,7 @@ JD-TC-BussinessHeadWithRBAC-UH6
 
 # ....... Loan Sanctioned .......
 
-    ${resp}=  Encrypted Provider Login     ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login     ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}      200
 
@@ -1648,7 +1648,7 @@ JD-TC-BussinessHeadWithRBAC-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login     ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login     ${NBFCPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}      200
 

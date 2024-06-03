@@ -9,7 +9,7 @@ Library           FakerLibrary
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
 *** Variables ***
@@ -32,22 +32,22 @@ JD-TC-Change Department Status-1
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_G}=  Evaluate  ${MUSERNAME}+423814
+    ${PUSERNAME_G}=  Evaluate  ${PUSERNAME}+423814
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_G}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_G}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_G}  0
+    ${resp}=  Account Activation  ${PUSERNAME_G}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_G}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_G}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_G}${\n}
-    Set Suite Variable  ${MUSERNAME_G}
-    ${id}=  get_id  ${MUSERNAME_G}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_G}${\n}
+    Set Suite Variable  ${PUSERNAME_G}
+    ${id}=  get_id  ${PUSERNAME_G}
     Set Suite Variable  ${id}
    
     ${resp}=  Create Sample Service  ${SERVICE1}  
@@ -81,7 +81,7 @@ JD-TC-Change Department Status-1
 JD-TC-Change Department Status-UH1
     [Documentation]  Change Department Status of another provider
    
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -94,7 +94,7 @@ JD-TC-Change Department Status-UH1
 JD-TC-Change Department Status-UH2
     [Documentation]  Change department status of Invalid department
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200      
     ${resp}=  Change Department Status  0  ${dep_status[0]}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -103,7 +103,7 @@ JD-TC-Change Department Status-UH2
 JD-TC-Change Department Status-UH3
     [Documentation]  Change department status to same status
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200      
     ${resp}=  Change Department Status  ${depid1}  ${dep_status[0]}
     Should Be Equal As Strings  ${resp.status_code}  422

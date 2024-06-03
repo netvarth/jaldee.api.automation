@@ -14,8 +14,8 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -38,7 +38,7 @@ JD-TC-Create Catalog Item Batch-UH1
 
     [Documentation]  When inventory manager is false,cant create batch for sales order catalog item.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME34}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -93,10 +93,10 @@ JD-TC-Create Catalog Item Batch-UH1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME34}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME34}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME34}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -207,7 +207,7 @@ JD-TC-Create Catalog Item Batch-UH2
 
     [Documentation]   Item is Batch applicable,create sales order catalog and item where ivntry mgr is on.Then create batch invtry mgr is off
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME34}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -257,7 +257,7 @@ JD-TC-Create Catalog Item Batch-UH3
 
     [Documentation]   create catalog item batch where invalid SO_itemEncid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME34}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -273,7 +273,7 @@ JD-TC-Create Catalog Item Batch-UH4
 
     [Documentation]   create catalog item batch where name is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME34}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -287,7 +287,7 @@ JD-TC-Create Catalog Item Batch-UH5
 
     [Documentation]   create catalog item batch where price is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME34}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -328,7 +328,7 @@ JD-TC-Create Catalog Item Batch-UH8
 
     [Documentation]   create catalog item batch where price is zero
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME34}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -342,7 +342,7 @@ JD-TC-Create Catalog Item Batch-UH9
 
     [Documentation]   create catalog item batch where price is negative
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME34}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -356,7 +356,7 @@ JD-TC-Create Catalog Item Batch-1
 
     [Documentation]  creating batch item when inventory manager is on
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -440,7 +440,7 @@ JD-TC-Create Catalog Item Batch-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -922,7 +922,7 @@ JD-TC-Create Catalog Item Batch-UH10
 
     [Documentation]  creating same batch item when inventory manager is on
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -941,7 +941,7 @@ JD-TC-Create Catalog Item Batch-2
 
     [Documentation]  creating multiple batch item for same catalog item batch when inventory manager is on
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1084,7 +1084,7 @@ JD-TC-Create Catalog Item Batch-2
 
 #     [Documentation]    MULTIPLE DICTIONARIES IN CREATE SALES ORDER CATALOG
 
-#     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME34}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1120,7 +1120,7 @@ JD-TC-Create Catalog Item Batch-2
 
 #     [Documentation]    MULTIPLE DICTIONARIES IN CREATE SALES ORDER CATALOG
 
-#     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME34}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1138,7 +1138,7 @@ JD-TC-Create Catalog Item Batch-UH11
 
     [Documentation]  Try to create batch where inventory manager is off.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1181,7 +1181,7 @@ JD-TC-Create Catalog Item Batch-UH11
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1293,7 +1293,7 @@ JD-TC-Create Catalog Item Batch-UH12
 
     [Documentation]   Given inventory catalog item is not an item of the inventory catalogs which are connected to this order catalog.
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

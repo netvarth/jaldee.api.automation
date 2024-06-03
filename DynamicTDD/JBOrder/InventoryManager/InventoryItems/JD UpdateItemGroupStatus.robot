@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Test Cases ***
 
@@ -22,7 +22,7 @@ JD-TC-UpdateItemGroupStatus-1
 
     [Documentation]   Update Item Group Status
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME41}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -75,7 +75,7 @@ JD-TC-UpdateItemGroupStatus-2
 
     [Documentation]  Update Item group Status - Disable to Disable
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME41}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -91,7 +91,7 @@ JD-TC-UpdateItemGroupStatus-3
 
     [Documentation]  Update Item group Status - Disable to Enable
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME41}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -119,7 +119,7 @@ JD-TC-UpdateItemGroupStatus-4
 
     [Documentation]  Update Item group Status - Enable to Enable
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME41}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

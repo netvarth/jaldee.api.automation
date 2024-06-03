@@ -14,7 +14,7 @@ Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot 
 
 *** Test Cases ***
@@ -42,7 +42,7 @@ JD-TC-GetStoreTypeByFilter-1
     Should Be Equal As Strings    ${resp.json()[0]['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -76,7 +76,7 @@ JD-TC-GetStoreTypeByFilter-2
     Should Be Equal As Strings    ${resp.json()[0]['storeNature']}    ${storeNature[1]}
     Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${St_Id1}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -102,7 +102,7 @@ JD-TC-GetStoreTypeByFilter-3
     Should Be Equal As Strings    ${resp.json()[0]['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -136,7 +136,7 @@ JD-TC-GetStoreTypeByFilter-4
     Should Be Equal As Strings    ${resp.json()[0]['storeNature']}    ${storeNature[2]}
     Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${St_Id2}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -162,7 +162,7 @@ JD-TC-GetStoreTypeByFilter-5
     Should Be Equal As Strings    ${resp.json()[0]['storeNature']}    ${storeNature[2]}
     Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${St_Id2}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -192,7 +192,7 @@ JD-TC-GetStoreTypeByFilter-6
     Should Be Equal As Strings    ${resp.json()[0]['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${St_Id2}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

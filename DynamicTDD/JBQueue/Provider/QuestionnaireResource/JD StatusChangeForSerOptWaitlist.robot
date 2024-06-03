@@ -14,8 +14,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 ${xlFile}      ${EXECDIR}/TDD/ServiceoptionsQnr.xlsx   # DataSheet
@@ -84,7 +84,7 @@ Check Answers
 JD-TC-ChangeStatusForServiceOptionsForWaitlist-1
     [Documentation]  Change status for service option waitlist
 
-    clear_queue     ${HLMUSERNAME2}
+    clear_queue     ${HLPUSERNAME2}
     ${wb}=  readWorkbook  ${xlFile}
     ${sheet1}  GetCurrentSheet   ${wb}
     Set Suite Variable   ${sheet1}
@@ -97,7 +97,7 @@ JD-TC-ChangeStatusForServiceOptionsForWaitlist-1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -152,7 +152,7 @@ JD-TC-ChangeStatusForServiceOptionsForWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -188,7 +188,7 @@ JD-TC-ChangeStatusForServiceOptionsForWaitlist-1
     Log         ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -270,7 +270,7 @@ JD-TC-ChangeStatusForServiceOptionsForWaitlist-1
     Log  ${data}
     Set Suite Variable   ${data}
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLMUSERNAME2}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLPUSERNAME2}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
   
@@ -323,9 +323,9 @@ JD-TC-ChangeStatusForServiceOptionsForWaitlist-1
 JD-TC-ChangeStatusForServiceOptionsForWaitlist-2
     [Documentation]  Submit Service Options for waitlist after starting waitlist
 
-    clear_customer   ${HLMUSERNAME2}
+    clear_customer   ${HLPUSERNAME2}
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -350,7 +350,7 @@ JD-TC-ChangeStatusForServiceOptionsForWaitlist-2
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${HLMUSERNAME2}
+    clear_queue   ${HLPUSERNAME2}
     
     ${list}=  Create List  1  2  3  4  5  6  7
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -445,7 +445,7 @@ JD-TC-ChangeStatusForServiceOptionsForWaitlist-2
     Log  ${data}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLMUSERNAME2}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLPUSERNAME2}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
   
@@ -498,9 +498,9 @@ JD-TC-ChangeStatusForServiceOptionsForWaitlist-2
 JD-TC-ChangeStatusForServiceOptionsForWaitlist-3
     [Documentation]  Submit Service Options for waitlist after completing waitlist
 
-    clear_customer   ${HLMUSERNAME2}
+    clear_customer   ${HLPUSERNAME2}
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -525,7 +525,7 @@ JD-TC-ChangeStatusForServiceOptionsForWaitlist-3
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${HLMUSERNAME2}
+    clear_queue   ${HLPUSERNAME2}
     
     ${list}=  Create List  1  2  3  4  5  6  7
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -625,7 +625,7 @@ JD-TC-ChangeStatusForServiceOptionsForWaitlist-3
     Log  ${data}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLMUSERNAME2}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLPUSERNAME2}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
   
@@ -678,9 +678,9 @@ JD-TC-ChangeStatusForServiceOptionsForWaitlist-3
 JD-TC-ChangeStatusForServiceOptionsForWaitlist-UH1
     [Documentation]  Submit Service Options for waitlist after canceled waitlist
 
-    clear_customer   ${HLMUSERNAME2}
+    clear_customer   ${HLPUSERNAME2}
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -705,7 +705,7 @@ JD-TC-ChangeStatusForServiceOptionsForWaitlist-UH1
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${HLMUSERNAME2}
+    clear_queue   ${HLPUSERNAME2}
     
     ${list}=  Create List  1  2  3  4  5  6  7
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -799,7 +799,7 @@ JD-TC-ChangeStatusForServiceOptionsForWaitlist-UH1
     Log  ${data}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLMUSERNAME2}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${HLPUSERNAME2}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
   

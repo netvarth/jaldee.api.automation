@@ -14,7 +14,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 
 
 *** Variables ***
@@ -35,22 +35,22 @@ JD-TC-UpdateCustomViewApis-1
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_F}=  Evaluate  ${MUSERNAME}+34349
+    ${PUSERNAME_F}=  Evaluate  ${PUSERNAME}+34349
     ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_F}    ${highest_package[0]}
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_F}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${MUSERNAME_F}  0
+    ${resp}=  Account Activation  ${PUSERNAME_F}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${MUSERNAME_F}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_F}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_F}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_F}${\n}
-    Set Suite Variable  ${MUSERNAME_F}
-    ${id}=  get_id  ${MUSERNAME_F}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_F}${\n}
+    Set Suite Variable  ${PUSERNAME_F}
+    ${id}=  get_id  ${PUSERNAME_F}
     Set Suite Variable  ${id}
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
@@ -224,7 +224,7 @@ JD-TC-UpdateCustomViewApis-1
 
 JD-TC-UpdateCustomViewApis-UH1
     [Documentation]  Checking Update CustomView details with Wrong CustomView ID 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_F}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${name7}=   FakerLibrary.word
@@ -236,7 +236,7 @@ JD-TC-UpdateCustomViewApis-UH1
 
 JD-TC-UpdateCustomViewApis-UH2
     [Documentation]  Checking Update CustomView details with custom name is Empty
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_F}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -247,7 +247,7 @@ JD-TC-UpdateCustomViewApis-UH2
 
 JD-TC-UpdateCustomViewApis-UH3
     [Documentation]  Update CustomView details with different Branch Number
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${name2}=   FakerLibrary.word
@@ -266,7 +266,7 @@ JD-TC-UpdateCustomViewApis-UH4
 
 JD-TC-UpdateCustomViewApis-UH5
     [Documentation]  Checking Update CustomView details with empty queue_id
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_F}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${name6}=   FakerLibrary.word
@@ -280,7 +280,7 @@ JD-TC-UpdateCustomViewApis-UH5
 *** comments ***
 JD-TC-UpdateCustomViewApis-UH5
     [Documentation]  Checking Update CustomView details with empty Department_id
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_F}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -297,7 +297,7 @@ JD-TC-UpdateCustomViewApis-UH5
 
 JD-TC-UpdateCustomViewApis-UH6
     [Documentation]  Checking Update CustomView details with empty service_id
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_F}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Get CustomeView By Id  ${cv_id}   
@@ -312,7 +312,7 @@ JD-TC-UpdateCustomViewApis-UH6
 
 JD-TC-UpdateCustomViewApis-UH8
     [Documentation]  Checking Update CustomView details with empty User_id
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_F}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${name9}=   FakerLibrary.word

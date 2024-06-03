@@ -14,8 +14,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
@@ -46,7 +46,7 @@ JD-TC-Identify Partner-1
                                   
     [Documentation]              Identify Partner
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -413,7 +413,7 @@ JD-TC-Identify-Partner-UH1
                                   
     [Documentation]               Identify partner where Partner mobile is empty
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -430,7 +430,7 @@ JD-TC-Identify-Partner-UH2
                                   
     [Documentation]               Identify partner where Account id is empty
     
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -450,7 +450,7 @@ JD-TC-Identify-Partner-UH3
                                   
     [Documentation]               Identify partner where partner id is empty
     
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}

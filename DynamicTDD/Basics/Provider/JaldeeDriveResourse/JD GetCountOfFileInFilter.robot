@@ -9,7 +9,7 @@ Library           OperatingSystem
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Library           /ebs/TDD/db.py
 Variables         /ebs/TDD/varfiles/providers.py
@@ -17,7 +17,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Resource          /ebs/TDD/Keywords.robot
 Variables         /ebs/TDD/varfiles/consumermail.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
-Variables          /ebs/TDD/varfiles/hl_musers.py
+Variables          /ebs/TDD/varfiles/hl_providers.py
 
 
 
@@ -296,10 +296,10 @@ JD-TC-GetCountOfFileInFilter-11
 
     [Documentation]    get jpg file from jaldeedrive by user
     
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME15}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME15}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${HLMUSERNAME15} 
+    ${pid}=  get_acc_id  ${HLPUSERNAME15} 
     Set Suite variable     ${pid}
 
     ${highest_package}=  get_highest_license_pkg
@@ -311,8 +311,8 @@ JD-TC-GetCountOfFileInFilter-11
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${HLMUSERNAME15} 
-    clear_appt_schedule   ${HLMUSERNAME15}
+    clear_service   ${HLPUSERNAME15} 
+    clear_appt_schedule   ${HLPUSERNAME15}
     
     ${resp2}=   Get Business Profile
     Log  ${resp2.json()}
@@ -474,10 +474,10 @@ JD-TC-GetCountOfFileInFilter-12
     Log                                        ${resp.content}
     Should Be Equal As Strings                 ${resp.status_code}                200
  
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME15}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${HLMUSERNAME15} 
+    ${pid}=  get_acc_id  ${HLPUSERNAME15} 
     Set Suite variable     ${pid}
 
     ${resp}=   Get Count of Files in a filter    owner-eq=${u_id} 
@@ -489,12 +489,12 @@ JD-TC-GetCountOfFileInFilter-13
 
     [Documentation]    upload file to  branch and get count by  user login
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME15}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${HLMUSERNAME15} 
+    ${pid}=  get_acc_id  ${HLPUSERNAME15} 
     Set Suite variable     ${pid}
-    ${id1}=  get_id   ${HLMUSERNAME15}
+    ${id1}=  get_id   ${HLPUSERNAME15}
     Set Suite Variable  ${id1}
   
     ${caption1}=  Fakerlibrary.Sentence
