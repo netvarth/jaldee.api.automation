@@ -10,9 +10,8 @@ Library           random
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/providers.py
-Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/providers.py
+Variables       /ebs/TDD/varfiles/providers.py
+Variables       /ebs/TDD/varfiles/consumerlist.py 
 
 *** Variables ***
 ${SERVICE1}     manicure 

@@ -13,7 +13,6 @@ Library           /ebs/TDD/db.py
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables          /ebs/TDD/varfiles/hl_providers.py
-Variables         /ebs/TDD/varfiles/providers.py
 Resource          /ebs/TDD/Keywords.robot
 Library           /ebs/TDD/Imageupload.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot

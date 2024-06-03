@@ -15,9 +15,8 @@ Resource          /ebs/TDD/AppKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ProviderPartnerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/providers.py
-Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/providers.py
+Variables       /ebs/TDD/varfiles/providers.py
+Variables       /ebs/TDD/varfiles/consumerlist.py 
 
 
 *** Variables ***

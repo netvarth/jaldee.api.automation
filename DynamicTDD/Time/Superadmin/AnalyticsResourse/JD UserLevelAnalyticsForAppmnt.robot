@@ -10,14 +10,13 @@ Library           /ebs/TDD/db.py
 Library           /ebs/TDD/Imageupload.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
-Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/providers.py
 Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/AppKeywords.robot
 Resource          /ebs/TDD/iphoneKeywords.robot
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/consumerlist.py 
+Variables         /ebs/TDD/varfiles/consumermail.py
 
 *** Variables ***
 @{multiples}  10  20  30   40   50
