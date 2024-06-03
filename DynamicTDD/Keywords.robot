@@ -11,7 +11,7 @@ Variables           superadminmessagesapi.py
 &{headers1}		          Content-Type=multipart/form-data
 ${SUSERNAME}              admin.support@jaldee.com
 ${PASSWORD}               Jaldee12
-${SPASSWORD}              Jaldee1
+${SPASSWORD}              Netvarth1
 ${test_mail}              test@jaldee.com
 ${Invalid_email}          inv.${test_mail}
 ${merchantid}             6811180
