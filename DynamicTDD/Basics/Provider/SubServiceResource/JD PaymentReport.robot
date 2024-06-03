@@ -1638,6 +1638,10 @@ JD-TC-PaymentReport-5
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceCategory']}                ${serviceCategory[1]}
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['assigneeUsers']}                  ${empty_list}
 
+    ${resp}=    Provider Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
     ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -1671,6 +1675,10 @@ JD-TC-PaymentReport-5
     ${resp}=   Get Booking Invoices
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Customer Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME14}  ${PASSWORD}
     Log   ${resp.json()}
