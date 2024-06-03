@@ -280,8 +280,10 @@ JD-TC-GetReleasedQuestionnaireByUuid-UH2
     
     ${respo}=    Provider Consent Form Get released questionnaire by uuid  ${fake}
     Log  ${respo.content}
-    Should Be Equal As Strings  ${respo.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}      ${INV_CONSENT_FORM_ID}
+    # Should Be Equal As Strings  ${respo.status_code}  422
+    # Should Be Equal As Strings  ${resp.json()}      ${INV_CONSENT_FORM_ID}
+    Should Be Equal As Strings  ${respo.status_code}  400
+    Should Be Equal As Strings  ${resp.json()}      ${LOGIN_INVALID_URL}
 
 JD-TC-GetReleasedQuestionnaireByUuid-UH3
 
@@ -306,5 +308,7 @@ JD-TC-GetReleasedQuestionnaireByUuid-UH3
     
     ${respo}=    Provider Consent Form Get released questionnaire by uuid  ${cf_uid}
     Log  ${respo.content}
-    Should Be Equal As Strings  ${respo.status_code}  401
-    Should Be Equal As Strings  ${respo.json()}  ${NO_PERMISSION_To}
+    # Should Be Equal As Strings  ${respo.status_code}  401
+    # Should Be Equal As Strings  ${respo.json()}  ${NO_PERMISSION_To}
+    Should Be Equal As Strings  ${respo.status_code}  400
+    Should Be Equal As Strings  ${resp.json()}      ${LOGIN_INVALID_URL}

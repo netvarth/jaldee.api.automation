@@ -355,6 +355,7 @@ JD-TC-Consumer Signup-6
         Log  ${PO_Number1}
         ${country_code1}=  Set Variable  ${PO_Number1.country_code}
         ${CUSERPH4}=  Set Variable  ${PO_Number1.national_number}
+        ${resp}  Validate phone number  ${country_code1}  ${CUSERPH4}
         ${keywordstatus} 	${value} = 	Run Keyword And Ignore Error   List Should Not Contain Value  ${numbers}  ${CUSERPH4}
         Log Many  ${keywordstatus} 	${value}
         Continue For Loop If  '${keywordstatus}' == 'FAIL'
