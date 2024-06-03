@@ -30,9 +30,9 @@ ${originFrom}       NONE
 
 *** Test Cases ***
 
-JD-TC-Update Sales Order Invoice Status-1
+JD-TC-Sales Order Payment Via Link-1
 
-    [Documentation]   Create a sales Order with Valid Details then Update sales order invoice Status New to Settled.
+    [Documentation]   Create a sales Order with Valid Details then do the payment through link.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME38}  ${PASSWORD}
     Log   ${resp.content}
@@ -240,7 +240,7 @@ JD-TC-Update Sales Order Invoice Status-1
 
     ${netTotal}=  Evaluate  ${price}*${quantity}
     ${netTotal}=  Convert To Number  ${netTotal}   1
-
+    Set Suite Variable  ${netTotal}
 
     ${resp}=    Get Sales Order    ${SO_Uid}   
     Log   ${resp.content}
@@ -367,6 +367,22 @@ JD-TC-Update Sales Order Invoice Status-1
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME38}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Sales Order Payment Via Link-2
+
+    [Documentation]   Create a sales Order  then do the payment through link payment modes is CC.
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME38}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    SO Payment Via Link    ${SO_Inv}    ${netTotal}   ${purpose[7]}    ${accountId}    ${finance_payment_modes[1]}     ${bool[0]} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
     Log   ${resp.content}
