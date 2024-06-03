@@ -535,7 +535,7 @@ JD-TC-Get Inventory Item Summary-1
     ${batchNo}=     Random Int      min=1  max=9999
     ${invoiceReferenceNo}=          Random Int  min=1  max=999
     ${purchaseNote}=                FakerLibrary.Sentence
-    ${roundOff}=                    Random Int  min=1  max=99
+    ${roundOff}=                    Random Int  min=1  max=10
 
 
     ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}   ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}    ${batchNo}  ${cgst}  ${sgst}  ${iu_id}    

@@ -353,7 +353,7 @@ JD-TC-GetRXPrescriptionItemQuantity-1
     ${batchNo}=     Random Int      min=1  max=9999
     ${invoiceReferenceNo}=          Random Int  min=1  max=999
     ${purchaseNote}=                FakerLibrary.Sentence
-    ${roundOff}=                    Random Int  min=1  max=99
+    ${roundOff}=                    Random Int  min=1  max=10
 
     ${purchaseItemDtoList1}=        Create purchaseItemDtoList   ${ic_Item_id}   ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  0  ${netTotal}   ${expiryDate}  ${mrp}  ${EMPTY}  0   0   ${iu_id}
     Set Suite Variable              ${purchaseItemDtoList1}

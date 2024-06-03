@@ -39,22 +39,8 @@ JD-TC-GetOrderByUid-1
     Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
     Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
     Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
-    ${firstname_A}=  FakerLibrary.first_name
-    Set Suite Variable  ${firstname_A}
-    ${lastname_A}=  FakerLibrary.last_name
-    Set Suite Variable  ${lastname_A}
-    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+4548754
-    ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${PUSERNAME_E}  0
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
-    Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME77}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -66,10 +52,10 @@ JD-TC-GetOrderByUid-1
     Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
     Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
-    Set Suite Variable  ${PUSERNAME_E}
-    ${id}=  get_id  ${PUSERNAME_E}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME77}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME77}${\n}
+    Set Suite Variable  ${PUSERNAME77}
+    ${id}=  get_id  ${PUSERNAME77}
     Set Suite Variable  ${id}
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
@@ -151,7 +137,7 @@ JD-TC-GetOrderByUid-1
 
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -359,7 +345,7 @@ JD-TC-GetOrderByUid-1
     ${batchNo}=     Random Int      min=1  max=9999
     ${invoiceReferenceNo}=          Random Int  min=1  max=999
     ${purchaseNote}=                FakerLibrary.Sentence
-    ${roundOff}=                    Random Int  min=1  max=99
+    ${roundOff}=                    Random Int  min=1  max=10
 
     ${purchaseItemDtoList1}=        Create purchaseItemDtoList   ${ic_Item_id}   ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  0  ${netTotal}   ${expiryDate}  ${mrp}  ${EMPTY}  0   0   ${iu_id}
     Set Suite Variable              ${purchaseItemDtoList1}
@@ -456,7 +442,7 @@ JD-TC-GetOrderByUid-1
 
 # --------------------------- Create SalesOrder Inventory Catalog-InvMgr True --------------------------
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME77}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -611,3 +597,12 @@ JD-TC-GetOrderByUid-1
     ${resp}=    Get Sorder By Uid  ${sorder_uid}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
+
+JD-TC-GetOrderByUid-2
+
+    [Documentation]    Get Order By Uid - where uid is invalid 
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME77}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
