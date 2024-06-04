@@ -2332,6 +2332,8 @@ INVALID_TELEGRAM_NUM= "Invalid Telegram Number"
 EMPTY_EMAIL="Invalid email"
 HTML_FILE_REQUIRED="Html file required"
 REQUIRED_QUANTITY_NOT_AVAILABLE="Required quantity is not avalable for the item {}. Available Quantity is 0.00"
+CAN_NOT_CHANGE_STATUS="Can't update the status because this Invoice is cancelled"
+
 # Vendor
 INVALID_NAME="Invalid Name"
 CATEGORY_EXIST="Category exists with given name"

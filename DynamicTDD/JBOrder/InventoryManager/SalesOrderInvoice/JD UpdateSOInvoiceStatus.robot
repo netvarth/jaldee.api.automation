@@ -357,3 +357,17 @@ JD-TC-Update Sales Order Invoice Status-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200   
     Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[2]}
+
+JD-TC-Update Sales Order Invoice Status-UH
+
+    [Documentation]    Update sales order invoice Status Cancel to new.
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Update Sales Order Invoice Status    ${SO_Inv}    ${billStatus[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${CAN_NOT_CHANGE_STATUS}
+
