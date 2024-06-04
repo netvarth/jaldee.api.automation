@@ -1514,7 +1514,11 @@ Take Appointment For Provider
     ${cons_params}=  Create Dictionary  account=${accid}
     ${sid}=  Create Dictionary  id=${service_id}
     ${schedule}=  Create Dictionary  id=${schedule}    
+    ${items}=  Get Dictionary items  ${kwargs}
     ${data}=    Create Dictionary    appointmentMode=ONLINE_APPOINTMENT   account=${accId}   service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}
+    FOR  ${key}  ${value}  IN  @{items}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
     ${data}=  json.dumps  ${data}
     Log  ${cons_headers}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
