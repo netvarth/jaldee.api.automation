@@ -2,7 +2,7 @@
 
 Suite Teardown    Run Keywords  Delete All Sessions
 Test Teardown     Delete All Sessions
-Force Tags        Consent FOrm
+Force Tags        Consent Form
 Library           Collections
 Library           String
 Library           json
@@ -31,7 +31,7 @@ ${fileSize}     0.00458
 
 JD-TC-ConsentFormSendOtp-1
 
-    [Documentation]  Get Consent Form By Uid
+    [Documentation]  Send consent form otp
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME294}  ${PASSWORD}
     Log  ${resp.content}
@@ -164,7 +164,7 @@ JD-TC-ConsentFormSendOtp-1
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
     Set Suite Variable    ${PCid}   ${resp.json()['id']}
 
-    ${resp}=    Consumer Get Consent Form By Uid  ${cf_uid}
+    ${resp}=    Consumer Send consent form otp  ${cf_uid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -269,7 +269,7 @@ JD-TC-ConsentFormSendOtp-UH5
 
 JD-TC-ConsentFormSendOtp-UH6
 
-    [Documentation]  Get Consent Form By Uid - another consumer login
+    [Documentation]  Send consent form otp - another consumer login
 
     ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
     Log  ${resp.content}
@@ -281,7 +281,7 @@ JD-TC-ConsentFormSendOtp-UH6
 
 JD-TC-ConsentFormSendOtp-UH7
 
-    [Documentation]  Get Consent Form By Uid - another Provider consumer login
+    [Documentation]  Send consent form otp - another Provider consumer login
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME294}  ${PASSWORD}
     Log  ${resp.content}
@@ -327,4 +327,14 @@ JD-TC-ConsentFormSendOtp-UH7
 
     ${resp}=    Consumer Consent Form Send Otp     ${cf_uid}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Consumer Consent Form Verify Otp  ${OtpPurpose['CONSENT_FORM']}  ${cf_uid}   ${consumerPhone}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Consumer Get Verify Status of consent form by uid  ${cf_uid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings  ${resp.json()}       ${bool[0]}
+

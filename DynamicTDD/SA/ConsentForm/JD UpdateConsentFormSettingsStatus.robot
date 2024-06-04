@@ -2,7 +2,7 @@
 
 Suite Teardown    Run Keywords  Delete All Sessions
 Test Teardown     Delete All Sessions
-Force Tags        Consent FOrm
+Force Tags        Consent Form
 Library           Collections
 Library           String
 Library           json
