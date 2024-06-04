@@ -24,3 +24,14 @@ DynamicTDD/clinicalnotes.json
 DynamicTDD/varfiles.zip
 DynamicTDD/TDD_Logs/*
 DynamicTDD/TDD_Logs/pan.txt
+Data/local_varfiles/providers.py
+Data/localdata/localphnumbers.txt
+Data/TDD_Logs/consumernumbers.txt
+Data/TDD_Logs/msgslog.txt
+Data/TDD_Logs/numbers.txt
+Data/TDD_Logs/pan.txt
+Data/TDD_Logs/proconnum.txt
+Data/TDD_Logs/providernumbers.txt
+DynamicTDD/cover.json
+DynamicTDD/proper.json
+Docker/logs/*
