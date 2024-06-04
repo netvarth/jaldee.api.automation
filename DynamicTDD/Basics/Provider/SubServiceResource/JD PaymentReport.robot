@@ -1360,7 +1360,10 @@ JD-TC-PaymentReport-5
 
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
-    Set Test Variable  ${prov_name}  ${decrypted_data['userName']}
+    Set Test Variable  ${prov_name}   ${decrypted_data['userName']}
+    Set Test Variable  ${prov_fname}  ${decrypted_data['userName']}
+    Set Test Variable  ${prov_lname}  ${decrypted_data['userName']}
+    Set Test Variable  ${prov_id}     ${decrypted_data['id']}
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -1386,11 +1389,17 @@ JD-TC-PaymentReport-5
     Set Test Variable  ${account_id}  ${resp.json()['id']}
     Set Test Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
+    ${email_name}=    FakerLibrary.word
+    Set Test Variable  ${email_id}  ${email_name}${HLPUSERNAME14}.${test_mail}
+
+    ${resp}=  Update Email   ${prov_id}   ${prov_fname}   ${prov_lname}   ${email_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    
     IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
         ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
         Log  ${resp1.content}
@@ -1646,7 +1655,7 @@ JD-TC-PaymentReport-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=   Get Booking Invoices
+    ${resp}=   Get Booking Invoices   ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1672,7 +1681,7 @@ JD-TC-PaymentReport-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Get Booking Invoices
+    ${resp}=   Get Booking Invoices  ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
