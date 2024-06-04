@@ -247,7 +247,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{CDLTypeCibil}                     cibil
 @{toothType}                        ADULT  CHILD
 @{toothSurfaces}                    BUCCAL   LINGUAL  PALATAL
-@{PRStatus}                         OPEN  CLOSED  COMPLETED 
+@{PRStatus}                         OPEN  CLOSED  COMPLETED  ARCHIVE
 @{RateType}                         Diminishing  Flat
 @{WorkStatus}                       OPEN  CANCELED  COMPLETE
 @{subcategory}                      ADD_PAYMENT_IN(AuditCategory.PAYMENT)   UPDATE_PAYMENT_IN(AuditCategory.PAYMENT)   UPDATE_PAYMENT_IN_STATUS(AuditCategory.PAYMENT)     ADD_PAYMENT_OUT(AuditCategory.PAYMENT)      UPDATE_PAYMENT_OUT(AuditCategory.PAYMENT)   UPDATE_PAYMENT_OUT_STATUS(AuditCategory.PAYMENT)      ADD_FINANCE_INVOICE(AuditCategory.FINANCE_INVOICE)    UPDATE_FINANCE_INVOICE(AuditCategory.FINANCE_INVOICE)        UPDATE_FINANCE_INVOICE_STATUS(AuditCategory.FINANCE_INVOICE)      ADD_EXPENSE(AuditCategory.EXPENSE)    UPDATE_EXPENSE(AuditCategory.EXPENSE)    UPDATE_EXPENSE_STATUS(AuditCategory.EXPENSE)

@@ -39,8 +39,22 @@ JD-TC-GetOrderByUid-1
     Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
     Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
     Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
+    ${firstname_A}=  FakerLibrary.first_name
+    Set Suite Variable  ${firstname_A}
+    ${lastname_A}=  FakerLibrary.last_name
+    Set Suite Variable  ${lastname_A}
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+4547598
+    ${highest_package}=  get_highest_license_pkg
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Account Activation  ${PUSERNAME_E}  0
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -606,3 +620,16 @@ JD-TC-GetOrderByUid-2
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
+    ${inv}=     Random Int  min=1  max=99
+
+    ${resp}=    Get Sorder By Uid  ${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+
+JD-TC-GetOrderByUid-3
+
+    [Documentation]    Get Order By Uid - without login 
+
+    ${resp}=    Get Sorder By Uid  ${invsorder_uid}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200

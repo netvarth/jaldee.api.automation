@@ -156,7 +156,7 @@ JD-TC-Change Case Status-1
     Should Be Equal As Strings    ${resp.json()['spInternalStatus']}     ${PRStatus[0]}
 
 
-    ${resp}=    Change Case Status    ${caseUId}   ${PRStatus[1]}
+    ${resp}=    Change Case Status    ${caseUId}   ${PRStatus[1]}  ${note}
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
@@ -280,7 +280,7 @@ JD-TC-Change Case Status-2
     Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description} 
     Should Be Equal As Strings    ${resp.json()[0]['spInternalStatus']}     ${PRStatus[0]}
 
-     ${resp}=    Change Case Status    ${caseUId}   ${PRStatus[1]}
+     ${resp}=    Change Case Status    ${caseUId}   ${PRStatus[1]}  ${note}
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
@@ -293,7 +293,7 @@ JD-TC-Change Case Status-UH1
 
     [Documentation]    change Case Status without login
 
-     ${resp}=    Change Case Status    ${caseUId}   ${PRStatus[1]}
+     ${resp}=    Change Case Status    ${caseUId}   ${PRStatus[1]}  ${note}
     Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -306,7 +306,7 @@ JD-TC-Change Case Status-UH2
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-     ${resp}=    Change Case Status    ${caseUId}   ${PRStatus[1]}
+     ${resp}=    Change Case Status    ${caseUId}   ${PRStatus[1]}  ${note}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}    ${NO_PERMISSION}
@@ -321,7 +321,7 @@ JD-TC-Change Case Status-UH3
 
     ${caseUId1}=  FakerLibrary.Random Number
 
-     ${resp}=    Change Case Status    ${caseUId1}   ${PRStatus[1]}
+     ${resp}=    Change Case Status    ${caseUId1}   ${PRStatus[1]}  ${note}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}  422
      Should Be Equal As Strings    ${resp.json()}   ${INVALID_CASE_ID}
@@ -336,11 +336,46 @@ JD-TC-Change Case Status-UH4
     Should Be Equal As Strings            ${resp.status_code}    200
 
 
-     ${resp}=    Change Case Status    ${caseUId}   ${PRStatus[1]}
+    ${resp}=    Change Case Status    ${caseUId}   ${PRStatus[1]}  ${note}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}  422
     Should Be Equal As Strings    ${resp.json()}   ${ALREADY_UPDATED}
 
-   
+
+JD-TC-Change Case Status-2
+
+    [Documentation]    change Case Status with    status closed to open
+
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME13}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Change Case Status    ${caseUId}   ${PRStatus[0]}  ${note}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}  200
+
+JD-TC-Change Case Status-3
+
+    [Documentation]    change Case Status with    status open to archive
+
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME13}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Change Case Status    ${caseUId}   ${PRStatus[3]}  ${note}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}  200
+
+JD-TC-Change Case Status-4
+
+    [Documentation]    change Case Status with    note is empty
+
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME13}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Change Case Status    ${caseUId}   ${PRStatus[1]}  ${empty}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}  200
     
    

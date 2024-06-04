@@ -627,7 +627,6 @@ JD-TC-ConvertToOrder-1
     ${resp}=    Get Sorder By Filter  
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
-    Set Suite Variable      ${sorder_uid}   ${resp.json()[0]['uid']}
     Should Be Equal As Strings      ${resp.json()[0]['createdDate']}    ${DAY1}
     Should Be Equal As Strings      ${resp.json()[0]['createdBy']}    ${pid}
     Should Be Equal As Strings      ${resp.json()[0]['createdByName']}    ${pdrname}
