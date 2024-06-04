@@ -112,7 +112,10 @@ JD-TC-GetCustomerDetailsForUser-2
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${prov_id}  ${resp.json()['id']}
+    # Set Suite Variable  ${prov_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${prov_id}  ${decrypted_data['id']}
 
     ${p_id}=  get_acc_id  ${HLPUSERNAME2}
     Set Suite Variable  ${p_id}

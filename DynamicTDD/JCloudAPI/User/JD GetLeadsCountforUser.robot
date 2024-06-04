@@ -111,7 +111,10 @@ JD-TC-GetLeadsCountforUser-2
     ${resp}=  Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${prov_id}  ${resp.json()['id']}
+    # Set Suite Variable  ${prov_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${prov_id}  ${decrypted_data['id']}
 
     ${p_id}=  get_acc_id  ${PUSERNAME16}
     Set Suite Variable  ${p_id}
@@ -509,7 +512,10 @@ JD-TC-GetLeadsCountforUser-7
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME19}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${prov_id}  ${resp.json()['id']}
+    # Set Test Variable  ${prov_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${prov_id}  ${decrypted_data['id']}
 
     clear_customer   ${HLPUSERNAME19}
 
@@ -648,7 +654,10 @@ JD-TC-GetLeadsCountforUser-8
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME13}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${prov_id}  ${resp.json()['id']}
+    # Set Test Variable  ${prov_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${prov_id}  ${decrypted_data['id']}
 
     clear_customer   ${HLPUSERNAME13}
 
@@ -787,7 +796,10 @@ JD-TC-GetLeadsCountforUser-9
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${prov_id}  ${resp.json()['id']}
+    # Set Test Variable  ${prov_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${prov_id}  ${decrypted_data['id']}
 
     ${p_id}=  get_acc_id  ${HLPUSERNAME2}
 
@@ -930,7 +942,10 @@ JD-TC-GetLeadsCountforUser-10
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME14}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${prov_id}  ${resp.json()['id']}
+    # Set Test Variable  ${prov_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${prov_id}  ${decrypted_data['id']}
 
     ${p_id}=  get_acc_id  ${HLPUSERNAME14}
 

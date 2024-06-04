@@ -401,8 +401,12 @@ JD-TC-GetLeadsWithFilterForUser-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${first_name}  ${resp.json()['firstName']}
-    Set Suite Variable  ${user_name}  ${resp.json()['userName']}
+    # Set Suite Variable  ${first_name}  ${resp.json()['firstName']}
+    # Set Suite Variable  ${user_name}  ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${first_name}  ${decrypted_data['firstName']}
+    Set Test Variable  ${user_name}  ${decrypted_data['userName']}
 
     ${resp}=   Create User Token   ${PUSERNAME_U1}  ${PASSWORD}   ${sp_token1}   ${countryCodes[0]}  
     Log   ${resp.content}
@@ -1235,8 +1239,12 @@ JD-TC-GetLeadsWithFilterForUser-17
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${first_name1}  ${resp.json()['firstName']}
-    Set Suite Variable  ${user_name1}  ${resp.json()['userName']}
+    # Set Suite Variable  ${first_name1}  ${resp.json()['firstName']}
+    # Set Suite Variable  ${user_name1}  ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${first_name1}  ${decrypted_data['firstName']}
+    Set Test Variable  ${user_name1}  ${decrypted_data['userName']}
 
     ${resp}=   Create User Token   ${PUSERNAME_U1}  ${PASSWORD}   ${sp_token1}   ${countryCodes[0]}  
     Log   ${resp.content}
