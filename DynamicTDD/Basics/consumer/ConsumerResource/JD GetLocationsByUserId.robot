@@ -77,11 +77,11 @@ JD-TC-Get locations by userid-1
     END
 
     ${addon_resp}=   Get Addons Metadata
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    Log  ${addon_resp.content}
+    Should Be Equal As Strings    ${addon_resp.status_code}   200
     # Set Test Variable  ${aId}  ${resp.json()[0]['addons'][0]['addonId']}
-    Set Suite Variable    ${addon_id}      ${resp.json()[6]['addons'][0]['addonId']}
-	Set Suite Variable    ${addon_name}      ${resp.json()[6]['addons'][0]['addonName']}
+    Set Suite Variable    ${addon_id}      ${addon_resp.json()[6]['addons'][0]['addonId']}
+	Set Suite Variable    ${addon_name}      ${addon_resp.json()[6]['addons'][0]['addonName']}
 
     ${resp}=  Add addon  ${addon_id}
     Should Be Equal As Strings    ${resp.status_code}   200
