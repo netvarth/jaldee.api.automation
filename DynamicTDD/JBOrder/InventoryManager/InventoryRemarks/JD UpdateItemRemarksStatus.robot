@@ -102,7 +102,7 @@ JD-TC-UpdateItemRemarkStatus-2
 
 
     ${remark2}=    FakerLibrary.first name
-
+    Set Suite Variable  ${remark2}
     ${resp}=  Update Item Remark    ${remarks_encid}   ${remark2}  ${transactionTypeEnum[1]}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -159,7 +159,7 @@ JD-TC-UpdateItemRemarkStatus-3
     ${resp}=  Get Item Remark Filter      status-eq=${status[0]}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()[0]['remark']}    ${remarks}
+    Should Be Equal As Strings    ${resp.json()[0]['remark']}    ${remark2}
     Should Be Equal As Strings    ${resp.json()[0]['transactionTypeEnum']}    ${transactionTypeEnum[1]}
     Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${remarks_encid}
     Should Be Equal As Strings    ${resp.json()[0]['status']}     ${status[0]}
