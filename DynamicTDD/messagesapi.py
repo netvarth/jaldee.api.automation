@@ -2333,6 +2333,7 @@ EMPTY_EMAIL="Invalid email"
 HTML_FILE_REQUIRED="Html file required"
 REQUIRED_QUANTITY_NOT_AVAILABLE="Required quantity is not avalable for the item {}. Available Quantity is 0.00"
 CAN_NOT_CHANGE_STATUS="Can't update the status because this Invoice is cancelled"
+CAN_NOT_CHANGE_SETTLED_STATUS="Can't update the status because this Invoice is settled"
 
 # Vendor
 INVALID_NAME="Invalid Name"
