@@ -4400,6 +4400,7 @@ Take Appointment For Consumer
     ${pro_params}=   Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
+    ${items}=  Get Dictionary items  ${kwargs}
     Set To Dictionary  ${pro_headers}   &{tzheaders}
     Set To Dictionary  ${pro_params}   &{locparam}
     
@@ -4408,6 +4409,9 @@ Take Appointment For Consumer
     ${schedule}=  Create Dictionary  id=${schedule}
     ${data}=    Create Dictionary   consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}
     # ${data}=    Create Dictionary   appointmentMode=WALK_IN_APPOINTMENT  consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}  
+    FOR  ${key}  ${value}  IN  @{items}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment  params=${pro_params}    data=${data}  expected_status=any
@@ -11701,9 +11705,11 @@ Get Case Filter
     RETURN  ${resp}
 
 Change Case Status
-    [Arguments]      ${uid}  ${statusName} 
+    [Arguments]      ${uid}  ${statusName}  ${note}
+    ${data}=    Create Dictionary  note=${note}
+    ${date}=    json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/medicalrecord/case/${uid}/status/${statusName}   expected_status=any
+    ${resp}=  PUT On Session  ynw  /provider/medicalrecord/case/${uid}/status/${statusName}  data=${data}   expected_status=any
     RETURN  ${resp}
 
 Get Case Count Filter
