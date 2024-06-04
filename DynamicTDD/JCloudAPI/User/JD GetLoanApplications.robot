@@ -559,8 +559,11 @@ JD-TC-GetLoanApplications-1
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Suite Variable  ${phone}  555${PH_Number}
+    ${dealerfname}=  FakerLibrary.name
+    ${dealername}=  FakerLibrary.bs
+    ${dealerlname}=  FakerLibrary.last_name
    
-    ${resp}=  Generate Phone Partner Creation    ${phone}    ${countryCodes[0]}
+    ${resp}=  Generate Phone Partner Creation    ${phone}    ${countryCodes[0]}  partnerName=${dealername}   partnerUserFirstName=${dealerfname}  partnerUserLastName=${dealerlname}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
@@ -593,8 +596,11 @@ JD-TC-GetLoanApplications-1
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Suite Variable  ${phone1}  555${PH_Number}
+    ${dealerfname}=  FakerLibrary.name
+    ${dealername}=  FakerLibrary.bs
+    ${dealerlname}=  FakerLibrary.last_name
 
-    ${resp}=  Generate Phone Partner Creation    ${phone1}    ${countryCodes[0]}
+    ${resp}=  Generate Phone Partner Creation    ${phone1}    ${countryCodes[0]}  partnerName=${dealername}   partnerUserFirstName=${dealerfname}  partnerUserLastName=${dealerlname}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
@@ -627,8 +633,11 @@ JD-TC-GetLoanApplications-1
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Suite Variable  ${phone2}  555${PH_Number}
+    ${dealerfname}=  FakerLibrary.name
+    ${dealername}=  FakerLibrary.bs
+    ${dealerlname}=  FakerLibrary.last_name
 
-    ${resp}=  Generate Phone Partner Creation    ${phone2}    ${countryCodes[0]}
+    ${resp}=  Generate Phone Partner Creation    ${phone2}    ${countryCodes[0]}  partnerName=${dealername}   partnerUserFirstName=${dealerfname}  partnerUserLastName=${dealerlname}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
@@ -661,8 +670,11 @@ JD-TC-GetLoanApplications-1
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Suite Variable  ${phone3}  555${PH_Number}
+    ${dealerfname}=  FakerLibrary.name
+    ${dealername}=  FakerLibrary.bs
+    ${dealerlname}=  FakerLibrary.last_name
 
-    ${resp}=  Generate Phone Partner Creation    ${phone3}    ${countryCodes[0]}
+    ${resp}=  Generate Phone Partner Creation    ${phone3}    ${countryCodes[0]}  partnerName=${dealername}   partnerUserFirstName=${dealerfname}  partnerUserLastName=${dealerlname}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
