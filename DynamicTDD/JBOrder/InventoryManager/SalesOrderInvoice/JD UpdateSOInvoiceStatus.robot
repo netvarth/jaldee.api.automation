@@ -341,7 +341,7 @@ JD-TC-Update Sales Order Invoice Status-1
     Should Be Equal As Strings    ${resp.status_code}   200   
     Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[1]}
 
-JD-TC-Update Sales Order Invoice Status-2
+JD-TC-Update Sales Order Invoice Status-UH1
 
     [Documentation]    Update sales order invoice Status Settled to Cancel.
 
@@ -351,14 +351,10 @@ JD-TC-Update Sales Order Invoice Status-2
 
     ${resp}=    Update Sales Order Invoice Status    ${SO_Inv}    ${billStatus[2]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${CAN_NOT_CHANGE_SETTLED_STATUS}
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200   
-    Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[2]}
-
-JD-TC-Update Sales Order Invoice Status-UH
+JD-TC-Update Sales Order Invoice Status-UH2
 
     [Documentation]    Update sales order invoice Status Cancel to new.
 
@@ -366,8 +362,106 @@ JD-TC-Update Sales Order Invoice Status-UH
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Update Sales Order Invoice Status    ${SO_Inv}    ${billStatus[0]}
+    ${quantity}=    Random Int  min=2   max=5
+    ${price}=    Random Int  min=2   max=40
+
+    ${Cg_encid}=  Create Dictionary   encId=${SO_Cata_Encid}   
+    ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
+    Set Suite Variable  ${SO_Cata_Encid_List}
+
+    ${store}=  Create Dictionary   encId=${store_id}  
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
+
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}  ${items}   store=${store}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${SO_Uid1}  ${resp.json()}
+
+    ${netTotal}=  Evaluate  ${price}*${quantity}
+    ${netTotal}=  Convert To Number  ${netTotal}   1
+
+
+    ${resp}=    Get Sales Order    ${SO_Uid1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid1}
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
+    
+# -----------------------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------- Update SalesOrder Status --------------------------------------------------------
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid1}     ${orderStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid1}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
+# ------------------------------------------------------------------------------------------------------------------------------------
+
+# ------------------------------------------------Create Sales Order Invoice----------------------------------------------
+
+    ${resp}=    Create Sales Order Invoice    ${SO_Uid1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable      ${SO_Inv1}    ${resp.json()}  
+# ------------------------------------------------------------------------------------------------------------------------
+
+# --------------------------------------------- Update Sales Order Invoice Status -----------------------------------------------
+
+    ${resp}=    Update Sales Order Invoice Status    ${SO_Inv1}    ${billStatus[2]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200   
+    Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[2]}
+
+    ${resp}=    Update Sales Order Invoice Status    ${SO_Inv1}    ${billStatus[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}   ${CAN_NOT_CHANGE_STATUS}
+
+JD-TC-Update Sales Order Invoice Status-UH3
+
+    [Documentation]    Update sales order invoice Status Cancel to Settled.
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Update Sales Order Invoice Status    ${SO_Inv1}    ${billStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${CAN_NOT_CHANGE_STATUS}
+
+JD-TC-Update Sales Order Invoice Status-UH4
+
+    [Documentation]    Update sales order invoice Status Cancel to Cancel.
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Update Sales Order Invoice Status    ${SO_Inv1}    ${billStatus[2]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${ALREADY_CANCELLED}
+
+JD-TC-Update Sales Order Invoice Status-UH5
+
+    [Documentation]   Another provider try to Update sales order invoice Status.
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Update Sales Order Invoice Status    ${SO_Inv}    ${billStatus[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${INVALID_FM_INVOICE_ID}
 

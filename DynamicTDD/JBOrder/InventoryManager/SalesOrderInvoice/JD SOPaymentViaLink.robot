@@ -337,9 +337,9 @@ JD-TC-Sales Order Payment Via Link-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    # ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
 # --------------------------------------------------------------------------------------------------------------
 # --------------------------------------------- Share SO Invoice -----------------------------------------------
