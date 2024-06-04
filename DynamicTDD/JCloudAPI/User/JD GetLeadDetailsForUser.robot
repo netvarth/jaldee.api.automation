@@ -37,7 +37,7 @@ JD-TC-GetLeadDetailsForUser-1
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable  ${prov_id1}  ${decrypted_data['id']}
-    Set Test Variable  ${prov_name1}  ${decrypted_data['firstName']}
+    Set Test Variable  ${prov_name1}  ${decrypted_data['userName']}
 
     clear_customer   ${PUSERNAME27}
 

@@ -135,6 +135,12 @@ JD-TC-GetLoanApplications-1
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
+    
+    IF  ${resp.json()['enableBranchMaster']}==${bool[0]}
+        ${resp1}=  Enable Disable Branch    ${status[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${resp}=  Get Account Settings
     Log  ${resp.content}
