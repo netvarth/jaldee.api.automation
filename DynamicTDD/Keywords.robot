@@ -85,7 +85,8 @@ ${bType}                  Waitlist
 @{CallingModes}             Zoom   WhatsApp   Phone   GoogleMeet  Hangouts   Botim   Imo   Skype   Viber  VideoCall
 @{reason}                   Holiday  QueueFull  ScheduleFull
 @{Report_Types}             TOKEN   APPOINTMENT   DONATION   PAYMENT  ORDER
-@{Report_Date_Category}     Last 7 days  Next 7 days  Last 30 days  Next 30 days  Today  Date Range
+@{Report_Date_Category}     LAST_WEEK  NEXT_WEEK  LAST_THIRTY_DAYS  NEXT_THIRTY_DAYS  TODAY  YEARLY  DATE_RANGE  NONE
+@{Report_Date_filter}       Last 7 days  Next 7 days  Last 30 days  Next 30 days  Today  Date Range
 @{Payment_Purpose}          prePayment  billPayment  donation  subscriptionLicenseInvoicePayment  verifyPayuPayment  verifyPaytmPayment  verifyRazorpayPayment
 @{Payment_Mode}             Mock  JCASH
 @{Payment_Statuses}         SUCCESS   FAILED   INCOMPLETE   VOID

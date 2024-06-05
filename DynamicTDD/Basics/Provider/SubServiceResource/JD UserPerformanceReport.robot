@@ -57,6 +57,22 @@ JD-TC-UserPerformanceReport-1
     Set Test Variable  ${account_id}  ${resp.json()['id']}
     Set Test Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -301,7 +317,8 @@ JD-TC-UserPerformanceReport-1
     Should Be Equal As Strings  ${resp.json()['reportResponseType']}                            ${ReportResponseType[0]}
     Should Be Equal As Strings  ${resp.json()['reportTokenID']}                                 ${token_id1}
     Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
-
+    
+*** comments ***
 JD-TC-UserPerformanceReport-2
 
     [Documentation]  Create a sub service and add that sub service to an appointment(online) for a provider consumer.
@@ -3328,6 +3345,32 @@ JD-TC-UserPerformanceReport-12
 
     [Documentation]  Create a sub service and add that sub service to an appointment(walkin) for a provider consumer.
                 ...   then reshedule the appointment to another date then verify the user performance report.
+               
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME49}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-UserPerformanceReport-13
+
+    [Documentation]  
+    
+    create 3 service (one with auto generation on)with price, one with auto off and price 0, auto off but with price.
+    take appt, 1 : view invoice, add sub service verify report
+    take appt 2 : create invoice, add sub service verify report
+    take appt, 3: payment info, add subservice, or create invoice add sub seervice verify report
+              ....
+               
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME49}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+
+JD-TC-UserPerformanceReport-14
+
+    [Documentation]  take an appointment(walk in), add subservice from invoice(auto generation off), create invoice, view invoice which has sub service.
+               ....
+
                
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME49}  ${PASSWORD}
     Log   ${resp.json()}

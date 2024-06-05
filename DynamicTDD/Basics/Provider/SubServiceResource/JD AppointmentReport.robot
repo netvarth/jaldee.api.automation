@@ -231,7 +231,7 @@ JD-TC-AppointmentReport-1
     Should Be Equal As Strings  ${resp.json()['reportType']}                                    ${reportType[1]}
     Should Be Equal As Strings  ${resp.json()['reportResponseType']}                            ${ReportResponseType[0]}
     Should Be Equal As Strings  ${resp.json()['reportTokenID']}                                 ${token_id1}
-    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_filter[4]}  
 
     # Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['1']}                 ${appt_date} 
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['2']}                 ${cid} 
@@ -478,7 +478,7 @@ JD-TC-AppointmentReport-2
     Should Be Equal As Strings  ${resp.json()['reportType']}                                    ${reportType[1]}
     Should Be Equal As Strings  ${resp.json()['reportResponseType']}                            ${ReportResponseType[0]}
     Should Be Equal As Strings  ${resp.json()['reportTokenID']}                                 ${token_id1}
-    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_filter[4]}  
 
     # Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['1']}                 ${appt_date} 
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['2']}                 ${cid} 
@@ -725,7 +725,7 @@ JD-TC-AppointmentReport-3
     Should Be Equal As Strings  ${resp.json()['reportType']}                                    ${reportType[1]}
     Should Be Equal As Strings  ${resp.json()['reportResponseType']}                            ${ReportResponseType[0]}
     Should Be Equal As Strings  ${resp.json()['reportTokenID']}                                 ${token_id1}
-    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_filter[4]}   
 
     # Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['1']}                 ${appt_date} 
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['2']}                 ${cid} 
@@ -779,7 +779,7 @@ JD-TC-AppointmentReport-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -802,7 +802,7 @@ JD-TC-AppointmentReport-3
     Should Be Equal As Strings  ${resp.json()['reportType']}                                    ${reportType[1]}
     Should Be Equal As Strings  ${resp.json()['reportResponseType']}                            ${ReportResponseType[0]}
     Should Be Equal As Strings  ${resp.json()['reportTokenID']}                                 ${token_id1}
-    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_filter[4]}   
 
     ${filter}=  Create Dictionary    
     ${resp}=  Generate Report REST details  ${reportType[1]}  ${Report_Date_Category[1]}  ${filter}
@@ -819,7 +819,7 @@ JD-TC-AppointmentReport-3
     Should Be Equal As Strings  ${resp.json()['reportType']}                                    ${reportType[1]}
     Should Be Equal As Strings  ${resp.json()['reportResponseType']}                            ${ReportResponseType[0]}
     Should Be Equal As Strings  ${resp.json()['reportTokenID']}                                 ${token_id1}
-    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_filter[1]}   
 
     # Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['1']}                 ${appt_date} 
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['2']}                 ${cid} 
