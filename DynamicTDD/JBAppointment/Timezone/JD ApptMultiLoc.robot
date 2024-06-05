@@ -403,8 +403,8 @@ JD-TC-Take Appointment in Different Timezone-2
 
     ${Number}=  random_phone_num_generator
     Log  ${Number}
-    ${US_CC}=  Set Variable  ${Number.country_code}
-    ${USProvider}=  Set Variable  ${Number.national_number}
+    ${US_CC}=  Set Variable  ${Number[0]}
+    ${USProvider}=  Set Variable  ${Number[1]}
 
     ${licpkgid}  ${licpkgname}=  get_highest_license_pkg
 
@@ -973,8 +973,8 @@ JD-TC-Take Appointment in Different Timezone-2
     # ${CountryCode}  FakerLibrary.Country Code
     ${Number}=  random_phone_num_generator
     Log  ${Number}
-    ${CountryCode}=  Set Variable  ${Number.country_code}
-    ${primaryMobileNo}=  Set Variable  ${Number.national_number}
+    ${CountryCode}=  Set Variable  ${Number[0]}
+    ${primaryMobileNo}=  Set Variable  ${Number[1]}
     Set Test Variable  ${email}  ${C_Email}${primaryMobileNo}.${test_mail}
     
     ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id1}   countryCode=${CountryCode}  alternateLoginId=${email}
@@ -1227,8 +1227,8 @@ JD-TC-Take Appointment in Different Timezone-2
     # ${CountryCode}  FakerLibrary.Country Code
     ${Number}=  random_phone_num_generator
     Log  ${Number}
-    ${CountryCode}=  Set Variable  ${Number.country_code}
-    ${primaryMobileNo}=  Set Variable  ${Number.national_number}
+    ${CountryCode}=  Set Variable  ${Number[0]}
+    ${primaryMobileNo}=  Set Variable  ${Number[1]}
     Set Test Variable  ${email}  ${C_Email}${primaryMobileNo}.${test_mail}
     
     ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id1}   countryCode=${CountryCode}  alternateLoginId=${email}
@@ -1483,8 +1483,8 @@ JD-TC-Take Appointment in Different Timezone-2
     # ${CountryCode}  FakerLibrary.Country Code
     ${Number}=  random_phone_num_generator
     Log  ${Number}
-    ${CountryCode}=  Set Variable  ${Number.country_code}
-    ${primaryMobileNo}=  Set Variable  ${Number.national_number}
+    ${CountryCode}=  Set Variable  ${Number[0]}
+    ${primaryMobileNo}=  Set Variable  ${Number[1]}
     Set Test Variable  ${email}  ${C_Email}${primaryMobileNo}.${test_mail}
     
     ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id1}   countryCode=${CountryCode}   alternateLoginId=${email}
@@ -1941,8 +1941,8 @@ JD-TC-Take Appointment in Different Timezone-3
     ${lastName}=  FakerLibrary.last_name
     ${Number}=  random_phone_num_generator
     Log  ${Number}
-    ${CountryCode}=  Set Variable  ${Number.country_code}
-    ${primaryMobileNo}=  Set Variable  ${Number.national_number}
+    ${CountryCode}=  Set Variable  ${Number[0]}
+    ${primaryMobileNo}=  Set Variable  ${Number[1]}
     Set Test Variable  ${email}  ${C_Email}${primaryMobileNo}.${test_mail}
     
     ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id1}   countryCode=${CountryCode}  alternateLoginId=${email}
@@ -2022,8 +2022,8 @@ JD-TC-Take Appointment in Different Timezone-4
 
     ${Number}=  random_phone_num_generator
     Log  ${Number}
-    ${CC1}=  Set Variable  ${Number.country_code}
-    ${US_MultiUser}=  Set Variable  ${Number.national_number}
+    ${CC1}=  Set Variable  ${Number[0]}
+    ${US_MultiUser}=  Set Variable  ${Number[1]}
     # ${splitCC}=  Split String    ${CC1}  separator=${SPACE}  max_split=1
     # ${CC1}=  Set Variable  ${splitCC}[0]
 
@@ -2248,8 +2248,8 @@ JD-TC-Take Appointment in Different Timezone-4
     # ${CC1}=    Remove String    ${CC1}    ${SPACE}
     ${Number}=  random_phone_num_generator
     Log  ${Number}
-    ${CC1}=  Set Variable  ${Number.country_code}
-    ${US_User_U1}=  Set Variable  ${Number.national_number}
+    ${CC1}=  Set Variable  ${Number[0]}
+    ${US_User_U1}=  Set Variable  ${Number[1]}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${address}=  FakerLibrary.address
@@ -2272,8 +2272,8 @@ JD-TC-Take Appointment in Different Timezone-4
 
     ${Number}=  random_phone_num_generator
     Log  ${Number}
-    ${CC2}=  Set Variable  ${Number.country_code}
-    ${US_User_U2}=  Set Variable  ${Number.national_number}
+    ${CC2}=  Set Variable  ${Number[0]}
+    ${US_User_U2}=  Set Variable  ${Number[1]}
     ${firstname2}=  FakerLibrary.name
     ${lastname2}=  FakerLibrary.last_name
     ${address2}=  FakerLibrary.address
@@ -2518,8 +2518,8 @@ JD-TC-Take Appointment in Different Timezone-4
 
     ${Number}=  random_phone_num_generator
     Log  ${Number}
-    ${CC1}=  Set Variable  ${Number.country_code}
-    ${ME_MultiUser}=  Set Variable  ${Number.national_number}
+    ${CC1}=  Set Variable  ${Number[0]}
+    ${ME_MultiUser}=  Set Variable  ${Number[1]}
     # ${splitCC}=  Split String    ${CC1}  separator=${SPACE}  max_split=1
     # ${CC1}=  Set Variable  ${splitCC}[0]
 
@@ -2734,8 +2734,8 @@ JD-TC-Take Appointment in Different Timezone-4
     # ${CC1}=    Remove String    ${CC1}    ${SPACE}
     ${Number}=  random_phone_num_generator
     Log  ${Number}
-    ${CC1}=  Set Variable  ${Number.country_code}
-    ${ME_User_U1}=  Set Variable  ${Number.national_number}
+    ${CC1}=  Set Variable  ${Number[0]}
+    ${ME_User_U1}=  Set Variable  ${Number[1]}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${address}=  FakerLibrary.address
@@ -2757,8 +2757,8 @@ JD-TC-Take Appointment in Different Timezone-4
 
     ${Number}=  random_phone_num_generator
     Log  ${Number}
-    ${CC2}=  Set Variable  ${Number.country_code}
-    ${ME_User_U2}=  Set Variable  ${Number.national_number}
+    ${CC2}=  Set Variable  ${Number[0]}
+    ${ME_User_U2}=  Set Variable  ${Number[1]}
     ${firstname2}=  FakerLibrary.name
     ${lastname2}=  FakerLibrary.last_name
     ${address2}=  FakerLibrary.address
@@ -3204,8 +3204,8 @@ JD-TC-Take Appointment in Different Timezone-4
     # ${CC1}=    Remove String    ${CC1}    ${SPACE}
     ${Number}=  random_phone_num_generator
     Log  ${Number}
-    ${CC1}=  Set Variable  ${Number.country_code}
-    ${IN_User_U1}=  Set Variable  ${Number.national_number}
+    ${CC1}=  Set Variable  ${Number[0]}
+    ${IN_User_U1}=  Set Variable  ${Number[1]}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${address}=  FakerLibrary.address
@@ -3227,8 +3227,8 @@ JD-TC-Take Appointment in Different Timezone-4
 
     ${Number}=  random_phone_num_generator
     Log  ${Number}
-    ${CC2}=  Set Variable  ${Number.country_code}
-    ${IN_User_U2}=  Set Variable  ${Number.national_number}
+    ${CC2}=  Set Variable  ${Number[0]}
+    ${IN_User_U2}=  Set Variable  ${Number[1]}
     ${firstname2}=  FakerLibrary.name
     ${lastname2}=  FakerLibrary.last_name
     ${address2}=  FakerLibrary.address
@@ -3463,8 +3463,8 @@ JD-TC-Take Appointment in Different Timezone-4
     # ${CountryCode}  FakerLibrary.Country Code
     ${Number}=  random_phone_num_generator
     Log  ${Number}
-    ${CountryCode}=  Set Variable  ${Number.country_code}
-    ${primaryMobileNo}=  Set Variable  ${Number.national_number}
+    ${CountryCode}=  Set Variable  ${Number[0]}
+    ${primaryMobileNo}=  Set Variable  ${Number[1]}
     Set Test Variable  ${email}  ${C_Email}${primaryMobileNo}.${test_mail}
     
     ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id1}   countryCode=${CountryCode}  alternateLoginId=${email}

@@ -425,8 +425,8 @@ JD-TC-ConsumerDonation-6
 
         ${PO_Number}=  random_phone_num_generator
         Log  ${PO_Number}
-        ${country_code}=  Set Variable  ${PO_Number.country_code}
-        ${CUSERPH0}=  Set Variable  ${PO_Number.national_number}
+        ${country_code}=  Set Variable  ${PO_Number[0]}
+        ${CUSERPH0}=  Set Variable  ${PO_Number[1]}
         ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000
         ${firstname}=  FakerLibrary.first_name
         ${lastname}=  FakerLibrary.last_name

@@ -19,8 +19,8 @@ JD-TC-Take Appointment in Different Timezone-2
     ${resp}=  db.validatePhoneNumber  91  9595362548
     ${Number}=  random_phone_num_generator
     Log  ${Number}
-    ${CountryCode}=  Set Variable  ${Number.country_code}
-    ${primaryMobileNo}=  Set Variable  ${Number.national_number}
+    ${CountryCode}=  Set Variable  ${Number[0]}
+    ${primaryMobileNo}=  Set Variable  ${Number[1]}
     Set Test Variable  ${email}  ${C_Email}${primaryMobileNo}.${test_mail}
     
     ${resp}=    Send Otp For Login    ${primaryMobileNo}    2   countryCode=${CountryCode}  alternateLoginId=${email}

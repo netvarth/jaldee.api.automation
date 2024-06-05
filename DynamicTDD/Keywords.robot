@@ -354,20 +354,22 @@ Convert To twodigitfloat
 
 Get Random Valid Phone Number
     
-    FOR    ${index}    IN RANGE    10
-        Log    ${index}
-        ${PO_Number}=  random_phone_num_generator
-        Log  ${PO_Number}
-        ${count}=  count_digits  ${PO_Number.national_number}
-        IF    ${count} < 10
-            ${PO_Number}=  random_phone_num_generator
-            Log  ${PO_Number}
-            ${count}=  count_digits  ${PO_Number.national_number}
-        ELSE
-            Return From Keyword  ${PO_Number}
-        END
-    END
+    # FOR    ${index}    IN RANGE    10
+    #     Log    ${index}
+    #     ${PO_Number}=  random_phone_num_generator
+    #     Log  ${PO_Number}
+    #     ${count}=  count_digits  ${PO_Number.national_number}
+    #     IF    ${count} < 10
+    #         ${PO_Number}=  random_phone_num_generator
+    #         Log  ${PO_Number}
+    #         ${count}=  count_digits  ${PO_Number.national_number}
+    #     ELSE
+    #         Return From Keyword  ${PO_Number}
+    #     END
+    # END
+    ${countryCode}  ${Number}=  random_phone_num_generator
     Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${PO_Number}${\n}
+    RETURN  ${countryCode}  ${Number}
 
 Generate Random Phone Number
     

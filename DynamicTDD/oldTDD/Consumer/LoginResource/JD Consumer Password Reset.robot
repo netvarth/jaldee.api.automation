@@ -134,8 +134,8 @@ JD-TC-ResetPassword-4
     # ${CUSERPH3}=  Evaluate  ${CUSERNAME}+${PO_Number}
     ${PO_Number}=  random_phone_num_generator
     Log  ${PO_Number}
-    ${country_code}=  Set Variable  ${PO_Number.country_code}
-    ${CUSERPH3}=  Set Variable  ${PO_Number.national_number}
+    ${country_code}=  Set Variable  ${PO_Number[0]}
+    ${CUSERPH3}=  Set Variable  ${PO_Number[1]}
     Set Suite Variable   ${CUSERPH3}
     # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH3}+1000
@@ -192,7 +192,7 @@ JD-TC-ResetPassword-UH6
 
     ${PO_Number}=  random_phone_num_generator
     Log  ${PO_Number}
-    ${country_code1}=  Set Variable  ${PO_Number.country_code}
+    ${country_code1}=  Set Variable  ${PO_Number[0]}
    
     ${other_country_codes}=   random_country_codes  ${CUSERPH4}
     Log  ${other_country_codes}
@@ -265,8 +265,8 @@ JD-TC-ResetPassword-6
     # ${CUSERPH5}=  Evaluate  ${CUSERNAME}+${PO_Number}
     ${PO_Number}=  random_phone_num_generator
     Log  ${PO_Number}
-    ${country_code}=  Set Variable  ${PO_Number.country_code}
-    ${CUSERPH5}=  Set Variable  ${PO_Number.national_number}
+    ${country_code}=  Set Variable  ${PO_Number[0]}
+    ${CUSERPH5}=  Set Variable  ${PO_Number[1]}
     Set Suite Variable   ${CUSERPH5}
     # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH5}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH5}+1000
@@ -319,8 +319,8 @@ JD-TC-ResetPassword-7
     # ${CUSERPH5}=  Evaluate  ${CUSERNAME}+${PO_Number}
     ${PO_Number}=  random_phone_num_generator
     Log  ${PO_Number}
-    ${country_code}=  Set Variable  ${PO_Number.country_code}
-    ${CUSERPH5}=  Set Variable  ${PO_Number.national_number}
+    ${country_code}=  Set Variable  ${PO_Number[0]}
+    ${CUSERPH5}=  Set Variable  ${PO_Number[1]}
     Set Suite Variable   ${CUSERPH5}
     # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH5}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH5}+1000
@@ -456,7 +456,7 @@ JD-TC-ResetPassword-5
 
     ${PO_Number}=  random_phone_num_generator
     Log  ${PO_Number}
-    ${country_code1}=  Set Variable  ${PO_Number.country_code}
+    ${country_code1}=  Set Variable  ${PO_Number[0]}
     # ${CUSERPH4}=  Set Variable  ${PO_Number.national_number}
 
     ${other_country_codes}=   random_country_codes  ${CUSERPH4}

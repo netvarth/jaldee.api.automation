@@ -4882,9 +4882,9 @@ JD-TC-CreateOrder-15
 
     ${PO_Number}=  random_phone_num_generator
     Log  ${PO_Number}
-    ${country_code}=  Set Variable  ${PO_Number.country_code}
+    ${country_code}=  Set Variable  ${PO_Number[0]}
     Set Suite Variable   ${country_code}
-    ${CUSERPH}=  Set Variable  ${PO_Number.national_number}
+    ${CUSERPH}=  Set Variable  ${PO_Number[1]}
     Set Suite Variable   ${CUSERPH}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH}+10007
     ${firstname}=  FakerLibrary.first_name

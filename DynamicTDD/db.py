@@ -4330,42 +4330,23 @@ def MultiUser_InternalStatus(statuses,accNo):
 #                 print("dictonary: ", fields)
 
 def random_phone_num_generator():
+    count = 0
+    subscriber_number_length=7
     while True:
-        try:
-        
-            countrycode= str(random.randint(1, 99)).zfill(2)
-            first = str(random.randint(100, 999))
-            second = str(random.randint(1, 888)).zfill(3)
-            last = (str(random.randint(1, 9998)).zfill(4))
-            while last in ['1111', '2222', '3333', '4444', '5555', '6666', '7777', '8888']:
-                last = (str(random.randint(1, 9998)).zfill(4))
-            phone= '+'+countrycode+first+second+last
-            print("phone number:"+ phone)
-            phone_number = phonenumbers.parse(phone)
-            print(phone_number)
-            # print('country code is:'+ str(phone_number.country_code))
-            print(phonenumbers.is_valid_number(phone_number))
-            if phonenumbers.is_valid_number(phone_number):
-                resp = validatePhoneNumber(phone_number.country_code, phone_number.national_number)
-                if resp.json:
-                    if phone_number.country_code != 91:
-                        print(geocoder.description_for_number(phone_number, 'en'))
-                        print(region_code_for_country_code(phone_number.country_code))
-                        print("Going to return- country code: "+ str(phone_number.country_code) + " and phone number: "+ str(phone_number.national_number))
-                        # valid_number= phone_number
-                        # print("valid number: "+ str(valid_number))
-                        return phone_number
-                    else:
-                        continue
-                else:
-                    continue
-            else:
-                # random_phone_num_generator()    
-                continue
-            
-        except phonenumbers.NumberParseException as npe:
-            # random_phone_num_generator()
-            continue
+        country_code = str(random.randint(1, 999)).zfill(3)
+        subscriber_number = ''.join(random.choices('0123456789', k=subscriber_number_length))
+        phone_number = country_code + subscriber_number
+        print("Phone number:", phone_number,"with country code: ", country_code, "and number: ", subscriber_number)
+        url = f"http://localhost:8080/v1/rest/provider/validate/phonenumber/{country_code}/{subscriber_number}"
+        r = requests.get(url)
+        response = r.json()
+        print(response)
+        count += 1
+        print(count)
+        if response == True or count == 50:
+            print("inside if")
+            break
+    return country_code, subscriber_number
 
 
 def random_country_codes(number):
