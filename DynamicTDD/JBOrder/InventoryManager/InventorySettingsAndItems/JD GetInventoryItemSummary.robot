@@ -472,6 +472,10 @@ JD-TC-Get Inventory Item Summary-1
     ${sgstamount}=      Evaluate    ${taxableAmount} * ${sgst} / 100
     ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
     ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
+    ${cgstamount}=  roundoff  ${cgstamount}
+    ${sgstamount}=  roundoff  ${sgstamount}
+    ${taxAmount}=  roundoff  ${taxAmount}
+    ${netRate}=  roundoff  ${netRate}
     Set Suite Variable              ${totalQuantity}
     Set Suite Variable              ${netTotal}
     Set Suite Variable              ${discountAmount}

@@ -468,6 +468,14 @@ JD-TC-Get Inventory Item Count-1
     ${sgstamount}=      Evaluate    ${taxableAmount} * ${sgst} / 100
     ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
     ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
+    # ${totalQuantity}=  roundoff  ${totalQuantity}
+    # ${netTotal}=  roundoff  ${netTotal}
+    # ${discountAmount}=  roundoff  ${discountAmount}
+    # ${taxableAmount}=  roundoff  ${taxableAmount}
+    ${cgstamount}=  roundoff  ${cgstamount}
+    ${sgstamount}=  roundoff  ${sgstamount}
+    ${taxAmount}=  roundoff  ${taxAmount}
+    ${netRate}=  roundoff  ${netRate}
     Set Suite Variable              ${totalQuantity}
     Set Suite Variable              ${netTotal}
     Set Suite Variable              ${discountAmount}

@@ -13842,9 +13842,9 @@ Get Item hns Count Filter
 
 Create Item group Provider
 
-    [Arguments]     ${groupName}  ${groupCode}  ${description}
+    [Arguments]     ${groupName}  ${groupCode}  ${groupDesc}
 
-    ${data}=  Create Dictionary  groupName=${groupName}  groupCode=${groupCode}   description=${description}
+    ${data}=  Create Dictionary  groupName=${groupName}  groupCode=${groupCode}   groupDesc=${groupDesc}
     ${data}=  json.dumps  ${data} 
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/spitem/group  data=${data}  expected_status=any
@@ -13860,9 +13860,9 @@ Get Item group by id Provider
 
 Update Item group Provider
 
-    [Arguments]     ${id}  ${groupName}  ${groupCode}  ${description}
+    [Arguments]     ${id}  ${groupName}  ${groupCode}  ${groupDesc}
 
-    ${data}=  Create Dictionary  id=${id}  groupName=${groupName}  groupCode=${groupCode}   description=${description}
+    ${data}=  Create Dictionary  id=${id}  groupName=${groupName}  groupCode=${groupCode}   groupDesc=${groupDesc}
     ${data}=  json.dumps  ${data} 
     Check And Create YNW Session
     ${resp}=  PATCH On Session  ynw  /provider/spitem/group  data=${data}  expected_status=any
