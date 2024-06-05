@@ -316,8 +316,8 @@ JD-TC-UserPerformanceReport-1
     Should Be Equal As Strings  ${resp.json()['reportType']}                                    ${reportType[6]}
     Should Be Equal As Strings  ${resp.json()['reportResponseType']}                            ${ReportResponseType[0]}
     Should Be Equal As Strings  ${resp.json()['reportTokenID']}                                 ${token_id1}
-    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
-    
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_filter[4]}  
+
 *** comments ***
 JD-TC-UserPerformanceReport-2
 
