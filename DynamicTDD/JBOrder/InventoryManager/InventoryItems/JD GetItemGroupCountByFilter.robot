@@ -85,7 +85,7 @@ JD-TC-GetItemGroupCount-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Item group Count Filter    groupDesc-eq=${groupDesc}
+    ${resp}=    Get Item group Count Filter    description-eq=${groupDesc}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}         200
     Should Be Equal As Strings    ${resp.json()}              1
