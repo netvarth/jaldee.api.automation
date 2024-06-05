@@ -15,12 +15,12 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 
 *** Variables ***
 @{Views}  self  all  customersOnly
-${CAUSERNAME}              admin.support@jaldee.com
-${PASSWORD}               Netvarth12
+${CAUSERNAME}             admin.support@jaldee.com
+${PASSWORD}               Jaldee01
 ${NEWPASSWORD}            Jaldee12
 ${SPASSWORD}              Netvarth1
 ${test_mail}              test@jaldee.com
-${count}  ${1}
+${count}                  ${1}
 
 *** Test Cases ***
 
@@ -46,14 +46,8 @@ JD-TC-Provider_Signup-1
     END
 
     
-    # ${PO_Number}=  FakerLibrary.Numerify  %#####
-    # ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    # Log  ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py
     ${num}=  find_last  ${var_file}
-    ${PH_Number}    Random Number 	digits=5  #fix_len=True
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    Log  ${PH_Number}
-    Set Suite Variable  ${PUSERPH0}  555${PH_Number}
+    ${PUSERPH0}=    Generate Random 555 Number
     FOR  ${index}  IN RANGE   ${count}
         ${num}=  Evaluate   ${num}+1
         ${ph}=  Evaluate   ${PUSERPH0}+${index}
@@ -89,13 +83,10 @@ JD-TC-Provider_Signup-1
         ${fname}=  FakerLibrary.name
         ${lname}=  FakerLibrary.lastname
         ${resp}=  Account SignUp  ${fname}  ${lname}  ${None}  ${domain}  ${subdomain}  ${ph}  ${licpkgid}
-        # Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  Account Activation  ${ph}  0
-        # Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  0
-        # Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         sleep  03s
         ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}

@@ -74,7 +74,7 @@ JD-TC-BroadcastMessageToCustomers-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${num}=    Generate Random 555 Test Phone Number
+    ${num}=    Generate Random 555 Number
     ${fname}=  FakerLibrary.name
     ${lname}=  FakerLibrary.last_name
     ${resp}=  AddCustomer  ${num}  firstName=${fname}  lastName=${lname}

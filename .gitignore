@@ -35,3 +35,5 @@ Data/TDD_Logs/providernumbers.txt
 DynamicTDD/cover.json
 DynamicTDD/proper.json
 Docker/logs/*
+Data/TDD_Output/msgslog.txt
+DynamicTDD/TDD_Output/msgslog.txt

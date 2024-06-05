@@ -387,11 +387,11 @@ Generate Random Phone Number
 
 
 
-Generate Random 555 Test Phone Number
+Generate Random 555 Number
     ${PH_Number}    Random Number 	       digits=5 
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
-    Set Suite Variable    ${Phone}  555${PH_Number}
+    ${Phone}=   Set Variable  555${PH_Number}
     Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${Phone}${\n}
     RETURN  ${Phone}
     

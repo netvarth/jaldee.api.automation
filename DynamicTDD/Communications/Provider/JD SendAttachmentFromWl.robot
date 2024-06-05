@@ -46,7 +46,7 @@ JD-TC-SendAttachmentWL-1
     ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cnum}=    Generate Random 555 Test Phone Number
+    ${cnum}=    Generate Random 555 Number
     Set Suite Variable  ${cnum}
      
     ${resp}=  AddCustomer  ${cnum}  

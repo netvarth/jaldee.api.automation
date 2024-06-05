@@ -595,7 +595,7 @@ JD-TC-GetAppointmentToday-1
             Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id3}
         END
     END
-
+*** comments ***
 JD-TC-GetAppointmentToday-2
 
     [Documentation]  Get consumer's appointments Today for multiple providers.
