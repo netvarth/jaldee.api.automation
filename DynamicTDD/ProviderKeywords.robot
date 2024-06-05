@@ -15093,7 +15093,7 @@ Get Catalog Item Details
     [Arguments]    ${purchaseUId}
 
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  t/provider/inventory/purchase/items/${purchaseUId}  expected_status=any 
+    ${resp}=  GET On Session  ynw  /provider/inventory/purchase/items/${purchaseUId}  expected_status=any 
     RETURN  ${resp}
 
 Update Details In Catalog 
