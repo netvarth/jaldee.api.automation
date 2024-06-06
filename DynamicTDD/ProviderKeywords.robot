@@ -14955,7 +14955,7 @@ Create Sales Order Invoice
     ${resp}=  POST On Session  ynw  /provider/sorder/${orderuid}/invoice   expected_status=any
     RETURN  ${resp} 
 
-Get Invoice By Invoice Uid
+Get Sales Order Invoice By Id
 
     [Arguments]  ${invoiceuid}   
     Check And Create YNW Session
