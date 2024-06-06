@@ -35,18 +35,18 @@ JD-TC-Remove Service Level Discount-1
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
     Log  ${licname}
-    ${domresp}=  Get BusinessDomainsConf
-    Log   ${domresp.json()}
-    Should Be Equal As Strings  ${domresp.status_code}  200
-    ${dlen}=  Get Length  ${domresp.json()}
-   FOR  ${pos}  IN RANGE  ${dlen}  
-        Set Suite Variable  ${d1}  ${domresp.json()[${pos}]['domain']}
-        ${sd1}  ${check}=  Get Billable Subdomain  ${d1}  ${domresp}  ${pos}  
-        Set Suite Variable   ${sd1}
-        Exit For Loop IF     '${check}' == '${bool[1]}'
-    END
-    Log  ${d1}
-    Log  ${sd1}
+  ${domresp}=  Get BusinessDomainsConf
+        Should Be Equal As Strings  ${domresp.status_code}  200
+
+        ${dlen}=  Get Length  ${domresp.json()}
+        FOR  ${pos}  IN RANGE  ${dlen}  
+                Set Test Variable  ${d1}  ${domresp.json()[${pos}]['domain']}
+
+                ${sd1}=  Get Billable Subdomain  ${d1}  ${domresp}  ${pos}  
+                Set Test Variable   ${sd1}
+                Exit For Loop IF    '${sd1}'
+
+        END
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
