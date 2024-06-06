@@ -17,54 +17,13 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
-${jpgfile}      /ebs/TDD/uploadimage.jpg
-${pngfile}      /ebs/TDD/upload.png
-${pdffile}      /ebs/TDD/sample.pdf
-${jpgfile2}      /ebs/TDD/small.jpg
-${gif}      /ebs/TDD/sample.gif
-${xlsx}      /ebs/TDD/qnr.xlsx
-
-${order}    0
-${fileSize}  0.00458
-${service_duration}     30
-@{emptylist}
-${self}         0
-${waitlistedby}           PROVIDER
-@{status1}    New     Pending    Assigned     Approved    Rejected
-@{New_status}    Proceed     Unassign    Block     Delete    Remove
 ${DisplayName1}   item1_DisplayName
 
-***Keywords***
-
-
-Get Billable Subdomain
-    [Arguments]   ${domain}  ${jsondata}  ${posval}  
-    ${length}=  Get Length  ${jsondata.json()[${posval}]['subDomains']}
-    FOR  ${pos}  IN RANGE  ${length}
-            Set Suite Variable  ${subdomain}  ${jsondata.json()[${posval}]['subDomains'][${pos}]['subDomain']}
-            ${resp}=   Get Sub Domain Settings    ${domain}    ${subdomain}
-            Should Be Equal As Strings    ${resp.status_code}    200
-            Exit For Loop IF  '${resp.json()['serviceBillable']}' == '${bool[1]}'
-    END
-    RETURN  ${subdomain}  ${resp.json()['serviceBillable']}
-
-
-
-Get Non Billable Subdomain
-    [Arguments]   ${domain}  ${jsondata}  ${posval}  
-    ${length}=  Get Length  ${jsondata.json()[${posval}]['subDomains']}
-    FOR  ${pos}  IN RANGE  ${length}
-            Set Test Variable  ${subdomain}  ${jsondata.json()[${posval}]['subDomains'][${pos}]['subDomain']}
-            ${resp}=   Get Sub Domain Settings    ${domain}    ${subdomain}
-            Should Be Equal As Strings    ${resp.status_code}    200
-            Exit For Loop IF  '${resp.json()['serviceBillable']}' == '${bool[0]}'
-    END
-    RETURN  ${subdomain}  ${resp.json()['serviceBillable']}
 
 
 *** Test Cases ***
 
-JD-TC-Remove Item to Finance-1
+JD-TC-Remove Item From Invoice-1
 
     [Documentation]  Apply Service Level Discount.
 
@@ -386,7 +345,7 @@ JD-TC-Remove Item to Finance-1
     Set Suite Variable   ${netTotal1}
 
 
-    ${resp}=  AddItemToFinance   ${invoice_uid}   ${itemList1}    
+    ${resp}=  AddItemToInvoice   ${invoice_uid}   ${itemList1}    
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -397,7 +356,7 @@ JD-TC-Remove Item to Finance-1
 
     ${itemList2}=  Create Dictionary  itemId=${itemId2}      price=${promotionalPrice1} 
 
-    ${resp}=  RemoveItemToFinance  ${invoice_uid}   ${itemList1}    
+    ${resp}=  RemoveItemFromInvoice  ${invoice_uid}   ${itemList1}    
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
 

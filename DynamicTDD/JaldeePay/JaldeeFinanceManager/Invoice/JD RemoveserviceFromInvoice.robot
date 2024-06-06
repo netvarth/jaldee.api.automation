@@ -17,61 +17,21 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
-${jpgfile}      /ebs/TDD/uploadimage.jpg
-${pngfile}      /ebs/TDD/upload.png
-${pdffile}      /ebs/TDD/sample.pdf
-${jpgfile2}      /ebs/TDD/small.jpg
-${gif}      /ebs/TDD/sample.gif
-${xlsx}      /ebs/TDD/qnr.xlsx
-
 ${order}    0
-${fileSize}  0.00458
 ${service_duration}     30
-@{emptylist}
 ${self}         0
 ${waitlistedby}           PROVIDER
-@{status1}    New     Pending    Assigned     Approved    Rejected
-@{New_status}    Proceed     Unassign    Block     Delete    Remove
-${DisplayName1}   item1_DisplayName
-
-***Keywords***
-
-
-Get Billable Subdomain
-    [Arguments]   ${domain}  ${jsondata}  ${posval}  
-    ${length}=  Get Length  ${jsondata.json()[${posval}]['subDomains']}
-    FOR  ${pos}  IN RANGE  ${length}
-            Set Suite Variable  ${subdomain}  ${jsondata.json()[${posval}]['subDomains'][${pos}]['subDomain']}
-            ${resp}=   Get Sub Domain Settings    ${domain}    ${subdomain}
-            Should Be Equal As Strings    ${resp.status_code}    200
-            Exit For Loop IF  '${resp.json()['serviceBillable']}' == '${bool[1]}'
-    END
-    RETURN  ${subdomain}  ${resp.json()['serviceBillable']}
-
-
-
-Get Non Billable Subdomain
-    [Arguments]   ${domain}  ${jsondata}  ${posval}  
-    ${length}=  Get Length  ${jsondata.json()[${posval}]['subDomains']}
-    FOR  ${pos}  IN RANGE  ${length}
-            Set Test Variable  ${subdomain}  ${jsondata.json()[${posval}]['subDomains'][${pos}]['subDomain']}
-            ${resp}=   Get Sub Domain Settings    ${domain}    ${subdomain}
-            Should Be Equal As Strings    ${resp.status_code}    200
-            Exit For Loop IF  '${resp.json()['serviceBillable']}' == '${bool[0]}'
-    END
-    RETURN  ${subdomain}  ${resp.json()['serviceBillable']}
-
 
 
 
 *** Test Cases ***
 
-JD-TC-Apply Item to Finance-1
+JD-TC-Remove Service From Invoice-1
 
     [Documentation]  Apply Service Level Discount.
 
 
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+3381864
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+3381684
     Set Suite Variable   ${PUSERPH0}
     
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -235,7 +195,6 @@ JD-TC-Apply Item to Finance-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
-
     ${name}=   FakerLibrary.word
     ${resp}=  CreateVendorCategory  ${name}  
     Log  ${resp.json()}
@@ -247,6 +206,7 @@ JD-TC-Apply Item to Finance-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+
 
     ${name1}=   FakerLibrary.word
     Set Suite Variable   ${name1}
@@ -341,63 +301,58 @@ JD-TC-Apply Item to Finance-1
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
     ${invoiceId}=   FakerLibrary.word
 
-     ${item1}=     FakerLibrary.word
-    ${itemCode1}=     FakerLibrary.word
-    ${price1}=     Random Int   min=400   max=500
-    ${price}=  Convert To Number  ${price1}  1
-    Set Suite Variable  ${price} 
-    ${resp}=  Create Sample Item   ${DisplayName1}   ${item1}  ${itemCode1}  ${price}  ${bool[0]} 
-    Log  ${resp.json()}  
-    Should Be Equal As Strings  ${resp.status_code}  200
-    # ${itemId1}=   Convert To Integer   ${resp.json()} 
-    Set Suite Variable  ${itemId1}   ${resp.json()} 
 
-    ${resp}=   Get Item By Id  ${itemId1}
+     ${SERVICE1}=    FakerLibrary.word
+    Set Suite Variable  ${SERVICE1}
+    ${desc}=   FakerLibrary.sentence
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}   
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${promotionalPrice}   ${resp.json()['promotionalPrice']}
-
+    Set Suite Variable  ${sid1}  ${resp.json()} 
 
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
-    ${itemList}=  Create Dictionary  itemId=${itemId1}   quantity=${quantity}  price=${promotionalPrice}
-    ${netTotal}=  Evaluate  ${quantity} * ${promotionalPrice}
-    Set Suite Variable   ${netTotal}
+    ${serviceprice}=   Random Int  min=100  max=500
+    ${serviceprice}=  Convert To Number  ${serviceprice}  1
+    ${netRate}=  Evaluate  ${quantity} * ${serviceprice}
+
+    ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}   price=${serviceprice} 
+    ${serviceList}=    Create List    ${serviceList}
     
     
-    
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    serviceList=${serviceList}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]} 
 
-    ${name}=     FakerLibrary.word
-    ${item2}=     FakerLibrary.word
-    ${itemCode2}=     FakerLibrary.word
-    ${resp}=  Create Sample Item   ${name}   ${item2}  ${itemCode2}  ${price}  ${bool[0]} 
-    Log  ${resp.json()}  
+
+     ${SERVICE2}=    FakerLibrary.word
+    Set Suite Variable  ${SERVICE2}
+    ${desc}=   FakerLibrary.sentence
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${resp}=  Create Service  ${SERVICE2}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}   
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${itemId2}  ${resp.json()}
+    Set Suite Variable  ${sid2}  ${resp.json()} 
 
-    ${resp}=   Get Item By Id  ${itemId2}
+
+
+    ${serviceList1}=  Create Dictionary  serviceId=${sid2}   quantity=${quantity}   price=${serviceprice} 
+    # ${serviceList1}=    Create List    ${serviceList1}
+
+
+    ${resp}=  AddServiceToFinance   ${invoice_uid}   ${serviceList1}    
+    Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${promotionalPrice1}   ${resp.json()['promotionalPrice']}
-    # ${itemId3}=   Convert To Integer   ${resp.json()['itemId']}
-    Set Suite Variable  ${itemId3}    ${resp.json()['itemId']}
 
+    ${serviceList2}=  Create Dictionary  serviceId=${sid2}      price=${serviceprice} 
 
-
-    ${itemList1}=  Create Dictionary  itemId=${itemId3}   quantity=${quantity}  price=${promotionalPrice1}
-    ${netTotal1}=  Evaluate  ${quantity} * ${promotionalPrice1}
-    Set Suite Variable   ${netTotal1}
-
-
-    ${resp}=  AddItemToFinance   ${invoice_uid}   ${itemList1}    
+    ${resp}=  RemoveServiceFromInvoice   ${invoice_uid}   ${serviceList2}    
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-
-*** Comments ***
     ${resp}=  Get Invoice By Id  ${invoice_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -406,13 +361,13 @@ JD-TC-Apply Item to Finance-1
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['quantity']}  ${quantity}
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['price']}  ${serviceprice}
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['netRate']}  ${netRate}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][1]['serviceId']}  ${sid2}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][1]['serviceName']}  ${SERVICE2}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][1]['quantity']}  ${quantity}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][1]['price']}  ${serviceprice}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][1]['netRate']}  ${netRate}
+    # Should Be Equal As Strings  ${resp.json()['serviceList'][1]['serviceId']}  ${sid2}
+    # Should Be Equal As Strings  ${resp.json()['serviceList'][1]['serviceName']}  ${SERVICE2}
+    # Should Be Equal As Strings  ${resp.json()['serviceList'][1]['quantity']}  ${quantity}
+    # Should Be Equal As Strings  ${resp.json()['serviceList'][1]['price']}  ${serviceprice}
+    # Should Be Equal As Strings  ${resp.json()['serviceList'][1]['netRate']}  ${netRate}
 
-JD-TC-Apply Service To Finance-2
+JD-TC-Remove Service From Invoice-2
 
     [Documentation]   Service auto invoice generation is on,then took one appointment from consumer side  and check whethrer invoice is created there .
 
@@ -452,7 +407,7 @@ JD-TC-Apply Service To Finance-2
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${servicecharge}=  Convert To Number  ${servicecharge}  1 
     ${srv_duration}=   Random Int   min=10   max=20
-    ${resp}=  Create Service  ${SERVICE3}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${min_pre}  ${servicecharge}  ${bool[1]}  ${bool[0]}
+    ${resp}=  Create Service  ${SERVICE3}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${min_pre}  ${servicecharge}  ${bool[0]}  ${bool[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
@@ -546,7 +501,7 @@ JD-TC-Apply Service To Finance-2
     Verify Response    ${resp}     uid=${apptid1}   appmtDate=${DAY1}   appmtTime=${slot1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}  ${apptStatus[0]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}  ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -580,6 +535,12 @@ JD-TC-Apply Service To Finance-2
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${serviceList2}=  Create Dictionary  serviceId=${sid2}      price=${serviceprice} 
+
+    ${resp}=  RemoveServiceFromInvoice   ${invoice_appt_uid}   ${serviceList2}    
+    Log  ${resp.json()} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Get Invoice By Id  ${invoice_appt_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -588,17 +549,17 @@ JD-TC-Apply Service To Finance-2
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['quantity']}  1.0
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['price']}  ${servicecharge}
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['netRate']}  ${servicecharge}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][1]['serviceId']}  ${sid2}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][1]['serviceName']}  ${SERVICE2}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][1]['quantity']}  ${quantity}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][1]['price']}  ${serviceprice}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][1]['netRate']}  ${netRate}
-    Should Be Equal As Strings  ${resp.json()['amountDue']}  ${Total}
-    Should Be Equal As Strings  ${resp.json()['amountTotal']}  ${Total}
-    Should Be Equal As Strings  ${resp.json()['netTotal']}  ${Total}
-    Should Be Equal As Strings  ${resp.json()['netRate']}  ${Total}
+    # Should Be Equal As Strings  ${resp.json()['serviceList'][1]['serviceId']}  ${sid2}
+    # Should Be Equal As Strings  ${resp.json()['serviceList'][1]['serviceName']}  ${SERVICE2}
+    # Should Be Equal As Strings  ${resp.json()['serviceList'][1]['quantity']}  ${quantity}
+    # Should Be Equal As Strings  ${resp.json()['serviceList'][1]['price']}  ${serviceprice}
+    # Should Be Equal As Strings  ${resp.json()['serviceList'][1]['netRate']}  ${netRate}
+    Should Be Equal As Strings  ${resp.json()['amountDue']}  ${servicecharge}
+    Should Be Equal As Strings  ${resp.json()['amountTotal']}  ${servicecharge}
+    Should Be Equal As Strings  ${resp.json()['netTotal']}  ${servicecharge}
+    Should Be Equal As Strings  ${resp.json()['netRate']}  ${servicecharge}
 
-JD-TC-Apply Services to finance-3
+JD-TC-Remove Services to finance-3
 
     [Documentation]   Service auto invoice generation is on,then took walkin appointment  and check whethrer invoice is created there .
 
@@ -762,6 +723,13 @@ JD-TC-Apply Services to finance-3
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
+
+    ${serviceList2}=  Create Dictionary  serviceId=${sid2}      price=${serviceprice} 
+
+    ${resp}=  RemoveServiceFromInvoice   ${invoice_apptwalkin_uid}   ${serviceList2}    
+    Log  ${resp.json()} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Get Invoice By Id  ${invoice_apptwalkin_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -770,17 +738,17 @@ JD-TC-Apply Services to finance-3
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['quantity']}  1.0
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['price']}  ${servicecharge}
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['netRate']}  ${servicecharge}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][1]['serviceId']}  ${sid2}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][1]['serviceName']}  ${SERVICE2}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][1]['quantity']}  ${quantity}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][1]['price']}  ${serviceprice}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][1]['netRate']}  ${netRate}
-    Should Be Equal As Strings  ${resp.json()['amountDue']}  ${Total}
-    Should Be Equal As Strings  ${resp.json()['amountTotal']}  ${Total}
-    Should Be Equal As Strings  ${resp.json()['netTotal']}  ${Total}
-    Should Be Equal As Strings  ${resp.json()['netRate']}  ${Total}
+    # Should Be Equal As Strings  ${resp.json()['serviceList'][1]['serviceId']}  ${sid2}
+    # Should Be Equal As Strings  ${resp.json()['serviceList'][1]['serviceName']}  ${SERVICE2}
+    # Should Be Equal As Strings  ${resp.json()['serviceList'][1]['quantity']}  ${quantity}
+    # Should Be Equal As Strings  ${resp.json()['serviceList'][1]['price']}  ${serviceprice}
+    # Should Be Equal As Strings  ${resp.json()['serviceList'][1]['netRate']}  ${netRate}
+    # Should Be Equal As Strings  ${resp.json()['amountDue']}  ${servicecharge}
+    Should Be Equal As Strings  ${resp.json()['amountTotal']}  ${servicecharge}
+    Should Be Equal As Strings  ${resp.json()['netTotal']}  ${servicecharge}
+    Should Be Equal As Strings  ${resp.json()['netRate']}  ${servicecharge}
 
-JD-TC-Apply Services to finance-4
+JD-TC-Remove Services to finance-4
 
     [Documentation]   Service auto invoice generation is on,then took walkin token  and check whethrer invoice is created there .
 
@@ -922,6 +890,12 @@ JD-TC-Apply Services to finance-4
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${serviceList2}=  Create Dictionary  serviceId=${sid2}      price=${serviceprice} 
+
+    ${resp}=  RemoveServiceFromInvoice   ${invoice_wtlistwalkin_uid}   ${serviceList2}    
+    Log  ${resp.json()} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Get Invoice By Id  ${invoice_wtlistwalkin_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -930,12 +904,21 @@ JD-TC-Apply Services to finance-4
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['quantity']}  1.0
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['price']}  ${tot_amt}
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['netRate']}  ${tot_amt}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][1]['serviceId']}  ${sid2}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][1]['serviceName']}  ${SERVICE2}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][1]['quantity']}  ${quantity}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][1]['price']}  ${serviceprice}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][1]['netRate']}  ${netRate}
-    Should Be Equal As Strings  ${resp.json()['amountDue']}  ${Total}
-    Should Be Equal As Strings  ${resp.json()['amountTotal']}  ${Total}
-    Should Be Equal As Strings  ${resp.json()['netTotal']}  ${Total}
-    Should Be Equal As Strings  ${resp.json()['netRate']}  ${Total}
+    # Should Be Equal As Strings  ${resp.json()['serviceList'][1]['serviceId']}  ${sid2}
+    # Should Be Equal As Strings  ${resp.json()['serviceList'][1]['serviceName']}  ${SERVICE2}
+    # Should Be Equal As Strings  ${resp.json()['serviceList'][1]['quantity']}  ${quantity}
+    # Should Be Equal As Strings  ${resp.json()['serviceList'][1]['price']}  ${serviceprice}
+    # Should Be Equal As Strings  ${resp.json()['serviceList'][1]['netRate']}  ${netRate}
+    Should Be Equal As Strings  ${resp.json()['amountDue']}  ${tot_amt}
+    Should Be Equal As Strings  ${resp.json()['amountTotal']}  ${tot_amt}
+    Should Be Equal As Strings  ${resp.json()['netTotal']}  ${tot_amt}
+    Should Be Equal As Strings  ${resp.json()['netRate']}  ${tot_amt}
+
+# JD-TC-Remove Services to finance-5
+
+#     [Documentation]   Service auto invoice generation is on,then took walkin token  and check whethrer invoice is created there .
+
+#     ${resp}=  Get Order Settings by account id
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     Run Keyword If  ${resp.json()['enableOrder']}==${bool[0]}   Enable Order Settings

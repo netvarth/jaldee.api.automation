@@ -270,7 +270,7 @@ JD-TC-UpdateService-1
     
 
 
-     ${resp}=  Update Finance Service  ${invoice_uid}   ${serviceList1}   
+     ${resp}=  Update Invoice Service  ${invoice_uid}   ${serviceList1}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -294,7 +294,7 @@ JD-TC-UpdateService-UH1
 
      ${invoice}=    FakerLibrary.word
 
-     ${resp}=  Update Finance Service  ${invoice}   ${serviceList1}   
+     ${resp}=  Update Invoice Service  ${invoice}   ${serviceList1}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
@@ -311,7 +311,7 @@ JD-TC-UpdateService-UH2
     ${service}=  Create Dictionary  
 
 
-     ${resp}=  Update Finance Service  ${invoice_uid}   ${service}   
+     ${resp}=  Update Invoice Service  ${invoice_uid}   ${service}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${quantity_cannot_empty}
@@ -319,7 +319,7 @@ JD-TC-UpdateService-UH2
 JD-TC-UpdateService-UH3
     [Documentation]   Update item Without login
 
-     ${resp}=  Update Finance Service  ${invoice_uid}   ${serviceList1}   
+     ${resp}=  Update Invoice Service  ${invoice_uid}   ${serviceList1}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}"
@@ -332,7 +332,7 @@ JD-TC-UpdateService-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  Update Finance Service  ${invoice_uid}   ${serviceList1}   
+     ${resp}=  Update Invoice Service  ${invoice_uid}   ${serviceList1}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}" 
@@ -363,7 +363,7 @@ JD-TC-UpdateService-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
-     ${resp}=  Update Finance Service  ${invoice_uid}   ${serviceList1}   
+     ${resp}=  Update Invoice Service  ${invoice_uid}   ${serviceList1}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
@@ -386,7 +386,7 @@ JD-TC-UpdateService-UH6
     Should Be Equal As Strings  ${resp.status_code}  422
     # ${INVOICE_SETTLED}=  format String   ${INVOICE_SETTLED}   ${billStatus[1]}
 
-     ${resp}=  Update Finance Service  ${invoice_uid}   ${serviceList1}   
+     ${resp}=  Update Invoice Service  ${invoice_uid}   ${serviceList1}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.json()}   ${INVOICE_SETTLED}

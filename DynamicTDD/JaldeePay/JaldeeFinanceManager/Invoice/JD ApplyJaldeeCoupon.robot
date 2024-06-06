@@ -17,23 +17,8 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
-
-${jpgfile}      /ebs/TDD/uploadimage.jpg
-${pngfile}      /ebs/TDD/upload.png
-${pdffile}      /ebs/TDD/sample.pdf
-${jpgfile2}      /ebs/TDD/small.jpg
-${gif}      /ebs/TDD/sample.gif
-${xlsx}      /ebs/TDD/qnr.xlsx
-
-${order}    0
-${fileSize}  0.00458
 ${service_duration}     30
 @{emptylist}
-
-@{status1}    New     Pending    Assigned     Approved    Rejected
-@{New_status}    Proceed     Unassign    Block     Delete    Remove
-${DisplayName1}   item1_DisplayName
-
 
 ${SERVICE1}  Note Book1102
 ${SERVICE2}  boots102
@@ -48,8 +33,7 @@ ${eTime}    11:00 PM
 ${longi}        89.524764
 ${latti}        86.524764
 ${Coupon19}     Coupon1912
-${numbers}  0123456789
-${self}   0
+
 
 
 *** Test Cases ***

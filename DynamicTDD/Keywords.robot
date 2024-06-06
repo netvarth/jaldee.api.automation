@@ -272,6 +272,8 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{serviceCategory}                  SubService   MainService
 @{updateType}                       ADD  SUBTRACT
 @{pushedStatus}                     PUSHED   ACCEPTED   DECLINED
+@{status1}    New     Pending    Assigned     Approved    Rejected
+@{New_status}    Proceed     Unassign    Block     Delete    Remove
 
 
 

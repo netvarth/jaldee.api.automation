@@ -19,50 +19,15 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Variables ***
 
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
-${pngfile}      /ebs/TDD/upload.png
-${pdffile}      /ebs/TDD/sample.pdf
 ${jpgfile2}      /ebs/TDD/small.jpg
 ${gif}      /ebs/TDD/sample.gif
 ${xlsx}      /ebs/TDD/qnr.xlsx
 
-${order}    0
-${fileSize}  0.00458
 ${service_duration}     30
 ${service_duration1}     10
 @{emptylist}
 ${self}         0
 ${waitlistedby}           PROVIDER
-@{status1}    New     Pending    Assigned     Approved    Rejected
-@{New_status}    Proceed     Unassign    Block     Delete    Remove
-${DisplayName1}   item1_DisplayName
-
-***Keywords***
-
-
-Get Billable Subdomain
-    [Arguments]   ${domain}  ${jsondata}  ${posval}  
-    ${length}=  Get Length  ${jsondata.json()[${posval}]['subDomains']}
-    FOR  ${pos}  IN RANGE  ${length}
-            Set Suite Variable  ${subdomain}  ${jsondata.json()[${posval}]['subDomains'][${pos}]['subDomain']}
-            ${resp}=   Get Sub Domain Settings    ${domain}    ${subdomain}
-            Should Be Equal As Strings    ${resp.status_code}    200
-            Exit For Loop IF  '${resp.json()['serviceBillable']}' == '${bool[1]}'
-    END
-    RETURN  ${subdomain}  ${resp.json()['serviceBillable']}
-
-
-
-Get Non Billable Subdomain
-    [Arguments]   ${domain}  ${jsondata}  ${posval}  
-    ${length}=  Get Length  ${jsondata.json()[${posval}]['subDomains']}
-    FOR  ${pos}  IN RANGE  ${length}
-            Set Test Variable  ${subdomain}  ${jsondata.json()[${posval}]['subDomains'][${pos}]['subDomain']}
-            ${resp}=   Get Sub Domain Settings    ${domain}    ${subdomain}
-            Should Be Equal As Strings    ${resp.status_code}    200
-            Exit For Loop IF  '${resp.json()['serviceBillable']}' == '${bool[0]}'
-    END
-    RETURN  ${subdomain}  ${resp.json()['serviceBillable']}
-
 
 
 
@@ -384,7 +349,7 @@ JD-TC-Apply Service to Finance-1
     # ${serviceList1}=    Create List    ${serviceList1}
 
 
-    ${resp}=  AddServiceToFinance   ${invoice_uid}   ${serviceList1}    
+    ${resp}=  AddServiceToInvoice   ${invoice_uid}   ${serviceList1}    
     Log  ${resp.content} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -602,7 +567,7 @@ JD-TC-Apply Service To Finance-2
     ${Total}=  Convert To Number  ${Total}  1
 
 
-    ${resp}=  AddServiceToFinance   ${invoice_appt_uid}   ${serviceList1}    
+    ${resp}=  AddServiceToInvoice   ${invoice_appt_uid}   ${serviceList1}    
     Log  ${resp.content} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -628,7 +593,7 @@ JD-TC-Apply Service To Finance-2
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
 
-JD-TC-Apply Services to finance-3
+JD-TC-Apply Services to Invoice-3
 
     [Documentation]   Service auto invoice generation is on,then took walkin appointment  and check whethrer invoice is created there then add service to that invoice.
 
@@ -789,7 +754,7 @@ JD-TC-Apply Services to finance-3
     ${Total}=  Convert To Number  ${Total}  1
 
 
-    ${resp}=  AddServiceToFinance   ${invoice_apptwalkin_uid}   ${serviceList1}    
+    ${resp}=  AddServiceToInvoice   ${invoice_apptwalkin_uid}   ${serviceList1}    
     Log  ${resp.content} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -811,7 +776,7 @@ JD-TC-Apply Services to finance-3
     Should Be Equal As Strings  ${resp.json()['netTotal']}  ${Total}
     Should Be Equal As Strings  ${resp.json()['netRate']}  ${Total}
 
-JD-TC-Apply Services to finance-4
+JD-TC-Apply Services to Invoice-4
 
     [Documentation]   Service auto invoice generation is on,then took walkin token  and check whethrer invoice is created there then add service to that invoice.
 
@@ -949,7 +914,7 @@ JD-TC-Apply Services to finance-4
     ${Total}=  Convert To Number  ${Total}  1
 
 
-    ${resp}=  AddServiceToFinance   ${invoice_wtlistwalkin_uid}   ${serviceList1}    
+    ${resp}=  AddServiceToInvoice   ${invoice_wtlistwalkin_uid}   ${serviceList1}    
     Log  ${resp.content} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -972,7 +937,7 @@ JD-TC-Apply Services to finance-4
     Should Be Equal As Strings  ${resp.json()['netRate']}  ${Total}
 
 
-JD-TC-Apply Services to finance-5
+JD-TC-Apply Services to Invoice-5
     [Documentation]  Taking waitlist from consumer side and the consumer doing the prepayment - check invoice(auto-invoice generation flag is on) then add service to that invoice.
 
    
@@ -1368,7 +1333,7 @@ JD-TC-Apply Services to finance-5
     Set Suite Variable  ${invoice_wtlistonline_uid}  ${resp.json()[0]['invoiceUid']}
 
 
-    ${resp}=  AddServiceToFinance   ${invoice_wtlistonline_uid}   ${serviceList1}    
+    ${resp}=  AddServiceToInvoice   ${invoice_wtlistonline_uid}   ${serviceList1}    
     Log  ${resp.content} 
     Should Be Equal As Strings  ${resp.status_code}  200
 

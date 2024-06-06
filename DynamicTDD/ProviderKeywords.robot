@@ -12212,7 +12212,7 @@ Remove Provider Coupon
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/remove/providercoupon    data=${data}  expected_status=any    headers=${headers}
     RETURN  ${resp}
 
-Update Finance Service
+Update Invoice Service
 
     [Arguments]    ${uuid}     @{vargs}
     ${len}=  Get Length  ${vargs}
@@ -12896,7 +12896,7 @@ Get Audit Log or History LOS
     ${resp}=  GET On Session  ynw  /provider/los/lead/${uid}/auditlog   expected_status=any
     RETURN  ${resp}
 
-AddItemToFinance
+AddItemToInvoice
    [Arguments]  ${uuid}   ${ItemLists}  &{kwargs}
     ${ItemLists}=  Create List     ${ItemLists}
     FOR  ${key}  ${value}  IN  &{kwargs}
@@ -12908,7 +12908,7 @@ AddItemToFinance
    ${resp}=    PUT On Session    ynw   /provider/jp/finance/invoice/${uuid}/additems    data=${data}  expected_status=any  
    RETURN  ${resp} 
 
-AddServiceToFinance
+AddServiceToInvoice
 
    [Arguments]  ${uuid}   ${serviceList}  &{kwargs}
     ${serviceLists}=  Create List     ${serviceList}
@@ -12921,7 +12921,7 @@ AddServiceToFinance
    ${resp}=    PUT On Session    ynw   /provider/jp/finance/invoice/${uuid}/addservices    data=${data}  expected_status=any  
    RETURN  ${resp} 
 
-RemoveServiceToFinance
+RemoveServiceFromInvoice
 
    [Arguments]  ${uuid}   ${serviceList}  &{kwargs}
     ${serviceLists}=  Create List     ${serviceList}
@@ -12934,7 +12934,7 @@ RemoveServiceToFinance
    ${resp}=    PUT On Session    ynw   /provider/jp/finance/invoice/${uuid}/removeservices    data=${data}  expected_status=any  
    RETURN  ${resp} 
 
-RemoveItemToFinance
+RemoveItemFromInvoice
 
    [Arguments]  ${uuid}   ${ItemLists}  &{kwargs}
     ${ItemLists}=  Create List     ${ItemLists}
