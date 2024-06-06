@@ -631,7 +631,7 @@ JD-TC-Inventory Manager Work Flow-1
     ${netTotal}=   Evaluate    ${price} * ${quantity} 
     ${netTotal}=  Convert To Number  ${netTotal}    1
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
@@ -661,7 +661,7 @@ JD-TC-Inventory Manager Work Flow-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -691,7 +691,7 @@ JD-TC-Inventory Manager Work Flow-1
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
@@ -1241,7 +1241,7 @@ JD-TC-Inventory Manager Work Flow-2
     ${netTotal}=   Evaluate    ${price} * ${quantity} 
     ${netTotal}=  Convert To Number  ${netTotal}    1
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
@@ -1271,7 +1271,7 @@ JD-TC-Inventory Manager Work Flow-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1301,7 +1301,7 @@ JD-TC-Inventory Manager Work Flow-2
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
@@ -1600,7 +1600,7 @@ JD-TC-Inventory Manager Work Flow-3
     ${netTotal}=   Evaluate    ${price1} * ${quantity} 
     ${netTotal}=  Convert To Number  ${netTotal}    1
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
@@ -1629,7 +1629,7 @@ JD-TC-Inventory Manager Work Flow-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    # ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    # ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     # Log   ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1659,7 +1659,7 @@ JD-TC-Inventory Manager Work Flow-3
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     # Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
@@ -1688,7 +1688,7 @@ JD-TC-Inventory Manager Work Flow-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200   
     Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[1]}
@@ -1699,7 +1699,7 @@ JD-TC-Inventory Manager Work Flow-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}

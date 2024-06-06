@@ -23,9 +23,6 @@ ${invalidNum}        1245
 ${invalidEma}        asd122
 ${invalidstring}     _ad$.sa_
 ${invalidItem}     sprx-3250dr0-800
-@{spItemSource}      RX       Ayur
-${originFrom}       NONE
-@{deliveryType}     STORE_PICKUP        HOME_DELIVERY
 
 *** Test Cases ***
 
@@ -87,7 +84,7 @@ JD-TC-Apply SalesOrder discount-1
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-# --------------------- Create Store Type from sa side -------------------------------
+# ---------------------    Create Store Type from sa side ----------------------------
     ${TypeName}=    FakerLibrary.name
     Set Suite Variable  ${TypeName}
     sleep  02s
@@ -103,7 +100,7 @@ JD-TC-Apply SalesOrder discount-1
     Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
-# --------------------- ---------------------------------------------------------------
+# ------------------------------------------------------------------------------------
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Log   ${resp.content}
@@ -133,7 +130,7 @@ JD-TC-Apply SalesOrder discount-1
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-# ------------------------ Create Store ----------------------------------------------------------
+# ---------------------    Create Store ----------------------------------------------
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
@@ -150,16 +147,16 @@ JD-TC-Apply SalesOrder discount-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id}  ${resp.json()}
 
-# ---------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------
 
-# --------------------------- Create SalesOrder Inventory Catalog-InvMgr False ------------------------------------
+# ---------------------    Create SalesOrder Inventory Catalog-InvMgr False ----------
 
     ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_Cata_Encid}  ${resp.json()}
-# --------------------------------------------------------------------------------------------------------------
-# ----------------------------------------  Create Item ---------------------------------------------------
+# ------------------------------------------------------------------------------------
+# ---------------------    Create Item -----------------------------------------------
 
     ${displayName}=     FakerLibrary.name
     ${displayName1}=     FakerLibrary.name
@@ -182,10 +179,11 @@ JD-TC-Apply SalesOrder discount-1
     ${resp}=  Create Sample Item   ${displayName1}   ${itemName1}  ${itemCode1}  ${price1}  ${bool[0]}     
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id1}  ${resp.json()}
-# -------------------------------------------------------------------------------------------------------------------
-# -------------------------------- Create SalesOrder Catalog Item-invMgmt False -----------------------------------
+# ------------------------------------------------------------------------------------
+# ---------------------    Create SalesOrder Catalog Item-invMgmt False --------------
 
     ${price}=    Random Int  min=2   max=40
+    Set Suite Variable  ${price}
     ${invCatItem}=     Create Dictionary       encId=${itemEncId2}
     ${Item_details}=  Create Dictionary        spItem=${invCatItem}    price=${price}   
 
@@ -196,7 +194,7 @@ JD-TC-Apply SalesOrder discount-1
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
     Set Suite Variable  ${SO_itemEncIds2}  ${resp.json()[1]}
 
-# -------------------------------- Add a provider Consumer -----------------------------------
+# ---------------------    Add a provider Consumer -----------------------------------
 
     ${firstName}=  FakerLibrary.name
     Set Suite Variable    ${firstName}
@@ -234,9 +232,9 @@ JD-TC-Apply SalesOrder discount-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-# --------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------
 
-# ----------------------------- Provider take a Sales Order ------------------------------------------------
+# ---------------------    Provider take a Sales Order -------------------------------
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Log   ${resp.content}
@@ -251,7 +249,7 @@ JD-TC-Apply SalesOrder discount-1
     ${store}=  Create Dictionary   encId=${store_id}  
     ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${items}     store=${store}
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom[5]}    ${items}     store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${SO_Uid}  ${resp.json()}
@@ -283,7 +281,7 @@ JD-TC-Apply SalesOrder discount-1
     Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[0]}
     Should Be Equal As Strings    ${resp.json()['deliveryType']}                                    ${deliveryType[0]}
     Should Be Equal As Strings    ${resp.json()['deliveryStatus']}                                  ${deliveryStatus[0]}
-    Should Be Equal As Strings    ${resp.json()['originFrom']}                                      ${originFrom}
+    Should Be Equal As Strings    ${resp.json()['originFrom']}                                      ${originFrom[5]}
 
     Should Be Equal As Strings    ${resp.json()['orderNum']}                                        1
     Should Be Equal As Strings    ${resp.json()['orderRef']}                                        1
@@ -304,8 +302,8 @@ JD-TC-Apply SalesOrder discount-1
     Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
-# -----------------------------------------------------------------------------------------------------------------------------------------
-# ----------------------------------------------- Update order status to ORDER_CONFIRMED---------------------------------------------------------------
+# ------------------------------------------------------------------------------------
+# ---------------------    Update order status to ORDER_CONFIRMED---------------------
 
     ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[1]}
     Log   ${resp.content}
@@ -317,16 +315,16 @@ JD-TC-Apply SalesOrder discount-1
     Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
     Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
 
-# ------------------------------------------------Create Sales Order Invoice----------------------------------------------
+# ---------------------    Create Sales Order Invoice---------------------------------
 
     ${resp}=    Create Sales Order Invoice    ${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable      ${SO_Inv}    ${resp.json()}  
-# ------------------------------------------------------------------------------------------------------------------------
-# --------------------------------------------- Get Invoice By Invoice EncId -----------------------------------------------
+# ------------------------------------------------------------------------------------
+# ---------------------    Get Invoice By Invoice EncId ------------------------------
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
@@ -348,7 +346,7 @@ JD-TC-Apply SalesOrder discount-1
     Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 
-# --------------------------------------------- Apply discount For SalesOrder -----------------------------------------------
+# --------------------------------------------- Apply discount For SalesOrder --------
 
     ${discount1}=     FakerLibrary.word
     ${desc}=   FakerLibrary.word
@@ -377,7 +375,7 @@ JD-TC-Apply SalesOrder discount-1
     ${discount_final_price}=  Evaluate  ${netTotal}-${bal_Total}
     ${discount_final_price}=  Convert To Number  ${discount_final_price}   2
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
@@ -424,8 +422,12 @@ JD-TC-Apply SalesOrder discount-2
 
     ${privateNote}=     FakerLibrary.word
     ${displayNote}=   FakerLibrary.word
-    ${discountValue1}=     Random Int   min=50   max=100
+    ${discountValue1}=     Random Int   min=40   max=100
     ${discountValue1}=  Convert To Number  ${discountValue1}  1
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    Apply discount For SalesOrder    ${SO_Uid}    ${discountId1}   ${privateNote}    ${displayNote}   ${discountValue1}
     Log   ${resp.content}
@@ -438,7 +440,7 @@ JD-TC-Apply SalesOrder discount-2
     ${discount_final_price}=  Evaluate  ${netTotal}-${bal_Total}
     ${discount_final_price}=  Convert To Number  ${discount_final_price}   1
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
@@ -468,9 +470,62 @@ JD-TC-Apply SalesOrder discount-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Remove SalesOrder discount     ${SO_Uid}    ${discountId1}    ${discountprice2}
+# ---------------------    Provider take a Sales Order -------------------------------
+    ${quantity}=    Random Int  min=2   max=5
+    ${Cg_encid}=  Create Dictionary   encId=${SO_Cata_Encid}   
+    ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
+
+    ${store}=  Create Dictionary   encId=${store_id}  
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
+
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom[5]}    ${items}     store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${SO_Uid}  ${resp.json()}
+
+    ${netTotal}=  Evaluate  ${price}*${quantity}
+    ${netTotal}=  Convert To Number  ${netTotal}   1
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable   ${SO_Encid}     ${resp.json()['encId']}
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
+# ------------------------------------------------------------------------------------
+# --------------------     Update order status to ORDER_CONFIRMED---------------------
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
+
+# --------------------     Create Sales Order Invoice---------------------------------
+
+    ${resp}=    Create Sales Order Invoice    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable      ${SO_Inv}    ${resp.json()}  
+# ------------------------------------------------------------------------------------
+# --------------------     Get Invoice By Invoice EncId ------------------------------
+
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['order']['uid']}                                       ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
+
+# ------------------------------------------------------------------------------------
+    # ${resp}=    Remove SalesOrder discount     ${SO_Uid}    ${discountId1}    ${discountprice2}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
     ${discount1}=     FakerLibrary.word
     ${desc}=   FakerLibrary.word
@@ -491,10 +546,10 @@ JD-TC-Apply SalesOrder discount-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${bal_Total}=  Evaluate  ${netTotal}-${discountValue1}
+    ${bal_Total}=  Evaluate  ${netTotal}-${discountprice3}
     ${bal_Total}=  Convert To Number  ${bal_Total}   1
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
@@ -504,7 +559,7 @@ JD-TC-Apply SalesOrder discount-3
     Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${SO_Cata_Encid}
     Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
     Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
-    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       ${discountValue1}
+    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       ${discountprice3}
 
     Should Be Equal As Strings    ${resp.json()['taxTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                                       0.0
@@ -524,9 +579,63 @@ JD-TC-Apply SalesOrder discount-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Remove SalesOrder discount     ${SO_Uid}    ${discountId2}    ${discountprice3}
+# --------------------     Provider take a Sales Order -------------------------------
+    ${quantity}=    Random Int  min=2   max=5
+    ${Cg_encid}=  Create Dictionary   encId=${SO_Cata_Encid}   
+    ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
+
+    ${store}=  Create Dictionary   encId=${store_id}  
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
+
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom[5]}    ${items}     store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${SO_Uid}  ${resp.json()}
+
+    ${netTotal}=  Evaluate  ${price}*${quantity}
+    ${netTotal}=  Convert To Number  ${netTotal}   1
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable   ${SO_Encid}     ${resp.json()['encId']}
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
+# ------------------------------------------------------------------------------------
+# --------------------     Update order status to ORDER_CONFIRMED---------------------
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
+
+# --------------------     Create Sales Order Invoice---------------------------------
+
+    ${resp}=    Create Sales Order Invoice    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable      ${SO_Inv}    ${resp.json()}  
+# ------------------------------------------------------------------------------------
+# --------------------     Get Invoice By Invoice EncId ------------------------------
+
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['order']['uid']}                                       ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
+
+# ------------------------------------------------------------------------------------
+
+    # ${resp}=    Remove SalesOrder discount     ${SO_Uid}    ${discountId2}    ${discountprice3}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
     ${discount1}=     FakerLibrary.word
     ${desc}=   FakerLibrary.word
@@ -540,7 +649,7 @@ JD-TC-Apply SalesOrder discount-4
 
     ${privateNote}=     FakerLibrary.word
     ${displayNote}=   FakerLibrary.word
-    ${discountValue1}=     Random Int   min=50   max=100
+    ${discountValue1}=     Random Int   min=5   max=10
     ${discountValue1}=  Convert To Number  ${discountValue1}  1
 
     ${resp}=    Apply discount For SalesOrder    ${SO_Uid}    ${discountId3}   ${privateNote}    ${displayNote}   ${discountValue1}
@@ -550,7 +659,7 @@ JD-TC-Apply SalesOrder discount-4
     ${bal_Total}=  Evaluate  ${netTotal}-${discountValue1}
     ${bal_Total}=  Convert To Number  ${bal_Total}   1
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
@@ -579,6 +688,60 @@ JD-TC-Apply SalesOrder discount-UH
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+# -------------------      Provider take a Sales Order -------------------------------
+    ${quantity}=    Random Int  min=2   max=5
+    ${Cg_encid}=  Create Dictionary   encId=${SO_Cata_Encid}   
+    ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
+
+    ${store}=  Create Dictionary   encId=${store_id}  
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
+
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom[5]}    ${items}     store=${store}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${SO_Uid}  ${resp.json()}
+
+    ${netTotal}=  Evaluate  ${price}*${quantity}
+    ${netTotal}=  Convert To Number  ${netTotal}   1
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable   ${SO_Encid}     ${resp.json()['encId']}
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
+# ------------------------------------------------------------------------------------
+# -------------------      Update order status to ORDER_CONFIRMED---------------------
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
+
+# ------------------       Create Sales Order Invoice---------------------------------
+
+    ${resp}=    Create Sales Order Invoice    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable      ${SO_Inv}    ${resp.json()}  
+# ------------------------------------------------------------------------------------
+# -------------------      Get Invoice By Invoice EncId ------------------------------
+
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['order']['uid']}                                       ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
+
+# ------------------------------------------------------------------------------------
+
     ${privateNote}=     FakerLibrary.word
     ${displayNote}=   FakerLibrary.word
     ${discountValue1}=     Random Int   min=50   max=100
@@ -586,30 +749,140 @@ JD-TC-Apply SalesOrder discount-UH
 
     ${resp}=    Apply discount For SalesOrder    ${SO_Uid}    ${EMPTY}   ${privateNote}    ${displayNote}   ${discountValue1}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${INCORRECT_DISCOUNT_ID}
 
-JD-TC-Apply SalesOrder discount-UH
+
+JD-TC-Apply SalesOrder discount-UH1
 
     [Documentation]   Apply Discount with EMPTY privateNote.
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+# -------------------      Provider take a Sales Order -------------------------------
+    ${quantity}=    Random Int  min=2   max=5
+    ${Cg_encid}=  Create Dictionary   encId=${SO_Cata_Encid}   
+    ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
+
+    ${store}=  Create Dictionary   encId=${store_id}  
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
+
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom[5]}    ${items}     store=${store}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${SO_Uid}  ${resp.json()}
+
+    ${netTotal}=  Evaluate  ${price}*${quantity}
+    ${netTotal}=  Convert To Number  ${netTotal}   1
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable   ${SO_Encid}     ${resp.json()['encId']}
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
+# ------------------------------------------------------------------------------------
+# ------------------       Update order status to ORDER_CONFIRMED---------------------
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
+
+# ------------------       Create Sales Order Invoice---------------------------------
+
+    ${resp}=    Create Sales Order Invoice    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable      ${SO_Inv}    ${resp.json()}  
+# ------------------------------------------------------------------------------------
+# -----------------        Get Invoice By Invoice EncId ------------------------------
+
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['order']['uid']}                                       ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
+
+# ------------------------------------------------------------------------------------
+
     ${privateNote}=     FakerLibrary.word
     ${displayNote}=   FakerLibrary.word
-    ${discountValue1}=     Random Int   min=50   max=100
+    ${discountValue1}=     Random Int   min=5   max=10
     ${discountValue1}=  Convert To Number  ${discountValue1}  1
 
     ${resp}=    Apply discount For SalesOrder    ${SO_Uid}    ${discountId3}   ${EMPTY}    ${displayNote}   ${discountValue1}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.status_code}   422
 
-JD-TC-Apply SalesOrder discount-UH
+JD-TC-Apply SalesOrder discount-UH2
 
-    [Documentation]   Apply Discount with EMPTY privateNote.
+    [Documentation]   Apply Discount with EMPTY displayNote.
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+# ------------------        Provider take a Sales Order ------------------------------
+    ${quantity}=    Random Int  min=2   max=5
+    ${Cg_encid}=  Create Dictionary   encId=${SO_Cata_Encid}   
+    ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
+
+    ${store}=  Create Dictionary   encId=${store_id}  
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
+
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom[5]}    ${items}     store=${store}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${SO_Uid}  ${resp.json()}
+
+    ${netTotal}=  Evaluate  ${price}*${quantity}
+    ${netTotal}=  Convert To Number  ${netTotal}   1
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable   ${SO_Encid}     ${resp.json()['encId']}
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
+# ------------------------------------------------------------------------------------
+# ------------------       Update order status to ORDER_CONFIRMED---------------------
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
+
+# ------------------       Create Sales Order Invoice---------------------------------
+
+    ${resp}=    Create Sales Order Invoice    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable      ${SO_Inv}    ${resp.json()}  
+# ------------------------------------------------------------------------------------
+# ------------------       Get Invoice By Invoice EncId ------------------------------
+
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['order']['uid']}                                       ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
+
+# ------------------------------------------------------------------------------------
 
     ${privateNote}=     FakerLibrary.word
     ${displayNote}=   FakerLibrary.word
@@ -618,25 +891,80 @@ JD-TC-Apply SalesOrder discount-UH
 
     ${resp}=    Apply discount For SalesOrder    ${SO_Uid}    ${discountId3}   ${privateNote}    ${EMPTY}   ${discountValue1}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.status_code}   422
 
-JD-TC-Apply SalesOrder discount-UH
+JD-TC-Apply SalesOrder discount-UH3
 
     [Documentation]   Apply Discount with EMPTY discountValue.
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+# ------------------       Provider take a Sales Order --------------------------------
+    ${quantity}=    Random Int  min=2   max=5
+    ${Cg_encid}=  Create Dictionary   encId=${SO_Cata_Encid}   
+    ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
+
+    ${store}=  Create Dictionary   encId=${store_id}  
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
+
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom[5]}    ${items}     store=${store}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${SO_Uid1}  ${resp.json()}
+
+    ${netTotal}=  Evaluate  ${price}*${quantity}
+    ${netTotal}=  Convert To Number  ${netTotal}   1
+
+    ${resp}=    Get Sales Order    ${SO_Uid1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable   ${SO_Encid}     ${resp.json()['encId']}
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid1}
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
+# -------------------------------------------------------------------------------------
+# ------------------       Update order status to ORDER_CONFIRMED----------------------
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid1}     ${orderStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid1}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
+
+# -----------------        Create Sales Order Invoice----------------------------------
+
+    ${resp}=    Create Sales Order Invoice    ${SO_Uid1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable      ${SO_Inv}    ${resp.json()}  
+# -------------------------------------------------------------------------------------
+# -----------------        Get Invoice By Invoice EncId -------------------------------
+
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['order']['uid']}                                       ${SO_Uid1}
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
+
+# -------------------------------------------------------------------------------------
+
     ${privateNote}=     FakerLibrary.word
     ${displayNote}=   FakerLibrary.word
     ${discountValue1}=     Random Int   min=50   max=100
     ${discountValue1}=  Convert To Number  ${discountValue1}  1
 
-    ${resp}=    Apply discount For SalesOrder    ${SO_Uid}    ${discountId3}   ${privateNote}    ${displayNote}   ${EMPTY}
+    ${resp}=    Apply discount For SalesOrder    ${SO_Uid1}    ${discountId3}   ${privateNote}    ${displayNote}   ${EMPTY}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${CANNOT_APPLY_ZERO_DISC}
 
-JD-TC-Apply SalesOrder discount-UH
+JD-TC-Apply SalesOrder discount-UH4
 
     [Documentation]    Try Apply Discount without login.
 
@@ -645,6 +973,7 @@ JD-TC-Apply SalesOrder discount-UH
     ${discountValue1}=     Random Int   min=50   max=100
     ${discountValue1}=  Convert To Number  ${discountValue1}  1
 
-    ${resp}=    Apply discount For SalesOrder    ${SO_Uid}    ${discountId3}   ${privateNote}    ${displayNote}   ${discountValue1}
+    ${resp}=    Apply discount For SalesOrder    ${SO_Uid1}    ${discountId3}   ${privateNote}    ${displayNote}   ${discountValue1}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}        ${SESSION_EXPIRED}

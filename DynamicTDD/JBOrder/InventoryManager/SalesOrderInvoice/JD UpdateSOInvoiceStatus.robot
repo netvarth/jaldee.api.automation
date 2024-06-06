@@ -23,9 +23,6 @@ ${invalidNum}        1245
 ${invalidEma}        asd122
 ${invalidstring}     _ad$.sa_
 ${invalidItem}     sprx-3250dr0-800
-@{spItemSource}      RX       Ayur
-${originFrom}       NONE
-@{deliveryType}     STORE_PICKUP        HOME_DELIVERY
 
 *** Test Cases ***
 
@@ -248,7 +245,7 @@ JD-TC-Update Sales Order Invoice Status-1
     ${store}=  Create Dictionary   encId=${store_id}  
     ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}  ${items}   store=${store}
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom[5]}  ${items}   store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${SO_Uid}  ${resp.json()}
@@ -278,7 +275,7 @@ JD-TC-Update Sales Order Invoice Status-1
     Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[0]}
     Should Be Equal As Strings    ${resp.json()['deliveryType']}                                    ${deliveryType[0]}
     Should Be Equal As Strings    ${resp.json()['deliveryStatus']}                                  ${deliveryStatus[0]}
-    Should Be Equal As Strings    ${resp.json()['originFrom']}                                      ${originFrom}
+    Should Be Equal As Strings    ${resp.json()['originFrom']}                                      ${originFrom[5]}
 
     Should Be Equal As Strings    ${resp.json()['orderNum']}                                        1
     Should Be Equal As Strings    ${resp.json()['orderRef']}                                        1
@@ -322,7 +319,7 @@ JD-TC-Update Sales Order Invoice Status-1
 # ------------------------------------------------------------------------------------------------------------------------
 # --------------------------------------------- Get Invoice By Invoice EncId -----------------------------------------------
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
@@ -352,7 +349,7 @@ JD-TC-Update Sales Order Invoice Status-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200   
     Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[1]}
@@ -388,7 +385,7 @@ JD-TC-Update Sales Order Invoice Status-UH2
     ${store}=  Create Dictionary   encId=${store_id}  
     ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}  ${items}   store=${store}
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom[5]}  ${items}   store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${SO_Uid1}  ${resp.json()}
@@ -432,7 +429,7 @@ JD-TC-Update Sales Order Invoice Status-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv1}   
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv1}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200   
     Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[2]}

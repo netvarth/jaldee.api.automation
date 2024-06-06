@@ -23,9 +23,6 @@ ${invalidNum}        1245
 ${invalidEma}        asd122
 ${invalidstring}     _ad$.sa_
 ${invalidItem}     sprx-3250dr0-800
-@{spItemSource}      RX       Ayur
-${originFrom}       NONE
-@{deliveryType}     STORE_PICKUP        HOME_DELIVERY
 
 *** Test Cases ***
 
@@ -249,7 +246,7 @@ JD-TC-Make Cash Payment For Sales Order-1
     ${store}=  Create Dictionary   encId=${store_id}  
     ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}  ${items}    store=${store}
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom[5]}  ${items}    store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${SO_Uid}  ${resp.json()}
@@ -281,7 +278,7 @@ JD-TC-Make Cash Payment For Sales Order-1
     Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[0]}
     Should Be Equal As Strings    ${resp.json()['deliveryType']}                                    ${deliveryType[0]}
     Should Be Equal As Strings    ${resp.json()['deliveryStatus']}                                  ${deliveryStatus[0]}
-    Should Be Equal As Strings    ${resp.json()['originFrom']}                                      ${originFrom}
+    Should Be Equal As Strings    ${resp.json()['originFrom']}                                      ${originFrom[5]}
 
     Should Be Equal As Strings    ${resp.json()['orderNum']}                                        1
     Should Be Equal As Strings    ${resp.json()['orderRef']}                                        1
@@ -327,7 +324,7 @@ JD-TC-Make Cash Payment For Sales Order-1
 # ------------------------------------------------------------------------------------------------------------------------
 # --------------------------------------------- Get Invoice By Invoice EncId -----------------------------------------------
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
@@ -358,7 +355,7 @@ JD-TC-Make Cash Payment For Sales Order-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
@@ -390,7 +387,7 @@ JD-TC-Make Cash Payment For Sales Order-UH1
 
 # --------------------------------------------- Get Invoice By Invoice EncId -----------------------------------------------
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
@@ -440,7 +437,7 @@ JD-TC-Make Cash Payment For Sales Order-3
     ${store}=  Create Dictionary   encId=${store_id}  
     ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}  ${items}    store=${store}
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom[5]}  ${items}    store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${SO_Uid1}  ${resp.json()}
@@ -473,7 +470,7 @@ JD-TC-Make Cash Payment For Sales Order-3
     Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[0]}
     Should Be Equal As Strings    ${resp.json()['deliveryType']}                                    ${deliveryType[0]}
     Should Be Equal As Strings    ${resp.json()['deliveryStatus']}                                  ${deliveryStatus[0]}
-    Should Be Equal As Strings    ${resp.json()['originFrom']}                                      ${originFrom}
+    Should Be Equal As Strings    ${resp.json()['originFrom']}                                      ${originFrom[5]}
 
     Should Be Equal As Strings    ${resp.json()['orderNum']}                                        2
     Should Be Equal As Strings    ${resp.json()['orderRef']}                                        2
@@ -518,7 +515,7 @@ JD-TC-Make Cash Payment For Sales Order-3
 # ------------------------------------------------------------------------------------------------------------------------
 # --------------------------------------------- Get Invoice By Invoice EncId -----------------------------------------------
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
@@ -554,7 +551,7 @@ JD-TC-Make Cash Payment For Sales Order-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     # Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${half_amt}
@@ -574,7 +571,7 @@ JD-TC-Make Cash Payment For Sales Order-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     # Should Be Equal As Strings    ${resp.json()['half_amt']}                                       ${half_amt}
@@ -599,7 +596,7 @@ JD-TC-Make Cash Payment For Sales Order-5
     ${store}=  Create Dictionary   encId=${store_id}  
     ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity1}   catItemBatchEncId=${SO_itemEncIds}
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}  ${items}    store=${store}
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom[5]}  ${items}    store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${SO_Uid2}  ${resp.json()}
@@ -646,7 +643,7 @@ JD-TC-Make Cash Payment For Sales Order-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     # Should Be Equal As Strings    ${resp.json()['half_amt']}                                       ${half_amt}
@@ -679,7 +676,7 @@ JD-TC-Make Cash Payment For Sales Order-
     ${store}=  Create Dictionary   encId=${store_id}  
     ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity1}   catItemBatchEncId=${SO_itemEncIds}
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}  ${items}    store=${store}
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom[5]}  ${items}    store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${SO_Uid2}  ${resp.json()}
@@ -726,7 +723,7 @@ JD-TC-Make Cash Payment For Sales Order-
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     # Should Be Equal As Strings    ${resp.json()['half_amt']}                                       ${half_amt}

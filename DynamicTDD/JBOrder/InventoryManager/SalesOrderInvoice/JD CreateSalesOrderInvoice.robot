@@ -23,9 +23,6 @@ ${invalidNum}        1245
 ${invalidEma}        asd122
 ${invalidstring}     _ad$.sa_
 ${invalidItem}     sprx-3250dr0-800
-@{spItemSource}      RX       Ayur
-${originFrom}       NONE
-@{deliveryType}     STORE_PICKUP        HOME_DELIVERY
 
 *** Test Cases ***
 
@@ -249,7 +246,7 @@ JD-TC-Create Sales Order Invoice-1
     ${store}=  Create Dictionary   encId=${store_id}  
     ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${items}    store=${store}
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom[5]}    ${items}    store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${SO_Uid}  ${resp.json()}
@@ -279,7 +276,7 @@ JD-TC-Create Sales Order Invoice-1
     Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[0]}
     Should Be Equal As Strings    ${resp.json()['deliveryType']}                                    ${deliveryType[0]}
     Should Be Equal As Strings    ${resp.json()['deliveryStatus']}                                  ${deliveryStatus[0]}
-    Should Be Equal As Strings    ${resp.json()['originFrom']}                                      ${originFrom}
+    Should Be Equal As Strings    ${resp.json()['originFrom']}                                      ${originFrom[5]}
 
     Should Be Equal As Strings    ${resp.json()['orderNum']}                                        1
     Should Be Equal As Strings    ${resp.json()['orderRef']}                                        1

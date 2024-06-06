@@ -204,7 +204,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{bankType}                 ProviderPaytm     JaldeeBank     NoBank     PrimaryBank
 @{jsonNames}                businessProfile  virtualFields  terminologies  services  donationServices  location
 @{catalogType}              submission  itemOrder
-@{originFrom}               Lead   Enquire  LoanApplication  Loan  Task  None
+@{originFrom}               Lead   Enquire  LoanApplication  Loan  Task  NONE
 @{serviceBookingType}       booking   request
 @{rbac_feature}             cdl   
 @{rbac_capabilities}        createLoanApplication  updateLoanApplication  viewLoanApplication  verifyPartnerLoanApplication
@@ -272,10 +272,10 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{serviceCategory}                  SubService   MainService
 @{updateType}                       ADD  SUBTRACT
 @{pushedStatus}                     PUSHED   ACCEPTED   DECLINED
-@{status1}    New     Pending    Assigned     Approved    Rejected
-@{New_status}    Proceed     Unassign    Block     Delete    Remove
-
-
+@{status1}                          New     Pending    Assigned     Approved    Rejected
+@{New_status}                       Proceed     Unassign    Block     Delete    Remove
+@{deliveryType}                     STORE_PICKUP        HOME_DELIVERY
+@{spItemSource}                     RX       Ayur
 
 *** Keywords ***
 Login

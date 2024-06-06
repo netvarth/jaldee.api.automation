@@ -32,7 +32,7 @@ ${originFrom}       NONE
 
 *** Test Cases ***
 
-JD-TC-Consumer Get Invoice By Invoice uid-1
+JD-TC-Consumer Get Sales Order Invoice By Id-1
 
     [Documentation]   Create a sales Order with Valid Details and share invoice then consumer get it by invoice uid.
 
@@ -302,7 +302,7 @@ JD-TC-Consumer Get Invoice By Invoice uid-1
 # ------------------------------------------------------------------------------------------------------------------------
 # --------------------------------------------- Get Invoice By Invoice EncId -----------------------------------------------
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
@@ -332,7 +332,7 @@ JD-TC-Consumer Get Invoice By Invoice uid-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    ${resp}=    Get Sales Order Invoice By Id    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -352,6 +352,6 @@ JD-TC-Consumer Get Invoice By Invoice uid-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Consumer Get Invoice By Invoice Uid      ${accountId}  ${SO_Inv} 
+    ${resp}=    Consumer Get Sales Order Invoice By Id      ${accountId}  ${SO_Inv} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
