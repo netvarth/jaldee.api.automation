@@ -29,9 +29,9 @@ ${originFrom}       NONE
       
 *** Test Cases ***
 
-JD-TC-GetOrderCountByFilter-1
+JD-TC-GetOrderByFilter-1
 
-    [Documentation]    Get Order Count By Filter
+    [Documentation]    Get Sorder Count By Filter
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
     Log  ${iscorp_subdomains}
@@ -43,7 +43,7 @@ JD-TC-GetOrderCountByFilter-1
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+4548754
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+4548778
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
@@ -190,6 +190,7 @@ JD-TC-GetOrderCountByFilter-1
     Set Suite Variable  ${DAY1} 
 
     ${Store_Name1}=    FakerLibrary.first name
+    Set Suite Variable      ${Store_Name1}
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
     Set Suite Variable  ${email_id}  ${Store_Name1}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
@@ -605,6 +606,596 @@ JD-TC-GetOrderCountByFilter-1
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
 
-    ${resp}=    Get Sorder Count By Filter
+    ${resp}=    Get Sorder By Filter  
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
+    Set Suite Variable      ${sorder_uid}   ${resp.json()[0]['uid']}
+    Should Be Equal As Strings      ${resp.json()[0]['createdDate']}    ${DAY1}
+    Should Be Equal As Strings      ${resp.json()[0]['createdBy']}    ${pid}
+    Should Be Equal As Strings      ${resp.json()[0]['createdByName']}    ${pdrname}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}    ${Store_Name1}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}   ${store_id}
+    Should Be Equal As Strings      ${resp.json()[0]['prescriptionUid']}    ${prescription_id}
+    Should Be Equal As Strings      ${resp.json()[0]['prescriptionDate']}    ${DAY1}
+    Should Be Equal As Strings      ${resp.json()[0]['pushedStatus']}    ${pushedStatus[0]}
+    Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
+    Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
+    Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
+
+    ${resp}=    Get Sorder By Uid  ${sorder_uid}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Set Suite Variable              ${refNumber}      ${resp.json()['store']['refNumber']}
+    Set Suite Variable              ${presc_ref}    ${resp.json()['prescriptionRefNo']}
+    Set Suite Variable              ${orgin_From}   ${resp.json()['originFrom']}
+    Should Be Equal As Strings      ${resp.json()['createdDate']}    ${DAY1}
+    Should Be Equal As Strings      ${resp.json()['createdBy']}    ${pid}
+    Should Be Equal As Strings      ${resp.json()['createdByName']}    ${pdrname}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}    ${Store_Name1}
+    Should Be Equal As Strings      ${resp.json()['store']['encId']}   ${store_id}
+    Should Be Equal As Strings      ${resp.json()['prescriptionUid']}    ${prescription_id}
+    Should Be Equal As Strings      ${resp.json()['prescriptionDate']}    ${DAY1}
+    Should Be Equal As Strings      ${resp.json()['pushedStatus']}    ${pushedStatus[0]}
+    Should Be Equal As Strings      ${resp.json()['doctorId']}    ${doc1}
+    Should Be Equal As Strings      ${resp.json()['doctorName']}    ${Docfname} ${Doclname}
+    Should Be Equal As Strings      ${resp.json()['orderStatus']}    ${couponState[0]}
+
+    ${resp}=    Convert to order  ${sorder_uid}  ${orderStatus[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+
+    ${resp}=    Get Sorder By Uid  ${sorder_uid}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Set Suite Variable              ${refNumber}      ${resp.json()['store']['refNumber']}
+    Set Suite Variable              ${presc_ref}    ${resp.json()['prescriptionRefNo']}
+    Set Suite Variable              ${orgin_From}   ${resp.json()['originFrom']}
+    Should Be Equal As Strings      ${resp.json()['createdDate']}    ${DAY1}
+    Should Be Equal As Strings      ${resp.json()['createdBy']}    ${pid}
+    Should Be Equal As Strings      ${resp.json()['createdByName']}    ${pdrname}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}    ${Store_Name1}
+    Should Be Equal As Strings      ${resp.json()['store']['encId']}   ${store_id}
+    Should Be Equal As Strings      ${resp.json()['prescriptionUid']}    ${prescription_id}
+    Should Be Equal As Strings      ${resp.json()['prescriptionDate']}    ${DAY1}
+    Should Be Equal As Strings      ${resp.json()['pushedStatus']}    ${pushedStatus[1]}
+    Should Be Equal As Strings      ${resp.json()['doctorId']}    ${doc1}
+    Should Be Equal As Strings      ${resp.json()['doctorName']}    ${Docfname} ${Doclname}
+    Should Be Equal As Strings      ${resp.json()['orderStatus']}    ${couponState[0]}
+
+    ${resp}=    Get Sorder Count By Filter    
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+JD-TC-GetOrderByFilter-2
+
+    [Documentation]    Get Sorder Count By Filter - account
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sorder Count By Filter      account-eq=${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+JD-TC-GetOrderByFilter-3
+
+    [Documentation]    Get Sorder Count By Filter - uid
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sorder Count By Filter      uid-eq=${sorder_uid}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+JD-TC-GetOrderByFilter-4
+
+    [Documentation]    Get Sorder Count By Filter -  locationId
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sorder Count By Filter       locationId-eq=${locId1}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+JD-TC-GetOrderByFilter-5
+
+    [Documentation]    Get Sorder Count By Filter -  storeId
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sorder Count By Filter       storeEncId-eq=${store_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+JD-TC-GetOrderByFilter-6
+
+    [Documentation]    Get Sorder Count By Filter -  storeName
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sorder Count By Filter       storeName-eq=${Store_Name1}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+JD-TC-GetOrderByFilter-7
+
+    [Documentation]    Get Sorder Count By Filter -  storeRefNo
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sorder Count By Filter       storeRefNo-eq=${refNumber}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+JD-TC-GetOrderByFilter-8
+
+    [Documentation]    Get Sorder Count By Filter -  acceptedBy
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sorder Count By Filter       acceptedBy-eq=${   }
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+JD-TC-GetOrderByFilter-9
+
+    [Documentation]    Get Sorder Count By Filter -  originFrom
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sorder Count By Filter       originFrom-eq=${orgin_From}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+JD-TC-GetOrderByFilter-10
+
+    [Documentation]    Get Sorder Count By Filter -   prescriptionUid
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sorder Count By Filter        prescriptionUid-eq=${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+JD-TC-GetOrderByFilter-11
+
+    [Documentation]    Get Sorder Count By Filter -   prescriptionRefNo
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sorder Count By Filter        prescriptionRefNo-eq=${presc_ref}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+JD-TC-GetOrderByFilter-12
+
+    [Documentation]    Get Sorder Count By Filter -   prescriptionUid
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sorder Count By Filter        prescriptionUid-eq=${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+JD-TC-GetOrderByFilter-13
+
+    [Documentation]    Get Sorder Count By Filter -   prescriptionDate
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sorder Count By Filter        prescriptionDate-eq=${DAY1}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+JD-TC-GetOrderByFilter-14
+
+    [Documentation]    Get Sorder Count By Filter -   doctorId
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sorder Count By Filter        doctorId-eq=${doc1}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+JD-TC-GetOrderByFilter-15
+
+    [Documentation]    Get Sorder Count By Filter -   doctorName
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sorder Count By Filter        doctorName-eq=${Docfname} ${Doclname}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+JD-TC-GetOrderByFilter-16
+
+    [Documentation]    Get Sorder Count By Filter -   orderStatus
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sorder Count By Filter        orderStatus-eq=${couponState[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+JD-TC-GetOrderByFilter-17
+
+    [Documentation]    Get Sorder Count By Filter -   pushedStatus
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sorder Count By Filter        pushedStatus-eq=${pushedStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+JD-TC-GetOrderByFilter-18
+
+    [Documentation]    Get Sorder Count By Filter -   providerConsumerId
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sorder Count By Filter        providerConsumerId-eq=${cid}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+JD-TC-GetOrderByFilter-19
+
+    [Documentation]    Get Sorder Count By Filter -   providerConsumerName
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sorder Count By Filter        providerConsumerName-eq=${firstName} ${lastName}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+JD-TC-GetOrderByFilter-20 
+
+    [Documentation]    Get Sorder Count By Filter -  acceptedDate
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sorder Count By Filter       acceptedDate-eq=${DAY1}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+JD-TC-GetOrderByFilter-UH1
+
+    [Documentation]    Get Sorder Count By Filter - invalid account
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${inv}=     Random int  min=666  max=999
+
+    ${resp}=    Get Sorder Count By Filter      account-eq=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+JD-TC-GetOrderByFilter-UH2
+
+    [Documentation]    Get Sorder Count By Filter - invalid uid
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${inv}=     Random int  min=666  max=999
+
+    ${resp}=    Get Sorder Count By Filter      uid-eq=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+JD-TC-GetOrderByFilter-UH3
+
+    [Documentation]    Get Sorder Count By Filter -  invalid locationId
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${inv}=     Random int  min=666  max=999
+
+    ${resp}=    Get Sorder Count By Filter       locationId-eq=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+JD-TC-GetOrderByFilter-UH4
+
+    [Documentation]    Get Sorder Count By Filter -  invalid storeId
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${inv}=     Random int  min=666  max=999
+
+    ${resp}=    Get Sorder Count By Filter       storeEncId-eq=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+JD-TC-GetOrderByFilter-UH5
+
+    [Documentation]    Get Sorder Count By Filter -  invalid storeName
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${ran_name}=    FakerLibrary.firstName
+
+    ${resp}=    Get Sorder Count By Filter       storeName-eq=${ran_name}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+JD-TC-GetOrderByFilter-UH6
+
+    [Documentation]    Get Sorder Count By Filter -  invalid storeRefNo
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=333  max=999
+
+    ${resp}=    Get Sorder Count By Filter       storeRefNo-eq=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+JD-TC-GetOrderByFilter-UH7
+
+    [Documentation]    Get Sorder Count By Filter -  invalid acceptedBy
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sorder Count By Filter       acceptedBy-eq=${   }
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+JD-TC-GetOrderByFilter-UH8
+
+    [Documentation]    Get Sorder Count By Filter -  invalid originFrom
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${inv_orgin}=   FakerLibrary.firstName
+
+    ${resp}=    Get Sorder Count By Filter       originFrom-eq=${inv_orgin}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+JD-TC-GetOrderByFilter-UH9
+
+    [Documentation]    Get Sorder Count By Filter -   invalid prescriptionUid
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=111  max=999
+
+    ${resp}=    Get Sorder Count By Filter        prescriptionUid-eq=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+JD-TC-GetOrderByFilter-UH10
+
+    [Documentation]    Get Sorder Count By Filter -   invalid prescriptionRefNo
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=111  max=999
+
+    ${resp}=    Get Sorder Count By Filter        prescriptionRefNo-eq=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+JD-TC-GetOrderByFilter-UH11
+
+    [Documentation]    Get Sorder Count By Filter -   invalid prescriptionUid
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=111  max=999
+
+    ${resp}=    Get Sorder Count By Filter        prescriptionUid-eq=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+JD-TC-GetOrderByFilter-UH12
+
+    [Documentation]    Get Sorder Count By Filter -   invalid prescriptionDate
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${day2}=   db.Add Date  10
+
+    ${resp}=    Get Sorder Count By Filter        prescriptionDate-eq=${day2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+JD-TC-GetOrderByFilter-UH13
+
+    [Documentation]    Get Sorder Count By Filter -  invalid doctorId
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+     ${inv}=     Random Int  min=111  max=999
+
+    ${resp}=    Get Sorder Count By Filter        doctorId-eq=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+JD-TC-GetOrderByFilter-UH14
+
+    [Documentation]    Get Sorder Count By Filter -   invalid doctorName
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${ran_name}=    FakerLibrary.firstName
+
+    ${resp}=    Get Sorder Count By Filter        doctorName-eq=${ran_name}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+JD-TC-GetOrderByFilter-UH15
+
+    [Documentation]    Get Sorder Count By Filter -   invalid orderStatus
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sorder Count By Filter        orderStatus-eq=${couponState[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+JD-TC-GetOrderByFilter-UH16
+
+    [Documentation]    Get Sorder Count By Filter -   invalid pushedStatus
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sorder Count By Filter        pushedStatus-eq=${pushedStatus[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+JD-TC-GetOrderByFilter-UH17
+
+    [Documentation]    Get Sorder Count By Filter -   invalid providerConsumerId
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=111  max=999
+
+    ${resp}=    Get Sorder Count By Filter        providerConsumerId-eq=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+JD-TC-GetOrderByFilter-UH18
+
+    [Documentation]    Get Sorder Count By Filter -   invalid providerConsumerName
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${ran_name}=    FakerLibrary.firstName
+
+    ${resp}=    Get Sorder Count By Filter        providerConsumerName-eq=${ran_name}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+JD-TC-GetOrderByFilter-UH19
+
+    [Documentation]    Get Sorder Count By Filter -  invalid acceptedDate
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sorder Count By Filter       acceptedDate-eq=${DAY1}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+JD-TC-GetOrderByFilter-UH20
+
+    [Documentation]    Get Sorder Count By Filter -  without login
+
+    ${resp}=    Get Sorder Count By Filter       acceptedDate-eq=${DAY1}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}        419
+    Should Be Equal As Strings      ${resp.json()}             ${SESSION_EXPIRED}

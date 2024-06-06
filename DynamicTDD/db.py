@@ -4338,8 +4338,7 @@ def random_phone_num_generator():
         phone_number = country_code + subscriber_number
         print("Phone number:", phone_number,"with country code: ", country_code, "and number: ", subscriber_number)
         url = f"http://localhost:8080/v1/rest/provider/validate/phonenumber/{country_code}/{subscriber_number}"
-        r = requests.get(url)
-        response = r.json()
+        response = requests.get(url).json()
         print(response)
         count += 1
         print(count)
@@ -4350,89 +4349,38 @@ def random_phone_num_generator():
 
 
 def random_country_codes(number):
-    
-    # first = str(random.randint(100, 999))
-    # second = str(random.randint(1, 888)).zfill(3)
-    # last = (str(random.randint(1, 9998)).zfill(4))
-    # while last in ['1111', '2222', '3333', '4444', '5555', '6666', '7777', '8888']:
-    #     last = (str(random.randint(1, 9998)).zfill(4))
-    country_code_list=[]
-    counter=0
-    while True:
-        try:
+    country_code_list = []
+    counter = count = 0
+
+    while counter < 5 and count < 50:
+        country_code = str(random.randint(1, 999)).zfill(3)
+        url = f"http://localhost:8080/v1/rest/provider/validate/phonenumber/{country_code}/{number}"
+        response = requests.get(url).json()
         
-            countrycode= str(random.randint(1, 99)).zfill(2)
-            phone= '+'+countrycode+str(number)
-            print("phone number:"+ phone)
-            phone_number = phonenumbers.parse(phone)
-            print(phone_number)
-            # print('country code is:'+ str(phone_number.country_code))
-            print(phonenumbers.is_valid_number(phone_number))
-            if phonenumbers.is_valid_number(phone_number):
-                if (phone_number.country_code != 91  
-                   and phone_number.national_number == number  
-                #    and phone_number.country_code not in country_code_list
-                   ):
-                    print(geocoder.description_for_number(phone_number, 'en'))
-                    print(region_code_for_country_code(phone_number.country_code))
-                    print("Going to return- country code: "+ str(phone_number.country_code) + " and phone number: "+ str(phone_number.national_number))
-                    country_code_list.append(phone_number.country_code)
-                    if counter<5:
-                        counter+=1
-                        continue
-                    return country_code_list
-                else:
-                    continue
-            else:
-                # random_phone_num_generator()    
-                continue
-            
-        except phonenumbers.NumberParseException as npe:
-            # random_phone_num_generator()
-            continue
+        if response and country_code != '91':
+            country_code_list.append(country_code)
+            counter += 1
+        
+        count += 1
+    
+    return country_code_list
 
 
 def country_code_numbers(countrycode):
     
+    counter = count = 0
+    subscriber_number_length=7
     number_list=[]
-    counter=0
-    while True:
-        try:
+    while counter < 5 and count < 50:
         
-            first = str(random.randint(100, 999))
-            second = str(random.randint(1, 888)).zfill(3)
-            last = (str(random.randint(1, 9998)).zfill(4))
-            while last in ['1111', '2222', '3333', '4444', '5555', '6666', '7777', '8888']:
-                last = (str(random.randint(1, 9998)).zfill(4))
-            # countrycode= str(random.randint(1, 99)).zfill(2)
-            phone= '+'+countrycode+first+second+last
-            print("phone number:"+ phone)
-            phone_number = phonenumbers.parse(phone)
-            print(phone_number)
-            # print('country code is:'+ str(phone_number.country_code))
-            print(phonenumbers.is_valid_number(phone_number))
-            if phonenumbers.is_valid_number(phone_number):
-                # if (phone_number.country_code != 91  
-                #    and phone_number.national_number == number  
-                # #    and phone_number.country_code not in country_code_list
-                #    ):
-                    print(geocoder.description_for_number(phone_number, 'en'))
-                    print(region_code_for_country_code(phone_number.country_code))
-                    print("Going to return- country code: "+ str(phone_number.country_code) + " and phone number: "+ str(phone_number.national_number))
-                    number_list.append(phone_number.national_number)
-                    if counter<5:
-                        counter+=1
-                        continue
-                    return number_list
-                # else:
-                #     continue
-            else:
-                # random_phone_num_generator()    
-                continue
-            
-        except phonenumbers.NumberParseException as npe:
-            # random_phone_num_generator()
-            continue
+        subscriber_number = ''.join(random.choices('0123456789', k=subscriber_number_length))
+        url = f"http://localhost:8080/v1/rest/provider/validate/phonenumber/{countrycode}/{subscriber_number}"
+        response = requests.get(url).json()
+        if response:
+            number_list.append(subscriber_number)
+            counter += 1
+        count += 1
+    return number_list
 
 
     

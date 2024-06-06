@@ -15314,8 +15314,10 @@ RX Update Prescription Item
 
 Get RX Prescription count
 
+    [Arguments]  &{param}
+
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/medicalrecord/prescription/item/count     expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/medicalrecord/prescription/item/count   params=${param}     expected_status=any
     RETURN  ${resp}
 
 Get RX Prescription By filter
