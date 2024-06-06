@@ -13,28 +13,13 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-*** Keywords ***
-Update Invoice Status
 
-    [Arguments]    ${InvoiceUid}     ${userId}     
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${InvoiceUid}/${userId}     expected_status=any    headers=${headers}
-    RETURN  ${resp}
 
 *** Variables ***
 
-${jpgfile}      /ebs/TDD/uploadimage.jpg
-${pngfile}      /ebs/TDD/upload.png
-${pdffile}      /ebs/TDD/sample.pdf
-${jpgfile2}      /ebs/TDD/small.jpg
-${gif}      /ebs/TDD/sample.gif
-${xlsx}      /ebs/TDD/qnr.xlsx
-
-${order}    0
-${fileSize}  0.00458
 
 @{status}    New     Pending    Assigned     Approved    Rejected
-@{New_status}    Proceed     Unassign    Block     Delete    Remove
+
 
 
 *** Test Cases ***

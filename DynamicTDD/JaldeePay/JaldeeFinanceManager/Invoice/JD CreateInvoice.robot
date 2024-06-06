@@ -18,12 +18,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
-${jpgfile}      /ebs/TDD/uploadimage.jpg
-${pngfile}      /ebs/TDD/upload.png
-${pdffile}      /ebs/TDD/sample.pdf
-${jpgfile2}      /ebs/TDD/small.jpg
-${gif}      /ebs/TDD/sample.gif
-${xlsx}      /ebs/TDD/qnr.xlsx
 ${self}         0
 
 ${SERVICE6}     SAMPLE1
@@ -31,12 +25,8 @@ ${SERVICE7}     SAMPLE2
 ${SERVICE8}     SAMPLE3
 
 ${order}    0
-${fileSize}  0.00458
 ${service_duration}     30
 ${service_duration1}     10
-
-@{status1}    New     Pending    Assigned     Approved    Rejected
-@{New_status}    Proceed     Unassign    Block     Delete    Remove
 ${DisplayName1}   item1_DisplayName
 ${Booking}      Booking
 

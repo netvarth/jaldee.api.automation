@@ -17,32 +17,13 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
-${xlFile}      ${EXECDIR}/TDD/ServiceoptionsQnr.xlsx   # DataSheet
-${jpgfile}     /ebs/TDD/uploadimage.jpg
-${pngfile}     /ebs/TDD/upload.png
-${pdffile}     /ebs/TDD/sample.pdf
-${mp4file}   /ebs/TDD/MP4file.mp4
-${avifile}   /ebs/TDD/AVIfile.avi
-${mp3file}   /ebs/TDD/MP3file.mp3
 ${self}      0
 
-${order}    0
-${fileSize}  0.00458
-${service_duration}     30
-@{emptylist}
-
-@{billViewStatus1}         show  notShow
-
-@{status1}    New     Pending    Assigned     Approved    Rejected
-@{New_status}    Proceed     Unassign    Block     Delete    Remove
 ${DisplayName1}   item1_DisplayName
 ${SERVICE1}  sampleservice33 
 ${SERVICE2}  sampleservice22
-${self}     0
 ${digits}       0123456789
-@{provider_list}
-@{dom_list}
-@{multiloc_providers}
+
 
 
 *** Test Cases ***

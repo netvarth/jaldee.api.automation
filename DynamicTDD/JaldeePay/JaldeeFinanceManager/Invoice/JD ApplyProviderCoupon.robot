@@ -16,48 +16,10 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
-
-${jpgfile}      /ebs/TDD/uploadimage.jpg
-${pngfile}      /ebs/TDD/upload.png
-${pdffile}      /ebs/TDD/sample.pdf
-${jpgfile2}      /ebs/TDD/small.jpg
-${gif}      /ebs/TDD/sample.gif
-${xlsx}      /ebs/TDD/qnr.xlsx
-
-${order}    0
-${fileSize}  0.00458
 ${service_duration}     30
 @{emptylist}
-
-@{status1}    New     Pending    Assigned     Approved    Rejected
-@{New_status}    Proceed     Unassign    Block     Delete    Remove
 ${DisplayName1}   item1_DisplayName
 
-# *** Keywords ***
-
-# Create Provider Coupons 
-#     [Arguments]  ${name}   ${description}   ${amount}   ${calculationType}  ${couponCode}  ${rt}  ${ri}    ${sDate}  ${eDate}   ${noo}  ${firstCheckinOnly}  ${minBillAmount}  ${maxDiscountValue}  ${isproviderAcceptCoupon}  ${maxProviderUseLimit}  ${bookingChannel}  ${couponBasedOn}  ${tc}  &{kwargs}
-#     ${validTimeRange}=  TimeSpecs  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}   
-#     ${policies}=  Create Dictionary  
-#     ${policie}=  Get Dictionary items  ${kwargs}
-#     FOR  ${key}  ${value}  IN  @{policie}
-#         Set To Dictionary  ${policies}   ${key}=${value}
-#     END
-#     Log  ${policies}  
-#     ${validTimeRange}=  Create List  ${validTimeRange}
-#     ${couponRules}=  Create Dictionary  startDate=${sDate}  endDate=${eDate}  firstCheckinOnly=${firstCheckinOnly}  minBillAmount=${minBillAmount}  maxDiscountValue=${maxDiscountValue}  isproviderAcceptCoupon=${isproviderAcceptCoupon}  maxProviderUseLimit=${maxProviderUseLimit}  validTimeRange=${validTimeRange}  policies=${policies}
-#     ${data}=  Create Dictionary   name=${name}  amount=${amount}  description=${description}   calculationType=${calculationType}  couponCode=${couponCode}  couponRules=${couponRules}  bookingChannel=${bookingChannel}  couponBasedOn=${couponBasedOn}  termsConditions=${tc}
-#     ${data}=  json.dumps  ${data}
-#     Check And Create YNW Session
-#     ${resp}=  POST On Session  ynw  /provider/bill/coupons   data=${data}  expected_status=any
-#     RETURN  ${resp}
-
-
-# TimeSpecs
-#     [Arguments]  ${rectype}  ${rint}  ${startDate}  ${endDate}  ${noocc}     
-#     ${terminator}=  Create Dictionary  endDate=${endDate}  noOfOccurance=${noocc}
-#     ${ts}=  Create Dictionary  recurringType=${rectype}  repeatIntervals=${rint}  startDate=${startDate}  terminator=${terminator}  
-#     RETURN  ${ts}
 *** Test Cases ***
 
 JD-TC-Apply ProviderCoupon-1
