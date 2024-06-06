@@ -64,6 +64,22 @@ JD-TC-Generate SalesOrder Payment Link-1
         Should Be Equal As Strings  ${resp.json()['enableSalesOrder']}  ${bool[1]}
     END
 
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
     ${resp}=  Get Store Type By Filter     
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -416,7 +432,7 @@ JD-TC-Generate SalesOrder Payment Link-UH1
     ${resp}=    Generate SO Payment Link    ${SO_Inv}   ${primaryMobileNo}   ${countryCodes[0]}   ${email_id}    ${bool[0]}    ${bool[0]}    ${bool[1]}   ${EMPTY}   ${countryCodes[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${INVALID_WHATSAPP}
+    Should Be Equal As Strings    ${resp.json()}   ${INVAID_WHATSAPP_NUMBER}    ignore_case=True
 
 JD-TC-Generate SalesOrder Payment Link-UH2
 
@@ -429,7 +445,7 @@ JD-TC-Generate SalesOrder Payment Link-UH2
     ${resp}=    Generate SO Payment Link    ${SO_Inv}   ${primaryMobileNo}   ${countryCodes[0]}   ${email_id}    ${bool[0]}    ${bool[0]}    ${bool[1]}   ${EMPTY}   ${countryCodes[2]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${INVALID_WHATSAPP}
+    Should Be Equal As Strings    ${resp.json()}   ${INVAID_WHATSAPP_NUMBER}   ignore_case=True
 
 JD-TC-Generate SalesOrder Payment Link-UH3
 
@@ -442,7 +458,7 @@ JD-TC-Generate SalesOrder Payment Link-UH3
     ${resp}=    Generate SO Payment Link    ${SO_Inv}   ${EMPTY}   ${countryCodes[0]}   ${EMPTY}    ${bool[1]}    ${bool[1]}    ${bool[1]}   ${EMPTY}   ${countryCodes[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${INVAID_USER_PHONE_NUMBER}
+    Should Be Equal As Strings    ${resp.json()}   ${INVAID_USER_PHONE_NUMBER}      ignore_case=True
 
 JD-TC-Generate SalesOrder Payment Link-UH4
 
@@ -455,4 +471,4 @@ JD-TC-Generate SalesOrder Payment Link-UH4
     ${resp}=    Generate SO Payment Link    ${SO_Inv}   ${EMPTY}   ${countryCodes[0]}   ${email_id}    ${bool[0]}    ${bool[1]}    ${bool[0]}   ${primaryMobileNo}   ${countryCodes[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${INVAID_USER_PHONE_NUMBER}
+    Should Be Equal As Strings    ${resp.json()}   ${INVAID_USER_PHONE_NUMBER}      ignore_case=True
