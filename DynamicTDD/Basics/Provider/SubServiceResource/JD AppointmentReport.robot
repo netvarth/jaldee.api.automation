@@ -219,8 +219,8 @@ JD-TC-AppointmentReport-1
     Set Test Variable   ${token_id1}   ${resp.json()}
 
     ${appt_date} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
-    # ${appt_date} =	Set Variable	${appt_date} [${slot1}]	
-    # ${slot1} = format time  ${slot1}  time_format=%I:%M %p
+    ${appt_date} =	Set Variable	${appt_date} [${slot1}]	
+   
     sleep  1s
     ${resp}=  Get Report Status By Token Id  ${token_id1}  
     Log  ${resp.json()}
