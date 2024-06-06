@@ -563,9 +563,162 @@ JD-TC-GetRXPrescriptionCount-1
     ${resp}=    Get RX Prescription By filter
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
+    Set Suite Variable              ${rxp_id}     ${resp.json()[0]['id']}
+    Should Be Equal As Strings      ${resp.json()[0]['spItemCode']}             ${item1}
+    Should Be Equal As Strings      ${resp.json()[0]['medicineName']}           ${displayName1}
+    Should Be Equal As Strings      ${resp.json()[0]['duration']}               ${duration1}
+    Should Be Equal As Strings      ${resp.json()[0]['dosage']}                 ${dos}
+    Should Be Equal As Strings      ${resp.json()[0]['description']}            ${description}
+    Should Be Equal As Strings      ${resp.json()[0]['quantity']}               ${quantity1}
+
     ${length}=      Get Length   ${resp.json()}
 
     ${resp}=    Get RX Prescription count
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
     Should Be Equal As Strings      ${resp.json()}                  ${length}
+
+JD-TC-GetRXPrescriptionCount-2
+
+    [Documentation]    Get RX Prescription Count  - id
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get RX Prescription count       id-eq=${rxp_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+
+JD-TC-GetRXPrescriptionCount-3
+
+    [Documentation]    Get RX Prescription Count  - spItemCode
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get RX Prescription count       spItemCode-eq=${item1}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+JD-TC-GetRXPrescriptionCount-4
+
+    [Documentation]    Get RX Prescription Count  - medicineName
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get RX Prescription count       medicineName-eq=${displayName1}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+JD-TC-GetRXPrescriptionCount-5
+
+    [Documentation]    Get RX Prescription Count  - duration
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get RX Prescription count       duration-eq=${duration1}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+JD-TC-GetRXPrescriptionCount-6
+
+    [Documentation]    Get RX Prescription Count  - frequency
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get RX Prescription count       frequency-eq=${frequency}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+
+JD-TC-GetRXPrescriptionCount-7
+
+    [Documentation]    Get RX Prescription Count  - frequencyCode
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get RX Prescription count       frequencyCode-eq=${frequencyCode}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+JD-TC-GetRXPrescriptionCount-8
+
+    [Documentation]    Get RX Prescription Count  - frequencyDescription
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get RX Prescription count       frequencyDescription-eq=${description}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+JD-TC-GetRXPrescriptionCount-9
+
+    [Documentation]    Get RX Prescription Count  - frequencyRemark
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get RX Prescription count       frequencyRemark-eq=${remark}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+JD-TC-GetRXPrescriptionCount-10
+
+    [Documentation]    Get RX Prescription Count  - dosage
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get RX Prescription count       dosage-eq=${dos}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+JD-TC-GetRXPrescriptionCount-11 
+
+    [Documentation]    Get RX Prescription Count  - description
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get RX Prescription count       description-eq=${description}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
+
+JD-TC-GetRXPrescriptionCount-12
+
+    [Documentation]    Get RX Prescription Count  - quantity
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get RX Prescription count       quantity-eq=${quantity1}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  1
