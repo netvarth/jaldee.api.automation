@@ -16,11 +16,9 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 *** Variables ***
 
 ${jpgfile}     /ebs/TDD/uploadimage.jpg
-${pngfile}     /ebs/TDD/upload.png
+
 ${pdffile}     /ebs/TDD/sample.pdf
-${jpgfile2}    /ebs/TDD/small.jpg
-${gif}         /ebs/TDD/sample.gif
-${xlsx}        /ebs/TDD/qnr.xlsx
+
 
 ${order}       0
 ${fileSize}    0.00458

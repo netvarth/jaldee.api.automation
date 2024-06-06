@@ -17,7 +17,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 *** Variables ***
 
 @{status}    New     Pending    Assigned     Approved    Rejected
-@{New_status}    Proceed     Unassign    Block     Delete    Remove
+
 
 
 
