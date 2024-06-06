@@ -2335,6 +2335,7 @@ REQUIRED_QUANTITY_NOT_AVAILABLE="Required quantity is not avalable for the item 
 CAN_NOT_CHANGE_STATUS="Can't update the status because this Invoice is cancelled"
 CAN_NOT_CHANGE_SETTLED_STATUS="Can't update the status because this Invoice is settled"
 ALREADY_CANCELLED="Already in Cancelled"
+LOCATION_INVALID="Invalid Location"
 
 # Vendor
 INVALID_NAME="Invalid Name"

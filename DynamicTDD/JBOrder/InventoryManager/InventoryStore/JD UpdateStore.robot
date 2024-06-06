@@ -432,7 +432,7 @@ JD-TC-UpdateStore-20
     ${resp}=  Update Store      ${store_id}    ${Name}  ${St_Id}    ${empty}   ${email}     ${PhoneNumber}  ${countryCodes[0]}  storeCode=${storeCode2}  city=${city}  district=${district}  State=${State}  country=${country}  pincode=${pincode}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${INVALID_LOCATION_ID}
+    Should Be Equal As Strings    ${resp.json()}    ${LOCATION_INVALID}
 
 JD-TC-UpdateStore-21
 

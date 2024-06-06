@@ -184,7 +184,7 @@ JD-TC-CreateStore-7
     ${resp}=  Create Store   ${Name}  ${St_Id2}    ${EMPTY}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${INVALID_LOCATION_ID}
+    Should Be Equal As Strings    ${resp.json()}    ${LOCATION_INVALID}
 
 JD-TC-CreateStore-8
 
