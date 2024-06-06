@@ -15431,3 +15431,48 @@ Update cash payment- Sales Order
     Check And Create YNW Session
     ${resp}=     PUT On Session    ynw    /provider/so/payment/acceptPayment/update/${paymentRefId}    data=${data}  expected_status=any    headers=${headers}
     RETURN  ${resp}
+
+
+#................Comm Template...............
+
+
+Create Custom Variable 
+
+    [Arguments]  ${name}  ${dis_name}  ${value}  ${type}  ${context}
+    ${data}=  Create Dictionary  name=${name}  displayName=${dis_name}  value=${value}  type=${type}  context=${context}
+    ${data}=  json.dumps  ${data}
+    ${resp}=  POST On Session  ynw  /provider/comm/template/variable  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Update Custom Variable 
+
+    [Arguments]  ${var_id}  ${var_name}  ${vardis_name}  ${var_value}  
+    ${data}=  Create Dictionary  varName=${name}  varDisplayName=${dis_name}  varValue=${value} 
+    ${data}=  json.dumps  ${data}
+    ${resp}=  PUT On Session  ynw  /provider/comm/template/variable/${var_id}  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Get Custom Variable By Id
+
+    [Arguments]  ${var_id} 
+    ${resp}=  GET On Session  ynw  /provider/comm/template/variable/${var_id}  expected_status=any
+    RETURN  ${resp}
+
+Get Custom Variable By Filter
+
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/comm/template/variable  params=${param}  expected_status=any
+    RETURN  ${resp}
+
+Get Custom Variable Count By Filter 
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/comm/template/variable/count    expected_status=any
+    RETURN  ${resp}
+
+Update Custom Variable Status 
+
+    [Arguments]  ${var_id}  ${status}  
+    ${resp}=  PUT On Session  ynw  /provider/comm/template/variable/${var_id}/status/${status}    expected_status=any
+    RETURN  ${resp}
