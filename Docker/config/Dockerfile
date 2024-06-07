@@ -50,9 +50,7 @@ robotframework-faker \
 robotframework-pabot \
 # pycurl \
 openpyxl \
-phonenumbers \
 robotframework-jsonlibrary \ 
-# timezonefinder \
 cryptography \
 && mkdir -p /ebs/TDD /ebs/TDD_Output /ebs/TDD_Output/signuplog /ebs/TDD_Output/tddreport /ebs/ynwconf /home/user/.ssh/ \
 && useradd -lm -u ${USER_ID} user \

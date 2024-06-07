@@ -23,14 +23,6 @@ import mimetypes
 import traceback
 # import xml.etree.ElementTree as ET
 from dateutil import parser,relativedelta
-import phonenumbers
-from phonenumbers import geocoder
-from phonenumbers.phonenumberutil import (
-    region_code_for_country_code,
-    region_code_for_number,
-)
-
-# from timezonefinder import TimezoneFinder
 from robot.api import logger
 
 from base64 import b64encode, b64decode
