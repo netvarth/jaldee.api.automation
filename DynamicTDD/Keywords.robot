@@ -371,7 +371,7 @@ Get Random Valid Phone Number
     #     END
     # END
     ${countryCode}  ${Number}=  random_phone_num_generator
-    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${PO_Number}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${Number}${\n}
     RETURN  ${countryCode}  ${Number}
 
 Generate Random Phone Number
