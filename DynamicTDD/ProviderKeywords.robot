@@ -15469,12 +15469,60 @@ Get Custom Variable By Filter
 
 Get Custom Variable Count By Filter 
 
+    [Arguments]  &{param}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/comm/template/variable/count    expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/comm/template/variable/count   params=${param}   expected_status=any
     RETURN  ${resp}
 
 Update Custom Variable Status 
 
     [Arguments]  ${var_id}  ${status}  
     ${resp}=  PUT On Session  ynw  /provider/comm/template/variable/${var_id}/status/${status}    expected_status=any
+    RETURN  ${resp}
+
+Create Template  
+
+    [Arguments]  ${temp_name}  ${context}  ${temp_format}  ${temp_type}  ${temp}   ${comm_chanl}  ${spec_id} 
+    ${recipient}=  Create Dictionary  userType=${userType[0]}  sendCategory=${sendCategory[0]}  specificID=${spec_id} 
+    ${data}=  Create Dictionary  name=${temp_name}  context=${context}  templateFormat=${temp_format}  templateType=${temp_type}  
+    ...   template=${temp}  commChannel=${comm_chanl}  recipient=${recipient}
+    ${data}=  json.dumps  ${data}
+    ${resp}=  POST On Session  ynw  /provider/comm/template  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Update Template  
+
+    [Arguments]  ${temp_id}  ${temp_name}  ${context}  ${temp_format}  ${temp_type}  ${temp}   ${comm_chanl}  ${spec_id} 
+    ${recipient}=  Create Dictionary  userType=${userType[0]}  sendCategory=${sendCategory[0]}  specificID=${spec_id} 
+    ${data}=  Create Dictionary  name=${temp_name}  context=${context}  templateFormat=${temp_format}  templateType=${temp_type}  
+    ...   template=${temp}  commChannel=${comm_chanl}  recipient=${recipient}
+    ${data}=  json.dumps  ${data}
+    ${resp}=  PUT On Session  ynw  /provider/comm/template/${temp_id}  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Update Template Status
+
+    [Arguments]  ${temp_id}  ${status} 
+   
+    ${resp}=  PUT On Session  ynw  /provider/comm/template/${temp_id}/${status}   expected_status=any
+    RETURN  ${resp} 
+
+Get Template By Id
+
+    [Arguments]  ${temp_id} 
+    ${resp}=  GET On Session  ynw  /provider/comm/template/${temp_id}  expected_status=any
+    RETURN  ${resp}
+
+Get Template By Filter
+
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/comm/template  params=${param}  expected_status=any
+    RETURN  ${resp}
+
+Get Template Count By Filter
+
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/comm/template/count  params=${param}  expected_status=any
     RETURN  ${resp}
