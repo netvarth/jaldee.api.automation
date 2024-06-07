@@ -26,7 +26,7 @@ JD-TC-CreateCustomVariable-1
     [Documentation]  Create custom variable for a provider
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${name}=    FakerLibrary.word
@@ -35,5 +35,5 @@ JD-TC-CreateCustomVariable-1
     ${value}=   FakerLibrary.hostname
 
     ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${type}  ${context[0]}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200

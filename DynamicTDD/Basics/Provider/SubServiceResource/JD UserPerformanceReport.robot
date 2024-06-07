@@ -605,7 +605,7 @@ JD-TC-UserPerformanceReport-2
 JD-TC-UserPerformanceReport-3
 
     [Documentation]   Create a service with auto invoice generation off and with price as zero, then take appointment(walk in). 
-                ...   View invoice and add subservice to that invoice and verify the report.
+                ...   create invoice and add subservice to that invoice and verify the report.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log   ${resp.json()}
@@ -687,17 +687,6 @@ JD-TC-UserPerformanceReport-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${s_id}  ${resp.json()}
-
-
-    # ${SERVICE1}=    FakerLibrary.word
-    # ${s_id}=  Create Sample Service  ${SERVICE1}   department=${dep_id}
-   
-    # ${resp}=   Get Service By Id  ${s_id}
-    # Log   ${resp.json()}  
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable   ${ser_dur}      ${resp.json()['serviceDuration']}
-    # Set Test Variable   ${ser_amount}   ${resp.json()['totalAmount']}
-    # Should Be Equal As Strings  ${resp.json()['serviceCategory']}       ${serviceCategory[1]}
 
     ##....subservice creation..........
 
@@ -809,6 +798,33 @@ JD-TC-UserPerformanceReport-3
     ${resp}=  Get Bookings Invoices  ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings    ${resp.json()}    ${NO_INVOICE_GENERATED}
+
+    ${resp}=   Get next invoice Id   ${locId}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${invoiceId}   ${resp.json()}
+
+    ${name}=   FakerLibrary.word
+    ${resp}=  Create Category   ${name}  ${categoryType[3]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${category_id1}   ${resp.json()}
+
+    ${providerConsumerIdList}=  Create List  ${cid}
+    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.get_date_by_timezone  ${tz}
+
+    ${resp}=  Create Invoice   ${category_id1}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}    serviceList=${serviceList}   adhocItemList=${adhocItemList}   locationId=${lid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_id}   ${resp.json()['idList'][0]}
+    Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}    
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+
 
 *** comments ***
     Set Test Variable    ${invoice_id1}    ${resp.json()[0]['invoiceUid']}

@@ -18,36 +18,43 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
-@{context}   ALL
+@{context}   ALL  Signup
+@{userType}             spConsumer
+@{sendCategory}   ALL
+@{templateFormat}   html
+${template_html}     /ebs/TDD/template.html
+
+*** Keywords ***
+
+Update Template Status
+
+    [Arguments]  ${temp_id}  ${status} 
+   
+    ${resp}=  PUT On Session  ynw  /provider/comm/template/${temp_id}/${status}   expected_status=any
+    RETURN  ${resp} 
+
 
 *** Test Cases ***
 
-JD-TC-GetCustomVariableCountByFilter-1
+JD-TC-UpdateTemplateStatus-1
 
-    [Documentation]  Create custom variable for a provider
+    [Documentation]  Create template for a provider
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Business Profile
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${account_id}  ${resp.content['id']}
+    ${temp_name}=    FakerLibrary.word
+    ${comm_chanl}=  Create List   ${notifytype[2]}  ${notifytype[1]}
+    ${spec_id}=  Create List   1  23
 
-    ${name}=    FakerLibrary.word
-    ${dis_name}=    FakerLibrary.word
-    ${type}=    FakerLibrary.sentence
-    ${value}=   FakerLibrary.hostname
-
-    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${type}  ${context[0]}
+    ${resp}=  Create Template   ${temp_name}  ${context[1]}  ${templateFormat[0]}  ${notifytype[2]}  ${temp}  ${comm_chanl}  ${userType[0]}   
+    ...      ${sendCategory[0]}   ${spec_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${var_id1}  ${resp.content}
+    Set Test Variable   ${temp_id1}  ${resp.content}
 
-    ${resp}=  Get Custom Variable Count By Filter   
+    ${resp}=  Update Template Status   ${temp_id1}  ${Qstate[0]}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.content}       1
-
 

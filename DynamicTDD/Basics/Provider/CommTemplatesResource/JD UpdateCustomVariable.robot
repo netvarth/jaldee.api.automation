@@ -26,7 +26,7 @@ JD-TC-UpdateCustomVariable-1
     [Documentation]  Create custom variable for a provider
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${name}=    FakerLibrary.word
@@ -35,14 +35,14 @@ JD-TC-UpdateCustomVariable-1
     ${value}=   FakerLibrary.hostname
 
     ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${type}  ${context[0]}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${var_id1}  ${resp.json()}
+    Set Test Variable   ${var_id1}  ${resp.content}
 
     ${var_name}=    FakerLibrary.word
     ${vardis_name}=    FakerLibrary.word
     ${var_value}=   FakerLibrary.hostname
     ${resp}=  Update Custom Variable   ${var_id1}  ${var_name}  ${vardis_name}  ${var_value}  
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
