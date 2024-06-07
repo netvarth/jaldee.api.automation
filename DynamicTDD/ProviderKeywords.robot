@@ -15503,7 +15503,6 @@ Update Template
 Update Template Status
 
     [Arguments]  ${temp_id}  ${status} 
-   
     ${resp}=  PUT On Session  ynw  /provider/comm/template/${temp_id}/${status}   expected_status=any
     RETURN  ${resp} 
 
