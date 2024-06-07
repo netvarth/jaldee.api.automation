@@ -18,7 +18,7 @@ DB_BACKUP_PATH="TDD/APreBackup"
 REDIS_HOST='127.0.0.1'
 tddpath="TDD/${SUITE}"
 var="$(cut -d'/' -f 1 <<< ${SUITE})"
-Log_DIR=${SUITE%%.*}
+Log_DIR="${SUITE%%.*}"
 # ssh-keyscan -H $IP_ADDRESS >> ~/.ssh/known_hosts
 # echo "===================================================================================================="
 # uname -vr
@@ -69,7 +69,7 @@ runAPre()
     echo "Running $2"
     mkdir -p "TDD_Output/signuplog/$Log_DIR"
     # pabot --processes 3 --outputdir TDD_Output/signuplog --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
-    robot --outputdir TDD_Output/signuplog/$Log_DIR --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
+    robot --outputdir "TDD_Output/signuplog/$Log_DIR" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
     # echo "APre Done. Executing Queries from $SQL_FILE"
     echo "APre Done."
 }
@@ -85,28 +85,29 @@ runTDD()
 runSE()
 {
     echo "Running $2"
-    robot --outputdir TDD_Output/SELog --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
+    mkdir -p "TDD_Output/SELog/$Log_DIR"
+    robot --outputdir "TDD_Output/SELog/$Log_DIR" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
 }
 
 runSA()
 {
     echo "Running $2"
     mkdir -p "TDD_Output/SALog/$Log_DIR"
-    robot --outputdir TDD_Output/SALog/$Log_DIR --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
+    robot --outputdir "TDD_Output/SALog/$Log_DIR" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
 }
 
 runTime()
 {
     echo "Running $2"
     mkdir -p "TDD_Output/timeLog/$Log_DIR"
-    robot --outputdir TDD_Output/timeLog/$Log_DIR --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT  --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
+    robot --outputdir "TDD_Output/timeLog/$Log_DIR" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT  --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
 }
 
 runBasics()
 {
     echo "Running $2"
     mkdir -p "TDD_Output/BasicsLog/$Log_DIR"
-    pabot --processes 5 --outputdir TDD_Output/BasicsLog/$Log_DIR --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
+    pabot --processes 5 --outputdir "TDD_Output/BasicsLog/$Log_DIR" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
     # robot --outputdir TDD_Output/tddreport --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
 }
 
@@ -114,7 +115,7 @@ runJBQueue()
 {
     echo "Running $2"
     mkdir -p "TDD_Output/JBQueueLog/$Log_DIR"
-    pabot --processes 5 --outputdir TDD_Output/JBQueueLog/$Log_DIR --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
+    pabot --processes 5 --outputdir "TDD_Output/JBQueueLog/$Log_DIR" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
     # robot --outputdir TDD_Output/tddreport --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
 }
 
@@ -122,7 +123,7 @@ runJBAppointment()
 {
     echo "Running $2"
     mkdir -p "TDD_Output/JBAppointmentLog/$Log_DIR"
-    pabot --processes 5 --outputdir TDD_Output/JBAppointmentLog/$Log_DIR --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
+    pabot --processes 5 --outputdir "TDD_Output/JBAppointmentLog/$Log_DIR" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
     # robot --outputdir TDD_Output/tddreport --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
 }
 
@@ -130,7 +131,7 @@ runJBOrder()
 {
     echo "Running $2"
     mkdir -p "TDD_Output/JBOrderLog/$Log_DIR"
-    pabot --processes 5 --outputdir TDD_Output/JBOrderLog/$Log_DIR --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
+    pabot --processes 5 --outputdir "TDD_Output/JBOrderLog/$Log_DIR" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
     # robot --outputdir TDD_Output/tddreport --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
 }
 
@@ -138,7 +139,7 @@ runLendingCRM()
 {
     echo "Running $2"
     mkdir -p "TDD_Output/LendingCRMLog/$Log_DIR"
-    pabot --processes 5 --outputdir TDD_Output/LendingCRMLog/$Log_DIR --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
+    pabot --processes 5 --outputdir "TDD_Output/LendingCRMLog/$Log_DIR" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
     # robot --outputdir TDD_Output/tddreport --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
 }
 
@@ -146,7 +147,7 @@ runPay()
 {
     echo "Running $2"
     mkdir -p "TDD_Output/JaldeePayLog/$Log_DIR"
-    pabot --processes 5 --outputdir TDD_Output/JaldeePayLog/$Log_DIR --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
+    pabot --processes 5 --outputdir "TDD_Output/JaldeePayLog/$Log_DIR" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
     # robot --outputdir TDD_Output/tddreport --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
 }
 
@@ -162,7 +163,7 @@ runComms()
 {
     echo "Running $2"
     mkdir -p "TDD_Output/CommsLog/$Log_DIR"
-    pabot --processes 5 --outputdir TDD_Output/CommsLog/$Log_DIR --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
+    pabot --processes 5 --outputdir "TDD_Output/CommsLog/$Log_DIR" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
     # robot --outputdir TDD_Output/tddreport --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
 }
 
@@ -170,7 +171,7 @@ runReports()
 {
     echo "Running $2"
     mkdir -p "TDD_Output/ReportsLog/$Log_DIR"
-    pabot --processes 5 --outputdir TDD_Output/ReportsLog/$Log_DIR --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
+    pabot --processes 5 --outputdir "TDD_Output/ReportsLog/$Log_DIR" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
     # robot --outputdir TDD_Output/tddreport --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
 }
 
@@ -178,7 +179,7 @@ runAnalytics()
 {
     echo "Running $2"
     mkdir -p "TDD_Output/AnalyticsLog/$Log_DIR"
-    pabot --processes 5 --outputdir TDD_Output/AnalyticsLog/$Log_DIR --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
+    pabot --processes 5 --outputdir "TDD_Output/AnalyticsLog/$Log_DIR" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
     # robot --outputdir TDD_Output/tddreport --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
 }
 
@@ -186,7 +187,7 @@ runProvider()
 {
     echo "Running $2"
     mkdir -p "TDD_Output/ProviderLog/$Log_DIR"
-    pabot --processes 5 --outputdir TDD_Output/ProviderLog/$Log_DIR --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
+    pabot --processes 5 --outputdir "TDD_Output/ProviderLog/$Log_DIR" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
     # robot --outputdir TDD_Output/tddreport --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
 }
 
@@ -194,7 +195,7 @@ runConsumer()
 {
     echo "Running $2"
     mkdir -p "TDD_Output/ConsumerLog/$Log_DIR"
-    pabot --processes 5 --outputdir TDD_Output/ConsumerLog/$Log_DIR --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
+    pabot --processes 5 --outputdir "TDD_Output/ConsumerLog/$Log_DIR" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
     # robot --outputdir TDD_Output/tddreport --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
 }
 
@@ -202,7 +203,7 @@ runUser()
 {
     echo "Running $2"
     mkdir -p "TDD_Output/UserLog/$Log_DIR"
-    pabot --processes 5 --outputdir TDD_Output/UserLog/$Log_DIR --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
+    pabot --processes 5 --outputdir "TDD_Output/UserLog/$Log_DIR" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
     # robot --outputdir TDD_Output/tddreport --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
 }
 
@@ -210,7 +211,7 @@ runPartner()
 {
     echo "Running $2"
     mkdir -p "TDD_Output/PartnerLog/$Log_DIR"
-    pabot --processes 5 --outputdir TDD_Output/PartnerLog/$Log_DIR --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
+    pabot --processes 5 --outputdir "TDD_Output/PartnerLog/$Log_DIR" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
     # robot --outputdir TDD_Output/tddreport --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
 }
 
