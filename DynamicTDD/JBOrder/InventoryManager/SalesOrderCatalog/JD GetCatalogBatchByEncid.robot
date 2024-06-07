@@ -19,12 +19,7 @@ Variables         /ebs/TDD/varfiles/providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
-${invalidNum}        1245
-${invalidEma}        asd122
-${invalidstring}     _ad$.sa_
-@{spItemSource}      RX       Ayur
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
-${pngfile}      /ebs/TDD/upload.png
 ${fileSize}     0.00458
 ${order}        0
 
@@ -674,6 +669,7 @@ JD-TC-Get Catalog Batch by Encid-2
     ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
     ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
     ${netRate}=  roundoff  ${netRate}
+    ${cgstamount}=  roundoff  ${cgstamount}
 
 
     ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}

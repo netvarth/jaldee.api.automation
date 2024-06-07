@@ -15162,6 +15162,13 @@ Get Item Transaction Count Filter
     ${resp}=  GET On Session  ynw   /provider/inventory/transaction/count  params=${param}  expected_status=any
     RETURN  ${resp}
 
+Get Batches using Salesordercatalog
+
+    [Arguments]  ${OrderCatEncId}   
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/${OrderCatEncId}/forcreateorder   expected_status=any
+    RETURN  ${resp} 
+
 #---------------------------RX Push-----------------------------------------    
 
 Create Frequency
