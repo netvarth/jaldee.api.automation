@@ -84,14 +84,27 @@ JD-TC-GetCustomerCountForUser-1
     ${desc}=   FakerLibrary.word 
     ${targetPotential}=    FakerLibrary.Building Number
 
-    ${resp}=  AddCustomer  ${CUSERNAME13}    
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  AddCustomer  ${CUSERNAME13}    
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME13}
-    Log   ${resp.json()}
+    # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME13}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings      ${resp.status_code}  200
+    # Set Test Variable  ${pcons_id13}  ${resp.json()[0]['id']}
+
+    ${emptylist}=  Create List
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME13}  
+    Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${pcons_id13}  ${resp.json()[0]['id']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${resp1}=  AddCustomer  ${CUSERNAME13} 
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Suite Variable  ${pcons_id13}   ${resp1.json()}
+    ELSE
+        Set Suite Variable  ${pcons_id13}  ${resp.json()[0]['id']}
+    END
     
     ${resp}=  Create Lead   ${title}  ${desc}  ${targetPotential}  ${locId1}  ${pcons_id13}    
     Log  ${resp.content}
@@ -230,14 +243,27 @@ JD-TC-GetCustomerCountForUser-2
     ${desc}=   FakerLibrary.word 
     ${targetPotential}=    FakerLibrary.Building Number
 
-    ${resp}=  AddCustomer  ${CUSERNAME3}    
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  AddCustomer  ${CUSERNAME3}    
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME3}
-    Log   ${resp.json()}
+    # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME3}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings      ${resp.status_code}  200
+    # Set Suite Variable  ${pcons_id3}  ${resp.json()[0]['id']}
+
+    ${emptylist}=  Create List
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME3}  
+    Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
-    Set Suite Variable  ${pcons_id3}  ${resp.json()[0]['id']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${resp1}=  AddCustomer  ${CUSERNAME3} 
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Suite Variable  ${pcons_id3}   ${resp1.json()}
+    ELSE
+        Set Suite Variable  ${pcons_id3}  ${resp.json()[0]['id']}
+    END
    
     ${resp}=    Create Lead    ${title}    ${desc}    ${targetPotential}      ${locId}    ${pcons_id3}    
     Log  ${resp.content}
@@ -302,14 +328,27 @@ JD-TC-GetCustomerCountForUser-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  AddCustomer  ${CUSERNAME14}    
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  AddCustomer  ${CUSERNAME14}    
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}
-    Log   ${resp.json()}
+    # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings      ${resp.status_code}  200
+    # Set Suite Variable  ${pcon_id}  ${resp.json()[0]['id']}
+
+    ${emptylist}=  Create List
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
-    Set Suite Variable  ${pcon_id}  ${resp.json()[0]['id']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${resp1}=  AddCustomer  ${CUSERNAME14} 
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Suite Variable  ${pcon_id}   ${resp1.json()}
+    ELSE
+        Set Suite Variable  ${pcons_id}  ${resp.json()[0]['id']}
+    END
     
     ${resp}=  Get Customer Count  ${user_token}
     Log  ${resp.content}
@@ -324,14 +363,27 @@ JD-TC-GetCustomerCountForUser-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  AddCustomer  ${CUSERNAME15}    
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  AddCustomer  ${CUSERNAME15}    
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME15}
-    Log   ${resp.json()}
+    # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME15}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings      ${resp.status_code}  200
+    # Set Test Variable  ${pcons_id1}  ${resp.json()[0]['id']}
+
+    ${emptylist}=  Create List
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME15}  
+    Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${pcons_id1}  ${resp.json()[0]['id']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${resp1}=  AddCustomer  ${CUSERNAME15} 
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Suite Variable  ${pcons_id1}   ${resp1.json()}
+    ELSE
+        Set Suite Variable  ${pcons_id1}  ${resp.json()[0]['id']}
+    END
     
     ${resp}=  Get Customer Count  ${user_token}
     Log  ${resp.content}

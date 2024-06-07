@@ -24,12 +24,11 @@ import traceback
 # import xml.etree.ElementTree as ET
 from dateutil import parser,relativedelta
 from robot.api import logger
-
 from base64 import b64encode, b64decode
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding
 import socket
-from Keywordspy import create_tz, validatePhoneNumber
+from Keywordspy import create_tz
 from dateutil import tz
 import re
 
