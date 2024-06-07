@@ -583,4 +583,133 @@ JD-TC-GetRXPrescriptionItemQuantity-1
     Should Be Equal As Strings      ${resp.status_code}             200
     Should Be Equal As Strings      ${resp.json()}          ${itemqty}
 
-#..............    ithe prescription create nu munpum cheyyam
+
+JD-TC-GetRXPrescriptionItemQuantity-2
+
+    [Documentation]    Get RX Prescription Item Quantity - medicine name is invalid 
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${inv}=     FakerLibrary.firstName
+
+    ${resp}=    Get RX Prescription Item Qnty By EncId  ${inv}  ${duration2}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+
+
+JD-TC-GetRXPrescriptionItemQuantity-3
+
+    [Documentation]    Get RX Prescription Item Quantity - medicine name is empty
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get RX Prescription Item Qnty By EncId  ${empty}  ${duration2}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+
+
+JD-TC-GetRXPrescriptionItemQuantity-4
+
+    [Documentation]    Get RX Prescription Item Quantity - duration is invalid
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=99  max=999
+
+    ${resp}=    Get RX Prescription Item Qnty By EncId  ${displayName2}  ${inv}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+
+
+JD-TC-GetRXPrescriptionItemQuantity-5
+
+    [Documentation]    Get RX Prescription Item Quantity - duration is empty
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get RX Prescription Item Qnty By EncId  ${displayName2}  ${empty}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+
+
+JD-TC-GetRXPrescriptionItemQuantity-6
+
+    [Documentation]    Get RX Prescription Item Quantity - quantity is invalid
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=99  max=999
+
+    ${resp}=    Get RX Prescription Item Qnty By EncId  ${displayName2}  ${duration2}  ${inv}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+
+
+JD-TC-GetRXPrescriptionItemQuantity-7
+
+    [Documentation]    Get RX Prescription Item Quantity - quantity is empty
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get RX Prescription Item Qnty By EncId  ${displayName2}  ${duration2}  ${empty}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+
+
+
+8JD-TC-GetRXPrescriptionItemQuantity-9
+
+    [Documentation]    Get RX Prescription Item Quantity - description
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${inv}=     FakerLibrary.sentence
+
+    ${resp}=    Get RX Prescription Item Qnty By EncId  ${displayName2}  ${duration2}  ${quantity2}  ${inv}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+
+
+JD-TC-GetRXPrescriptionItemQuantity-10
+
+    [Documentation]    Get RX Prescription Item Quantity - Descriptiom is empty
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get RX Prescription Item Qnty By EncId  ${displayName2}  ${duration2}  ${quantity2}  ${empty}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+ 
+
+
+
+
+
+
+JD-TC-GetRXPrescriptionItemQuantity-2
+   
+    [Documentation]    Get RX Prescription Item Quantity
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get RX Prescription Item Qnty By EncId  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200

@@ -200,6 +200,7 @@ JD-TC-GetRXPrescriptionCount-1
 # ----------------------------------------  Create Item ---------------------------------------------
 
     ${displayName1}=     FakerLibrary.name
+    Set Suite Variable      ${displayName1}
 
     ${resp}=    Create Item Inventory  ${displayName1}    isInventoryItem=${bool[1]}
     Log   ${resp.json()}
@@ -508,6 +509,8 @@ JD-TC-GetRXPrescriptionCount-1
     ${qt}=        Random Int  min=1  max=10
     ${duration1}=             Evaluate    float(${dur})
     ${quantity1}=             Evaluate    float(${qt})
+    Set Suite Variable          ${quantity1}
+    Set Suite variable          ${duration1}
 
     ${resp}=    RX Create Prescription  ${cid}  ${doc1}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}
     Log   ${resp.content}
@@ -571,7 +574,8 @@ JD-TC-GetRXPrescriptionCount-1
     Should Be Equal As Strings      ${resp.json()[0]['description']}            ${description}
     Should Be Equal As Strings      ${resp.json()[0]['quantity']}               ${quantity1}
 
-    ${length}=      Get Length   ${resp.json()}
+    ${length}=      Get Length  ${resp.json()}
+    Set Suite Variable          ${length}
 
     ${resp}=    Get RX Prescription count
     Log   ${resp.content}
@@ -603,7 +607,7 @@ JD-TC-GetRXPrescriptionCount-3
     ${resp}=    Get RX Prescription count       spItemCode-eq=${item1}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
-    Should Be Equal As Strings      ${resp.json()}                  1
+    Should Be Equal As Strings      ${resp.json()}                  ${length}
 
 JD-TC-GetRXPrescriptionCount-4
 
@@ -616,7 +620,7 @@ JD-TC-GetRXPrescriptionCount-4
     ${resp}=    Get RX Prescription count       medicineName-eq=${displayName1}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
-    Should Be Equal As Strings      ${resp.json()}                  1
+    Should Be Equal As Strings      ${resp.json()}                  ${length}
 
 JD-TC-GetRXPrescriptionCount-5
 
@@ -629,7 +633,7 @@ JD-TC-GetRXPrescriptionCount-5
     ${resp}=    Get RX Prescription count       duration-eq=${duration1}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
-    Should Be Equal As Strings      ${resp.json()}                  1
+    Should Be Equal As Strings      ${resp.json()}                  ${length}
 
 JD-TC-GetRXPrescriptionCount-6
 
@@ -642,7 +646,7 @@ JD-TC-GetRXPrescriptionCount-6
     ${resp}=    Get RX Prescription count       frequency-eq=${frequency}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
-    Should Be Equal As Strings      ${resp.json()}                  1
+    Should Be Equal As Strings      ${resp.json()}                  ${length}
 
 
 JD-TC-GetRXPrescriptionCount-7
@@ -656,7 +660,7 @@ JD-TC-GetRXPrescriptionCount-7
     ${resp}=    Get RX Prescription count       frequencyCode-eq=${frequencyCode}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
-    Should Be Equal As Strings      ${resp.json()}                  1
+    Should Be Equal As Strings      ${resp.json()}                  ${length}
 
 JD-TC-GetRXPrescriptionCount-8
 
@@ -669,7 +673,7 @@ JD-TC-GetRXPrescriptionCount-8
     ${resp}=    Get RX Prescription count       frequencyDescription-eq=${description}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
-    Should Be Equal As Strings      ${resp.json()}                  1
+    Should Be Equal As Strings      ${resp.json()}                  ${length}
 
 JD-TC-GetRXPrescriptionCount-9
 
@@ -682,7 +686,7 @@ JD-TC-GetRXPrescriptionCount-9
     ${resp}=    Get RX Prescription count       frequencyRemark-eq=${remark}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
-    Should Be Equal As Strings      ${resp.json()}                  1
+    Should Be Equal As Strings      ${resp.json()}                  ${length}
 
 JD-TC-GetRXPrescriptionCount-10
 
@@ -695,7 +699,7 @@ JD-TC-GetRXPrescriptionCount-10
     ${resp}=    Get RX Prescription count       dosage-eq=${dos}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
-    Should Be Equal As Strings      ${resp.json()}                  1
+    Should Be Equal As Strings      ${resp.json()}                  ${length}
 
 JD-TC-GetRXPrescriptionCount-11 
 
@@ -708,7 +712,7 @@ JD-TC-GetRXPrescriptionCount-11
     ${resp}=    Get RX Prescription count       description-eq=${description}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
-    Should Be Equal As Strings      ${resp.json()}                  1
+    Should Be Equal As Strings      ${resp.json()}                  ${length}
 
 JD-TC-GetRXPrescriptionCount-12
 
@@ -721,4 +725,181 @@ JD-TC-GetRXPrescriptionCount-12
     ${resp}=    Get RX Prescription count       quantity-eq=${quantity1}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
-    Should Be Equal As Strings      ${resp.json()}                  1
+    Should Be Equal As Strings      ${resp.json()}                  ${length}
+
+JD-TC-GetRXPrescriptionCount-UH1
+
+    [Documentation]    Get RX Prescription Count  - invalid id
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${inv}=    Random Int  min=111  max=999
+
+    ${resp}=    Get RX Prescription count       id-eq=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+
+JD-TC-GetRXPrescriptionCount-UH2
+
+    [Documentation]    Get RX Prescription Count  - invalid spItemCode
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${inv}=    Random Int  min=111  max=999
+
+    ${resp}=    Get RX Prescription count       spItemCode-eq=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+JD-TC-GetRXPrescriptionCount-UH3
+
+    [Documentation]    Get RX Prescription Count  - invalid medicineName
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${ran_name}=    FakerLibrary.firstName
+
+    ${resp}=    Get RX Prescription count       medicineName-eq=${ran_name}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+JD-TC-GetRXPrescriptionCount-UH4
+
+    [Documentation]    Get RX Prescription Count  - invalid duration
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${inv}=    Random Int  min=111  max=999
+
+    ${resp}=    Get RX Prescription count       duration-eq=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+JD-TC-GetRXPrescriptionCount-UH5
+
+    [Documentation]    Get RX Prescription Count  - invalid frequency
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${inv}=    Random Int  min=111  max=999
+
+    ${resp}=    Get RX Prescription count       frequency-eq=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+
+JD-TC-GetRXPrescriptionCount-UH6
+
+    [Documentation]    Get RX Prescription Count  - invalid frequencyCode
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${inv}=    Random Int  min=111  max=999
+
+    ${resp}=    Get RX Prescription count       frequencyCode-eq=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+
+JD-TC-GetRXPrescriptionCount-UH7
+
+    [Documentation]    Get RX Prescription Count  - invalid frequencyDescription
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${des}=     FakerLibrary.sentence
+
+    ${resp}=    Get RX Prescription count       frequencyDescription-eq=${des}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+JD-TC-GetRXPrescriptionCount-UH8
+
+    [Documentation]    Get RX Prescription Count  - invalid frequencyRemark
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${des}=     FakerLibrary.sentence
+
+    ${resp}=    Get RX Prescription count       frequencyRemark-eq=${des}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+JD-TC-GetRXPrescriptionCount-UH9
+
+    [Documentation]    Get RX Prescription Count  - invalid dosage
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${inv}=    Random Int  min=111  max=999
+
+    ${resp}=    Get RX Prescription count       dosage-eq=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+JD-TC-GetRXPrescriptionCount-UH10
+
+    [Documentation]    Get RX Prescription Count  - invalid description
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${des}=     FakerLibrary.sentence
+
+    ${resp}=    Get RX Prescription count       description-eq=${des}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+JD-TC-GetRXPrescriptionCount-UH11
+
+    [Documentation]    Get RX Prescription Count  - invalid quantity
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${inv}=    Random Int  min=11  max=99
+
+    ${resp}=    Get RX Prescription count       quantity-eq=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()}                  0
+
+JD-TC-GetRXPrescriptionCount-UH12
+
+    [Documentation]    Get RX Prescription Count -  without login
+
+    ${resp}=    Get RX Prescription count
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}        419
+    Should Be Equal As Strings      ${resp.json()}             ${SESSION_EXPIRED}
