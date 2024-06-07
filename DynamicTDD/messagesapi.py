@@ -2336,7 +2336,7 @@ CAN_NOT_CHANGE_STATUS="Can't update the status because this Invoice is cancelled
 CAN_NOT_CHANGE_SETTLED_STATUS="Can't update the status because this Invoice is settled"
 ALREADY_CANCELLED="Already in Cancelled"
 LOCATION_INVALID="Invalid Location"
-
+CAN_NOT_UPDATE_ORDER_IS_CONFIRMED="Can't update because this order is in Order Confirmed status"
 # Vendor
 INVALID_NAME="Invalid Name"
 CATEGORY_EXIST="Category exists with given name"

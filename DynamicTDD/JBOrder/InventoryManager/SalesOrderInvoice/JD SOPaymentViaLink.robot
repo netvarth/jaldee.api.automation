@@ -372,7 +372,7 @@ JD-TC-Sales Order Payment Via Link-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    SO Payment Via Link    ${SO_Inv}    ${netTotal}   ${purpose[7]}    ${accountId}    ${finance_payment_modes[8]}     ${bool[0]} 
+    ${resp}=    SO Payment Via Link    ${SO_Inv}    ${netTotal}   ${purpose[7]}    ${accountId}    ${finance_payment_modes[5]}     ${bool[0]}       mockResponse=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
