@@ -24,19 +24,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 @{templateFormat}   html
 ${template_html}     /ebs/TDD/template.html
 
-*** Keywords ***
-
-Update Template  
-
-    [Arguments]  ${temp_id}  ${temp_name}  ${context}  ${temp_format}  ${temp_type}  ${temp}   ${comm_chanl}  ${spec_id} 
-    ${recipient}=  Create Dictionary  userType=${userType[0]}  sendCategory=${sendCategory[0]}  specificID=${spec_id} 
-    ${data}=  Create Dictionary  name=${temp_name}  context=${context}  templateFormat=${temp_format}  templateType=${temp_type}  
-    ...   template=${temp}  commChannel=${comm_chanl}  recipient=${recipient}
-    ${data}=  json.dumps  ${data}
-    ${resp}=  PUT On Session  ynw  /provider/comm/template/${temp_id}  data=${data}  expected_status=any
-    RETURN  ${resp} 
-
-
 *** Test Cases ***
 
 JD-TC-UpdateTemplate-1

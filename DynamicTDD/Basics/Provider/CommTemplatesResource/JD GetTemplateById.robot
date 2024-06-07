@@ -24,14 +24,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 @{templateFormat}   html
 ${template_html}     /ebs/TDD/template.html
 
-*** Keywords ***
-
-Get Template By Id
-
-    [Arguments]  ${temp_id} 
-    ${resp}=  GET On Session  ynw  /provider/comm/template/${temp_id}  expected_status=any
-    RETURN  ${resp}
-
 *** Test Cases ***
 
 JD-TC-GetTemplateById-1

@@ -15,30 +15,39 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
-
 *** Variables ***
 
-@{context}   ALL  Signup
-@{userType}             spConsumer
-@{sendCategory}   ALL
-@{templateFormat}   html
-${template_html}     /ebs/TDD/template.html
+@{context}   ALL
 
 *** Test Cases ***
 
-JD-TC-CreateTemplate-1
+JD-TC-GetDynamicVariableListByContext-1
 
-    [Documentation]  Create template for a provider
+    [Documentation]  Create custom variable for a provider
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${temp_name}=    FakerLibrary.word
-    ${comm_chanl}=  Create List   ${notifytype[2]}  ${notifytype[1]}
-    ${spec_id}=  Create List   1  23
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.content['id']}
 
-    ${resp}=  Create Template   ${temp_name}  ${context[1]}  ${templateFormat[0]}  ${notifytype[2]}  ${temp}  ${comm_chanl}  ${userType[0]}   
-    ...      ${sendCategory[0]}   ${spec_id}
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${type}=    FakerLibrary.sentence
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${type}  ${context[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id1}  ${resp.content}
+
+    ${resp}=  Get Dynamic Variable List By Context   ${context_id1} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+
+
+

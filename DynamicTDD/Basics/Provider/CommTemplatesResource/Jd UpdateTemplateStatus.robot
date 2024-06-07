@@ -24,16 +24,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 @{templateFormat}   html
 ${template_html}     /ebs/TDD/template.html
 
-*** Keywords ***
-
-Update Template Status
-
-    [Arguments]  ${temp_id}  ${status} 
-   
-    ${resp}=  PUT On Session  ynw  /provider/comm/template/${temp_id}/${status}   expected_status=any
-    RETURN  ${resp} 
-
-
 *** Test Cases ***
 
 JD-TC-UpdateTemplateStatus-1

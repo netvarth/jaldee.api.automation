@@ -24,15 +24,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 @{templateFormat}   html
 ${template_html}     /ebs/TDD/template.html
 
-*** Keywords ***
-
-Get Template Count By Filter
-
-    [Arguments]  &{param}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/comm/template/count  params=${param}  expected_status=any
-    RETURN  ${resp}
-
 *** Test Cases ***
 
 JD-TC-GetTemplateByFilter-1
