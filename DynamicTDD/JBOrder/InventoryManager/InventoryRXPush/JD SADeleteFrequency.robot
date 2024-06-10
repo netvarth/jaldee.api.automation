@@ -33,6 +33,8 @@ JD-TC-DeleteFrequencySA-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+*** COMMENTS ***
+
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200

@@ -508,6 +508,8 @@ JD-TC-UpdatePrescription-1
     ${qt}=        Random Int  min=1  max=10
     ${duration1}=             Evaluate    float(${dur})
     ${quantity1}=             Evaluate    float(${qt})
+    Set Suite Variable      ${duration1}
+    Set Suite Variable      ${quantity1}
 
     ${resp}=    RX Create Prescription  ${cid}  ${doc1}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}
     Log   ${resp.content}
@@ -515,6 +517,7 @@ JD-TC-UpdatePrescription-1
     Set Suite Variable              ${prescription_id}      ${resp.json()}
 
     ${prescriptionCreatedDate}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable          ${prescriptionCreatedDate}
 
     ${resp}=    Get RX Prescription By Id  ${prescription_id}
     Log   ${resp.content}
@@ -541,6 +544,390 @@ JD-TC-UpdatePrescription-1
 
 
     ${medicineName2}=    FakerLibrary.firstName
+    Set Suite Variable      ${medicineName2}
+
+    ${resp}=    RX Update Prescription  ${prescription_id}  ${cid}  ${doc1}  ${medicineName2}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+    ${resp}=    Get RX Prescription By Id  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()['providerConsumerId']}                                ${cid}
+    Should Be Equal As Strings      ${resp.json()['doctorId']}                                          ${doc1}
+    Should Be Equal As Strings      ${resp.json()['uid']}                                               ${prescription_id}
+    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedDate']}                           ${prescriptionCreatedDate}
+    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedBy']}                             ${pid}
+    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedByName']}                         ${pdrname}
+    Should Be Equal As Strings      ${resp.json()['prescriptionAttachments'][0]['owner']}               ${pid}
+    Should Be Equal As Strings      ${resp.json()['prescriptionAttachments'][0]['ownerName']}           ${pdrname}
+    Should Be Equal As Strings      ${resp.json()['prescriptionStatus']}                                ${printTemplateStatus[0]}
+    Should Be Equal As Strings      ${resp.json()['prescriptionSharedStatus']}                          ${prescriptionSharedStatus[1]}
+    Should Be Equal As Strings      ${resp.json()['doctorName']}                                        ${Docfname} ${Doclname}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['spItemCode']}          ${item1}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['medicineName']}        ${medicineName2}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['duration']}            ${duration1}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['frequency']['id']}     ${frequency_id}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['dosage']}              ${dos}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['description']}         ${description}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['quantity']}            ${quantity1}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['prescriptioinUid']}    ${prescription_id}
+
+
+JD-TC-UpdatePrescription-2
+
+    [Documentation]    Update Prescription - prescription id is invalid
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=99  max=999
+
+    ${PRESCRIPTION_NOT_FOUND}=  Format String    ${PRESCRIPTION_NOT_FOUND}    ${inv}
+
+    ${resp}=    RX Update Prescription  ${inv}  ${cid}  ${doc1}  ${medicineName2}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${PRESCRIPTION_NOT_FOUND}
+
+
+JD-TC-UpdatePrescription-3
+
+    [Documentation]    Update Prescription - Provider consumer id is invalid
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=99  max=999
+
+    ${resp}=    RX Update Prescription  ${prescription_id}  ${inv}  ${doc1}  ${medicineName2}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${CONSUMER_NOT_FOUND}
+
+JD-TC-UpdatePrescription-4
+
+    [Documentation]    Update Prescription - Provider consumer id is empty
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    RX Update Prescription  ${prescription_id}  ${empty}  ${doc1}  ${medicineName2}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${INVALID_PROVIDERCONSUMER_ID}
+
+JD-TC-UpdatePrescription-5
+
+    [Documentation]    Update Prescription - invalid doc id
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=99  max=999
+
+    ${resp}=    RX Update Prescription  ${prescription_id}  ${cid}  ${inv}  ${medicineName2}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${INVALID_USER_ID}
+
+JD-TC-UpdatePrescription-6
+
+    [Documentation]    Update Prescription - doc id is empty
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    RX Update Prescription  ${prescription_id}  ${cid}  ${empty}  ${medicineName2}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${INVALID_Doctor_ID}
+
+JD-TC-UpdatePrescription-7
+
+    [Documentation]    Update Prescription - medicine name is empty
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    RX Update Prescription  ${prescription_id}  ${cid}  ${doc1}  ${empty}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+    ${resp}=    Get RX Prescription By Id  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()['providerConsumerId']}                                ${cid}
+    Should Be Equal As Strings      ${resp.json()['doctorId']}                                          ${doc1}
+    Should Be Equal As Strings      ${resp.json()['uid']}                                               ${prescription_id}
+    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedDate']}                           ${prescriptionCreatedDate}
+    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedBy']}                             ${pid}
+    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedByName']}                         ${pdrname}
+    Should Be Equal As Strings      ${resp.json()['prescriptionAttachments'][0]['owner']}               ${pid}
+    Should Be Equal As Strings      ${resp.json()['prescriptionAttachments'][0]['ownerName']}           ${pdrname}
+    Should Be Equal As Strings      ${resp.json()['prescriptionStatus']}                                ${printTemplateStatus[0]}
+    Should Be Equal As Strings      ${resp.json()['prescriptionSharedStatus']}                          ${prescriptionSharedStatus[1]}
+    Should Be Equal As Strings      ${resp.json()['doctorName']}                                        ${Docfname} ${Doclname}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['spItemCode']}          ${item1}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['medicineName']}        ${empty}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['duration']}            ${duration1}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['frequency']['id']}     ${frequency_id}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['dosage']}              ${dos}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['description']}         ${description}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['quantity']}            ${quantity1}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['prescriptioinUid']}    ${prescription_id}
+
+JD-TC-UpdatePrescription-8
+
+    [Documentation]    Update Prescription - medicine name is changed
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${medicineName_ran}=     FakerLibrary.name
+
+    ${resp}=    RX Update Prescription  ${prescription_id}  ${cid}  ${doc1}  ${medicineName_ran}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+    ${resp}=    Get RX Prescription By Id  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()['providerConsumerId']}                                ${cid}
+    Should Be Equal As Strings      ${resp.json()['doctorId']}                                          ${doc1}
+    Should Be Equal As Strings      ${resp.json()['uid']}                                               ${prescription_id}
+    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedDate']}                           ${prescriptionCreatedDate}
+    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedBy']}                             ${pid}
+    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedByName']}                         ${pdrname}
+    Should Be Equal As Strings      ${resp.json()['prescriptionAttachments'][0]['owner']}               ${pid}
+    Should Be Equal As Strings      ${resp.json()['prescriptionAttachments'][0]['ownerName']}           ${pdrname}
+    Should Be Equal As Strings      ${resp.json()['prescriptionStatus']}                                ${printTemplateStatus[0]}
+    Should Be Equal As Strings      ${resp.json()['prescriptionSharedStatus']}                          ${prescriptionSharedStatus[1]}
+    Should Be Equal As Strings      ${resp.json()['doctorName']}                                        ${Docfname} ${Doclname}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['spItemCode']}          ${item1}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['medicineName']}        ${medicineName_ran}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['duration']}            ${duration1}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['frequency']['id']}     ${frequency_id}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['dosage']}              ${dos}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['description']}         ${description}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['quantity']}            ${quantity1}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['prescriptioinUid']}    ${prescription_id}
+
+JD-TC-UpdatePrescription-9
+
+    [Documentation]    Update Prescription - duration is empty
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    RX Update Prescription  ${prescription_id}  ${cid}  ${doc1}  ${medicineName2}  ${empty   }  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+    ${resp}=    Get RX Prescription By Id  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()['providerConsumerId']}                                ${cid}
+    Should Be Equal As Strings      ${resp.json()['doctorId']}                                          ${doc1}
+    Should Be Equal As Strings      ${resp.json()['uid']}                                               ${prescription_id}
+    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedDate']}                           ${prescriptionCreatedDate}
+    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedBy']}                             ${pid}
+    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedByName']}                         ${pdrname}
+    Should Be Equal As Strings      ${resp.json()['prescriptionAttachments'][0]['owner']}               ${pid}
+    Should Be Equal As Strings      ${resp.json()['prescriptionAttachments'][0]['ownerName']}           ${pdrname}
+    Should Be Equal As Strings      ${resp.json()['prescriptionStatus']}                                ${printTemplateStatus[0]}
+    Should Be Equal As Strings      ${resp.json()['prescriptionSharedStatus']}                          ${prescriptionSharedStatus[1]}
+    Should Be Equal As Strings      ${resp.json()['doctorName']}                                        ${Docfname} ${Doclname}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['spItemCode']}          ${item1}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['medicineName']}        ${medicineName2}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['duration']}            ${duration1}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['frequency']['id']}     ${frequency_id}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['dosage']}              ${dos}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['description']}         ${description}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['quantity']}            ${quantity1}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['prescriptioinUid']}    ${prescription_id}
+
+*** COMMENTS ***
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+JD-TC-UpdatePrescription-2
+
+    [Documentation]    Update Prescription - 
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    RX Update Prescription  ${prescription_id}  ${cid}  ${doc1}  ${medicineName2}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+    ${resp}=    Get RX Prescription By Id  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()['providerConsumerId']}                                ${cid}
+    Should Be Equal As Strings      ${resp.json()['doctorId']}                                          ${doc1}
+    Should Be Equal As Strings      ${resp.json()['uid']}                                               ${prescription_id}
+    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedDate']}                           ${prescriptionCreatedDate}
+    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedBy']}                             ${pid}
+    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedByName']}                         ${pdrname}
+    Should Be Equal As Strings      ${resp.json()['prescriptionAttachments'][0]['owner']}               ${pid}
+    Should Be Equal As Strings      ${resp.json()['prescriptionAttachments'][0]['ownerName']}           ${pdrname}
+    Should Be Equal As Strings      ${resp.json()['prescriptionStatus']}                                ${printTemplateStatus[0]}
+    Should Be Equal As Strings      ${resp.json()['prescriptionSharedStatus']}                          ${prescriptionSharedStatus[1]}
+    Should Be Equal As Strings      ${resp.json()['doctorName']}                                        ${Docfname} ${Doclname}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['spItemCode']}          ${item1}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['medicineName']}        ${medicineName2}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['duration']}            ${duration1}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['frequency']['id']}     ${frequency_id}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['dosage']}              ${dos}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['description']}         ${description}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['quantity']}            ${quantity1}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['prescriptioinUid']}    ${prescription_id}
+
+
+JD-TC-UpdatePrescription-2
+
+    [Documentation]    Update Prescription - 
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    RX Update Prescription  ${prescription_id}  ${cid}  ${doc1}  ${medicineName2}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+    ${resp}=    Get RX Prescription By Id  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()['providerConsumerId']}                                ${cid}
+    Should Be Equal As Strings      ${resp.json()['doctorId']}                                          ${doc1}
+    Should Be Equal As Strings      ${resp.json()['uid']}                                               ${prescription_id}
+    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedDate']}                           ${prescriptionCreatedDate}
+    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedBy']}                             ${pid}
+    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedByName']}                         ${pdrname}
+    Should Be Equal As Strings      ${resp.json()['prescriptionAttachments'][0]['owner']}               ${pid}
+    Should Be Equal As Strings      ${resp.json()['prescriptionAttachments'][0]['ownerName']}           ${pdrname}
+    Should Be Equal As Strings      ${resp.json()['prescriptionStatus']}                                ${printTemplateStatus[0]}
+    Should Be Equal As Strings      ${resp.json()['prescriptionSharedStatus']}                          ${prescriptionSharedStatus[1]}
+    Should Be Equal As Strings      ${resp.json()['doctorName']}                                        ${Docfname} ${Doclname}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['spItemCode']}          ${item1}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['medicineName']}        ${medicineName2}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['duration']}            ${duration1}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['frequency']['id']}     ${frequency_id}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['dosage']}              ${dos}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['description']}         ${description}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['quantity']}            ${quantity1}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['prescriptioinUid']}    ${prescription_id}
+
+
+JD-TC-UpdatePrescription-2
+
+    [Documentation]    Update Prescription - 
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    RX Update Prescription  ${prescription_id}  ${cid}  ${doc1}  ${medicineName2}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+    ${resp}=    Get RX Prescription By Id  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()['providerConsumerId']}                                ${cid}
+    Should Be Equal As Strings      ${resp.json()['doctorId']}                                          ${doc1}
+    Should Be Equal As Strings      ${resp.json()['uid']}                                               ${prescription_id}
+    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedDate']}                           ${prescriptionCreatedDate}
+    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedBy']}                             ${pid}
+    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedByName']}                         ${pdrname}
+    Should Be Equal As Strings      ${resp.json()['prescriptionAttachments'][0]['owner']}               ${pid}
+    Should Be Equal As Strings      ${resp.json()['prescriptionAttachments'][0]['ownerName']}           ${pdrname}
+    Should Be Equal As Strings      ${resp.json()['prescriptionStatus']}                                ${printTemplateStatus[0]}
+    Should Be Equal As Strings      ${resp.json()['prescriptionSharedStatus']}                          ${prescriptionSharedStatus[1]}
+    Should Be Equal As Strings      ${resp.json()['doctorName']}                                        ${Docfname} ${Doclname}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['spItemCode']}          ${item1}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['medicineName']}        ${medicineName2}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['duration']}            ${duration1}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['frequency']['id']}     ${frequency_id}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['dosage']}              ${dos}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['description']}         ${description}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['quantity']}            ${quantity1}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['prescriptioinUid']}    ${prescription_id}
+
+
+JD-TC-UpdatePrescription-2
+
+    [Documentation]    Update Prescription - 
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    RX Update Prescription  ${prescription_id}  ${cid}  ${doc1}  ${medicineName2}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+    ${resp}=    Get RX Prescription By Id  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()['providerConsumerId']}                                ${cid}
+    Should Be Equal As Strings      ${resp.json()['doctorId']}                                          ${doc1}
+    Should Be Equal As Strings      ${resp.json()['uid']}                                               ${prescription_id}
+    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedDate']}                           ${prescriptionCreatedDate}
+    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedBy']}                             ${pid}
+    Should Be Equal As Strings      ${resp.json()['prescriptionCreatedByName']}                         ${pdrname}
+    Should Be Equal As Strings      ${resp.json()['prescriptionAttachments'][0]['owner']}               ${pid}
+    Should Be Equal As Strings      ${resp.json()['prescriptionAttachments'][0]['ownerName']}           ${pdrname}
+    Should Be Equal As Strings      ${resp.json()['prescriptionStatus']}                                ${printTemplateStatus[0]}
+    Should Be Equal As Strings      ${resp.json()['prescriptionSharedStatus']}                          ${prescriptionSharedStatus[1]}
+    Should Be Equal As Strings      ${resp.json()['doctorName']}                                        ${Docfname} ${Doclname}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['spItemCode']}          ${item1}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['medicineName']}        ${medicineName2}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['duration']}            ${duration1}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['frequency']['id']}     ${frequency_id}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['dosage']}              ${dos}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['description']}         ${description}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['quantity']}            ${quantity1}
+    Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['prescriptioinUid']}    ${prescription_id}
+
+
+JD-TC-UpdatePrescription-2
+
+    [Documentation]    Update Prescription - 
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=    RX Update Prescription  ${prescription_id}  ${cid}  ${doc1}  ${medicineName2}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}
     Log   ${resp.content}
