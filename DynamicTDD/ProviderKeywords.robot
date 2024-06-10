@@ -15430,6 +15430,29 @@ Update cash payment- Sales Order
     ${resp}=     PUT On Session    ynw    /provider/so/payment/acceptPayment/update/${paymentRefId}    data=${data}  expected_status=any    headers=${headers}
     RETURN  ${resp}
 
+Get Inventory Auditlog By Filter
+    [Arguments]     &{kwargs}
+    Check And Create YNW Session
+    ${resp}=    GET On Session     ynw   /provider/inventory/log   params=${kwargs}  expected_status=any
+    RETURN  ${resp}
+
+Get Inventory Auditlog Count By Filter
+    [Arguments]     &{kwargs}
+    Check And Create YNW Session
+    ${resp}=    GET On Session     ynw   /provider/inventory/log/count   params=${kwargs}  expected_status=any
+    RETURN  ${resp}
+
+Get Inventory Auditlog By Uid
+    [Arguments]   ${uid}     &{kwargs}
+    Check And Create YNW Session
+    ${resp}=    GET On Session     ynw   /provider/inventory/${uid}   params=${kwargs}  expected_status=any
+    RETURN  ${resp}
+
+Get Inventory Auditlog By Uid
+    [Arguments]   ${id}     &{kwargs}
+    Check And Create YNW Session
+    ${resp}=    GET On Session     ynw   /provider/inventory/id/${id}   params=${kwargs}  expected_status=any
+    RETURN  ${resp}
 
 #................Comm Template...............
 
