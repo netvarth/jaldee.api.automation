@@ -278,7 +278,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{spItemSource}                     RX       Ayur
 @{VariableValueType}                String  Number  Decimal  Date  Link  File
 @{VariableStatus}                   Enabled  Disabled
-@{Context}                          Signup  Appointment  Token  Order  Donation  Payment  All
+@{VariableContext}                  Signup  Appointment  Token  Order  Donation  Payment  All
 
 *** Keywords ***
 Login
