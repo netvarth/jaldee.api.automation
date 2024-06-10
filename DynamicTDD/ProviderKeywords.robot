@@ -15462,6 +15462,7 @@ Create Custom Variable
     [Arguments]  ${name}  ${dis_name}  ${value}  ${type}  ${context}
     ${data}=  Create Dictionary  name=${name}  displayName=${dis_name}  value=${value}  type=${type}  context=${context}
     ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/comm/template/variable  data=${data}  expected_status=any
     RETURN  ${resp}
 
@@ -15470,12 +15471,14 @@ Update Custom Variable
     [Arguments]  ${var_id}  ${var_name}  ${vardis_name}  ${var_value}  
     ${data}=  Create Dictionary  varName=${name}  varDisplayName=${dis_name}  varValue=${value} 
     ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/comm/template/variable/${var_id}  data=${data}  expected_status=any
     RETURN  ${resp}
 
 Get Custom Variable By Id
 
     [Arguments]  ${var_id} 
+    Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/comm/template/variable/${var_id}  expected_status=any
     RETURN  ${resp}
 
@@ -15496,6 +15499,7 @@ Get Custom Variable Count By Filter
 Update Custom Variable Status 
 
     [Arguments]  ${var_id}  ${status}  
+    Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/comm/template/variable/${var_id}/status/${status}    expected_status=any
     RETURN  ${resp}
 
@@ -15506,6 +15510,7 @@ Create Template
     ${data}=  Create Dictionary  name=${temp_name}  context=${context}  templateFormat=${temp_format}  templateType=${temp_type}  
     ...   template=${temp}  commChannel=${comm_chanl}  recipient=${recipient}
     ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/comm/template  data=${data}  expected_status=any
     RETURN  ${resp} 
 
@@ -15516,18 +15521,21 @@ Update Template
     ${data}=  Create Dictionary  name=${temp_name}  context=${context}  templateFormat=${temp_format}  templateType=${temp_type}  
     ...   template=${temp}  commChannel=${comm_chanl}  recipient=${recipient}
     ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/comm/template/${temp_id}  data=${data}  expected_status=any
     RETURN  ${resp} 
 
 Update Template Status
 
     [Arguments]  ${temp_id}  ${status} 
+    Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/comm/template/${temp_id}/${status}   expected_status=any
     RETURN  ${resp} 
 
 Get Template By Id
 
     [Arguments]  ${temp_id} 
+    Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/comm/template/${temp_id}  expected_status=any
     RETURN  ${resp}
 
