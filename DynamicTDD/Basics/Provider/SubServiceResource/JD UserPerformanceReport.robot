@@ -15,33 +15,6 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
-
-*** Keywords ***
-
-
-Create Invoice
-
-    [Arguments]    ${invoiceCategoryId}   ${invoiceDate}    ${invoiceId}   ${providerConsumerIdList}   &{kwargs}
-
-    ${len}=  Get Length  ${vargs}
-    ${itemList}=  Create List  
-
-    FOR    ${index}    IN RANGE    ${len}   
-        Exit For Loop If  ${len}==0
-        Append To List  ${itemList}  ${vargs[${index}]}
-    END
-    ${data}=  Create Dictionary  invoiceCategoryId=${invoiceCategoryId}     invoiceDate=${invoiceDate}   invoiceLabel=${invoiceLabel}  billedTo=${billedTo}    vendorUid=${vendorUid}  invoiceId=${invoiceId}    providerConsumerIdList=${providerConsumerIdList}   itemList=${itemList} 
-
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    log  ${data}
-    ${data}=    json.dumps    ${data}   
-    Check And Create YNW Session
-    ${resp}=    POST On Session    ynw    /provider/jp/finance/invoice    data=${data}  expected_status=any    headers=${headers}
-    RETURN  ${resp}
-
-
 *** Variables ***
 
 ${self}         0
@@ -111,7 +84,7 @@ JD-TC-UserPerformanceReport-1
     ${resp}=    Get Locations
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.json()}' == '${emptylist}'
+    IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Test Variable   ${locId}
 
@@ -128,7 +101,7 @@ JD-TC-UserPerformanceReport-1
     ${resp}=  Get Departments
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.json()}' == '${emptylist}'
+    IF   '${resp.content}' == '${emptylist}'
         ${dep_name1}=  FakerLibrary.bs
         ${dep_code1}=   Random Int  min=100   max=999
         ${dep_desc1}=   FakerLibrary.word  
@@ -143,7 +116,7 @@ JD-TC-UserPerformanceReport-1
     ${resp}=  Get User
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    IF   not '${resp.json()}' == '${emptylist}'
+    IF   not '${resp.content}' == '${emptylist}'
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
@@ -312,7 +285,7 @@ JD-TC-UserPerformanceReport-1
     ${resp}=  Get Report Status By Token Id  ${token_id1}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${tot_amt}   ${resp.json()['reportjson()']['dataHeader']['Grand Total']}
+    Set Test Variable   ${tot_amt}   ${resp.json()['reportContent']['dataHeader']['Grand Total']}
 
     ${total_amt}=    Evaluate    ${ser_amount}+${total}
     ${ser_date} =	Convert Date	${DAY1}	result_format=%d-%m-%Y
@@ -321,26 +294,26 @@ JD-TC-UserPerformanceReport-1
     ${tot_amt}=  Convert To Number  ${tot_amt}  1
 
     Should Be Equal As Strings  ${resp.json()['status']}                                        ${Report_Status[0]}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['5']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['6']}                 1
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['7']}                 ${ser_amount}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['4']}                 ${userf_name} ${userl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['5']}                 ${subser_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['6']}                 ${subser_qnty}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['7']}                 ${total}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['count']}                        2
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['5']}                 ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['6']}                 1
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['7']}                 ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['4']}                 ${userf_name} ${userl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['5']}                 ${subser_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['6']}                 ${subser_qnty}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['7']}                 ${total}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['count']}                        2
     Should Be Equal As Strings  ${tot_amt}                                                      ${total_amt}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportName']}                   User Performance Report
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportName']}                   User Performance Report
     Should Be Equal As Strings  ${resp.json()['reportType']}                                    ${reportType[6]}
     Should Be Equal As Strings  ${resp.json()['reportResponseType']}                            ${ReportResponseType[0]}
     Should Be Equal As Strings  ${resp.json()['reportTokenID']}                                 ${token_id1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportHeader']['Time Period']}  ${Report_Date_filter[4]}  
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_filter[4]}  
 
 JD-TC-UserPerformanceReport-2
 
@@ -404,7 +377,7 @@ JD-TC-UserPerformanceReport-2
     ${resp}=    Get Locations
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.json()}' == '${emptylist}'
+    IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Test Variable   ${locId}
 
@@ -421,7 +394,7 @@ JD-TC-UserPerformanceReport-2
     ${resp}=  Get Departments
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.json()}' == '${emptylist}'
+    IF   '${resp.content}' == '${emptylist}'
         ${dep_name1}=  FakerLibrary.bs
         ${dep_code1}=   Random Int  min=100   max=999
         ${dep_desc1}=   FakerLibrary.word  
@@ -579,7 +552,7 @@ JD-TC-UserPerformanceReport-2
     ${subser_qnty}=   Random Int   min=1   max=5
     ${serviceList1}=  Create Dictionary  serviceId=${subser_id1}   quantity=${subser_qnty}
    
-    ${resp}=  AddServiceToFinance   ${invoice_id1}   ${serviceList1}    
+    ${resp}=  AddServiceToInvoice   ${invoice_id1}   ${serviceList1}    
     Log   ${resp.content} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -598,7 +571,7 @@ JD-TC-UserPerformanceReport-2
     ${resp}=  Get Report Status By Token Id  ${token_id1}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${tot_amt}   ${resp.json()['reportjson()']['dataHeader']['Grand Total']}
+    Set Test Variable   ${tot_amt}   ${resp.json()['reportContent']['dataHeader']['Grand Total']}
 
     ${total}=    Evaluate    ${subser_qnty}*${subser_price}
     ${total_amt}=    Evaluate    ${ser_amount}+${total}
@@ -608,25 +581,25 @@ JD-TC-UserPerformanceReport-2
     ${tot_amt}=  Convert To Number  ${tot_amt}  1
 
     Should Be Equal As Strings  ${resp.json()['status']}                                        ${Report_Status[0]}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['5']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['6']}                 1
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['7']}                 ${ser_amount}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['5']}                 ${subser_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['6']}                 ${subser_qnty}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['7']}                 ${total}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['count']}                        2
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['5']}                 ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['6']}                 1
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['7']}                 ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['5']}                 ${subser_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['6']}                 ${subser_qnty}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['7']}                 ${total}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['count']}                        2
     Should Be Equal As Strings  ${tot_amt}                                                      ${total_amt}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportName']}                   User Performance Report
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportName']}                   User Performance Report
     Should Be Equal As Strings  ${resp.json()['reportType']}                                    ${reportType[6]}
     Should Be Equal As Strings  ${resp.json()['reportResponseType']}                            ${ReportResponseType[0]}
     Should Be Equal As Strings  ${resp.json()['reportTokenID']}                                 ${token_id1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportHeader']['Time Period']}  ${Report_Date_filter[4]}  
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_filter[4]}  
 
 
 JD-TC-UserPerformanceReport-3
@@ -697,7 +670,7 @@ JD-TC-UserPerformanceReport-3
     ${resp}=    Get Locations
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.json()}' == '${emptylist}'
+    IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Test Variable   ${locId}
 
@@ -714,7 +687,7 @@ JD-TC-UserPerformanceReport-3
     ${resp}=  Get Departments
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.json()}' == '${emptylist}'
+    IF   '${resp.content}' == '${emptylist}'
         ${dep_name1}=  FakerLibrary.bs
         ${dep_code1}=   Random Int  min=100   max=999
         ${dep_desc1}=   FakerLibrary.word  
@@ -729,7 +702,7 @@ JD-TC-UserPerformanceReport-3
     ${resp}=  Get User
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    IF   not '${resp.json()}' == '${emptylist}'
+    IF   not '${resp.content}' == '${emptylist}'
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
@@ -922,7 +895,7 @@ JD-TC-UserPerformanceReport-3
     ${resp}=  Get Report Status By Token Id  ${token_id1}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${tot_amt}   ${resp.json()['reportjson()']['dataHeader']['Grand Total']}
+    Set Test Variable   ${tot_amt}   ${resp.json()['reportContent']['dataHeader']['Grand Total']}
 
     ${total_amt}=    Evaluate    ${ser_amount}+${total}
     ${ser_date} =	Convert Date	${DAY1}	result_format=%d-%m-%Y
@@ -931,26 +904,26 @@ JD-TC-UserPerformanceReport-3
     ${tot_amt}=  Convert To Number  ${tot_amt}  1
 
     Should Be Equal As Strings  ${resp.json()['status']}                                        ${Report_Status[0]}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['5']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['6']}                 1
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['7']}                 ${ser_amount}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['4']}                 ${userf_name} ${userl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['5']}                 ${subser_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['6']}                 ${subser_qnty}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['7']}                 ${total}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['count']}                        2
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['5']}                 ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['6']}                 1
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['7']}                 ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['4']}                 ${userf_name} ${userl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['5']}                 ${subser_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['6']}                 ${subser_qnty}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['7']}                 ${total}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['count']}                        2
     Should Be Equal As Strings  ${tot_amt}                                                      ${total_amt}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportName']}                   User Performance Report
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportName']}                   User Performance Report
     Should Be Equal As Strings  ${resp.json()['reportType']}                                    ${reportType[6]}
     Should Be Equal As Strings  ${resp.json()['reportResponseType']}                            ${ReportResponseType[0]}
     Should Be Equal As Strings  ${resp.json()['reportTokenID']}                                 ${token_id1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
 
 JD-TC-UserPerformanceReport-4
 
@@ -1020,7 +993,7 @@ JD-TC-UserPerformanceReport-4
     ${resp}=    Get Locations
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.json()}' == '${emptylist}'
+    IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Test Variable   ${locId}
 
@@ -1037,7 +1010,7 @@ JD-TC-UserPerformanceReport-4
     ${resp}=  Get Departments
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.json()}' == '${emptylist}'
+    IF   '${resp.content}' == '${emptylist}'
         ${dep_name1}=  FakerLibrary.bs
         ${dep_code1}=   Random Int  min=100   max=999
         ${dep_desc1}=   FakerLibrary.word  
@@ -1052,7 +1025,7 @@ JD-TC-UserPerformanceReport-4
     ${resp}=  Get User
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    IF   not '${resp.json()}' == '${emptylist}'
+    IF   not '${resp.content}' == '${emptylist}'
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
@@ -1275,7 +1248,7 @@ JD-TC-UserPerformanceReport-4
     ${resp}=  Get Report Status By Token Id  ${token_id1}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${tot_amt}   ${resp.json()['reportjson()']['dataHeader']['Grand Total']}
+    Set Test Variable   ${tot_amt}   ${resp.json()['reportContent']['dataHeader']['Grand Total']}
 
     ${total_amt}=    Evaluate    ${ser_amount}+${total}
     ${ser_date} =	Convert Date	${DAY1}	result_format=%d-%m-%Y
@@ -1284,26 +1257,26 @@ JD-TC-UserPerformanceReport-4
     ${tot_amt}=  Convert To Number  ${tot_amt}  1
 
     Should Be Equal As Strings  ${resp.json()['status']}                                        ${Report_Status[0]}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['3']}                 ${fname} ${lname}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['5']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['6']}                 1
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['7']}                 ${ser_amount}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['3']}                 ${fname} ${lname}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['4']}                 ${userf_name} ${userl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['5']}                 ${subser_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['6']}                 ${subser_qnty}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['7']}                 ${total}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['count']}                        2
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['3']}                 ${fname} ${lname}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['5']}                 ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['6']}                 1
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['7']}                 ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['3']}                 ${fname} ${lname}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['4']}                 ${userf_name} ${userl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['5']}                 ${subser_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['6']}                 ${subser_qnty}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['7']}                 ${total}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['count']}                        2
     Should Be Equal As Strings  ${tot_amt}                                                      ${total_amt}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportName']}                   User Performance Report
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportName']}                   User Performance Report
     Should Be Equal As Strings  ${resp.json()['reportType']}                                    ${reportType[6]}
     Should Be Equal As Strings  ${resp.json()['reportResponseType']}                            ${ReportResponseType[0]}
     Should Be Equal As Strings  ${resp.json()['reportTokenID']}                                 ${token_id1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
 
 
 JD-TC-UserPerformanceReport-5
@@ -1368,7 +1341,7 @@ JD-TC-UserPerformanceReport-5
     ${resp}=    Get Locations
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.json()}' == '${emptylist}'
+    IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Test Variable   ${locId}
 
@@ -1385,7 +1358,7 @@ JD-TC-UserPerformanceReport-5
     ${resp}=  Get Departments
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.json()}' == '${emptylist}'
+    IF   '${resp.content}' == '${emptylist}'
         ${dep_name1}=  FakerLibrary.bs
         ${dep_code1}=   Random Int  min=100   max=999
         ${dep_desc1}=   FakerLibrary.word  
@@ -1400,7 +1373,7 @@ JD-TC-UserPerformanceReport-5
     ${resp}=  Get User
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    IF   not '${resp.json()}' == '${emptylist}'
+    IF   not '${resp.content}' == '${emptylist}'
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
@@ -1610,7 +1583,7 @@ JD-TC-UserPerformanceReport-5
     ${resp}=  Get Report Status By Token Id  ${token_id1}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${tot_amt}   ${resp.json()['reportjson()']['dataHeader']['Grand Total']}
+    Set Test Variable   ${tot_amt}   ${resp.json()['reportContent']['dataHeader']['Grand Total']}
 
     ${total_amt}=    Evaluate    ${ser_amount}+${total}+${total1}+${total2}
     ${ser_date} =	Convert Date	${DAY1}	result_format=%d-%m-%Y
@@ -1619,40 +1592,40 @@ JD-TC-UserPerformanceReport-5
     ${tot_amt}=  Convert To Number  ${tot_amt}  1
 
     Should Be Equal As Strings  ${resp.json()['status']}                                        ${Report_Status[0]}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['5']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['6']}                 1
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['7']}                 ${ser_amount}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['4']}                 ${userf_name} ${userl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['5']}                 ${subser_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['6']}                 ${subser_qnty}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['7']}                 ${total}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['4']}                 ${userf_name} ${userl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['5']}                 ${subser_name1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['6']}                 ${subser_qnty}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['7']}                 ${total1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][3]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][3]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][3]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][3]['4']}                 ${userf_name} ${userl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][3]['5']}                 ${subser_name2}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][3]['6']}                 ${subser_qnty}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][3]['7']}                 ${total2}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['count']}                        4
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['5']}                 ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['6']}                 1
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['7']}                 ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['4']}                 ${userf_name} ${userl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['5']}                 ${subser_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['6']}                 ${subser_qnty}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['7']}                 ${total}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['4']}                 ${userf_name} ${userl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['5']}                 ${subser_name1}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['6']}                 ${subser_qnty}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['7']}                 ${total1}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['4']}                 ${userf_name} ${userl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['5']}                 ${subser_name2}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['6']}                 ${subser_qnty}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['7']}                 ${total2}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['count']}                        4
     Should Be Equal As Strings  ${tot_amt}                                                      ${total_amt}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportName']}                   User Performance Report
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportName']}                   User Performance Report
     Should Be Equal As Strings  ${resp.json()['reportType']}                                    ${reportType[6]}
     Should Be Equal As Strings  ${resp.json()['reportResponseType']}                            ${ReportResponseType[0]}
     Should Be Equal As Strings  ${resp.json()['reportTokenID']}                                 ${token_id1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
 
 JD-TC-UserPerformanceReport-6
 
@@ -1717,7 +1690,7 @@ JD-TC-UserPerformanceReport-6
     ${resp}=    Get Locations
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.json()}' == '${emptylist}'
+    IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Test Variable   ${locId}
 
@@ -1734,7 +1707,7 @@ JD-TC-UserPerformanceReport-6
     ${resp}=  Get Departments
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.json()}' == '${emptylist}'
+    IF   '${resp.content}' == '${emptylist}'
         ${dep_name1}=  FakerLibrary.bs
         ${dep_code1}=   Random Int  min=100   max=999
         ${dep_desc1}=   FakerLibrary.word  
@@ -1749,7 +1722,7 @@ JD-TC-UserPerformanceReport-6
     ${resp}=  Get User
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    IF   not '${resp.json()}' == '${emptylist}'
+    IF   not '${resp.content}' == '${emptylist}'
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
@@ -1960,7 +1933,7 @@ JD-TC-UserPerformanceReport-6
     ${resp}=  Get Report Status By Token Id  ${token_id1}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${tot_amt}   ${resp.json()['reportjson()']['dataHeader']['Grand Total']}
+    Set Test Variable   ${tot_amt}   ${resp.json()['reportContent']['dataHeader']['Grand Total']}
 
     ${total_amt}=    Evaluate    ${ser_amount}+${total}+${total1}+${total2}
     ${ser_date} =	Convert Date	${DAY1}	result_format=%d-%m-%Y
@@ -1969,40 +1942,40 @@ JD-TC-UserPerformanceReport-6
     ${tot_amt}=  Convert To Number  ${tot_amt}  1
 
     Should Be Equal As Strings  ${resp.json()['status']}                                        ${Report_Status[0]}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['5']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['6']}                 1
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['7']}                 ${ser_amount}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['4']}                 ${userf_name} ${userl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['5']}                 ${subser_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['6']}                 ${subser_qnty}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['7']}                 ${total}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['4']}                 ${userf_name} ${userl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['5']}                 ${subser_name1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['6']}                 ${subser_qnty}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['7']}                 ${total1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][3]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][3]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][3]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][3]['4']}                 ${userf_name} ${userl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][3]['5']}                 ${subser_name2}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][3]['6']}                 ${subser_qnty}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][3]['7']}                 ${total2}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['count']}                        4
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['5']}                 ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['6']}                 1
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['7']}                 ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['4']}                 ${userf_name} ${userl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['5']}                 ${subser_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['6']}                 ${subser_qnty}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['7']}                 ${total}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['4']}                 ${userf_name} ${userl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['5']}                 ${subser_name1}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['6']}                 ${subser_qnty}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['7']}                 ${total1}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['4']}                 ${userf_name} ${userl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['5']}                 ${subser_name2}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['6']}                 ${subser_qnty}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['7']}                 ${total2}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['count']}                        4
     Should Be Equal As Strings  ${tot_amt}                                                      ${total_amt}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportName']}                   User Performance Report
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportName']}                   User Performance Report
     Should Be Equal As Strings  ${resp.json()['reportType']}                                    ${reportType[6]}
     Should Be Equal As Strings  ${resp.json()['reportResponseType']}                            ${ReportResponseType[0]}
     Should Be Equal As Strings  ${resp.json()['reportTokenID']}                                 ${token_id1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
 
     ${newsubser_price}=   Random Int   min=500   max=700
     ${subser_list1}=  Create Dictionary  serviceId=${subser_id1}  serviceAmount=${newsubser_price}    quantity=${subser_qnty}   sequenceId=${seq_id1}
@@ -2026,7 +1999,7 @@ JD-TC-UserPerformanceReport-6
     ${resp}=  Get Report Status By Token Id  ${token_id2}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${tot_amt1}   ${resp.json()['reportjson()']['dataHeader']['Grand Total']}
+    Set Test Variable   ${tot_amt1}   ${resp.json()['reportContent']['dataHeader']['Grand Total']}
 
     ${total_amt1}=    Evaluate    ${ser_amount}+${total1}+${total11}+${total2}
     ${tot_amt1} =    Replace String    ${tot_amt1}    Rs.     ${EMPTY}
@@ -2034,39 +2007,39 @@ JD-TC-UserPerformanceReport-6
     ${tot_amt1}=  Convert To Number  ${tot_amt1}  1
 
     Should Be Equal As Strings  ${resp.json()['status']}                                        ${Report_Status[0]}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['5']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['6']}                 1
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['7']}                 ${ser_amount}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['4']}                 ${userf_name} ${userl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['5']}                 ${subser_name1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['6']}                 ${subser_qnty}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['7']}                 ${total1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['4']}                 ${userf_name} ${userl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['5']}                 ${subser_name2}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['6']}                 ${subser_qnty}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['7']}                 ${total2}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][3]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][3]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][3]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][3]['5']}                 ${subser_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][3]['6']}                 ${subser_qnty}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][3]['7']}                 ${total11}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['count']}                        4
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['5']}                 ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['6']}                 1
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['7']}                 ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['4']}                 ${userf_name} ${userl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['5']}                 ${subser_name1}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['6']}                 ${subser_qnty}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['7']}                 ${total1}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['4']}                 ${userf_name} ${userl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['5']}                 ${subser_name2}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['6']}                 ${subser_qnty}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['7']}                 ${total2}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['5']}                 ${subser_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['6']}                 ${subser_qnty}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['7']}                 ${total11}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['count']}                        4
     Should Be Equal As Strings  ${tot_amt1}                                                      ${total_amt1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportName']}                   User Performance Report
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportName']}                   User Performance Report
     Should Be Equal As Strings  ${resp.json()['reportType']}                                    ${reportType[6]}
     Should Be Equal As Strings  ${resp.json()['reportResponseType']}                            ${ReportResponseType[0]}
     Should Be Equal As Strings  ${resp.json()['reportTokenID']}                                 ${token_id2}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
 
 JD-TC-UserPerformanceReport-7
 
@@ -2131,7 +2104,7 @@ JD-TC-UserPerformanceReport-7
     ${resp}=    Get Locations
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.json()}' == '${emptylist}'
+    IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Test Variable   ${locId}
 
@@ -2148,7 +2121,7 @@ JD-TC-UserPerformanceReport-7
     ${resp}=  Get Departments
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.json()}' == '${emptylist}'
+    IF   '${resp.content}' == '${emptylist}'
         ${dep_name1}=  FakerLibrary.bs
         ${dep_code1}=   Random Int  min=100   max=999
         ${dep_desc1}=   FakerLibrary.word  
@@ -2163,7 +2136,7 @@ JD-TC-UserPerformanceReport-7
     ${resp}=  Get User
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    IF   not '${resp.json()}' == '${emptylist}'
+    IF   not '${resp.content}' == '${emptylist}'
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
@@ -2374,7 +2347,7 @@ JD-TC-UserPerformanceReport-7
     ${resp}=  Get Report Status By Token Id  ${token_id1}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${tot_amt}   ${resp.json()['reportjson()']['dataHeader']['Grand Total']}
+    Set Test Variable   ${tot_amt}   ${resp.json()['reportContent']['dataHeader']['Grand Total']}
 
     ${total_amt}=    Evaluate    ${ser_amount}+${total}+${total1}+${total2}
     ${ser_date} =	Convert Date	${DAY1}	result_format=%d-%m-%Y
@@ -2383,40 +2356,40 @@ JD-TC-UserPerformanceReport-7
     ${tot_amt}=  Convert To Number  ${tot_amt}  1
 
     Should Be Equal As Strings  ${resp.json()['status']}                                        ${Report_Status[0]}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['5']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['6']}                 1
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['7']}                 ${ser_amount}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['4']}                 ${userf_name} ${userl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['5']}                 ${subser_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['6']}                 ${subser_qnty}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['7']}                 ${total}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['4']}                 ${userf_name} ${userl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['5']}                 ${subser_name1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['6']}                 ${subser_qnty}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['7']}                 ${total1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][3]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][3]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][3]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][3]['4']}                 ${userf_name} ${userl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][3]['5']}                 ${subser_name2}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][3]['6']}                 ${subser_qnty}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][3]['7']}                 ${total2}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['count']}                        4
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['5']}                 ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['6']}                 1
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['7']}                 ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['4']}                 ${userf_name} ${userl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['5']}                 ${subser_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['6']}                 ${subser_qnty}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['7']}                 ${total}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['4']}                 ${userf_name} ${userl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['5']}                 ${subser_name1}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['6']}                 ${subser_qnty}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['7']}                 ${total1}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['4']}                 ${userf_name} ${userl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['5']}                 ${subser_name2}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['6']}                 ${subser_qnty}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['7']}                 ${total2}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['count']}                        4
     Should Be Equal As Strings  ${tot_amt}                                                      ${total_amt}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportName']}                   User Performance Report
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportName']}                   User Performance Report
     Should Be Equal As Strings  ${resp.json()['reportType']}                                    ${reportType[6]}
     Should Be Equal As Strings  ${resp.json()['reportResponseType']}                            ${ReportResponseType[0]}
     Should Be Equal As Strings  ${resp.json()['reportTokenID']}                                 ${token_id1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
 
     ${subser_list2}=  Create Dictionary  serviceId=${subser_id1}  sequenceId=${seq_id1}
     
@@ -2432,7 +2405,7 @@ JD-TC-UserPerformanceReport-7
     ${resp}=  Get Report Status By Token Id  ${token_id2}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${tot_amt1}   ${resp.json()['reportjson()']['dataHeader']['Grand Total']}
+    Set Test Variable   ${tot_amt1}   ${resp.json()['reportContent']['dataHeader']['Grand Total']}
 
     ${total_amt1}=    Evaluate    ${ser_amount}+${total1}+${total2}
     ${tot_amt1} =    Replace String    ${tot_amt1}    Rs.     ${EMPTY}
@@ -2440,33 +2413,33 @@ JD-TC-UserPerformanceReport-7
     ${tot_amt1}=  Convert To Number  ${tot_amt1}  1
 
     Should Be Equal As Strings  ${resp.json()['status']}                                        ${Report_Status[0]}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['5']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['6']}                 1
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['7']}                 ${ser_amount}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['4']}                 ${userf_name} ${userl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['5']}                 ${subser_name1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['6']}                 ${subser_qnty}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][1]['7']}                 ${total1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['4']}                 ${userf_name} ${userl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['5']}                 ${subser_name2}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['6']}                 ${subser_qnty}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][2]['7']}                 ${total2}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['count']}                        3
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['5']}                 ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['6']}                 1
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['7']}                 ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['4']}                 ${userf_name} ${userl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['5']}                 ${subser_name1}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['6']}                 ${subser_qnty}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['7']}                 ${total1}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['4']}                 ${userf_name} ${userl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['5']}                 ${subser_name2}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['6']}                 ${subser_qnty}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['7']}                 ${total2}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['count']}                        3
     Should Be Equal As Strings  ${tot_amt1}                                                      ${total_amt1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportName']}                   User Performance Report
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportName']}                   User Performance Report
     Should Be Equal As Strings  ${resp.json()['reportType']}                                    ${reportType[6]}
     Should Be Equal As Strings  ${resp.json()['reportResponseType']}                            ${ReportResponseType[0]}
     Should Be Equal As Strings  ${resp.json()['reportTokenID']}                                 ${token_id2}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
 
 JD-TC-UserPerformanceReport-8
 
@@ -2529,7 +2502,7 @@ JD-TC-UserPerformanceReport-8
     ${resp}=    Get Locations
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.json()}' == '${emptylist}'
+    IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Test Variable   ${locId}
 
@@ -2546,7 +2519,7 @@ JD-TC-UserPerformanceReport-8
     ${resp}=  Get Departments
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.json()}' == '${emptylist}'
+    IF   '${resp.content}' == '${emptylist}'
         ${dep_name1}=  FakerLibrary.bs
         ${dep_code1}=   Random Int  min=100   max=999
         ${dep_desc1}=   FakerLibrary.word  
@@ -2561,7 +2534,7 @@ JD-TC-UserPerformanceReport-8
     ${resp}=  Get User
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    IF   not '${resp.json()}' == '${emptylist}'
+    IF   not '${resp.content}' == '${emptylist}'
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
@@ -2788,7 +2761,7 @@ JD-TC-UserPerformanceReport-8
     ${resp}=  Get Report Status By Token Id  ${token_id1}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${tot_amt}   ${resp.json()['reportjson()']['dataHeader']['Grand Total']}
+    Set Test Variable   ${tot_amt}   ${resp.json()['reportContent']['dataHeader']['Grand Total']}
 
     ${total_amt}=    Evaluate    ${total}*2
     ${ser_date} =	Convert Date	${DAY1}	result_format=%d-%m-%Y
@@ -2796,36 +2769,36 @@ JD-TC-UserPerformanceReport-8
     ${tot_amt} =    Replace String    ${tot_amt}    ,       ${EMPTY}
     ${tot_amt}=  Convert To Number  ${tot_amt}  1
 
-    ${len}=  Get Length  ${resp.json()['reportjson()']['data']}
+    ${len}=  Get Length  ${resp.json()['reportContent']['data']}
 
     FOR  ${i}  IN RANGE   ${len}
 
-        IF  '${resp.json()['reportjson()']['data'][${i}]['2']}' == '${encId1}'  
+        IF  '${resp.json()['reportContent']['data'][${i}]['2']}' == '${encId1}'  
             Should Be Equal As Strings  ${resp.json()['status']}                                    ${Report_Status[0]}
-            Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][${i}]['1']}          ${ser_date}
-            Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][${i}]['3']}          ${custf_name} ${custl_name}
-            Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][${i}]['4']}          ${userf_name} ${userl_name}
-            Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][${i}]['5']}          ${subser_name}
-            Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][${i}]['6']}          ${subser_qnty}
-            Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][${i}]['7']}          ${total}
+            Should Be Equal As Strings  ${resp.json()['reportContent']['data'][${i}]['1']}          ${ser_date}
+            Should Be Equal As Strings  ${resp.json()['reportContent']['data'][${i}]['3']}          ${custf_name} ${custl_name}
+            Should Be Equal As Strings  ${resp.json()['reportContent']['data'][${i}]['4']}          ${userf_name} ${userl_name}
+            Should Be Equal As Strings  ${resp.json()['reportContent']['data'][${i}]['5']}          ${subser_name}
+            Should Be Equal As Strings  ${resp.json()['reportContent']['data'][${i}]['6']}          ${subser_qnty}
+            Should Be Equal As Strings  ${resp.json()['reportContent']['data'][${i}]['7']}          ${total}
 
-        ELSE IF     '${resp.json()['reportjson()']['data'][${i}]['2']}' == '${encId2}'            
-            Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][${i}]['1']}          ${ser_date}
-            Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][${i}]['3']}          ${custf_name} ${custl_name}
-            Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][${i}]['4']}          ${userf_name} ${userl_name}
-            Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][${i}]['5']}          ${subser_name}
-            Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][${i}]['6']}          ${subser_qnty}
-            Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][${i}]['7']}          ${total}
+        ELSE IF     '${resp.json()['reportContent']['data'][${i}]['2']}' == '${encId2}'            
+            Should Be Equal As Strings  ${resp.json()['reportContent']['data'][${i}]['1']}          ${ser_date}
+            Should Be Equal As Strings  ${resp.json()['reportContent']['data'][${i}]['3']}          ${custf_name} ${custl_name}
+            Should Be Equal As Strings  ${resp.json()['reportContent']['data'][${i}]['4']}          ${userf_name} ${userl_name}
+            Should Be Equal As Strings  ${resp.json()['reportContent']['data'][${i}]['5']}          ${subser_name}
+            Should Be Equal As Strings  ${resp.json()['reportContent']['data'][${i}]['6']}          ${subser_qnty}
+            Should Be Equal As Strings  ${resp.json()['reportContent']['data'][${i}]['7']}          ${total}
         END
     END
     Should Be Equal As Strings  ${resp.json()['status']}                                        ${Report_Status[0]}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['count']}                        2
+    Should Be Equal As Strings  ${resp.json()['reportContent']['count']}                        2
     Should Be Equal As Strings  ${tot_amt}                                                      ${total_amt}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportName']}                   User Performance Report
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportName']}                   User Performance Report
     Should Be Equal As Strings  ${resp.json()['reportType']}                                    ${reportType[6]}
     Should Be Equal As Strings  ${resp.json()['reportResponseType']}                            ${ReportResponseType[0]}
     Should Be Equal As Strings  ${resp.json()['reportTokenID']}                                 ${token_id1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
 
     ${s_id}  Convert To String  ${s_id}
     ${filter}=  Create Dictionary    service-eq=${s_id}
@@ -2837,7 +2810,7 @@ JD-TC-UserPerformanceReport-8
     ${resp}=  Get Report Status By Token Id  ${token_id2}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${tot_amt}   ${resp.json()['reportjson()']['dataHeader']['Grand Total']}
+    Set Test Variable   ${tot_amt}   ${resp.json()['reportContent']['dataHeader']['Grand Total']}
 
     ${ser_date} =	Convert Date	${DAY1}	result_format=%d-%m-%Y
     ${tot_amt} =    Replace String    ${tot_amt}    Rs.     ${EMPTY}
@@ -2845,19 +2818,19 @@ JD-TC-UserPerformanceReport-8
     ${tot_amt}=  Convert To Number  ${tot_amt}  1
 
     Should Be Equal As Strings  ${resp.json()['status']}                                        ${Report_Status[0]}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['2']}                 ${encId1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['5']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['6']}                 1
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['7']}                 ${ser_amount}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['count']}                        1
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['2']}                 ${encId1}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['5']}                 ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['6']}                 1
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['7']}                 ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['count']}                        1
     Should Be Equal As Strings  ${tot_amt}                                                      ${ser_amount}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportName']}                   User Performance Report
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportName']}                   User Performance Report
     Should Be Equal As Strings  ${resp.json()['reportType']}                                    ${reportType[6]}
     Should Be Equal As Strings  ${resp.json()['reportResponseType']}                            ${ReportResponseType[0]}
     Should Be Equal As Strings  ${resp.json()['reportTokenID']}                                 ${token_id2}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
 
 JD-TC-UserPerformanceReport-9
 
@@ -2921,7 +2894,7 @@ JD-TC-UserPerformanceReport-9
     ${resp}=    Get Locations
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.json()}' == '${emptylist}'
+    IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Test Variable   ${locId}
 
@@ -2938,7 +2911,7 @@ JD-TC-UserPerformanceReport-9
     ${resp}=  Get Departments
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.json()}' == '${emptylist}'
+    IF   '${resp.content}' == '${emptylist}'
         ${dep_name1}=  FakerLibrary.bs
         ${dep_code1}=   Random Int  min=100   max=999
         ${dep_desc1}=   FakerLibrary.word  
@@ -2953,7 +2926,7 @@ JD-TC-UserPerformanceReport-9
     ${resp}=  Get User
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    IF   not '${resp.json()}' == '${emptylist}'
+    IF   not '${resp.content}' == '${emptylist}'
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
@@ -3123,7 +3096,7 @@ JD-TC-UserPerformanceReport-9
     ${resp}=  Get Report Status By Token Id  ${token_id1}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${tot_amt}   ${resp.json()['reportjson()']['dataHeader']['Grand Total']}
+    Set Test Variable   ${tot_amt}   ${resp.json()['reportContent']['dataHeader']['Grand Total']}
 
     ${ser_date} =	Convert Date	${DAY1}	result_format=%d-%m-%Y
     ${tot_amt} =    Replace String    ${tot_amt}    Rs.     ${EMPTY}
@@ -3131,20 +3104,20 @@ JD-TC-UserPerformanceReport-9
     ${tot_amt}=  Convert To Number  ${tot_amt}  1
 
     Should Be Equal As Strings  ${resp.json()['status']}                                        ${Report_Status[0]}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['4']}                 ${userf_name} ${userl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['5']}                 ${subser_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['6']}                 ${subser_qnty}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['7']}                 ${total}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['1']}                 ${ser_date}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['count']}                        1
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['4']}                 ${userf_name} ${userl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['5']}                 ${subser_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['6']}                 ${subser_qnty}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['7']}                 ${total}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['1']}                 ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['count']}                        1
     Should Be Equal As Strings  ${tot_amt}                                                      ${total}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportName']}                   User Performance Report
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportName']}                   User Performance Report
     Should Be Equal As Strings  ${resp.json()['reportType']}                                    ${reportType[6]}
     Should Be Equal As Strings  ${resp.json()['reportResponseType']}                            ${ReportResponseType[0]}
     Should Be Equal As Strings  ${resp.json()['reportTokenID']}                                 ${token_id1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
 
 JD-TC-UserPerformanceReport-10
 
@@ -3207,7 +3180,7 @@ JD-TC-UserPerformanceReport-10
     ${resp}=    Get Locations
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.json()}' == '${emptylist}'
+    IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Test Variable   ${locId}
 
@@ -3224,7 +3197,7 @@ JD-TC-UserPerformanceReport-10
     ${resp}=  Get Departments
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.json()}' == '${emptylist}'
+    IF   '${resp.content}' == '${emptylist}'
         ${dep_name1}=  FakerLibrary.bs
         ${dep_code1}=   Random Int  min=100   max=999
         ${dep_desc1}=   FakerLibrary.word  
@@ -3239,7 +3212,7 @@ JD-TC-UserPerformanceReport-10
     ${resp}=  Get User
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    IF   not '${resp.json()}' == '${emptylist}'
+    IF   not '${resp.content}' == '${emptylist}'
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
@@ -3420,7 +3393,7 @@ JD-TC-UserPerformanceReport-10
     ${resp}=  Get Report Status By Token Id  ${token_id1}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${tot_amt}   ${resp.json()['reportjson()']['dataHeader']['Grand Total']}
+    Set Test Variable   ${tot_amt}   ${resp.json()['reportContent']['dataHeader']['Grand Total']}
 
     ${ser_date} =	Convert Date	${DAY1}	result_format=%d-%m-%Y
     ${tot_amt} =    Replace String    ${tot_amt}    Rs.     ${EMPTY}
@@ -3428,19 +3401,19 @@ JD-TC-UserPerformanceReport-10
     ${tot_amt}=  Convert To Number  ${tot_amt}  1
 
     Should Be Equal As Strings  ${resp.json()['status']}                                        ${Report_Status[0]}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['4']}                 ${userf_name} ${userl_name}, ${userf_name2} ${userl_name2}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['5']}                 ${subser_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['6']}                 ${subser_qnty}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['7']}                 ${total}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['count']}                        1
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['4']}                 ${userf_name} ${userl_name}, ${userf_name2} ${userl_name2}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['5']}                 ${subser_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['6']}                 ${subser_qnty}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['7']}                 ${total}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['count']}                        1
     Should Be Equal As Strings  ${tot_amt}                                                      ${total}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportName']}                   User Performance Report
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportName']}                   User Performance Report
     Should Be Equal As Strings  ${resp.json()['reportType']}                                    ${reportType[6]}
     Should Be Equal As Strings  ${resp.json()['reportResponseType']}                            ${ReportResponseType[0]}
     Should Be Equal As Strings  ${resp.json()['reportTokenID']}                                 ${token_id1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
 
 JD-TC-UserPerformanceReport-11
 
@@ -3504,7 +3477,7 @@ JD-TC-UserPerformanceReport-11
     ${resp}=    Get Locations
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.json()}' == '${emptylist}'
+    IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Test Variable   ${locId}
 
@@ -3521,7 +3494,7 @@ JD-TC-UserPerformanceReport-11
     ${resp}=  Get Departments
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.json()}' == '${emptylist}'
+    IF   '${resp.content}' == '${emptylist}'
         ${dep_name1}=  FakerLibrary.bs
         ${dep_code1}=   Random Int  min=100   max=999
         ${dep_desc1}=   FakerLibrary.word  
@@ -3536,7 +3509,7 @@ JD-TC-UserPerformanceReport-11
     ${resp}=  Get User
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    IF   not '${resp.json()}' == '${emptylist}'
+    IF   not '${resp.content}' == '${emptylist}'
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
@@ -3717,7 +3690,7 @@ JD-TC-UserPerformanceReport-11
     ${resp}=  Get Report Status By Token Id  ${token_id1}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${tot_amt}   ${resp.json()['reportjson()']['dataHeader']['Grand Total']}
+    Set Test Variable   ${tot_amt}   ${resp.json()['reportContent']['dataHeader']['Grand Total']}
 
     ${ser_date} =	Convert Date	${DAY1}	result_format=%d-%m-%Y
     ${tot_amt} =    Replace String    ${tot_amt}    Rs.     ${EMPTY}
@@ -3725,19 +3698,19 @@ JD-TC-UserPerformanceReport-11
     ${tot_amt}=  Convert To Number  ${tot_amt}  1
 
     Should Be Equal As Strings  ${resp.json()['status']}                                        ${Report_Status[0]}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['4']}                 ${userf_name} ${userl_name}, ${userf_name2} ${userl_name2}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['5']}                 ${subser_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['6']}                 ${subser_qnty}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['7']}                 ${total}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['count']}                        1
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['4']}                 ${userf_name} ${userl_name}, ${userf_name2} ${userl_name2}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['5']}                 ${subser_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['6']}                 ${subser_qnty}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['7']}                 ${total}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['count']}                        1
     Should Be Equal As Strings  ${tot_amt}                                                      ${total}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportName']}                   User Performance Report
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportName']}                   User Performance Report
     Should Be Equal As Strings  ${resp.json()['reportType']}                                    ${reportType[6]}
     Should Be Equal As Strings  ${resp.json()['reportResponseType']}                            ${ReportResponseType[0]}
     Should Be Equal As Strings  ${resp.json()['reportTokenID']}                                 ${token_id1}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
 
     ${asgn_users}=   Create List  ${u_id1}
     ${subser_list2}=  Create Dictionary  serviceId=${subser_id1}   serviceAmount=${subser_price}   quantity=${subser_qnty}  assigneeUsers=${asgn_users}
@@ -3757,19 +3730,19 @@ JD-TC-UserPerformanceReport-11
     Should Be Equal As Strings  ${resp.status_code}  200
    
     Should Be Equal As Strings  ${resp.json()['status']}                                        ${Report_Status[0]}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['2']}                 ${encId}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['3']}                 ${custf_name} ${custl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['4']}                 ${userf_name} ${userl_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['5']}                 ${subser_name}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['6']}                 ${subser_qnty}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['data'][0]['7']}                 ${total}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['count']}                        1
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['2']}                 ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['4']}                 ${userf_name} ${userl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['5']}                 ${subser_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['6']}                 ${subser_qnty}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['7']}                 ${total}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['count']}                        1
     Should Be Equal As Strings  ${tot_amt}                                                      ${total}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportName']}                   User Performance Report
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportName']}                   User Performance Report
     Should Be Equal As Strings  ${resp.json()['reportType']}                                    ${reportType[6]}
     Should Be Equal As Strings  ${resp.json()['reportResponseType']}                            ${ReportResponseType[0]}
     Should Be Equal As Strings  ${resp.json()['reportTokenID']}                                 ${token_id2}
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_Category[4]}   ignore_case=True
 
     ${filter}=  Create Dictionary    assignee-eq=${u_id2}
     ${resp}=  Generate Report REST details  ${reportType[6]}  ${Report_Date_Category[4]}  ${filter}
@@ -3780,9 +3753,9 @@ JD-TC-UserPerformanceReport-11
     ${resp}=  Get Report Status By Token Id  ${token_id3}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['reportjson()']['count']}                        0
+    Should Be Equal As Strings  ${resp.json()['reportContent']['count']}                        0
 
-JD-TC-UserPerformanceReport-UH1
+JD-TC-UserPerformanceReport-12
 
     [Documentation]   Create a service with auto invoice generation off and with price as zero, then take appointment(walk in). 
                 ...   create invoice and add subservice to that invoice.
@@ -3834,7 +3807,7 @@ JD-TC-UserPerformanceReport-UH1
     ${resp}=    Get Locations
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.json()}' == '${emptylist}'
+    IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Test Variable   ${locId}
 
@@ -3860,6 +3833,7 @@ JD-TC-UserPerformanceReport-UH1
     ${ser_dur}=   Random Int   min=5   max=10
     ${desc}=   FakerLibrary.sentence
     ${ser_amount}=   Random Int  min=0  max=0
+    ${ser_amount}=  Convert To Number  ${ser_amount}  1
 
     ${resp}=  Create Service  ${SERVICE1}   ${desc}   ${ser_dur}   ${status[0]}  
     ...  ${btype}   ${bool[1]}   ${notifytype[2]}  ${EMPTY}  ${ser_amount}  ${bool[0]} 
@@ -3969,10 +3943,6 @@ JD-TC-UserPerformanceReport-UH1
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceId']}        ${s_id}
     Should Not Contain   ${resp.json()['subServiceData']}                               ${subser_id1}
 
-    ${resp}=  Get Appointment By Id   ${apptid1}
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${NO_INVOICE_GENERATED}=  format String   ${NO_INVOICE_GENERATED}   ${apptid1}
 
     ${resp}=  Get Bookings Invoices  ${apptid1}
@@ -3980,25 +3950,71 @@ JD-TC-UserPerformanceReport-UH1
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings    ${resp.json()}    ${NO_INVOICE_GENERATED}
 
-    ${resp}=   Get next invoice Id   ${locId}
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${invoiceId}   ${resp.json()}
-
-    ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[3]} 
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${category_id1}   ${resp.json()}
-
-    ${providerConsumerIdList}=  Create List  ${cid}
-    ${invoiceDate}=   db.get_date_by_timezone  ${tz}
-    ${ser_list}=  Create List  ${subser_id1}    
-
-    ${resp}=  Create Invoice   ${category_id1}   ${invoiceDate}   ${invoiceId}   ${providerConsumerIdList}   serviceList=${ser_list}  
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    ${subser_qnty}=   Random Int   min=1   max=5
+    ${ser_list}=  Create Dictionary  serviceId=${subser_id1}    price=${subser_price}  quantity=${subser_qnty}
    
+    ${resp}=  createInvoice for booking  ${invoicebooking[0]}   ${apptid1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Bookings Invoices  ${apptid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable    ${invoice_uid}    ${resp.json()[0]['invoiceUid']}
+
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}                                        ${account_id}
+    Should Be Equal As Strings  ${resp.json()[0]['categoryName']}                                     ${CategoryName[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['invoiceDate']}                                      ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['providerConsumerId']}                               ${cid}
+    Should Be Equal As Strings  ${resp.json()[0]['providerConsumerData']['phoneNos'][0]['number']}    ${NewCustomer}
+    Should Be Equal As Strings   ${resp.json()[0]['ynwUuid']}                                         ${apptid1}
+    Should Be Equal As Strings   ${resp.json()[0]['amountPaid']}                                      0.0
+    Should Be Equal As Strings   ${resp.json()[0]['amountDue']}                                       0.0
+    Should Be Equal As Strings   ${resp.json()[0]['amountTotal']}                                     0.0
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}                      ${s_id}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}                    ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}                       1.0
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['taxable']}                        ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['totalPrice']}                     ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}                        ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceCategory']}                ${serviceCategory[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['assigneeUsers']}                  ${empty_list}
+    
+    ${resp}=  AddServiceToInvoice   ${invoice_uid}   ${ser_list}    
+    Log  ${resp.content} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${total}=    Evaluate    ${subser_qnty}*${subser_price}
+
+    ${resp}=  Get Bookings Invoices  ${apptid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}                                        ${account_id}
+    Should Be Equal As Strings  ${resp.json()[0]['categoryName']}                                     ${CategoryName[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['invoiceDate']}                                      ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['providerConsumerId']}                               ${cid}
+    Should Be Equal As Strings  ${resp.json()[0]['providerConsumerData']['phoneNos'][0]['number']}    ${NewCustomer}
+    Should Be Equal As Strings   ${resp.json()[0]['ynwUuid']}                                         ${apptid1}
+    Should Be Equal As Strings   ${resp.json()[0]['amountPaid']}                                      0.0
+    Should Be Equal As Strings   ${resp.json()[0]['amountDue']}                                       ${total}
+    Should Be Equal As Strings   ${resp.json()[0]['amountTotal']}                                     ${total}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}                      ${s_id}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}                    ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}                       1.0
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['taxable']}                        ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['totalPrice']}                     ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}                        ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceCategory']}                ${serviceCategory[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['assigneeUsers']}                  ${empty_list}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][1]['serviceId']}                      ${subser_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][1]['serviceName']}                    ${subser_name}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][1]['quantity']}                       ${subser_qnty}.0
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][1]['taxable']}                        ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][1]['totalPrice']}                     ${total}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][1]['netRate']}                        ${total}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][1]['serviceCategory']}                ${serviceCategory[0]}
+    
 *** comments ***
 JD-TC-UserPerformanceReport-11
 

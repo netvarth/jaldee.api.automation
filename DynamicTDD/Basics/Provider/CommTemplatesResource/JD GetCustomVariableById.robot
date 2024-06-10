@@ -15,17 +15,14 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
-*** Variables ***
-
-@{context}   ALL
 
 *** Test Cases ***
 
 JD-TC-GetCustomVariableById-1
 
-    [Documentation]  Create custom variable for a provider
+    [Documentation]  Create custom variable for a provider then get it by id and verify.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -36,10 +33,9 @@ JD-TC-GetCustomVariableById-1
 
     ${name}=    FakerLibrary.word
     ${dis_name}=    FakerLibrary.word
-    ${type}=    FakerLibrary.sentence
     ${value}=   FakerLibrary.hostname
 
-    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${type}  ${context[0]}
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${var_id1}  ${resp.content}
@@ -51,9 +47,9 @@ JD-TC-GetCustomVariableById-1
     Should Be Equal As Strings  ${resp.content['name']}            ${name}
     Should Be Equal As Strings  ${resp.content['displayName']}     ${dis_name} 
     Should Be Equal As Strings  ${resp.content['value']}           ${value}
-    Should Be Equal As Strings  ${resp.content['type']}            ${type} 
-    Should Be Equal As Strings  ${resp.content['context']}         ${context[0]}
-    Should Be Equal As Strings  ${resp.content['status']}          ${Qstate[0]} 
+    Should Be Equal As Strings  ${resp.content['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.content['context']}         ${VariableContext[0]}
+    Should Be Equal As Strings  ${resp.content['status']}          ${VariableStatus[0]} 
     Should Be Equal As Strings  ${resp.content['account']}         ${account_id}
 
 

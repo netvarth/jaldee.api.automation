@@ -38,7 +38,7 @@ JD-TC-AddSubServicesToAppt-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -115,7 +115,7 @@ JD-TC-AddSubServicesToAppt-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${PUSERNAME172}'
+            IF   not '${user_phone}' == '${HLPUSERNAME25}'
                 clear_users  ${user_phone}
             END
         END
@@ -265,7 +265,7 @@ JD-TC-AddSubServicesToAppt-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -367,7 +367,7 @@ JD-TC-AddSubServicesToAppt-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1014,7 +1014,7 @@ JD-TC-AddSubServicesToAppt-5
 
     [Documentation]  Create a sub service and add that sub service to multiple appointments(walkin).
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1093,7 +1093,7 @@ JD-TC-AddSubServicesToAppt-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1201,7 +1201,7 @@ JD-TC-AddSubServicesToAppt-6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1833,7 +1833,7 @@ JD-TC-AddSubServicesToAppt-9
 
     [Documentation]  created a sub-service with a specified amount, adding the sub-service to the appointment with a different service amount.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1883,7 +1883,7 @@ JD-TC-AddSubServicesToAppt-10
 
     [Documentation]  add a subservice that conflicts with an existing one.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2489,7 +2489,7 @@ JD-TC-AddSubServicesToAppt-UH3
 
     [Documentation]  add an inactive subservice to an appointment
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2544,7 +2544,7 @@ JD-TC-AddSubServicesToAppt-UH4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2560,7 +2560,7 @@ JD-TC-AddSubServicesToAppt-UH5
 
     [Documentation]  add a service to an appointment using sub service url.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2579,7 +2579,7 @@ JD-TC-AddSubServicesToAppt-UH6
 
     [Documentation]  add a subservice to an appointment without service id.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2597,7 +2597,7 @@ JD-TC-AddSubServicesToAppt-UH7
 
     [Documentation]  add subservice to an inactive appointment.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2617,7 +2617,7 @@ JD-TC-AddSubServicesToAppt-UH8
 
     [Documentation]  add subservice to an invalid appointment id.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2658,7 +2658,7 @@ JD-TC-AddSubServicesToAppt-UH9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2674,7 +2674,7 @@ JD-TC-AddSubServicesToAppt-UH10
 
     [Documentation]  add subservice to an inactive user.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
