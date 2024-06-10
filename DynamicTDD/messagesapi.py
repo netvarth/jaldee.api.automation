@@ -2381,3 +2381,15 @@ CAN_NOT_ACCEPT_PAYMENT="Cannot accept payment since the due amount is zero, and 
 
 GREATER_THAN_THE_BILL="Cannot accept payment since amount will be greater than the bill, since you have already paid some amount"
 NOTES_CANNOT_BE_EMPTY="Notes cannot be empty"
+
+#   Comm Template
+
+VARIABLE_NAME = "Please enter variable name"
+VARIABLE_SHOULD_BE_NOT_NULL = "Variable data should be provided"
+VARIABLE_NOT_FOUND = "Variable does not exist"
+VARIABLE_NAME_EXISTS = "Variable name already exists"
+VARIABLE_DISPLAY_NAME_EXISTS = "Variable display name already exists"
+VARIABLE_DISPLAY_NAME = "Please enter variable display name"
+VARIABLE_VALUE = "Please enter the value"
+VARIABLE_TYPE = "Please enter the value type of variable"
+VARIABLE_STATUS = "Variable is already '{}'"
