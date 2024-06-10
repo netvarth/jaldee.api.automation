@@ -412,7 +412,7 @@ JD-TC-Get SalesOrder Catalog List-UH4
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings   ${resp.json()}   []
 
-JD-TC-Get SalesOrder Catalog List-UH5
+JD-TC-Get SalesOrder Catalog List-8
 
     [Documentation]  Get SalesOrder Catalog List using inventory manager is on and with invcatalog encid
 
@@ -423,7 +423,23 @@ JD-TC-Get SalesOrder Catalog List-UH5
     ${resp}=  Get SalesOrder Catalog List    invCatEncId-eq=${inv_cat_encid}   invMgmt-eq=${bool[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings   ${resp.json()}   []
+    Should Be Equal As Strings    ${resp.json()[0]['accountId']}    ${accountId}  
+    Should Be Equal As Strings    ${resp.json()[0]['encId']}   ${sa_catlog_id4}
+    Should Be Equal As Strings    ${resp.json()[0]['location']['id']}    ${locId1}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['name']}    ${Name2}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['encId']}    ${store_id1}
+    # Should Be Equal As Strings    ${resp.json()[0]['name']}    ${invalidstring}    
+    Should Be Equal As Strings    ${resp.json()[0]['status']}     ${toggle[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['invMgmt']}     ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['onlineSelfOrder']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['walkInOrder']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['extPartnerOrder']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['intPartnerOrder']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['allowNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['allowNegativeTrueAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['allowFutureNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['allowtrueFutureNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['inventoryCatalog']['invCatEncIdList'][0]}    ${inv_cat_encid}
 
 
 

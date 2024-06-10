@@ -18,12 +18,8 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
-${invalidNum}        1245
-${invalidEma}        asd122
-${invalidstring}     _ad$.sa_
-@{spItemSource}      RX       Ayur
+
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
-${pngfile}      /ebs/TDD/upload.png
 ${fileSize}     0.00458
 ${order}        0
 

@@ -200,17 +200,54 @@ JD-TC-Get Sales Order Catalog Items By EncId-2
 
     ${taxes}=    Random Int  min=2   max=40
     ${tax}=          Create List    ${taxes}
+
     ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${SO_Cata_Encid}     ${itemEncId2}     ${price}    TaxInclude=${boolean[1]}    taxes=${tax}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${INVALID_TAXID}
+
+    # ..... Create Tax ......
+
+    ${taxName}=    FakerLibrary.name
+    ${taxPercentage}=     Random Int  min=0  max=200
+    ${taxPercentage}=           Convert To Number  ${taxPercentage}  1
+    ${cgst}=     Evaluate   ${taxPercentage} / 2
+    ${sgst}=     Evaluate   ${taxPercentage} / 2
+    Set Suite Variable      ${taxName}
+    Set Suite Variable      ${taxPercentage}
+    Set Suite Variable      ${cgst}
+    Set Suite Variable      ${sgst}
+
+
+    ${resp}=    Create Item Tax  ${taxName}  ${taxtypeenum[0]}  ${taxPercentage}  ${cgst}  ${sgst}  0
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${itemtax_id}  ${resp.json()}
+
+
+
+
+    ${resp}=    Get Item Tax by id  ${itemtax_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.json()['taxName']}         ${taxName}
+    Should Be Equal As Strings    ${resp.json()['status']}          ${toggle[0]}
+    Should Be Equal As Strings    ${resp.json()['taxTypeEnum']}     ${taxtypeenum[0]}
+    Should Be Equal As Strings    ${resp.json()['taxCode']}         ${itemtax_id}
+    Set Suite Variable              ${itemtax_id1}           ${resp.json()['id']}
+
+    ${tax1}=     Create List  ${itemtax_id1}
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${SO_Cata_Encid}     ${itemEncId2}     ${price}    TaxInclude=${boolean[1]}    taxes=${tax1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_itemEncIds1}  ${resp.json()[0]}
+
 
     ${resp}=  Get SalesOrder Catalog Item By Encid     ${SO_itemEncIds1}      
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['accountId']}    ${accountId}
     Should Be Equal As Strings    ${resp.json()['price']}    ${price}
-    Should Be Equal As Strings    ${resp.json()['taxInclude']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['taxInclude']}    ${bool[1]}
     Should Be Equal As Strings    ${resp.json()['batchPricing']}    ${bool[1]}
     Should Be Equal As Strings    ${resp.json()['allowNegativeAvial']}    ${bool[0]}
     Should Be Equal As Strings    ${resp.json()['allowNegativeTrueAvial']}    ${bool[0]}
@@ -224,7 +261,7 @@ JD-TC-Get Sales Order Catalog Items By EncId-2
     Should Be Equal As Strings    ${resp.json()['catalog']['invMgmt']}    ${bool[0]}
     Should Be Equal As Strings    ${resp.json()['spItem']['encId']}    ${itemEncId2}
     Should Be Equal As Strings    ${resp.json()['spItem']['name']}    ${displayName1}
-    Should Be Equal As Strings    ${resp.json()['taxes'][0]}    ${taxes}
+    Should Be Equal As Strings    ${resp.json()['taxes'][0]}    ${itemtax_id1}
     Should Be Equal As Strings    ${resp.json()['taxInclude']}    ${bool[1]}
 
 JD-TC-Get Sales Order Catalog Items By EncId-3
@@ -239,8 +276,17 @@ JD-TC-Get Sales Order Catalog Items By EncId-3
 
     ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name}  ${boolean[1]}  ${inv_cat_encid1}
     Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${ORDER_CATALOG_EXIST_WITH_SAME_NAME}
+
+    ${Name1}=    FakerLibrary.last name
+    Set Suite Variable  ${Name1}
+
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name1}  ${boolean[1]}  ${inv_cat_encid1}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_Cata_Encid1}  ${resp.json()}
+
 
     ${displayName2}=     FakerLibrary.name
     Set Suite Variable  ${displayName2}
@@ -270,9 +316,9 @@ JD-TC-Get Sales Order Catalog Items By EncId-3
     Should Be Equal As Strings    ${resp.json()['allowtrueFutureNegativeAvial']}    ${bool[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${SO_itemEncIds3}
     Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[0]}
-    Should Be Equal As Strings    ${resp.json()['invMgmt']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['invMgmt']}    ${bool[1]}
     Should Be Equal As Strings    ${resp.json()['catalog']['encId']}    ${SO_Cata_Encid1}
-    Should Be Equal As Strings    ${resp.json()['catalog']['name']}    ${Name}
+    Should Be Equal As Strings    ${resp.json()['catalog']['name']}    ${Name1}
     Should Be Equal As Strings    ${resp.json()['catalog']['invMgmt']}    ${bool[0]}
     Should Be Equal As Strings    ${resp.json()['spItem']['encId']}    ${itemEncId1}
     Should Be Equal As Strings    ${resp.json()['spItem']['name']}    ${displayName}
@@ -291,7 +337,7 @@ JD-TC-Get Sales Order Catalog Items By EncId-4
     ${resp}=  Create Inventory Catalog   ${Name1}  ${store_id}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${Inv_cat_id}  ${resp.json()}
+    Set Test Variable  ${Inv_cat_id}  ${resp.json()}
     
     ${resp}=  Get Inventory Catalog By EncId   ${Inv_cat_id}  
     Log   ${resp.content}
@@ -302,12 +348,26 @@ JD-TC-Get Sales Order Catalog Items By EncId-4
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${Inv_Cata_Item_Encid1}  ${resp.json()[0]}
 
+    ${Name2}=    FakerLibrary.last name
+    Set Suite Variable  ${Name2}
+    ${inv_cat_encid1}=  Create List  ${Inv_cat_id}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name2}  ${boolean[1]}  ${inv_cat_encid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${SO_Cata_Encid2}  ${resp.json()}
+
     ${price}=    Random Int  min=2   max=40
     ${price}=   Convert To Number  ${price}  1
     ${taxes}=    Random Int  min=2   max=40
     ${tax}=          Create List    ${taxes}
 
     ${resp}=  Create SalesOrder Catalog Item-invMgmt True      ${SO_Cata_Encid1}    ${boolean[1]}     ${Inv_Cata_Item_Encid1}     ${price}    ${boolean[1]}    TaxInclude=${boolean[1]}    taxes=${tax}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${NOT_CONNECTED_TO_ORDER_CATALOG}
+
+    ${tax1}=     Create List  ${itemtax_id1}
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt True      ${SO_Cata_Encid2}    ${boolean[1]}     ${Inv_Cata_Item_Encid1}     ${price}    ${boolean[1]}    TaxInclude=${boolean[1]}    taxes=${tax1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_itemEncIds4}  ${resp.json()[0]}
@@ -317,7 +377,7 @@ JD-TC-Get Sales Order Catalog Items By EncId-4
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['accountId']}    ${accountId}
     Should Be Equal As Strings    ${resp.json()['price']}    ${price}
-    Should Be Equal As Strings    ${resp.json()['taxInclude']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['taxInclude']}    ${bool[1]}
     Should Be Equal As Strings    ${resp.json()['batchPricing']}    ${bool[1]}
     Should Be Equal As Strings    ${resp.json()['allowNegativeAvial']}    ${bool[0]}
     Should Be Equal As Strings    ${resp.json()['allowNegativeTrueAvial']}    ${bool[0]}
@@ -325,10 +385,10 @@ JD-TC-Get Sales Order Catalog Items By EncId-4
     Should Be Equal As Strings    ${resp.json()['allowtrueFutureNegativeAvial']}    ${bool[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${SO_itemEncIds4}
     Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[0]}
-    Should Be Equal As Strings    ${resp.json()['invMgmt']}    ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()['catalog']['encId']}    ${SO_Cata_Encid1}
-    Should Be Equal As Strings    ${resp.json()['catalog']['name']}    ${Name}
-    Should Be Equal As Strings    ${resp.json()['catalog']['invMgmt']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['invMgmt']}    ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()['catalog']['encId']}    ${SO_Cata_Encid2}
+    Should Be Equal As Strings    ${resp.json()['catalog']['name']}    ${Name2}
+    Should Be Equal As Strings    ${resp.json()['catalog']['invMgmt']}    ${bool[1]}
     Should Be Equal As Strings    ${resp.json()['spItem']['encId']}    ${itemEncId3}
     Should Be Equal As Strings    ${resp.json()['spItem']['name']}    ${displayName2}
     Should Be Equal As Strings    ${resp.json()['invCatItem']['encId']}    ${Inv_Cata_Item_Encid1}

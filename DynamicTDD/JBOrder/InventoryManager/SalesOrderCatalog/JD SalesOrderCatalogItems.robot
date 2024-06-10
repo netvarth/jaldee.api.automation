@@ -184,15 +184,45 @@ JD-TC-Sales Order Catalog Items-2
 
     ${price}=    Random Int  min=2   max=40
 
-    ${taxes}=    Random Int  min=2   max=40
-    ${tax}=          Create List    ${taxes}
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${SO_Cata_Encid}     ${itemEncId2}     ${price}    TaxInclude=${boolean[1]}    taxes=${tax}
+
+
+    # ..... Create Tax ......
+
+    ${taxName}=    FakerLibrary.name
+    ${taxPercentage}=     Random Int  min=0  max=200
+    ${taxPercentage}=           Convert To Number  ${taxPercentage}  1
+    ${cgst}=     Evaluate   ${taxPercentage} / 2
+    ${sgst}=     Evaluate   ${taxPercentage} / 2
+    Set Suite Variable      ${taxName}
+    Set Suite Variable      ${taxPercentage}
+    Set Suite Variable      ${cgst}
+    Set Suite Variable      ${sgst}
+
+
+    ${resp}=    Create Item Tax  ${taxName}  ${taxtypeenum[0]}  ${taxPercentage}  ${cgst}  ${sgst}  0
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${itemtax_id}  ${resp.json()}
+
+
+
+
+    ${resp}=    Get Item Tax by id  ${itemtax_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.json()['taxName']}         ${taxName}
+    Should Be Equal As Strings    ${resp.json()['status']}          ${toggle[0]}
+    Should Be Equal As Strings    ${resp.json()['taxTypeEnum']}     ${taxtypeenum[0]}
+    Should Be Equal As Strings    ${resp.json()['taxCode']}         ${itemtax_id}
+    Set Suite Variable              ${itemtax_id1}           ${resp.json()['id']}
+
+    ${tax1}=     Create List  ${itemtax_id1}
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${SO_Cata_Encid}     ${itemEncId2}     ${price}    TaxInclude=${boolean[1]}    taxes=${tax1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-Sales Order Catalog Items-3
 
-    [Documentation]   create multiple items with same details but price is differnt.
+    [Documentation]   create multiple items with same details but price is different.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}

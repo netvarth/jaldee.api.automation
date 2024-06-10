@@ -2338,6 +2338,8 @@ ALREADY_CANCELLED="Already in Cancelled"
 LOCATION_INVALID="Invalid Location"
 CAN_NOT_UPDATE_ORDER_IS_CONFIRMED="Can't update because this order is in Order Confirmed status"
 RECORD_ALREADY_UPDATED="Record status is already Updated"
+ORDER_CATALOG_EXIST_WITH_SAME_NAME="Order Catalog exists with given name in this store"
+INVALID_TAXID="Invalid Tax Id"
 # Vendor
 INVALID_NAME="Invalid Name"
 CATEGORY_EXIST="Category exists with given name"
