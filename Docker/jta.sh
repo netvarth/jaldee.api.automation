@@ -335,7 +335,7 @@ setContainerCount()
 setSuite()
 {
     suitePath="${suitePath%/}"
-    suite=$(echo ${suitePath#$defaultInputPath/})
+    suite="${suitePath#$defaultSuitePath}"
     suitebase="$(cut -d'/' -f 1 <<< ${suite})"
     # echo "suitebase= $suitebase"
 }
