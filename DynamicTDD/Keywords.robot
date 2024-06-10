@@ -238,6 +238,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{ivr_status}                       connected  missed 	voicemail  success 	transferred  inCall  callCompleted
 @{ivr_category}                     MONTHLY  WEEKLY  DATE_RANGE
 @{dentalState}                      TEMPORARY  PERMANENT  MIXED
+@{CategoryName}                     Booking
 @{categoryType}                     Vendor  Expense  PaymentsInOut  Invoice
 @{MembershipApprovalType}           Manual  Automatic
 @{MembershipServiceStatus}          Enabled  Disabled
