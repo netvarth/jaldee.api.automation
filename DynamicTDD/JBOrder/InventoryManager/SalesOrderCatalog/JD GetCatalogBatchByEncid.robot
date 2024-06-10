@@ -459,7 +459,11 @@ JD-TC-Get Catalog Batch by Encid-1
     ${sgstamount}=      Evaluate    ${taxableAmount} * ${sgst} / 100
     ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
     ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
-    ${netRate}=  roundoff  ${netRate}
+    ${netRate}=  roundoff  ${netRate}  
+    ${cgstamount}=  roundoff  ${cgstamount}  
+    ${sgstamount}=  roundoff  ${sgstamount}  
+    ${taxAmount}=  roundoff  ${taxAmount}  
+
     Set Suite Variable              ${totalQuantity}
     Set Suite Variable              ${netTotal}
     Set Suite Variable              ${discountAmount}
@@ -668,8 +672,11 @@ JD-TC-Get Catalog Batch by Encid-2
     ${sgstamount}=      Evaluate    ${taxableAmount} * ${sgst} / 100
     ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
     ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
-    ${netRate}=  roundoff  ${netRate}
-    ${cgstamount}=  roundoff  ${cgstamount}
+    ${netRate}=  roundoff  ${netRate}  
+    ${cgstamount}=  roundoff  ${cgstamount}  
+    ${sgstamount}=  roundoff  ${sgstamount}  
+    ${taxAmount}=  roundoff  ${taxAmount}  
+
 
 
     ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}

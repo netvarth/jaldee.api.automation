@@ -783,6 +783,9 @@ JD-TC-Create Catalog Item Batch-1
     ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
     ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
     ${netRate}=  roundoff  ${netRate}  
+    ${cgstamount}=  roundoff  ${cgstamount}  
+    ${sgstamount}=  roundoff  ${sgstamount}  
+    ${taxAmount}=  roundoff  ${taxAmount}  
     Set Suite Variable              ${totalQuantity}
     Set Suite Variable              ${netTotal}
     Set Suite Variable              ${discountAmount}
@@ -981,6 +984,9 @@ JD-TC-Create Catalog Item Batch-2
     ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
     ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
     ${netRate}=  roundoff  ${netRate}  
+    ${cgstamount}=  roundoff  ${cgstamount}  
+    ${sgstamount}=  roundoff  ${sgstamount}  
+    ${taxAmount}=  roundoff  ${taxAmount}  
 
 
     ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}
