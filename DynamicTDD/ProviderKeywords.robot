@@ -15448,7 +15448,7 @@ Get Inventory Auditlog By Uid
     ${resp}=    GET On Session     ynw   /provider/inventory/${uid}   params=${kwargs}  expected_status=any
     RETURN  ${resp}
 
-Get Inventory Auditlog By Uid
+Get Inventory Auditlog By id
     [Arguments]   ${id}     &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/inventory/id/${id}   params=${kwargs}  expected_status=any
