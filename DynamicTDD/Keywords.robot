@@ -280,6 +280,9 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{VariableValueType}                String  Number  Decimal  Date  Link  File
 @{VariableStatus}                   Enabled  Disabled
 @{VariableContext}                  Signup  Appointment  Token  Order  Donation  Payment  All
+@{InventoryAuditType}               PURCHASE        STOCK_ADJUST        INV_CATALOG        REMARK
+@{InventoryAuditContext}            PURCHASE        INVENTORY        ITEM        CATALOG
+@{InventoryAuditLogAction}          ADD             UPDATE             REMOVE             UPDATE_STATUS
 
 *** Keywords ***
 Login
