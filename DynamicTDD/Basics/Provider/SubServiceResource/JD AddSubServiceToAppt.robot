@@ -303,7 +303,6 @@ JD-TC-AddSubServicesToAppt-1
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['serviceCategory']}  ${serviceCategory[0]}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['assigneeUsers']}    ${empty_list}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['teamIds']}          ${empty_list}
-   
 
 JD-TC-AddSubServicesToAppt-2
 
