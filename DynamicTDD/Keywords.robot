@@ -276,6 +276,9 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{New_status}                       Proceed     Unassign    Block     Delete    Remove
 @{deliveryType}                     STORE_PICKUP        HOME_DELIVERY
 @{spItemSource}                     RX       Ayur
+@{VariableValueType}                String  Number  Decimal  Date  Link  File
+@{VariableStatus}                   Enabled  Disabled
+@{Context}                          Signup  Appointment  Token  Order  Donation  Payment  All
 
 *** Keywords ***
 Login
