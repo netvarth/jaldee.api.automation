@@ -15454,6 +15454,23 @@ Get Inventory Auditlog By id
     ${resp}=    GET On Session     ynw   /provider/inventory/id/${id}   params=${kwargs}  expected_status=any
     RETURN  ${resp}
 
+
+Create Finance Invoice
+
+    [Arguments]    ${invoiceCategoryId}   ${invoiceDate}    ${invoiceId}   ${providerConsumerIdList}   &{kwargs}
+
+    ${data}=  Create Dictionary  invoiceCategoryId=${invoiceCategoryId}   invoiceDate=${invoiceDate}  invoiceId=${invoiceId}  providerConsumerIdList=${providerConsumerIdList}  
+
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    log  ${data}
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw    /provider/jp/finance/invoice    data=${data}  expected_status=any    headers=${headers}
+    RETURN  ${resp}
+
+
 #................Comm Template...............
 
 
