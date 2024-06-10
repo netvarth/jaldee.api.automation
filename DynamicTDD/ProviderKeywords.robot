@@ -15023,17 +15023,6 @@ Share SO Invoice
     ${resp}=  PUT On Session  ynw  /provider/so/invoice/${invoiceUid}/share   data=${data}  expected_status=any
     RETURN  ${resp} 
 
-SO Payment Via Link
-
-    [Arguments]       ${uuid}    ${amount}   ${purpose}    ${accountId}   ${paymentMode}    ${isInternational}     &{kwargs}
-    ${data}=   Create Dictionary   uuid=${uuid}    amount=${amount}   purpose=${purpose}     accountId=${accountId}   paymentMode=${paymentMode}    isInternational=${isInternational} 
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /consumer/so/pay   data=${data}  expected_status=any
-    RETURN  ${resp} 
 
 Get invoice filter
     [Arguments]  &{param}    

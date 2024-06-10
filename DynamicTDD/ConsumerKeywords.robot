@@ -3632,3 +3632,16 @@ Consumer Get Sales Order Invoice By Id
     Check And Create YNW Session
     ${resp}=    GET On Session    synw   /consumer/so/invoice/${accountId}/${SO_Inv}  expected_status=any
     RETURN  ${resp}
+
+
+SO Payment Via Link
+
+    [Arguments]       ${uuid}    ${amount}   ${purpose}    ${accountId}   ${paymentMode}    ${isInternational}     &{kwargs}
+    ${data}=   Create Dictionary   uuid=${uuid}    amount=${amount}   purpose=${purpose}     accountId=${accountId}   paymentMode=${paymentMode}    isInternational=${isInternational} 
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /consumer/so/pay   data=${data}  expected_status=any
+    RETURN  ${resp} 
