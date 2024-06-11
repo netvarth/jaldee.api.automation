@@ -19,6 +19,13 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
+*** Variables ***
+
+${jpgfile}      /ebs/TDD/uploadimage.jpg
+${pngfile}      /ebs/TDD/upload.png
+${fileSize}     0.00458
+${order}        0
+
 *** Test Cases ***
 
 JD-TC-GetInvAuditlogByFilter-1
@@ -63,6 +70,12 @@ JD-TC-GetInvAuditlogByFilter-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable      ${pid}          ${decrypted_data['id']}
+    Set Suite Variable      ${pdrname}      ${decrypted_data['userName']}
+
     ${accountId}=  get_acc_id  ${PUSERNAME20}
     Set Suite Variable    ${accountId}
 
@@ -495,3 +508,715 @@ JD-TC-GetInvAuditlogByFilter-17
     Should Be Equal As Strings  ${resp.json()[0]['subject']}    Inventory Catalog updated
     Should Be Equal As Strings  ${resp.json()[0]['description']}    Inventory Catalog updated ${Catalog_Name2}
     Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
+
+JD-TC-GetInvAuditlogByFilter-18
+
+    [Documentation]   Updated Inventory catalog status then verifing with accound Filter
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Date Time by Timezone  ${tz}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable      ${datetime1}    ${resp.json()}   
+    ${datetime01}    Convert Date    ${datetime1}    result_format=%Y-%m-%d %H:%M
+    Set Suite Variable      ${datetime01}
+
+    ${resp}=  Update Inventory Catalog status   ${encid}  ${InventoryCatalogStatus[1]}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Get Inventory Auditlog By Filter    account-eq=${accountId}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}             200
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[0]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditLogAction']}       ${InventoryAuditLogAction[3]} 
+    Should Be Equal As Strings  ${resp.json()[0]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['subject']}    Inventory Catalog status updated
+    Should Be Equal As Strings  ${resp.json()[0]['description']}    Inventory Catalog ${Catalog_Name2} status updated to ${InventoryCatalogStatus[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
+
+    Should Be Equal As Strings  ${resp.json()[1]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[1]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[1]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[1]['auditLogAction']}       ${InventoryAuditLogAction[1]} 
+    Should Be Equal As Strings  ${resp.json()[1]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[1]['subject']}    Inventory Catalog updated
+    Should Be Equal As Strings  ${resp.json()[1]['description']}    Inventory Catalog updated ${Catalog_Name2}
+    Should Be Equal As Strings  ${resp.json()[1]['userId']}   ${user_id}
+
+    Should Be Equal As Strings  ${resp.json()[2]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[2]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[2]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[2]['auditLogAction']}       ${InventoryAuditLogAction[0]} 
+    Should Be Equal As Strings  ${resp.json()[2]['subject']}    Inventory Catalog Created
+    Should Be Equal As Strings  ${resp.json()[2]['description']}    Inventory Catalog Created ${Catalog_Name}
+    Should Be Equal As Strings  ${resp.json()[2]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[2]['userId']}   ${user_id}
+
+JD-TC-GetInvAuditlogByFilter-19
+
+    [Documentation]   Updated Inventory catalog status to activa then verifing with uid Filter
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update Inventory Catalog status   ${encid}  ${InventoryCatalogStatus[0]}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Get Inventory Auditlog By Filter    uid-eq=${encid}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}             200
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[0]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditLogAction']}       ${InventoryAuditLogAction[3]} 
+    Should Be Equal As Strings  ${resp.json()[0]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['subject']}    Inventory Catalog status updated
+    Should Be Equal As Strings  ${resp.json()[0]['description']}    Inventory Catalog ${Catalog_Name2} status updated to ${InventoryCatalogStatus[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
+
+    Should Be Equal As Strings  ${resp.json()[1]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[1]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[1]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[1]['auditLogAction']}       ${InventoryAuditLogAction[3]} 
+    Should Be Equal As Strings  ${resp.json()[1]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[1]['subject']}    Inventory Catalog status updated
+    Should Be Equal As Strings  ${resp.json()[1]['description']}    Inventory Catalog ${Catalog_Name2} status updated to ${InventoryCatalogStatus[1]}
+    Should Be Equal As Strings  ${resp.json()[1]['userId']}   ${user_id}
+
+    Should Be Equal As Strings  ${resp.json()[2]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[2]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[2]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[2]['auditLogAction']}       ${InventoryAuditLogAction[1]} 
+    Should Be Equal As Strings  ${resp.json()[2]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[2]['subject']}    Inventory Catalog updated
+    Should Be Equal As Strings  ${resp.json()[2]['description']}    Inventory Catalog updated ${Catalog_Name2}
+    Should Be Equal As Strings  ${resp.json()[2]['userId']}   ${user_id}
+
+    Should Be Equal As Strings  ${resp.json()[3]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[3]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[3]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[3]['auditLogAction']}       ${InventoryAuditLogAction[0]} 
+    Should Be Equal As Strings  ${resp.json()[3]['subject']}    Inventory Catalog Created
+    Should Be Equal As Strings  ${resp.json()[3]['description']}    Inventory Catalog Created ${Catalog_Name}
+    Should Be Equal As Strings  ${resp.json()[3]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[3]['userId']}   ${user_id}
+
+JD-TC-GetInvAuditlogByFilter-20
+
+    [Documentation]   Updated Inventory catalog status then verifing with auditType Filter
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Get Inventory Auditlog By Filter    auditType-eq=${InventoryAuditType[2]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}             200
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[0]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditLogAction']}       ${InventoryAuditLogAction[3]} 
+    Should Be Equal As Strings  ${resp.json()[0]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['subject']}    Inventory Catalog status updated
+    Should Be Equal As Strings  ${resp.json()[0]['description']}    Inventory Catalog ${Catalog_Name2} status updated to ${InventoryCatalogStatus[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
+
+    Should Be Equal As Strings  ${resp.json()[1]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[1]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[1]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[1]['auditLogAction']}       ${InventoryAuditLogAction[3]} 
+    Should Be Equal As Strings  ${resp.json()[1]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[1]['subject']}    Inventory Catalog status updated
+    Should Be Equal As Strings  ${resp.json()[1]['description']}    Inventory Catalog ${Catalog_Name2} status updated to ${InventoryCatalogStatus[1]}
+    Should Be Equal As Strings  ${resp.json()[1]['userId']}   ${user_id}
+
+    Should Be Equal As Strings  ${resp.json()[2]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[2]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[2]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[2]['auditLogAction']}       ${InventoryAuditLogAction[1]} 
+    Should Be Equal As Strings  ${resp.json()[2]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[2]['subject']}    Inventory Catalog updated
+    Should Be Equal As Strings  ${resp.json()[2]['description']}    Inventory Catalog updated ${Catalog_Name2}
+    Should Be Equal As Strings  ${resp.json()[2]['userId']}   ${user_id}
+
+    Should Be Equal As Strings  ${resp.json()[3]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[3]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[3]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[3]['auditLogAction']}       ${InventoryAuditLogAction[0]} 
+    Should Be Equal As Strings  ${resp.json()[3]['subject']}    Inventory Catalog Created
+    Should Be Equal As Strings  ${resp.json()[3]['description']}    Inventory Catalog Created ${Catalog_Name}
+    Should Be Equal As Strings  ${resp.json()[3]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[3]['userId']}   ${user_id}
+
+JD-TC-GetInvAuditlogByFilter-21
+
+    [Documentation]   Updated Inventory catalog status then verifing with auditContext Filter
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Get Inventory Auditlog By Filter    auditContext-eq=${InventoryAuditContext[3]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}             200
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[0]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditLogAction']}       ${InventoryAuditLogAction[3]} 
+    Should Be Equal As Strings  ${resp.json()[0]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['subject']}    Inventory Catalog status updated
+    Should Be Equal As Strings  ${resp.json()[0]['description']}    Inventory Catalog ${Catalog_Name2} status updated to ${InventoryCatalogStatus[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
+
+    Should Be Equal As Strings  ${resp.json()[1]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[1]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[1]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[1]['auditLogAction']}       ${InventoryAuditLogAction[3]} 
+    Should Be Equal As Strings  ${resp.json()[1]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[1]['subject']}    Inventory Catalog status updated
+    Should Be Equal As Strings  ${resp.json()[1]['description']}    Inventory Catalog ${Catalog_Name2} status updated to ${InventoryCatalogStatus[1]}
+    Should Be Equal As Strings  ${resp.json()[1]['userId']}   ${user_id}
+
+    Should Be Equal As Strings  ${resp.json()[2]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[2]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[2]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[2]['auditLogAction']}       ${InventoryAuditLogAction[1]} 
+    Should Be Equal As Strings  ${resp.json()[2]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[2]['subject']}    Inventory Catalog updated
+    Should Be Equal As Strings  ${resp.json()[2]['description']}    Inventory Catalog updated ${Catalog_Name2}
+    Should Be Equal As Strings  ${resp.json()[2]['userId']}   ${user_id}
+
+    Should Be Equal As Strings  ${resp.json()[3]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[3]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[3]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[3]['auditLogAction']}       ${InventoryAuditLogAction[0]} 
+    Should Be Equal As Strings  ${resp.json()[3]['subject']}    Inventory Catalog Created
+    Should Be Equal As Strings  ${resp.json()[3]['description']}    Inventory Catalog Created ${Catalog_Name}
+    Should Be Equal As Strings  ${resp.json()[3]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[3]['userId']}   ${user_id}
+
+JD-TC-GetInvAuditlogByFilter-22
+
+    [Documentation]   Updated Inventory catalog status then verifing with auditLogAction Filter
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Get Inventory Auditlog By Filter    auditLogAction-eq=${InventoryAuditLogAction[3]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}             200
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[0]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditLogAction']}       ${InventoryAuditLogAction[3]} 
+    Should Be Equal As Strings  ${resp.json()[0]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['subject']}    Inventory Catalog status updated
+    Should Be Equal As Strings  ${resp.json()[0]['description']}    Inventory Catalog ${Catalog_Name2} status updated to ${InventoryCatalogStatus[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
+
+    Should Be Equal As Strings  ${resp.json()[1]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[1]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[1]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[1]['auditLogAction']}       ${InventoryAuditLogAction[3]} 
+    Should Be Equal As Strings  ${resp.json()[1]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[1]['subject']}    Inventory Catalog status updated
+    Should Be Equal As Strings  ${resp.json()[1]['description']}    Inventory Catalog ${Catalog_Name2} status updated to ${InventoryCatalogStatus[1]}
+    Should Be Equal As Strings  ${resp.json()[1]['userId']}   ${user_id}
+
+JD-TC-GetInvAuditlogByFilter-23
+
+    [Documentation]   Updated Inventory catalog status then verifing with userType Filter
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Get Inventory Auditlog By Filter    userType-eq=${userType[0]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}             200
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[0]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditLogAction']}       ${InventoryAuditLogAction[3]} 
+    Should Be Equal As Strings  ${resp.json()[0]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['subject']}    Inventory Catalog status updated
+    Should Be Equal As Strings  ${resp.json()[0]['description']}    Inventory Catalog ${Catalog_Name2} status updated to ${InventoryCatalogStatus[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
+
+    Should Be Equal As Strings  ${resp.json()[1]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[1]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[1]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[1]['auditLogAction']}       ${InventoryAuditLogAction[3]} 
+    Should Be Equal As Strings  ${resp.json()[1]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[1]['subject']}    Inventory Catalog status updated
+    Should Be Equal As Strings  ${resp.json()[1]['description']}    Inventory Catalog ${Catalog_Name2} status updated to ${InventoryCatalogStatus[1]}
+    Should Be Equal As Strings  ${resp.json()[1]['userId']}   ${user_id}
+
+    Should Be Equal As Strings  ${resp.json()[2]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[2]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[2]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[2]['auditLogAction']}       ${InventoryAuditLogAction[1]} 
+    Should Be Equal As Strings  ${resp.json()[2]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[2]['subject']}    Inventory Catalog updated
+    Should Be Equal As Strings  ${resp.json()[2]['description']}    Inventory Catalog updated ${Catalog_Name2}
+    Should Be Equal As Strings  ${resp.json()[2]['userId']}   ${user_id}
+
+    Should Be Equal As Strings  ${resp.json()[3]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[3]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[3]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[3]['auditLogAction']}       ${InventoryAuditLogAction[0]} 
+    Should Be Equal As Strings  ${resp.json()[3]['subject']}    Inventory Catalog Created
+    Should Be Equal As Strings  ${resp.json()[3]['description']}    Inventory Catalog Created ${Catalog_Name}
+    Should Be Equal As Strings  ${resp.json()[3]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[3]['userId']}   ${user_id}
+
+JD-TC-GetInvAuditlogByFilter-24
+
+    [Documentation]   Updated Inventory catalog status then verifing with userId Filter
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Get Inventory Auditlog By Filter    userId-eq=${user_id}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}             200
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[0]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditLogAction']}       ${InventoryAuditLogAction[3]} 
+    Should Be Equal As Strings  ${resp.json()[0]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['subject']}    Inventory Catalog status updated
+    Should Be Equal As Strings  ${resp.json()[0]['description']}    Inventory Catalog ${Catalog_Name2} status updated to ${InventoryCatalogStatus[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
+
+    Should Be Equal As Strings  ${resp.json()[1]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[1]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[1]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[1]['auditLogAction']}       ${InventoryAuditLogAction[3]} 
+    Should Be Equal As Strings  ${resp.json()[1]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[1]['subject']}    Inventory Catalog status updated
+    Should Be Equal As Strings  ${resp.json()[1]['description']}    Inventory Catalog ${Catalog_Name2} status updated to ${InventoryCatalogStatus[1]}
+    Should Be Equal As Strings  ${resp.json()[1]['userId']}   ${user_id}
+
+    Should Be Equal As Strings  ${resp.json()[2]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[2]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[2]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[2]['auditLogAction']}       ${InventoryAuditLogAction[1]} 
+    Should Be Equal As Strings  ${resp.json()[2]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[2]['subject']}    Inventory Catalog updated
+    Should Be Equal As Strings  ${resp.json()[2]['description']}    Inventory Catalog updated ${Catalog_Name2}
+    Should Be Equal As Strings  ${resp.json()[2]['userId']}   ${user_id}
+
+    Should Be Equal As Strings  ${resp.json()[3]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[3]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[3]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[3]['auditLogAction']}       ${InventoryAuditLogAction[0]} 
+    Should Be Equal As Strings  ${resp.json()[3]['subject']}    Inventory Catalog Created
+    Should Be Equal As Strings  ${resp.json()[3]['description']}    Inventory Catalog Created ${Catalog_Name}
+    Should Be Equal As Strings  ${resp.json()[3]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[3]['userId']}   ${user_id}
+
+JD-TC-GetInvAuditlogByFilter-25
+
+    [Documentation]   Updated Inventory catalog status then verifing with dateTime Filter
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+
+    ${resp}=   Get Inventory Auditlog By Filter    dateTime-eq=${DAY1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}             200
+
+JD-TC-GetInvAuditlogByFilter-25
+
+    [Documentation]   Provider do the purchase then verifing with account Filter
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    # ............... Create Vendor ...............
+
+    ${resp}=  Populate Url For Vendor   ${account_id}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${name}=   FakerLibrary.word
+    ${resp}=  CreateVendorCategory  ${name}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${category_id1}   ${resp.json()}
+
+    ${resp}=  Get by encId  ${category_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
+    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id}
+    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+
+    ${vender_name}=   FakerLibrary.firstname
+    ${contactPersonName}=   FakerLibrary.lastname
+    ${vendorId}=   FakerLibrary.word
+    ${PO_Number}    Generate random string    5    123456789
+    ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
+    Set Test Variable  ${email}  ${vender_name}.${test_mail}
+    ${address}=  FakerLibrary.city
+    Set Suite Variable  ${address}
+    ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
+    ${branch}=   db.get_place
+    ${ifsc_code}=   db.Generate_ifsc_code
+    ${gst_num}  ${pan_num}=   db.Generate_gst_number   ${Container_id}
+    ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
+
+    ${state}=    Evaluate     "${state}".title()
+    ${state}=    String.RemoveString  ${state}    ${SPACE}
+    Set Suite Variable    ${state}
+    Set Suite Variable    ${district}
+    Set Suite Variable    ${pin}
+    ${vendor_phno}=   Create List  ${vendor_phno}
+    Set Suite Variable    ${vendor_phno}
+    
+    ${email}=   Create List  ${email}
+    Set Suite Variable    ${email}
+
+    ${bankIfsc}    Random Number 	digits=5 
+    ${bankIfsc}=    Evaluate    f'{${bankIfsc}:0>7d}'
+    Log  ${bankIfsc}
+    Set Suite Variable  ${bankIfsc}  55555${bankIfsc} 
+
+    ${bankName}     FakerLibrary.name
+    Set Suite Variable    ${bankName}
+
+    ${upiId}     FakerLibrary.name
+    Set Suite Variable  ${upiId}
+
+    ${pan}    Random Number 	digits=5 
+    ${pan}=    Evaluate    f'{${pan}:0>5d}'
+    Log  ${pan}
+    Set Suite Variable  ${pan}  55555${pan}
+
+    ${branchName}=    FakerLibrary.name
+    Set Suite Variable  ${branchName}
+    ${gstin}    Random Number 	digits=5 
+    ${gstin}=    Evaluate    f'{${gstin}:0>8d}'
+    Log  ${gstin}
+    Set Suite Variable  ${gstin}  55555${gstin}
+
+    ${preferredPaymentMode}=    Create List    ${jaldeePaymentmode[0]}
+    ${bankInfo}=    Create Dictionary     bankaccountNo=${bank_accno}    ifscCode=${bankIfsc}    bankName=${bankName}    upiId=${upiId}     branchName=${branchName}    pancardNo=${pan}    gstNumber=${gstin}    preferredPaymentMode=${preferredPaymentMode}    lastPaymentModeUsed=${jaldeePaymentmode[0]}
+    ${bankInfo}=    Create List         ${bankInfo}                
+    ${resp}=  Create Vendor  ${category_id1}  ${vendorId}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable      ${vendorId}     ${resp.json()['encId']}
+
+    # ...... Create Category .......
+
+    ${categoryName}=    FakerLibrary.name
+    Set Suite Variable  ${categoryName}
+
+    ${resp}=  Create Item Category   ${categoryName}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable      ${categoryCode}     ${resp.json()}
+
+    # ...... Create Type .........
+
+    ${TypeName}=    FakerLibrary.name
+    Set Suite Variable  ${TypeName}
+
+    ${resp}=  Create Item Type   ${TypeName}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable      ${typeCode}     ${resp.json()}
+
+    # ..... Create manufacturer .....
+
+    ${manufactureName}=    FakerLibrary.name
+    Set Suite Variable  ${manufactureName}
+
+    ${resp}=  Create Item Manufacture   ${manufactureName}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable      ${manufacturerCode}     ${resp.json()}
+
+    # .... Cretate Group 01 ........
+
+    ${groupName}=    FakerLibrary.name
+    Set Suite Variable      ${groupName}
+
+    ${groupDesc}=    FakerLibrary.name
+    Set Suite Variable  ${groupDesc}
+
+    ${groupCode}=   FakerLibrary.Sentence   nb_words=3
+    Set Suite Variable  ${groupCode}
+
+    ${resp}=    Create Item group Provider  ${groupName}  ${groupCode}  ${groupDesc}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${ig_id}   ${resp.json()}
+
+    # .... Cretate Group 02 ........
+
+    ${groupName2}=    FakerLibrary.name
+    Set Suite Variable      ${groupName2}
+
+    ${groupDesc2}=    FakerLibrary.name
+    Set Suite Variable  ${groupDesc2}
+
+    ${groupCode2}=   FakerLibrary.Sentence   nb_words=3
+    Set Suite Variable  ${groupCode2}
+
+    ${resp}=    Create Item group Provider  ${groupName2}  ${groupCode2}  ${groupDesc2}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${ig_id2}   ${resp.json()}
+
+    ${itemGroups}=  Create List  ${ig_id}  ${ig_id2}
+
+    # ..... Create Tax ......
+
+    ${taxName}=    FakerLibrary.name
+    ${taxPercentage}=     Random Int  min=0  max=200
+    ${taxPercentage}=           Convert To Number  ${taxPercentage}  1
+    ${cgst}=     Evaluate   ${taxPercentage} / 2
+    ${sgst}=     Evaluate   ${taxPercentage} / 2
+    Set Suite Variable      ${taxName}
+    Set Suite Variable      ${taxPercentage}
+    Set Suite Variable      ${cgst}
+    Set Suite Variable      ${sgst}
+
+    ${resp}=    Create Item Tax  ${taxName}  ${taxtypeenum[0]}  ${taxPercentage}  ${cgst}  ${sgst}  0
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${itemtax_id}  ${resp.json()}
+
+    ${tax}=     Create List  ${itemtax_id}
+
+    # ....... Create composition ......
+
+    ${compositionName}=     FakerLibrary.name
+    Set Suite Variable  ${compositionName}
+
+    ${resp}=    Create Item Composition     ${compositionName} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable      ${compositionCode}    ${resp.json()}
+
+    ${composition}=     Create List  ${compositionCode}
+
+    # ... Create itemUnits ....
+
+    ${unitName}=                    FakerLibrary.name
+    ${convertionQty}=               Random Int  min=1  max=20
+    Set Suite Variable              ${unitName}
+    Set Suite Variable              ${convertionQty}
+
+    ${resp}=    Create Item Unit    ${unitName}  ${convertionQty}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Suite Variable   ${iu_id}   ${resp.json()}
+
+    ${itemUnits}=   Create List     ${iu_id}
+
+    # .... Attachments ......
+
+    ${resp}=            db.getType  ${jpgfile} 
+    Log  ${resp}
+    ${fileType}=                    Get From Dictionary       ${resp}    ${jpgfile} 
+    Set Suite Variable              ${fileType}
+    ${caption}=                     Fakerlibrary.Sentence
+    Set Suite Variable              ${caption}
+
+    ${resp}    upload file to temporary location    ${file_action[0]}    ${pid}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200 
+    Set Suite Variable              ${driveId}    ${resp.json()[0]['driveId']}
+
+    ${resp}    change status of the uploaded file    ${QnrStatus[1]}    ${driveId}
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+
+    ${attachments}=    Create Dictionary   action=${file_action[0]}  fileName=${jpgfile}  fileSize=${fileSize}  fileType=${fileType}  order=${order}    driveId=${driveId}
+    Log  ${attachments}
+    ${attachments}=  Create List    ${attachments}
+    Set Suite Variable              ${attachments}
+
+    ${nameit}=                        FakerLibrary.name
+    ${shortDesc}=                   FakerLibrary.sentence
+    ${internalDesc}=                FakerLibrary.sentence
+    Set Suite Variable              ${nameit}
+    Set Suite Variable              ${shortDesc}
+    Set Suite Variable              ${internalDesc}
+
+    ${resp}=    Create Item Inventory  ${nameit}  shortDesc=${shortDesc}   internalDesc=${internalDesc}    categoryCode=${categoryCode}  categoryCode2=${categoryCode}  typeCode=${typeCode}  typeCode2=${typeCode}    isBatchApplicable=${boolean[1]}  isInventoryItem=${boolean[1]}  itemGroups=${itemGroups}  itemSubGroups=${itemGroups}  tax=${tax}   itemUnits=${itemUnits}  attachments=${attachments}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Suite Variable              ${itemEncId1}  ${resp.json()}
+
+    ${resp}=    Get Item Inventory  ${itemEncId1}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()['name']}                                      ${nameit}
+    Should Be Equal As Strings      ${resp.json()['shortDesc']}                                 ${shortDesc}
+    Should Be Equal As Strings      ${resp.json()['internalDesc']}                              ${internalDesc}
+    Should Be Equal As Strings      ${resp.json()['isInventoryItem']}                           ${bool[1]}
+    Should Be Equal As Strings      ${resp.json()['itemCategory']['categoryCode']}              ${categoryCode}
+    Should Be Equal As Strings      ${resp.json()['itemCategory']['categoryName']}              ${categoryName}
+    Should Be Equal As Strings      ${resp.json()['itemCategory']['status']}                    ${toggle[0]}
+    Should Be Equal As Strings      ${resp.json()['itemSubCategory']['categoryCode']}           ${categoryCode}
+    Should Be Equal As Strings      ${resp.json()['itemSubCategory']['categoryName']}           ${categoryName}
+    Should Be Equal As Strings      ${resp.json()['itemSubCategory']['status']}                 ${toggle[0]}
+    Should Be Equal As Strings      ${resp.json()['itemGroups'][0]}                             ${ig_id}
+    Should Be Equal As Strings      ${resp.json()['itemGroups'][1]}                             ${ig_id2}
+    Should Be Equal As Strings      ${resp.json()['itemSubGroups'][0]}                          ${ig_id}
+    Should Be Equal As Strings      ${resp.json()['itemSubGroups'][1]}                          ${ig_id2}
+    Should Be Equal As Strings      ${resp.json()['tax'][0]}                                    ${itemtax_id}
+    Should Be Equal As Strings      ${resp.json()['status']}                                    ${toggle[0]}
+
+    ${resp}=   Create Inventory Catalog Item  ${encid}   ${itemEncId1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Suite Variable   ${ic_id}   ${resp.json()[0]}
+
+    ${quantity}=                    Random Int  min=1  max=99
+    ${quantity}=                    Convert To Number  ${quantity}  1
+    ${freeQuantity}=                Random Int  min=0  max=10
+    ${freeQuantity}=                Convert To Number  ${freeQuantity}  1
+    ${amount}=                      Random Int  min=10  max=999
+    ${amount}=                      Convert To Number  ${amount}  1
+    ${discountPercentage}=          Random Int  min=0  max=80
+    ${discountPercentage}=          Convert To Number  ${discountPercentage}  1
+    ${fixedDiscount}=               Random Int  min=0  max=10
+    ${fixedDiscount}=               Convert To Number  ${fixedDiscount}  1
+    ${inventoryCatalogItem}=        Create Dictionary   encId=${ic_id}
+    Set Suite Variable              ${quantity}
+    Set Suite Variable              ${freeQuantity}
+    Set Suite Variable              ${amount}
+    Set Suite Variable              ${discountPercentage}
+    Set Suite Variable              ${fixedDiscount}
+    Set Suite Variable              ${inventoryCatalogItem}
+
+    ${totalQuantity}=   Evaluate    ${quantity} + ${freeQuantity}
+    ${netTotal}=        Evaluate    ${quantity} * ${amount}
+    ${discountAmount}=  Evaluate    ${netTotal} * ${discountPercentage} / 100
+    ${taxableAmount}=   Evaluate    ${netTotal} - ${discountAmount}
+    ${cgstamount}=      Evaluate    ${taxableAmount} * ${cgst} / 100
+    ${cgstamount}=               Convert To Number  ${cgstamount}  2
+    ${sgstamount}=      Evaluate    ${taxableAmount} * ${sgst} / 100
+    ${sgstamount}=               Convert To Number  ${sgstamount}  2
+    ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
+    ${taxAmount}=               Convert To Number  ${taxAmount}  2
+    ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
+    ${netRate}=               Convert To Number  ${netRate}  2
+    Set Suite Variable              ${totalQuantity}
+    Set Suite Variable              ${netTotal}
+    Set Suite Variable              ${discountAmount}
+    Set Suite Variable              ${taxableAmount}
+    Set Suite Variable              ${cgstamount}
+    Set Suite Variable              ${sgstamount}
+    Set Suite Variable              ${taxAmount}
+    Set Suite Variable              ${netRate}
+
+    ${expiryDate}=  db.add_timezone_date  ${tz}  50
+    ${sRate}=                   Evaluate                 ${amount} / ${convertionQty}
+    ${salesRate}=               Evaluate                round(${sRate}, 2)
+    ${totalAmount}=             Evaluate                ${amount} * ${quantity}
+    ${invoiceDate}=             db.add_timezone_date    ${tz}  1
+    ${rate}=                    Evaluate                int(${salesRate})
+    ${mrp}=                     Random Int              min=${rate}  max=9999
+    ${mrp}=                     Convert To Number  ${mrp}  1
+    ${batchNo}=                 Random Int              min=1  max=9999
+    ${invoiceReferenceNo}=      Random Int              min=1  max=999
+    ${purchaseNote}=            FakerLibrary.Sentence
+    ${roundOff}=                    Random Int  min=-10  max=10
+    ${totalDiscountAmount}=     Evaluate                ${totalAmount} * ${discountPercentage} / 100
+    ${totaltaxable}=            Evaluate                ${totalAmount} - ${totalDiscountAmount}
+    ${totaltaxableamount}=      Evaluate                round(${totaltaxable}, 2)
+    ${tcgst}=                   Evaluate                ${totaltaxableamount} * ${cgst} / 100
+    ${totalcgst}=               Evaluate                round(${tcgst}, 2)
+    ${tsgst}=                   Evaluate                ${totaltaxableamount} * ${sgst} / 100
+    ${totalSgst}=               Evaluate                round(${tsgst}, 2)
+    ${taxAmount}=               Evaluate                round(${taxAmount}, 2)
+
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}    
+    Set Suite Variable              ${purchaseItemDtoList1}
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}   200
+    Set Suite Variable              ${purchaseId}           ${resp.json()}
+
+    ${resp}=   Get Inventory Auditlog By Filter    account-eq=${accountId}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}             200
+
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}       ${purchaseId}
+    Should Be Equal As Strings  ${resp.json()[0]['auditType']}       ${InventoryAuditType[0]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditContext']}       ${InventoryAuditContext[0]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditLogAction']}       ${InventoryAuditLogAction[0]} 
+    Should Be Equal As Strings  ${resp.json()[0]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['subject']}    Purchase created
+    Should Be Equal As Strings  ${resp.json()[0]['description']}    Purchase created for ${vender_name} 
+    Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
+
+    Should Be Equal As Strings  ${resp.json()[1]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[1]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[1]['auditContext']}       ${InventoryAuditContext[2]} 
+    Should Be Equal As Strings  ${resp.json()[1]['auditLogAction']}       ${InventoryAuditLogAction[0]} 
+    Should Be Equal As Strings  ${resp.json()[1]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[1]['subject']}    Item Added to inventory Calatlog
+    # Should Be Equal As Strings  ${resp.json()[1]['description']}    Item Added to inventory Calatlog ${Catalog_Name2} 
+    Should Be Equal As Strings  ${resp.json()[1]['userId']}   ${user_id}
+
+
+    Should Be Equal As Strings  ${resp.json()[2]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[2]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[2]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[2]['auditLogAction']}       ${InventoryAuditLogAction[3]} 
+    Should Be Equal As Strings  ${resp.json()[2]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[2]['subject']}    Inventory Catalog status updated
+    Should Be Equal As Strings  ${resp.json()[2]['description']}    Inventory Catalog ${Catalog_Name2} status updated to ${InventoryCatalogStatus[0]}
+    Should Be Equal As Strings  ${resp.json()[2]['userId']}   ${user_id}
+
+    Should Be Equal As Strings  ${resp.json()[3]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[3]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[3]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[3]['auditLogAction']}       ${InventoryAuditLogAction[3]} 
+    Should Be Equal As Strings  ${resp.json()[3]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[3]['subject']}    Inventory Catalog status updated
+    Should Be Equal As Strings  ${resp.json()[3]['description']}    Inventory Catalog ${Catalog_Name2} status updated to ${InventoryCatalogStatus[1]}
+    Should Be Equal As Strings  ${resp.json()[3]['userId']}   ${user_id}
+
+    Should Be Equal As Strings  ${resp.json()[4]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[4]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[4]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[4]['auditLogAction']}       ${InventoryAuditLogAction[1]} 
+    Should Be Equal As Strings  ${resp.json()[4]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[4]['subject']}    Inventory Catalog updated
+    Should Be Equal As Strings  ${resp.json()[4]['description']}    Inventory Catalog updated ${Catalog_Name2}
+    Should Be Equal As Strings  ${resp.json()[4]['userId']}   ${user_id}
+
+    Should Be Equal As Strings  ${resp.json()[5]['uid']}       ${encid}
+    Should Be Equal As Strings  ${resp.json()[5]['auditType']}       ${InventoryAuditType[2]} 
+    Should Be Equal As Strings  ${resp.json()[5]['auditContext']}       ${InventoryAuditContext[3]} 
+    Should Be Equal As Strings  ${resp.json()[5]['auditLogAction']}       ${InventoryAuditLogAction[0]} 
+    Should Be Equal As Strings  ${resp.json()[5]['subject']}    Inventory Catalog Created
+    Should Be Equal As Strings  ${resp.json()[5]['description']}    Inventory Catalog Created ${Catalog_Name}
+    Should Be Equal As Strings  ${resp.json()[5]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[5]['userId']}   ${user_id}
