@@ -48,7 +48,9 @@ BANK_TABLE='bank_master_tbl.sql'
 BACKUP_FILE="${BACKUP_NAME}-${TODAY}.sql"
 SECONDS=0
 myversion=$(mysql -h ${MYSQL_HOST} -se "select @@version;")
-TDD_Logs_Path="$(dirname "$PWD")/Data/TDD_Logs/"
+TDD_CustomLogs_Path="$(dirname "$PWD")/Data/TDD_Logs/"
+TDD_Output_path="$(dirname "$(pwd)")/DynamicTDD/Output/"
+
 
 
 
@@ -224,13 +226,24 @@ eof
 
 clearfiles()
 {
-    # for file in "${TDD_Logs_Path%/}/"*; do echo "Clearing file $(basename $file)"; >$file; done
-    for file in "${TDD_Logs_Path%/}/"*; do
+    # for file in "${TDD_CustomLogs_Path%/}/"*; do echo "Clearing file $(basename $file)"; >$file; done
+    for file in "${TDD_CustomLogs_Path%/}/"*; do
         if [ -s $file ]; then
             echo "Clearing file $(basename $file)"
             >$file
         fi
     done
+}
+
+
+clearTddLogs()
+{
+    echo "-- clearing logs older than $BACKUP_RETAIN_DAYS days from DynamicTDD/Output" 
+    find "$TDD_Output_path" -mtime +$BACKUP_RETAIN_DAYS -type f -print -delete
+    find "$TDD_Output_path" -mtime $BACKUP_RETAIN_DAYS -type f -depth -print -delete
+    find "$TDD_Output_path" -mindepth 1 -depth -type d -empty -print -delete
+    # find "$TDD_Output_path" -mtime $BACKUP_RETAIN_DAYS -type f -depth -print -delete && find "$TDD_Output_path" -mindepth 1 -depth -type d -empty -print -delete
+    
 }
 
 
@@ -260,6 +273,7 @@ case $1 in
             populatePostalCodeTable
             populateBankMasterTable
             backup
+            clearTddLogs
             shift
             ;;
     "-p" | "--populate" )
