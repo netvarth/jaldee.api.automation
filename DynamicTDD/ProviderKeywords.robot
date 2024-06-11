@@ -15486,7 +15486,7 @@ Create Custom Variable
 Update Custom Variable 
 
     [Arguments]  ${var_id}  ${var_name}  ${vardis_name}  ${var_value}  
-    ${data}=  Create Dictionary  varName=${name}  varDisplayName=${dis_name}  varValue=${value} 
+    ${data}=  Create Dictionary  varName=${var_name}  varDisplayName=${vardis_name}  varValue=${var_value} 
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/comm/template/variable/${var_id}  data=${data}  expected_status=any
