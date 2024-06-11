@@ -29,7 +29,7 @@ JD-TC-GetCustomVariableById-1
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${account_id}  ${resp.content['id']}
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
 
     ${name}=    FakerLibrary.word
     ${dis_name}=    FakerLibrary.word
@@ -38,20 +38,409 @@ JD-TC-GetCustomVariableById-1
     ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${var_id1}  ${resp.content}
+    Set Test Variable   ${var_id1}  ${resp.json()}
 
     ${resp}=  Get Custom Variable By Id   ${var_id1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.content['id']}              ${var_id1} 
-    Should Be Equal As Strings  ${resp.content['name']}            ${name}
-    Should Be Equal As Strings  ${resp.content['displayName']}     ${dis_name} 
-    Should Be Equal As Strings  ${resp.content['value']}           ${value}
-    Should Be Equal As Strings  ${resp.content['type']}            ${VariableValueType[1]} 
-    Should Be Equal As Strings  ${resp.content['context']}         ${VariableContext[0]}
-    Should Be Equal As Strings  ${resp.content['status']}          ${VariableStatus[0]} 
-    Should Be Equal As Strings  ${resp.content['account']}         ${account_id}
+    Should Be Equal As Strings  ${resp.json()['id']}              ${var_id1} 
+    Should Be Equal As Strings  ${resp.json()['name']}            ${name}
+    Should Be Equal As Strings  ${resp.json()['displayName']}     ${dis_name} 
+    Should Be Equal As Strings  ${resp.json()['value']}           ${value}
+    Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[0]}
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VariableStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
 
+JD-TC-GetCustomVariableById-2
 
+    [Documentation]  Create multiple custom variables then get it by id and verify.
 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME76}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id1}  ${resp.json()}
+
+    ${name1}=    FakerLibrary.word
+    ${dis_name1}=    FakerLibrary.word
+    ${value1}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name1}  ${dis_name1}  ${value1}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id2}  ${resp.json()}
+
+    ${resp}=  Get Custom Variable By Id   ${var_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['id']}              ${var_id1} 
+    Should Be Equal As Strings  ${resp.json()['name']}            ${name}
+    Should Be Equal As Strings  ${resp.json()['displayName']}     ${dis_name} 
+    Should Be Equal As Strings  ${resp.json()['value']}           ${value}
+    Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[0]}
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VariableStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
+
+    ${resp}=  Get Custom Variable By Id   ${var_id2}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['id']}              ${var_id2} 
+    Should Be Equal As Strings  ${resp.json()['name']}            ${name1}
+    Should Be Equal As Strings  ${resp.json()['displayName']}     ${dis_name1} 
+    Should Be Equal As Strings  ${resp.json()['value']}           ${value1}
+    Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[0]}
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VariableStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
+
+JD-TC-GetCustomVariableById-3
+
+    [Documentation]  Create custom variable for the context appointment then get it by id and verify.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id1}  ${resp.json()}
+
+    ${resp}=  Get Custom Variable By Id   ${var_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['id']}              ${var_id1} 
+    Should Be Equal As Strings  ${resp.json()['name']}            ${name}
+    Should Be Equal As Strings  ${resp.json()['displayName']}     ${dis_name} 
+    Should Be Equal As Strings  ${resp.json()['value']}           ${value}
+    Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[1]}
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VariableStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
+
+JD-TC-GetCustomVariableById-4
+
+    [Documentation]  Create custom variable for the context token then get it by id and verify.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME72}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[2]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id1}  ${resp.json()}
+
+    ${resp}=  Get Custom Variable By Id   ${var_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['id']}              ${var_id1} 
+    Should Be Equal As Strings  ${resp.json()['name']}            ${name}
+    Should Be Equal As Strings  ${resp.json()['displayName']}     ${dis_name} 
+    Should Be Equal As Strings  ${resp.json()['value']}           ${value}
+    Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[2]}
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VariableStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
+
+JD-TC-GetCustomVariableById-5
+
+    [Documentation]  Create custom variable for the context order then get it by id and verify.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[3]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id1}  ${resp.json()}
+
+    ${resp}=  Get Custom Variable By Id   ${var_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['id']}              ${var_id1} 
+    Should Be Equal As Strings  ${resp.json()['name']}            ${name}
+    Should Be Equal As Strings  ${resp.json()['displayName']}     ${dis_name} 
+    Should Be Equal As Strings  ${resp.json()['value']}           ${value}
+    Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[3]}
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VariableStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
+
+JD-TC-GetCustomVariableById-6
+
+    [Documentation]  Create custom variable for the context donation then get it by id and verify.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME74}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[4]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id1}  ${resp.json()}
+
+    ${resp}=  Get Custom Variable By Id   ${var_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['id']}              ${var_id1} 
+    Should Be Equal As Strings  ${resp.json()['name']}            ${name}
+    Should Be Equal As Strings  ${resp.json()['displayName']}     ${dis_name} 
+    Should Be Equal As Strings  ${resp.json()['value']}           ${value}
+    Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[4]}
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VariableStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
+
+JD-TC-GetCustomVariableById-7
+
+    [Documentation]  Create custom variable for the context payment then get it by id and verify.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME75}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[5]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id1}  ${resp.json()}
+
+    ${resp}=  Get Custom Variable By Id   ${var_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['id']}              ${var_id1} 
+    Should Be Equal As Strings  ${resp.json()['name']}            ${name}
+    Should Be Equal As Strings  ${resp.json()['displayName']}     ${dis_name} 
+    Should Be Equal As Strings  ${resp.json()['value']}           ${value}
+    Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[5]}
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VariableStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
+
+JD-TC-GetCustomVariableById-8
+
+    [Documentation]  Create custom variable for the context ALL then get it by id and verify.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME76}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[6]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id1}  ${resp.json()}
+
+    ${resp}=  Get Custom Variable By Id   ${var_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['id']}              ${var_id1} 
+    Should Be Equal As Strings  ${resp.json()['name']}            ${name}
+    Should Be Equal As Strings  ${resp.json()['displayName']}     ${dis_name} 
+    Should Be Equal As Strings  ${resp.json()['value']}           ${value}
+    Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[6]}
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VariableStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
+
+JD-TC-GetCustomVariableById-UH1
+
+    [Documentation]  Get custom variable by id with invalid variable id.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id1}  ${resp.json()}
+
+    ${invalidvar_id1}=     Random Int  min=100   max=999
+
+    ${resp}=  Get Custom Variable By Id   ${invalidvar_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}   ${VARIABLE_NOT_FOUND}
+    
+JD-TC-GetCustomVariableById-UH2
+
+    [Documentation]  Get custom variable by id with another providers variable id.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id1}  ${resp.json()}
+
+    ${resp}=  ProviderLogout  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME72}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Custom Variable By Id   ${var_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    401
+
+JD-TC-GetCustomVariableById-UH3
+
+    [Documentation]  Get custom variable by id without login
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME74}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id1}  ${resp.json()}
+
+    ${resp}=  ProviderLogout  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Custom Variable By Id   ${var_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
+
+JD-TC-GetCustomVariableById-UH4
+
+    [Documentation]  Get custom variable by id with consumer login.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME75}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id1}  ${resp.json()}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    #............provider consumer creation..........
+
+    ${NewCustomer}    Generate random string    10    123456789
+    ${NewCustomer}    Convert To Integer  ${NewCustomer}
+
+    ${custf_name}=  FakerLibrary.name    
+    ${custl_name}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${NewCustomer}    firstName=${custf_name}   lastName=${custl_name}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get Custom Variable By Id   ${var_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   400
+    Should Be Equal As Strings  ${resp.json()}   ${LOGIN_INVALID_URL}

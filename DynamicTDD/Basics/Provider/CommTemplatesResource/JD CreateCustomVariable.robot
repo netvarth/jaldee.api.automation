@@ -38,7 +38,7 @@ JD-TC-CreateCustomVariable-2
 
     [Documentation]  Create custom variable for the context appointment.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME81}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -54,7 +54,7 @@ JD-TC-CreateCustomVariable-3
 
     [Documentation]  Create custom variable for the context Token.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME82}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -70,7 +70,7 @@ JD-TC-CreateCustomVariable-4
 
     [Documentation]  Create custom variable for the context order.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME84}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -86,7 +86,7 @@ JD-TC-CreateCustomVariable-5
 
     [Documentation]  Create custom variable for the context donation.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME84}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -102,7 +102,7 @@ JD-TC-CreateCustomVariable-6
 
     [Documentation]  Create custom variable for the context payment.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME85}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -118,7 +118,7 @@ JD-TC-CreateCustomVariable-7
 
     [Documentation]  Create custom variable for the context All.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -134,7 +134,7 @@ JD-TC-CreateCustomVariable-8
 
     [Documentation]  Create multiple custom variables for the context signup.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME81}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -169,11 +169,44 @@ JD-TC-CreateCustomVariable-UH1
 
 JD-TC-CreateCustomVariable-UH2
 
-    [Documentation]  Create custom variable with consumer login.
+    [Documentation]  Create custom variable with provider consumer login.
 
-    ${resp}=  Consumer Login  ${CUSERNAME12}  ${PASSWORD}
-    Log   ${resp.json()}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    #............provider consumer creation..........
+
+    ${NewCustomer}    Generate random string    10    123456789
+    ${NewCustomer}    Convert To Integer  ${NewCustomer}
+
+    ${custf_name}=  FakerLibrary.name    
+    ${custl_name}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${NewCustomer}    firstName=${custf_name}   lastName=${custl_name}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${name}=    FakerLibrary.word
     ${dis_name}=    FakerLibrary.word
@@ -181,8 +214,8 @@ JD-TC-CreateCustomVariable-UH2
 
     ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   401
-    Should Be Equal As Strings  ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
+    Should Be Equal As Strings    ${resp.status_code}   400
+    Should Be Equal As Strings  ${resp.json()}   ${LOGIN_INVALID_URL}
 
 JD-TC-CreateCustomVariable-UH3
 
