@@ -49,7 +49,7 @@ JD-TC-GetCustomVariableById-1
     Should Be Equal As Strings  ${resp.json()['value']}           ${value}
     Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
     Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[0]}
-    Should Be Equal As Strings  ${resp.json()['status']}          ${VariableStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
     Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
 
 JD-TC-GetCustomVariableById-2
@@ -92,7 +92,7 @@ JD-TC-GetCustomVariableById-2
     Should Be Equal As Strings  ${resp.json()['value']}           ${value}
     Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
     Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[0]}
-    Should Be Equal As Strings  ${resp.json()['status']}          ${VariableStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
     Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
 
     ${resp}=  Get Custom Variable By Id   ${var_id2}  
@@ -104,7 +104,7 @@ JD-TC-GetCustomVariableById-2
     Should Be Equal As Strings  ${resp.json()['value']}           ${value1}
     Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
     Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[0]}
-    Should Be Equal As Strings  ${resp.json()['status']}          ${VariableStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
     Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
 
 JD-TC-GetCustomVariableById-3
@@ -138,7 +138,7 @@ JD-TC-GetCustomVariableById-3
     Should Be Equal As Strings  ${resp.json()['value']}           ${value}
     Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
     Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[1]}
-    Should Be Equal As Strings  ${resp.json()['status']}          ${VariableStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
     Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
 
 JD-TC-GetCustomVariableById-4
@@ -172,7 +172,7 @@ JD-TC-GetCustomVariableById-4
     Should Be Equal As Strings  ${resp.json()['value']}           ${value}
     Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
     Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[2]}
-    Should Be Equal As Strings  ${resp.json()['status']}          ${VariableStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
     Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
 
 JD-TC-GetCustomVariableById-5
@@ -206,7 +206,7 @@ JD-TC-GetCustomVariableById-5
     Should Be Equal As Strings  ${resp.json()['value']}           ${value}
     Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
     Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[3]}
-    Should Be Equal As Strings  ${resp.json()['status']}          ${VariableStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
     Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
 
 JD-TC-GetCustomVariableById-6
@@ -240,7 +240,7 @@ JD-TC-GetCustomVariableById-6
     Should Be Equal As Strings  ${resp.json()['value']}           ${value}
     Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
     Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[4]}
-    Should Be Equal As Strings  ${resp.json()['status']}          ${VariableStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
     Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
 
 JD-TC-GetCustomVariableById-7
@@ -274,7 +274,7 @@ JD-TC-GetCustomVariableById-7
     Should Be Equal As Strings  ${resp.json()['value']}           ${value}
     Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
     Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[5]}
-    Should Be Equal As Strings  ${resp.json()['status']}          ${VariableStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
     Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
 
 JD-TC-GetCustomVariableById-8
@@ -308,7 +308,7 @@ JD-TC-GetCustomVariableById-8
     Should Be Equal As Strings  ${resp.json()['value']}           ${value}
     Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
     Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[6]}
-    Should Be Equal As Strings  ${resp.json()['status']}          ${VariableStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
     Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
 
 JD-TC-GetCustomVariableById-UH1

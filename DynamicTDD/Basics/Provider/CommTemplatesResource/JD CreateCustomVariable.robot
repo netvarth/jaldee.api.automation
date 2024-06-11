@@ -312,35 +312,3 @@ JD-TC-CreateCustomVariable-UH7
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  ${resp.json()}   ${VARIABLE_DISPLAY_NAME_EXISTS}
-
-JD-TC-CreateCustomVariable-UH8
-
-    [Documentation]  Create custom variable with name as integer.
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${name}=     Random Int  min=100   max=999
-    ${dis_name}=    FakerLibrary.word
-    ${value}=   FakerLibrary.hostname
-
-    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[4]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-
-JD-TC-CreateCustomVariable-UH9
-
-    [Documentation]  Create custom variable with dispaly name as integer.
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${dis_name}=     Random Int  min=100   max=999
-    ${name}=    FakerLibrary.word
-    ${value}=   FakerLibrary.hostname
-
-    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[4]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422

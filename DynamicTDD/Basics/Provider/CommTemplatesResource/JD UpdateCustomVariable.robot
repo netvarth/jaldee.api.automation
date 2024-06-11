@@ -15,34 +15,460 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
-*** Variables ***
-
-@{context}   ALL
 
 *** Test Cases ***
 
 JD-TC-UpdateCustomVariable-1
 
-    [Documentation]  Create custom variable for a provider
+    [Documentation]  Create custom variable and update it with same details then get it by id and verify.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id1}  ${resp.json()}
+
+    ${resp}=  Get Custom Variable By Id   ${var_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['id']}              ${var_id1} 
+    Should Be Equal As Strings  ${resp.json()['name']}            ${name}
+    Should Be Equal As Strings  ${resp.json()['displayName']}     ${dis_name} 
+    Should Be Equal As Strings  ${resp.json()['value']}           ${value}
+    Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[0]}
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
+
+    ${resp}=  Update Custom Variable   ${var_id1}  ${name}  ${dis_name}  ${value} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Get Custom Variable By Id   ${var_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['id']}              ${var_id1} 
+    Should Be Equal As Strings  ${resp.json()['name']}            ${name}
+    Should Be Equal As Strings  ${resp.json()['displayName']}     ${dis_name} 
+    Should Be Equal As Strings  ${resp.json()['value']}           ${value}
+    Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[0]}
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
+
+JD-TC-UpdateCustomVariable-2
+
+    [Documentation]  Create custom variable and update it different name then get it by id and verify.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME61}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id1}  ${resp.json()}
+
+    ${resp}=  Get Custom Variable By Id   ${var_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['id']}              ${var_id1} 
+    Should Be Equal As Strings  ${resp.json()['name']}            ${name}
+    Should Be Equal As Strings  ${resp.json()['displayName']}     ${dis_name} 
+    Should Be Equal As Strings  ${resp.json()['value']}           ${value}
+    Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[0]}
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
+
+    ${name1}=    FakerLibrary.firstname
+
+    ${resp}=  Update Custom Variable   ${var_id1}  ${name1}  ${dis_name}  ${value}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Get Custom Variable By Id   ${var_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['id']}              ${var_id1} 
+    Should Be Equal As Strings  ${resp.json()['name']}            ${name1}
+    Should Be Equal As Strings  ${resp.json()['displayName']}     ${dis_name} 
+    Should Be Equal As Strings  ${resp.json()['value']}           ${value}
+    Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[0]}
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
+
+JD-TC-UpdateCustomVariable-3
+
+    [Documentation]  Create custom variable and update it different display name then get it by id and verify.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id1}  ${resp.json()}
+
+    ${resp}=  Get Custom Variable By Id   ${var_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['id']}              ${var_id1} 
+    Should Be Equal As Strings  ${resp.json()['name']}            ${name}
+    Should Be Equal As Strings  ${resp.json()['displayName']}     ${dis_name} 
+    Should Be Equal As Strings  ${resp.json()['value']}           ${value}
+    Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[0]}
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
+
+    ${dis_name1}=    FakerLibrary.firstname
+
+    ${resp}=  Update Custom Variable   ${var_id1}  ${name}  ${dis_name1}  ${value}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Get Custom Variable By Id   ${var_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['id']}              ${var_id1} 
+    Should Be Equal As Strings  ${resp.json()['name']}            ${name}
+    Should Be Equal As Strings  ${resp.json()['displayName']}     ${dis_name1} 
+    Should Be Equal As Strings  ${resp.json()['value']}           ${value}
+    Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[0]}
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
+
+JD-TC-UpdateCustomVariable-4
+
+    [Documentation]  Create custom variable and update it different value then get it by id and verify.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME63}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id1}  ${resp.json()}
+
+    ${resp}=  Get Custom Variable By Id   ${var_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['id']}              ${var_id1} 
+    Should Be Equal As Strings  ${resp.json()['name']}            ${name}
+    Should Be Equal As Strings  ${resp.json()['displayName']}     ${dis_name} 
+    Should Be Equal As Strings  ${resp.json()['value']}           ${value}
+    Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[0]}
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
+
+    ${value1}=   FakerLibrary.hostname
+
+    ${resp}=  Update Custom Variable   ${var_id1}  ${name}  ${dis_name}  ${value1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Get Custom Variable By Id   ${var_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['id']}              ${var_id1} 
+    Should Be Equal As Strings  ${resp.json()['name']}            ${name}
+    Should Be Equal As Strings  ${resp.json()['displayName']}     ${dis_name} 
+    Should Be Equal As Strings  ${resp.json()['value']}           ${value1}
+    Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[0]}
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
+
+JD-TC-UpdateCustomVariable-UH1
+
+    [Documentation]  Create custom variable and update it without name.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id1}  ${resp.json()}
+
+    ${resp}=  Get Custom Variable By Id   ${var_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['id']}              ${var_id1} 
+    Should Be Equal As Strings  ${resp.json()['name']}            ${name}
+    Should Be Equal As Strings  ${resp.json()['displayName']}     ${dis_name} 
+    Should Be Equal As Strings  ${resp.json()['value']}           ${value}
+    Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[0]}
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
+
+    ${resp}=  Update Custom Variable   ${var_id1}  ${EMPTY}  ${dis_name}  ${value}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}   ${VARIABLE_NAME}
+
+JD-TC-UpdateCustomVariable-UH2
+
+    [Documentation]  Create custom variable and update it without display name.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id1}  ${resp.json()}
+
+    ${resp}=  Get Custom Variable By Id   ${var_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['id']}              ${var_id1} 
+    Should Be Equal As Strings  ${resp.json()['name']}            ${name}
+    Should Be Equal As Strings  ${resp.json()['displayName']}     ${dis_name} 
+    Should Be Equal As Strings  ${resp.json()['value']}           ${value}
+    Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[0]}
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
+
+    ${resp}=  Update Custom Variable   ${var_id1}  ${name}  ${EMPTY}  ${value} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}   ${VARIABLE_DISPLAY_NAME}
+
+JD-TC-UpdateCustomVariable-UH3
+
+    [Documentation]  Create custom variable and update it without value.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME66}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id1}  ${resp.json()}
+
+    ${resp}=  Get Custom Variable By Id   ${var_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['id']}              ${var_id1} 
+    Should Be Equal As Strings  ${resp.json()['name']}            ${name}
+    Should Be Equal As Strings  ${resp.json()['displayName']}     ${dis_name} 
+    Should Be Equal As Strings  ${resp.json()['value']}           ${value}
+    Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[0]}
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
+
+    ${resp}=  Update Custom Variable   ${var_id1}  ${name}  ${dis_name}  ${EMPTY}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}   ${VARIABLE_VALUE}
+
+JD-TC-CreateCustomVariable-UH4
+
+    [Documentation]  Update custom variable with provider consumer login.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id1}  ${resp.json()}
+
+    #............provider consumer creation..........
+
+    ${NewCustomer}    Generate random string    10    123456789
+    ${NewCustomer}    Convert To Integer  ${NewCustomer}
+
+    ${custf_name}=  FakerLibrary.name    
+    ${custl_name}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${NewCustomer}    firstName=${custf_name}   lastName=${custl_name}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Update Custom Variable     ${var_id1}  ${name}  ${dis_name}  ${value}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   400
+    Should Be Equal As Strings  ${resp.json()}   ${LOGIN_INVALID_URL}
+
+JD-TC-CreateCustomVariable-UH5
+
+    [Documentation]  Update custom variable without login
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${name}=    FakerLibrary.word
     ${dis_name}=    FakerLibrary.word
-    ${type}=    FakerLibrary.sentence
     ${value}=   FakerLibrary.hostname
 
-    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${type}  ${context[0]}
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${var_id1}  ${resp.content}
+    Set Test Variable   ${var_id1}  ${resp.json()}
 
-    ${var_name}=    FakerLibrary.word
-    ${vardis_name}=    FakerLibrary.word
-    ${var_value}=   FakerLibrary.hostname
-    ${resp}=  Update Custom Variable   ${var_id1}  ${var_name}  ${vardis_name}  ${var_value}  
+    ${resp}=  ProviderLogout  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Update Custom Variable   ${var_id1}  ${name}  ${dis_name}  ${value}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
+
+JD-TC-UpdateCustomVariable-UH6
+
+    [Documentation]  update custom variable using another providers variable id.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id1}  ${resp.json()}
+
+    ${resp}=  Get Custom Variable By Id   ${var_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['id']}              ${var_id1} 
+    Should Be Equal As Strings  ${resp.json()['name']}            ${name}
+    Should Be Equal As Strings  ${resp.json()['displayName']}     ${dis_name} 
+    Should Be Equal As Strings  ${resp.json()['value']}           ${value}
+    Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[0]}
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Update Custom Variable   ${var_id1}  ${name}  ${dis_name}  ${value} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    401
+    
