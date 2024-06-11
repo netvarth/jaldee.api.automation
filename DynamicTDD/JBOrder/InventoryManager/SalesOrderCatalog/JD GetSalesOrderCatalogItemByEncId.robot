@@ -198,7 +198,7 @@ JD-TC-Get Sales Order Catalog Items By EncId-2
     ${price}=    Random Int  min=2   max=40
     ${price}=   Convert To Number  ${price}  1
 
-    ${taxes}=    Random Int  min=2   max=40
+    ${taxes}=    Random Int  min=70   max=100
     ${tax}=          Create List    ${taxes}
 
     ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${SO_Cata_Encid}     ${itemEncId2}     ${price}    TaxInclude=${boolean[1]}    taxes=${tax}
