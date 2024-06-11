@@ -571,3 +571,59 @@ JD-TC-UpdateRXPrescriptionItem-1
     Should Be Equal As Strings      ${resp.json()['description']}           ${description}  
     Should Be Equal As Strings      ${resp.json()['quantity']}              ${quantity1}  
     Should Be Equal As Strings      ${resp.json()['prescriptioinUid']}      ${prescription_id}  
+
+
+JD-TC-UpdateRXPrescriptionItem-2
+
+    [Documentation]    Update RX Prescription Item - 
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    RX Update Prescription Item  ${pitm_id}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+
+    ${resp}=    Get RX Prescription Item By EncId  ${pitm_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()['spItemCode']}    ${item1}
+    Should Be Equal As Strings      ${resp.json()['medicineName']}          ${displayName1}    
+    Should Be Equal As Strings      ${resp.json()['duration']}              ${duration1}    
+    Should Be Equal As Strings      ${resp.json()['frequency']['id']}       ${frequency_id}    
+    Should Be Equal As Strings      ${resp.json()['dosage']}                ${dos}    
+    Should Be Equal As Strings      ${resp.json()['description']}           ${description}  
+    Should Be Equal As Strings      ${resp.json()['quantity']}              ${quantity1}  
+    Should Be Equal As Strings      ${resp.json()['prescriptioinUid']}      ${prescription_id} 
+
+
+
+
+
+*** COMMETD ***
+
+
+JD-TC-UpdateRXPrescriptionItem-2
+
+    [Documentation]    Update RX Prescription Item - 
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    RX Update Prescription Item  ${pitm_id}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+
+    ${resp}=    Get RX Prescription Item By EncId  ${pitm_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()['spItemCode']}    ${item1}
+    Should Be Equal As Strings      ${resp.json()['medicineName']}          ${displayName1}    
+    Should Be Equal As Strings      ${resp.json()['duration']}              ${duration1}    
+    Should Be Equal As Strings      ${resp.json()['frequency']['id']}       ${frequency_id}    
+    Should Be Equal As Strings      ${resp.json()['dosage']}                ${dos}    
+    Should Be Equal As Strings      ${resp.json()['description']}           ${description}  
+    Should Be Equal As Strings      ${resp.json()['quantity']}              ${quantity1}  
+    Should Be Equal As Strings      ${resp.json()['prescriptioinUid']}      ${prescription_id} 
