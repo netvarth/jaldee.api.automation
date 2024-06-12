@@ -188,7 +188,7 @@ JD-TC-CreateCustomVariable-10
 
 JD-TC-CreateCustomVariable-11
 
-    [Documentation]  Create custom variable for two providers with same name.
+    [Documentation]  Create custom variable by two providers with same name.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}

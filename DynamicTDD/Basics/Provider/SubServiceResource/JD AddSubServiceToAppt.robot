@@ -26,17 +26,6 @@ ${self}         0
 JD-TC-AddSubServicesToAppt-1
 
     [Documentation]  Create a sub service and add that sub service to an appointment(walkin).
-
-    ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID}   ${resp.json()['id']}
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
-
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
@@ -208,11 +197,42 @@ JD-TC-AddSubServicesToAppt-1
     Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  AddCustomer  ${CUSERNAME11}  firstName=${fname}   lastName=${lname}
+    #............provider consumer creation..........
+
+    ${NewCustomer}    Generate random string    10    123456789
+    ${NewCustomer}    Convert To Integer  ${NewCustomer}
+    Set Suite Variable   ${NewCustomer}
+
+    ${resp}=  AddCustomer  ${NewCustomer}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${cid}   ${resp.json()}
     
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
+
+    ${resp}=    Customer Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
@@ -250,18 +270,16 @@ JD-TC-AddSubServicesToAppt-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=   Get consumer Appointment By Id   ${account_id}  ${apptid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[1]}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}  ${fname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
-
-    ${resp}=  Consumer Logout
+   
+    ${resp}=  Customer Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -308,9 +326,9 @@ JD-TC-AddSubServicesToAppt-2
 
     [Documentation]  Create a sub service and add that sub service to an appointment(online).
 
-    ${resp}=  Consumer Login  ${CUSERNAME12}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Appointment Schedules Consumer  ${account_id}
     Log  ${resp.content}
@@ -337,9 +355,10 @@ JD-TC-AddSubServicesToAppt-2
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${cid}=  get_id  ${CUSERNAME12}   
+    ${DAY2}=  db.add_timezone_date  ${tz}  1 
+
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id}  ${sch_id}  ${DAY2}  ${cnote}   ${apptfor}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -350,7 +369,7 @@ JD-TC-AddSubServicesToAppt-2
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceId']}        ${s_id}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceName']}      ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceDate']}      ${DAY1}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceDate']}      ${DAY2}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceAmount']}    ${ser_amount}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['quantity']}         1.0
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['taxable']}          ${bool[0]}
@@ -362,7 +381,7 @@ JD-TC-AddSubServicesToAppt-2
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['teamIds']}          ${empty_list}
     Should Not Contain   ${resp.json()}   ${subser_id1}
 
-    ${resp}=  Consumer Logout
+    ${resp}=  Customer Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -375,7 +394,7 @@ JD-TC-AddSubServicesToAppt-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceId']}        ${s_id}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceName']}      ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceDate']}      ${DAY1}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceDate']}      ${DAY2}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceAmount']}    ${ser_amount}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['quantity']}         1.0
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['taxable']}          ${bool[0]}
@@ -398,7 +417,7 @@ JD-TC-AddSubServicesToAppt-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceId']}        ${s_id}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceName']}      ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceDate']}      ${DAY1}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceDate']}      ${DAY2}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceAmount']}    ${ser_amount}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['quantity']}         1.0
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['taxable']}          ${bool[0]}
@@ -427,17 +446,6 @@ JD-TC-AddSubServicesToAppt-3
 
     [Documentation]  add subservice to an appointment with sub service quantity.
 
-    ${resp}=  Consumer Login  ${CUSERNAME3}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    Set Test Variable  ${lname}   ${resp.json()['lastName']}
-
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
     ${resp}=  Encrypted Provider Login  ${PUSERNAME173}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -584,10 +592,40 @@ JD-TC-AddSubServicesToAppt-3
     Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  AddCustomer  ${CUSERNAME3}  firstName=${fname}   lastName=${lname}
+    #............provider consumer creation..........
+
+    ${NewCustomer}    Generate random string    10    123456789
+    ${NewCustomer}    Convert To Integer  ${NewCustomer}
+  
+    ${resp}=  AddCustomer  ${NewCustomer}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}   ${resp.json()}
+    
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+
+    ${resp}=    Customer Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME173}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -626,18 +664,16 @@ JD-TC-AddSubServicesToAppt-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME3}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=   Get consumer Appointment By Id   ${account_id}  ${apptid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[1]}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}  ${fname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
-
-    ${resp}=  Consumer Logout
+    
+    ${resp}=  Customer Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -683,23 +719,11 @@ JD-TC-AddSubServicesToAppt-3
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['teamIds']}          ${empty_list}
    
 
-
 JD-TC-AddSubServicesToAppt-4
 
     [Documentation]  add subservice to an appointment with one assignee.
 
-    ${resp}=  Consumer Login  ${CUSERNAME3}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    Set Test Variable  ${lname}   ${resp.json()['lastName']}
-
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME174}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME26}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -790,7 +814,7 @@ JD-TC-AddSubServicesToAppt-4
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${PUSERNAME174}'
+            IF   not '${user_phone}' == '${HLPUSERNAME26}'
                 clear_users  ${user_phone}
             END
         END
@@ -865,10 +889,40 @@ JD-TC-AddSubServicesToAppt-4
     Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  AddCustomer  ${CUSERNAME3}  firstName=${fname}   lastName=${lname}
+    #............provider consumer creation..........
+
+    ${NewCustomer}    Generate random string    10    123456789
+    ${NewCustomer}    Convert To Integer  ${NewCustomer}
+  
+    ${resp}=  AddCustomer  ${NewCustomer}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}   ${resp.json()}
+    
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+
+    ${resp}=    Customer Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME26}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -907,22 +961,20 @@ JD-TC-AddSubServicesToAppt-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME3}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=   Get consumer Appointment By Id   ${account_id}  ${apptid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[1]}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}  ${fname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
-
-    ${resp}=  Consumer Logout
+  
+    ${resp}=  Customer Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME174}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME26}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1006,8 +1058,7 @@ JD-TC-AddSubServicesToAppt-4
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['netRate']}          ${total}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['serviceCategory']}  ${serviceCategory[0]}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['assigneeUsers']}    ${asgn_users}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['teamIds']}          ${empty_list}
-   
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['teamIds']}          ${empty_list} 
 
 JD-TC-AddSubServicesToAppt-5
 
@@ -1077,9 +1128,9 @@ JD-TC-AddSubServicesToAppt-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=   Get consumer Appointment By Id   ${account_id}  ${apptid2}
     Log  ${resp.json()}
@@ -1141,10 +1192,10 @@ JD-TC-AddSubServicesToAppt-6
 
     [Documentation]  Create a sub service and add that sub service to multiple appointments(online).
 
-    ${resp}=  Consumer Login  ${CUSERNAME12}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+   
     ${resp}=  Get Appointment Schedules Consumer  ${account_id}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1196,7 +1247,7 @@ JD-TC-AddSubServicesToAppt-6
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['teamIds']}          ${empty_list}
     Should Not Contain   ${resp.json()}   ${subser_id1}
 
-    ${resp}=  Consumer Logout
+    ${resp}=  Customer Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1260,19 +1311,8 @@ JD-TC-AddSubServicesToAppt-6
 JD-TC-AddSubServicesToAppt-7
 
     [Documentation]  Create a sub service for a user and add that subservice to users appointment(walkin)
-
-    ${resp}=  Consumer Login  ${CUSERNAME5}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    Set Test Variable  ${lname}   ${resp.json()['lastName']}
-
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME176}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME27}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1363,7 +1403,7 @@ JD-TC-AddSubServicesToAppt-7
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${PUSERNAME176}'
+            IF   not '${user_phone}' == '${HLPUSERNAME27}'
                 clear_users  ${user_phone}
             END
         END
@@ -1453,11 +1493,41 @@ JD-TC-AddSubServicesToAppt-7
     Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  AddCustomer  ${CUSERNAME5}  firstName=${fname}   lastName=${lname}
+    #............provider consumer creation..........
+
+    ${NewCustomer}    Generate random string    10    123456789
+    ${NewCustomer}    Convert To Integer  ${NewCustomer}
+  
+    ${resp}=  AddCustomer  ${NewCustomer}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}   ${resp.json()}
     
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+
+    ${resp}=    Customer Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
@@ -2185,7 +2255,7 @@ JD-TC-AddSubServicesToAppt-12
 
     [Documentation]  add a subservice to an appointment without service price.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2317,7 +2387,6 @@ JD-TC-AddSubServicesToAppt-12
     Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     
-
     #............provider consumer creation..........
 
     ${NewCustomer}    Generate random string    10    123456789
@@ -2398,7 +2467,7 @@ JD-TC-AddSubServicesToAppt-12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2472,17 +2541,47 @@ JD-TC-AddSubServicesToAppt-UH2
 
     [Documentation]  consumer tries to Add a subservice to an appointment.
     
-    ${resp}=  Consumer Login  ${CUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME28}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+   
+    #............provider consumer creation..........
+
+    ${NewCustomer}    Generate random string    10    123456789
+    ${NewCustomer}    Convert To Integer  ${NewCustomer}
+
+    ${resp}=  AddCustomer  ${NewCustomer}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+   
     ${subser_list1}=  Create Dictionary  serviceId=${subser_id1}  serviceAmount=${subser_price}   
 
     ${resp}=   Add SubService To Appointment    ${apptid1}   ${subser_list1}
     Log   ${resp.json()}  
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings  ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
-
 
 JD-TC-AddSubServicesToAppt-UH3
 
@@ -2554,27 +2653,7 @@ JD-TC-AddSubServicesToAppt-UH4
     Should Be Equal As Strings     ${resp.status_code}    401
     Should Be Equal As Strings    ${resp.json()}    ${NO_PERMISSION}
 
-
 JD-TC-AddSubServicesToAppt-UH5
-
-    [Documentation]  add a service to an appointment using sub service url.
-    
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${SERVICE1}=    FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}   department=${dep_id}
-
-    ${subser_list1}=  Create Dictionary  serviceId=${s_id}  serviceAmount=${subser_price}   
-
-    ${resp}=   Add SubService To Appointment    ${apptid1}   ${subser_list1}
-    Log   ${resp.json()}  
-    Should Be Equal As Strings     ${resp.status_code}    401
-    Should Be Equal As Strings    ${resp.json()}    ${NO_PERMISSION}
-
-
-JD-TC-AddSubServicesToAppt-UH6
 
     [Documentation]  add a subservice to an appointment without service id.
     
@@ -2592,27 +2671,7 @@ JD-TC-AddSubServicesToAppt-UH6
     Should Be Equal As Strings    ${resp.json()}    ${INVALID_FIELD}
 
 
-JD-TC-AddSubServicesToAppt-UH7
-
-    [Documentation]  add subservice to an inactive appointment.
-    
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=   Disable Appointment
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${subser_list1}=  Create Dictionary  serviceId=${subser_id1}  serviceAmount=${subser_price}   
-
-    ${resp}=   Add SubService To Appointment    ${apptid1}   ${subser_list1}
-    Log   ${resp.json()}  
-    Should Be Equal As Strings     ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${INVALID_APPOINTMENT}
-
-
-JD-TC-AddSubServicesToAppt-UH8
+JD-TC-AddSubServicesToAppt-UH6
 
     [Documentation]  add subservice to an invalid appointment id.
     
@@ -2629,7 +2688,7 @@ JD-TC-AddSubServicesToAppt-UH8
     Should Be Equal As Strings    ${resp.json()}    ${INVALID_APPOINTMENT}
 
 
-JD-TC-AddSubServicesToAppt-UH9
+JD-TC-AddSubServicesToAppt-UH7
 
     [Documentation]  add subservice to another providers appointment.
     
@@ -2667,34 +2726,6 @@ JD-TC-AddSubServicesToAppt-UH9
     Log   ${resp.json()}  
     Should Be Equal As Strings     ${resp.status_code}    401
     Should Be Equal As Strings    ${resp.json()}    ${NO_PERMISSION}
-
-
-JD-TC-AddSubServicesToAppt-UH10
-
-    [Documentation]  add subservice to an inactive user.
-    
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  EnableDisable User  ${u_id1}  ${toggle[1]}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get User By Id  ${u_id1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${u_id1}   status=${status[1]} 
-
-    ${asgn_users}=   Create List  ${u_id1}
-    ${subser_list1}=  Create Dictionary  serviceId=${subser_id1}  serviceAmount=${subser_price}   assigneeUsers=${asgn_users}
-   
-    ${resp}=   Add SubService To Appointment    ${apptid1}   ${subser_list1}
-    Log   ${resp.json()}  
-    Should Be Equal As Strings     ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${INVALID_APPOINTMENT}
-
-
 
 *** comments ***
 

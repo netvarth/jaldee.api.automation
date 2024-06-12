@@ -246,8 +246,8 @@ JD-TC-GetCustomVariableByFilter-5
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${var_id1}  ${resp.json()}
 
-    ${name1}=    FakerLibrary.word
-    ${dis_name1}=    FakerLibrary.word
+    ${name1}=    FakerLibrary.firstname
+    ${dis_name1}=    FakerLibrary.lastname
     ${value1}=   FakerLibrary.hostname
 
     ${resp}=  Create Custom Variable   ${name1}  ${dis_name1}  ${value1}  ${VariableValueType[1]}  ${VariableContext[0]}
@@ -428,6 +428,141 @@ JD-TC-GetCustomVariableByFilter-7
     Should Not Contain          ${resp.json()}                       ${var_id2} 
     Should Not Contain          ${resp.json()}                       ${var_id1} 
 
+JD-TC-GetCustomVariableByFilter-8
+
+    [Documentation]  Get the filter by name after updating the custom variable name.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id1}  ${resp.json()}
+
+    ${resp}=  Get Custom Variable By Filter   variableName-eq=${name}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()[0]['id']}              ${var_id1} 
+    Should Be Equal As Strings  ${resp.json()[0]['name']}            ${name}
+    Should Be Equal As Strings  ${resp.json()[0]['displayName']}     ${dis_name} 
+    Should Be Equal As Strings  ${resp.json()[0]['value']}           ${value}
+    Should Be Equal As Strings  ${resp.json()[0]['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['context']}         ${VariableContext[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['status']}          ${VarStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()[0]['account']}         ${account_id}
+
+    ${name1}=    FakerLibrary.word
+   
+    ${resp}=  Update Custom Variable   ${var_id1}  ${name1}  ${dis_name}  ${value}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=  Get Custom Variable By Filter   variableName-eq=${name}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()}              [] 
+
+JD-TC-GetCustomVariableByFilter-9
+
+    [Documentation]  Get the filter by name after updating the custom variable display name.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id1}  ${resp.json()}
+
+    ${resp}=  Get Custom Variable By Filter   variableName-eq=${name}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()[0]['id']}              ${var_id1} 
+    Should Be Equal As Strings  ${resp.json()[0]['name']}            ${name}
+    Should Be Equal As Strings  ${resp.json()[0]['displayName']}     ${dis_name} 
+    Should Be Equal As Strings  ${resp.json()[0]['value']}           ${value}
+    Should Be Equal As Strings  ${resp.json()[0]['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['context']}         ${VariableContext[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['status']}          ${VarStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()[0]['account']}         ${account_id}
+
+    ${dis_name1}=    FakerLibrary.word
+   
+    ${resp}=  Update Custom Variable   ${var_id1}  ${name}  ${dis_name1}  ${value}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Get Custom Variable By Filter   variableName-eq=${dis_name1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()}              [] 
+
+JD-TC-GetCustomVariableByFilter-10
+
+    [Documentation]  Get the filter by name after updating the custom value.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id1}  ${resp.json()}
+
+    ${resp}=  Get Custom Variable By Filter   variableName-eq=${name}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()[0]['id']}              ${var_id1} 
+    Should Be Equal As Strings  ${resp.json()[0]['name']}            ${name}
+    Should Be Equal As Strings  ${resp.json()[0]['displayName']}     ${dis_name} 
+    Should Be Equal As Strings  ${resp.json()[0]['value']}           ${value}
+    Should Be Equal As Strings  ${resp.json()[0]['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['context']}         ${VariableContext[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['status']}          ${VarStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()[0]['account']}         ${account_id}
+
+    ${value1}=   FakerLibrary.hostname
+
+    ${resp}=  Update Custom Variable   ${var_id1}  ${name}  ${dis_name}  ${value1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+  
+    ${resp}=  Get Custom Variable By Filter   variableName-eq=${value1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()}              [] 
+
 JD-TC-GetCustomVariableByFilter-UH1
 
     [Documentation]  Get Custom variable by filter without login
@@ -482,3 +617,110 @@ JD-TC-GetCustomVariableByFilter-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   400
     Should Be Equal As Strings  ${resp.json()}   ${LOGIN_INVALID_URL}
+
+JD-TC-GetCustomVariableByFilter-UH3
+
+    [Documentation]   get the filter using a variable name associated with a different provider.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id1}  ${resp.json()}
+
+    ${resp}=  ProviderLogout  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Custom Variable By Filter   variableName-eq=${name}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()}             []
+
+JD-TC-GetCustomVariableByFilter-UH4
+
+    [Documentation]   get the filter using a variable display name associated with a different provider.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id1}  ${resp.json()}
+
+    ${resp}=  ProviderLogout  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Custom Variable By Filter   variableDisplayName-eq=${dis_name}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()}             []
+
+JD-TC-GetCustomVariableByFilter-UH5
+
+    [Documentation]   get the filter using a value associated with a different provider.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id1}  ${resp.json()}
+
+    ${resp}=  ProviderLogout  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Custom Variable By Filter   value-eq=${value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()}             []
+    
+    
