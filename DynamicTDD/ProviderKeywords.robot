@@ -56,16 +56,19 @@ Account Activation
     RETURN  ${resp_val}
 
 Account Set Credential
-    [Arguments]  ${email}  ${password}  ${purpose}  ${countryCode}=91
-    ${auth}=     Create Dictionary   password=${password}  countryCode=${countryCode}
+    [Arguments]  ${email}  ${password}  ${purpose}  ${loginId}
+    ${auth}=     Create Dictionary   password=${password}  loginId=${loginId}
     ${key}=   verify accnt  ${email}  ${purpose}
     ${apple}=    json.dumps    ${auth}
     ${resp}=    PUT On Session    ynw    /provider/${key}/activate    data=${apple}    expected_status=any
     RETURN  ${resp}
 
 Provider Login
-    [Arguments]    ${usname}  ${passwrd}   ${countryCode}=91
-    ${log}=  Login  ${usname}  ${passwrd}   countryCode=${countryCode}
+    [Arguments]    ${usname}  ${passwrd}   
+
+    ${login}=    Create Dictionary    loginId=${usname}  password=${passwrd}
+    ${log}=    json.dumps    ${login}
+
     ${resp}=    POST On Session    ynw    /provider/login    data=${log}  expected_status=any
     RETURN  ${resp}
 
@@ -15581,4 +15584,42 @@ Get Dynamic Variable List
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/comm/template/dynamic/variable   expected_status=any
+    RETURN  ${resp}
+
+# ...............LINKING AND UNLNKING...................
+
+Connect with other login
+
+    [Arguments]  ${loginId}  ${password}
+    ${data}=  Create Dictionary  loginId=${loginId}  password=${password}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider//connections/${loginId}  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+List all links of a loginId
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/Connections   expected_status=any
+    RETURN  ${resp}
+
+Unlink one login
+
+    [Arguments]  ${loginId} 
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/connections/${loginId}   expected_status=any
+    RETURN  ${resp} 
+
+Switch login
+
+    [Arguments]  ${loginId} 
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/switch/${loginId}   expected_status=any
+    RETURN  ${resp}
+
+Reset LoginId
+
+    [Arguments]  ${loginId} 
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/reset/${loginId}    expected_status=any
     RETURN  ${resp}
