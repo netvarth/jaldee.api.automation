@@ -15525,10 +15525,15 @@ Update Custom Variable Status
 
 Create Template  
 
-    [Arguments]  ${temp_name}  ${context}  ${temp_format}  ${temp_type}  ${temp}   ${comm_chanl}  ${spec_id} 
-    ${recipient}=  Create Dictionary  userType=${userType[0]}  sendCategory=${sendCategory[0]}  specificID=${spec_id} 
-    ${data}=  Create Dictionary  name=${temp_name}  context=${context}  templateFormat=${temp_format}  templateType=${temp_type}  
-    ...   template=${temp}  commChannel=${comm_chanl}  recipient=${recipient}
+    [Arguments]  ${temp_name}  ${content}  ${temp_format}  ${context}  ${commTarget}   ${comm_chanl}  &{kwargs}
+   
+    ${data}=  Create Dictionary  templateName=${temp_name}  content=${content}  templateFormat=${temp_format}  context=${context}  
+    ...   commTarget=${commTarget}  commChannel=${comm_chanl} 
+
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/comm/template  data=${data}  expected_status=any
@@ -15536,10 +15541,14 @@ Create Template
 
 Update Template  
 
-    [Arguments]  ${temp_id}  ${temp_name}  ${context}  ${temp_format}  ${temp_type}  ${temp}   ${comm_chanl}  ${spec_id} 
-    ${recipient}=  Create Dictionary  userType=${userType[0]}  sendCategory=${sendCategory[0]}  specificID=${spec_id} 
-    ${data}=  Create Dictionary  name=${temp_name}  context=${context}  templateFormat=${temp_format}  templateType=${temp_type}  
-    ...   template=${temp}  commChannel=${comm_chanl}  recipient=${recipient}
+    [Arguments]  ${temp_id}  ${temp_name}  ${content}  ${temp_format}  ${context}  ${commTarget}   ${comm_chanl}  &{kwargs}
+   
+    ${data}=  Create Dictionary  templateName=${temp_name}  content=${content}  templateFormat=${temp_format}  context=${context}  
+    ...   commTarget=${commTarget}  commChannel=${comm_chanl} 
+
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/comm/template/${temp_id}  data=${data}  expected_status=any

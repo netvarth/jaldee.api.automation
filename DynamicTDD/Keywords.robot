@@ -283,6 +283,9 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{InventoryAuditType}               PURCHASE        STOCK_ADJUST        INV_CATALOG        REMARK
 @{InventoryAuditContext}            PURCHASE        INVENTORY        ITEM        CATALOG
 @{InventoryAuditLogAction}          ADD             UPDATE             REMOVE             UPDATE_STATUS
+@{templateFormat}                   PlainText
+@{CommChannel}                      SMS  Whatsapp  Email  Telegram
+@{CommTarget}                    	SPConsumer  SPUser  SPAdminUser
 
 *** Keywords ***
 Login
