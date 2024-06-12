@@ -154,6 +154,131 @@ JD-TC-CreateCustomVariable-8
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+JD-TC-CreateCustomVariable-9
+
+    [Documentation]  Create custom variable with name as integer.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${name}=    Random Int  min=1001  max=9000
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-CreateCustomVariable-10
+
+    [Documentation]  Create custom variable with display name as integer.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    Random Int  min=1001  max=9000
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-CreateCustomVariable-11
+
+    [Documentation]  Create custom variable for two providers with same name.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  ProviderLogout  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${dis_name1}=    FakerLibrary.word
+    ${value1}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name1}  ${value1}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-CreateCustomVariable-12
+
+    [Documentation]  Create custom variable for two providers with same display name.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  ProviderLogout  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${name1}=    FakerLibrary.word
+    ${value1}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name1}  ${dis_name}  ${value1}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-CreateCustomVariable-13
+
+    [Documentation]  Create custom variable for two providers with same value.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  ProviderLogout  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${name1}=    FakerLibrary.word
+    ${dis_name1}=    FakerLibrary.word
+
+    ${resp}=  Create Custom Variable   ${name1}  ${dis_name1}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
 JD-TC-CreateCustomVariable-UH1
 
     [Documentation]  Create custom variable without login

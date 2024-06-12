@@ -224,7 +224,7 @@ JD-TC-UpdateCustomVariable-4
     Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
     Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
 
-JD-TC-UpdateCustomVariable-UH1
+JD-TC-UpdateCustomVariable-5
 
     [Documentation]  Create custom variable and update it without name.
 
@@ -260,10 +260,21 @@ JD-TC-UpdateCustomVariable-UH1
 
     ${resp}=  Update Custom Variable   ${var_id1}  ${EMPTY}  ${dis_name}  ${value}  
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings  ${resp.json()}   ${VARIABLE_NAME}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-UpdateCustomVariable-UH2
+    ${resp}=  Get Custom Variable By Id   ${var_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['id']}              ${var_id1} 
+    Should Be Equal As Strings  ${resp.json()['name']}            ${name}
+    Should Be Equal As Strings  ${resp.json()['displayName']}     ${dis_name} 
+    Should Be Equal As Strings  ${resp.json()['value']}           ${value}
+    Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[0]}
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
+
+JD-TC-UpdateCustomVariable-6
 
     [Documentation]  Create custom variable and update it without display name.
 
@@ -299,10 +310,21 @@ JD-TC-UpdateCustomVariable-UH2
 
     ${resp}=  Update Custom Variable   ${var_id1}  ${name}  ${EMPTY}  ${value} 
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings  ${resp.json()}   ${VARIABLE_DISPLAY_NAME}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-UpdateCustomVariable-UH3
+    ${resp}=  Get Custom Variable By Id   ${var_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['id']}              ${var_id1} 
+    Should Be Equal As Strings  ${resp.json()['name']}            ${name}
+    Should Be Equal As Strings  ${resp.json()['displayName']}     ${dis_name} 
+    Should Be Equal As Strings  ${resp.json()['value']}           ${value}
+    Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[0]}
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
+
+JD-TC-UpdateCustomVariable-7
 
     [Documentation]  Create custom variable and update it without value.
 
@@ -338,10 +360,21 @@ JD-TC-UpdateCustomVariable-UH3
 
     ${resp}=  Update Custom Variable   ${var_id1}  ${name}  ${dis_name}  ${EMPTY}  
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings  ${resp.json()}   ${VARIABLE_VALUE}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-CreateCustomVariable-UH4
+    ${resp}=  Get Custom Variable By Id   ${var_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['id']}              ${var_id1} 
+    Should Be Equal As Strings  ${resp.json()['name']}            ${name}
+    Should Be Equal As Strings  ${resp.json()['displayName']}     ${dis_name} 
+    Should Be Equal As Strings  ${resp.json()['value']}           ${value}
+    Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[0]}
+    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
+
+JD-TC-CreateCustomVariable-UH1
 
     [Documentation]  Update custom variable with provider consumer login.
 
@@ -400,7 +433,7 @@ JD-TC-CreateCustomVariable-UH4
     Should Be Equal As Strings    ${resp.status_code}   400
     Should Be Equal As Strings  ${resp.json()}   ${LOGIN_INVALID_URL}
 
-JD-TC-CreateCustomVariable-UH5
+JD-TC-CreateCustomVariable-UH2
 
     [Documentation]  Update custom variable without login
 
@@ -426,7 +459,7 @@ JD-TC-CreateCustomVariable-UH5
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-UpdateCustomVariable-UH6
+JD-TC-UpdateCustomVariable-UH3
 
     [Documentation]  update custom variable using another providers variable id.
 

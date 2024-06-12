@@ -85,23 +85,30 @@ JD-TC-GetCustomVariableByFilter-2
     ${resp}=  Get Custom Variable By Filter   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()[0]['id']}              ${var_id2} 
-    Should Be Equal As Strings  ${resp.json()[0]['name']}            ${name1}
-    Should Be Equal As Strings  ${resp.json()[0]['displayName']}     ${dis_name1} 
-    Should Be Equal As Strings  ${resp.json()[0]['value']}           ${value1}
-    Should Be Equal As Strings  ${resp.json()[0]['type']}            ${VariableValueType[1]} 
-    Should Be Equal As Strings  ${resp.json()[0]['context']}         ${VariableContext[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['status']}          ${VarStatus[0]} 
-    Should Be Equal As Strings  ${resp.json()[0]['account']}         ${account_id}
 
-    Should Be Equal As Strings  ${resp.json()[1]['id']}              ${var_id1} 
-    Should Be Equal As Strings  ${resp.json()[1]['name']}            ${name}
-    Should Be Equal As Strings  ${resp.json()[1]['displayName']}     ${dis_name} 
-    Should Be Equal As Strings  ${resp.json()[1]['value']}           ${value}
-    Should Be Equal As Strings  ${resp.json()[1]['type']}            ${VariableValueType[1]} 
-    Should Be Equal As Strings  ${resp.json()[1]['context']}         ${VariableContext[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['status']}          ${VarStatus[0]} 
-    Should Be Equal As Strings  ${resp.json()[1]['account']}         ${account_id}
+    ${len}=  Get Length  ${resp.json()}
+
+    FOR  ${i}  IN RANGE   ${len}
+
+        IF  '${resp.json()[${i}]['id']}' == '${var_id1}'  
+            Should Be Equal As Strings  ${resp.json()[${i}]['name']}            ${name}
+            Should Be Equal As Strings  ${resp.json()[${i}]['displayName']}     ${dis_name} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['value']}           ${value}
+            Should Be Equal As Strings  ${resp.json()[${i}]['type']}            ${VariableValueType[1]} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['context']}         ${VariableContext[0]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['status']}          ${VarStatus[0]} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['account']}         ${account_id}
+
+        ELSE IF     '${resp.json()[${i}]['id']}' == '${var_id2}'            
+            Should Be Equal As Strings  ${resp.json()[${i}]['name']}            ${name1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['displayName']}     ${dis_name1} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['value']}           ${value1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['type']}            ${VariableValueType[1]} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['context']}         ${VariableContext[0]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['status']}          ${VarStatus[0]} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['account']}         ${account_id}
+        END
+    END
 
 JD-TC-GetCustomVariableByFilter-3
 
@@ -308,22 +315,29 @@ JD-TC-GetCustomVariableByFilter-6
     ${resp}=  Get Custom Variable By Filter   status-eq=${VarStatus[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()[0]['id']}              ${var_id2} 
-    Should Be Equal As Strings  ${resp.json()[0]['name']}            ${name1}
-    Should Be Equal As Strings  ${resp.json()[0]['displayName']}     ${dis_name1} 
-    Should Be Equal As Strings  ${resp.json()[0]['value']}           ${value1}
-    Should Be Equal As Strings  ${resp.json()[0]['type']}            ${VariableValueType[1]} 
-    Should Be Equal As Strings  ${resp.json()[0]['context']}         ${VariableContext[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['status']}          ${VarStatus[0]} 
-    Should Be Equal As Strings  ${resp.json()[0]['account']}         ${account_id} 
-    Should Be Equal As Strings  ${resp.json()[1]['id']}              ${var_id1} 
-    Should Be Equal As Strings  ${resp.json()[1]['name']}            ${name}
-    Should Be Equal As Strings  ${resp.json()[1]['displayName']}     ${dis_name} 
-    Should Be Equal As Strings  ${resp.json()[1]['value']}           ${value}
-    Should Be Equal As Strings  ${resp.json()[1]['type']}            ${VariableValueType[1]} 
-    Should Be Equal As Strings  ${resp.json()[1]['context']}         ${VariableContext[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['status']}          ${VarStatus[0]} 
-    Should Be Equal As Strings  ${resp.json()[1]['account']}         ${account_id}
+    ${len}=  Get Length  ${resp.json()}
+
+    FOR  ${i}  IN RANGE   ${len}
+
+        IF  '${resp.json()[${i}]['id']}' == '${var_id1}'  
+            Should Be Equal As Strings  ${resp.json()[${i}]['name']}            ${name}
+            Should Be Equal As Strings  ${resp.json()[${i}]['displayName']}     ${dis_name} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['value']}           ${value}
+            Should Be Equal As Strings  ${resp.json()[${i}]['type']}            ${VariableValueType[1]} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['context']}         ${VariableContext[0]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['status']}          ${VarStatus[0]} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['account']}         ${account_id}
+
+        ELSE IF     '${resp.json()[${i}]['id']}' == '${var_id2}'            
+            Should Be Equal As Strings  ${resp.json()[${i}]['name']}            ${name1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['displayName']}     ${dis_name1} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['value']}           ${value1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['type']}            ${VariableValueType[1]} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['context']}         ${VariableContext[0]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['status']}          ${VarStatus[0]} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['account']}         ${account_id}
+        END
+    END
 
     ${resp}=  Update Custom Variable Status  ${var_id1}   ${VarStatus[1]} 
     Log   ${resp.content}
@@ -365,14 +379,15 @@ JD-TC-GetCustomVariableByFilter-7
     Set Test Variable   ${var_id1}  ${resp.json()}
 
     ${name1}=    FakerLibrary.word
+    ${dis_name1}=    FakerLibrary.word
     ${value1}=   FakerLibrary.hostname
 
-    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    ${resp}=  Create Custom Variable   ${name1}  ${dis_name1}  ${value1}  ${VariableValueType[1]}  ${VariableContext[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${var_id1}  ${resp.json()}
+    Set Test Variable   ${var_id2}  ${resp.json()}
 
-    ${resp}=  Get Custom Variable By Filter   
+    ${resp}=  Get Custom Variable By Filter   context-eq=${VariableContext[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()[0]['id']}              ${var_id1} 
@@ -383,3 +398,87 @@ JD-TC-GetCustomVariableByFilter-7
     Should Be Equal As Strings  ${resp.json()[0]['context']}         ${VariableContext[0]}
     Should Be Equal As Strings  ${resp.json()[0]['status']}          ${VarStatus[0]} 
     Should Be Equal As Strings  ${resp.json()[0]['account']}         ${account_id}
+    Should Not Contain          ${resp.json()}                       ${var_id2} 
+
+    ${resp}=  Get Custom Variable By Filter   context-eq=${VariableContext[2]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()}              [] 
+
+    ${name2}=    FakerLibrary.word
+    ${dis_name2}=    FakerLibrary.word
+    ${value2}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name2}  ${dis_name2}  ${value2}  ${VariableValueType[1]}  ${VariableContext[2]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id3}  ${resp.json()}
+
+    ${resp}=  Get Custom Variable By Filter   context-eq=${VariableContext[2]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()[0]['id']}              ${var_id3} 
+    Should Be Equal As Strings  ${resp.json()[0]['name']}            ${name2}
+    Should Be Equal As Strings  ${resp.json()[0]['displayName']}     ${dis_name2} 
+    Should Be Equal As Strings  ${resp.json()[0]['value']}           ${value2}
+    Should Be Equal As Strings  ${resp.json()[0]['type']}            ${VariableValueType[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['context']}         ${VariableContext[2]}
+    Should Be Equal As Strings  ${resp.json()[0]['status']}          ${VarStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()[0]['account']}         ${account_id}
+    Should Not Contain          ${resp.json()}                       ${var_id2} 
+    Should Not Contain          ${resp.json()}                       ${var_id1} 
+
+JD-TC-GetCustomVariableByFilter-UH1
+
+    [Documentation]  Get Custom variable by filter without login
+
+    ${resp}=  Get Custom Variable By Filter
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
+
+JD-TC-GetCustomVariableByFilter-UH2
+
+    [Documentation]  Get Custom variable by filter with provider consumer login.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME37}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    #............provider consumer creation..........
+
+    ${NewCustomer}    Generate random string    10    123456789
+    ${NewCustomer}    Convert To Integer  ${NewCustomer}
+
+    ${custf_name}=  FakerLibrary.name    
+    ${custl_name}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${NewCustomer}    firstName=${custf_name}   lastName=${custl_name}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get Custom Variable By Filter
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   400
+    Should Be Equal As Strings  ${resp.json()}   ${LOGIN_INVALID_URL}
