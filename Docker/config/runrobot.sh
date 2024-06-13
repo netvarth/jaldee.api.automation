@@ -2,8 +2,8 @@
 
 # set -vx      # uncomment to enable debugging
 # OR uncomment following lines to enable debugging
-# PS4='\033[0;33m+(${BASH_SOURCE}:${LINENO}):\033[0m ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
-# set -x      
+PS4='\033[0;33m+(${BASH_SOURCE}:${LINENO}):\033[0m ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
+set -x      
 
 MYSQL_USER='root'
 DATABASE_NAME='ynw'
@@ -18,7 +18,7 @@ DB_BACKUP_PATH="TDD/APreBackup"
 REDIS_HOST='127.0.0.1'
 tddpath="TDD/${SUITE}"
 var="$(cut -d'/' -f 1 <<< ${SUITE})"
-Log_DIR="${suite%.*}"
+Log_DIR="${SUITE%.*}"
 # ssh-keyscan -H $IP_ADDRESS >> ~/.ssh/known_hosts
 # echo "===================================================================================================="
 # uname -vr
