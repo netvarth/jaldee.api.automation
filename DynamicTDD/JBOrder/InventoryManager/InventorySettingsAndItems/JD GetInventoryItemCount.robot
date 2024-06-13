@@ -925,6 +925,7 @@ JD-TC-Get Inventory Item Count-3
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}                 200
     Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[0]}
+    Set Suite Variable              ${purchaseReferenceNo}           ${resp.json()['purchaseReferenceNo']}
 # -------------------------------------------  Update Purchase Status ------------------------------------------------
     ${resp}=    Update Purchase Status  ${PurchaseStatus[1]}  ${purchaseId} 
     Log   ${resp.content}
@@ -977,7 +978,7 @@ JD-TC-Get Inventory Item Count-3
     Should Be Equal As Strings      ${resp.json()[0]['updateTypeString']}          Add
     Should Be Equal As Strings      ${resp.json()[0]['updateQty']}          ${totalConvertedQuantity}
     Should Be Equal As Strings      ${resp.json()[0]['transactionTypeEnum']}          ${transactionTypeEnum[3]}
-    Should Be Equal As Strings      ${resp.json()[0]['referenceNo']}          ${invoiceReferenceNo}
+    Should Be Equal As Strings      ${resp.json()[0]['referenceNo']}          ${purchaseReferenceNo}
     Should Be Equal As Strings      ${resp.json()[0]['referenceDate']}          ${DAY1}
     Should Be Equal As Strings      ${resp.json()[0]['referenceUid']}          ${purchaseId}
     Should Be Equal As Strings      ${resp.json()[0]['createdBy']}          ${user_id}
