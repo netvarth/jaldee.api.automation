@@ -307,7 +307,7 @@ JD-TC-AddDetailsToCataolog-1
 
     ${taxName}=    FakerLibrary.name
     ${taxPercentage}=     Random Int  min=0  max=200
-    ${taxPercentage}=           Convert To Number  ${taxPercentage}  1
+    ${taxPercentage}=           Convert To Number  ${taxPercentage}  2
     ${cgst}=     Evaluate   ${taxPercentage} / 2
     ${sgst}=     Evaluate   ${taxPercentage} / 2
     Set Suite Variable      ${taxName}
@@ -434,15 +434,15 @@ JD-TC-AddDetailsToCataolog-1
     Set Suite Variable   ${ic_id}   ${resp.json()[0]}
 
     ${quantity}=                    Random Int  min=0  max=999
-    ${quantity}=                    Convert To Number  ${quantity}  1
+    ${quantity}=                    Convert To Number  ${quantity}  2
     ${freeQuantity}=                Random Int  min=0  max=10
-    ${freeQuantity}=                Convert To Number  ${freeQuantity}  1
+    ${freeQuantity}=                Convert To Number  ${freeQuantity}  2
     ${amount}=                      Random Int  min=1  max=999
-    ${amount}=                      Convert To Number  ${amount}  1
+    ${amount}=                      Convert To Number  ${amount}  2
     ${discountPercentage}=          Random Int  min=0  max=100
-    ${discountPercentage}=          Convert To Number  ${discountPercentage}  1
+    ${discountPercentage}=          Convert To Number  ${discountPercentage}  2
     ${fixedDiscount}=               Random Int  min=0  max=200
-    ${fixedDiscount}=               Convert To Number  ${fixedDiscount}  1
+    ${fixedDiscount}=               Convert To Number  ${fixedDiscount}  2
     ${inventoryCatalogItem}=        Create Dictionary   encId=${ic_id}
     Set Suite Variable              ${quantity}
     Set Suite Variable              ${freeQuantity}
@@ -497,7 +497,7 @@ JD-TC-AddDetailsToCataolog-1
     # Set Suite Variable              ${inv_order_encid}    ${resp.json()}
     ${inv_cat_encid_List}=  Create List  ${encid}
     ${price}=    Random Int  min=2   max=40
-    ${price}=  Convert To Number  ${price}    1
+    ${price}=  Convert To Number  ${price}    2
     Set Suite Variable  ${price}
     # ${resp}=   Create Inventory Catalog Item  ${inv_cat_encid}   ${itemEncId1}  
     # Log   ${resp.content}
@@ -572,7 +572,7 @@ JD-TC-AddDetailsToCataolog-1
 
     ${Name1}=    FakerLibrary.last name
     ${price1}=    Random Int  min=2   max=40
-    ${price1}=  Convert To Number  ${price1}    1
+    ${price1}=  Convert To Number  ${price1}    2
     ${catalog_details}=  Create Dictionary          name=${Name1}  price=${price1}   inventoryItemBatch=${enccid}   
     Set Suite Variable  ${catalog_details}  
 
