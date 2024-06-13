@@ -15558,7 +15558,7 @@ Update Template Status
 
     [Arguments]  ${temp_id}  ${status} 
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/comm/template/${temp_id}/${status}   expected_status=any
+    ${resp}=  PUT On Session  ynw  /provider/comm/template/${temp_id}/status/${status}   expected_status=any
     RETURN  ${resp} 
 
 Get Template By Id
