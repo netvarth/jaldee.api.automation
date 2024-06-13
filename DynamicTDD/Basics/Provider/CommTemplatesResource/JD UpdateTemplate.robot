@@ -16,35 +16,55 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
-*** Variables ***
-
-@{context}   ALL  Signup
-@{userType}             spConsumer
-@{sendCategory}   ALL
-@{templateFormat}   html
-${template_html}     /ebs/TDD/template.html
-
 *** Test Cases ***
 
 JD-TC-UpdateTemplate-1
 
-    [Documentation]  Create template for a provider
+    [Documentation]  Create template update it with same details then get it by id and verify.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-*** comments ***
-    ${temp_name}=    FakerLibrary.word
-    ${comm_chanl}=  Create List   ${notifytype[2]}  ${notifytype[1]}
-    ${spec_id}=  Create List   1  23
+ 
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
 
-    ${resp}=  Create Template   ${temp_name}  ${context[1]}  ${templateFormat[0]}  ${notifytype[2]}  ${temp}  ${comm_chanl}  ${userType[0]}   
-    ...      ${sendCategory[0]}   ${spec_id}
+    ${temp_name}=    FakerLibrary.word
+    ${content}=    FakerLibrary.sentence
+    ${comm_chanl}=  Create List   ${CommChannel[0]}  
+    ${comm_target}=  Create List   ${CommTarget[0]}  
+    
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${temp_id1}  ${resp.content}
 
-    ${resp}=  Update Template   ${temp_id1}  ${temp_name}  ${context[1]}  ${templateFormat[0]}  ${notifytype[2]}  ${temp}  ${comm_chanl}  ${userType[0]}   
-    ...      ${sendCategory[0]}   ${spec_id}
+    ${resp}=  Get Template By Id   ${temp_id1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['accountId']}                   ${account_id} 
+    Should Be Equal As Strings  ${resp.json()['templateName']}                ${temp_name}
+    Should Be Equal As Strings  ${resp.json()['context']}                     ${VariableContext[0]} 
+    Should Be Equal As Strings  ${resp.json()['commChannel']}                 ${comm_chanl} 
+    Should Be Equal As Strings  ${resp.json()['templateFormat']}              ${templateFormat[0]}
+    Should Be Equal As Strings  ${resp.json()['content']}                     ${content}
+    Should Be Equal As Strings  ${resp.json()['commTarget']}                  ${comm_target} 
+    Should Be Equal As Strings  ${resp.json()['status']}                      ${VarStatus[0]} 
+
+    ${resp}=  Update Template   ${temp_id1}  ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Template By Id   ${temp_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['accountId']}                   ${account_id} 
+    Should Be Equal As Strings  ${resp.json()['templateName']}                ${temp_name}
+    Should Be Equal As Strings  ${resp.json()['context']}                     ${VariableContext[0]} 
+    Should Be Equal As Strings  ${resp.json()['commChannel']}                 ${comm_chanl} 
+    Should Be Equal As Strings  ${resp.json()['templateFormat']}              ${templateFormat[0]}
+    Should Be Equal As Strings  ${resp.json()['content']}                     ${content}
+    Should Be Equal As Strings  ${resp.json()['commTarget']}                  ${comm_target} 
+    Should Be Equal As Strings  ${resp.json()['status']}                      ${VarStatus[0]} 

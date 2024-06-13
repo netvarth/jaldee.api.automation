@@ -15,10 +15,6 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
-*** Variables ***
-
-@{context}   ALL
-
 *** Test Cases ***
 
 JD-TC-UpdateCustomVariableStatus-1
