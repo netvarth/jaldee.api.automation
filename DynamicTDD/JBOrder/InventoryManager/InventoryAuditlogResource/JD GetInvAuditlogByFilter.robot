@@ -1201,7 +1201,7 @@ JD-TC-GetInvAuditlogByFilter-26
     ${resp}=    Get Purchase By Uid  ${purchaseId} 
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
-    Set Suite Variable              ${purchase_EncId}           ${resp.json()['purchaseItemDtoList'][0]['encId']}
+    Set Suite Variable              ${purchase_EncId}           ${resp.json()['purchaseItemDtoList'][0]['encId']} 
 
 
     ${resp}=   Get Inventory Auditlog By Filter    account-eq=${accountId}
