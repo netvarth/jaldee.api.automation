@@ -192,6 +192,40 @@ JD-TC-CreateTemplate-9
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+JD-TC-CreateTemplate-10
+
+    [Documentation]  Create template without comm channel. 
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME159}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${temp_name}=    FakerLibrary.word
+    ${content}=    FakerLibrary.sentence
+    ${comm_chanl}=  Create List   
+    ${comm_target}=  Create List   ${CommTarget[0]}  
+    
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[2]}  ${comm_target}    ${comm_chanl} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+JD-TC-CreateTemplate-11
+
+    [Documentation]  Create template without comm target. 
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${temp_name}=    FakerLibrary.word
+    ${content}=    FakerLibrary.sentence
+    ${comm_chanl}=  Create List   ${CommChannel[0]}  
+    ${comm_target}=  Create List  
+    
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[2]}  ${comm_target}    ${comm_chanl} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
 JD-TC-CreateTemplate-UH1
 
     [Documentation]  Create template with same template name.
@@ -231,7 +265,7 @@ JD-TC-CreateTemplate-UH2
     ${resp}=  Create Template   ${EMPTY}  ${content}  ${templateFormat[0]}  ${VariableContext[2]}  ${comm_target}    ${comm_chanl} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings  ${resp.json()}   ${TEMPLATE_NAME_EXISTS}
+    Should Be Equal As Strings  ${resp.json()}   ${TEMPLATE_NAME_SHOULD_NOT_BE_NULL}
 
 JD-TC-CreateTemplate-UH3
 
@@ -252,38 +286,66 @@ JD-TC-CreateTemplate-UH3
 
 JD-TC-CreateTemplate-UH4
 
-    [Documentation]  Create template without comm channel. 
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME181}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    [Documentation]  Create template without login
 
     ${temp_name}=    FakerLibrary.word
+    ${content}=    FakerLibrary.sentence
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
-    
-    ${resp}=  Create Template   ${temp_name}  ${EMPTY}  ${templateFormat[0]}  ${VariableContext[2]}  ${comm_target}    ${comm_chanl} 
+
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}   ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings  ${resp.json()}   ${TEMPLATE_CONTENT}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-CreateTemplate-UH5
 
-    [Documentation]  Create template without comm target. 
+    [Documentation]  Create template with provider consumer login.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME181}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    #............provider consumer creation..........
+
+    ${NewCustomer}    Generate random string    10    123456789
+    ${NewCustomer}    Convert To Integer  ${NewCustomer}
+
+    ${custf_name}=  FakerLibrary.name    
+    ${custl_name}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${NewCustomer}    firstName=${custf_name}   lastName=${custl_name}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
     ${temp_name}=    FakerLibrary.word
+    ${content}=    FakerLibrary.sentence
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
-    
-    ${resp}=  Create Template   ${temp_name}  ${EMPTY}  ${templateFormat[0]}  ${VariableContext[2]}  ${comm_target}    ${comm_chanl} 
+
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}   ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings  ${resp.json()}   ${TEMPLATE_CONTENT}
-
-
-
+    Should Be Equal As Strings    ${resp.status_code}   401
+    Should Be Equal As Strings  ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
 

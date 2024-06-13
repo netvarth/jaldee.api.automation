@@ -85,7 +85,7 @@ JD-TC-GetDynamicVariableList-UH2
 
     ${resp}=  Get Dynamic Variable List
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   400
-    Should Be Equal As Strings  ${resp.json()}   ${LOGIN_INVALID_URL}
+    Should Be Equal As Strings    ${resp.status_code}   401
+    Should Be Equal As Strings  ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
 
 

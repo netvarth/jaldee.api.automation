@@ -430,8 +430,8 @@ JD-TC-CreateCustomVariable-UH1
 
     ${resp}=  Update Custom Variable     ${var_id1}  ${name}  ${dis_name}  ${value}  
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   400
-    Should Be Equal As Strings  ${resp.json()}   ${LOGIN_INVALID_URL}
+    Should Be Equal As Strings    ${resp.status_code}   401
+    Should Be Equal As Strings  ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
 
 JD-TC-CreateCustomVariable-UH2
 
@@ -503,5 +503,5 @@ JD-TC-UpdateCustomVariable-UH3
 
     ${resp}=  Update Custom Variable   ${var_id1}  ${name}  ${dis_name}  ${value} 
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    401
-    
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}   ${VARIABLE_NOT_FOUND}

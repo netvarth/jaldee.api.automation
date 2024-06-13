@@ -632,7 +632,8 @@ JD-TC-GetCustomVariableById-UH2
 
     ${resp}=  Get Custom Variable By Id   ${var_id1}  
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    401
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}   ${VARIABLE_NOT_FOUND}
 
 JD-TC-GetCustomVariableById-UH3
 
@@ -712,5 +713,5 @@ JD-TC-GetCustomVariableById-UH4
 
     ${resp}=  Get Custom Variable By Id   ${var_id1}  
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   400
-    Should Be Equal As Strings  ${resp.json()}   ${LOGIN_INVALID_URL}
+    Should Be Equal As Strings    ${resp.status_code}   401
+    Should Be Equal As Strings  ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
