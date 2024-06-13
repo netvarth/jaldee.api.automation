@@ -2341,6 +2341,7 @@ RECORD_ALREADY_UPDATED="Record status is already Updated"
 ORDER_CATALOG_EXIST_WITH_SAME_NAME="Order Catalog exists with given name in this store"
 INVALID_TAXID="Invalid Tax Id"
 SP_ITEM_ID_REQUIRED="Sp Item Id required"
+BATCH_APPLICABLE_SECLECT_ONLY_FOR_INVENTORY_ITEMS="Batch Applicable can only be selected if the item is marked as an Inventory Item."
 # Vendor
 INVALID_NAME="Invalid Name"
 CATEGORY_EXIST="Category exists with given name"
