@@ -171,7 +171,7 @@ JD-TC-GetPayableWithFilter-1
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${dueDate}  
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     Set Suite Variable  ${amount}  
 
     ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}     ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}
@@ -260,7 +260,7 @@ JD-TC-GetPayableWithFilter-4
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     Set Test Variable  ${dueDate}  
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     Set Test Variable  ${amount}  
 
 
@@ -307,7 +307,7 @@ JD-TC-GetPayableWithFilter-5
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     Set Test Variable  ${dueDate}  
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     Set Test Variable  ${amount}  
     ${merchantId}=   FakerLibrary.word
     Set Suite Variable   ${merchantId}
@@ -392,7 +392,7 @@ JD-TC-GetPayableWithFilter-6
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     Set Test Variable  ${dueDate}  
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     Set Test Variable  ${amount}  
 
 
@@ -453,7 +453,7 @@ JD-TC-GetPayableWithFilter-7
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     Set Test Variable  ${dueDate}  
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     Set Test Variable  ${amount}  
 
     ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${EMPTY}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}

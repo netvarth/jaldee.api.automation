@@ -166,7 +166,7 @@ JD-TC-Get PaymentsIn-1
     ${payableLabel}=   FakerLibrary.word
     ${receivedDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
     ${resp}=  db.getType   ${jpgfile}
     Log  ${resp}
@@ -223,7 +223,7 @@ JD-TC-Get PaymentsIn-2
     ${payableLabel}=   FakerLibrary.word
     ${receivedDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[0]}
     ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${paymentMode}    uploadedDocuments=${uploadedDocuments}    
     Log  ${resp.json()}
@@ -263,7 +263,7 @@ JD-TC-Get PaymentsIn-3
     ${payableLabel}=   FakerLibrary.word
     ${receivedDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[0]}
     ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${paymentMode}    uploadedDocuments=${uploadedDocuments}    
     Log  ${resp.json()}
@@ -300,7 +300,7 @@ JD-TC-Get PaymentsIn-4
     ${payableLabel}=   FakerLibrary.word
     ${receivedDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     ${merchantId}=   FakerLibrary.word
     Set Suite Variable   ${merchantId}
     ${merchantKey}=   FakerLibrary.word

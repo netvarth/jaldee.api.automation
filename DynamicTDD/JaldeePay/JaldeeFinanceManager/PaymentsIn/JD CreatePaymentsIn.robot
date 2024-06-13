@@ -174,7 +174,7 @@ JD-TC-Create PaymentsIn-1
     ${payableLabel}=   FakerLibrary.word
     ${receivedDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
  
     ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[0]}
     ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    ${paymentMode}    uploadedDocuments=${uploadedDocuments}
@@ -213,7 +213,7 @@ JD-TC-Create PaymentsIn-2
     ${payableLabel}=   FakerLibrary.word
     ${receivedDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
      ${resp}=  db.getType   ${jpgfile}
     Log  ${resp}

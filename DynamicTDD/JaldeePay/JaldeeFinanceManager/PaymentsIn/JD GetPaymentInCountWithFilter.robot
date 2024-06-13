@@ -173,7 +173,7 @@ JD-TC-GetPayableCountWithFilter-1
     ${receivedDate}=   db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${receivedDate}  
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     Set Suite Variable  ${amount}  
 
 
@@ -248,7 +248,7 @@ JD-TC-GetPayableCountWithFilter-3
     ${payableLabel}=   FakerLibrary.word
     ${receivedDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
     ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[0]}
     ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${paymentMode}    uploadedDocuments=${uploadedDocuments}    
@@ -284,7 +284,7 @@ JD-TC-GetPayableCountWithFilter-4
     ${payableLabel}=   FakerLibrary.word
     ${receivedDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
 
     ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[0]}
@@ -321,7 +321,7 @@ JD-TC-GetPayableCountWithFilter-5
     ${receivedDate}=   db.get_date_by_timezone  ${tz}
     Set Test Variable  ${receivedDate}  
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     Set Test Variable  ${amount}  
 
    ${resp}=  db.getType   ${jpgfile}
@@ -429,7 +429,7 @@ JD-TC-GetPayableCountWithFilter-9
     ${receivedDate}=   db.get_date_by_timezone  ${tz}
     Set Test Variable  ${receivedDate}  
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     Set Test Variable  ${amount}  
 
    ${resp}=  db.getType   ${jpgfile}

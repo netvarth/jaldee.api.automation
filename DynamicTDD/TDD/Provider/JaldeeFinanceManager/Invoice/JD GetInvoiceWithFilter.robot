@@ -163,7 +163,7 @@ JD-TC-CreateInvoice-1
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=  db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
     
     ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${pcid18}

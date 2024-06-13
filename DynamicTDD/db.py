@@ -1639,8 +1639,8 @@ def restore_date_claim():
     with open('TDD/data.csv','w', encoding="utf-8") as f:
         f.write(new)
 
-def roundval(fval,preci):
-    return round(float(fval),int(preci))
+# def roundval(fval,preci):
+#     return round(float(fval),int(preci))
 
 def get_place() :       
     # with open(pfile,'r', encoding="utf-8") as data:
@@ -2378,15 +2378,19 @@ def clear_consumer_notification_settings (usrid):
             dbconn.close()
 
 
-def roundoff(num):
+def roundoff(num, precision=2):
     if isinstance(num, (int, float)):
-        val=round(num,2)
-        # print('roundedval=',val)
+        val=round(float(num),precision)
+        print('roundedval=',val)
     else:
+        print(type(num))
         try:
-            val=float("{:.2f}".format(num))
-            # print('convertedval=',val)
-        except ValueError:
+            # val=float("{:.2f}".format(num))
+            val = float("{:.{}f}".format(float(num), precision))
+            print('convertedval=',val)
+        except Exception as e:
+            print ("Exception:", e)
+            print ("Exception at line no:", e.__traceback__.tb_lineno)
             return 0
     return val
 

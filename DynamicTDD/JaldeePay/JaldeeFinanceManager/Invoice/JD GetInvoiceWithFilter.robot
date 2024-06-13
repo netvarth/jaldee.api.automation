@@ -187,7 +187,7 @@ JD-TC-Get Invoice With Filter -1
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${invoiceDate}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     Set Suite Variable   ${amount}
     ${invoiceId}=   FakerLibrary.word
 

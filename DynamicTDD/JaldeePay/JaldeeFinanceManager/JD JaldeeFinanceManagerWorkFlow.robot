@@ -455,7 +455,7 @@ JD-TC-FinanceWorkFlow-1
     ${time_now}=    db.get_time_by_timezone  ${tz}
 
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
  
     ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[0]}
 
@@ -485,7 +485,7 @@ JD-TC-FinanceWorkFlow-1
     Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
 
     ${amount1}=   Random Int  min=500  max=2000
-    ${amount1}=     roundval    ${amount1}   1
+    ${amount1}=     roundoff    ${amount1}   1
 
     ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount1}  ${category_id4}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${paymentMode}    uploadedDocuments=${uploadedDocuments}    
     Log  ${resp.json()}

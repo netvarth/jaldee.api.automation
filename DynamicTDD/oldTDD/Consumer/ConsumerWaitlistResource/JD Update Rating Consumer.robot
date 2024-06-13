@@ -121,7 +121,7 @@ JD-TC-Update Rating Consumer-1
     Should Be Equal As Strings  ${resp.json()['rating']['feedback'][1]['comments']}  ${comment4}
     ${rating}=   Evaluate   ${rating2}.0 + ${rating4}.0 
     ${avg_rating}=   Evaluate   ${rating}/2.0
-    ${avg_round}=     roundval    ${avg_rating}   2
+    ${avg_round}=     roundoff    ${avg_rating}   2
     Set Suite Variable   ${avg_round}   
 
 JD-TC-Update Rating Consumer -UH1

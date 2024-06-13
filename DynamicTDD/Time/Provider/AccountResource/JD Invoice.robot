@@ -1162,7 +1162,7 @@ JD-TC-Invoice-8
     ${len}=  Get Length  ${resp.json()}
     Should Be Equal As Integers  ${len}  2
     ${amount}=  Evaluate  float(1000)/${daysR}*(${daysR}-${mid})
-    ${amount}=  roundval  ${amount}  2
+    ${amount}=  roundoff  ${amount}  2
     Should Be Equal As Strings  ${resp.json()[0]['addonDetails'][0]['amount']}  ${amount}
     Should Be Equal As Strings  ${resp.json()[0]['addonDetails'][0]['addOnId']}  ${aId}
     Verify Response List  ${resp}  0  accountId=${pid2}  createdDate=${cdate}  periodFrom=${cdate}  periodTo=${DAY2}  amount=${amount}  licensePaymentStatus=NotPaid  debit=0.0  credit=0.0  isPeriodic=False

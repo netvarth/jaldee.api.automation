@@ -175,7 +175,7 @@ JD-TC-GetPayableWithFilter-1
     ${receivedDate}=   db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${receivedDate}  
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     Set Suite Variable  ${amount}  
 
 
@@ -289,7 +289,7 @@ JD-TC-GetPayableWithFilter-4
     ${receivedDate}=   db.get_date_by_timezone  ${tz}
     Set Test Variable  ${receivedDate}  
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     Set Test Variable  ${amount}  
 
 
@@ -394,7 +394,7 @@ JD-TC-GetPayableWithFilter-5
     ${receivedDate}=   db.get_date_by_timezone  ${tz}
     Set Test Variable  ${receivedDate}  
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     Set Test Variable  ${amount}  
 
 
@@ -459,7 +459,7 @@ JD-TC-GetPayableWithFilter-6
     ${receivedDate}=   db.get_date_by_timezone  ${tz}
     Set Test Variable  ${receivedDate}  
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     Set Test Variable  ${amount}  
 
 
@@ -504,7 +504,7 @@ JD-TC-GetPayableWithFilter-7
     ${receivedDate}=   db.get_date_by_timezone  ${tz}
     Set Test Variable  ${receivedDate}  
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     Set Test Variable  ${amount}  
 
    ${resp}=  db.getType   ${jpgfile}

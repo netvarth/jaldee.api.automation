@@ -211,7 +211,7 @@ JD-TC-CreateReceivable-1
     ${receivableLabel}=   FakerLibrary.word
     ${dueDate}=  db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
     
     ${resp}=  Create Receivable   ${amount}    ${category_id3}   ${dueDate}   ${receivableLabel}     ${vendor_uid1}
@@ -234,7 +234,7 @@ JD-TC-CreateReceivable-1
     Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
 
     ${amount1}=   Random Int  min=500  max=2000
-    ${amount1}=     roundval    ${amount1}   1
+    ${amount1}=     roundoff    ${amount1}   1
 
     ${resp}=  Update Receivable   ${receivable_uid}    ${amount1}    ${category_id3}   ${dueDate}   ${receivableLabel}     ${vendor_uid1}
     Log  ${resp.json()}
