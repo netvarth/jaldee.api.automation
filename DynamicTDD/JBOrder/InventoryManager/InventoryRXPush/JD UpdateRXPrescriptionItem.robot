@@ -601,7 +601,7 @@ JD-TC-UpdateRXPrescriptionItem-2
 
 
 
-*** COMMETD ***
+*** Comments ***
 
 
 JD-TC-UpdateRXPrescriptionItem-2
