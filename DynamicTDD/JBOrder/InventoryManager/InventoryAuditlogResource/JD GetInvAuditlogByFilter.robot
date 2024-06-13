@@ -1104,6 +1104,17 @@ JD-TC-GetInvAuditlogByFilter-26
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Suite Variable   ${ic_id}   ${resp.json()[0]}
 
+    ${resp}=   Get Inventory Catalog item By EncId  ${ic_id}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200 
+
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
+    ${batch}=     FakerLibrary.name
+    ${resp}=   Create Batch  ${store_id}   ${ic_id}   ${batch}   ${DAY2}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${batch_id1}  ${resp.json()['id']}
+
     ${quantity}=                    Random Int  min=1  max=99
     ${quantity}=                    Convert To Number  ${quantity}  1
     ${freeQuantity}=                Random Int  min=0  max=10
@@ -1928,7 +1939,7 @@ JD-TC-GetInvAuditlogByFilter-50
 
     ${remarks}=    FakerLibrary.name
 
-    ${resp}=  Create Item Remarks   ${remarks}  ${transactionTypeEnum[5]}   
+    ${resp}=  Create Item Remarks   ${remarks}  ${transactionTypeEnum[1]}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${remarks_encid1}  ${resp.json()}
@@ -1954,17 +1965,31 @@ JD-TC-GetInvAuditlogByFilter-51
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=   Get Inventory Catalog item By EncId  ${ic_id}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200 
+
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
     ${invCatalog}=  Create Dictionary   encId=${encid} 
-    ${invCatalogItem}=  Create Dictionary   encId=${itemEncId1} 
-    ${data}=  Create Dictionary   invCatalog=${invCatalog}   invCatalogItem=${invCatalogItem}    qty=${quantity}    
+    ${invCatalogItem}=  Create Dictionary   encId=${ic_id} 
+    ${data}=  Create Dictionary   invCatalog=${invCatalog}   invCatalogItem=${invCatalogItem}    batch=${batch_id1}    qty=${quantity}    
     Set Suite Variable  ${data}  
     ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${encid}   ${remarks_encid1}      ${data} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${Stock_uid}  ${resp.json()}
 
     ${resp}=   Get Inventory Auditlog By Filter    userName-eq=${user_firstName} ${user_lastName}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}             200
-    
+
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}       ${Stock_uid}
+    Should Be Equal As Strings  ${resp.json()[0]['auditType']}       ${InventoryAuditType[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditContext']}       ${InventoryAuditContext[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditLogAction']}       ${InventoryAuditLogAction[0]} 
+    Should Be Equal As Strings  ${resp.json()[0]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['subject']}    Stock Adjusted
+    Should Be Equal As Strings  ${resp.json()[0]['description']}    Stock adjustment created 
+    Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}   
+    Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
