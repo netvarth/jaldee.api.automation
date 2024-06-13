@@ -61,3 +61,6 @@ JD-TC-paymentcheck-1
     ${netRate}=  roundoff  ${5.45}  1
     ${netRate}=  roundoff  5.45  1
     ${netRate}=  roundoff  ${545}  1
+
+    ${netRate}=  roundoff  108224.1888
+    ${netRate}=  roundoff  ${108224.1888}
