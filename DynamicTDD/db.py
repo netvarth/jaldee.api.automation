@@ -4320,11 +4320,12 @@ def MultiUser_InternalStatus(statuses,accNo):
 #                 fields[child.tag] = child.text.encode('utf8')
 #                 print("dictonary: ", fields)
 
-def random_phone_num_generator():
+def random_phone_num_generator(subscriber_number_length=7, cc=3):
     count = 0
-    subscriber_number_length=7
+    # subscriber_number_length=7
     while True:
-        country_code = str(random.randint(1, 999)).zfill(3)
+        # country_code = str(random.randint(1, 999)).zfill(cc)
+        country_code= str(random.randint(10**(cc-1),(10**cc)-1))
         subscriber_number = ''.join(random.choices('0123456789', k=subscriber_number_length))
         phone_number = country_code + subscriber_number
         print("Phone number:", phone_number,"with country code: ", country_code, "and number: ", subscriber_number)

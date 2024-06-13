@@ -2219,7 +2219,6 @@ CONSUMER_LAST_NAME_LENGTH_EXCEED ="Consumer last name should not exceed 250 char
 CONSUMER_DOB_REQUIRED = "Consumer DOB required."
 CONSUMER_GENDER_REQUIRED = "Consumer gender required."
 CONSUMER_PHONE_NO_REQUIRED = "Consumer phone number required."
-EMAIL_ID_REQUIRED = "Email Id required"
 AADHAAR_NUMBER_REQUIRED =  "Aadhaar number required."
 INVALID_AADHAAR_NUMBER =  "Invalid Aadhaar number."
 PAN_REQUIRED = "PAN required"
@@ -2396,3 +2395,7 @@ VARIABLE_DISPLAY_NAME = "Please enter variable display name"
 VARIABLE_VALUE = "Please enter the value"
 VARIABLE_TYPE = "Please enter the value type of variable"
 VARIABLE_STATUS = "Variable is already '{}'"
+
+#   Linking and Unlinking
+
+INVALID_PACKAGE_ID = "Invalid license package"

@@ -48,12 +48,21 @@ Claim SignUp
     ${resp}=    POST On Session   ynw    /provider    data=${data}  expected_status=any
     RETURN  ${resp}
 
+# Account Activation
+#     [Arguments]  ${email}  ${purpose}
+#     Check And Create YNW Session
+#     ${key}=   verify accnt  ${email}  ${purpose}
+#     ${resp_val}=  POST On Session   ynw  /provider/${key}/verify  expected_status=any
+#     RETURN  ${resp_val}
+# This URL Has Been Commented in rest side
+
 Account Activation
-    [Arguments]  ${email}  ${purpose}
+    [Arguments]  ${loginid}  ${purpose}
     Check And Create YNW Session
-    ${key}=   verify accnt  ${email}  ${purpose}
-    ${resp_val}=  POST On Session   ynw  /provider/${key}/verify  expected_status=any
-    RETURN  ${resp_val}
+    ${key}=   verify accnt  ${loginid}  ${purpose}
+    ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
+    ${resp}=    POST On Session    ynw    /provider/oauth/otp/${key}/verify  headers=${headers2}  expected_status=any
+    RETURN  ${resp}
 
 Account Set Credential
     [Arguments]  ${email}  ${password}  ${purpose}  ${loginId}
@@ -15594,7 +15603,7 @@ Connect with other login
     ${data}=  Create Dictionary  loginId=${loginId}  password=${password}
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider//connections/${loginId}  data=${data}  expected_status=any
+    ${resp}=  POST On Session  ynw  /provider/connections/${loginId}  data=${data}  expected_status=any
     RETURN  ${resp}
 
 List all links of a loginId
