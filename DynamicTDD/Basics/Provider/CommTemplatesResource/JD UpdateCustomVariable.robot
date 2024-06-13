@@ -374,7 +374,7 @@ JD-TC-UpdateCustomVariable-7
     Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
     Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
 
-JD-TC-CreateCustomVariable-UH1
+JD-TC-UpdateCustomVariable-UH1
 
     [Documentation]  Update custom variable with provider consumer login.
 
@@ -433,7 +433,7 @@ JD-TC-CreateCustomVariable-UH1
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings  ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
 
-JD-TC-CreateCustomVariable-UH2
+JD-TC-UpdateCustomVariable-UH2
 
     [Documentation]  Update custom variable without login
 
