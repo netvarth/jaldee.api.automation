@@ -708,7 +708,90 @@ JD-TC-UpdateTemplate-11
     Should Be Equal As Strings  ${resp.json()['content']['intro']}              ${content_msg}
     Should Be Equal As Strings  ${resp.json()['commTarget']}                    ${comm_target} 
     Should Be Equal As Strings  ${resp.json()['status']}                        ${VarStatus[0]} 
-    
+
+JD-TC-UpdateTemplate-12
+
+    [Documentation]  Create a template for signup context without custom variable in content then update it with custom variable..
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME252}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${var_id1}  ${resp.json()}
+
+    ${resp}=  Get Custom Variable By Id   ${var_id1}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${custom_var1}   ${resp.json()['internalName']}
+
+    ${temp_name}=    FakerLibrary.word
+    ${content_msg}=      FakerLibrary.sentence   
+    ${content}=    Create Dictionary  intro=${content_msg}
+    ${tempheader_sub}=      FakerLibrary.sentence   5
+    ${salutation}=      FakerLibrary.word
+    ${comm_chanl}=  Create List   ${CommChannel[2]}  
+    ${comm_target}=  Create List   ${CommTarget[0]}  
+    ${signature}=   FakerLibrary.hostname
+
+    ${temp_header}=    Create Dictionary  subject=${tempheader_sub}   salutation=${salutation}
+    ${temp_footer}=    Create Dictionary  signature=${signature}  
+
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl}  
+    ...    templateHeader=${temp_header}  footer=${temp_footer}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${temp_id1}  ${resp.content}
+
+    ${resp}=  Get Template By Id   ${temp_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['accountId']}                     ${account_id} 
+    Should Be Equal As Strings  ${resp.json()['templateName']}                  ${temp_name}
+    Should Be Equal As Strings  ${resp.json()['context']}                       ${VariableContext[0]} 
+    Should Be Equal As Strings  ${resp.json()['commChannel']}                   ${comm_chanl} 
+    Should Be Equal As Strings  ${resp.json()['templateFormat']}                ${templateFormat[0]}
+    Should Be Equal As Strings  ${resp.json()['templateHeader']['subject']}     ${tempheader_sub}
+    Should Be Equal As Strings  ${resp.json()['templateHeader']['salutation']}  ${salutation}
+    Should Be Equal As Strings  ${resp.json()['footer']['signature']}           ${signature}
+    Should Be Equal As Strings  ${resp.json()['content']['intro']}              ${content_msg}
+    Should Be Equal As Strings  ${resp.json()['commTarget']}                    ${comm_target} 
+    Should Be Equal As Strings  ${resp.json()['status']}                        ${VarStatus[0]} 
+
+    ${content_msg}=     Set Variable  ${content_msg} ${custom_var1}.
+
+    ${resp}=  Update Template   ${temp_id1}  ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl}  
+    ...    templateHeader=${temp_header}  footer=${temp_footer}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Template By Id   ${temp_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['accountId']}                     ${account_id} 
+    Should Be Equal As Strings  ${resp.json()['templateName']}                  ${temp_name}
+    Should Be Equal As Strings  ${resp.json()['context']}                       ${VariableContext[0]} 
+    Should Be Equal As Strings  ${resp.json()['commChannel']}                   ${comm_chanl} 
+    Should Be Equal As Strings  ${resp.json()['templateFormat']}                ${templateFormat[0]}
+    Should Be Equal As Strings  ${resp.json()['templateHeader']['subject']}     ${tempheader_sub}
+    Should Be Equal As Strings  ${resp.json()['templateHeader']['salutation']}  ${salutation}
+    Should Be Equal As Strings  ${resp.json()['footer']['signature']}           ${signature}
+    Should Be Equal As Strings  ${resp.json()['content']['intro']}              ${content_msg}
+    Should Be Equal As Strings  ${resp.json()['variables']['content'][0]}       ${custom_var1}
+    Should Be Equal As Strings  ${resp.json()['commTarget']}                    ${comm_target} 
+    Should Be Equal As Strings  ${resp.json()['status']}                        ${VarStatus[0]} 
+
 JD-TC-UpdateTemplate-UH1
 
     [Documentation]  Update custom variable with provider consumer login.
