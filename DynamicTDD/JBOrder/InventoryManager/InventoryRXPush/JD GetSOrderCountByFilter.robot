@@ -650,6 +650,7 @@ JD-TC-GetOrderByFilter-1
     Set Suite Variable              ${refNumber}      ${resp.json()['store']['refNumber']}
     Set Suite Variable              ${presc_ref}    ${resp.json()['prescriptionRefNo']}
     Set Suite Variable              ${orgin_From}   ${resp.json()['originFrom']}
+    Set Suite Variable              ${acceptedBy}   ${resp.json()['acceptedBy']}
     Should Be Equal As Strings      ${resp.json()['createdDate']}    ${DAY1}
     Should Be Equal As Strings      ${resp.json()['createdBy']}    ${pid}
     Should Be Equal As Strings      ${resp.json()['createdByName']}    ${pdrname}
@@ -753,7 +754,7 @@ JD-TC-GetOrderByFilter-8
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Get Sorder Count By Filter       acceptedBy-eq=${   }
+    ${resp}=    Get Sorder Count By Filter       acceptedBy-eq=${acceptedBy}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
     Should Be Equal As Strings      ${resp.json()}                  1

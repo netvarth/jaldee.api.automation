@@ -627,7 +627,7 @@ JD-TC-GetRXPrescriptionItemQuantity-4
     Should Be Equal As Strings      ${resp.status_code}             200
 
 
-JD-TC-GetRXPrescriptionItemQuantity-5
+JD-TC-GetRXPrescriptionItemQuantity-UH1
 
     [Documentation]    Get RX Prescription Item Quantity - duration is empty
 
@@ -637,8 +637,8 @@ JD-TC-GetRXPrescriptionItemQuantity-5
 
     ${resp}=    Get RX Prescription Item Qnty By EncId  ${displayName2}  ${empty}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}             200
-
+    Should Be Equal As Strings      ${resp.status_code}             422
+    Should Be Equal As Strings      ${resp.json()}          ${INVALID_DURATION_VALUE}
 
 JD-TC-GetRXPrescriptionItemQuantity-6
 
@@ -665,7 +665,8 @@ JD-TC-GetRXPrescriptionItemQuantity-7
 
     ${resp}=    Get RX Prescription Item Qnty By EncId  ${displayName2}  ${duration2}  ${empty}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.status_code}             422
+    Should Be Equal As Strings      ${resp.json()}          ${INVALID_QUANTITY_VALUE}
 
 
 

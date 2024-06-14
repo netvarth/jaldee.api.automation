@@ -62,7 +62,7 @@ JD-TC-GetFrequencyByAccount-1
     Should Be Equal As Strings      ${resp.json()['remark']}        ${remark0}
     Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos0}
 
-    ${frequency}=       Random Int  min=1  max=10
+    ${frequency}=       Random Int  min=120  max=125
     ${dosage}=          Random Int  min=1  max=3000
     ${description}=     FakerLibrary.sentence
     ${remark}=          FakerLibrary.sentence

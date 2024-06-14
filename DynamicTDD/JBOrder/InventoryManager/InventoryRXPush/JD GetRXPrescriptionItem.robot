@@ -416,7 +416,7 @@ JD-TC-GetRXPrescriptionItem-1
     Set Suite Variable    ${firstName}
     ${lastName}=  FakerLibrary.last_name
     Set Suite Variable    ${lastName}
-    ${primaryMobileNo}    Generate random string    10    123456789
+    ${primaryMobileNo}    Generate random string    10    123456889
     ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
     Set Suite Variable    ${primaryMobileNo}
 
