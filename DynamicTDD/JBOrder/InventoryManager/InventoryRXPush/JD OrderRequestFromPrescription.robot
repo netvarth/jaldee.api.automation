@@ -599,6 +599,7 @@ JD-TC-OrderRequest-1
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
 
+
     ${resp}=    Get Sorder By Filter  
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
@@ -614,6 +615,8 @@ JD-TC-OrderRequest-1
     Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
     Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
 
+
+
 JD-TC-OrderRequest-UH3
 
     [Documentation]    Order Request - same request after order Declined 
@@ -626,9 +629,12 @@ JD-TC-OrderRequest-UH3
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
+
+
     ${resp}=    Order Request    ${store_id}  ${prescription_id}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
+
 
 JD-TC-OrderRequest-UH1
 
@@ -655,6 +661,7 @@ JD-TC-OrderRequest-UH2
     ${resp}=    Convert to order  ${sorder_uid}  ${orderStatus[0]}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
+
 
     ${resp}=    Get Sorder By Filter  
     Log   ${resp.content}
