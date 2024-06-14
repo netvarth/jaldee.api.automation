@@ -2342,6 +2342,11 @@ ORDER_CATALOG_EXIST_WITH_SAME_NAME="Order Catalog exists with given name in this
 INVALID_TAXID="Invalid Tax Id"
 SP_ITEM_ID_REQUIRED="Sp Item Id required"
 BATCH_APPLICABLE_SECLECT_ONLY_FOR_INVENTORY_ITEMS="Batch Applicable can only be selected if the item is marked as an Inventory Item."
+PURCHASE_INVOICE_NO_DUPLICATE = "The purchase invoice number has already been entered."
+INV_CATALOG_NOT_IN_STORE  = "Selected store is not having this Inventory catalog"
+INVALID_QUANTITY_VALUE="Invalid Quantity Value"
+
+
 # Vendor
 INVALID_NAME="Invalid Name"
 CATEGORY_EXIST="Category exists with given name"
