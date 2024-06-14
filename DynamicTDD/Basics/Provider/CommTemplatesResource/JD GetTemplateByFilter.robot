@@ -21,7 +21,7 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 JD-TC-GetTemplateByFilter-1
 
     [Documentation]  Create template for a provider with context signup then get it by filter and verify.
-
+    
     ${resp}=  Encrypted Provider Login  ${PUSERNAME240}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200

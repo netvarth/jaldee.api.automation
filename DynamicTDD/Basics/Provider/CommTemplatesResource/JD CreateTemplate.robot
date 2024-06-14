@@ -238,7 +238,32 @@ JD-TC-CreateTemplate-11
     ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[2]}  ${comm_target}    ${comm_chanl} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    
+
+JD-TC-CreateTemplate-12
+
+    [Documentation]  Create a template for signup context with email as the communication channel.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${temp_name}=    FakerLibrary.word
+    ${content_msg}=      FakerLibrary.sentence   
+    ${content}=    Create Dictionary  intro=${content_msg}
+    ${tempheader_sub}=      FakerLibrary.sentence   5
+    ${salutation}=      FakerLibrary.word
+    ${comm_chanl}=  Create List   ${CommChannel[2]}  
+    ${comm_target}=  Create List   ${CommTarget[0]}  
+    ${signature}=   FakerLibrary.hostname
+
+    ${temp_header}=    Create Dictionary  subject=${tempheader_sub}   salutation=${salutation}
+    ${temp_footer}=    Create Dictionary  signature=${signature}  
+
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl}  
+    ...    templateHeader=${temp_header}  footer=${temp_footer}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
 JD-TC-CreateTemplate-UH1
 
     [Documentation]  Create template with same template name.
@@ -367,4 +392,46 @@ JD-TC-CreateTemplate-UH5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings  ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
+
+JD-TC-CreateTemplate-UH6
+
+    [Documentation]  Create a template for signup context with email as the communication channel, excluding the template header.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${temp_name}=    FakerLibrary.word
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
+    ${comm_chanl}=  Create List   ${CommChannel[2]}  
+    ${comm_target}=  Create List   ${CommTarget[0]}  
+    
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}   ${TEMPLATE_HEADER}
+
+JD-TC-CreateTemplate-UH7
+
+    [Documentation]    Create a template for signup context with email as the communication channel, excluding the template footer.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${temp_name}=    FakerLibrary.word
+    ${content_msg}=      FakerLibrary.sentence   
+    ${content}=    Create Dictionary  intro=${content_msg}
+    ${tempheader_sub}=      FakerLibrary.sentence   5
+    ${salutation}=      FakerLibrary.word
+    ${comm_chanl}=  Create List   ${CommChannel[2]}  
+    ${comm_target}=  Create List   ${CommTarget[0]}  
+
+    ${temp_header}=    Create Dictionary  subject=${tempheader_sub}   salutation=${salutation}
+    
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl}  templateHeader=${temp_header}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}   ${TEMPLATE_FOOTER}
 
