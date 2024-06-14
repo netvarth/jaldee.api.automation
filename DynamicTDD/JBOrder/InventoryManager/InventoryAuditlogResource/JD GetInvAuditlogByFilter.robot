@@ -1969,6 +1969,11 @@ JD-TC-GetInvAuditlogByFilter-51
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
+    ${resp}=  Get Date Time by Timezone  ${tz}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable      ${datetime01}   ${resp.json()}  
+
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
     ${invCatalog}=  Create Dictionary   encId=${encid} 
@@ -1979,6 +1984,29 @@ JD-TC-GetInvAuditlogByFilter-51
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${Stock_uid}  ${resp.json()}
+
+    ${resp}=   Get Inventory Auditlog By Filter    account-eq=${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}             200
+
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}       ${Stock_uid}
+    Should Be Equal As Strings  ${resp.json()[0]['auditType']}       ${InventoryAuditType[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditContext']}       ${InventoryAuditContext[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditLogAction']}       ${InventoryAuditLogAction[0]} 
+    Should Be Equal As Strings  ${resp.json()[0]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['subject']}    Stock Adjusted
+    Should Be Equal As Strings  ${resp.json()[0]['description']}    Stock adjustment created 
+    Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}   
+    Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
+
+
+JD-TC-GetInvAuditlogByFilter-52
+
+    [Documentation]    Provider Adjusted stock verifing with userName Filter
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200   
 
     ${resp}=   Get Inventory Auditlog By Filter    userName-eq=${user_firstName} ${user_lastName}
     Log   ${resp.content}
@@ -1991,5 +2019,366 @@ JD-TC-GetInvAuditlogByFilter-51
     Should Be Equal As Strings  ${resp.json()[0]['userType']}   ${userType[0]}
     Should Be Equal As Strings  ${resp.json()[0]['subject']}    Stock Adjusted
     Should Be Equal As Strings  ${resp.json()[0]['description']}    Stock adjustment created 
+    Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}   
+    Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
+
+JD-TC-GetInvAuditlogByFilter-53
+
+    [Documentation]    Provider Adjusted stock verifing with uid Filter
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200   
+
+    ${resp}=   Get Inventory Auditlog By Filter    uid-eq=${Stock_uid} 
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}             200
+
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}       ${Stock_uid}
+    Should Be Equal As Strings  ${resp.json()[0]['auditType']}       ${InventoryAuditType[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditContext']}       ${InventoryAuditContext[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditLogAction']}       ${InventoryAuditLogAction[0]} 
+    Should Be Equal As Strings  ${resp.json()[0]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['subject']}    Stock Adjusted
+    Should Be Equal As Strings  ${resp.json()[0]['description']}    Stock adjustment created 
+    Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}   
+    Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
+
+JD-TC-GetInvAuditlogByFilter-54
+
+    [Documentation]    Provider Adjusted stock verifing with auditType Filter
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200   
+
+    ${resp}=   Get Inventory Auditlog By Filter    auditType-eq=${InventoryAuditType[1]} 
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}             200
+
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}       ${Stock_uid}
+    Should Be Equal As Strings  ${resp.json()[0]['auditType']}       ${InventoryAuditType[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditContext']}       ${InventoryAuditContext[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditLogAction']}       ${InventoryAuditLogAction[0]} 
+    Should Be Equal As Strings  ${resp.json()[0]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['subject']}    Stock Adjusted
+    Should Be Equal As Strings  ${resp.json()[0]['description']}    Stock adjustment created 
+    Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}   
+    Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
+
+JD-TC-GetInvAuditlogByFilter-55
+
+    [Documentation]    Provider Adjusted stock verifing with auditContext Filter
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200   
+
+    ${resp}=   Get Inventory Auditlog By Filter    auditContext-eq=${InventoryAuditContext[2]} 
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}             200
+
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}       ${Stock_uid}
+    Should Be Equal As Strings  ${resp.json()[0]['auditType']}       ${InventoryAuditType[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditContext']}       ${InventoryAuditContext[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditLogAction']}       ${InventoryAuditLogAction[0]} 
+    Should Be Equal As Strings  ${resp.json()[0]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['subject']}    Stock Adjusted
+    Should Be Equal As Strings  ${resp.json()[0]['description']}    Stock adjustment created 
+    Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}   
+    Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
+
+JD-TC-GetInvAuditlogByFilter-56
+
+    [Documentation]    Provider Adjusted stock verifing with auditLogAction Filter
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200   
+
+    ${resp}=   Get Inventory Auditlog By Filter    auditLogAction-eq=${InventoryAuditLogAction[0]} 
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}             200
+
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}       ${Stock_uid}
+    Should Be Equal As Strings  ${resp.json()[0]['auditType']}       ${InventoryAuditType[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditContext']}       ${InventoryAuditContext[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditLogAction']}       ${InventoryAuditLogAction[0]} 
+    Should Be Equal As Strings  ${resp.json()[0]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['subject']}    Stock Adjusted
+    Should Be Equal As Strings  ${resp.json()[0]['description']}    Stock adjustment created 
+    Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}   
+    Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
+
+JD-TC-GetInvAuditlogByFilter-57
+
+    [Documentation]    Provider Adjusted stock verifing with userId Filter
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200   
+
+    ${resp}=   Get Inventory Auditlog By Filter    userId-eq=${user_id} 
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}             200
+
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}       ${Stock_uid}
+    Should Be Equal As Strings  ${resp.json()[0]['auditType']}       ${InventoryAuditType[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditContext']}       ${InventoryAuditContext[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditLogAction']}       ${InventoryAuditLogAction[0]} 
+    Should Be Equal As Strings  ${resp.json()[0]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['subject']}    Stock Adjusted
+    Should Be Equal As Strings  ${resp.json()[0]['description']}    Stock adjustment created 
+    Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}   
+    Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
+
+JD-TC-GetInvAuditlogByFilter-58
+
+    [Documentation]    Provider Adjusted stock verifing with createdDate Filter
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200   
+
+    ${resp}=   Get Inventory Auditlog By Filter    createdDate-eq=${datetime01}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}             200
+
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}       ${Stock_uid}
+    Should Be Equal As Strings  ${resp.json()[0]['auditType']}       ${InventoryAuditType[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditContext']}       ${InventoryAuditContext[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditLogAction']}       ${InventoryAuditLogAction[0]} 
+    Should Be Equal As Strings  ${resp.json()[0]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['subject']}    Stock Adjusted
+    Should Be Equal As Strings  ${resp.json()[0]['description']}    Stock adjustment created 
+    Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}   
+    Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
+
+JD-TC-GetInvAuditlogByFilter-59
+
+    [Documentation]    Provider Adjusted stock verifing with userType Filter
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200   
+
+    ${resp}=   Get Inventory Auditlog By Filter    userType-eq=${userType[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}             200
+
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}       ${Stock_uid}
+    Should Be Equal As Strings  ${resp.json()[0]['auditType']}       ${InventoryAuditType[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditContext']}       ${InventoryAuditContext[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditLogAction']}       ${InventoryAuditLogAction[0]} 
+    Should Be Equal As Strings  ${resp.json()[0]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['subject']}    Stock Adjusted
+    Should Be Equal As Strings  ${resp.json()[0]['description']}    Stock adjustment created 
+    Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}   
+    Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
+
+JD-TC-GetInvAuditlogByFilter-60
+
+    [Documentation]    update the stock Adjusted then verifing with account Filter
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200  
+
+    ${resp}=  Get Date Time by Timezone  ${tz}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable      ${datetime01}   ${resp.json()}  
+
+    ${resp}=  Update Stock Adjustment  ${Stock_uid}    ${locId1}  ${store_id}   ${encid}   ${remarks_encid1}      ${data} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Get Inventory Auditlog By Filter    account-eq=${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}             200
+
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}       ${Stock_uid}
+    Should Be Equal As Strings  ${resp.json()[0]['auditType']}       ${InventoryAuditType[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditContext']}       ${InventoryAuditContext[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditLogAction']}       ${InventoryAuditLogAction[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['subject']}    Stock Adjusted
+    Should Be Equal As Strings  ${resp.json()[0]['description']}    Stock adjustment updated
+    Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}   
+    Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
+
+JD-TC-GetInvAuditlogByFilter-61
+
+    [Documentation]    update the stock Adjusted then verifing with uid Filter
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200   
+
+    ${resp}=   Get Inventory Auditlog By Filter    uid-eq=${Stock_uid}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}             200
+
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}       ${Stock_uid}
+    Should Be Equal As Strings  ${resp.json()[0]['auditType']}       ${InventoryAuditType[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditContext']}       ${InventoryAuditContext[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditLogAction']}       ${InventoryAuditLogAction[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['subject']}    Stock Adjusted
+    Should Be Equal As Strings  ${resp.json()[0]['description']}    Stock adjustment updated 
+    Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}   
+    Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
+
+JD-TC-GetInvAuditlogByFilter-62
+
+    [Documentation]    update the stock Adjusted then verifing with auditType Filter
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200   
+
+    ${resp}=   Get Inventory Auditlog By Filter    auditType-eq=${InventoryAuditType[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}             200
+
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}       ${Stock_uid}
+    Should Be Equal As Strings  ${resp.json()[0]['auditType']}       ${InventoryAuditType[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditContext']}       ${InventoryAuditContext[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditLogAction']}       ${InventoryAuditLogAction[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['subject']}    Stock Adjusted
+    Should Be Equal As Strings  ${resp.json()[0]['description']}    Stock adjustment updated
+    Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}   
+    Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
+
+JD-TC-GetInvAuditlogByFilter-63
+
+    [Documentation]    update the stock Adjusted then verifing with auditContext Filter
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200   
+
+    ${resp}=   Get Inventory Auditlog By Filter    auditContext-eq=${InventoryAuditContext[2]}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}             200
+
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}       ${Stock_uid}
+    Should Be Equal As Strings  ${resp.json()[0]['auditType']}       ${InventoryAuditType[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditContext']}       ${InventoryAuditContext[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditLogAction']}       ${InventoryAuditLogAction[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['subject']}    Stock Adjusted
+    Should Be Equal As Strings  ${resp.json()[0]['description']}    Stock adjustment updated
+    Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}   
+    Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
+
+JD-TC-GetInvAuditlogByFilter-64
+
+    [Documentation]    update the stock Adjusted then verifing with auditLogAction Filter
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200   
+
+    ${resp}=   Get Inventory Auditlog By Filter    auditLogAction-eq=${InventoryAuditLogAction[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}             200
+
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}       ${Stock_uid}
+    Should Be Equal As Strings  ${resp.json()[0]['auditType']}       ${InventoryAuditType[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditContext']}       ${InventoryAuditContext[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditLogAction']}       ${InventoryAuditLogAction[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['subject']}    Stock Adjusted
+    Should Be Equal As Strings  ${resp.json()[0]['description']}    Stock adjustment updated
+    Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}   
+    Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
+
+JD-TC-GetInvAuditlogByFilter-65
+
+    [Documentation]    update the stock Adjusted then verifing with userName Filter
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200   
+
+    ${resp}=   Get Inventory Auditlog By Filter    userName-eq=${user_firstName} ${user_lastName}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}             200
+
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}       ${Stock_uid}
+    Should Be Equal As Strings  ${resp.json()[0]['auditType']}       ${InventoryAuditType[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditContext']}       ${InventoryAuditContext[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditLogAction']}       ${InventoryAuditLogAction[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['subject']}    Stock Adjusted
+    Should Be Equal As Strings  ${resp.json()[0]['description']}    Stock adjustment updated
+    Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}   
+    Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
+
+JD-TC-GetInvAuditlogByFilter-66
+
+    [Documentation]    update the stock Adjusted then verifing with userId Filter
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200   
+
+    ${resp}=   Get Inventory Auditlog By Filter    userId-eq=${user_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}             200
+
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}       ${Stock_uid}
+    Should Be Equal As Strings  ${resp.json()[0]['auditType']}       ${InventoryAuditType[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditContext']}       ${InventoryAuditContext[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditLogAction']}       ${InventoryAuditLogAction[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['subject']}    Stock Adjusted
+    Should Be Equal As Strings  ${resp.json()[0]['description']}    Stock adjustment updated
+    Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}   
+    Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
+
+JD-TC-GetInvAuditlogByFilter-67
+
+    [Documentation]    update the stock Adjusted then verifing with userType Filter
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200   
+
+    ${resp}=   Get Inventory Auditlog By Filter    userType-eq=${userType[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}             200
+
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}       ${Stock_uid}
+    Should Be Equal As Strings  ${resp.json()[0]['auditType']}       ${InventoryAuditType[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditContext']}       ${InventoryAuditContext[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditLogAction']}       ${InventoryAuditLogAction[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['subject']}    Stock Adjusted
+    Should Be Equal As Strings  ${resp.json()[0]['description']}    Stock adjustment updated
+    Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}   
+    Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
+
+JD-TC-GetInvAuditlogByFilter-68
+
+    [Documentation]    update the stock Adjusted then verifing with createdDate Filter
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200   
+
+    ${resp}=   Get Inventory Auditlog By Filter    createdDate-eq=${datetime01}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}             200
+
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}       ${Stock_uid}
+    Should Be Equal As Strings  ${resp.json()[0]['auditType']}       ${InventoryAuditType[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditContext']}       ${InventoryAuditContext[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['auditLogAction']}       ${InventoryAuditLogAction[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['userType']}   ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['subject']}    Stock Adjusted
+    Should Be Equal As Strings  ${resp.json()[0]['description']}    Stock adjustment updated
     Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}   
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
