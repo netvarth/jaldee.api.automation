@@ -812,7 +812,7 @@ JD-TC-UpdatePurchase-5
 
     ${inv}=                Random Int              min=999  max=9999  
 
-    ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   purchase uid                                                           
+    ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   Purchase uid                                                           
 
     ${resp}=    Update Purchase  ${inv}  ${invoiceReferenceNo}  ${invoiceDate}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}
     Log   ${resp.content}
