@@ -15603,20 +15603,20 @@ Connect with other login
     ${data}=  Create Dictionary  loginId=${loginId}  password=${password}
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/connections/${loginId}  data=${data}  expected_status=any
+    ${resp}=  POST On Session  ynw  /provider/login/connections/${loginId}  data=${data}  expected_status=any
     RETURN  ${resp}
 
 List all links of a loginId
 
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/Connections   expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/login/connections   expected_status=any
     RETURN  ${resp}
 
 Unlink one login
 
     [Arguments]  ${loginId} 
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/connections/${loginId}   expected_status=any
+    ${resp}=  PUT On Session  ynw  /provider/login/connections/${loginId}   expected_status=any
     RETURN  ${resp} 
 
 Switch login

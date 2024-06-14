@@ -275,7 +275,7 @@ JD-TC-Provider_Signup-8
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Provider_Signup-9
+JD-TC-Provider_Signup-UH1
 
     [Documentation]    Provider Sign Up with same number different country code and email id not provided
 
@@ -284,7 +284,7 @@ JD-TC-Provider_Signup-9
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}         ${EMAIL_ID_REQUIRED}
 
-JD-TC-Provider_Signup-10
+JD-TC-Provider_Signup-9
 
     [Documentation]    Provider Sign Up with same number different country code and different login id
 
@@ -313,7 +313,7 @@ JD-TC-Provider_Signup-10
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Provider_Signup-11
+JD-TC-Provider_Signup-10
 
     [Documentation]    Provider Sign Up with same number same country code and same login id ( international )
 
@@ -339,7 +339,7 @@ JD-TC-Provider_Signup-11
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Provider_Signup-12
+JD-TC-Provider_Signup-UH2
 
     [Documentation]  Provider sign up where firstname is empty
 
@@ -352,7 +352,7 @@ JD-TC-Provider_Signup-12
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}         ${ENTER_FIRST_NAME}
 
-JD-TC-Provider_Signup-13
+JD-TC-Provider_Signup-UH3
 
     [Documentation]  Provider sign up where last name is empty
 
@@ -365,7 +365,7 @@ JD-TC-Provider_Signup-13
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}         ${VALID_LAST_NAME}
 
-JD-TC-Provider_Signup-14
+JD-TC-Provider_Signup-UH4
 
     [Documentation]  Provider sign up where domain name is empty
 
@@ -379,7 +379,7 @@ JD-TC-Provider_Signup-14
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}         ${INVALID_SUB_SECTOR}
 
-JD-TC-Provider_Signup-15
+JD-TC-Provider_Signup-UH5
 
     [Documentation]  Provider sign up where subdomain is empty
 
@@ -393,7 +393,7 @@ JD-TC-Provider_Signup-15
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}         ${INVALID_SUB_SECTOR}
 
-JD-TC-Provider_Signup-16
+JD-TC-Provider_Signup-UH6
 
     [Documentation]  Provider sign up where phone is empty
 
@@ -407,7 +407,7 @@ JD-TC-Provider_Signup-16
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}         ${PRIMARY_PHONENO_REQUIRED}
 
-JD-TC-Provider_Signup-17
+JD-TC-Provider_Signup-11
 
     [Documentation]  Provider sign up where licence pkg id is empty
 
@@ -425,7 +425,7 @@ JD-TC-Provider_Signup-17
     Should Be Equal As Strings    ${resp.status_code}    200
     # Should Be Equal As Strings   ${resp.json()}         ${INVALID_PACKAGE_ID}
 
-JD-TC-Provider_Signup-18
+JD-TC-Provider_Signup-UH7
 
     [Documentation]  Provider sign up where account activation id is empty
 
@@ -443,7 +443,7 @@ JD-TC-Provider_Signup-18
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}         ${OTP validation failed}
 
-JD-TC-Provider_Signup-19
+JD-TC-Provider_Signup-UH8
 
     [Documentation]  Provider sign up where otp purpose is wrong
 
@@ -461,7 +461,7 @@ JD-TC-Provider_Signup-19
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}         ${OTP validation failed}
 
-JD-TC-Provider_Signup-20
+JD-TC-Provider_Signup-12
 
     [Documentation]  Provider sign up where otp purpose is empty
 
@@ -492,7 +492,7 @@ JD-TC-Provider_Signup-20
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Provider_Signup-21
+JD-TC-Provider_Signup-UH9
 
     [Documentation]  Provider sign up activate phone is empty
 
@@ -516,7 +516,7 @@ JD-TC-Provider_Signup-21
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}         ${OTP_DIGIT_VALID}
 
-JD-TC-Provider_Signup-22
+JD-TC-Provider_Signup-14
 
     [Documentation]  Provider sign up activate password is empty
 
@@ -547,7 +547,7 @@ JD-TC-Provider_Signup-22
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Provider_Signup-23
+JD-TC-Provider_Signup-15
 
     [Documentation]  Provider sign up activate otp purpose is empty
 
@@ -578,7 +578,7 @@ JD-TC-Provider_Signup-23
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Provider_Signup-24
+JD-TC-Provider_Signup-16
 
     [Documentation]  Provider sign up activate loginid is empty
 
@@ -609,7 +609,7 @@ JD-TC-Provider_Signup-24
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Provider_Signup-25
+JD-TC-Provider_Signup-UH10
 
     [Documentation]  Provider sign up activate otp purpose is invalid
 
@@ -633,7 +633,7 @@ JD-TC-Provider_Signup-25
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}         ${OTP_DIGIT_VALID}
 
-JD-TC-Provider_Signup-26
+JD-TC-Provider_Signup-UH11
 
     [Documentation]  Provider sign up activate phone is invalid
 
@@ -659,7 +659,7 @@ JD-TC-Provider_Signup-26
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}         ${OTP_DIGIT_VALID}
 
-JD-TC-Provider_Signup-27
+JD-TC-Provider_Signup-UH12
 
     [Documentation]  Provider sign up where phone number is invalid
 
@@ -672,3 +672,40 @@ JD-TC-Provider_Signup-27
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}         ${INVALID_PHONE_NUM}
+
+JD-TC-Provider_Signup-17
+
+    [Documentation]  Provider sign up using 555 number
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable    ${P_Phone}  555${PH_Number}
+
+    ${firstname_p}=  FakerLibrary.first_name
+    ${lastname_p}=  FakerLibrary.last_name
+    Set Suite Variable      ${firstname_p}
+    Set Suite Variable      ${lastname_p}
+
+    ${resp}=  Account SignUp  ${firstname_p}  ${lastname_p}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${P_Phone}   1
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${P_Phone}  ${OtpPurpose['ProviderSignUp']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${loginId}=     Random Int  min=1  max=9999
+    
+    ${resp}=  Account Set Credential  ${P_Phone}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Provider Login  ${loginId}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph}${\n}
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200

@@ -57,7 +57,7 @@ CONSUMER_DONT_HAVE_EMAIL= "[customer] don't have email"
 
 PASSWORD_EMPTY= "Please enter a valid password"
 NEW_PASSWORD_CANNOT_BE_SAME_AS_OLD_PASSWORD= "New password cannot be same as old password"
-
+LOGIN_SESSION_ALREADY_EXISTS = "Session already exists."
 ACCOUNT_DEACTIVATED= "Admin has deactivated your account for a reason. Please contact Customer support to re-activate your account."
 ACCOUNT_ALREADY_CLAIMED= "Account has been already claimed" 
 OTP_DIGIT_VALID= "Invalid OTP" 
@@ -2399,3 +2399,5 @@ VARIABLE_STATUS = "Variable is already '{}'"
 #   Linking and Unlinking
 
 INVALID_PACKAGE_ID = "Invalid license package"
+LOGINID_NOT_REGISTERED = "This login is not registered with Jaldee. Sign up now with Jaldee to avail our services."
+ENTER_LOGIN_ID = "Please enter your login ID"
