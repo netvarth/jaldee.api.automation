@@ -27,7 +27,8 @@ JD-TC-CreateTemplate-1
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${temp_name}=    FakerLibrary.word
-    ${content}=    FakerLibrary.sentence
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
@@ -44,7 +45,8 @@ JD-TC-CreateTemplate-2
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${temp_name}=    FakerLibrary.word
-    ${content}=    FakerLibrary.sentence
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
@@ -61,7 +63,8 @@ JD-TC-CreateTemplate-3
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${temp_name}=    FakerLibrary.word
-    ${content}=    FakerLibrary.sentence
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
@@ -78,7 +81,8 @@ JD-TC-CreateTemplate-4
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${temp_name}=    FakerLibrary.word
-    ${content}=    FakerLibrary.sentence
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
@@ -95,7 +99,8 @@ JD-TC-CreateTemplate-5
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${temp_name}=    FakerLibrary.word
-    ${content}=    FakerLibrary.sentence
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
@@ -112,7 +117,8 @@ JD-TC-CreateTemplate-6
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${temp_name}=    FakerLibrary.word
-    ${content}=    FakerLibrary.sentence
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
@@ -129,7 +135,8 @@ JD-TC-CreateTemplate-7
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${temp_name}=    FakerLibrary.word
-    ${content}=    FakerLibrary.sentence
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
@@ -146,7 +153,8 @@ JD-TC-CreateTemplate-8
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${temp_name}=    FakerLibrary.word
-    ${content}=    FakerLibrary.sentence
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
@@ -155,8 +163,9 @@ JD-TC-CreateTemplate-8
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${temp_name1}=    FakerLibrary.word
-    ${content1}=    FakerLibrary.sentence
-    
+    ${content_msg1}=      FakerLibrary.sentence
+    ${content1}=    Create Dictionary  intro=${content_msg1}
+
     ${resp}=  Create Template   ${temp_name1}  ${content1}  ${templateFormat[0]}  ${VariableContext[2]}  ${comm_target}    ${comm_chanl} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -170,7 +179,8 @@ JD-TC-CreateTemplate-9
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${temp_name}=    FakerLibrary.word
-    ${content}=    FakerLibrary.sentence
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
@@ -186,7 +196,8 @@ JD-TC-CreateTemplate-9
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${content1}=    FakerLibrary.sentence
+    ${content_msg1}=      FakerLibrary.sentence
+    ${content1}=    Create Dictionary  intro=${content_msg1}
     
     ${resp}=  Create Template   ${temp_name}  ${content1}  ${templateFormat[0]}  ${VariableContext[2]}  ${comm_target}    ${comm_chanl} 
     Log   ${resp.content}
@@ -201,7 +212,8 @@ JD-TC-CreateTemplate-10
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${temp_name}=    FakerLibrary.word
-    ${content}=    FakerLibrary.sentence
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
@@ -218,7 +230,8 @@ JD-TC-CreateTemplate-11
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${temp_name}=    FakerLibrary.word
-    ${content}=    FakerLibrary.sentence
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List  
     
@@ -235,7 +248,8 @@ JD-TC-CreateTemplate-UH1
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${temp_name}=    FakerLibrary.word
-    ${content}=    FakerLibrary.sentence
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
 
@@ -243,7 +257,8 @@ JD-TC-CreateTemplate-UH1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${content1}=    FakerLibrary.sentence
+    ${content_msg1}=      FakerLibrary.sentence
+    ${content1}=    Create Dictionary  intro=${content_msg1}
     
     ${resp}=  Create Template   ${temp_name}  ${content1}  ${templateFormat[0]}  ${VariableContext[2]}  ${comm_target}    ${comm_chanl} 
     Log   ${resp.content}
@@ -258,7 +273,8 @@ JD-TC-CreateTemplate-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${content}=    FakerLibrary.sentence
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
@@ -276,10 +292,11 @@ JD-TC-CreateTemplate-UH3
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${temp_name}=    FakerLibrary.word
+    ${content}=    Create Dictionary  intro=${EMPTY}
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
-    ${resp}=  Create Template   ${temp_name}  ${EMPTY}  ${templateFormat[0]}  ${VariableContext[2]}  ${comm_target}    ${comm_chanl} 
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[2]}  ${comm_target}    ${comm_chanl} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  ${resp.json()}   ${TEMPLATE_CONTENT}
@@ -289,7 +306,8 @@ JD-TC-CreateTemplate-UH4
     [Documentation]  Create template without login
 
     ${temp_name}=    FakerLibrary.word
-    ${content}=    FakerLibrary.sentence
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
 
@@ -340,7 +358,8 @@ JD-TC-CreateTemplate-UH5
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${temp_name}=    FakerLibrary.word
-    ${content}=    FakerLibrary.sentence
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
 

@@ -32,7 +32,8 @@ JD-TC-GetTemplateById-1
     Set Test Variable  ${account_id}  ${resp.json()['id']}
 
     ${temp_name}=    FakerLibrary.word
-    ${content}=    FakerLibrary.sentence
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
@@ -49,7 +50,7 @@ JD-TC-GetTemplateById-1
     Should Be Equal As Strings  ${resp.json()['context']}                     ${VariableContext[0]} 
     Should Be Equal As Strings  ${resp.json()['commChannel']}                 ${comm_chanl} 
     Should Be Equal As Strings  ${resp.json()['templateFormat']}              ${templateFormat[0]}
-    Should Be Equal As Strings  ${resp.json()['content']}                     ${content}
+    Should Be Equal As Strings  ${resp.json()['content']['intro']}            ${content_msg}
     Should Be Equal As Strings  ${resp.json()['commTarget']}                  ${comm_target} 
     Should Be Equal As Strings  ${resp.json()['status']}                      ${VarStatus[0]} 
 
@@ -67,7 +68,8 @@ JD-TC-GetTemplateById-2
     Set Test Variable  ${account_id}  ${resp.json()['id']}
 
     ${temp_name}=    FakerLibrary.word
-    ${content}=    FakerLibrary.sentence
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target1}=  Create List   ${CommTarget[0]}  
     
@@ -77,7 +79,8 @@ JD-TC-GetTemplateById-2
     Set Test Variable   ${temp_id1}  ${resp.content}
 
     ${temp_name2}=    FakerLibrary.word
-    ${content2}=    FakerLibrary.sentence
+    ${content_msg1}=      FakerLibrary.sentence
+    ${content2}=    Create Dictionary  intro=${content_msg1}
     ${comm_chanl2}=  Create List   ${CommChannel[1]}  
     ${comm_target2}=  Create List   ${CommTarget[1]}  
     
@@ -94,7 +97,7 @@ JD-TC-GetTemplateById-2
     Should Be Equal As Strings  ${resp.json()['context']}                     ${VariableContext[0]} 
     Should Be Equal As Strings  ${resp.json()['commChannel']}                 ${comm_chanl} 
     Should Be Equal As Strings  ${resp.json()['templateFormat']}              ${templateFormat[0]}
-    Should Be Equal As Strings  ${resp.json()['content']}                     ${content}
+    Should Be Equal As Strings  ${resp.json()['content']['intro']}            ${content_msg}
     Should Be Equal As Strings  ${resp.json()['commTarget']}                  ${comm_target1} 
     Should Be Equal As Strings  ${resp.json()['status']}                      ${VarStatus[0]} 
     
@@ -106,7 +109,7 @@ JD-TC-GetTemplateById-2
     Should Be Equal As Strings  ${resp.json()['context']}                     ${VariableContext[0]} 
     Should Be Equal As Strings  ${resp.json()['commChannel']}                 ${comm_chanl2} 
     Should Be Equal As Strings  ${resp.json()['templateFormat']}              ${templateFormat[0]}
-    Should Be Equal As Strings  ${resp.json()['content']}                     ${content2}
+    Should Be Equal As Strings  ${resp.json()['content']['intro']}            ${content_msg1}
     Should Be Equal As Strings  ${resp.json()['commTarget']}                  ${comm_target2} 
     Should Be Equal As Strings  ${resp.json()['status']}                      ${VarStatus[0]} 
 
@@ -124,7 +127,8 @@ JD-TC-GetTemplateById-3
     Set Test Variable  ${account_id}  ${resp.json()['id']}
 
     ${temp_name}=    FakerLibrary.word
-    ${content}=    FakerLibrary.sentence
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
@@ -141,7 +145,7 @@ JD-TC-GetTemplateById-3
     Should Be Equal As Strings  ${resp.json()['context']}                     ${VariableContext[1]} 
     Should Be Equal As Strings  ${resp.json()['commChannel']}                 ${comm_chanl} 
     Should Be Equal As Strings  ${resp.json()['templateFormat']}              ${templateFormat[0]}
-    Should Be Equal As Strings  ${resp.json()['content']}                     ${content}
+    Should Be Equal As Strings  ${resp.json()['content']['intro']}            ${content_msg}
     Should Be Equal As Strings  ${resp.json()['commTarget']}                  ${comm_target} 
     Should Be Equal As Strings  ${resp.json()['status']}                      ${VarStatus[0]} 
 
@@ -159,7 +163,8 @@ JD-TC-GetTemplateById-4
     Set Test Variable  ${account_id}  ${resp.json()['id']}
 
     ${temp_name}=    FakerLibrary.word
-    ${content}=    FakerLibrary.sentence
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
@@ -176,7 +181,7 @@ JD-TC-GetTemplateById-4
     Should Be Equal As Strings  ${resp.json()['context']}                     ${VariableContext[2]} 
     Should Be Equal As Strings  ${resp.json()['commChannel']}                 ${comm_chanl} 
     Should Be Equal As Strings  ${resp.json()['templateFormat']}              ${templateFormat[0]}
-    Should Be Equal As Strings  ${resp.json()['content']}                     ${content}
+    Should Be Equal As Strings  ${resp.json()['content']['intro']}            ${content_msg}
     Should Be Equal As Strings  ${resp.json()['commTarget']}                  ${comm_target} 
     Should Be Equal As Strings  ${resp.json()['status']}                      ${VarStatus[0]} 
 
@@ -194,7 +199,8 @@ JD-TC-GetTemplateById-5
     Set Test Variable  ${account_id}  ${resp.json()['id']}
 
     ${temp_name}=    FakerLibrary.word
-    ${content}=    FakerLibrary.sentence
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
@@ -211,7 +217,7 @@ JD-TC-GetTemplateById-5
     Should Be Equal As Strings  ${resp.json()['context']}                     ${VariableContext[3]} 
     Should Be Equal As Strings  ${resp.json()['commChannel']}                 ${comm_chanl} 
     Should Be Equal As Strings  ${resp.json()['templateFormat']}              ${templateFormat[0]}
-    Should Be Equal As Strings  ${resp.json()['content']}                     ${content}
+    Should Be Equal As Strings  ${resp.json()['content']['intro']}            ${content_msg}
     Should Be Equal As Strings  ${resp.json()['commTarget']}                  ${comm_target} 
     Should Be Equal As Strings  ${resp.json()['status']}                      ${VarStatus[0]} 
 
@@ -229,7 +235,8 @@ JD-TC-GetTemplateById-6
     Set Test Variable  ${account_id}  ${resp.json()['id']}
 
     ${temp_name}=    FakerLibrary.word
-    ${content}=    FakerLibrary.sentence
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
@@ -246,7 +253,7 @@ JD-TC-GetTemplateById-6
     Should Be Equal As Strings  ${resp.json()['context']}                     ${VariableContext[4]} 
     Should Be Equal As Strings  ${resp.json()['commChannel']}                 ${comm_chanl} 
     Should Be Equal As Strings  ${resp.json()['templateFormat']}              ${templateFormat[0]}
-    Should Be Equal As Strings  ${resp.json()['content']}                     ${content}
+    Should Be Equal As Strings  ${resp.json()['content']['intro']}            ${content_msg}
     Should Be Equal As Strings  ${resp.json()['commTarget']}                  ${comm_target} 
     Should Be Equal As Strings  ${resp.json()['status']}                      ${VarStatus[0]} 
 
@@ -264,7 +271,8 @@ JD-TC-GetTemplateById-7
     Set Test Variable  ${account_id}  ${resp.json()['id']}
 
     ${temp_name}=    FakerLibrary.word
-    ${content}=    FakerLibrary.sentence
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
@@ -281,7 +289,7 @@ JD-TC-GetTemplateById-7
     Should Be Equal As Strings  ${resp.json()['context']}                     ${VariableContext[5]} 
     Should Be Equal As Strings  ${resp.json()['commChannel']}                 ${comm_chanl} 
     Should Be Equal As Strings  ${resp.json()['templateFormat']}              ${templateFormat[0]}
-    Should Be Equal As Strings  ${resp.json()['content']}                     ${content}
+    Should Be Equal As Strings  ${resp.json()['content']['intro']}            ${content_msg}
     Should Be Equal As Strings  ${resp.json()['commTarget']}                  ${comm_target} 
     Should Be Equal As Strings  ${resp.json()['status']}                      ${VarStatus[0]} 
 
@@ -299,7 +307,8 @@ JD-TC-GetTemplateById-8
     Set Test Variable  ${account_id}  ${resp.json()['id']}
 
     ${temp_name}=    FakerLibrary.word
-    ${content}=    FakerLibrary.sentence
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
@@ -316,7 +325,7 @@ JD-TC-GetTemplateById-8
     Should Be Equal As Strings  ${resp.json()['context']}                     ${VariableContext[6]} 
     Should Be Equal As Strings  ${resp.json()['commChannel']}                 ${comm_chanl} 
     Should Be Equal As Strings  ${resp.json()['templateFormat']}              ${templateFormat[0]}
-    Should Be Equal As Strings  ${resp.json()['content']}                     ${content}
+    Should Be Equal As Strings  ${resp.json()['content']['intro']}            ${content_msg}
     Should Be Equal As Strings  ${resp.json()['commTarget']}                  ${comm_target} 
     Should Be Equal As Strings  ${resp.json()['status']}                      ${VarStatus[0]} 
 
@@ -334,7 +343,8 @@ JD-TC-GetTemplateById-9
     Set Test Variable  ${account_id}  ${resp.json()['id']}
 
     ${temp_name}=    FakerLibrary.word
-    ${content}=    FakerLibrary.sentence
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
@@ -351,7 +361,7 @@ JD-TC-GetTemplateById-9
     Should Be Equal As Strings  ${resp.json()['context']}                     ${VariableContext[0]} 
     Should Be Equal As Strings  ${resp.json()['commChannel']}                 ${comm_chanl} 
     Should Be Equal As Strings  ${resp.json()['templateFormat']}              ${templateFormat[0]}
-    Should Be Equal As Strings  ${resp.json()['content']}                     ${content}
+    Should Be Equal As Strings  ${resp.json()['content']['intro']}            ${content_msg}
     Should Be Equal As Strings  ${resp.json()['commTarget']}                  ${comm_target} 
     Should Be Equal As Strings  ${resp.json()['status']}                      ${VarStatus[0]} 
 
@@ -368,7 +378,8 @@ JD-TC-GetTemplateById-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id1}  ${resp.json()['id']}
 
-    ${content1}=    FakerLibrary.sentence
+    ${content_msg1}=      FakerLibrary.sentence
+    ${content1}=    Create Dictionary  intro=${content_msg1}
     ${comm_chanl1}=  Create List   ${CommChannel[0]}  
     ${comm_target1}=  Create List   ${CommTarget[0]}  
     
@@ -385,7 +396,7 @@ JD-TC-GetTemplateById-9
     Should Be Equal As Strings  ${resp.json()['context']}                     ${VariableContext[6]} 
     Should Be Equal As Strings  ${resp.json()['commChannel']}                 ${comm_chanl1} 
     Should Be Equal As Strings  ${resp.json()['templateFormat']}              ${templateFormat[0]}
-    Should Be Equal As Strings  ${resp.json()['content']}                     ${content1}
+    Should Be Equal As Strings  ${resp.json()['content']['intro']}            ${content_msg1}
     Should Be Equal As Strings  ${resp.json()['commTarget']}                  ${comm_target1} 
     Should Be Equal As Strings  ${resp.json()['status']}                      ${VarStatus[0]} 
 
@@ -398,7 +409,8 @@ JD-TC-GetTemplateById-UH1
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${temp_name}=    FakerLibrary.word
-    ${content}=    FakerLibrary.sentence
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
@@ -423,7 +435,8 @@ JD-TC-GetTemplateById-UH2
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${temp_name}=    FakerLibrary.word
-    ${content}=    FakerLibrary.sentence
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
@@ -454,7 +467,8 @@ JD-TC-GetTemplateById-UH3
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${temp_name}=    FakerLibrary.word
-    ${content}=    FakerLibrary.sentence
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
@@ -481,7 +495,8 @@ JD-TC-GetTemplateById-UH4
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${temp_name}=    FakerLibrary.word
-    ${content}=    FakerLibrary.sentence
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
