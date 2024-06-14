@@ -2347,6 +2347,12 @@ INV_CATALOG_NOT_IN_STORE  = "Selected store is not having this Inventory catalog
 INVALID_QUANTITY_VALUE="Invalid Quantity Value"
 INVTRY_RX_ALREADY_ENABLED="Inventory Rx already enabled"
 INVTRY_RX_ALREADY_DISABLED="Inventory Rx already disabled"
+INVALID_PURCHASE_QUANTITY = "Invalid purchase quantity"
+INVALID_PURCHASE_FREE_QUANTITY = "Invalid purchase free quantity"
+INVALID_EXPIRY_DATE_ITEM = "The expiry date for the {} item is not valid."
+INVALID_EXPIRY_DATE_X = "The item {} has expired and cannot be processed. Please remove or replace this item to continue."
+INVALID_DURATION_VALUE="Invalid Duration Value"
+
 
 
 # Vendor
