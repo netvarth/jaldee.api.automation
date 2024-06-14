@@ -2345,6 +2345,8 @@ BATCH_APPLICABLE_SECLECT_ONLY_FOR_INVENTORY_ITEMS="Batch Applicable can only be 
 PURCHASE_INVOICE_NO_DUPLICATE = "The purchase invoice number has already been entered."
 INV_CATALOG_NOT_IN_STORE  = "Selected store is not having this Inventory catalog"
 INVALID_QUANTITY_VALUE="Invalid Quantity Value"
+INVTRY_RX_ALREADY_ENABLED="Inventory Rx already enabled"
+INVTRY_RX_ALREADY_DISABLED="Inventory Rx already disabled"
 
 
 # Vendor

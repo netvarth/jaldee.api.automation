@@ -33,7 +33,7 @@ JD-TC-GetAllAccountFrequency-1
 
     [Documentation]  Get All Account Frequency
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME104}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     

@@ -33,16 +33,16 @@ JD-TC-GetFrequencyByAccount-1
 
     [Documentation]  Get Frequency By Account
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${account_id_PUSERNAME105}  ${resp.json()['id']}
 
-    ${frequency0}=       Random Int  min=1  max=10
+    ${frequency0}=       Random Int  min=26  max=30
     ${dosage0}=          Random Int  min=1  max=3000
     ${description0}=     FakerLibrary.sentence
     ${remark0}=          FakerLibrary.sentence
@@ -82,7 +82,7 @@ JD-TC-GetFrequencyByAccount-1
     Should Be Equal As Strings      ${resp.json()['remark']}        ${remark}
     Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos}
 
-    ${resp}=    Get Frequency By Account  ${account_id}
+    ${resp}=    Get Frequency By Account  ${account_id_PUSERNAME105}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}                 200
     Should Be Equal As Strings      ${resp.json()[0]['id']}             ${frequency_id}
@@ -101,7 +101,7 @@ JD-TC-GetFrequencyByAccount-2
 
     [Documentation]  Get Frequency By Account - where account id is invalid
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -115,7 +115,7 @@ JD-TC-GetFrequencyByAccount-3
 
     [Documentation]  Get Frequency By Account - without login 
 
-    ${resp}=    Get Frequency By Account  ${account_id}
+    ${resp}=    Get Frequency By Account  ${account_id_PUSERNAME105}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     419
     Should Be Equal As Strings      ${resp.json()}          ${SESSION_EXPIRED}

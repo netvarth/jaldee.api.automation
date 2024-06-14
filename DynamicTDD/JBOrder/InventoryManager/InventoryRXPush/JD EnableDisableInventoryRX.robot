@@ -33,7 +33,7 @@ JD-TC-EbableDisableInventoryRX-1
 
     [Documentation]  Ebable Disable Inventory RX
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -56,11 +56,11 @@ JD-TC-EbableDisableInventoryRX-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableInventoryRx']}  ${bool[1]}
 
-JD-TC-EbableDisableInventoryRX-2
+JD-TC-EbableDisableInventoryRX-UH1
 
     [Documentation]  Ebable Disable Inventory RX - status enable to enable  
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -71,13 +71,15 @@ JD-TC-EbableDisableInventoryRX-2
 
     ${resp1}=  Enable/Disable Inventory Rx  ${toggle[0]}
     Log  ${resp1.content}
-    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.status_code}  422
+    Should Be Equal As Strings      ${resp.json()}          ${INVTRY_RX_ALREADY_ENABLED}
 
-JD-TC-EbableDisableInventoryRX-3
+
+JD-TC-EbableDisableInventoryRX-2
 
     [Documentation]  Ebable Disable Inventory RX - enable to disable
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -95,11 +97,11 @@ JD-TC-EbableDisableInventoryRX-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableInventoryRx']}  ${bool[0]}
 
-JD-TC-EbableDisableInventoryRX-4
+JD-TC-EbableDisableInventoryRX-UH2
 
     [Documentation]  Ebable Disable Inventory RX - status disable to disaable  
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -110,13 +112,14 @@ JD-TC-EbableDisableInventoryRX-4
 
     ${resp1}=  Enable/Disable Inventory Rx  ${toggle[1]}
     Log  ${resp1.content}
-    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.status_code}  422
+    Should Be Equal As Strings      ${resp.json()}          ${INVTRY_RX_ALREADY_DISABLED}
 
-JD-TC-EbableDisableInventoryRX-5
+JD-TC-EbableDisableInventoryRX-3
 
     [Documentation]  Ebable Disable Inventory RX - disable to enaable
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

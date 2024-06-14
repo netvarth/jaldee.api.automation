@@ -29,7 +29,7 @@ JD-TC-DeleteFrequencySA-1
 
     [Documentation]   Delete Frequency SA
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -48,7 +48,7 @@ JD-TC-DeleteFrequencySA-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${frequency}=       Random Int  min=1  max=10
+    ${frequency}=       Random Int  min=91  max=95
     ${dosage}=          Random Int  min=1  max=3000
     ${description}=     FakerLibrary.sentence
     ${remark}=          FakerLibrary.sentence

@@ -333,7 +333,7 @@ JD-TC-ConvertToOrder-1
 
     ${quantity}=                    Random Int  min=0  max=999
     ${quantity}=                    Convert To Number  ${quantity}  1
-    ${freeQuantity}=                Random Int  min=0  max=10
+    ${freeQuantity}=                Random Int  min=10  max=20
     ${freeQuantity}=                Convert To Number  ${freeQuantity}  1
     ${amount}=                      Random Int  min=1  max=999
     ${amount}=                      Convert To Number  ${amount}  1
@@ -479,7 +479,7 @@ JD-TC-ConvertToOrder-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
 
-    ${frequency}=       Random Int  min=1  max=10
+    ${frequency}=       Random Int  min=10  max=15
     ${dosage}=          Random Int  min=1  max=3000
     ${description}=     FakerLibrary.sentence
     ${remark}=          FakerLibrary.sentence
@@ -638,7 +638,7 @@ JD-TC-ConvertToOrder-1
     Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
     Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
 
-JD-TC-ConvertToOrder-2
+JD-TC-ConvertToOrder-UH2
 
     [Documentation]    Convert to Order - where order is already accepted
 
@@ -653,7 +653,7 @@ JD-TC-ConvertToOrder-2
     Should Be Equal As Strings      ${resp.status_code}             422
     Should Be Equal As Strings      ${resp.json()}                  ${ORDER_IN_STATUS}
 
-JD-TC-ConvertToOrder-3
+JD-TC-ConvertToOrder-UH3
 
     [Documentation]    Convert to Order - where sorder uid is invalid
 
@@ -665,32 +665,36 @@ JD-TC-ConvertToOrder-3
 
     ${resp}=    Convert to order  ${inv}  ${orderStatus[0]}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.status_code}             422
+    Should Be Equal As Strings      ${resp.json()}                  ${INVALID_STORE_ID}
+    
 
-JD-TC-ConvertToOrder-4
+JD-TC-ConvertToOrder-UH4
 
     [Documentation]    Convert to Order - where order status draft to confirmed
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
+    ${ORDER_IN_STATUS}=     format String   ${ORDER_IN_STATUS}   ACCEPTED
 
     ${resp}=    Convert to order  ${sorder_uid}  ${orderStatus[1]}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}             200
-
-JD-TC-ConvertToOrder-5
+    Should Be Equal As Strings      ${resp.status_code}             422
+    Should Be Equal As Strings      ${resp.json()}                  ${ORDER_IN_STATUS}
+JD-TC-ConvertToOrder-UH5
 
     [Documentation]    Convert to Order - where order status confirmed to draft
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
+    ${ORDER_IN_STATUS}=     format String   ${ORDER_IN_STATUS}   ACCEPTED
 
     ${resp}=    Convert to order  ${sorder_uid}  ${orderStatus[0]}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}             200
-
+    Should Be Equal As Strings      ${resp.status_code}             422
+    Should Be Equal As Strings      ${resp.json()}                  ${ORDER_IN_STATUS}
 JD-TC-OrderRequest-UH1
 
     [Documentation]    Convert to Order - without login

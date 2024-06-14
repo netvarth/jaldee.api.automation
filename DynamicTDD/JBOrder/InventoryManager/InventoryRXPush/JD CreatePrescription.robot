@@ -465,7 +465,7 @@ JD-TC-CreatePrescription-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
 
-    ${frequency}=       Random Int  min=1  max=10
+    ${frequency}=       Random Int  min=16  max=20
     ${dosage}=          Random Int  min=1  max=3000
     ${description}=     FakerLibrary.sentence
     ${remark}=          FakerLibrary.sentence
@@ -562,7 +562,7 @@ JD-TC-CreatePrescription-2
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-JD-TC-CreatePrescription-3
+JD-TC-CreatePrescription-UH1
 
     [Documentation]    Create Prescription -  where provider consumer id is empty 
 
@@ -577,7 +577,7 @@ JD-TC-CreatePrescription-3
     Should Be Equal As Strings      ${resp.status_code}     422
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_X_ID}
 
-JD-TC-CreatePrescription-4
+JD-TC-CreatePrescription-UH2
 
     [Documentation]    Create Prescription -  where doc id is empty
 
@@ -592,7 +592,7 @@ JD-TC-CreatePrescription-4
     Should Be Equal As Strings      ${resp.status_code}     422
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_X_ID}
 
-JD-TC-CreatePrescription-5
+JD-TC-CreatePrescription-3
 
     [Documentation]    Create Prescription -  display name is empty
 
@@ -604,7 +604,7 @@ JD-TC-CreatePrescription-5
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-JD-TC-CreatePrescription-6
+JD-TC-CreatePrescription-UH3
 
     [Documentation]    Create Prescription -  duration is empty
 
@@ -619,7 +619,7 @@ JD-TC-CreatePrescription-6
     Should Be Equal As Strings      ${resp.status_code}     422
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
 
-JD-TC-CreatePrescription-7
+JD-TC-CreatePrescription-UH4
 
     [Documentation]    Create Prescription -  quantity is empty
 
@@ -629,9 +629,9 @@ JD-TC-CreatePrescription-7
 
     ${resp}=    RX Create Prescription  ${cid}  ${doc1}  ${displayName1}  ${duration1}  ${empty}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
-
-JD-TC-CreatePrescription-8
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${INVALID_QUANTITY_VALUE}
+JD-TC-CreatePrescription-4
 
     [Documentation]    Create Prescription -  description is empty 
 
@@ -643,7 +643,7 @@ JD-TC-CreatePrescription-8
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-JD-TC-CreatePrescription-9
+JD-TC-CreatePrescription-5
 
     [Documentation]    Create Prescription -  item code is empty
 
@@ -655,7 +655,7 @@ JD-TC-CreatePrescription-9
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-JD-TC-CreatePrescription-10
+JD-TC-CreatePrescription-UH5
 
     [Documentation]    Create Prescription -  Dosage is empty
 
@@ -670,7 +670,7 @@ JD-TC-CreatePrescription-10
     Should Be Equal As Strings      ${resp.status_code}     422
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
 
-JD-TC-CreatePrescription-11
+JD-TC-CreatePrescription-UH6
 
     [Documentation]    Create Prescription -  frequency id is empty
 
@@ -685,7 +685,7 @@ JD-TC-CreatePrescription-11
     Should Be Equal As Strings      ${resp.status_code}     422
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
 
-JD-TC-CreatePrescription-12
+JD-TC-CreatePrescription-UH7
 
     [Documentation]    Create Prescription -  html is empty
 
