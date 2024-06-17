@@ -488,6 +488,54 @@ JD-TC-CreateTemplate-16
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+JD-TC-CreateTemplate-17
+
+    [Documentation]  Create a template for signup context with dynamic variable in content.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME280}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${resp}=  Get Dynamic Variable List
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${context_id1}  ${resp.json()[0]['context']}
+
+    ${resp}=  Get Dynamic Variable List By Context   ${context_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${dynamic_var1}   ${resp.json()[0]['name']}
+    Set Test Variable   ${dynamic_var2}   ${resp.json()[1]['name']}
+    Set Test Variable   ${dynamic_var3}   ${resp.json()[2]['name']}
+    Set Test Variable   ${dynamic_var4}   ${resp.json()[3]['name']}
+
+    ${temp_name}=    FakerLibrary.word
+    ${content_msg}=      FakerLibrary.sentence   
+    ${content_msg}=     Catenate   SEPARATOR=\n
+    ...             ${content_msg} ${dynamic_var1}.
+    ...             ${dynamic_var2} 
+    ...             ${dynamic_var3}
+    ...             ${dynamic_var4}  
+    ${content}=    Create Dictionary  intro=${content_msg}
+    ${tempheader_sub}=      FakerLibrary.sentence   5
+    ${salutation}=      FakerLibrary.word
+    ${comm_chanl}=  Create List   ${CommChannel[2]}  
+    ${comm_target}=  Create List   ${CommTarget[0]}  
+    ${signature}=   FakerLibrary.hostname
+
+    ${temp_header}=    Create Dictionary  subject=${tempheader_sub}   salutation=${salutation}
+    ${temp_footer}=    Create Dictionary  signature=${signature}  
+
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl}  
+    ...    templateHeader=${temp_header}  footer=${temp_footer}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200  
+
 JD-TC-CreateTemplate-UH1
 
     [Documentation]  Create template with same template name.
