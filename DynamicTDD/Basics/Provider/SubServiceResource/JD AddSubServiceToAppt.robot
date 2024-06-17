@@ -389,7 +389,7 @@ JD-TC-AddSubServicesToAppt-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Appointment By Id   ${apptid1}
+    ${resp}=  Get Appointment By Id   ${apptid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceId']}        ${s_id}

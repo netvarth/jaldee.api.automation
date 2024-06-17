@@ -763,7 +763,9 @@ JD-TC-CreatePurchase-UH13
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  []  
+    ${emptyList}=  Create List
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  @{emptyList}  
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}   200
 
