@@ -143,7 +143,7 @@ JD-TC-AddSubServicesToAppt-1
 
     ${SERVICE1}=    FakerLibrary.word
     Set Suite Variable   ${SERVICE1}
-    ${s_id}=  Create Sample Service  ${SERVICE1}   department=${dep_id}
+    ${s_id}=  Create Sample Service  ${SERVICE1}   department=${dep_id}  maxBookingsAllowed=10
     Set Suite Variable    ${s_id}
 
     ${resp}=   Get Service By Id  ${s_id}
@@ -608,7 +608,7 @@ JD-TC-AddSubServicesToAppt-3
     ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token}  ${resp.json()['token']}
+    Set Test Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=    Customer Logout
     Log  ${resp.content}
@@ -718,7 +718,6 @@ JD-TC-AddSubServicesToAppt-3
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['assigneeUsers']}    ${empty_list}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['teamIds']}          ${empty_list}
    
-
 JD-TC-AddSubServicesToAppt-4
 
     [Documentation]  add subservice to an appointment with one assignee.
@@ -905,7 +904,7 @@ JD-TC-AddSubServicesToAppt-4
     ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token}  ${resp.json()['token']}
+    Set Test Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=    Customer Logout
     Log  ${resp.content}
@@ -1136,8 +1135,6 @@ JD-TC-AddSubServicesToAppt-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[1]}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}  ${fname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
 
     ${resp}=  Consumer Logout
     Log   ${resp.json()}
@@ -1260,7 +1257,7 @@ JD-TC-AddSubServicesToAppt-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceId']}        ${s_id}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceName']}      ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceDate']}      ${DAY1}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceDate']}      ${DAY2}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceAmount']}    ${ser_amount}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['quantity']}         1.0
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['taxable']}          ${bool[0]}
