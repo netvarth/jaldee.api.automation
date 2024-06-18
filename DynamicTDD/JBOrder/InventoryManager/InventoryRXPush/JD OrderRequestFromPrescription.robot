@@ -617,7 +617,7 @@ JD-TC-OrderRequest-1
 
 
 
-JD-TC-OrderRequest-UH3
+JD-TC-OrderRequest-UH7
 
     [Documentation]    Order Request - same request after order Declined 
 
