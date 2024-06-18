@@ -3957,6 +3957,7 @@ JD-TC-UserPerformanceReport-12
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    sleep   2s
     ${resp}=  Get Bookings Invoices  ${apptid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
