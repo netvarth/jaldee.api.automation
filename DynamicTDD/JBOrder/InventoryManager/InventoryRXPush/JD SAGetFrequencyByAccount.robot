@@ -42,7 +42,7 @@ JD-TC-GetAllAccountFrequency-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
-    ${frequency}=       Random Int  min=1  max=10
+    ${frequency}=       Random Int  min=150  max=155
     ${dosage}=          Random Int  min=1  max=3000
     ${description}=     FakerLibrary.sentence
     ${remark}=          FakerLibrary.sentence
@@ -82,7 +82,7 @@ JD-TC-GetAllAccountFrequency-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id2}  ${resp.json()['id']}
 
-    ${frequency2}=       Random Int  min=10  max=20
+    ${frequency2}=       Random Int  min=170  max=175
     ${dosage2}=          Random Int  min=1  max=3000
     ${description2}=     FakerLibrary.sentence
     ${remark2}=          FakerLibrary.sentence

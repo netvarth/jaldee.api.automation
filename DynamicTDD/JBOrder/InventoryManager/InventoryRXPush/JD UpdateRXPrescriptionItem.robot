@@ -581,6 +581,12 @@ JD-TC-UpdateRXPrescriptionItem-2
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
+    ${displayName1}=     FakerLibrary.name
+    ${dur}=        Random Int  min=1  max=100
+    ${qt}=        Random Int  min=1  max=10
+    ${duration1}=             Evaluate    float(${dur})
+    ${quantity1}=             Evaluate    float(${qt})
+    
     ${resp}=    RX Update Prescription Item  ${pitm_id}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${prescription_id}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200

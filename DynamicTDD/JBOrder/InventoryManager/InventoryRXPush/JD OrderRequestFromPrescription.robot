@@ -617,24 +617,6 @@ JD-TC-OrderRequest-1
 
 
 
-JD-TC-OrderRequest-UH7
-
-    [Documentation]    Order Request - same request after order Declined 
-
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    Update SOrder Status  ${sorder_uid}  ${pushedStatus[2]}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-
-
-    ${resp}=    Order Request    ${store_id}  ${prescription_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}             200
-
 
 JD-TC-OrderRequest-UH1
 
@@ -747,6 +729,26 @@ JD-TC-OrderRequest-UH6
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}        419
     Should Be Equal As Strings      ${resp.json()}             ${SESSION_EXPIRED}
+
+
+JD-TC-OrderRequest-UH7
+
+    [Documentation]    Here is the corrected version of your sentence:"Order Request: If the same request is declined,  try to place the order again with the declined request."
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Update SOrder Status  ${sorder_uid}  ${pushedStatus[2]}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+
+
+    ${resp}=    Order Request    ${store_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             422
+
 
 
 

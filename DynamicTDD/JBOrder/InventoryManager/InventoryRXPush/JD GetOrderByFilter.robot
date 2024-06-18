@@ -808,7 +808,7 @@ JD-TC-GetOrderByFilter-8
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Get Sorder By Filter       acceptedBy-eq=${   }
+    ${resp}=    Get Sorder By Filter       acceptedBy-eq=${pid}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
     Should Be Equal As Strings      ${resp.json()[0]['createdDate']}    ${DAY1}
@@ -1107,7 +1107,7 @@ JD-TC-GetOrderByFilter-UH1
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${inv}=     Random int  min=666  max=999
+    ${inv}=     Random int  min=10000  max=15000
 
     ${resp}=    Get Sorder By Filter      account-eq=${inv}
     Log   ${resp.content}
@@ -1196,8 +1196,8 @@ JD-TC-GetOrderByFilter-UH7
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    Get Sorder By Filter       acceptedBy-eq=${   }
+    ${ran_name}=    FakerLibrary.firstName
+    ${resp}=    Get Sorder By Filter       acceptedBy-eq=${ran_name}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
     Should BeEqual As Strings     ${resp.json()}      []

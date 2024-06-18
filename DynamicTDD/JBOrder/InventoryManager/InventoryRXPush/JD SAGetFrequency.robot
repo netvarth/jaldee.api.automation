@@ -79,7 +79,7 @@ JD-TC-GetFrequencySA-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${inv}=     Random Int  min=1  max=100
+    ${inv}=     Random Int  min=1000  max=1500
 
     ${resp}=    SA Get Frequency  ${inv}
     Log   ${resp.content}

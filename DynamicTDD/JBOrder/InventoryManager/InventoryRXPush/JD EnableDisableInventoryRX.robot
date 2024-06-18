@@ -72,7 +72,7 @@ JD-TC-EbableDisableInventoryRX-UH1
     ${resp1}=  Enable/Disable Inventory Rx  ${toggle[0]}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  422
-    Should Be Equal As Strings      ${resp.json()}          ${INVTRY_RX_ALREADY_ENABLED}
+    Should Be Equal As Strings      ${resp1.json()}          ${INVTRY_RX_ALREADY_ENABLED}
 
 
 JD-TC-EbableDisableInventoryRX-2
@@ -113,7 +113,7 @@ JD-TC-EbableDisableInventoryRX-UH2
     ${resp1}=  Enable/Disable Inventory Rx  ${toggle[1]}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  422
-    Should Be Equal As Strings      ${resp.json()}          ${INVTRY_RX_ALREADY_DISABLED}
+    Should Be Equal As Strings      ${resp1.json()}          ${INVTRY_RX_ALREADY_DISABLED}
 
 JD-TC-EbableDisableInventoryRX-3
 

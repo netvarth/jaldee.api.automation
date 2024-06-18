@@ -155,7 +155,7 @@ JD-TC-UpdateFrequency-4
     ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${frequency}=       Random Int  min=59  max=61
+    ${frequency}=       Random Int  min=180  max=185
     ${remark2}=     FakerLibrary.sentence
 
     ${resp}=    Update Frequency  ${frequency_id}  ${frequency}  ${dos}  description=${description}  remark=${remark2}
@@ -199,7 +199,7 @@ JD-TC-UpdateFrequency-6
     ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${frequency}=       Random Int  min=65  max=68
+    ${frequency}=       Random Int  min=201  max=205
     ${resp}=    Update Frequency  ${frequency_id}  ${frequency}  ${dos}  description=${empty}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200

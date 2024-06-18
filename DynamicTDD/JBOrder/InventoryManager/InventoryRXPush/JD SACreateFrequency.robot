@@ -83,7 +83,7 @@ JD-TC-CreateFrequencySA-2
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-JD-TC-CreateFrequencySA-3
+JD-TC-CreateFrequencySA-UH1
 
     [Documentation]   Create Frequency SA - frequency is empty
 
@@ -93,9 +93,11 @@ JD-TC-CreateFrequencySA-3
     ${frequency}=       Random Int  min=11  max=15
     ${resp}=    SA Create Frequency  ${empty}  ${dosage}  description=${description}  remark=${remark}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}             ${FREEQUENCY_REQUIRED}
+    
 
-JD-TC-CreateFrequencySA-4
+JD-TC-CreateFrequencySA-UH2
 
     [Documentation]   Create Frequency SA - dosage is empty
 
@@ -105,7 +107,8 @@ JD-TC-CreateFrequencySA-4
     ${frequency}=       Random Int  min=16  max=20
     ${resp}=    SA Create Frequency  ${frequency}  ${empty}  description=${description}  remark=${remark}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}             ${DOSAGE_REQUIRED}
 
 JD-TC-CreateFrequencySA-5
 
@@ -131,10 +134,11 @@ JD-TC-CreateFrequencySA-6
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-JD-TC-CreateFrequencySA-7
+JD-TC-CreateFrequencySA-UH3
 
     [Documentation]   Create Frequency SA - without login
     ${frequency}=       Random Int  min=36  max=40
     ${resp}=    SA Create Frequency  ${frequency}  ${dosage}  description=${description}  remark=${remark}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.status_code}        419
+    Should Be Equal As Strings      ${resp.json()}             ${SA_SESSION_EXPIRED}

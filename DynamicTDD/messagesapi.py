@@ -2352,8 +2352,8 @@ INVALID_PURCHASE_FREE_QUANTITY = "Invalid purchase free quantity"
 INVALID_EXPIRY_DATE_ITEM = "The expiry date for the {} item is not valid."
 INVALID_EXPIRY_DATE_X = "The item {} has expired and cannot be processed. Please remove or replace this item to continue."
 INVALID_DURATION_VALUE="Invalid Duration Value"
-
-
+FREEQUENCY_REQUIRED="Frequency required "
+DOSAGE_REQUIRED="Dosage required "
 
 # Vendor
 INVALID_NAME="Invalid Name"

@@ -1013,7 +1013,7 @@ JD-TC-GetOrderByFilter-UH7
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Get Sorder Count By Filter       acceptedBy-eq=${   }
+    ${resp}=    Get Sorder Count By Filter       acceptedBy-eq=${pid}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
     Should Be Equal As Strings      ${resp.json()}                  0
