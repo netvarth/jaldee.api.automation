@@ -62,7 +62,9 @@ JD-TC-CreateItemComposition-UH1
 
     ${resp}=    Create Item Composition     ${empty} 
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}         ${INVALID_ITEM_COMPOSITION}
+    
 
 JD-TC-CreateItemComposition-UH2
 

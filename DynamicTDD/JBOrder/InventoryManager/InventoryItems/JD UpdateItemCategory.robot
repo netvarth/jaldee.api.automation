@@ -157,7 +157,7 @@ JD-TC-UpdateItemCategory-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-UpdateItemCategory-6
+JD-TC-UpdateItemCategory-UH3
 
     [Documentation]  Update item CategoryName With EMPTY value.
 
@@ -169,11 +169,9 @@ JD-TC-UpdateItemCategory-6
 
     ${resp}=  Update Item Category   ${EMPTY}    ${Ca_Id}
     Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get Item Category   ${Ca_Id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${INVALID_CATEGORY_NAME} 
+    
 
 JD-TC-UpdateItemCategory-UH1
 

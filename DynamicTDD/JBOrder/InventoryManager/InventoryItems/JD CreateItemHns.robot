@@ -67,7 +67,9 @@ JD-TC-CreateItemHsn-Uh1
 
     ${resp}=    Create Item hns  ${EMPTY} 
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}         ${INVALID_HSNCODE}
+    
 
 JD-TC-CreateItemHsn-UH2
 

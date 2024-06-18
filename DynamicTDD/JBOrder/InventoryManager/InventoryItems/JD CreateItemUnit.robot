@@ -64,7 +64,9 @@ JD-TC-CreateItemUnit-UH1
 
     ${resp}=    Create Item Unit  ${empty}  ${convertionQty}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}        ${INVALID_UNIT_NAME}
+    
 
 JD-TC-CreateItemUnit-UH2
 
@@ -117,4 +119,4 @@ JD-TC-CreateItemUnit-UH5
     ${resp}=    Create Item Unit  ${unitName}  ${convertionQty}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}        ${CUSTOM_VIEW_NAME_EXIT}
+    Should Be Equal As Strings    ${resp.json()}        ${UNIT_NAME_ALREADY_EXIST}

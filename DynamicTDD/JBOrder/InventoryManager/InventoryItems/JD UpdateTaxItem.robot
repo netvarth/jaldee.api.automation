@@ -105,7 +105,9 @@ JD-TC-UpdateItemTax-3
 
     ${resp}=    Update Item Tax  ${empty}  ${itemtax_id}  ${taxtypeenum[0]}  ${taxPercentage}  ${cgst}  ${sgst}  0
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}         ${INVALID_TAX_NAME}
+    
 
 JD-TC-UpdateItemTax-4
 

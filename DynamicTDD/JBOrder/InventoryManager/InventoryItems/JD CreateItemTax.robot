@@ -56,7 +56,7 @@ JD-TC-CreateItemTax-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-CreateItemTax-2
+JD-TC-CreateItemTax-UH1
 
     [Documentation]  Create Item tax - where tax name is empty
 
@@ -66,7 +66,9 @@ JD-TC-CreateItemTax-2
 
     ${resp}=    Create Item Tax  ${empty}  ${taxtypeenum[0]}  ${taxPercentage}  ${cgst}  ${sgst}  0
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}         ${INVALID_TAX_NAME}
+    
 
 JD-TC-CreateItemTax-3
 

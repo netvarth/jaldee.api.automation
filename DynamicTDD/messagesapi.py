@@ -2354,6 +2354,17 @@ INVALID_EXPIRY_DATE_X = "The item {} has expired and cannot be processed. Please
 INVALID_DURATION_VALUE="Invalid Duration Value"
 FREEQUENCY_REQUIRED="Frequency required "
 DOSAGE_REQUIRED="Dosage required "
+CATOGORY_NAME_ALRADY_EXIST="Category name already exist"
+INVALID_ITEM_COMPOSITION="Invalid Composition name "
+INVALID_GROUP_NAME="Invalid Group name "
+GROUP_NAME_ALREADY_EXIST="Group name already exist"
+INVALID_HSNCODE="Invalid HsnCode code"
+MANUFACTURER_NAME_ALREADY_EXIST="Manufacturer name already exist"
+INVALID_TAX_NAME="Invalid Tax name "
+TYPE_NAME_ALREADY_EXIST="Type name already exist"
+INVALID_UNIT_NAME="Invalid Unit name "
+UNIT_NAME_ALREADY_EXIST="Unit name already exist"
+INVALID_CATEGORY_NAME="Invalid Category name "
 
 # Vendor
 INVALID_NAME="Invalid Name"

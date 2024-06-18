@@ -756,7 +756,9 @@ JD-TC-UpdateItemInv-24
 
     ${resp}=    Update Item Inventory  ${spCode}  name=${name2}    isBatchApplicable=${boolean[1]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}        ${BATCH_APPLICABLE_SECLECT_ONLY_FOR_INVENTORY_ITEMS}
+
 
 
 JD-TC-UpdateItemInv-25

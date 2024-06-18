@@ -84,7 +84,7 @@ JD-TC-CreateItemManufacture-UH1
     ${resp}=  Create Item Manufacture   ${ManufactureName}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${NAME_ALREADY_EXIST}
+    Should Be Equal As Strings    ${resp.json()}    ${MANUFACTURER_NAME_ALREADY_EXIST}
 
 JD-TC-CreateItemManufacture-UH2
 

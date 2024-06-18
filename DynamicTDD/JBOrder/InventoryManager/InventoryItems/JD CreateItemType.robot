@@ -73,7 +73,7 @@ JD-TC-CreateItemType-3
 
 JD-TC-CreateItemType-UH1
 
-    [Documentation]  Provider Create another Item Category with same name.
+    [Documentation]  Provider Create another Item TYPE with same name.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
@@ -84,7 +84,7 @@ JD-TC-CreateItemType-UH1
     ${resp}=  Create Item Type   ${TypeName}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${NAME_ALREADY_EXIST}
+    Should Be Equal As Strings    ${resp.json()}    ${TYPE_NAME_ALREADY_EXIST}
 
 JD-TC-CreateItemType-UH2
 
