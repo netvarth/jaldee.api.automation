@@ -14603,7 +14603,7 @@ Create purchaseItemDtoList
 
     # .....   discountPercentage or fixedDiscount as kwargs
 
-    [Arguments]  ${inv_cat_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${taxableAmount}  ${taxAmount}  ${netAmount}  ${expiryDate}  ${mrp}  ${batchNo}  ${cgst}  ${sgst}  ${unitCode}    &{kwargs}
+    [Arguments]  ${inv_cat_encid}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${taxableAmount}  ${taxAmount}  ${netAmount}  ${expiryDate}  ${mrp}  ${batchNo}  ${cgst}  ${sgst}  ${unitCode}    &{kwargs}
     
     ${inventoryCatalogItem}=    Create Dictionary  encId=${inv_cat_encid} 
     ${data}=                    Create Dictionary  inventoryCatalogItem=${inventoryCatalogItem}  quantity=${quantity}  freeQuantity=${freeQuantity}  totalQuantity=${totalQuantity}  amount=${amount}  discountAmount=${discountAmount}  discountPercentage=${discountPercentage}  fixedDiscount=${fixedDiscount}  taxableAmount=${taxableAmount}  taxAmount=${taxAmount}  netAmount=${netAmount}  expiryDate=${expiryDate}  mrp=${mrp}  batchNo=${batchNo}  cgst=${cgst}  sgst=${sgst}  unitCode=${unitCode}
