@@ -495,7 +495,7 @@ JD-TC-CreatePurchase-1
     ${price}=  Convert To Number  ${price}    1
     Set Suite Variable  ${price}
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name}  ${boolean[1]}  ${inv_cat_encid_List}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${SName}  ${boolean[1]}  ${inv_cat_encid_List}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${inv_order_encid}  ${resp.json()}
@@ -548,10 +548,50 @@ JD-TC-CreatePurchase-1
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}   200
+    Set Suite Variable  ${purchaseId}   ${resp.json()}
 
     ${resp}=  Get Inventoryitem      ${ic_id}         
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${SName}
+    Should Be Equal As Strings      ${resp.json()['store']['encId']}      ${store_id}
+    Should Be Equal As Strings      ${resp.json()['inventoryCatalog']['encId']}      ${encid}
+    Should Be Equal As Strings      ${resp.json()['uid']}      ${purchaseId}
+    Should Be Equal As Strings      ${resp.json()['invoiceReferenceNo']}      ${invoiceReferenceNo}
+    Should Be Equal As Strings      ${resp.json()['invoiceDate']}      ${invoiceDate}
+    Should Be Equal As Strings      ${resp.json()['purchaseNote']}      ${purchaseNote}
+    Should Be Equal As Strings      ${resp.json()['vendor']['vendorName']}      ${vender_name}
+    Should Be Equal As Strings      ${resp.json()['vendor']['encId']}      ${vendorId}
+    Should Be Equal As Strings      ${resp.json()['totalQuantity']}      ${quantity}
+    Should Be Equal As Strings      ${resp.json()['totalFreeQuantity']}      ${freeQuantity}
+    Should Be Equal As Strings      ${resp.json()['netQuantity']}      ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()['totalAmount']}      ${totalAmount}
+    Should Be Equal As Strings      ${resp.json()['totalDiscountAmount']}      ${totalDiscountAmount}
+    Should Be Equal As Strings      ${resp.json()['totalTaxableAmount']}      ${totaltaxableamount}
+    Should Be Equal As Strings      ${resp.json()['totalCgst']}      ${totalcgst}
+    Should Be Equal As Strings      ${resp.json()['totalSgst']}      ${totalSgst}
+    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['inventoryCatalogItem']['encId']}      	${ic_id}
+    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['inventoryCatalogItem']['item']['name']}      ${nameit}
+    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['inventoryCatalogItem']['item']['spCode']}      ${itemEncId1}
+    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['quantity']}      ${quantity}
+    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['freeQuantity']}      ${freeQuantity}
+    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['totalQuantity']}      ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['amount']}      ${amount}
+    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['discountAmount']}      ${totalDiscountAmount}
+    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['taxableAmount']}      ${totaltaxableamount}
+    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['taxAmount']}      ${taxAmount}
+    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['netTotal']}      ${netTotal}
+    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['discountPercentage']}      ${discountPercentage}
+    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['hsnCode']}      ${hsnCode}
+    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['expiryDate']}      ${expiryDate}
+    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['mrp']}      ${mrp}
+    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['batchNo']}      ${batchNo}
+    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['purchaseUid']}      ${purchaseId}
+    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['unitCode']}      ${iu_id}
 
 
 JD-TC-CreatePurchase-2
@@ -631,6 +671,7 @@ JD-TC-CreatePurchase-6
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
 
+
 JD-TC-CreatePurchase-UH1
 
     [Documentation]  Create Purchase - where store id is empty
@@ -645,6 +686,7 @@ JD-TC-CreatePurchase-UH1
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}   422
     Should Be Equal As Strings      ${resp.json()}          ${X_REQUIRED}
+
 
 JD-TC-CreatePurchase-UH2
 
@@ -662,6 +704,7 @@ JD-TC-CreatePurchase-UH2
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}   422
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
+
 
 JD-TC-CreatePurchase-UH3
 
@@ -693,6 +736,7 @@ JD-TC-CreatePurchase-UH3
 #     Log   ${resp.content}
 #     Should Be Equal As Strings      ${resp.status_code}   200
 
+
 JD-TC-CreatePurchase-UH4
 
     [Documentation]  Create Purchase - using an already used invoice reference number.
@@ -705,6 +749,7 @@ JD-TC-CreatePurchase-UH4
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}   422
     Should Be Equal As Strings      ${resp.json()}          ${PURCHASE_INVOICE_NO_DUPLICATE}
+
 
 JD-TC-CreatePurchase-UH5
 
@@ -724,9 +769,6 @@ JD-TC-CreatePurchase-UH5
     Should Be Equal As Strings      ${resp.json()}          ${X_REQUIRED}
 
 
-
-
-
 JD-TC-CreatePurchase-UH6
 
     [Documentation]  Create Purchase - vendor id is empty
@@ -742,6 +784,7 @@ JD-TC-CreatePurchase-UH6
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}   422
     Should Be Equal As Strings      ${resp.json()}          ${X_REQUIRED}
+
 
 JD-TC-CreatePurchase-UH7
 
@@ -761,6 +804,7 @@ JD-TC-CreatePurchase-UH7
     Should Be Equal As Strings      ${resp.status_code}   422
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
 
+
 JD-TC-CreatePurchase-UH8
 
     [Documentation]  Create Purchase - item catalogue enc id is empty
@@ -775,6 +819,7 @@ JD-TC-CreatePurchase-UH8
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}   422
     Should Be Equal As Strings      ${resp.json()}          ${X_REQUIRED}
+
 
 JD-TC-CreatePurchase-UH9
 
@@ -793,9 +838,6 @@ JD-TC-CreatePurchase-UH9
     Should Be Equal As Strings      ${resp.json()}          ${INV_CATALOG_NOT_IN_STORE}
 
 
-
-
-
 JD-TC-CreatePurchase-UH10
 
     [Documentation]  Create Purchase - purchase Item dto List is empty
@@ -810,6 +852,7 @@ JD-TC-CreatePurchase-UH10
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}   422
     Should Be Equal As Strings      ${resp.json()}   ${ITEM_LIST_NULL}
+
 
 JD-TC-CreatePurchase-UH11
 
@@ -889,9 +932,6 @@ JD-TC-CreatePurchase-UH14
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_PURCHASE_FREE_QUANTITY}
 
 
-
-
-
 JD-TC-CreatePurchase-UH15
 
     [Documentation]  Create Purchase - total quantity is negative
@@ -905,6 +945,33 @@ JD-TC-CreatePurchase-UH15
     ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${negative_value}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Set Test Variable  ${purchaseId}  ${resp.json()}
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+
+JD-TC-CreatePurchase-UH15
+
+    [Documentation]  Create Purchase - without total quantity
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${invoiceReferenceNo}=     Random Int  min=999  max=9999
+    ${negative_value}=    Evaluate    -random.randint(1, 100)
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${negative_value}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Set Test Variable  ${purchaseId}  ${resp.json()}
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
 
@@ -1294,7 +1361,7 @@ JD-TC-CreatePurchase-36
 
     ${expiryDate2}=  db.add_timezone_date  ${tz}  40
 
-    ${INVALID_EXPIRY_DATE_ITEM_WITH_BATCH}=  format String   ${INVALID_EXPIRY_DATE_ITEM_WITH_BATCH}   ${nameit}  ${batchNo}  ${expiryDate2}
+    ${INVALID_EXPIRY_DATE_ITEM_WITH_BATCH}=  format String   ${INVALID_EXPIRY_DATE_ITEM_WITH_BATCH}   ${nameit}  ${batchNo}  ${expiryDate}
 
     ${invoiceReferenceNo}=  Generate Random String    10    [NUMBERS] [LETTERS]
     ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate2}  ${mrp}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               

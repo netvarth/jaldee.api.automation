@@ -592,7 +592,7 @@ JD-TC-GetPurchaseByUid-2
 
     [Documentation]  Get Purchase By Uid - where purchase is not created
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME158}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
