@@ -283,7 +283,7 @@ JD-TC-GetInvAuditlogCountByFilter-9
 
 JD-TC-GetInvAuditlogCountByFilter-10
 
-    [Documentation]   Update Invebtory catalog then verify auditlogCount with userType filter.
+    [Documentation]   Update Inventory catalog then verify auditlogCount with userType filter.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log   ${resp.json()}
