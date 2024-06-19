@@ -767,7 +767,8 @@ JD-TC-CreatePurchase-UH13
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  @{emptyList}  
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}   200
+    Should Be Equal As Strings      ${resp.status_code}   422
+    Should Be Equal As Strings      ${resp.json()}   ${ITEM_LIST_NULL}
 
 JD-TC-CreatePurchase-UH14
 
@@ -1148,7 +1149,8 @@ JD-TC-CreatePurchase-UH32
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}   ${ROUNDOFF_GREATER_AMOUNT}
 
 JD-TC-CreatePurchase-UH33
 
