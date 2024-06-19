@@ -166,19 +166,13 @@ JD-TC-UpdateItemTax-8
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${taxPercentage2}=     Random Int  min=0  max=200    
+    ${taxPercentage2}=     Random Int  min=200  max=300    
 
     ${resp}=    Update Item Tax  ${taxName}  ${itemtax_id}  ${taxtypeenum[0]}  ${taxPercentage2}  ${cgst}  ${sgst}  0
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}         ${INVALID_GST_PERCENTAGE}
 
-    ${resp}=    Get Item Tax by id  ${itemtax_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['taxName']}         ${taxName}
-    Should Be Equal As Strings    ${resp.json()['status']}          ${toggle[0]}
-    Should Be Equal As Strings    ${resp.json()['taxTypeEnum']}     ${taxtypeenum[0]}
-    Should Be Equal As Strings    ${resp.json()['taxCode']}         ${itemtax_id}
 
 JD-TC-UpdateItemTax-9
 
