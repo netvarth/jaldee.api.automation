@@ -19,9 +19,9 @@ ${alph_digits}  D3r52A
 
 *** Test Cases ***
 
-JD-TC-Link_With_Other_Login-1
+JD-TC-Reset_LoginId-1
 
-    [Documentation]    Link With other login
+    [Documentation]    Reset login Id
 
     ${domresp}=  Get BusinessDomainsConf
     Log  ${domresp.json()}
@@ -63,15 +63,62 @@ JD-TC-Link_With_Other_Login-1
     ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    
+
     ${resp}=  Provider Login  ${loginId}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph}${\n}
+    Set Suite Variable      ${id}  ${resp.json()['id']}
+
+    ${loginId_n}=     Random Int  min=1  max=9999
+    Set Suite Variable      ${loginId_n}
+
+    ${resp}=    Reset LoginId  ${id}  ${loginId_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Reset_LoginId-2
+
+    [Documentation]    Reset login Id - Login after reseting the login id with new login id
+
+    ${resp}=  Provider Login  ${loginId_n}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Reset_LoginId-UH1
+
+    [Documentation]    Reset login Id - Login with old login id
+
+    ${resp}=  Provider Login  ${loginId}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     401
+    Should Be Equal As Strings      ${resp.json()}          ${LOGINID_NOT_REGISTERED}
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Reset_LoginId-UH2
+
+    [Documentation]    Reset login Id - without login
+
+    ${loginId_n2}=     Random Int  min=1  max=9999
+
+    ${resp}=    Reset LoginId  ${id}  ${loginId_n2}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED}
+
+JD-TC-Reset_LoginId-3
+
+    [Documentation]    Reset login Id - reset loginid after switching account 
 
     # ........ Provider 2 ..........
 
@@ -106,7 +153,7 @@ JD-TC-Link_With_Other_Login-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${loginId}  ${PASSWORD}
+    ${resp}=  Provider Login  ${loginId_n}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -118,148 +165,99 @@ JD-TC-Link_With_Other_Login-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Link_With_Other_Login-2
-
-    [Documentation]    Link With other login - Provider 1 Get list of all connections
-
-    ${resp}=  Provider Login  ${loginId}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    List all links of a loginId
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]}     ${loginId2}
-
-    ${resp}=    Provider Logout
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-JD-TC-Link_With_Other_Login-3
-
-    [Documentation]    Link With other login - Provider 2 Get list of all connections
-
     ${resp}=  Provider Login  ${loginId2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    List all links of a loginId
+    ${resp}=    Switch login    ${loginId_n}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()[0]}     ${loginId}
+
+    ${new}=     Random Int  min=100   max=200
+    Set Suite Variable      ${new}
+
+    ${resp}=    Reset LoginId  ${id}  ${new}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Link_With_Other_Login-4
-
-    [Documentation]    Link With other login - sign up provider 3 and provider 2 link provider 3 and get list of limks
-
-    # ........ Provider 3 ..........
-
-    ${ph3}=  Evaluate  ${PUSERNAME}+5666400
-    Set Suite Variable  ${ph3}
-    ${firstname}=  FakerLibrary.first_name
-    ${lastname}=  FakerLibrary.last_name
-    Set Suite Variable      ${firstname}
-    Set Suite Variable      ${lastname}
-
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph}   1
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    202
-
-    ${resp}=    Account Activation  ${ph3}  ${OtpPurpose['ProviderSignUp']}
+    ${resp}=  Provider Login  ${new}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${loginId3}=     Random Int  min=1  max=9999
-    Set Suite Variable      ${loginId3}
-    
-    ${resp}=  Account Set Credential  ${ph3}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId3}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
-    ${resp}=  Provider Login  ${loginId3}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph}${\n}
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${loginId2}  ${PASSWORD}
+JD-TC-Reset_LoginId-UH3
+
+    [Documentation]    Reset login Id - reset loginid whith existing password   
+
+    ${resp}=  Provider Login  ${new}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Connect with other login  ${loginId3}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    List all links of a loginId
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()[0]}     ${loginId}
-    Should Be Equal As Strings    ${resp.json()[1]}     ${loginId3}
-
-    ${resp}=    Provider Logout
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-JD-TC-Link_With_Other_Login-5
-
-    [Documentation]    Link With other login - Provider 3 Get list of all connections
-
-    ${resp}=  Provider Login  ${loginId3}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    List all links of a loginId
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()[0]}     ${loginId2}
-
-    ${resp}=    Provider Logout
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-JD-TC-Link_With_Other_Login-6
-
-    [Documentation]    Link With other login - Provider 1 Get list of all connections
-
-    ${resp}=  Provider Login  ${loginId}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    List all links of a loginId
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()[0]}     ${loginId2}
-
-    ${resp}=    Provider Logout
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-JD-TC-Link_With_Other_Login-UH1
-
-    [Documentation]    Link With other login - without login
-
-    ${resp}=    Connect with other login  ${loginId3}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    419
-    Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED}
-
-JD-TC-Link_With_Other_Login-7
-
-    [Documentation]    Link With other login - Provider 1 linking the same provider again
-
-    ${resp}=  Provider Login  ${loginId}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Connect with other login  ${loginId2}  ${PASSWORD}
+    ${resp}=    Reset LoginId  ${id}  ${new}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${ALREADY_LINKED}
-    
+    Should Be Equal As Strings    ${resp.json()}    ${EXISTING_LOGINID}
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Reset_LoginId-UH4
+
+    [Documentation]    Reset login Id - reset loginid where user id is invalid   
+
+    ${resp}=  Provider Login  ${new}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=123  max=999
+
+    ${resp}=    Reset LoginId  ${inv}  ${new}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${EXISTING_LOGINID}
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Reset_LoginId-UH6
+
+    [Documentation]    Reset login Id - reset loginid where user id is empty   
+
+    ${resp}=  Provider Login  ${new}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Reset LoginId  ${empty}  ${new}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${EXISTING_LOGINID}
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Reset_LoginId-UH7
+
+    [Documentation]    Reset login Id - reset loginid where login id is empty 
+
+    ${resp}=  Provider Login  ${new}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Reset LoginId  ${id}  ${empty}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${EXISTING_LOGINID}
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200

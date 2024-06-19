@@ -265,15 +265,8 @@ JD-TC-Provider_Signup-8
 
     ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId_sm}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
-    ${resp}=  Provider Login  ${loginId_sm}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Provider Logout
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings   ${resp.json()}         ${LOGINID_EXISTS}
 
 JD-TC-Provider_Signup-UH1
 
@@ -329,15 +322,8 @@ JD-TC-Provider_Signup-10
 
     ${resp}=  Account Set Credential  ${email}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId_z}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
-    ${resp}=  Provider Login  ${loginId_z}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Provider Logout
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings   ${resp.json()}         ${LOGINID_EXISTS}
 
 JD-TC-Provider_Signup-UH2
 

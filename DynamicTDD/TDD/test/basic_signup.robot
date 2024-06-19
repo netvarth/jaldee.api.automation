@@ -82,15 +82,25 @@ JD-TC-Provider_Signup-1
         
         ${fname}=  FakerLibrary.name
         ${lname}=  FakerLibrary.lastname
-        ${resp}=  Account SignUp  ${fname}  ${lname}  ${None}  ${domain}  ${subdomain}  ${ph}  ${licpkgid}
+
+        ${resp}=  Account SignUp  ${fname}  ${lname}  ${None}  ${domain}  ${subdomain}  ${ph}   ${licpkgid}
+        Log   ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}    202
+
+        ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderSignUp']}
+        Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${resp}=  Account Activation  ${ph}  0
+
+        ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${ph}
+        Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  0
-        Should Be Equal As Strings    ${resp.status_code}    200
+
         sleep  03s
-        ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
+        
+        ${resp}=  Provider Login  ${ph}  ${PASSWORD}
+        Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
+
         Append To File  ${data_file}  ${ph} - ${PASSWORD}${\n}
         Append To File  ${var_file}  PUSERNAME${num}=${ph}${\n}
         

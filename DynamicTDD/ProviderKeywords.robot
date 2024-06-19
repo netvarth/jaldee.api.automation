@@ -15623,12 +15623,25 @@ Switch login
 
     [Arguments]  ${loginId} 
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/switch/${loginId}   expected_status=any
+    ${resp}=  POST On Session  ynw  /provider/login/switch/${loginId}   expected_status=any
     RETURN  ${resp}
 
 Reset LoginId
 
-    [Arguments]  ${loginId} 
+    [Arguments]  ${userid}    ${loginId} 
+
+    ${data}=  Create Dictionary  userId=${userId}  loginId=${loginId}
+    ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/reset/${loginId}    expected_status=any
+    ${resp}=  POST On Session  ynw  /provider/login/reset/loginId   data=${data}   expected_status=any
     RETURN  ${resp}
+
+Forgot LoginId
+
+    [Arguments]   &{kwargs}  #... countryCode, phoneNo, email ( countryCode is mandatory with phoneNo )
+
+    ${data}=    json.dumps    ${kwargs}   
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/login/forgot/loginId   data=${data}   expected_status=any
+    RETURN  ${resp}
+
