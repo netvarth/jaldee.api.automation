@@ -767,7 +767,9 @@ JD-TC-CreatePurchase-UH13
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  @{emptyList}  
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}   200
+    Should Be Equal As Strings      ${resp.status_code}   422
+    Should Be Equal As Strings      ${resp.json()}          ${ITEM_LIST_IS_EMPTY}
+    
 
 JD-TC-CreatePurchase-UH14
 
@@ -806,7 +808,7 @@ JD-TC-CreatePurchase-UH15
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings      ${resp.json()}          ${QUANTITY_OF_ITEM_NEEDED}
+    Should Be Equal As Strings      ${resp.json()}          ${INVALID_PURCHASE_QUANTITY}
 
 
 JD-TC-CreatePurchase-UH16
@@ -1148,7 +1150,9 @@ JD-TC-CreatePurchase-UH32
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${ROUNDINGOFF_AMOUNT_CANNOT_EXCEED_TOTAL}
+    
 
 JD-TC-CreatePurchase-UH33
 
@@ -1279,7 +1283,8 @@ JD-TC-CreatePurchase-36
     Should Be Equal As Strings    ${resp.status_code}    200      
 
     ${expiryDate2}=  db.add_timezone_date  ${tz}  40
-    ${INVALID_EXPIRY_DATE_ITEM}=  format String   ${INVALID_EXPIRY_DATE_ITEM}   ${nameit}
+
+    ${INVALID_EXPIRY_DATE_ITEM_WITH_BATCH}=  format String   ${INVALID_EXPIRY_DATE_ITEM_WITH_BATCH}   ${nameit}  ${batchNo}  ${expiryDate2}
 
     ${invoiceReferenceNo}=  Generate Random String    10    [NUMBERS] [LETTERS]
     ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate2}  ${mrp}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
@@ -1287,7 +1292,7 @@ JD-TC-CreatePurchase-36
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings      ${resp.json()}          ${INVALID_EXPIRY_DATE_ITEM}
+    Should Be Equal As Strings      ${resp.json()}          ${INVALID_EXPIRY_DATE_ITEM_WITH_BATCH}
 
 JD-TC-CreatePurchase-37
 
