@@ -15448,13 +15448,13 @@ Get Inventory Auditlog Count By Filter
 Get Inventory Auditlog By Uid
     [Arguments]   ${uid}     &{kwargs}
     Check And Create YNW Session
-    ${resp}=    GET On Session     ynw   /provider/inventory/${uid}   params=${kwargs}  expected_status=any
+    ${resp}=    GET On Session     ynw   /provider/inventory/log/${uid}   params=${kwargs}  expected_status=any
     RETURN  ${resp}
 
 Get Inventory Auditlog By id
-    [Arguments]   ${id}     &{kwargs}
+    [Arguments]   ${id}      &{kwargs}
     Check And Create YNW Session
-    ${resp}=    GET On Session     ynw   /provider/inventory/id/${id}   params=${kwargs}  expected_status=any
+    ${resp}=    GET On Session     ynw   /provider/inventory/log/id/${id}  params=${kwargs}    expected_status=any
     RETURN  ${resp}
 
 
