@@ -864,7 +864,7 @@ JD-TC-CreatePurchase-UH18
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_PURCHASE_FREE_QUANTITY}
 
 
-JD-TC-CreatePurchase-UH17
+JD-TC-CreatePurchase-UH34
 
     [Documentation]  Create Purchase - total quantity is null
 
@@ -880,7 +880,7 @@ JD-TC-CreatePurchase-UH17
     Should Be Equal As Strings      ${resp.status_code}     200
 
 
-JD-TC-CreatePurchase-UH17
+JD-TC-CreatePurchase-UH35
 
     [Documentation]  Create Purchase - total quantity is negative
 
