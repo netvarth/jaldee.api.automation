@@ -2365,6 +2365,8 @@ TYPE_NAME_ALREADY_EXIST="Type name already exist"
 INVALID_UNIT_NAME="Invalid Unit name "
 UNIT_NAME_ALREADY_EXIST="Unit name already exist"
 INVALID_CATEGORY_NAME="Invalid Category name "
+ITEM_LIST_NULL = "Item list is empty"
+ROUNDOFF_GREATER_AMOUNT  = "The rounding off amount cannot exceed the net total of the bill."
 
 # Vendor
 INVALID_NAME="Invalid Name"

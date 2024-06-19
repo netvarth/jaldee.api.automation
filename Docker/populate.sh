@@ -240,7 +240,7 @@ clearTddLogs()
 {
     echo "-- clearing logs older than $BACKUP_RETAIN_DAYS days from DynamicTDD/Output" 
     find "$TDD_Output_path" -mtime +$BACKUP_RETAIN_DAYS -type f -print -delete
-    find "$TDD_Output_path" -mtime $BACKUP_RETAIN_DAYS -type f -depth -print -delete
+    find "$TDD_Output_path" -depth  -mtime $BACKUP_RETAIN_DAYS -type f -print -delete
     find "$TDD_Output_path" -mindepth 1 -depth -type d -empty -print -delete
     # find "$TDD_Output_path" -mtime $BACKUP_RETAIN_DAYS -type f -depth -print -delete && find "$TDD_Output_path" -mindepth 1 -depth -type d -empty -print -delete
     
