@@ -1988,7 +1988,6 @@ JD-TC-GetInvAuditlogByFilter-51
     ${resp}=   Get Inventory Auditlog By Filter    account-eq=${accountId}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}             200
-
     Should Be Equal As Strings  ${resp.json()[0]['uid']}       ${Stock_uid}
     Should Be Equal As Strings  ${resp.json()[0]['auditType']}       ${InventoryAuditType[1]} 
     Should Be Equal As Strings  ${resp.json()[0]['auditContext']}       ${InventoryAuditContext[2]} 
