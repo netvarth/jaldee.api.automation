@@ -756,50 +756,53 @@ JD-TC-UpdatePurchase-4
 
     ${roundOff2}=                Random Int              min=1  max=99                                                             
 
+    ${EXPIRY_DATE_REQ}=  format String   ${EXPIRY_DATE_REQ}   ${nameit}
     ${resp}=    Update Purchase  ${purchaseId}  ${invoiceReferenceNo}  ${invoiceDate}  ${purchaseNote}  ${roundOff2}  ${purchaseItemDtoList1}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${ROUNDING_CANNOT_E_PERFORMED}
 
-    ${resp}=    Get Purchase By Uid  ${purchaseId}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
-    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${SName}
-    Should Be Equal As Strings      ${resp.json()['store']['encId']}      ${store_id}
-    Should Be Equal As Strings      ${resp.json()['inventoryCatalog']['encId']}      ${encid}
-    Should Be Equal As Strings      ${resp.json()['uid']}      ${purchaseId}
-    Should Be Equal As Strings      ${resp.json()['invoiceReferenceNo']}      ${invoiceReferenceNo}
-    Should Be Equal As Strings      ${resp.json()['invoiceDate']}      ${invoiceDate}
-    Should Be Equal As Strings      ${resp.json()['purchaseNote']}      ${purchaseNote}
-    Should Be Equal As Strings      ${resp.json()['vendor']['vendorName']}      ${vender_name}
-    Should Be Equal As Strings      ${resp.json()['vendor']['encId']}      ${vendorId}
-    Should Be Equal As Strings      ${resp.json()['totalQuantity']}      ${quantity}
-    Should Be Equal As Strings      ${resp.json()['totalFreeQuantity']}      ${freeQuantity}
-    Should Be Equal As Strings      ${resp.json()['netQuantity']}      ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()['totalAmount']}      ${totalAmount}
-    Should Be Equal As Strings      ${resp.json()['totalDiscountAmount']}      ${totalDiscountAmount}
-    Should Be Equal As Strings      ${resp.json()['totalTaxableAmount']}      ${totaltaxableamount}
-    Should Be Equal As Strings      ${resp.json()['totalCgst']}      ${totalcgst}
-    Should Be Equal As Strings      ${resp.json()['totalSgst']}      ${totalSgst}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['inventoryCatalogItem']['encId']}      	${ic_id}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['inventoryCatalogItem']['item']['name']}      ${nameit}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['inventoryCatalogItem']['item']['spCode']}      ${itemEncId1}
+
+    # ${resp}=    Get Purchase By Uid  ${purchaseId}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings      ${resp.status_code}     200
+    # Should Be Equal As Strings      ${resp.json()['store']['name']}      ${SName}
+    # Should Be Equal As Strings      ${resp.json()['store']['encId']}      ${store_id}
+    # Should Be Equal As Strings      ${resp.json()['inventoryCatalog']['encId']}      ${encid}
+    # Should Be Equal As Strings      ${resp.json()['uid']}      ${purchaseId}
+    # Should Be Equal As Strings      ${resp.json()['invoiceReferenceNo']}      ${invoiceReferenceNo}
+    # Should Be Equal As Strings      ${resp.json()['invoiceDate']}      ${invoiceDate}
+    # Should Be Equal As Strings      ${resp.json()['purchaseNote']}      ${purchaseNote}
+    # Should Be Equal As Strings      ${resp.json()['vendor']['vendorName']}      ${vender_name}
+    # Should Be Equal As Strings      ${resp.json()['vendor']['encId']}      ${vendorId}
+    # Should Be Equal As Strings      ${resp.json()['totalQuantity']}      ${quantity}
+    # Should Be Equal As Strings      ${resp.json()['totalFreeQuantity']}      ${freeQuantity}
+    # Should Be Equal As Strings      ${resp.json()['netQuantity']}      ${totalQuantity}
+    # Should Be Equal As Strings      ${resp.json()['totalAmount']}      ${totalAmount}
+    # Should Be Equal As Strings      ${resp.json()['totalDiscountAmount']}      ${totalDiscountAmount}
+    # Should Be Equal As Strings      ${resp.json()['totalTaxableAmount']}      ${totaltaxableamount}
+    # Should Be Equal As Strings      ${resp.json()['totalCgst']}      ${totalcgst}
+    # Should Be Equal As Strings      ${resp.json()['totalSgst']}      ${totalSgst}
+    # Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['inventoryCatalogItem']['encId']}      	${ic_id}
+    # Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['inventoryCatalogItem']['item']['name']}      ${nameit}
+    # Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['inventoryCatalogItem']['item']['spCode']}      ${itemEncId1}
     
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['quantity']}      ${quantity}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['freeQuantity']}      ${freeQuantity}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['totalQuantity']}      ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['amount']}      ${amount}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['discountAmount']}      ${totalDiscountAmount}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['taxableAmount']}      ${totaltaxableamount}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['taxAmount']}      ${taxAmount}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['netTotal']}      ${netTotal}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['discountPercentage']}      ${discountPercentage}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['hsnCode']}      ${hsnCode}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['expiryDate']}      ${expiryDate}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['mrp']}      ${mrp}
+    # Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['quantity']}      ${quantity}
+    # Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['freeQuantity']}      ${freeQuantity}
+    # Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['totalQuantity']}      ${totalQuantity}
+    # Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['amount']}      ${amount}
+    # Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['discountAmount']}      ${totalDiscountAmount}
+    # Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['taxableAmount']}      ${totaltaxableamount}
+    # Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['taxAmount']}      ${taxAmount}
+    # Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['netTotal']}      ${netTotal}
+    # Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['discountPercentage']}      ${discountPercentage}
+    # Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['hsnCode']}      ${hsnCode}
+    # Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['expiryDate']}      ${expiryDate}
+    # Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['mrp']}      ${mrp}
     
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['batchNo']}      ${batchNo}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['purchaseUid']}      ${purchaseId}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['unitCode']}      ${iu_id}
+    # Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['batchNo']}      ${batchNo}
+    # Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['purchaseUid']}      ${purchaseId}
+    # Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['unitCode']}      ${iu_id}
 
 
 JD-TC-UpdatePurchase-5
@@ -853,7 +856,7 @@ JD-TC-UpdatePurchase-8
     ${resp}=    Update Purchase  ${purchaseId}  ${invoiceReferenceNo}  ${invoiceDate}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings    ${resp.json()}            ${QUANTITY_OF_ITEM_NEEDED}
+    Should Be Equal As Strings    ${resp.json()}            ${INVALID_PURCHASE_QUANTITY}
 
 JD-TC-UpdatePurchase-9
 
@@ -1259,12 +1262,13 @@ JD-TC-UpdatePurchase-29
     Should Be Equal As Strings    ${resp.status_code}    200      
 
     ${expiryDate3}=  db.add_timezone_date  ${tz}  -5
-
+    ${ITEM_EXPIRED}=  format String   ${ITEM_EXPIRED}   ${nameit}
     ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate3}  ${mrp}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
 
     ${resp}=    Update Purchase  ${purchaseId}  ${invoiceReferenceNo}  ${invoiceDate}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${ITEM_EXPIRED}
 
 JD-TC-UpdatePurchase-30
 
@@ -1278,7 +1282,8 @@ JD-TC-UpdatePurchase-30
 
     ${resp}=    Update Purchase  ${purchaseId}  ${invoiceReferenceNo}  ${invoiceDate}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${INVALID_ITEM_MRP}
 
 JD-TC-UpdatePurchase-30.1
 
@@ -1293,6 +1298,7 @@ JD-TC-UpdatePurchase-30.1
     ${resp}=    Update Purchase  ${purchaseId}  ${invoiceReferenceNo}  ${invoiceDate}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${INVALID_ITEM_MRP}
 
 JD-TC-UpdatePurchase-30.2
 

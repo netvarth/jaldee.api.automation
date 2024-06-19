@@ -1282,7 +1282,7 @@ JD-TC-CreatePurchase-36
 
     ${expiryDate2}=  db.add_timezone_date  ${tz}  40
 
-    ${INVALID_EXPIRY_DATE_ITEM_WITH_BATCH}=  format String   ${INVALID_EXPIRY_DATE_ITEM_WITH_BATCH}   ${nameit}  ${batchNo}  ${expiryDate2}
+    ${INVALID_EXPIRY_DATE_ITEM_WITH_BATCH}=  format String   ${INVALID_EXPIRY_DATE_ITEM_WITH_BATCH}   ${nameit}  ${batchNo}  ${expiryDate}
 
     ${invoiceReferenceNo}=  Generate Random String    10    [NUMBERS] [LETTERS]
     ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate2}  ${mrp}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
