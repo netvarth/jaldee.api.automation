@@ -768,12 +768,7 @@ JD-TC-CreatePurchase-UH13
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  @{emptyList}  
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}   422
-<<<<<<< HEAD
     Should Be Equal As Strings      ${resp.json()}   ${ITEM_LIST_NULL}
-=======
-    Should Be Equal As Strings      ${resp.json()}          ${ITEM_LIST_IS_EMPTY}
-    
->>>>>>> branch 'master' of https://github.com/netvarth/jaldee.api.automation
 
 JD-TC-CreatePurchase-UH14
 
@@ -1155,12 +1150,7 @@ JD-TC-CreatePurchase-UH32
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
-<<<<<<< HEAD
     Should Be Equal As Strings      ${resp.json()}   ${ROUNDOFF_GREATER_AMOUNT}
-=======
-    Should Be Equal As Strings      ${resp.json()}          ${ROUNDINGOFF_AMOUNT_CANNOT_EXCEED_TOTAL}
-    
->>>>>>> branch 'master' of https://github.com/netvarth/jaldee.api.automation
 
 JD-TC-CreatePurchase-UH33
 

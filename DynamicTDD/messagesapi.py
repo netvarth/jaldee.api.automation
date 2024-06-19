@@ -2365,15 +2365,10 @@ TYPE_NAME_ALREADY_EXIST="Type name already exist"
 INVALID_UNIT_NAME="Invalid Unit name "
 UNIT_NAME_ALREADY_EXIST="Unit name already exist"
 INVALID_CATEGORY_NAME="Invalid Category name "
-<<<<<<< HEAD
 ITEM_LIST_NULL = "Item list is empty"
 ROUNDOFF_GREATER_AMOUNT  = "The rounding off amount cannot exceed the net total of the bill."
-=======
 INVALID_GST_PERCENTAGE="Invalid GST Percentage"
-ITEM_LIST_IS_EMPTY="Item list is empty"
-ROUNDINGOFF_AMOUNT_CANNOT_EXCEED_TOTAL="The rounding off amount cannot exceed the net total of the bill."
 INVALID_EXPIRY_DATE_ITEM_WITH_BATCH="Item {} with batch {} has an expiry date of {}. Make sure your values are correct."
->>>>>>> branch 'master' of https://github.com/netvarth/jaldee.api.automation
 
 # Vendor
 INVALID_NAME="Invalid Name"
