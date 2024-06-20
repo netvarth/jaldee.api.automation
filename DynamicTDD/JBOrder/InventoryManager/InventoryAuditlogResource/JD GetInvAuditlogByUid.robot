@@ -903,11 +903,3 @@ JD-TC-GetInvAuditlogByUid-9
     Should Be Equal As Strings  ${resp.json()[1]['description']}    Stock adjustment created 
     Should Be Equal As Strings  ${resp.json()[1]['userId']}   ${user_id}   
     Should Contain              ${resp.json()[1]['dateTime']}   ${datetime01} 
-
-JD-TC-GetInvAuditlogByUid-10
-
-    [Documentation]  update the stock Adjusted then verifing with get auditlogByUid.
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
