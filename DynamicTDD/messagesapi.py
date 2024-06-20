@@ -2372,7 +2372,10 @@ INVALID_EXPIRY_DATE_ITEM_WITH_BATCH="Item {} with batch {} has an expiry date of
 INVALID_ITEM_MRP="Invalid item mrp"
 ITEM_EXPIRED="The item {} has expired and cannot be processed. Please remove or replace this item to continue."
 ROUNDING_CANNOT_E_PERFORMED="Rounding can be performed to the nearest 10 rupees, including both positive and negative values."
-
+INVALID_DOSAGE_VALUE="Invalid Dosage Value"
+INVALID_FREEQUENCY_VALUE="Invalid Frequency Value"
+RECORD_STATUS_SAME= "Record status is already {}"
+RX_ITEMS_ARE_NOT_AVAILABLE_FOR_ORDER_CREATION="Rx items are not available for order creation"
 
 # Vendor
 INVALID_NAME="Invalid Name"
