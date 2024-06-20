@@ -1161,7 +1161,7 @@ JD-TC-UpdatePurchase-30
     ${resp}=    Update Purchase  ${purchaseId}  ${invoiceReferenceNo}  ${invoiceDate}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings      ${resp.json()}          ${INVALID_ITEM_MRP}
+    Should Be Equal As Strings      ${resp.json()}          ${INVALID_MRP}
 
 JD-TC-UpdatePurchase-30.1
 
@@ -1176,7 +1176,7 @@ JD-TC-UpdatePurchase-30.1
     ${resp}=    Update Purchase  ${purchaseId}  ${invoiceReferenceNo}  ${invoiceDate}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings      ${resp.json()}          ${INVALID_ITEM_MRP}
+    Should Be Equal As Strings      ${resp.json()}          ${INVALID_MRP}
 
 JD-TC-UpdatePurchase-30.2
 

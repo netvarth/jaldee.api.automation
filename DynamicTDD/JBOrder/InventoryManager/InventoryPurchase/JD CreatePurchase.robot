@@ -25,6 +25,7 @@ ${jpgfile}      /ebs/TDD/uploadimage.jpg
 ${pngfile}      /ebs/TDD/upload.png
 ${fileSize}     0.00458
 ${order}        0
+${fixedDiscount}      500
 
 *** Test Cases ***
 
@@ -456,13 +457,13 @@ JD-TC-CreatePurchase-1
     ${discountAmount}=  Evaluate    ${netTotal} * ${discountPercentage} / 100
     ${taxableAmount}=   Evaluate    ${netTotal} - ${discountAmount}
     ${cgstamount_actual}=      Evaluate    ${taxableAmount} * ${cgst} / 100
-    ${cgstamount}=               Convert To Number  ${cgstamount_actual}  2
+    ${cgstamount}=               roundoff  ${cgstamount_actual}  2
     ${sgstamount_actual}=      Evaluate    ${taxableAmount} * ${sgst} / 100
-    ${sgstamount}=               Convert To Number  ${sgstamount_actual}  2
+    ${sgstamount}=               roundoff  ${sgstamount_actual}  2
     ${taxAmount}=       Evaluate    ${cgstamount_actual} + ${sgstamount_actual}
-    ${taxAmount}=               Convert To Number  ${taxAmount}  2
+    ${taxAmount}=               roundoff  ${taxAmount}  2
     ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
-    ${netRate}=               Convert To Number  ${netRate}  2
+    ${netRate}=               roundoff  ${netRate}  2
     Set Suite Variable              ${totalQuantity}
     Set Suite Variable              ${netTotal}
     Set Suite Variable              ${discountAmount}
@@ -529,6 +530,9 @@ JD-TC-CreatePurchase-1
     ${tsgst}=                   Evaluate                ${totaltaxableamount} * ${sgst} / 100
     ${totalSgst}=               roundoff  ${tsgst}  2
     ${taxAmount}=               roundoff  ${taxAmount}  2
+    ${totalNetRate}=        Evaluate  ${totaltaxable} + ${totalcgst} + ${totalSgst} + ${roundOff}
+    ${totalNetRate}=        roundoff  ${totalNetRate}  2
+    ${roundOff_float}=   Convert To Number  ${roundOff}  1 
     Set Suite Variable          ${invoiceReferenceNo}
     Set Suite Variable          ${purchaseNote}
     Set Suite Variable          ${invoiceDate}
@@ -544,7 +548,7 @@ JD-TC-CreatePurchase-1
     Set Suite Variable          ${salesRate}
     Set Suite Variable          ${batchNo}
 
-    ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}    
+    ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}    
     Set Suite Variable              ${purchaseItemDtoList1}
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
@@ -594,6 +598,12 @@ JD-TC-CreatePurchase-1
     Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['batchNo']}      ${batchNo}
     Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['purchaseUid']}      ${purchaseId}
     Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['unitCode']}      ${iu_id}
+    Should Be Equal As Strings      ${resp.json()['totalIgst']}      0.0
+    Should Be Equal As Strings      ${resp.json()['totalCess']}      0.0
+    Should Be Equal As Strings      ${resp.json()['totalTaxAmount']}      ${totalAmount}
+    Should Be Equal As Strings      ${resp.json()['totalNetRate']}      ${totalNetRate}
+    Should Be Equal As Strings      ${resp.json()['roundOff']}      ${roundOff_float}
+    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}      ${InvStatus[0]}
 
 
 JD-TC-CreatePurchase-2
@@ -610,6 +620,12 @@ JD-TC-CreatePurchase-2
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}   200
+    Set Test Variable  ${purchaseId}   ${resp.json()}
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()['invoiceDate']}      ${invoiceDate}
 
 
 JD-TC-CreatePurchase-3
@@ -625,6 +641,12 @@ JD-TC-CreatePurchase-3
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${empty}  ${roundOff}  ${purchaseItemDtoList1}  
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}   200
+    Set Test Variable  ${purchaseId}   ${resp.json()}
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()['purchaseNote']}      ${EMPTY}
 
 
 JD-TC-CreatePurchase-4
@@ -640,6 +662,12 @@ JD-TC-CreatePurchase-4
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${empty}  ${purchaseItemDtoList1}  
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}   200
+    Set Test Variable  ${purchaseId}   ${resp.json()}
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()['roundOff']}      0.0
 
 
 JD-TC-CreatePurchase-5
@@ -651,11 +679,17 @@ JD-TC-CreatePurchase-5
     Should Be Equal As Strings    ${resp.status_code}    200      
 
     ${invoiceReferenceNo}=     Random Int  min=999  max=9999
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${NONE}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${NONE}  ${amount}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
+    Set Test Variable  ${purchaseId}   ${resp.json()}
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()['totalFreeQuantity']}      0.0
 
 
 JD-TC-CreatePurchase-6
@@ -669,7 +703,9 @@ JD-TC-CreatePurchase-6
     ${inv_ic_id}=                Random Int              min=1  max=99  
 
     ${invoiceReferenceNo}=     Random Int  min=999  max=9999
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${empty}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
+    ${totalAmount}=   Evaluate   ${amount} * ${quantity}
+    ${totalDiscountAmount}=     Evaluate   ${totalAmount} * ${discountPercentage} / 100
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${empty}  ${discountPercentage}  ${fixedDiscount}  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
@@ -679,6 +715,7 @@ JD-TC-CreatePurchase-6
     ${resp}=    Get Purchase By Uid  ${purchaseId} 
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()['totalDiscountAmount']}      ${totalDiscountAmount}
 
 
 JD-TC-CreatePurchase-7
@@ -691,8 +728,10 @@ JD-TC-CreatePurchase-7
 
     ${dis}=                Random Int              min=1  max=99  
 
+    ${totalAmount}=   Evaluate   ${amount} * ${quantity}
+    ${totalDiscountAmount}=     Evaluate   ${totalAmount} * ${discountPercentage} / 100
     ${invoiceReferenceNo}=     Random Int  min=999  max=9999
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${dis}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${dis}  ${discountPercentage}  ${fixedDiscount}  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
@@ -702,6 +741,7 @@ JD-TC-CreatePurchase-7
     ${resp}=    Get Purchase By Uid  ${purchaseId} 
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()['totalDiscountAmount']}      ${totalDiscountAmount}
 
 
 JD-TC-CreatePurchase-8
@@ -713,7 +753,7 @@ JD-TC-CreatePurchase-8
     Should Be Equal As Strings    ${resp.status_code}    200      
 
     ${invoiceReferenceNo}=     Random Int  min=999  max=9999
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${empty}  500  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${empty}  ${fixedDiscount}  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
@@ -723,6 +763,7 @@ JD-TC-CreatePurchase-8
     ${resp}=    Get Purchase By Uid  ${purchaseId} 
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()['totalDiscountAmount']}      ${fixedDiscount}
 
 JD-TC-CreatePurchase-9
 
@@ -733,7 +774,7 @@ JD-TC-CreatePurchase-9
     Should Be Equal As Strings    ${resp.status_code}    200      
 
     ${invoiceReferenceNo}=     Random Int  min=999  max=9999
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${null}  500  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${null}  ${fixedDiscount}  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
@@ -743,6 +784,57 @@ JD-TC-CreatePurchase-9
     ${resp}=    Get Purchase By Uid  ${purchaseId} 
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()['totalDiscountAmount']}      ${fixedDiscount}
+
+
+JD-TC-CreatePurchase-10
+
+    [Documentation]  Create Purchase - mrp is changed
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${mrp2}=                Random Int              min=1  max=99  
+
+    ${invoiceReferenceNo}=  Generate Random String    10    [NUMBERS] [LETTERS]
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${expiryDate}  ${mrp2}  ${batchNo}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Set Test Variable  ${purchaseId}   ${resp.json()}
+
+    ${mrp2}=   roundoff  ${mrp2}  1      
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['mrp']}      ${mrp2}
+
+
+JD-TC-CreatePurchase-11
+
+    [Documentation]  Create Purchase - batch number is updated
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${batchNo2}=                Random Int              min=1  max=99  
+
+    ${invoiceReferenceNo}=  Generate Random String    10    [NUMBERS] [LETTERS]
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${expiryDate}  ${mrp}  ${batchNo2}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Set Test Variable  ${purchaseId}   ${resp.json()}
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['batchNo']}      ${batchNo2}
 
 
 JD-TC-CreatePurchase-UH1
@@ -940,7 +1032,7 @@ JD-TC-CreatePurchase-UH11
     ${ITEM_NOT_FOUND}=  format String   ${ITEM_NOT_FOUND}   ${inv_ic_id}
 
     ${invoiceReferenceNo}=     Random Int  min=999  max=9999
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${inv_ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${inv_ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
@@ -957,7 +1049,7 @@ JD-TC-CreatePurchase-UH12
     Should Be Equal As Strings    ${resp.status_code}    200      
 
     ${invoiceReferenceNo}=     Random Int  min=999  max=9999
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${NONE}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${NONE}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
 
     ${QUANTITY_OF_ITEM_NEEDED}=  format String   ${QUANTITY_OF_ITEM_NEEDED}   ${nameit}
 
@@ -977,7 +1069,7 @@ JD-TC-CreatePurchase-UH13
 
     ${invoiceReferenceNo}=     Random Int  min=999  max=9999
     ${negative_value}=    Evaluate    -random.randint(1, 100)
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${negative_value}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${negative_value}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
 
     ${QUANTITY_OF_ITEM_NEEDED}=  format String   ${QUANTITY_OF_ITEM_NEEDED}   ${nameit}
 
@@ -997,7 +1089,7 @@ JD-TC-CreatePurchase-UH14
 
     ${invoiceReferenceNo}=     Random Int  min=999  max=9999
     ${negative_value}=    Evaluate    -random.randint(1, 100)
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${negative_value}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${negative_value}  ${amount}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
@@ -1013,7 +1105,7 @@ JD-TC-CreatePurchase-UH15
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${empty}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${empty}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
@@ -1030,7 +1122,7 @@ JD-TC-CreatePurchase-UH16
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200      
 
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${null}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${null}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
@@ -1049,7 +1141,7 @@ JD-TC-CreatePurchase-UH17
     ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   item amount
 
     ${invoiceReferenceNo}=     Random Int  min=999  max=9999
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  -100  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  -100  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
@@ -1068,7 +1160,7 @@ JD-TC-CreatePurchase-UH18
     ${amount2}=                Random Int              min=1  max=99  
 
     ${invoiceReferenceNo}=     Random Int  min=999  max=9999
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount2}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount2}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
@@ -1091,7 +1183,7 @@ JD-TC-CreatePurchase-UH19
     ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   item discount percentage 
 
     ${invoiceReferenceNo}=     Generate Random String    5    [NUMBERS] [LETTERS]
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  -10  500  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  -10  ${fixedDiscount}  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
@@ -1112,7 +1204,7 @@ JD-TC-CreatePurchase-UH20
     ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   item discount percentage
     
     ${invoiceReferenceNo}=  Generate Random String    10    [NUMBERS] [LETTERS]
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${disp2}  500  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${disp2}  ${fixedDiscount}  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
@@ -1196,7 +1288,7 @@ JD-TC-CreatePurchase-UH24
     Should Be Equal As Strings      ${resp.json()}   ${ROUNDOFF_GREATER_AMOUNT}
     
 
-JD-TC-CreatePurchase-35
+JD-TC-CreatePurchase-UH25
 
     [Documentation]  Create Purchase - expairy date is empty
 
@@ -1209,14 +1301,14 @@ JD-TC-CreatePurchase-35
     ${EXPIRY_DATE_REQ}=  format String   ${EXPIRY_DATE_REQ}   ${nameit}
 
     ${invoiceReferenceNo}=  Generate Random String    10    [NUMBERS] [LETTERS]
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${empty}  ${mrp}  ${batchNo}  ${iu_id}                                                               
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${empty}  ${mrp}  ${batchNo}  ${iu_id}                                                               
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
     Should Be Equal As Strings      ${resp.json()}          ${EXPIRY_DATE_REQ}
 
-JD-TC-CreatePurchase-36
+JD-TC-CreatePurchase-UH26
 
     [Documentation]  Create Purchase - expairy date is changed
 
@@ -1229,14 +1321,14 @@ JD-TC-CreatePurchase-36
     ${INVALID_EXPIRY_DATE_ITEM_WITH_BATCH}=  format String   ${INVALID_EXPIRY_DATE_ITEM_WITH_BATCH}   ${nameit}  ${batchNo}  ${expiryDate}
 
     ${invoiceReferenceNo}=  Generate Random String    10    [NUMBERS] [LETTERS]
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate2}  ${mrp}  ${batchNo}  ${iu_id}                                                               
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${expiryDate2}  ${mrp}  ${batchNo}  ${iu_id}                                                               
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_EXPIRY_DATE_ITEM_WITH_BATCH}
 
-JD-TC-CreatePurchase-37
+JD-TC-CreatePurchase-UH27
 
     [Documentation]  Create Purchase - expairy date is past date
 
@@ -1248,14 +1340,14 @@ JD-TC-CreatePurchase-37
     ${INVALID_EXPIRY_DATE_X}=  format String   ${INVALID_EXPIRY_DATE_X}   ${nameit}
 
     ${invoiceReferenceNo}=  Generate Random String    10    [NUMBERS] [LETTERS]
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate3}  ${mrp}  ${batchNo}  ${iu_id}                                                               
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${expiryDate3}  ${mrp}  ${batchNo}  ${iu_id}                                                               
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings      ${resp.json()}          ${INVALID_EXPIRY_DATE_X}
+    Should Be Equal As Strings      ${resp.json()}   ${INVALID_EXPIRY_DATE_X}
 
-JD-TC-CreatePurchase-38
+JD-TC-CreatePurchase-UH28
 
     [Documentation]  Create Purchase - mrp is empty
 
@@ -1264,13 +1356,14 @@ JD-TC-CreatePurchase-38
     Should Be Equal As Strings    ${resp.status_code}    200      
 
     ${invoiceReferenceNo}=  Generate Random String    10    [NUMBERS] [LETTERS]
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${empty}  ${batchNo}  ${iu_id}                                                               
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${expiryDate}  ${empty}  ${batchNo}  ${iu_id}                                                               
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}   ${INVALID_MRP}
 
-JD-TC-CreatePurchase-38.1
+JD-TC-CreatePurchase-UH29
 
     [Documentation]  Create Purchase - mrp is null
 
@@ -1279,13 +1372,14 @@ JD-TC-CreatePurchase-38.1
     Should Be Equal As Strings    ${resp.status_code}    200      
 
     ${invoiceReferenceNo}=  Generate Random String    10    [NUMBERS] [LETTERS]
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${null}  ${batchNo}  ${iu_id}                                                               
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${expiryDate}  ${null}  ${batchNo}  ${iu_id}                                                               
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}   ${INVALID_MRP}
 
-JD-TC-CreatePurchase-38.2
+JD-TC-CreatePurchase-UH30
 
     [Documentation]  Create Purchase - mrp is negative
 
@@ -1296,31 +1390,15 @@ JD-TC-CreatePurchase-38.2
     ${invoiceReferenceNo}=  Generate Random String    10    [NUMBERS] [LETTERS]
     ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   item mrp
 
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  -100  ${batchNo}  ${iu_id}                                                               
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${expiryDate}  -100  ${batchNo}  ${iu_id}                                                               
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
 
-JD-TC-CreatePurchase-39
 
-    [Documentation]  Create Purchase - mrp is changed
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200      
-
-    ${mrp2}=                Random Int              min=1  max=99  
-
-    ${invoiceReferenceNo}=  Generate Random String    10    [NUMBERS] [LETTERS]
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp2}  ${batchNo}  ${iu_id}                                                               
-
-    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
-
-JD-TC-CreatePurchase-42
+JD-TC-CreatePurchase-UH31
 
     [Documentation]  Create Purchase - batch number is empty
 
@@ -1331,32 +1409,15 @@ JD-TC-CreatePurchase-42
     ${ITEM_BATCH_NEEDED}=   format String   ${ITEM_BATCH_NEEDED}   ${nameit}
 
     ${invoiceReferenceNo}=  Generate Random String    10    [NUMBERS] [LETTERS]
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${empty}  ${iu_id}                                                               
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${expiryDate}  ${mrp}  ${empty}  ${iu_id}                                                               
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
     Should Be Equal As Strings      ${resp.json()}          ${ITEM_BATCH_NEEDED}
 
-JD-TC-CreatePurchase-43
 
-    [Documentation]  Create Purchase - batch number is updated
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200      
-
-    ${inv}=                Random Int              min=1  max=99  
-
-    ${invoiceReferenceNo}=  Generate Random String    10    [NUMBERS] [LETTERS]
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${inv}  ${iu_id}                                                               
-
-    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
-
-
-JD-TC-CreatePurchase-48
+JD-TC-CreatePurchase-UH32
 
     [Documentation]  Create Purchase - unit code is empty
 
@@ -1369,14 +1430,15 @@ JD-TC-CreatePurchase-48
     ${UNIT_REQ}=  format String   ${UNIT_REQ}   ${nameit}
 
     ${invoiceReferenceNo}=  Generate Random String    10    [NUMBERS] [LETTERS]
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}  ${empty}                                                               
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${expiryDate}  ${mrp}  ${batchNo}  ${empty}                                                               
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
     Should Be Equal As Strings      ${resp.json()}          ${UNIT_REQ}
 
-JD-TC-CreatePurchase-49
+
+JD-TC-CreatePurchase-UH33
 
     [Documentation]  Create Purchase - unit code is invalid
 
@@ -1389,19 +1451,20 @@ JD-TC-CreatePurchase-49
     ${UNIT_REQ}=  format String   ${UNIT_REQ}   ${nameit}
 
     ${invoiceReferenceNo}=  Generate Random String    10    [NUMBERS] [LETTERS]
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}  ${inv}                                                               
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${expiryDate}  ${mrp}  ${batchNo}  ${inv}                                                               
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
     Should Be Equal As Strings      ${resp.json()}          ${UNIT_REQ}
 
-JD-TC-CreatePurchase-50
+
+JD-TC-CreatePurchase-UH34
 
     [Documentation]  Create Purchase - without login 
 
     ${invoiceReferenceNo}=  Generate Random String    10    [NUMBERS] [LETTERS]
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
