@@ -15645,3 +15645,11 @@ Forgot LoginId
     ${resp}=  POST On Session  ynw  /provider/login/forgot/loginId   data=${data}   expected_status=any
     RETURN  ${resp}
 
+Forgot Password 
+
+    [Arguments]   &{kwargs}  #... pasword and login id )  
+
+    ${data}=    json.dumps    ${kwargs} 
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/login/forgot/password   data=${data}   expected_status=any
+    RETURN  ${resp} 

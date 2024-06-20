@@ -49,7 +49,9 @@ JD-TC-Forget_LoginId-1
     Set Suite Variable      ${firstname}
     Set Suite Variable      ${lastname}
 
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph}   1
+    ${highest_package}=  get_highest_license_pkg
+
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph}   ${highest_package[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
@@ -280,3 +282,206 @@ JD-TC-Forget_LoginId-UH10
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings      ${resp.json()}      ${OTP_VALIDATION_FAILED}
+
+JD-TC-Forget_LoginId-5
+
+    [Documentation]    Forget login Id - creating a sample user, reset login id for that user after that calling forgot login id
+
+    ${resp}=  Provider Login  ${loginId}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #..... User Creation ......
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${acc_id}   ${resp.json()['id']}
+    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}' 
+        ${dep_name1}=  FakerLibrary.bs
+        ${dep_code1}=   Random Int  min=100   max=999
+        ${dep_desc1}=   FakerLibrary.word  
+        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Suite Variable  ${dep_id}  ${resp1.json()}
+    ELSE
+        Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    END
+
+    ${user1}=  Create Sample User 
+    Set suite Variable                    ${user1}
+    
+    ${resp}=  Get User By Id              ${user1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Set Suite Variable  ${user1_id}       ${resp.json()['id']}
+    Set Suite Variable  ${user_num}    ${resp.json()['mobileNo']}
+
+    ${loginId_n}=     Random Int  min=1  max=9999
+    Set Suite Variable      ${loginId_n}
+
+    ${resp}=    Reset LoginId  ${user1_id}  ${loginId_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Forgot LoginId  countryCode=${countryCodes[1]}  phoneNo=${user_num}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${user_num}  ${OtpPurpose['ResetLoginId']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key3} =   db.Verify Accnt   ${user_num}    ${OtpPurpose['ResetLoginId']}
+    ${resp}=    Forgot LoginId     otp=${key3}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${loginId_usr}=  Convert To String  ${loginId_n}
+    Dictionary Should Contain Key    ${resp.json()}      ${loginId_usr}
+
+    ${Password_n}=    Random Int  min=11111111  max=99999999
+
+    ${resp}=    Forgot Password   loginId=${loginId_n}  password=${Password_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${user_num}  ${OtpPurpose['ProviderResetPassword']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key4} =   db.Verify Accnt   ${user_num}    ${OtpPurpose['ProviderResetPassword']}
+    Set Suite Variable   ${key4}
+
+    ${resp}=    Forgot Password     otp=${key4}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Provider Login  ${loginId}  ${Password_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+*** comments ***
+
+JD-TC-Forget_LoginId-6
+
+    [Documentation]    Forget login Id - create user for another provider with same number as provider 1 and call forgot login id
+
+    ${resp}=  Provider Login  ${loginId}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${firstname_u}=  FakerLibrary.name
+    Set Suite Variable  ${firstname_u}
+    ${lastname_u}=  FakerLibrary.last_name
+    Set Suite Variable  ${lastname_u}
+    ${address}=  get_address
+    Set Suite Variable  ${address}
+    ${dob}=  FakerLibrary.Date
+    Set Suite Variable  ${dob}
+    FOR    ${i}    IN RANGE    3
+    ${pin}=  get_pincode
+    ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+    IF    '${kwstatus}' == 'FAIL'
+            Continue For Loop
+    ELSE IF    '${kwstatus}' == 'PASS'
+            Exit For Loop
+    END
+    END
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
+    Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
+
+    ${resp}=  Create User  ${firstname_u}  ${lastname_u}  ${dob}  ${Genderlist[0]}  ${lastname_u}${ph}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${u_id}  ${resp.json()}
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Forget_LoginId-7
+
+    [Documentation]    Forget login Id - where number is 555 number
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${PH_Number}    Random Number 	digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable  ${phone}  555${PH_Number}
+
+    ${firstname3}=  FakerLibrary.first_name
+    ${lastname3}=  FakerLibrary.last_name
+    Set Suite Variable      ${firstname3}
+    Set Suite Variable      ${lastname3}
+
+    ${highest_package}=  get_highest_license_pkg
+
+    ${resp}=  Account SignUp  ${firstname3}  ${lastname3}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${phone}   ${highest_package[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${phone}  ${OtpPurpose['ProviderSignUp']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${loginId555}=     Random Int  min=1  max=9999
+    Set Suite Variable      ${loginId555}
+    
+    ${resp}=  Account Set Credential  ${phone}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId555}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Provider Login  ${loginId555}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Forgot LoginId  countryCode=${countryCodes[1]}  phoneNo=${phone}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${phone}  ${OtpPurpose['ResetLoginId']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key555} =   db.Verify Accnt   ${phone}    ${OtpPurpose['ResetLoginId']}
+    Set Suite Variable   ${key555}
+
+    ${resp}=    Forgot LoginId     otp=${key555}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${loginId_555}=  Convert To String  ${loginId555}
+    Dictionary Should Contain Key    ${resp.json()}      ${loginId_555}
