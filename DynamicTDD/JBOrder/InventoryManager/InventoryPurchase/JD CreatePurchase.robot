@@ -524,7 +524,8 @@ JD-TC-CreatePurchase-1
     ${totaltaxable}=            Evaluate                ${totalAmount} - ${totalDiscountAmount}
     ${totaltaxableamount}=      Evaluate                round(${totaltaxable}, 2)
     ${tcgst}=                   Evaluate                ${totaltaxableamount} * ${cgst} / 100
-    ${totalcgst}=               Evaluate                round(${tcgst}, 2)
+    # ${totalcgst}=               Evaluate                round(${tcgst}, 2)
+    ${totalcgst}=  roundoff  ${tcgst}
     ${tsgst}=                   Evaluate                ${totaltaxableamount} * ${sgst} / 100
     ${totalSgst}=               Evaluate                round(${tsgst}, 2)
     ${taxAmount}=               Evaluate                round(${taxAmount}, 2)
