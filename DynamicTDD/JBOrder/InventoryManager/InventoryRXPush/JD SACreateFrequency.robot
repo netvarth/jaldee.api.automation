@@ -46,7 +46,7 @@ JD-TC-CreateFrequencySA-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${frequency}=       Random Int  min=1  max=5
+    ${frequency}=       Random Int  min=120  max=125
     ${dosage}=          Random Int  min=1  max=3000
     ${description}=     FakerLibrary.sentence
     ${remark}=          FakerLibrary.sentence
@@ -117,7 +117,7 @@ JD-TC-CreateFrequencySA-5
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${frequency}=       Random Int  min=21  max=25
+    ${frequency}=       Random Int  min=210  max=250
     ${resp}=    SA Create Frequency  ${frequency}  ${dosage}  description=${empty}  remark=${remark}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200

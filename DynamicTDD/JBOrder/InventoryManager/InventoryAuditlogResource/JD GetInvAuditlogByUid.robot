@@ -600,7 +600,7 @@ JD-TC-GetInvAuditlogByUid-4
     Set Suite Variable          ${batchNo}
 
     # ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}    
+    ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}    
     Set Suite Variable              ${purchaseItemDtoList1}
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
@@ -699,7 +699,7 @@ JD-TC-GetInvAuditlogByUid-5
     ${invoiceDate}=             db.add_timezone_date    ${tz}  1
     ${expiryDate}=  db.add_timezone_date  ${tz}  50
 
-    ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}  encId=${purchase_EncId}
+    ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}  encId=${purchase_EncId}
 
 
     ${resp}=    Update Purchase  ${purchaseId}  ${invoiceReferenceNo2}  ${invoiceDate}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}

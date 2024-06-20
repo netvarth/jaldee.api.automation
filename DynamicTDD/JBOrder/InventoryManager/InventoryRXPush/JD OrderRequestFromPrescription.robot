@@ -362,7 +362,7 @@ JD-TC-OrderRequest-1
     ${purchaseNote}=                FakerLibrary.Sentence
     ${roundOff}=                    Random Int  min=1  max=10
 
-    ${purchaseItemDtoList1}=        Create purchaseItemDtoList   ${ic_Item_id}   ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  0  ${netTotal}   ${expiryDate}  ${mrp}  ${EMPTY}  0   0   ${iu_id}
+    ${purchaseItemDtoList1}=        Create purchaseItemDtoList   ${ic_Item_id}   ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}   ${iu_id}
     Set Suite Variable              ${purchaseItemDtoList1}
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${Catalog_EncIds}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
@@ -713,9 +713,9 @@ JD-TC-OrderRequest-UH5
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${inv}=     Random Int  min=1000  max=9999
 
-    ${resp}=    Order Request    ${store_id}  ${inv}
+
+    ${resp}=    Order Request    ${store_id}  ${firstName}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}        422
     Should Be Equal As Strings      ${resp.json()}             ${ALREADY_HAVE_ACTIVE_REQUEST}
@@ -743,11 +743,12 @@ JD-TC-OrderRequest-UH7
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-
+    ${RECORD_STATUS_SAME}=        format String   ${RECORD_STATUS_SAME}   ${pushedStatus[2]}
 
     ${resp}=    Order Request    ${store_id}  ${prescription_id}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             422
+    Should Be Equal As Strings      ${resp.json()}             ${RECORD_STATUS_SAME}
 
 
 

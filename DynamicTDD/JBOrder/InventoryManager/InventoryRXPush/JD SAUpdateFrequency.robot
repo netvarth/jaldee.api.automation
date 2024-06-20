@@ -105,7 +105,7 @@ JD-TC-UpdateFrequencySA-2
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
     Should Be Equal As Strings      ${resp.json()['id']}            ${frequency_id}
-    Should Be Equal As Strings      ${resp.json()['frequency']}     ${frequency}
+    Should Be Equal As Strings      ${resp.json()['frequency']}     ${frequency2}
     Should Be Equal As Strings      ${resp.json()['description']}   ${description}
     Should Be Equal As Strings      ${resp.json()['remark']}        ${remark}
     Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos2}
