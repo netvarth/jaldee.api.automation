@@ -29,7 +29,7 @@ ${fileSize}     0.00458
 
 *** Test Cases ***
 
-JD-TC-GetConsentFormByUid-1
+JD-TC-ConsentFormSendOtp-1
 
     [Documentation]  Get Consent Form By Uid
 
@@ -267,7 +267,7 @@ JD-TC-ConsentFormSendOtp-UH5
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${INVALID_CONSENTFORM_INPUT_FORMAT}
 
-JD-TC-GetConsentFormByUid-UH6
+JD-TC-ConsentFormSendOtp-UH6
 
     [Documentation]  Get Consent Form By Uid - another consumer login
 
@@ -279,7 +279,7 @@ JD-TC-GetConsentFormByUid-UH6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
 
-JD-TC-GetConsentFormByUid-UH7
+JD-TC-ConsentFormSendOtp-UH7
 
     [Documentation]  Get Consent Form By Uid - another Provider consumer login
 

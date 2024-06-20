@@ -6280,7 +6280,7 @@ def load_property(property_key, sep='=', comment_char='#'):
 # aes.cbc.iv= "RW5jRGVjSmFsZGVlMDYyMw=="
 cbc_secret_key="amFsZGVlRW5jcnlwdGlvbkRlY3J5cHRpb24xNDA2MjM="
 cbc_iv_key="RW5jRGVjSmFsZGVlMDYyMw=="
-def ecrypt_data(data):
+def encrypt_data(data):
 
     try:
         # cbc_key= load_property('aes.cbc.secret')

@@ -3482,7 +3482,7 @@ Consumer Consent Form Send Otp
     ${resp}=    PUT On Session    ynw    /consumer/consentform/sendOtp/${uuid}   expected_status=any
     RETURN  ${resp}
 
-Consumer Comsent Form Verify Otp
+Consumer Consent Form Verify Otp
 
     [Arguments]    ${purpose}  ${uid}  ${phone}
    

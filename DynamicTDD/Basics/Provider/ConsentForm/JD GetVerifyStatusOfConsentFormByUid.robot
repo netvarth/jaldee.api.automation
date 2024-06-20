@@ -152,11 +152,11 @@ JD-TC-GetVerifyStatusOfConsentFormByUid-1
     Should Be Equal As Strings  ${resp.json()['status']}      ${toggle[0]}
     Should Be Equal As Strings  ${resp.json()['settingId']}   ${cfid}
 
-    ${resp}=    Comsent Form Sent Otp     ${cf_uid}
+    ${resp}=    Consent Form Send Otp     ${cf_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Comsent Form Verify Otp  {OtpPurpose['CONSENT_FORM']}  ${cf_uid}   ${consumerPhone}
+    ${resp}=    Consent Form Verify Otp  {OtpPurpose['CONSENT_FORM']}  ${cf_uid}   ${consumerPhone}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -256,7 +256,7 @@ JD-TC-GetVerifyStatusOfConsentFormByUid-UH2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Comsent Form Sent Otp     ${cf_uid2}
+    ${resp}=    Consent Form Send Otp     ${cf_uid2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -273,11 +273,11 @@ JD-TC-GetVerifyStatusOfConsentFormByUid-UH3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Comsent Form Sent Otp     ${cf_uid2}
+    ${resp}=    Consent Form Send Otp     ${cf_uid2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Comsent Form Verify Otp  {OtpPurpose['CONSENT_FORM']}  ${cf_uid2}   ${consumerPhone2}
+    ${resp}=    Consent Form Verify Otp  {OtpPurpose['CONSENT_FORM']}  ${cf_uid2}   ${consumerPhone2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

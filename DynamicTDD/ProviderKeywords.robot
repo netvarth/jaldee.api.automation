@@ -11141,7 +11141,7 @@ Get Date Time by Timezone
 Encrypted Provider Login
     [Arguments]    ${usname}  ${passwrd}   ${countryCode}=91
     ${data}=  Login  ${usname}  ${passwrd}   countryCode=${countryCode}
-    ${encrypted_data}=  db.ecrypt_data  ${data}
+    ${encrypted_data}=  db.encrypt_data  ${data}
     ${data}=    json.dumps    ${encrypted_data}
     ${resp}=    POST On Session    ynw    /provider/login/encrypt    data=${data}  expected_status=any
     RETURN  ${resp}
@@ -13362,7 +13362,7 @@ Get Verify Status of consent form by uid
     ${resp}=    GET On Session    ynw    /provider/consentform/verifyStatus/${uid}   expected_status=any
     RETURN  ${resp}
 
-Comsent Form Sent Otp 
+Consent Form Send Otp 
 
     [Arguments]     ${uuid}
 
@@ -13370,7 +13370,7 @@ Comsent Form Sent Otp
     ${resp}=    PUT On Session    ynw    /provider/consentform/sendOtp/${uuid}   expected_status=any
     RETURN  ${resp}
 
-Comsent Form Verify Otp
+Consent Form Verify Otp
 
     [Arguments]    ${purpose}  ${uid}  ${phone}
    

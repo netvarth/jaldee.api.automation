@@ -150,11 +150,11 @@ JD-TC-ConsentFormVerifySign-1
     Should Be Equal As Strings  ${resp.json()['status']}      ${toggle[0]}
     Should Be Equal As Strings  ${resp.json()['settingId']}   ${cfid}
 
-    ${resp}=    Comsent Form Sent Otp     ${cf_uid}
+    ${resp}=    Consent Form Send Otp     ${cf_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Comsent Form Verify Otp   ${OtpPurpose['CONSENT_FORM']}  ${cf_uid}   ${consumerPhone}
+    ${resp}=    Consent Form Verify Otp   ${OtpPurpose['CONSENT_FORM']}  ${cf_uid}   ${consumerPhone}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

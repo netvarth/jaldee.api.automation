@@ -13,7 +13,7 @@ from RequestsLibrary.utils import is_file_descriptor
 from robot.api import logger
 from faker import Faker
 from Keywordspy import second_password, log_response, log_request
-from db import ecrypt_data, decrypt_data, Set_TZ_Header
+from db import encrypt_data, decrypt_data, Set_TZ_Header
 BASE_URL = __import__(os.environ['VARFILE']).BASE_URL
 HOST = __import__(os.environ['VARFILE']).HOSTED_IP
 SA_BASE_URL = "http://"+HOST+"/superadmin/rest/mgmt"
@@ -97,7 +97,7 @@ def spLogin(phno,pswd,countrycode=91):
                 'Accept': "application/json",
             }
         jsondata = json.dumps({"loginId": str(phno), "password":str(pswd), "countryCode":str(countrycode)})
-        encrypted_data=  ecrypt_data(jsondata)
+        encrypted_data=  encrypt_data(jsondata)
         data= json.dumps(encrypted_data)
         r = s.post(url, data=data, headers=headers)
         # print s.cookies

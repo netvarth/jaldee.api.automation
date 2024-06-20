@@ -150,11 +150,11 @@ JD-TC-ConsentFormVerifyOtp-1
     Should Be Equal As Strings  ${resp.json()['status']}      ${toggle[0]}
     Should Be Equal As Strings  ${resp.json()['settingId']}   ${cfid}
 
-    ${resp}=    Comsent Form Sent Otp     ${cf_uid}
+    ${resp}=    Consent Form Send Otp     ${cf_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Comsent Form Verify Otp  ${OtpPurpose['CONSENT_FORM']}  ${cf_uid}   ${consumerPhone}
+    ${resp}=    Consent Form Verify Otp  ${OtpPurpose['CONSENT_FORM']}  ${cf_uid}   ${consumerPhone}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -166,11 +166,11 @@ JD-TC-ConsentFormVerifyOtp-UH1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Comsent Form Sent Otp     ${cf_uid}
+    ${resp}=    Consent Form Send Otp     ${cf_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Comsent Form Verify Otp  ${OtpPurpose['CONSENT_FORM']}  ${cf_uid}   ${consumerPhone}
+    ${resp}=    Consent Form Verify Otp  ${OtpPurpose['CONSENT_FORM']}  ${cf_uid}   ${consumerPhone}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -182,11 +182,11 @@ JD-TC-ConsentFormVerifyOtp-UH2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Comsent Form Sent Otp     ${cf_uid}
+    ${resp}=    Consent Form Send Otp     ${cf_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Comsent Form Verify Otp  ${OtpPurpose['SPDataImport']}  ${cf_uid}   ${consumerPhone}
+    ${resp}=    Consent Form Verify Otp  ${OtpPurpose['SPDataImport']}  ${cf_uid}   ${consumerPhone}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${ENTER_VALID_OTP}
@@ -199,11 +199,11 @@ JD-TC-ConsentFormVerifyOtp-UH3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Comsent Form Sent Otp     ${cf_uid}
+    ${resp}=    Consent Form Send Otp     ${cf_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Comsent Form Verify Otp  ${empty}  ${cf_uid}   ${consumerPhone}
+    ${resp}=    Consent Form Verify Otp  ${empty}  ${cf_uid}   ${consumerPhone}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${ENTER_VALID_OTP}
@@ -216,13 +216,13 @@ JD-TC-ConsentFormVerifyOtp-UH4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Comsent Form Sent Otp     ${cf_uid}
+    ${resp}=    Consent Form Send Otp     ${cf_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${fake}=    Random Int  min=11111  max=99999
 
-    ${resp}=    Comsent Form Verify Otp  ${OtpPurpose['CONSENT_FORM']}  ${fake}   ${consumerPhone}
+    ${resp}=    Consent Form Verify Otp  ${OtpPurpose['CONSENT_FORM']}  ${fake}   ${consumerPhone}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${ENTER_VALID_OTP}
@@ -235,11 +235,11 @@ JD-TC-ConsentFormVerifyOtp-UH5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Comsent Form Sent Otp     ${cf_uid}
+    ${resp}=    Consent Form Send Otp     ${cf_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Comsent Form Verify Otp  ${OtpPurpose['CONSENT_FORM']}  ${cf_uid}   ${empty}
+    ${resp}=    Consent Form Verify Otp  ${OtpPurpose['CONSENT_FORM']}  ${cf_uid}   ${empty}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${ENTER_VALID_OTP}
@@ -252,13 +252,13 @@ JD-TC-ConsentFormVerifyOtp-UH6
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Comsent Form Sent Otp     ${cf_uid}
+    ${resp}=    Consent Form Send Otp     ${cf_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${fake}=    FakerLibrary.Random Number  
 
-    ${resp}=    Comsent Form Verify Otp  ${OtpPurpose['CONSENT_FORM']}  ${cf_uid}   ${fake}
+    ${resp}=    Consent Form Verify Otp  ${OtpPurpose['CONSENT_FORM']}  ${cf_uid}   ${fake}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${ENTER_VALID_OTP}
@@ -271,11 +271,11 @@ JD-TC-ConsentFormVerifyOtp-UH7
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Comsent Form Sent Otp     ${cf_uid}
+    ${resp}=    Consent Form Send Otp     ${cf_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Comsent Form Verify Otp  ${OtpPurpose['CONSENT_FORM']}  ${cf_uid}   ${PUSERNAME285}
+    ${resp}=    Consent Form Verify Otp  ${OtpPurpose['CONSENT_FORM']}  ${cf_uid}   ${PUSERNAME285}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${ENTER_VALID_OTP}
@@ -284,7 +284,7 @@ JD-TC-ConsentFormVerifyOtp-UH8
 
     [Documentation]  Consent Form Verify Otp - without login
 
-    ${resp}=    Comsent Form Verify Otp  ${OtpPurpose['CONSENT_FORM']}  ${cf_uid}   ${consumerPhone}
+    ${resp}=    Consent Form Verify Otp  ${OtpPurpose['CONSENT_FORM']}  ${cf_uid}   ${consumerPhone}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  ${resp.json()}       ${SESSION_EXPIRED}
@@ -297,7 +297,7 @@ JD-TC-ConsentFormVerifyOtp-UH9
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Comsent Form Verify Otp  ${OtpPurpose['CONSENT_FORM']}  ${cf_uid}   ${consumerPhone}
+    ${resp}=    Consent Form Verify Otp  ${OtpPurpose['CONSENT_FORM']}  ${cf_uid}   ${consumerPhone}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  ${resp.json()}       ${SESSION_EXPIRED}

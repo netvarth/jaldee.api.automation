@@ -295,7 +295,7 @@ JD-TC-Consumer Signup-UH2
 JD-TC-Consumer Signup-5
     [Documentation]   Create consumer with different country code
 
-    ${resp}=   Get File    /ebs/TDD/consumernumbers.txt
+    ${resp}=   Get File    ${EXECDIR}/data/TDD_Logs/consumernumbers.txt
     ${numbers}=   Split to lines  ${resp}
     Set Suite Variable  ${numbers}
     ${length}=  Get Length   ${numbers}

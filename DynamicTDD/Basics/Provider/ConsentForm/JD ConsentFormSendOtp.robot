@@ -150,7 +150,7 @@ JD-TC-ConsentFormSendOtp-1
     Should Be Equal As Strings  ${resp.json()['status']}      ${toggle[0]}
     Should Be Equal As Strings  ${resp.json()['settingId']}   ${cfid}
 
-    ${resp}=    Comsent Form Sent Otp     ${cf_uid}
+    ${resp}=    Consent Form Send Otp     ${cf_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -162,7 +162,7 @@ JD-TC-ConsentFormSendOtp-UH1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Comsent Form Sent Otp     ${cf_uid}
+    ${resp}=    Consent Form Send Otp     ${cf_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -177,7 +177,7 @@ JD-TC-ConsentFormSendOtp-UH2
 
     ${fake}=    Random Int  min=1000000   max=9999999
 
-    ${resp}=    Comsent Form Sent Otp     ${fake}
+    ${resp}=    Consent Form Send Otp     ${fake}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${INVALID_UNIQUE_ID}
@@ -186,7 +186,7 @@ JD-TC-ConsentFormSendOtp-UH3
 
     [Documentation]  Consent Form Send Otp - without login
 
-    ${resp}=    Comsent Form Sent Otp     ${cf_uid}
+    ${resp}=    Consent Form Send Otp     ${cf_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  ${resp.json()}       ${SESSION_EXPIRED}
@@ -199,7 +199,7 @@ JD-TC-ConsentFormSendOtp-Uh4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Comsent Form Sent Otp     ${cf_uid}
+    ${resp}=    Consent Form Send Otp     ${cf_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  ${resp.json()}       ${SESSION_EXPIRED}
@@ -212,7 +212,7 @@ JD-TC-ConsentFormSendOtp-UH5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Comsent Form Sent Otp     ${cf_uid}
+    ${resp}=    Consent Form Send Otp     ${cf_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  ${resp.json()}       ${NO_PERMISSION}
