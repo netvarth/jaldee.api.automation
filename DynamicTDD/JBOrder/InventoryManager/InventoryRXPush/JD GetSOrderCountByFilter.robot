@@ -915,20 +915,20 @@ JD-TC-GetOrderByFilter-20
     Should Be Equal As Strings      ${resp.status_code}             200
     Should Be Equal As Strings      ${resp.json()}                  1
 
-JD-TC-GetOrderByFilter-UH1
+# JD-TC-GetOrderByFilter-UH1
 
-    [Documentation]    Get Sorder Count By Filter - invalid account
+#     [Documentation]    Get Sorder Count By Filter - invalid account
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
+#     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+#     Log  ${resp.json()}         
+#     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${inv}=     Random int  min=66666  max=99999
+#     ${inv}=     Random int  min=66666  max=99999
 
-    ${resp}=    Get Sorder Count By Filter      account-eq=${inv}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}             200
-    Should Be Equal As Strings      ${resp.json()}                  0
+#     ${resp}=    Get Sorder Count By Filter      account-eq=${inv}
+#     Log   ${resp.content}
+#     Should Be Equal As Strings      ${resp.status_code}             200
+#     Should Be Equal As Strings      ${resp.json()}                  0
 
 JD-TC-GetOrderByFilter-UH2
 

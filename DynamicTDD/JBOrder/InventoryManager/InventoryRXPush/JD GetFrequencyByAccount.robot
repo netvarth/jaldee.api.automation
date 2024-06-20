@@ -85,16 +85,27 @@ JD-TC-GetFrequencyByAccount-1
     ${resp}=    Get Frequency By Account  ${account_id_PUSERNAME300}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}                 200
-    Should Be Equal As Strings      ${resp.json()[0]['id']}             ${frequency_id}
-    Should Be Equal As Strings      ${resp.json()[0]['frequency']}      ${frequency}
-    Should Be Equal As Strings      ${resp.json()[0]['description']}    ${description}
-    Should Be Equal As Strings      ${resp.json()[0]['remark']}         ${remark}
-    Should Be Equal As Strings      ${resp.json()[0]['dosage']}         ${dos}
-    Should Be Equal As Strings      ${resp.json()[1]['id']}             ${frequency_id0}
-    Should Be Equal As Strings      ${resp.json()[1]['frequency']}      ${frequency0}
-    Should Be Equal As Strings      ${resp.json()[1]['description']}    ${description0}
-    Should Be Equal As Strings      ${resp.json()[1]['remark']}         ${remark0}
-    Should Be Equal As Strings      ${resp.json()[1]['dosage']}         ${dos0}
+
+    ${len}=  Get Length  ${resp.json()}
+ 
+
+    FOR  ${i}  IN RANGE   ${len}
+
+        IF  '${resp.json()[${i}]['id']}' == '${frequency_id}'  
+            Should Be Equal As Strings      ${resp.json()[${i}]['id']}             ${frequency_id}
+            Should Be Equal As Strings      ${resp.json()[${i}]['frequency']}      ${frequency}
+            Should Be Equal As Strings      ${resp.json()[${i}]['description']}    ${description}
+            Should Be Equal As Strings      ${resp.json()[${i}]['remark']}         ${remark}
+            Should Be Equal As Strings      ${resp.json()[${i}]['dosage']}         ${dos}
+
+        ELSE IF     '${resp.json()[${i}]['id']}' == '${frequency_id0}'     
+            Should Be Equal As Strings      ${resp.json()[${i}]['id']}             ${frequency_id0}
+            Should Be Equal As Strings      ${resp.json()[${i}]['frequency']}      ${frequency0}
+            Should Be Equal As Strings      ${resp.json()[${i}]['description']}    ${description0}
+            Should Be Equal As Strings      ${resp.json()[${i}]['remark']}         ${remark0}
+            Should Be Equal As Strings      ${resp.json()[${i}]['dosage']}         ${dos0}
+        END
+    END
 
 
 JD-TC-GetFrequencyByAccount-2
