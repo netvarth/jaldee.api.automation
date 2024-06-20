@@ -31,6 +31,7 @@ import socket
 from Keywordspy import create_tz
 from dateutil import tz
 import re
+from decimal import Decimal, ROUND_HALF_UP
 
 
 if os.environ['SYSTEM_ENV'] == 'Microsoft WSL':
@@ -2379,20 +2380,21 @@ def clear_consumer_notification_settings (usrid):
 
 
 def roundoff(num, precision=2):
-    if isinstance(num, (int, float)):
-        val=round(float(num),precision)
-        print('roundedval=',val)
-    else:
-        print(type(num))
-        try:
-            # val=float("{:.2f}".format(num))
-            val = float("{:.{}f}".format(float(num), precision))
-            print('convertedval=',val)
-        except Exception as e:
-            print ("Exception:", e)
-            print ("Exception at line no:", e.__traceback__.tb_lineno)
-            return 0
-    return val
+    # val=Decimal(str(num)).quantize(Decimal(10)**-precision, rounding=ROUND_HALF_UP)
+    # Convert num to a Decimal object with precise string representation
+    num_decimal = Decimal(str(num))
+    
+    # Define the quantization factor using Decimal
+    quantize_factor = Decimal('10') ** -precision
+    
+    # Quantize with specified precision and rounding mode
+    val = num_decimal.quantize(quantize_factor, rounding=ROUND_HALF_UP)
+    print('roundedval=',val)
+    
+    # Convert back to float if necessary
+    val_float = float(val)
+    return val_float
+    
 
 
 def get_time_secs():
