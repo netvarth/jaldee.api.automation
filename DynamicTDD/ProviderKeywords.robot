@@ -15594,3 +15594,29 @@ Get Dynamic Variable List
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/comm/template/dynamic/variable   expected_status=any
     RETURN  ${resp}
+
+Create Send Comm Settings
+
+    [Arguments]  ${temp_id}   ${context}  ${sendcomm_id}  ${commTarget}  ${comm_chanl}  &{kwargs}
+   
+    ${data}=  Create Dictionary  templateId=${temp_id}  context=${context}  sendCommId=${sendcomm_id}  commTarget=${commTarget}   commChannel=${comm_chanl} 
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/comm/template/settings  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get Send Comm List
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/comm/template/sendComms   expected_status=any
+    RETURN  ${resp}
+
+Get Send Comm List By Context
+
+    [Arguments]  ${context_id} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/comm/template/sendComms/context/${context_id}   expected_status=any
+    RETURN  ${resp}
