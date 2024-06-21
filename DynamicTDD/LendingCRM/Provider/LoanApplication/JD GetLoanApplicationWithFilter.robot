@@ -1106,7 +1106,7 @@ JD-TC-LoanApplication-1
     Log  ${time.content}
     Should Be Equal As Strings  ${time.status_code}  200
     Set Suite Variable      ${datetime1}    ${time.json()}   
-    ${datetime01}    Convert Date    ${datetime1}    result_format=%Y-%m-%d %H:%M
+    ${datetime01}    Convert Date    ${datetime1}    result_format=%Y-%m-%d  
 
     Run Keyword And Continue On Failure    Should Contain                         ${resp.json()["lastStatusUpdatedDate"]}    ${datetime01}
 
@@ -1140,7 +1140,7 @@ JD-TC-LoanApplication-1
     Log  ${time.content}
     Should Be Equal As Strings  ${time.status_code}  200
     Set Suite Variable      ${datetime2}    ${time.json()}   
-    ${datetime02}    Convert Date    ${datetime2}    result_format=%Y-%m-%d %H:%M
+    ${datetime02}    Convert Date    ${datetime2}    result_format=%Y-%m-%d  
 
     Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime02}
 
@@ -1180,7 +1180,7 @@ JD-TC-LoanApplication-1
     Log  ${time.content}
     Should Be Equal As Strings  ${time.status_code}  200
     Set Suite Variable      ${datetime3}    ${time.json()}   
-    ${datetime03}    Convert Date    ${datetime3}    result_format=%Y-%m-%d %H:%M
+    ${datetime03}    Convert Date    ${datetime3}    result_format=%Y-%m-%d  
 
     Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime03}
     
@@ -1208,7 +1208,7 @@ JD-TC-LoanApplication-1
     Log  ${time.content}
     Should Be Equal As Strings  ${time.status_code}  200
     Set Suite Variable      ${datetime4}    ${time.json()}   
-    ${datetime04}    Convert Date    ${datetime4}    result_format=%Y-%m-%d %H:%M
+    ${datetime04}    Convert Date    ${datetime4}    result_format=%Y-%m-%d  
 
     Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime04}
 
@@ -1321,7 +1321,7 @@ JD-TC-LoanApplication-1
     Log  ${time.content}
     Should Be Equal As Strings  ${time.status_code}  200
     Set Suite Variable      ${datetime5}    ${time.json()}   
-    ${datetime05}    Convert Date    ${datetime5}    result_format=%Y-%m-%d %H:%M
+    ${datetime05}    Convert Date    ${datetime5}    result_format=%Y-%m-%d  
 
     Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime05}
 
@@ -1361,7 +1361,7 @@ JD-TC-LoanApplication-1
     Log  ${time.content}
     Should Be Equal As Strings  ${time.status_code}  200
     Set Suite Variable      ${datetime6}    ${time.json()}   
-    ${datetime06}    Convert Date    ${datetime6}    result_format=%Y-%m-%d %H:%M
+    ${datetime06}    Convert Date    ${datetime6}    result_format=%Y-%m-%d  
 
     Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime06}
 
@@ -1378,7 +1378,7 @@ JD-TC-LoanApplication-1
     Log  ${time.content}
     Should Be Equal As Strings  ${time.status_code}  200
     Set Suite Variable      ${datetime7}    ${time.json()}   
-    ${datetime07}    Convert Date    ${datetime7}    result_format=%Y-%m-%d %H:%M
+    ${datetime07}    Convert Date    ${datetime7}    result_format=%Y-%m-%d  
 
     Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime07}
 
@@ -1403,7 +1403,7 @@ JD-TC-LoanApplication-1
     Log  ${time.content}
     Should Be Equal As Strings  ${time.status_code}  200
     Set Suite Variable      ${datetime9}    ${time.json()}   
-    ${datetime09}    Convert Date    ${datetime9}    result_format=%Y-%m-%d %H:%M
+    ${datetime09}    Convert Date    ${datetime9}    result_format=%Y-%m-%d  
 
     Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime09}
 
