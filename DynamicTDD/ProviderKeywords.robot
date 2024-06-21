@@ -14342,6 +14342,7 @@ Get inventory catalog item by inventory catalog encoded id
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/inventory/inventorycatalog/${icEncId}/list    expected_status=any
     RETURN  ${resp} 
+
 #------------Sales order catalog--------------------------
 Create SalesOrder Inventory Catalog-InvMgr False
 
@@ -15685,5 +15686,5 @@ Get All Settings By Filter
 Get Available Slots for Month Year
     [Arguments]  ${location}  ${service}  ${month}  ${year}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/comm/template/settings  params=${param}  expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/appointment/availability/location/${location}/service/${service}/${month}/${year}  params=${param}  expected_status=any
     RETURN  ${resp}

@@ -578,7 +578,7 @@ JD-TC-GetSharedOnwnersDetailsList-8
     Set Suite Variable   ${s_id}
    
     ${s_id1}=  Create Sample Service  ${SERVICE2}
-     Set Suite Variable   ${s_id1}
+    Set Suite Variable   ${s_id1}
    
     clear_appt_schedule   ${PUSERNAME8}
 
