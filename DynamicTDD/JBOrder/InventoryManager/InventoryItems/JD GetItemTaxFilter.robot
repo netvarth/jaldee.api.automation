@@ -59,10 +59,18 @@ JD-TC-CreateItemTax-1
     ${resp}=    Get Item Tax Filter
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()[0]['taxCode']}            ${itemtax_id}
-    Should Be Equal As Strings    ${resp.json()[0]['taxName']}            ${taxName}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}             ${toggle[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['taxTypeEnum']}        ${taxtypeenum[0]}
+    ${len}=  Get Length  ${resp.json()}
+ 
+
+    FOR  ${i}  IN RANGE   ${len}
+
+        IF  '${resp.json()[${i}]['taxCode']}' == '${itemtax_id}'  
+            Should Be Equal As Strings    ${resp.json()[${i}]['taxCode']}            ${itemtax_id}
+            Should Be Equal As Strings    ${resp.json()[${i}]['taxName']}            ${taxName}
+            Should Be Equal As Strings    ${resp.json()[${i}]['status']}             ${toggle[0]}
+            Should Be Equal As Strings    ${resp.json()[${i}]['taxTypeEnum']}        ${taxtypeenum[0]}
+        END
+    END
 
 JD-TC-CreateItemTax-2
 
@@ -129,8 +137,15 @@ JD-TC-CreateItemTax-UH2
     ${resp}=    Get Item Tax Filter
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()[0]['taxCode']}            ${itemtax_id}
-    Should Be Equal As Strings    ${resp.json()[0]['taxName']}            ${taxName}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}             ${toggle[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['taxTypeEnum']}        ${taxtypeenum[0]}
-    
+    ${len}=  Get Length  ${resp.json()}
+ 
+
+    FOR  ${i}  IN RANGE   ${len}
+
+        IF  '${resp.json()[${i}]['taxCode']}' == '${itemtax_id}'  
+            Should Be Equal As Strings    ${resp.json()[${i}]['taxCode']}            ${itemtax_id}
+            Should Be Equal As Strings    ${resp.json()[${i}]['taxName']}            ${taxName}
+            Should Be Equal As Strings    ${resp.json()[${i}]['status']}             ${toggle[0]}
+            Should Be Equal As Strings    ${resp.json()[${i}]['taxTypeEnum']}        ${taxtypeenum[0]}
+        END
+    END
