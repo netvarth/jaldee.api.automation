@@ -29,7 +29,7 @@ JD-TC-GetDynamicVariableListByContext-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Dynamic Variable List
+    ${resp}=  Get Send Comm List
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${context_id1}  ${resp.json()[0]['context']}
@@ -46,7 +46,7 @@ JD-TC-GetDynamicVariableListByContext-UH1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Dynamic Variable List
+    ${resp}=  Get Send Comm List
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${context_id1}  ${resp.json()[0]['context']}
@@ -73,7 +73,7 @@ JD-TC-GetDynamicVariableListByContext-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id}  ${resp.json()['id']}
 
-    ${resp}=  Get Dynamic Variable List
+    ${resp}=  Get Send Comm List
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${context_id1}  ${resp.json()[0]['context']}
