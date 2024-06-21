@@ -17,10 +17,19 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Test Cases ***
 
-JD-TC-CreateSendCommSettings-1
+JD-TC-GetDynamicVariableListBySendComm-1
 
-    [Documentation]  Create template for a provider with context signup and create send comm settings.
+    [Documentation]  Get Dynamic Variable List By Send Comm id.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Send Comm List
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${sendcomm_id1}   ${resp.json()[0]['id']}
+
+    ${resp}=  Get Default Template List by sendComm   ${sendcomm_id1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
