@@ -42,7 +42,7 @@ JD-TC-GetGlobalVariableList-UH3
 
     [Documentation]  Get Global Variable List with provider consumer login.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
