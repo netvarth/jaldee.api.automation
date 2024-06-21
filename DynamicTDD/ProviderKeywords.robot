@@ -15620,3 +15620,50 @@ Get Send Comm List By Context
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/comm/template/sendComms/context/${context_id}   expected_status=any
     RETURN  ${resp}
+
+Update Send Comm Settings
+
+    [Arguments]  ${setttings_id}  ${temp_id}   ${context}  ${sendcomm_id}  ${commTarget}  ${comm_chanl}  &{kwargs}
+   
+    ${data}=  Create Dictionary  templateId=${temp_id}  context=${context}  sendCommId=${sendcomm_id}  commTarget=${commTarget}   commChannel=${comm_chanl} 
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/comm/template/settings/${setttings_id}  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get Global Variable List
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/comm/template/dynamic/variable/global   expected_status=any
+    RETURN  ${resp}
+
+Get Default Template List by sendComm
+
+    [Arguments]  ${sendcomm_id}
+    Check And Create YNW Session
+    ${resp}=  GET On Ses    sion  ynw  /provider/comm/template/default/sendComm/${sendcomm_id}   expected_status=any
+    RETURN  ${resp}
+
+Get Send Comm Settings By Id
+
+    [Arguments]  ${settings_id} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/comm/template/settings/${settings_id}  expected_status=any
+    RETURN  ${resp}
+
+Update Send Comm Settings Status
+
+    [Arguments]  ${setting_id}  ${status} 
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/comm/template/settings/${setting_id}/status/${status}   expected_status=any
+    RETURN  ${resp} 
+
+Get All Settings By Filter
+
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/comm/template/settings  params=${param}  expected_status=any
+    RETURN  ${resp}
