@@ -15,56 +15,52 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
-*** Variables ***
-
-@{context}   ALL
-
 *** Test Cases ***
 
-JD-TC-GetDynamicVariableListByContext-1
+JD-TC-GetDynamicVariableListBySendComm-1
 
-    [Documentation]  Get Dynamic avriable list by context for a provider
+    [Documentation]  Get Dynamic Variable List By Send Comm id.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Send Comm List
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${context_id1}  ${resp.json()[0]['context']}
+    Set Suite Variable   ${sendcomm_id1}   ${resp.json()[0]['id']}
 
-    ${resp}=  Get Dynamic Variable List By Context   ${context_id1}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
-JD-TC-GetDynamicVariableListByContext-UH1
-
-    [Documentation]  Get Dynamic avriable list by context without login.
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD}
+    ${resp}=  Get Dynamic Variable List By SendComm   ${sendcomm_id1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Send Comm List
+JD-TC-GetDynamicVariableListBySendComm-UH1
+
+    [Documentation]  Get Dynamic Variable List By non existing Send Comm id.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${context_id1}  ${resp.json()[0]['context']}
 
-    ${resp}=  ProviderLogout  
+    ${invsend_comid}=  Random Int   min=1000  max=10000
+    ${resp}=  Get Dynamic Variable List By SendComm   ${invsend_comid}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
 
-    ${resp}=  Get Dynamic Variable List By Context   ${context_id1}
+JD-TC-GetDynamicVariableListBySendComm-UH2
+
+    [Documentation]  Get Dynamic Variable List By Send Comm id without login.
+
+    ${resp}=  Get Dynamic Variable List By SendComm   ${sendcomm_id1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
-   
-JD-TC-GetDynamicVariableListByContext-UH2
 
-    [Documentation]  Get Dynamic avriable list by context with provider consumer login.
+JD-TC-GetDynamicVariableListBySendComm-UH3
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD}
+    [Documentation]  Get Dynamic Variable List By Send Comm id with provider consumer login.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -72,11 +68,6 @@ JD-TC-GetDynamicVariableListByContext-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id}  ${resp.json()['id']}
-
-    ${resp}=  Get Send Comm List
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${context_id1}  ${resp.json()[0]['context']}
 
     #............provider consumer creation..........
 
@@ -106,7 +97,7 @@ JD-TC-GetDynamicVariableListByContext-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Get Dynamic Variable List By Context   ${context_id1}
+    ${resp}=  Get Dynamic Variable List By SendComm   ${sendcomm_id1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings  ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}

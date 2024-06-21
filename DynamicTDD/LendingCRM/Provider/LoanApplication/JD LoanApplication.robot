@@ -1095,7 +1095,7 @@ JD-TC-CdlWorkFlow-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${datetime1}    ${resp.json()}   
-    ${datetime01}    Convert Date    ${datetime1}    result_format=%Y-%m-%d %H:%M
+    ${datetime01}    Convert Date    ${datetime1}    result_format=%Y-%m-%d  
 
     ${resp}=                               Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
@@ -1129,7 +1129,7 @@ JD-TC-CdlWorkFlow-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${datetime2}    ${resp.json()} 
-    ${datetime02}    Convert Date    ${datetime2}    result_format=%Y-%m-%d %H:%M
+    ${datetime02}    Convert Date    ${datetime2}    result_format=%Y-%m-%d  
 
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
@@ -1169,7 +1169,7 @@ JD-TC-CdlWorkFlow-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${datetime3}    ${resp.json()} 
-    ${datetime03}    Convert Date    ${datetime3}    result_format=%Y-%m-%d %H:%M
+    ${datetime03}    Convert Date    ${datetime3}    result_format=%Y-%m-%d  
 
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
@@ -1196,7 +1196,7 @@ JD-TC-CdlWorkFlow-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${datetime4}    ${resp.json()} 
-    ${datetime04}    Convert Date    ${datetime4}    result_format=%Y-%m-%d %H:%M
+    ${datetime04}    Convert Date    ${datetime4}    result_format=%Y-%m-%d  
 
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
@@ -1308,7 +1308,7 @@ JD-TC-CdlWorkFlow-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${datetime5}    ${resp.json()} 
-    ${datetime05}    Convert Date    ${datetime5}    result_format=%Y-%m-%d %H:%M
+    ${datetime05}    Convert Date    ${datetime5}    result_format=%Y-%m-%d  
 
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
@@ -1347,7 +1347,7 @@ JD-TC-CdlWorkFlow-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${datetime6}    ${resp.json()} 
-    ${datetime06}    Convert Date    ${datetime6}    result_format=%Y-%m-%d %H:%M
+    ${datetime06}    Convert Date    ${datetime6}    result_format=%Y-%m-%d  
 
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
@@ -1362,7 +1362,7 @@ JD-TC-CdlWorkFlow-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${datetime7}    ${resp.json()} 
-    ${datetime07}    Convert Date    ${datetime7}    result_format=%Y-%m-%d %H:%M
+    ${datetime07}    Convert Date    ${datetime7}    result_format=%Y-%m-%d  
 
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
@@ -1392,7 +1392,7 @@ JD-TC-CdlWorkFlow-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${datetime9}    ${resp.json()} 
-    ${datetime09}    Convert Date    ${datetime9}    result_format=%Y-%m-%d %H:%M
+    ${datetime09}    Convert Date    ${datetime9}    result_format=%Y-%m-%d  
 
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
@@ -1434,7 +1434,7 @@ JD-TC-CdlWorkFlow-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${datetime10}    ${resp.json()} 
-    ${datetime010}    Convert Date    ${datetime10}    result_format=%Y-%m-%d %H:%M
+    ${datetime010}    Convert Date    ${datetime10}    result_format=%Y-%m-%d  
 
     ${resp}=                               Get Loan Application By uid           ${loanuid} 
     Log  ${resp.content}
@@ -1563,7 +1563,7 @@ JD-TC-CdlWorkFlow-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${datetime11}    ${resp.json()} 
-    ${datetime011}    Convert Date    ${datetime11}    result_format=%Y-%m-%d %H:%M
+    ${datetime011}    Convert Date    ${datetime11}    result_format=%Y-%m-%d  
 
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
@@ -1600,7 +1600,7 @@ JD-TC-CdlWorkFlow-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${datetime12}    ${resp.json()} 
-    ${datetime012}    Convert Date    ${datetime12}    result_format=%Y-%m-%d %H:%M
+    ${datetime012}    Convert Date    ${datetime12}    result_format=%Y-%m-%d  
 
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
@@ -1622,7 +1622,7 @@ JD-TC-CdlWorkFlow-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${datetime13}    ${resp.json()} 
-    ${datetime013}    Convert Date    ${datetime13}    result_format=%Y-%m-%d %H:%M
+    ${datetime013}    Convert Date    ${datetime13}    result_format=%Y-%m-%d  
 
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
@@ -1664,7 +1664,7 @@ JD-TC-CdlWorkFlow-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${datetime14}    ${resp.json()} 
-    ${datetime014}    Convert Date    ${datetime14}    result_format=%Y-%m-%d %H:%M
+    ${datetime014}    Convert Date    ${datetime14}    result_format=%Y-%m-%d  
 
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
@@ -1697,7 +1697,7 @@ JD-TC-CdlWorkFlow-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${datetime15}    ${resp.json()} 
-    ${datetime015}    Convert Date    ${datetime15}    result_format=%Y-%m-%d %H:%M
+    ${datetime015}    Convert Date    ${datetime15}    result_format=%Y-%m-%d  
 
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}

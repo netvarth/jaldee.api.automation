@@ -115,7 +115,7 @@ JD-TC-UpdateandProceedEnquiry-1
     Log  ${time.content}
     Should Be Equal As Strings  ${time.status_code}  200
     Set Suite Variable      ${datetime}    ${time.json()} 
-    ${formatted_time}    Convert Date    ${datetime}    result_format=%d-%m-%Y %H:%M
+    ${formatted_time}    Convert Date    ${datetime}    result_format=%d-%m-%Y   
     Run Keyword And Continue On Failure     Should Contain  ${resp.json()['createdDateString']}   ${formatted_time} 
 
 

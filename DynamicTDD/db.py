@@ -5623,13 +5623,13 @@ def loanScheme(account):
     try:
         with dbconn.cursor() as cur:
             date= get_date()
-            mySql_insert_query = """INSERT INTO ynw.crm_loanscheme_tbl(account_id,scheme_name,scheme_aliasname,no_of_co_applicat_required,min_amount,max_amount,is_employee_scheme,is_subvention_scheme,subvention_rate,scheme_type,scheme_rate,min_duration,max_duration,loan_to_value,is_multi_item,status,no_of_pdc_required,no_of_spdc_required,overdue_charge_rate,processing_fee_amount,processing_fee_rate,foir_on_assesed_income,foir_on_declared_income,fore_closure_charge,created_by,created_date,modified_by,updated_date)
-                                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) """
+            mySql_insert_query = """INSERT INTO ynw.crm_loanscheme_tbl(account_id,scheme_name,scheme_aliasname,no_of_co_applicat_required,min_amount,max_amount,is_employee_scheme,is_subvention_scheme,subvention_rate,scheme_type,scheme_rate,min_duration,max_duration,loan_to_value,is_multi_item,status,no_of_pdc_required,no_of_spdc_required,overdue_charge_rate,processing_fee_amount,processing_fee_rate,foir_on_assesed_income,foir_on_declared_income,fore_closure_charge,created_by,created_date,modified_by,updated_date,diminishing_rate)
+                                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) """
 
-            records_to_insert = [(account, 'SCHEME - A', 'SCHEME-A, 6-12 Months'   , '0', '10000.0', '50000.0' , 0, 0, '0', 1, '24.91', '6' ,'12' , '80', 1 , 0, '1', '1', '3.00', '10000.0', '3.0', '45.0', '55.0', '3.0', '1', date, '0', None),
-                                 (account, 'SCHEME - B', 'SCHEME-B, 12-36 Months'  , '1', '50001.0', '300000.0', 0, 0, '0', 1, '24.0' , '12','36' , '80', 1 , 0, '1', '2', '3.00', '10000.0', '3.0', '45.0', '55.0', '3.0', '1', date, '0', None),
-                                 (account, 'SCHEME - C', 'SCHEME-C, 6-24 Months'   , '1', '10000.0', '50000.0' , 1, 0, '0', 1, '17.50', '6' ,'24' , '80', 1 , 0, '1', '2', '3.00', '10000.0', '3.0', '55.0', '55.0', '3.0', '1', date, '0', None),
-                                 (account, 'SUBVENTION', 'No Cost EMI, 6-24 Months', '1', '10000.0', '100000.0', 0, 1, '0', 1, '0'    , '6' ,'24' , '100',1 , 0, '1', '2', '3.00', '10000.0', '3.0', '45.0', '55.0', '3.0', '1', date, '0', None)]
+            records_to_insert = [(account, 'SCHEME - A', 'SCHEME-A, 6-12 Months'   , '0', '10000.0', '50000.0' , 0, 0, '0', 1, '24.91', '6' ,'12' , '80', 1 , 0, '1', '1', '3.00', '10000.0', '3.0', '45.0', '55.0', '3.0', '1', date, '0', None,'0.0'),
+                                 (account, 'SCHEME - B', 'SCHEME-B, 12-36 Months'  , '1', '50001.0', '300000.0', 0, 0, '0', 1, '24.0' , '12','36' , '80', 1 , 0, '1', '2', '3.00', '10000.0', '3.0', '45.0', '55.0', '3.0', '1', date, '0', None,'0.0'),
+                                 (account, 'SCHEME - C', 'SCHEME-C, 6-24 Months'   , '1', '10000.0', '50000.0' , 1, 0, '0', 1, '17.50', '6' ,'24' , '80', 1 , 0, '1', '2', '3.00', '10000.0', '3.0', '55.0', '55.0', '3.0', '1', date, '0', None,'0.0'),
+                                 (account, 'SUBVENTION', 'No Cost EMI, 6-24 Months', '1', '10000.0', '100000.0', 0, 1, '0', 1, '0'    , '6' ,'24' , '100',1 , 0, '1', '2', '3.00', '10000.0', '3.0', '45.0', '55.0', '3.0', '1', date, '0', None,'0.0')]
             cur.executemany(mySql_insert_query, records_to_insert)
             dbconn.commit()
          

@@ -14345,9 +14345,12 @@ Get inventory catalog item by inventory catalog encoded id
 #------------Sales order catalog--------------------------
 Create SalesOrder Inventory Catalog-InvMgr False
 
-    [Arguments]  ${store_id}   ${name}   ${invMgmt}   
+    [Arguments]  ${store_id}   ${name}   ${invMgmt}   &{kwargs}
     ${encid}=  Create Dictionary   encId=${store_id}   
     ${data}=  Create Dictionary   store=${encid}    name=${name}    invMgmt=${invMgmt}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/so/catalog   data=${data}  expected_status=any
@@ -14355,10 +14358,13 @@ Create SalesOrder Inventory Catalog-InvMgr False
 
 Create SalesOrder Inventory Catalog-InvMgr True
 
-    [Arguments]  ${store_id}   ${name}   ${invMgmt}   ${inventoryCatalog}
+    [Arguments]  ${store_id}   ${name}   ${invMgmt}   ${inventoryCatalog}   &{kwargs}
     ${encid}=  Create Dictionary   encId=${store_id}   
     ${invcatid}=  Create Dictionary   invCatEncIdList=${inventoryCatalog} 
     ${data}=  Create Dictionary   store=${encid}    name=${name}    invMgmt=${invMgmt}   inventoryCatalog=${invcatid}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/so/catalog   data=${data}  expected_status=any
@@ -15586,13 +15592,20 @@ Get Dynamic Variable List By Context
 
     [Arguments]  ${context_id} 
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/comm/template/dynamic/variable/${context_id}   expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/comm/template/dynamic/variable/context/${context_id}   expected_status=any
     RETURN  ${resp}
 
 Get Dynamic Variable List
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/comm/template/dynamic/variable   expected_status=any
+    RETURN  ${resp}
+
+Get Dynamic Variable List By SendComm
+
+    [Arguments]  ${sendcomm_id} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/comm/template/dynamic/variable/sendComm/${sendcomm_id}   expected_status=any
     RETURN  ${resp}
 
 Create Send Comm Settings
@@ -15644,7 +15657,7 @@ Get Default Template List by sendComm
 
     [Arguments]  ${sendcomm_id}
     Check And Create YNW Session
-    ${resp}=  GET On Ses    sion  ynw  /provider/comm/template/default/sendComm/${sendcomm_id}   expected_status=any
+    ${resp}=  GET On Session    sion  ynw  /provider/comm/template/default/sendComm/${sendcomm_id}   expected_status=any
     RETURN  ${resp}
 
 Get Send Comm Settings By Id

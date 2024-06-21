@@ -15,56 +15,34 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
-*** Variables ***
-
-@{context}   ALL
-
 *** Test Cases ***
 
-JD-TC-GetDynamicVariableListByContext-1
+JD-TC-GetGlobalVariableList-1
 
-    [Documentation]  Get Dynamic avriable list by context for a provider
+    [Documentation]  Get Global Variable List for a template creation.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Send Comm List
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${context_id1}  ${resp.json()[0]['context']}
-
-    ${resp}=  Get Dynamic Variable List By Context   ${context_id1}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
-JD-TC-GetDynamicVariableListByContext-UH1
-
-    [Documentation]  Get Dynamic avriable list by context without login.
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD}
+    ${resp}=  Get Global Variable List
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Send Comm List
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${context_id1}  ${resp.json()[0]['context']}
+JD-TC-GetGlobalVariableList-UH2
 
-    ${resp}=  ProviderLogout  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    [Documentation]  Get Global Variable List without login.
 
-    ${resp}=  Get Dynamic Variable List By Context   ${context_id1}
+    ${resp}=  Get Global Variable List
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
-   
-JD-TC-GetDynamicVariableListByContext-UH2
 
-    [Documentation]  Get Dynamic avriable list by context with provider consumer login.
+JD-TC-GetGlobalVariableList-UH3
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD}
+    [Documentation]  Get Global Variable List with provider consumer login.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -72,11 +50,6 @@ JD-TC-GetDynamicVariableListByContext-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id}  ${resp.json()['id']}
-
-    ${resp}=  Get Send Comm List
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${context_id1}  ${resp.json()[0]['context']}
 
     #............provider consumer creation..........
 
@@ -106,7 +79,7 @@ JD-TC-GetDynamicVariableListByContext-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Get Dynamic Variable List By Context   ${context_id1}
+    ${resp}=  Get Global Variable List
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings  ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
