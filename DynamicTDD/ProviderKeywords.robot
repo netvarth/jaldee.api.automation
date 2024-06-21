@@ -15595,6 +15595,13 @@ Get Dynamic Variable List
     ${resp}=  GET On Session  ynw  /provider/comm/template/dynamic/variable   expected_status=any
     RETURN  ${resp}
 
+Get Dynamic Variable List By SendComm
+
+    [Arguments]  ${sendcomm_id} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/comm/template/dynamic/variable/sendComm/${sendcomm_id}   expected_status=any
+    RETURN  ${resp}
+
 Create Send Comm Settings
 
     [Arguments]  ${temp_id}   ${context}  ${sendcomm_id}  ${commTarget}  ${comm_chanl}  &{kwargs}

@@ -30,6 +30,6 @@ JD-TC-GetDynamicVariableListBySendComm-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${sendcomm_id1}   ${resp.json()[0]['id']}
 
-    ${resp}=  Get Default Template List by sendComm   ${sendcomm_id1}
+    ${resp}=  Get Dynamic Variable List By SendComm   ${sendcomm_id1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
