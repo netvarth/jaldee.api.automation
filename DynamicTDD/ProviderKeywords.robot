@@ -15586,7 +15586,7 @@ Get Dynamic Variable List By Context
 
     [Arguments]  ${context_id} 
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/comm/template/dynamic/variable/${context_id}   expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/comm/template/dynamic/variable/context/${context_id}   expected_status=any
     RETURN  ${resp}
 
 Get Dynamic Variable List
