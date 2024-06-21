@@ -15667,3 +15667,10 @@ Get All Settings By Filter
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/comm/template/settings  params=${param}  expected_status=any
     RETURN  ${resp}
+
+
+Get Available Slots for Month Year
+    [Arguments]  ${location}  ${service}  ${month}  ${year}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/comm/template/settings  params=${param}  expected_status=any
+    RETURN  ${resp}
