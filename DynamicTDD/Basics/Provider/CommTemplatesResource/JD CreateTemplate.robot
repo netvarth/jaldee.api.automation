@@ -579,7 +579,35 @@ JD-TC-CreateTemplate-19
     Should Be Equal As Strings    ${resp.status_code}    200  
     # Should Be Equal As Strings    ${resp.status_code}    422
     # Should Be Equal As Strings  ${resp.json()}   ${TEMPLATE_FOOTER}
+
+JD-TC-CreateTemplate-20
+
+    [Documentation]    Create a template with trigger point(send comm)
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Send Comm List
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${sendcomm_id1}   ${resp.json()[0]['id']}
+
+    ${temp_name}=    FakerLibrary.word
+    ${content_msg}=      FakerLibrary.sentence   
+    ${content}=    Create Dictionary  intro=${content_msg}
+    ${tempheader_sub}=      FakerLibrary.sentence   5
+    ${salutation}=      FakerLibrary.word
+    ${comm_chanl}=  Create List   ${CommChannel[2]}  
+    ${comm_target}=  Create List   ${CommTarget[0]}  
+    ${sendcomm_list}=  Create List   ${sendcomm_id1}  
+    ${temp_header}=    Create Dictionary  subject=${tempheader_sub}   salutation=${salutation}
     
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl}  
+    ...       templateHeader=${temp_header}   sendComm=${sendcomm_list}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200  
+
 JD-TC-CreateTemplate-UH1
 
     [Documentation]  Create template with same template name.
