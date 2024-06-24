@@ -15609,7 +15609,7 @@ Get Dynamic Variable List By SendComm
     ${resp}=  GET On Session  ynw  /provider/comm/template/dynamic/variable/sendComm/${sendcomm_id}   expected_status=any
     RETURN  ${resp}
 
-Create Send Comm Settings
+Create Template Settings
 
     [Arguments]  ${temp_id}   ${context}  ${sendcomm_id}  ${commTarget}  ${comm_chanl}  &{kwargs}
    
@@ -15635,7 +15635,7 @@ Get Send Comm List By Context
     ${resp}=  GET On Session  ynw  /provider/comm/template/sendComms/context/${context_id}   expected_status=any
     RETURN  ${resp}
 
-Update Send Comm Settings
+Update Template Settings
 
     [Arguments]  ${setttings_id}  ${temp_id}   ${context}  ${sendcomm_id}  ${commTarget}  ${comm_chanl}  &{kwargs}
    
@@ -15661,14 +15661,14 @@ Get Default Template List by sendComm
     ${resp}=  GET On Session   ynw  /provider/comm/template/default/sendComm/${sendcomm_id}   expected_status=any
     RETURN  ${resp}
 
-Get Send Comm Settings By Id
+Get Template Settings By Id
 
     [Arguments]  ${settings_id} 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/comm/template/settings/${settings_id}  expected_status=any
     RETURN  ${resp}
 
-Update Send Comm Settings Status
+Update Template Settings Status
 
     [Arguments]  ${setting_id}  ${status} 
     Check And Create YNW Session
