@@ -25,13 +25,20 @@ Get Provider Catalog Filter
     ${resp}=  GET On Session  ynw  /consumer/so/catalog   params=${param}   expected_status=any
     RETURN  ${resp} 
 
+Get Provider Catalog Count Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/so/catalog/count   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+
 *** Test Cases ***
 
-JD-TC-Get Provider Catalogs-1
+JD-TC-Get Provider Catalogs Count-1
 
     [Documentation]  Provider create catalog ,consumer side get that catalog
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME51}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -74,10 +81,10 @@ JD-TC-Get Provider Catalogs-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME51}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLPUSERNAME53}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME51}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -152,28 +159,20 @@ JD-TC-Get Provider Catalogs-1
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
 
-    ${resp}=    Get Provider Catalog Filter
+    ${resp}=    Get Provider Catalog Count Filter
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()[0]['name']}                                           ${Name}
-    Should Be Equal As Strings    ${resp.json()[0]['store']['encId']}                                  ${store_id}
-    Should Be Equal As Strings    ${resp.json()[0]['store']['name']}                                   ${Name}
-    Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                        ${accountId}
-    Should Be Equal As Strings    ${resp.json()[0]['invMgmt']}                                           ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['onlineSelfOrder']}                                  ${bool[1]}
-    Should Be Equal As Strings    ${resp.json()[0]['walkInOrder']}                                        ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['location']['id']}                                       ${locId1}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}                                            ${toggle[0]}
+    Should Be Equal As Strings   ${resp.json()}    1
 
     ${resp}=    Customer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Get Provider Catalogs-2
+JD-TC-Get Provider Catalogs Count-2
 
     [Documentation]  Provider create catalog where onlineSelfOrder and walkin order is on  ,consumer side get that catalog using name
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME51}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -194,20 +193,12 @@ JD-TC-Get Provider Catalogs-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Provider Catalog Filter  name-eq=${Name1}
+    ${resp}=    Get Provider Catalog Count Filter  name-eq=${Name1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()[0]['name']}                                           ${Name1}
-    Should Be Equal As Strings    ${resp.json()[0]['store']['encId']}                                  ${store_id}
-    Should Be Equal As Strings    ${resp.json()[0]['store']['name']}                                   ${Name}
-    Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                        ${accountId}
-    Should Be Equal As Strings    ${resp.json()[0]['invMgmt']}                                           ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['onlineSelfOrder']}                                  ${bool[1]}
-    Should Be Equal As Strings    ${resp.json()[0]['walkInOrder']}                                        ${bool[1]}
-    Should Be Equal As Strings    ${resp.json()[0]['location']['id']}                                       ${locId1}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}                                           ${toggle[0]}
+    Should Be Equal As Strings   ${resp.json()}    1
 
-JD-TC-Get Provider Catalogs-3
+JD-TC-Get Provider Catalogs Count-3
 
     [Documentation]  consumer side get  catalog using storeEncId
 
@@ -216,41 +207,13 @@ JD-TC-Get Provider Catalogs-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Provider Catalog Filter  storeEncId-eq=${store_id}
+    ${resp}=    Get Provider Catalog Count Filter   storeEncId-eq=${store_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Strings    ${len}    2
+    Should Be Equal As Strings   ${resp.json()}    2
  
 
-    FOR  ${i}  IN RANGE   ${len}
-
-        IF  '${resp.json()[${i}]['encId']}' == '${soc_id1}'  
-            Should Be Equal As Strings    ${resp.json()[${i}]['name']}                                           ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['encId']}                                  ${store_id}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['name']}                                   ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['accountId']}                                        ${accountId}
-            Should Be Equal As Strings    ${resp.json()[${i}]['invMgmt']}                                           ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['onlineSelfOrder']}                                  ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['walkInOrder']}                                        ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['location']['id']}                                       ${locId1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['status']}                                            ${toggle[0]}
-
-
-        ELSE IF   '${resp.json()[${i}]['encId']}' == '${soc_id2}'      
-            Should Be Equal As Strings    ${resp.json()[${i}]['name']}                                           ${Name1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['encId']}                                  ${store_id}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['name']}                                   ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['accountId']}                                        ${accountId}
-            Should Be Equal As Strings    ${resp.json()[${i}]['invMgmt']}                                           ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['onlineSelfOrder']}                                  ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['walkInOrder']}                                        ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['location']['id']}                                       ${locId1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['status']}                                           ${toggle[0]}
-        END
-    END
-
-JD-TC-Get Provider Catalogs-4
+JD-TC-Get Provider Catalogs Count-4
 
     [Documentation]  consumer side get  catalog using storeName
 
@@ -259,41 +222,13 @@ JD-TC-Get Provider Catalogs-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Provider Catalog Filter  storeName-eq=${Name}
+    ${resp}=    Get Provider Catalog Count Filter  storeName-eq=${Name}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Strings    ${len}    2
+    Should Be Equal As Strings   ${resp.json()}    2
  
 
-    FOR  ${i}  IN RANGE   ${len}
-
-        IF  '${resp.json()[${i}]['encId']}' == '${soc_id1}'  
-            Should Be Equal As Strings    ${resp.json()[${i}]['name']}                                           ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['encId']}                                  ${store_id}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['name']}                                   ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['accountId']}                                        ${accountId}
-            Should Be Equal As Strings    ${resp.json()[${i}]['invMgmt']}                                           ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['onlineSelfOrder']}                                  ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['walkInOrder']}                                        ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['location']['id']}                                       ${locId1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['status']}                                            ${toggle[0]}
-
-
-        ELSE IF     '${resp.json()[${i}]['encId']}' == '${soc_id2}'      
-            Should Be Equal As Strings    ${resp.json()[${i}]['name']}                                           ${Name1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['encId']}                                  ${store_id}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['name']}                                   ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['accountId']}                                        ${accountId}
-            Should Be Equal As Strings    ${resp.json()[${i}]['invMgmt']}                                           ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['onlineSelfOrder']}                                  ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['walkInOrder']}                                        ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['location']['id']}                                       ${locId1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['status']}                                           ${toggle[0]}
-        END
-    END
-
-JD-TC-Get Provider Catalogs-5
+JD-TC-Get Provider Catalogs Count-5
 
     [Documentation]  consumer side get  catalog using status
 
@@ -302,41 +237,12 @@ JD-TC-Get Provider Catalogs-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Provider Catalog Filter  status-eq=${toggle[0]}
+    ${resp}=    Get Provider Catalog Count Filter  status-eq=${toggle[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Strings    ${len}    2
+    Should Be Equal As Strings   ${resp.json()}    2
  
-
-    FOR  ${i}  IN RANGE   ${len}
-
-        IF  '${resp.json()[${i}]['encId']}' == '${soc_id1}'  
-            Should Be Equal As Strings    ${resp.json()[${i}]['name']}                                           ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['encId']}                                  ${store_id}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['name']}                                   ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['accountId']}                                        ${accountId}
-            Should Be Equal As Strings    ${resp.json()[${i}]['invMgmt']}                                           ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['onlineSelfOrder']}                                  ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['walkInOrder']}                                        ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['location']['id']}                                       ${locId1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['status']}                                            ${toggle[0]}
-
-
-        ELSE IF     '${resp.json()[${i}]['encId']}' == '${soc_id2}'      
-            Should Be Equal As Strings    ${resp.json()[${i}]['name']}                                           ${Name1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['encId']}                                  ${store_id}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['name']}                                   ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['accountId']}                                        ${accountId}
-            Should Be Equal As Strings    ${resp.json()[${i}]['invMgmt']}                                           ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['onlineSelfOrder']}                                  ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['walkInOrder']}                                        ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['location']['id']}                                       ${locId1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['status']}                                           ${toggle[0]}
-        END
-    END
-
-JD-TC-Get Provider Catalogs-UH1
+JD-TC-Get Provider Catalogs Count-UH1
 
     [Documentation]  consumer side get  catalog using inventory management on case
 
@@ -345,17 +251,17 @@ JD-TC-Get Provider Catalogs-UH1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Provider Catalog Filter  invMgmt-eq= ${bool[1]}
+    ${resp}=    Get Provider Catalog Count Filter  invMgmt-eq= ${bool[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()}    []
+    Should Be Equal As Strings   ${resp.json()}    0
 
 
-JD-TC-Get Provider Catalogs-UH2
+JD-TC-Get Provider Catalogs Count-UH2
 
     [Documentation]  Provider create catalog with inventory manager is off and online self order is disable ,walkin order is enabled ,consumer try to get that catalog using name
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME51}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -373,16 +279,16 @@ JD-TC-Get Provider Catalogs-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Provider Catalog Filter  name-eq=${Name2}
+    ${resp}=    Get Provider Catalog Count Filter  name-eq=${Name2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()}   []
+    Should Be Equal As Strings   ${resp.json()}    0
 
-JD-TC-Get Provider Catalogs-6
+JD-TC-Get Provider Catalogs Count-6
 
     [Documentation]  Provider create catalog where inventory manager is on with online sales order is enabled,another one inventory is false and online sales order is disabled and next is inventory is off and online sales order is on,consumer side get that catalog
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME52}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -392,7 +298,8 @@ JD-TC-Get Provider Catalogs-6
     Set Test Variable    ${St_Id}    ${resp.json()[0]['encId']}
 
 
-    ${accountId52}=  get_acc_id  ${HLPUSERNAME52}
+
+    ${accountId52}=  get_acc_id  ${HLPUSERNAME50}
     Set Suite Variable    ${accountId52} 
 
 
@@ -440,7 +347,6 @@ JD-TC-Get Provider Catalogs-6
     Set Suite Variable              ${sa_catlog_id2}    ${resp.json()}
 
     ${Name4}=    FakerLibrary. name
-    Set Suite Variable              ${Name4}
     ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id1}   ${Name4}  ${boolean[0]}   onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -456,8 +362,7 @@ JD-TC-Get Provider Catalogs-6
     ${primaryMobileNo1}    Generate random string    10    123456798
     ${primaryMobileNo1}    Convert To Integer  ${primaryMobileNo}
     Set Suite Variable    ${primaryMobileNo1}
-    # ${email}=    FakerLibrary.Email
-    # Set Suite Variable    ${email}
+
 
     ${resp}=    Send Otp For Login    ${primaryMobileNo1}    ${accountId52}
     Log   ${resp.content}
@@ -482,50 +387,21 @@ JD-TC-Get Provider Catalogs-6
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
 
-    ${resp}=    Get Provider Catalog Filter
+    ${resp}=    Get Provider Catalog Count Filter
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Strings    ${len}    2
+    Should Be Equal As Strings   ${resp.json()}    2
  
-
-    FOR  ${i}  IN RANGE   ${len}
-
-        IF  '${resp.json()[${i}]['encId']}' == '${sa_catlog_id1}'  
-            Should Be Equal As Strings    ${resp.json()[${i}]['name']}                                            ${Name-of-store}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['encId']}                                  ${store_id1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['name']}                                    ${Name-of-store}
-            Should Be Equal As Strings    ${resp.json()[${i}]['accountId']}                                        ${accountId52}
-            Should Be Equal As Strings    ${resp.json()[${i}]['invMgmt']}                                           ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['onlineSelfOrder']}                                  ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['walkInOrder']}                                        ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['location']['id']}                                       ${locId1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['status']}                                            ${toggle[0]}
-
-
-        ELSE IF     '${resp.json()[${i}]['encId']}' == '${sa_catlog_id3}'      
-            Should Be Equal As Strings    ${resp.json()[${i}]['name']}                                           ${Name4}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['encId']}                                  ${store_id1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['name']}                                   ${Name-of-store}
-            Should Be Equal As Strings    ${resp.json()[${i}]['accountId']}                                        ${accountId52}
-            Should Be Equal As Strings    ${resp.json()[${i}]['invMgmt']}                                           ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['onlineSelfOrder']}                                  ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['walkInOrder']}                                        ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['location']['id']}                                       ${locId1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['status']}                                           ${toggle[0]}
-        END
-    END
-
 
     ${resp}=    Customer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Get Provider Catalogs-7
+JD-TC-Get Provider Catalogs Count-7
 
     [Documentation]  user create catalog then consumer try to acess all catalogs of main provider
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME52}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -609,56 +485,14 @@ JD-TC-Get Provider Catalogs-7
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
 
-    ${resp}=    Get Provider Catalog Filter
+    ${resp}=    Get Provider Catalog Count Filter   storeEncId-eq=${store_id1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Strings    ${len}    3
+    Should Be Equal As Strings   ${resp.json()}    3
  
-
-    FOR  ${i}  IN RANGE   ${len}
-
-        IF  '${resp.json()[${i}]['encId']}' == '${sa_catlog_id1}'  
-            Should Be Equal As Strings    ${resp.json()[${i}]['name']}                                            ${Name-of-store}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['encId']}                                  ${store_id1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['name']}                                    ${Name-of-store}
-            Should Be Equal As Strings    ${resp.json()[${i}]['accountId']}                                        ${accountId52}
-            Should Be Equal As Strings    ${resp.json()[${i}]['invMgmt']}                                           ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['onlineSelfOrder']}                                  ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['walkInOrder']}                                        ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['location']['id']}                                       ${locId1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['status']}                                            ${toggle[0]}
-
-
-        ELSE IF     '${resp.json()[${i}]['encId']}' == '${sa_catlog_id3}'      
-            Should Be Equal As Strings    ${resp.json()[${i}]['name']}                                           ${Name4}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['encId']}                                  ${store_id1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['name']}                                   ${Name-of-store}
-            Should Be Equal As Strings    ${resp.json()[${i}]['accountId']}                                        ${accountId52}
-            Should Be Equal As Strings    ${resp.json()[${i}]['invMgmt']}                                           ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['onlineSelfOrder']}                                  ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['walkInOrder']}                                        ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['location']['id']}                                       ${locId1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['status']}                                           ${toggle[0]}
-
-        ELSE IF     '${resp.json()[${i}]['encId']}' == '${sa_catlog_id4}'      
-            Should Be Equal As Strings    ${resp.json()[${i}]['name']}                                           ${Name5}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['encId']}                                  ${store_id1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['name']}                                   ${Name-of-store}
-            Should Be Equal As Strings    ${resp.json()[${i}]['accountId']}                                        ${accountId52}
-            Should Be Equal As Strings    ${resp.json()[${i}]['invMgmt']}                                           ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['onlineSelfOrder']}                                  ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['walkInOrder']}                                        ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['location']['id']}                                       ${locId1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['status']}                                           ${toggle[0]}
-        END
-    END
-
-
     ${resp}=    Customer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-
 
 
 
