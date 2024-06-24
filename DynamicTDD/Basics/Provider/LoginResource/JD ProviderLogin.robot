@@ -98,7 +98,7 @@ JD-TC-Provider_Login-UH3
     ${resp}=  Provider Login  ${ph2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    401
-    Should Be Equal As Strings   ${resp.json()}         ${LOGINID_NOT_REGISTERED}
+    Should Be Equal As Strings   ${resp.json()}         ${NOT_REGISTERED_CUSTOMER}
 
 JD-TC-Provider_Login-UH4
 

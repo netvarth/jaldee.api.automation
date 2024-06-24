@@ -113,7 +113,7 @@ JD-TC-JD S3-3
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${PUSERNAME_NEW}   ${PUSERNAME}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_NEW}  ${PASSWORD}
@@ -139,7 +139,7 @@ JD-TC-JD S3-4
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${PUSERNAME_NEW1}   ${PUSERNAME}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_NEW1}  ${PASSWORD}
@@ -180,7 +180,7 @@ JD-TC-JD S3-5
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${PUSERNAME_NEW2}   ${PUSERNAME}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_NEW2}  ${PASSWORD}
@@ -211,7 +211,7 @@ JD-TC-JD S3-6
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${PUSERNAME_NEW3}   ${PUSERNAME}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_NEW3}  ${PASSWORD}
@@ -267,7 +267,7 @@ JD-TC-JD S3-7
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${PUSERNAME_NEW4}   ${PUSERNAME}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_NEW4}  ${PASSWORD}
@@ -295,7 +295,7 @@ JD-TC-JD S3-8
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${PUSERNAME_NEW5}   ${PUSERNAME}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_NEW5}  ${PASSWORD}
@@ -325,7 +325,7 @@ JD-TC-JD S3-9
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${PUSERNAME_NEW6}   ${PUSERNAME}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_NEW6}  ${PASSWORD}

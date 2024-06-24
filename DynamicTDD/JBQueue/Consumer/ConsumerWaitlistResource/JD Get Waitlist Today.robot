@@ -879,7 +879,7 @@ JD-TC-Get Waitlist Today-39
 
     ${resp}=  Account Activation  ${US_P_Email}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${US_P_Email}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${US_P_Email}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${US_P_Email}
     Should Be Equal As Strings    ${resp.status_code}    200
     sleep  01s
     ${resp}=  Encrypted Provider Login  ${USProvider}  ${PASSWORD}  countryCode=+64
@@ -1062,7 +1062,7 @@ JD-TC-Get Waitlist Today-41
 
     ${resp}=  Account Activation  ${US_P_Email}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${US_P_Email}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${US_P_Email}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${US_P_Email}
     Should Be Equal As Strings    ${resp.status_code}    200
     sleep  01s
     ${resp}=  Encrypted Provider Login  ${USProvider}  ${PASSWORD}  countryCode=+64
@@ -1298,7 +1298,7 @@ JD-TC-Get Waitlist Today-42
 
     ${resp}=  Account Activation  ${US_P_Email}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${US_P_Email}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${US_P_Email}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${US_P_Email}
     Should Be Equal As Strings    ${resp.status_code}    200
     sleep  01s
     ${resp}=  Encrypted Provider Login  ${USProvider}  ${PASSWORD}  countryCode=+64

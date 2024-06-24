@@ -83,7 +83,7 @@ JD-TC-PHONE_TOKEN-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.content}    "true"
     
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -329,7 +329,7 @@ JD-TC-WALK_IN_TOKEN and ARRIVED_TOKEN-2
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.content}    "true"
     
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -597,7 +597,7 @@ JD-TC-ONLINE_TOKEN and CHECKED_IN_TOKEN-3
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.content}    "true"
     
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -867,7 +867,7 @@ JD-TC-TELE_SERVICE_TOKEN-4
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.content}    "true"
     
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1153,7 +1153,7 @@ JD-TC-TELEGRAM_TOKEN-5
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.content}    "true"
     
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1466,7 +1466,7 @@ JD-TC-STARTED_TOKEN-6
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.content}    "true"
     
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1758,7 +1758,7 @@ JD-TC-CANCELLED_TOKEN-7
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.content}    "true"
     
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2051,7 +2051,7 @@ JD-TC-DONE_TOKEN-8
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.content}    "true"
     
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2340,7 +2340,7 @@ JD-TC-RESCHEDULED_TOKEN-9
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.content}    "true"
     
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2693,7 +2693,7 @@ JD-TC-JALDEE_LINK_TOKENS and WEB_TOKENS-10
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.content}    "true"
     
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3011,7 +3011,7 @@ JD-TC-IOS_TOKENS-11
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.content}    "true"
     
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3337,7 +3337,7 @@ JD-TC-ANDROID_TOKENS-12
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.content}    "true"
     
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3679,7 +3679,7 @@ JD-TC-TELEGRAM_TOKEN-13
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.content}    "true"
     
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3987,7 +3987,7 @@ JD-TC-TOTAL_ON_TOKEN-14
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.content}    "true"
     
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

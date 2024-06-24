@@ -37,7 +37,7 @@ JD-TC-UpdateSubDomainVirtualFieldOfUser-1
      ${resp}=  Account Activation  ${PUSERNAME_E}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
@@ -148,7 +148,7 @@ JD-TC-UpdateSubDomainVirtualFieldOfUser-UH2
 #     ${resp}=  Account Activation  ${PUSERNAME_R}  0
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Account Set Credential  ${PUSERNAME_R}  ${PASSWORD}  0
+#     ${resp}=  Account Set Credential  ${PUSERNAME_R}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_R}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
 #     Log  ${resp.json()}

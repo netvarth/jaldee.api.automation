@@ -65,7 +65,7 @@ JD-TC-Payment By Consumer-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.content}    "true"
     
-    ${resp}=  Account Set Credential  ${PUSERPH2}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH2}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -337,7 +337,7 @@ JD-TC-Payment By Consumer-2
     ${resp}=  Account Activation  ${PUSERPH1}  0
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERPH1}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH1}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2098,7 +2098,7 @@ JD-TC-Payment By Consumer-13
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.content}    "true"
     
-    ${resp}=  Account Set Credential  ${PUSERPH2}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH2}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2792,7 +2792,7 @@ JD-TC-Payment By Consumer-2
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  "${resp.json()}"    "true"
     
-    ${resp}=  Account Set Credential  ${PUSERPH3}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH3}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH3}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     

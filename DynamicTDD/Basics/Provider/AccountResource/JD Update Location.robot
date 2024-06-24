@@ -31,7 +31,7 @@ JD-TC-UpdateLocation-1
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Activation  ${PUSERNAME_D}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Set Credential  ${PUSERNAME_D}  ${PASSWORD}  0
+      ${resp}=  Account Set Credential  ${PUSERNAME_D}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_D}
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
       Log  ${resp.json()}
@@ -122,7 +122,7 @@ JD-TC-UpdateLocation-2
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Activation  ${PUSERNAME_E}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
+      ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E}
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Log  ${resp.json()}
@@ -215,7 +215,7 @@ JD-TC-UpdateLocation-3
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Activation  ${PUSERNAME_F}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Set Credential  ${PUSERNAME_F}  ${PASSWORD}  0
+      ${resp}=  Account Set Credential  ${PUSERNAME_F}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_F}
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
       Log  ${resp.json()}
@@ -290,7 +290,7 @@ JD-TC-UpdateLocation-4
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Activation  ${PUSERNAME_E}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
+      ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E}
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Log  ${resp.json()}
@@ -367,7 +367,7 @@ JD-TC-UpdateLocation-UH1
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Activation  ${PUSERNAME_A}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
+      ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
       Log  ${resp.json()}
@@ -454,7 +454,7 @@ JD-TC-UpdateLocation-5
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Activation  ${PUSERNAME_B}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Set Credential  ${PUSERNAME_B}  ${PASSWORD}  0
+      ${resp}=  Account Set Credential  ${PUSERNAME_B}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_B}
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
       Log  ${resp.json()}

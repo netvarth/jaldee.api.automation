@@ -55,7 +55,7 @@ JD-TC-Update_Notification_Settings_of_User-1
      ${resp}=  Account Activation  ${EMAIL_id0}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${EMAIL_id0}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${EMAIL_id0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${EMAIL_id0}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
      Log  ${resp.json()}
@@ -1562,7 +1562,7 @@ JD-TC-Update_Notification_Settings_of_User-UH5
      ${resp}=  Account Activation  ${PUSERNAME_E2}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${PUSERNAME_E2}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${PUSERNAME_E2}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E2}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E2}  ${PASSWORD}
      Log  ${resp.json()}

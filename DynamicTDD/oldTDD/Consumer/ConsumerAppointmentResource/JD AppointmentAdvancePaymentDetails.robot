@@ -82,7 +82,7 @@ JD-TC- AppointmentAdvancePaymentdetails-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  "${resp.json()}"    "true"
     
-    ${resp}=  Account Set Credential  ${PUSERNAME_B}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_B}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_B}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
   

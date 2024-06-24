@@ -120,7 +120,7 @@ JD-TC-AddCustomer-4
      ${resp}=  Account Activation  ${email}  0
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${email}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${email}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${email}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Encrypted Provider Login  ${ph5}  ${PASSWORD}
      Log  ${resp.json()}
@@ -2279,7 +2279,7 @@ JD-TC-AddCustomer-23
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Activation  ${PUSERNAME_C}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${PUSERNAME_C}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${PUSERNAME_C}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_C}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
      Log  ${resp.json()}
@@ -2789,7 +2789,7 @@ JD-TC-AddCustomer-5
     ${resp}=  Account Activation  ${email3}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${email3}  ${PASSWORD}
+    ${resp}=  Account Set Credential  ${email3}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${email3}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${ph3}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200

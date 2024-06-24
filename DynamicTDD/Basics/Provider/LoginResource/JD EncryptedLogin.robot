@@ -53,10 +53,10 @@ JD-TC-EncryptedProviderLogin-1
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_B}    ${highest_package[0]}
     Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+    ${resp}=  Account Activation  ${PUSERNAME_B}  ${OtpPurpose['ProviderSignUp']}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${PUSERNAME_B}  0
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_B}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_B}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_B}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_B}${\n}

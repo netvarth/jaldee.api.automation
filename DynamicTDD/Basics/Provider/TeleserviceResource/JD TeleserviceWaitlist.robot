@@ -112,7 +112,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     Should Be Equal As Strings  "${resp.json()}"    "true"
     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
 
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1070,7 +1070,7 @@ JD-TC-TeleserviceWaitlist-(Non billable Subdomain)-9
     Should Be Equal As Strings  "${resp.json()}"    "true"
     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
 
-    ${resp}=  Account Set Credential  ${PUSERPH2}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH2}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH2}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1716,7 +1716,7 @@ JD-TC-TeleserviceWaitlist-15
     Should Be Equal As Strings  "${resp.json()}"    "true"
     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
 
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -101,7 +101,7 @@ JD-TC-Reset_LoginId-UH1
     ${resp}=  Provider Login  ${loginId}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     401
-    Should Be Equal As Strings      ${resp.json()}          ${LOGINID_NOT_REGISTERED}
+    Should Be Equal As Strings      ${resp.json()}          ${NOT_REGISTERED_CUSTOMER}
 
     ${resp}=    Provider Logout
     Log   ${resp.content}

@@ -61,7 +61,7 @@ JD-TC-License Metric-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}
+    ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -99,7 +99,7 @@ JD-TC-License Metric-2
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME1}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Account Set Credential  ${PUSERNAME1}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME1}
     Should Be Equal As Strings    ${resp.status_code}    200   
     ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -137,7 +137,7 @@ JD-TC-License Metric-3
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME2}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Account Set Credential  ${PUSERNAME2}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME2}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -175,7 +175,7 @@ JD-TC-License Metric-4
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME3}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME3}  ${PASSWORD}
+    ${resp}=  Account Set Credential  ${PUSERNAME3}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME3}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -214,7 +214,7 @@ JD-TC-License Metric-5
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME4}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME4}  ${PASSWORD}
+    ${resp}=  Account Set Credential  ${PUSERNAME4}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME4}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200

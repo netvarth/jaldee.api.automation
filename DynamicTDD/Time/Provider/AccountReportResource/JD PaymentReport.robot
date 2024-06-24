@@ -477,7 +477,7 @@ JD-TC-Payment_Report-2
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()}    "true"
     
-    ${resp}=  Account Set Credential  ${PUSERPH3}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH3}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH3}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     

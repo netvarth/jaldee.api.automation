@@ -32,7 +32,7 @@ JD-TC-CreateBusinessProfile-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME_B}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_B}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_B}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_B}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
@@ -57,7 +57,7 @@ JD-TC-CreateBusinessProfile-1
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Activation  ${PUSERNAME_C}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Account Set Credential  ${PUSERNAME_C}  ${PASSWORD}  0
+#     ${resp}=  Account Set Credential  ${PUSERNAME_C}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_C}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
 #     Log  ${resp.json()}
@@ -97,7 +97,7 @@ JD-TC-CreateBusinessProfile-1
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Activation  ${PUSERNAME_D}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Account Set Credential  ${PUSERNAME_D}  ${PASSWORD}  0
+#     ${resp}=  Account Set Credential  ${PUSERNAME_D}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_D}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
 #     Log  ${resp.json()}
@@ -119,7 +119,7 @@ JD-TC-CreateBusinessProfile-1
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Activation  ${PUSERNAME_E}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
+#     ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
 #     Log  ${resp.json()}
@@ -139,7 +139,7 @@ JD-TC-CreateBusinessProfile-1
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Activation  ${PUSERNAME_F}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Account Set Credential  ${PUSERNAME_F}  ${PASSWORD}  0
+#     ${resp}=  Account Set Credential  ${PUSERNAME_F}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_F}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
 #     Log  ${resp.json()}
@@ -181,7 +181,7 @@ JD-TC-CreateBusinessProfile-1
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Activation  ${PUSERNAME_G}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Account Set Credential  ${PUSERNAME_G}  ${PASSWORD}  0
+#     ${resp}=  Account Set Credential  ${PUSERNAME_G}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_G}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
 #     Log  ${resp.json()}
@@ -215,7 +215,7 @@ JD-TC-CreateBusinessProfile-1
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Activation  ${PUSERNAME_H}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Account Set Credential  ${PUSERNAME_H}  ${PASSWORD}  0
+#     ${resp}=  Account Set Credential  ${PUSERNAME_H}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_H}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Encrypted Provider Login  ${PUSERNAME_H}  ${PASSWORD}
 #     Log  ${resp.json()}
@@ -252,7 +252,7 @@ JD-TC-CreateBusinessProfile-1
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Activation  ${PUSERNAME_I}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Account Set Credential  ${PUSERNAME_I}  ${PASSWORD}  0
+#     ${resp}=  Account Set Credential  ${PUSERNAME_I}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_I}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Encrypted Provider Login  ${PUSERNAME_I}  ${PASSWORD}
 #     Log  ${resp.json()}
@@ -289,7 +289,7 @@ JD-TC-CreateBusinessProfile-1
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Activation  ${PUSERNAME_J}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Account Set Credential  ${PUSERNAME_J}  ${PASSWORD}  0
+#     ${resp}=  Account Set Credential  ${PUSERNAME_J}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_J}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Encrypted Provider Login  ${PUSERNAME_J}  ${PASSWORD}
 #     Log  ${resp.json()}

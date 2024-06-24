@@ -70,7 +70,7 @@ Provider_Signup
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${ph}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${ph}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -128,7 +128,7 @@ Multiuser_Signup
     # Log to Console   ${resp.content}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${ph}
     # Log to Console   ${resp.content}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200

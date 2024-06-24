@@ -48,7 +48,7 @@ JD-TC-ManageBranchSP-1
     ${resp}=  ProviderKeywords.Account Activation  ${PUSERNAME_Z}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  ProviderKeywords.Account Set Credential  ${PUSERNAME_Z}  ${PASSWORD}  0
+    ${resp}=  ProviderKeywords.Account Set Credential  ${PUSERNAME_Z}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_Z}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME_Z}
     ${resp}=  ProviderKeywords.Provider Login  ${PUSERNAME_Z}  ${PASSWORD}

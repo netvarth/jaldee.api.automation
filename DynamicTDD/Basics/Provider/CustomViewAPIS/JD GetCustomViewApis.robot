@@ -42,7 +42,7 @@ JD-TC-GetCustomViewApis-1
     ${resp}=  Account Activation  ${PUSERNAME_C}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_C}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_C}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_C}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
@@ -159,7 +159,7 @@ JD-TC-GetCustomViewApis-2
     ${resp}=  Account Activation  ${PUSERNAME_C}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_C}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_C}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_C}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
@@ -346,7 +346,7 @@ JD-TC-GetCustomViewApis-UH1
     ${resp}=  Account Activation  ${PUSERNAME_Z}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_Z}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_Z}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_Z}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}

@@ -62,7 +62,7 @@ JD-TC-Take Appointment in Different Timezone-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME_X}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_X}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_X}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_X}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_X}  ${PASSWORD}
@@ -433,7 +433,7 @@ JD-TC-Take Appointment in Different Timezone-2
 
     ${resp}=  Account Activation  ${US_P_Email}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${US_P_Email}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${US_P_Email}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${US_P_Email}
     Should Be Equal As Strings    ${resp.status_code}    200
     sleep  01s
     ${resp}=  Encrypted Provider Login  ${USProvider}  ${PASSWORD}  countryCode=${US_CC}
@@ -657,7 +657,7 @@ JD-TC-Take Appointment in Different Timezone-2
     ${resp}=  Account Activation  ${ME_P_Email}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential  ${ME_P_Email}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${ME_P_Email}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${ME_P_Email}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     sleep  01s
@@ -839,7 +839,7 @@ JD-TC-Take Appointment in Different Timezone-2
     ${resp}=  Account Activation  ${INProvider}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential  ${INProvider}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${INProvider}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${INProvider}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     sleep  01s
@@ -1764,7 +1764,7 @@ JD-TC-Take Appointment in Different Timezone-3
     ${resp}=  Account Activation  ${SProvider}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Account Set Credential  ${SProvider}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${SProvider}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${SProvider}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     sleep  01s
@@ -2062,7 +2062,7 @@ JD-TC-Take Appointment in Different Timezone-4
 
     ${resp}=  Account Activation  ${US_M_Email}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${US_M_Email}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${US_M_Email}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${US_M_Email}
     Should Be Equal As Strings    ${resp.status_code}    200
     sleep  01s
     ${resp}=  Encrypted Provider Login  ${US_MultiUser}  ${PASSWORD}  countryCode=${CC1}
@@ -2552,7 +2552,7 @@ JD-TC-Take Appointment in Different Timezone-4
 
     ${resp}=  Account Activation  ${ME_M_Email}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${ME_M_Email}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${ME_M_Email}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${ME_M_Email}
     Should Be Equal As Strings    ${resp.status_code}    200
     sleep  01s
     ${resp}=  Encrypted Provider Login  ${ME_MultiUser}  ${PASSWORD}  countryCode=${CC1}
@@ -3024,7 +3024,7 @@ JD-TC-Take Appointment in Different Timezone-4
 
     ${resp}=  Account Activation  ${IN_MU_Email}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${IN_MU_Email}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${IN_MU_Email}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${IN_MU_Email}
     Should Be Equal As Strings    ${resp.status_code}    200
     sleep  01s
     ${resp}=  Encrypted Provider Login  ${IN_MultiUser}  ${PASSWORD}  countryCode=${CC1}

@@ -514,7 +514,7 @@ JD-TC-Create Service With info-9
         ${resp}=  Account Activation  ${PUSERNAME_Y}  0
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${resp}=  Account Set Credential  ${PUSERNAME_Y}  ${PASSWORD}  0
+        ${resp}=  Account Set Credential  ${PUSERNAME_Y}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_Y}
         Should Be Equal As Strings    ${resp.status_code}    200
         Set Suite Variable  ${PUSERNAME_Y}
         ${resp}=  Encrypted Provider Login  ${PUSERNAME_Y}  ${PASSWORD}

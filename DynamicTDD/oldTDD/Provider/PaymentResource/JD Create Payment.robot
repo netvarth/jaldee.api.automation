@@ -70,7 +70,7 @@ JD-TC-Create Payment-1
     ${resp}=  Account Activation  ${PUSERPH0}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
@@ -694,7 +694,7 @@ JD-TC-Create Payment-4
     ${resp}=  Account Activation  ${PUSEREMAIL}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSEREMAIL}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSEREMAIL}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSEREMAIL}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
@@ -757,7 +757,7 @@ JD-TC-Create Payment-5
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSEREMAIL}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSEREMAIL}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSEREMAIL}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSEREMAIL}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
@@ -883,7 +883,7 @@ JD-TC-Create Payment-6
     ${resp}=  Account Activation  ${PUSEREMAIL}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSEREMAIL}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSEREMAIL}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSEREMAIL}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
@@ -1132,7 +1132,7 @@ JD-TC-Create Payment-9
     ${resp}=  Account Activation  ${PUSEREMAIL}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSEREMAIL}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSEREMAIL}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSEREMAIL}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
@@ -1261,7 +1261,7 @@ JD-TC-Create Payment-10
     ${resp}=  Account Activation  ${PUSEREMAIL}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSEREMAIL}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSEREMAIL}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSEREMAIL}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}

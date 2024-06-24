@@ -85,7 +85,7 @@ Jaldee-TC-Upgrade License Package-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAMETRIAL1}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL1}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL1}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAMETRIAL1}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -144,7 +144,7 @@ JD-TC-Upgrade License Package-2
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAMETRIAL2}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL2}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL2}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAMETRIAL2}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL2}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -217,7 +217,7 @@ JD-TC-Upgrade License Package-3
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAMETRIAL3}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL3}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL3}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAMETRIAL3}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL3}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -296,7 +296,7 @@ JD-TC-Upgrade License Package-4
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAMETRIAL4}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL4}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL4}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAMETRIAL4}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL4}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -383,7 +383,7 @@ JD-TC-Upgrade License Package-5
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAMETRIAL5}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL5}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL5}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAMETRIAL5}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL5}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -448,7 +448,7 @@ JD-TC-Upgrade License Package-6
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAMETRIAL6}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL6}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL6}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAMETRIAL6}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL6}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -518,7 +518,7 @@ JD-TC-Upgrade License Package-7
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAMETRIAL7}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL7}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL7}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAMETRIAL7}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL7}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -623,7 +623,7 @@ JD-TC-Upgrade License Package-8
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAMETRIAL8}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL8}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL8}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAMETRIAL8}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL8}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -682,7 +682,7 @@ JD-TC-Upgrade License Package-9
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAMETRIAL9}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL9}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL9}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAMETRIAL9}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL9}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -751,7 +751,7 @@ JD-TC-Upgrade License Package-10
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAMETRIAL10}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL10}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL10}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAMETRIAL10}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL10}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -822,7 +822,7 @@ JD-TC-Upgrade License Package-11
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAMETRIAL11}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL11}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL11}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAMETRIAL11}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL11}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -908,7 +908,7 @@ JD-TC-Upgrade License Package-12
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAMETRIAL12}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL12}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL12}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAMETRIAL12}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL12}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -972,7 +972,7 @@ JD-TC-Upgrade License Package-13
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAMETRIAL13}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL13}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL13}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAMETRIAL13}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL13}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1041,7 +1041,7 @@ JD-TC-Upgrade License Package-14
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAMETRIAL14}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL14}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL14}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAMETRIAL14}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL14}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1140,7 +1140,7 @@ JD-TC-Upgrade License Package-15
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAMETRIAL15}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL15}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL15}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAMETRIAL15}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL15}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1198,7 +1198,7 @@ JD-TC-Upgrade License Package-16
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAMETRIAL16}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL16}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL16}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAMETRIAL16}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL16}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1276,7 +1276,7 @@ JD-TC-Upgrade License Package-17
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAMETRIAL17}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL17}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL17}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAMETRIAL17}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL17}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1357,7 +1357,7 @@ JD-TC-Upgrade License Package-18
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAMETRIAL18}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL18}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL18}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAMETRIAL18}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL18}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1443,7 +1443,7 @@ JD-TC-Upgrade License Package-19
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAMETRIAL19}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL19}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL19}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAMETRIAL19}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL19}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1508,7 +1508,7 @@ JD-TC-Upgrade License Package-20
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAMETRIAL20}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL20}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL20}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAMETRIAL20}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL20}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1578,7 +1578,7 @@ JD-TC-Upgrade License Package-21
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAMETRIAL21}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL21}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAMETRIAL21}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAMETRIAL21}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL21}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200

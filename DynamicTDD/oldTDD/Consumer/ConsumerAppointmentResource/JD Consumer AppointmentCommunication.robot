@@ -57,7 +57,7 @@ JD-TC-ConsumerAppointmentCommunication-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME_H}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_H}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_H}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_H}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_H}  ${PASSWORD}
     Log  ${resp.json()}

@@ -77,7 +77,7 @@ JD-TC-SendMessageWithWL-1
     ${resp}=  Account Activation  ${PUSERPH0}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     

@@ -78,7 +78,7 @@ JD-TC-Provider_Signup
     # Log to Console   ${resp.content}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${ph}
     # Log to Console   ${resp.content}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200

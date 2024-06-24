@@ -162,7 +162,7 @@ JD-TC-UpdateFamilyMember-4
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Activation  ${PUSERPH1}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Set Credential  ${PUSERPH1}  ${PASSWORD}  0
+      ${resp}=  Account Set Credential  ${PUSERPH1}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH1}
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
       Should Be Equal As Strings    ${resp.status_code}    200
@@ -202,7 +202,7 @@ JD-TC-UpdateFamilyMember-5
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Activation  ${PUSERPH2}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Set Credential  ${PUSERPH2}  ${PASSWORD}  0
+      ${resp}=  Account Set Credential  ${PUSERPH2}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH2}
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD}
       Should Be Equal As Strings    ${resp.status_code}    200

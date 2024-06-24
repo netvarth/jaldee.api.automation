@@ -71,7 +71,7 @@ ${zero_value}     0
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Should Be Equal As Strings    ${resp.content}    "true"
     
-#     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+#     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -443,7 +443,7 @@ ${zero_value}     0
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Should Be Equal As Strings    ${resp.content}    "true"
     
-#     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+#     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -784,7 +784,7 @@ ${zero_value}     0
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Should Be Equal As Strings    ${resp.content}    "true"
     
-#     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+#     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1133,7 +1133,7 @@ ${zero_value}     0
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Should Be Equal As Strings    ${resp.content}    "true"
     
-#     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+#     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1506,7 +1506,7 @@ ${zero_value}     0
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Should Be Equal As Strings    ${resp.content}    "true"
     
-#     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+#     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1897,7 +1897,7 @@ ${zero_value}     0
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Should Be Equal As Strings    ${resp.content}    "true"
     
-#     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+#     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2289,7 +2289,7 @@ ${zero_value}     0
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Should Be Equal As Strings    ${resp.content}    "true"
     
-#     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+#     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2667,7 +2667,7 @@ ${zero_value}     0
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Should Be Equal As Strings    ${resp.content}    "true"
     
-#     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+#     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3072,7 +3072,7 @@ ${zero_value}     0
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Should Be Equal As Strings    ${resp.content}    "true"
     
-#     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+#     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3461,7 +3461,7 @@ ${zero_value}     0
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Should Be Equal As Strings    ${resp.content}    "true"
     
-#     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+#     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3824,7 +3824,7 @@ JD-TC-TOTAL_ON_APPMT-11
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.content}    "true"
     
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

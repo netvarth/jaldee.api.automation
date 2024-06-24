@@ -39,7 +39,7 @@ JD-TC-GetAppmtServicesByLocation-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME_R}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_R}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_R}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_R}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
     Log  ${resp.json()}
@@ -715,7 +715,7 @@ JD-TC-GetAppmtServicesByLocation-10
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME_R}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_R}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_R}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_R}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
     Log  ${resp.json()}

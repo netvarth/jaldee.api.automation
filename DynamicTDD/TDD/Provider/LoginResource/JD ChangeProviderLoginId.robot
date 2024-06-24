@@ -30,8 +30,11 @@ JD-TC-ChangeProviderLoginId-1
     ${resp}=  Send Verify Login   ${PUSEREMAIL18}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}  200
-    ${resp}=  Verify Login        ${PUSEREMAIL18}   4
-    Should Be Equal As Strings    ${resp.status_code}  200
+    ${resp}=    Account Activation  ${PUSEREMAIL18}  ${OtpPurpose['ProviderVerifyEmail']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Verify Login        ${PUSEREMAIL18}   ${OtpPurpose['ProviderVerifyEmail']}
+    # Should Be Equal As Strings    ${resp.status_code}  200
     ${resp}=   Encrypted Provider Login  ${PUSEREMAIL18}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200

@@ -33,7 +33,7 @@ JD-TC-Communication Between Provider And Consumer-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME_P}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_P}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_P}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_P}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
     Log  ${resp.json()}

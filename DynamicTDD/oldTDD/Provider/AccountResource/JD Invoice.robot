@@ -30,7 +30,7 @@ JD-TC-Invoice-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME_T}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_T}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_T}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_T}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_T}  ${PASSWORD}
     Log  ${resp.json()}
@@ -242,7 +242,7 @@ JD-TC-Invoice-4
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME_S}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_S}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_S}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_S}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log  ${resp.json()}
@@ -427,7 +427,7 @@ JD-TC-Invoice-UH3
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${ph}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${ph}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph}${\n}
     ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
@@ -514,7 +514,7 @@ JD-TC-Invoice-5
     ${scwtype}=  Random Element  ${HowDoYouHear}
     ${resp}=  Create HowDoYouHearUs  ${PUSERNAME_R}  ${scwtype}  ${scCode}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_R}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_R}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_R}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
     Log  ${resp.json()}
@@ -628,7 +628,7 @@ JD-TC-Invoice-5
     # ${scwtype}=  Random Element  ${HowDoYouHear}
     # ${resp}=  Create HowDoYouHearUs  ${ph}  ${scwtype}  ${scCode}
     # Should Be Equal As Strings    ${resp.status_code}    200
-    # ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  0
+    # ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${ph}
     # Should Be Equal As Strings    ${resp.status_code}    200
     # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph}${\n}
     # ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}

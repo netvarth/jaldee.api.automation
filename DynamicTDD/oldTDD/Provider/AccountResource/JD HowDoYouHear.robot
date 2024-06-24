@@ -127,7 +127,7 @@ JD-TC-HowDoYouHear1
     ${resp}=  Create HowDoYouHearUs    ${PUSERNAME_M}   ${HowDoYouHear[0]}  ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200  
-    ${resp}=  Account Set Credential  ${PUSERNAME_M}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_M}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_M}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_M}  ${PASSWORD}
     Log  ${resp.json()}
@@ -255,7 +255,7 @@ JD-TC-HowDoYouHear2
      ${resp}=  Create HowDoYouHearUs    ${PUSERNAME_M}   ${HowDoYouHear[4]}   ${sc_code}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200  
-    ${resp}=  Account Set Credential  ${PUSERNAME_M}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_M}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_M}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_M}  ${PASSWORD}
     Log  ${resp.json()}
@@ -381,7 +381,7 @@ JD-TC-HowDoYouHear_UH1
     ${resp}=  Create HowDoYouHearUs    ${PUSERNAME_M}   ${HowDoYouHear[4]}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422  
-    ${resp}=  Account Set Credential  ${PUSERNAME_M}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_M}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_M}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_M}  ${PASSWORD}
     Log  ${resp.json()}
@@ -506,7 +506,7 @@ JD-TC-HowDoYouHear_UH2
     ${resp}=  Create HowDoYouHearUs    ${PUSERNAME_M}   ${HowDoYouHear[2]}    ${sc_code} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200  
-    ${resp}=  Account Set Credential  ${PUSERNAME_M}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_M}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_M}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_M}  ${PASSWORD}
     Log  ${resp.json()}

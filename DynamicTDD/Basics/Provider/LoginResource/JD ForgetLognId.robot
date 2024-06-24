@@ -70,6 +70,7 @@ JD-TC-Forget_LoginId-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable      ${id}  ${resp.json()['id']}
+    Set Suite Variable      ${userName}  ${resp.json()['userName']}
 
     Set Suite Variable  ${email_id}  ${firstname}${ph}.${test_mail}
 
