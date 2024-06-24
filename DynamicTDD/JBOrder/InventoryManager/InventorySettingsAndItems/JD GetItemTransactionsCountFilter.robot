@@ -324,7 +324,7 @@ JD-TC-Get Item Transaction Count Filter-1
     ${purchaseNote}=                FakerLibrary.Sentence
     ${roundOff}=                    Random Int  min=1  max=10
 
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList   ${ic_Batch_Item_id}   ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  0  ${netTotal}   ${expiryDate}  ${mrp}  ${batchNo}  0   0   ${iu_id}
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList   ${ic_Batch_Item_id}   ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}   ${iu_id}
     Set Suite Variable              ${purchaseItemDtoList2}
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${Catalog_EncIds}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}  
@@ -336,6 +336,7 @@ JD-TC-Get Item Transaction Count Filter-1
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}                 200
     Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[0]}
+    Set Suite Variable              ${purchaseReferenceNo}           ${resp.json()['purchaseReferenceNo']}
 # -------------------------------------------  Update Purchase Status ------------------------------------------------
     ${resp}=    Update Purchase Status  ${PurchaseStatus[1]}  ${purchaseId} 
     Log   ${resp.content}
@@ -388,7 +389,7 @@ JD-TC-Get Item Transaction Count Filter-1
     Should Be Equal As Strings      ${resp.json()[0]['updateTypeString']}          Add
     Should Be Equal As Strings      ${resp.json()[0]['updateQty']}          ${totalConvertedQuantity}
     Should Be Equal As Strings      ${resp.json()[0]['transactionTypeEnum']}          ${transactionTypeEnum[3]}
-    Should Be Equal As Strings      ${resp.json()[0]['referenceNo']}          ${invoiceReferenceNo}
+    Should Be Equal As Strings      ${resp.json()[0]['referenceNo']}          ${purchaseReferenceNo}
     Should Be Equal As Strings      ${resp.json()[0]['referenceDate']}          ${DAY1}
     Should Be Equal As Strings      ${resp.json()[0]['referenceUid']}          ${purchaseId}
     Should Be Equal As Strings      ${resp.json()[0]['createdBy']}          ${user_id}

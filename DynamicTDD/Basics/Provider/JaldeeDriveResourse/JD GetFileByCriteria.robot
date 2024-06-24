@@ -623,7 +623,7 @@ JD-TC-GetFileByCriteria-13
     Set Suite Variable  ${id}
    
 
-     ${resp}=    Get Locations
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'

@@ -398,7 +398,9 @@ JD-TC-CreateItemInv-9
 
     ${resp}=    Create Item Inventory  ${name2}    isBatchApplicable=${boolean[1]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}         ${BATCH_APPLICABLE_SECLECT_ONLY_FOR_INVENTORY_ITEMS} 
+    
 
 
 JD-TC-CreateItemInv-10

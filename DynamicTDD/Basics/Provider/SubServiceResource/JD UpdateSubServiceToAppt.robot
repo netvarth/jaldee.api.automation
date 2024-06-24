@@ -28,18 +28,18 @@ JD-TC-UpdateSubServicesToAppt-1
     [Documentation]  add sub service to an appointment(walkin) without quantity then update the subservice with quantity.
 
     ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${jdconID}   ${resp.json()['id']}
     Set Suite Variable  ${fname}   ${resp.json()['firstName']}
     Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
     ${resp}=  Consumer Logout
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME240}  ${PASSWORD}
-    Log   ${resp.json()}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Appointment Settings
@@ -51,7 +51,7 @@ JD-TC-UpdateSubServicesToAppt-1
     END
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
@@ -109,16 +109,16 @@ JD-TC-UpdateSubServicesToAppt-1
     END
 
     ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
         ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-        Log   ${resp.json()}
+        Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
    
     ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]} 
 
@@ -129,7 +129,7 @@ JD-TC-UpdateSubServicesToAppt-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${PUSERNAME240}'
+            IF   not '${user_phone}' == '${HLPUSERNAME21}'
                 clear_users  ${user_phone}
             END
         END
@@ -174,7 +174,7 @@ JD-TC-UpdateSubServicesToAppt-1
     Set Suite Variable    ${s_id}
 
     ${resp}=   Get Service By Id  ${s_id}
-    Log   ${resp.json()}  
+    Log   ${resp.content}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${ser_dur}      ${resp.json()['serviceDuration']}
     Set Suite Variable   ${ser_amount}   ${resp.json()['totalAmount']}
@@ -192,12 +192,12 @@ JD-TC-UpdateSubServicesToAppt-1
 
     ${resp}=  Create Service    ${subser_name}  ${desc}  ${subser_dur}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${EMPTY}   ${subser_price}
     ...    ${bool[0]}   ${bool[0]}   department=${dep_id}  serviceCategory=${serviceCategory[0]}
-    Log   ${resp.json()}  
+    Log   ${resp.content}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${subser_id1}  ${resp.json()}
 
     ${resp}=   Get Service By Id  ${subser_id1}
-    Log   ${resp.json()}  
+    Log   ${resp.content}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}                  ${subser_name} 
     Should Be Equal As Strings  ${resp.json()['serviceCategory']}       ${serviceCategory[0]}
@@ -225,7 +225,7 @@ JD-TC-UpdateSubServicesToAppt-1
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
     ${resp}=  AddCustomer  ${CUSERNAME11}  firstName=${fname}   lastName=${lname}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid}   ${resp.json()}
     
@@ -241,12 +241,12 @@ JD-TC-UpdateSubServicesToAppt-1
     Set Suite Variable  ${apptid1}  ${apptid[0]}
 
     ${resp}=  Get Appointment EncodedID   ${apptid1}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${encId}=  Set Variable   ${resp.json()}
 
     ${resp}=  Get Appointment By Id   ${apptid1}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceId']}        ${s_id}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceName']}      ${SERVICE1}
@@ -265,11 +265,11 @@ JD-TC-UpdateSubServicesToAppt-1
     ${subser_list1}=  Create Dictionary  serviceId=${subser_id1}  serviceAmount=${subser_price}  
     
     ${resp}=   Add SubService To Appointment    ${apptid1}   ${subser_list1}
-    Log   ${resp.json()}  
+    Log   ${resp.content}  
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Appointment By Id   ${apptid1}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceId']}        ${s_id}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceName']}      ${SERVICE1}
@@ -303,14 +303,14 @@ JD-TC-UpdateSubServicesToAppt-1
     ${subser_list2}=  Create Dictionary  serviceId=${subser_id1}  serviceAmount=${subser_price}    quantity=${subser_qnty}
     
     ${resp}=   Update SubService To Appointment    ${apptid1}   ${subser_list2}
-    Log   ${resp.json()}  
+    Log   ${resp.content}  
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${total}=    Evaluate    ${subser_qnty}*${subser_price}
     Set Suite Variable   ${total} 
 
     ${resp}=  Get Appointment By Id   ${apptid1}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceId']}        ${s_id}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceName']}      ${SERVICE1}
@@ -343,19 +343,19 @@ JD-TC-UpdateSubServicesToAppt-2
 
     [Documentation]  add sub service to an appointment(walkin) without any users then assign one user to that service.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME240}  ${PASSWORD}
-    Log   ${resp.json()}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${asgn_users}=   Create List  ${u_id1}
     ${subser_list2}=  Create Dictionary  serviceId=${subser_id1}  serviceAmount=${subser_price}    quantity=${subser_qnty}   assigneeUsers=${asgn_users}
     
     ${resp}=   Update SubService To Appointment    ${apptid1}   ${subser_list2}
-    Log   ${resp.json()}  
+    Log   ${resp.content}  
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Appointment By Id   ${apptid1}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceId']}        ${s_id}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceName']}      ${SERVICE1}
@@ -388,19 +388,19 @@ JD-TC-UpdateSubServicesToAppt-3
 
     [Documentation]  update the subservice with more than one user as assignee.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME240}  ${PASSWORD}
-    Log   ${resp.json()}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${asgn_users}=   Create List  ${u_id2}   ${u_id3}
     ${subser_list2}=  Create Dictionary  serviceId=${subser_id1}  serviceAmount=${subser_price}    quantity=${subser_qnty}   assigneeUsers=${asgn_users}
     
     ${resp}=   Update SubService To Appointment    ${apptid1}   ${subser_list2}
-    Log   ${resp.json()}  
+    Log   ${resp.content}  
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Appointment By Id   ${apptid1}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceId']}        ${s_id}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceName']}      ${SERVICE1}
@@ -432,19 +432,19 @@ JD-TC-UpdateSubServicesToAppt-4
 
     [Documentation]  update the subservice with assignee conflicting with the existing one.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME240}  ${PASSWORD}
-    Log   ${resp.json()}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${asgn_users}=   Create List  ${u_id2}   ${u_id3}
     ${subser_list2}=  Create Dictionary  serviceId=${subser_id1}  serviceAmount=${subser_price}    quantity=${subser_qnty}   assigneeUsers=${asgn_users}
     
     ${resp}=   Update SubService To Appointment    ${apptid1}   ${subser_list2}
-    Log   ${resp.json()}  
+    Log   ${resp.content}  
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Appointment By Id   ${apptid1}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceId']}        ${s_id}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceName']}      ${SERVICE1}
@@ -479,7 +479,7 @@ JD-TC-UpdateSubServicesToAppt-UH1
     ${subser_list1}=  Create Dictionary  serviceId=${subser_id1}  serviceAmount=${subser_price}   
 
     ${resp}=   Update SubService To Appointment    ${apptid1}   ${subser_list1}
-    Log   ${resp.json()}  
+    Log   ${resp.content}  
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
  
@@ -488,13 +488,13 @@ JD-TC-UpdateSubServicesToAppt-UH2
     [Documentation]  consumer tries to update a subservice to an appointment.
     
     ${resp}=  Consumer Login  ${CUSERNAME12}  ${PASSWORD}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${subser_list1}=  Create Dictionary  serviceId=${subser_id1}  serviceAmount=${subser_price}   
 
     ${resp}=   Update SubService To Appointment    ${apptid1}   ${subser_list1}
-    Log   ${resp.json()}  
+    Log   ${resp.content}  
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings  ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
 
@@ -503,46 +503,46 @@ JD-TC-UpdateSubServicesToAppt-UH3
 
     [Documentation]  update an inactive subservice to an appointment
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME240}  ${PASSWORD}
-    Log   ${resp.json()}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Disable service  ${subser_id1} 
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service By Id  ${subser_id1}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['status']}   ${status[1]}
     
     ${subser_list1}=  Create Dictionary  serviceId=${subser_id1}  serviceAmount=${subser_price}   
 
-    ${STATUS_DISABLED}=  format String   ${STATUS_DISABLED}   ${serviceCategory[0]} : ${subser_id1}
+    ${STATUS_DISABLED}=  format String   ${STATUS_DISABLED}   ${serviceCategory[0]} : ${subser_name}
 
     ${resp}=   Update SubService To Appointment    ${apptid1}   ${subser_list1}
-    Log   ${resp.json()}  
+    Log   ${resp.content}  
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings  ${resp.json()}   ${STATUS_DISABLED}
 
     ${resp}=  Enable service  ${subser_id1} 
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-UpdateSubServicesToAppt-UH4
 
     [Documentation]  update the subservice with inactive user.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME240}  ${PASSWORD}
-    Log   ${resp.json()}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  EnableDisable User  ${u_id1}  ${toggle[1]}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get User By Id  ${u_id1}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${u_id1}   status=${status[1]} 
 
@@ -550,16 +550,31 @@ JD-TC-UpdateSubServicesToAppt-UH4
     ${subser_list2}=  Create Dictionary  serviceId=${subser_id1}  serviceAmount=${subser_price}    quantity=${subser_qnty}   assigneeUsers=${asgn_users}
     
     ${resp}=   Update SubService To Appointment    ${apptid1}   ${subser_list2}
-    Log   ${resp.json()}  
+    Log   ${resp.content}  
     Should Be Equal As Strings  ${resp.status_code}  422
 
-JD-TC-UserPerformanceReport-UH5
+JD-TC-UpdateSubServicesToAppt-UH5
 
     [Documentation]   Create a sub service with auto invoice generation on and with a service price , then try to update the subservice with price as zero.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get jp finance settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.json()}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
     ${desc}=  FakerLibrary.sentence                       
     ${subser_dur}=   Random Int   min=5   max=10
@@ -569,12 +584,12 @@ JD-TC-UserPerformanceReport-UH5
    
     ${resp}=  Create Service    ${subser_name}  ${desc}  ${subser_dur}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${EMPTY}   ${subser_price}
     ...    ${bool[0]}   ${bool[0]}    serviceCategory=${serviceCategory[0]}
-    Log   ${resp.json()}  
+    Log   ${resp.content}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${subser_id1}  ${resp.json()}
 
     ${resp}=   Get Service By Id  ${subser_id1}
-    Log   ${resp.json()}  
+    Log   ${resp.content}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}                  ${subser_name} 
     Should Be Equal As Strings  ${resp.json()['serviceCategory']}       ${serviceCategory[0]}
@@ -586,7 +601,7 @@ JD-TC-UserPerformanceReport-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service By Id  ${subser_id1}
-    Log   ${resp.json()}  
+    Log   ${resp.content}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['serviceCategory']}               ${serviceCategory[0]}
     Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[1]}
@@ -595,6 +610,6 @@ JD-TC-UserPerformanceReport-UH5
 
     ${resp}=  Update Service    ${subser_id1}  ${subser_name}  ${desc}  ${subser_dur}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${EMPTY}   ${subser_price}
     ...    ${bool[0]}   ${bool[0]}    serviceCategory=${serviceCategory[0]}
-    Log   ${resp.json()}  
+    Log   ${resp.content}  
     Should Be Equal As Strings  ${resp.status_code}  422
    

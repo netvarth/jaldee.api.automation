@@ -207,7 +207,7 @@ JD-TC-CreateReceivable-1
     ${receivableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
     
     ${resp}=  Create Receivable   ${amount}    ${category_id3}   ${dueDate}   ${receivableLabel}     ${vendor_uid1}

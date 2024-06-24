@@ -38,7 +38,7 @@ JD-TC-RemoveSubServicesToAppt-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME23}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -129,7 +129,7 @@ JD-TC-RemoveSubServicesToAppt-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${PUSERNAME230}'
+            IF   not '${user_phone}' == '${HLPUSERNAME23}'
                 clear_users  ${user_phone}
             END
         END
@@ -326,7 +326,7 @@ JD-TC-RemoveSubServicesToAppt-2
 
     [Documentation]  remove the subservice with one assigned user.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME23}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -401,7 +401,7 @@ JD-TC-RemoveSubServicesToAppt-3
 
     [Documentation]  add a subservice and change the price then try to remove the subservice .
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME23}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -449,6 +449,7 @@ JD-TC-RemoveSubServicesToAppt-3
     
     ${subser_price1}=   Random Int   min=10   max=50
     ${subser_price1}=  Convert To Number  ${subser_price1}  1
+    Set Suite Variable   ${subser_price1}
     ${subser_list}=  Create Dictionary  serviceId=${subser_id1}  serviceAmount=${subser_price1}   quantity=${subser_qnty}   assigneeUsers=${asgn_users}
     
     ${resp}=   Update SubService To Appointment    ${apptid1}   ${subser_list}
@@ -509,11 +510,6 @@ JD-TC-RemoveSubServicesToAppt-3
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['teamIds']}          ${empty_list}
     Should Not Contain   ${resp.json()['subServiceData']}                               ${subser_id1}
 
-
-JD-TC-RemoveSubServicesToAppt-4
-
-    [Documentation]  add sub service to an appointment(online) then remove that sub service then again add that sub service.
-
 JD-TC-RemoveSubServicesToAppt-UH1
 
     [Documentation]  Remove a subservice from an appointment without Login
@@ -545,7 +541,7 @@ JD-TC-RemoveSubServicesToAppt-UH3
 
     [Documentation]  remove an inactive subservice from an appointment
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME23}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -560,7 +556,7 @@ JD-TC-RemoveSubServicesToAppt-UH3
     
     ${subser_list1}=  Create Dictionary  serviceId=${subser_id1}  
 
-    ${STATUS_DISABLED}=  format String   ${STATUS_DISABLED}   ${serviceCategory[0]} : ${subser_id1}
+    ${STATUS_DISABLED}=  format String   ${STATUS_DISABLED}   ${serviceCategory[0]} : ${subser_name}
 
     ${resp}=   Remove SubService From Appointment    ${apptid1}   ${subser_list1}
     Log   ${resp.json()}  
@@ -575,7 +571,7 @@ JD-TC-RemoveSubServicesToAppt-UH4
 
     [Documentation]  Remove a subservice from an appointment that has already been canceled.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME23}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -588,7 +584,7 @@ JD-TC-RemoveSubServicesToAppt-UH4
     Log   ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${total}=    Evaluate    ${subser_qnty}*${subser_price}
+    ${total}=    Evaluate    ${subser_qnty}*${subser_price1}
 
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
@@ -609,7 +605,7 @@ JD-TC-RemoveSubServicesToAppt-UH4
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['serviceId']}        ${subser_id1}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['serviceName']}      ${subser_name}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['serviceDate']}      ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['serviceAmount']}    ${subser_price}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['serviceAmount']}    ${subser_price1}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['quantity']}         ${subser_qnty}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['taxable']}          ${bool[0]}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['taxPercentage']}    0.0
@@ -651,6 +647,11 @@ JD-TC-RemoveSubServicesToAppt-UH4
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
 
+*** comments ***
+
+JD-TC-RemoveSubServicesToAppt-4
+
+    [Documentation]  add sub service to an appointment(online) then remove that sub service then again add that sub service.
 
 JD-TC-RemoveSubServicesToAppt-UH5
 

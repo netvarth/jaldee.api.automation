@@ -29,7 +29,7 @@ JD-TC-UpdateFrequencySA-1
 
     [Documentation]   Update Frequency SA
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -46,7 +46,7 @@ JD-TC-UpdateFrequencySA-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${frequency}=       Random Int  min=1  max=10
+    ${frequency}=       Random Int  min=200  max=205
     ${dosage}=          Random Int  min=1  max=3000
     ${description}=     FakerLibrary.sentence
     ${remark}=          FakerLibrary.sentence
@@ -71,7 +71,7 @@ JD-TC-UpdateFrequencySA-1
     Should Be Equal As Strings      ${resp.json()['remark']}        ${remark}
     Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos}
 
-    ${frequency2}=       Random Int  min=1  max=10
+    ${frequency2}=       Random Int  min=156  max=160
 
     ${resp}=    SA Update Frequency  ${frequency_id}  ${frequency2}  ${dosage}  description=${description}  remark=${remark}
     Log   ${resp.content}
@@ -93,7 +93,7 @@ JD-TC-UpdateFrequencySA-2
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
+    ${frequency2}=       Random Int  min=176  max=180
     ${dosage2}=          Random Int  min=1  max=3000
     ${dos2}=             Evaluate    float(${dosage2})
 
@@ -105,7 +105,7 @@ JD-TC-UpdateFrequencySA-2
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
     Should Be Equal As Strings      ${resp.json()['id']}            ${frequency_id}
-    Should Be Equal As Strings      ${resp.json()['frequency']}     ${frequency}
+    Should Be Equal As Strings      ${resp.json()['frequency']}     ${frequency2}
     Should Be Equal As Strings      ${resp.json()['description']}   ${description}
     Should Be Equal As Strings      ${resp.json()['remark']}        ${remark}
     Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos2}

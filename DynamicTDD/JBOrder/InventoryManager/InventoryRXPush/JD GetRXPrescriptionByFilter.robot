@@ -355,7 +355,7 @@ JD-TC-GetRXPrescriptionItemByFilter-1
     ${purchaseNote}=                FakerLibrary.Sentence
     ${roundOff}=                    Random Int  min=1  max=10
 
-    ${purchaseItemDtoList1}=        Create purchaseItemDtoList   ${ic_Item_id}   ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  0  ${netTotal}   ${expiryDate}  ${mrp}  ${EMPTY}  0   0   ${iu_id}
+    ${purchaseItemDtoList1}=        Create purchaseItemDtoList   ${ic_Item_id}   ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}   ${iu_id}
     Set Suite Variable              ${purchaseItemDtoList1}
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${Catalog_EncIds}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
@@ -473,7 +473,7 @@ JD-TC-GetRXPrescriptionItemByFilter-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
 
-    ${frequency}=       Random Int  min=1  max=10
+    ${frequency}=       Random Int  min=61  max=65
     ${dosage}=          Random Int  min=1  max=3000
     ${description}=     FakerLibrary.sentence
     ${remark}=          FakerLibrary.sentence
@@ -666,7 +666,7 @@ JD-TC-GetRXPrescriptionItemByFilter-4
     Should Be Equal As Strings      ${resp.json()[0]['quantity']}               ${quantity1}  
     Should Be Equal As Strings      ${resp.json()[0]['prescriptioinUid']}       ${prescription_id} 
 
-JD-TC-GetRXPrescriptionItemByFilter-5
+*** Comments ***
 
     [Documentation]    Get RX Prescription Item By Filter - medicineName
 
@@ -853,7 +853,7 @@ JD-TC-GetRXPrescriptionItemByFilter-11
     Should Be Equal As Strings      ${resp.json()[0]['quantity']}               ${quantity2}  
     Should Be Equal As Strings      ${resp.json()[0]['prescriptioinUid']}       ${prescription_id} 
 
-JD-TC-GetRXPrescriptionItemByFilter-5
+JD-TC-GetRXPrescriptionItemByFilter-12
 
     [Documentation]    Get RX Prescription Item By Filter - duration
 
@@ -874,7 +874,7 @@ JD-TC-GetRXPrescriptionItemByFilter-5
     Should Be Equal As Strings      ${resp.json()[0]['quantity']}               ${quantity2}  
     Should Be Equal As Strings      ${resp.json()[0]['prescriptioinUid']}       ${prescription_id} 
 
-JD-TC-GetRXPrescriptionItemByFilter-5
+JD-TC-GetRXPrescriptionItemByFilter-13
 
     [Documentation]    Get RX Prescription Item By Filter - duration
 
@@ -895,7 +895,7 @@ JD-TC-GetRXPrescriptionItemByFilter-5
     Should Be Equal As Strings      ${resp.json()[0]['quantity']}               ${quantity2}  
     Should Be Equal As Strings      ${resp.json()[0]['prescriptioinUid']}       ${prescription_id} 
 
-JD-TC-GetRXPrescriptionItemByFilter-5
+JD-TC-GetRXPrescriptionItemByFilter-14
 
     [Documentation]    Get RX Prescription Item By Filter - duration
 
@@ -916,7 +916,7 @@ JD-TC-GetRXPrescriptionItemByFilter-5
     Should Be Equal As Strings      ${resp.json()[0]['quantity']}               ${quantity2}  
     Should Be Equal As Strings      ${resp.json()[0]['prescriptioinUid']}       ${prescription_id} 
 
-JD-TC-GetRXPrescriptionItemByFilter-5
+JD-TC-GetRXPrescriptionItemByFilter-15
 
     [Documentation]    Get RX Prescription Item By Filter - duration
 
@@ -937,7 +937,7 @@ JD-TC-GetRXPrescriptionItemByFilter-5
     Should Be Equal As Strings      ${resp.json()[0]['quantity']}               ${quantity2}  
     Should Be Equal As Strings      ${resp.json()[0]['prescriptioinUid']}       ${prescription_id} 
 
-JD-TC-GetRXPrescriptionItemByFilter-5
+JD-TC-GetRXPrescriptionItemByFilter-16
 
     [Documentation]    Get RX Prescription Item By Filter - duration
 
@@ -958,7 +958,7 @@ JD-TC-GetRXPrescriptionItemByFilter-5
     Should Be Equal As Strings      ${resp.json()[0]['quantity']}               ${quantity2}  
     Should Be Equal As Strings      ${resp.json()[0]['prescriptioinUid']}       ${prescription_id} 
 
-JD-TC-GetRXPrescriptionItemByFilter-5
+JD-TC-GetRXPrescriptionItemByFilter-17
 
     [Documentation]    Get RX Prescription Item By Filter - duration
 
@@ -979,7 +979,7 @@ JD-TC-GetRXPrescriptionItemByFilter-5
     Should Be Equal As Strings      ${resp.json()[0]['quantity']}               ${quantity2}  
     Should Be Equal As Strings      ${resp.json()[0]['prescriptioinUid']}       ${prescription_id} 
 
-JD-TC-GetRXPrescriptionItemByFilter-5
+JD-TC-GetRXPrescriptionItemByFilter-18
 
     [Documentation]    Get RX Prescription Item By Filter - duration
 

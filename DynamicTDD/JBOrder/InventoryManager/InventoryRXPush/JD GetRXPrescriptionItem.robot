@@ -43,7 +43,7 @@ JD-TC-GetRXPrescriptionItem-1
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+45789754
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+35789754
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
@@ -353,7 +353,7 @@ JD-TC-GetRXPrescriptionItem-1
     ${purchaseNote}=                FakerLibrary.Sentence
     ${roundOff}=                    Random Int  min=1  max=10
 
-    ${purchaseItemDtoList1}=        Create purchaseItemDtoList   ${ic_Item_id}   ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  0  ${netTotal}   ${expiryDate}  ${mrp}  ${EMPTY}  0   0   ${iu_id}
+    ${purchaseItemDtoList1}=        Create purchaseItemDtoList   ${ic_Item_id}   ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}   ${iu_id}
     Set Suite Variable              ${purchaseItemDtoList1}
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${Catalog_EncIds}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
@@ -416,7 +416,7 @@ JD-TC-GetRXPrescriptionItem-1
     Set Suite Variable    ${firstName}
     ${lastName}=  FakerLibrary.last_name
     Set Suite Variable    ${lastName}
-    ${primaryMobileNo}    Generate random string    10    123456789
+    ${primaryMobileNo}    Generate random string    10    123456889
     ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
     Set Suite Variable    ${primaryMobileNo}
 
@@ -471,7 +471,7 @@ JD-TC-GetRXPrescriptionItem-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
 
-    ${frequency}=       Random Int  min=1  max=10
+    ${frequency}=       Random Int  min=71  max=75
     ${dosage}=          Random Int  min=1  max=3000
     ${description}=     FakerLibrary.sentence
     ${remark}=          FakerLibrary.sentence

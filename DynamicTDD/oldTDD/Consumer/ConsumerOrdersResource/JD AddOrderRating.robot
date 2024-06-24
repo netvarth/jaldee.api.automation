@@ -258,7 +258,7 @@ JD-TC-AddOrderRating-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${rating1} =  roundval  ${rating1}  2
+    ${rating1} =  roundoff  ${rating1}  2
     
     sleep  2s
     ${resp}=  Get Business Profile

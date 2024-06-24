@@ -452,11 +452,11 @@ JD-TC-GetItemDetails-1
     ${netTotal}=        Evaluate    ${quantity} * ${amount}
     ${discountAmount}=  Evaluate    ${netTotal} * ${discountPercentage} / 100
     ${taxableAmount}=   Evaluate    ${netTotal} - ${discountAmount}
-    ${cgstamount}=      Evaluate    ${taxableAmount} * ${cgst} / 100
-    ${cgstamount}=               Convert To Number  ${cgstamount}  2
-    ${sgstamount}=      Evaluate    ${taxableAmount} * ${sgst} / 100
-    ${sgstamount}=               Convert To Number  ${sgstamount}  2
-    ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
+    ${cgstamount_actual}=      Evaluate    ${taxableAmount} * ${cgst} / 100
+    ${cgstamount}=               Convert To Number  ${cgstamount_actual}  2
+    ${sgstamount_actual}=      Evaluate    ${taxableAmount} * ${sgst} / 100
+    ${sgstamount}=               Convert To Number  ${sgstamount_actual}  2
+    ${taxAmount}=       Evaluate    ${cgstamount_actual} + ${sgstamount_actual}
     ${taxAmount}=               Convert To Number  ${taxAmount}  2
     ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
     ${netRate}=               Convert To Number  ${netRate}  2
@@ -581,7 +581,7 @@ JD-TC-GetItemDetails-UH6
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings    ${resp.json()}        ${ITEM_NOT_FOUND}
 
-JD-TC-GetItemDetails-2
+JD-TC-GetItemDetails-UH8
 
     [Documentation]  Get item Details - quantity id is 0
 
@@ -593,33 +593,35 @@ JD-TC-GetItemDetails-2
     ${netTotal}=        Evaluate    0 * ${amount}
     ${discountAmount}=  Evaluate    ${netTotal} * ${discountPercentage} / 100
     ${taxableAmount}=   Evaluate    ${netTotal} - ${discountAmount}
-    ${cgstamount}=      Evaluate    ${taxableAmount} * ${cgst} / 100
-    ${cgstamount}=               Convert To Number  ${cgstamount}  2
-    ${sgstamount}=      Evaluate    ${taxableAmount} * ${sgst} / 100
-    ${sgstamount}=               Convert To Number  ${sgstamount}  2
-    ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
+    ${cgstamount_actual}=      Evaluate    ${taxableAmount} * ${cgst} / 100
+    ${cgstamount}=               Convert To Number  ${cgstamount_actual}  2
+    ${sgstamount_actual}=      Evaluate    ${taxableAmount} * ${sgst} / 100
+    ${sgstamount}=               Convert To Number  ${sgstamount_actual}  2
+    ${taxAmount}=       Evaluate    ${cgstamount_actual} + ${sgstamount_actual}
     ${taxAmount}=               Convert To Number  ${taxAmount}  2
     ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
     ${netRate}=               Convert To Number  ${netRate}  2
 
     ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  0  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings      ${resp.json()['quantity']}              0.0
-    Should Be Equal As Strings      ${resp.json()['freeQuantity']}          ${freeQuantity}
-    Should Be Equal As Strings      ${resp.json()['totalQuantity']}         ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()['amount']}                ${amount}
-    Should Be Equal As Strings      ${resp.json()['discountPercentage']}    ${discountPercentage}
-    Should Be Equal As Strings      ${resp.json()['discountAmount']}        ${discountAmount}
-    Should Be Equal As Strings      ${resp.json()['taxableAmount']}         ${taxableAmount}
-    Should Be Equal As Strings      ${resp.json()['cgstPercentage']}        ${cgst}
-    Should Be Equal As Strings      ${resp.json()['sgstPercentage']}        ${sgst}
-    Should Be Equal As Strings      ${resp.json()['cgst']}                  ${cgstamount}
-    Should Be Equal As Strings      ${resp.json()['sgst']}                  ${sgstamount}
-    Should Be Equal As Strings      ${resp.json()['taxPercentage']}         ${taxPercentage}
-    Should Be Equal As Strings      ${resp.json()['taxAmount']}             ${taxAmount}
-    Should Be Equal As Strings      ${resp.json()['netTotal']}              ${netTotal}
-    Should Be Equal As Strings      ${resp.json()['netRate']}               ${netRate}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}        ${INVALID_PURCHASE_QUANTITY}
+
+    # Should Be Equal As Strings      ${resp.json()['quantity']}              0.0
+    # Should Be Equal As Strings      ${resp.json()['freeQuantity']}          ${freeQuantity}
+    # Should Be Equal As Strings      ${resp.json()['totalQuantity']}         ${totalQuantity}
+    # Should Be Equal As Strings      ${resp.json()['amount']}                ${amount}
+    # Should Be Equal As Strings      ${resp.json()['discountPercentage']}    ${discountPercentage}
+    # Should Be Equal As Strings      ${resp.json()['discountAmount']}        ${discountAmount}
+    # Should Be Equal As Strings      ${resp.json()['taxableAmount']}         ${taxableAmount}
+    # Should Be Equal As Strings      ${resp.json()['cgstPercentage']}        ${cgst}
+    # Should Be Equal As Strings      ${resp.json()['sgstPercentage']}        ${sgst}
+    # Should Be Equal As Strings      ${resp.json()['cgst']}                  ${cgstamount}
+    # Should Be Equal As Strings      ${resp.json()['sgst']}                  ${sgstamount}
+    # Should Be Equal As Strings      ${resp.json()['taxPercentage']}         ${taxPercentage}
+    # Should Be Equal As Strings      ${resp.json()['taxAmount']}             ${taxAmount}
+    # Should Be Equal As Strings      ${resp.json()['netTotal']}              ${netTotal}
+    # Should Be Equal As Strings      ${resp.json()['netRate']}               ${netRate}
 
 
 JD-TC-GetItemDetails-3
@@ -634,11 +636,11 @@ JD-TC-GetItemDetails-3
     ${netTotal}=        Evaluate    ${quantity} * ${amount}
     ${discountAmount}=  Evaluate    ${netTotal} * ${discountPercentage} / 100
     ${taxableAmount}=   Evaluate    ${netTotal} - ${discountAmount}
-    ${cgstamount}=      Evaluate    ${taxableAmount} * ${cgst} / 100
-    ${cgstamount}=               Convert To Number  ${cgstamount}  2
-    ${sgstamount}=      Evaluate    ${taxableAmount} * ${sgst} / 100
-    ${sgstamount}=               Convert To Number  ${sgstamount}  2
-    ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
+    ${cgstamount_actual}=      Evaluate    ${taxableAmount} * ${cgst} / 100
+    ${cgstamount}=               Convert To Number  ${cgstamount_actual}  2
+    ${sgstamount_actual}=      Evaluate    ${taxableAmount} * ${sgst} / 100
+    ${sgstamount}=               Convert To Number  ${sgstamount_actual}  2
+    ${taxAmount}=       Evaluate    ${cgstamount_actual} + ${sgstamount_actual}
     ${taxAmount}=               Convert To Number  ${taxAmount}  2
     ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
     ${netRate}=               Convert To Number  ${netRate}  2
@@ -698,11 +700,11 @@ JD-TC-GetItemDetails-5
     ${netTotal}=        Evaluate    ${quantity} * ${amount}
     ${discountAmount}=  Evaluate    ${netTotal} * ${discountPercentage} / 100
     ${taxableAmount}=   Evaluate    ${netTotal} - ${discountAmount}
-    ${cgstamount}=      Evaluate    ${taxableAmount} * ${cgst} / 100
-    ${cgstamount}=               Convert To Number  ${cgstamount}  2
-    ${sgstamount}=      Evaluate    ${taxableAmount} * ${sgst} / 100
-    ${sgstamount}=               Convert To Number  ${sgstamount}  2
-    ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
+    ${cgstamount_actual}=      Evaluate    ${taxableAmount} * ${cgst} / 100
+    ${cgstamount}=               Convert To Number  ${cgstamount_actual}  2
+    ${sgstamount_actual}=      Evaluate    ${taxableAmount} * ${sgst} / 100
+    ${sgstamount}=               Convert To Number  ${sgstamount_actual}  2
+    ${taxAmount}=       Evaluate    ${cgstamount_actual} + ${sgstamount_actual}
     ${taxAmount}=               Convert To Number  ${taxAmount}  2
     ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
     ${netRate}=               Convert To Number  ${netRate}  2

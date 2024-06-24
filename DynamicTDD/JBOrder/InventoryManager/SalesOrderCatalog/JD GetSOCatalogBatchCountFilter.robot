@@ -534,7 +534,7 @@ JD-TC-Get Catalog Batch Count Filter-1
     ${purchaseNote}=                FakerLibrary.Sentence
     ${roundOff}=                    Random Int  min=1  max=10
 
-    ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}   ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}    ${batchNo}  ${cgst}  ${sgst}  ${iu_id}    
+    ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}   ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}   ${iu_id}    
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
     Log   ${resp.content}

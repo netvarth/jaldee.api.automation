@@ -81,7 +81,9 @@ JD-TC-UpdateItemHsn-UH1
 
     ${resp}=    Update Item hns  ${hns_id}   ${empty}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}                 200
+    Should Be Equal As Strings    ${resp.status_code}                 422
+    Should Be Equal As Strings    ${resp.json()}          ${INVALID_HSNCODE}
+
 
 JD-TC-UpdateItemHsn-UH2
 

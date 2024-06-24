@@ -43,7 +43,7 @@ JD-TC-CreateRXPrescriptionItem-1
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+45789754
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+45789654
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
@@ -354,7 +354,7 @@ JD-TC-CreateRXPrescriptionItem-1
     ${purchaseNote}=                FakerLibrary.Sentence
     ${roundOff}=                    Random Int  min=1  max=10
 
-    ${purchaseItemDtoList1}=        Create purchaseItemDtoList   ${ic_Item_id}   ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  0  ${netTotal}   ${expiryDate}  ${mrp}  ${EMPTY}  0   0   ${iu_id}
+    ${purchaseItemDtoList1}=        Create purchaseItemDtoList   ${ic_Item_id}   ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}   ${iu_id}
     Set Suite Variable              ${purchaseItemDtoList1}
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${Catalog_EncIds}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
@@ -472,7 +472,7 @@ JD-TC-CreateRXPrescriptionItem-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
 
-    ${frequency}=       Random Int  min=1  max=10
+    ${frequency}=       Random Int  min=21  max=25
     ${dosage}=          Random Int  min=1  max=3000
     ${description}=     FakerLibrary.sentence
     ${remark}=          FakerLibrary.sentence
@@ -595,7 +595,7 @@ JD-TC-CreateRXPrescriptionItem-3
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
 
-JD-TC-CreateRXPrescriptionItem-4
+JD-TC-CreateRXPrescriptionItem-UH1
 
     [Documentation]    Create RX Prescription Item - where duration is empty
 
@@ -610,7 +610,7 @@ JD-TC-CreateRXPrescriptionItem-4
     Should Be Equal As Strings      ${resp.status_code}         422
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
 
-JD-TC-CreateRXPrescriptionItem-5
+JD-TC-CreateRXPrescriptionItem-UH2
 
     [Documentation]    Create RX Prescription Item - where quantity is empty
 
@@ -620,9 +620,10 @@ JD-TC-CreateRXPrescriptionItem-5
 
     ${resp}=    RX Create Prescription Item  ${displayName2}  ${duration2}  ${empty}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.status_code}             422
+    Should Be Equal As Strings      ${resp.json()}          ${INVALID_QUANTITY_VALUE}
 
-JD-TC-CreateRXPrescriptionItem-6
+JD-TC-CreateRXPrescriptionItem-4
 
     [Documentation]    Create RX Prescription Item - description is empty
 
@@ -634,7 +635,7 @@ JD-TC-CreateRXPrescriptionItem-6
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
 
-JD-TC-CreateRXPrescriptionItem-7
+JD-TC-CreateRXPrescriptionItem-5
 
     [Documentation]    Create RX Prescription Item - empty item
 
@@ -646,7 +647,7 @@ JD-TC-CreateRXPrescriptionItem-7
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
 
-JD-TC-CreateRXPrescriptionItem-8
+JD-TC-CreateRXPrescriptionItem-UH3
 
     [Documentation]    Create RX Prescription Item - dosage is empty
 
@@ -661,7 +662,7 @@ JD-TC-CreateRXPrescriptionItem-8
     Should Be Equal As Strings      ${resp.status_code}        422
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
 
-JD-TC-CreateRXPrescriptionItem-9
+JD-TC-CreateRXPrescriptionItem-UH4
 
     [Documentation]    Create RX Prescription Item - frequency is empty
 
@@ -677,7 +678,7 @@ JD-TC-CreateRXPrescriptionItem-9
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
 
 
-JD-TC-CreateRXPrescriptionItem-10
+JD-TC-CreateRXPrescriptionItem-UH5
 
     [Documentation]    Create RX Prescription Item - prescription is empty
 
@@ -692,7 +693,7 @@ JD-TC-CreateRXPrescriptionItem-10
     Should Be Equal As Strings      ${resp.status_code}     422
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
 
-JD-TC-CreateRXPrescriptionItem-11
+JD-TC-CreateRXPrescriptionItem-UH6
 
     [Documentation]    Create RX Prescription Item - without login
 

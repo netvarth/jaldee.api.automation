@@ -118,7 +118,7 @@ JD-TC-Waitlist Rating By Consumer-1
     Should Be Equal As Strings  ${resp.json()['rating']['feedback'][0]['comments']}  ${comment}   
     ${rating}=   Evaluate   ${rating1}.0 + ${rating2}.0 + ${rating3}.0
     ${avg_rating}=   Evaluate   ${rating}/3.0
-    ${avg_round}=     roundval    ${avg_rating}   2
+    ${avg_round}=     roundoff    ${avg_rating}   2
     Set Suite Variable   ${avg_round}   
 
 JD-TC-Rating Added By Consumer-UH1

@@ -219,7 +219,7 @@ JD-TC-Update PaymentsOut With Expense--1
     ${quantity}=   Random Int  min=5  max=10
     ${rate}=   Random Int  min=50  max=1000
     ${amount}=   Random Int  min=50  max=1000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
     ${deptId}=   Random Int  min=50  max=100
     ${deptName}=  FakerLibrary.word
@@ -258,7 +258,7 @@ JD-TC-Update PaymentsOut With Expense--1
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
 
     ${resp}=  Create PaymentsOut With Expense   ${amount}    ${dueDate}   ${payableLabel}   ${finance_payment_modes[0]}   ${bool[1]}    ${expense_uid}    
@@ -308,7 +308,7 @@ JD-TC-Update PaymentsOut With Expense--2
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -318,7 +318,7 @@ JD-TC-Update PaymentsOut With Expense--2
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
     ${merchantId}=   FakerLibrary.word
@@ -404,7 +404,7 @@ JD-TC-Update PaymentsOut With Expense--3
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -469,7 +469,7 @@ JD-TC-Update PaymentsOut With Expense--4
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -534,7 +534,7 @@ JD-TC-Update PaymentsOut With Expense--5
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -599,7 +599,7 @@ JD-TC-Update PaymentsOut With Expense--6
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -664,7 +664,7 @@ JD-TC-Update PaymentsOut With Expense--7
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -729,7 +729,7 @@ JD-TC-Update PaymentsOut With Expense--8
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -794,7 +794,7 @@ JD-TC-Update PaymentsOut With Expense--9
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -859,7 +859,7 @@ JD-TC-Update PaymentsOut With Expense--10
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -924,7 +924,7 @@ JD-TC-Update PaymentsOut With Expense--11
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -989,7 +989,7 @@ JD-TC-Update PaymentsOut With Expense--12
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -1054,7 +1054,7 @@ JD-TC-Update PaymentsOut With Expense--13
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -1119,7 +1119,7 @@ JD-TC-Update PaymentsOut With Expense--14
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -1185,7 +1185,7 @@ JD-TC-Update PaymentsOut With Expense--UH1
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -1206,7 +1206,7 @@ JD-TC-Update PaymentsOut With Expense--UH2
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -1229,7 +1229,7 @@ JD-TC-Update PaymentsOut With Expense--UH3
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -1252,7 +1252,7 @@ JD-TC-Update PaymentsOut With Expense--UH4
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -1276,7 +1276,7 @@ JD-TC-Update PaymentsOut With Expense--UH5
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -1302,7 +1302,7 @@ JD-TC-Update PaymentsOut With Expense--UH6
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
 
     ${resp}=  Update PaymentsOut With Expense   ${payable_uid1}    ${category_id2}   ${name1}    ${amount}   ${finance_payment_modes[1]}  ${dueDate}    
@@ -1322,7 +1322,7 @@ JD-TC-Update PaymentsOut With Expense--UH7
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -1346,7 +1346,7 @@ JD-TC-Update PaymentsOut With Expense--UH8
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}

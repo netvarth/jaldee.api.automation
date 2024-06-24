@@ -33,7 +33,7 @@ JD-TC-GetFrequency-1
 
     [Documentation]  Get Frequency
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME106}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -42,7 +42,7 @@ JD-TC-GetFrequency-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
-    ${frequency0}=       Random Int  min=1  max=10
+    ${frequency0}=       Random Int  min=100  max=105
     ${dosage0}=          Random Int  min=1  max=3000
     ${description0}=     FakerLibrary.sentence
     ${remark0}=          FakerLibrary.sentence
@@ -66,7 +66,7 @@ JD-TC-GetFrequency-2
 
     [Documentation]  Get Frequency - where frequency id is invalid
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME106}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

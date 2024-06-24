@@ -84,7 +84,7 @@ JD-TC-CreateItemCategory-UH1
     ${resp}=  Create Item Category   ${categoryName}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${NAME_ALREADY_EXIST}
+    Should Be Equal As Strings    ${resp.json()}    ${CATOGORY_NAME_ALRADY_EXIST}
 
 JD-TC-CreateItemCategory-UH2
 

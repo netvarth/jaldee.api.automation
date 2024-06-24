@@ -14354,12 +14354,16 @@ Get inventory catalog item by inventory catalog encoded id
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/inventory/inventorycatalog/${icEncId}/list    expected_status=any
     RETURN  ${resp} 
+
 #------------Sales order catalog--------------------------
 Create SalesOrder Inventory Catalog-InvMgr False
 
-    [Arguments]  ${store_id}   ${name}   ${invMgmt}   
+    [Arguments]  ${store_id}   ${name}   ${invMgmt}   &{kwargs}
     ${encid}=  Create Dictionary   encId=${store_id}   
     ${data}=  Create Dictionary   store=${encid}    name=${name}    invMgmt=${invMgmt}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/so/catalog   data=${data}  expected_status=any
@@ -14367,10 +14371,13 @@ Create SalesOrder Inventory Catalog-InvMgr False
 
 Create SalesOrder Inventory Catalog-InvMgr True
 
-    [Arguments]  ${store_id}   ${name}   ${invMgmt}   ${inventoryCatalog}
+    [Arguments]  ${store_id}   ${name}   ${invMgmt}   ${inventoryCatalog}   &{kwargs}
     ${encid}=  Create Dictionary   encId=${store_id}   
     ${invcatid}=  Create Dictionary   invCatEncIdList=${inventoryCatalog} 
     ${data}=  Create Dictionary   store=${encid}    name=${name}    invMgmt=${invMgmt}   inventoryCatalog=${invcatid}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/so/catalog   data=${data}  expected_status=any
@@ -14615,10 +14622,13 @@ Create purchaseItemDtoList
 
     # .....   discountPercentage or fixedDiscount as kwargs
 
-    [Arguments]  ${inv_cat_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${taxableAmount}  ${taxAmount}  ${netAmount}  ${expiryDate}  ${mrp}  ${batchNo}  ${cgst}  ${sgst}  ${unitCode}  
+    [Arguments]  ${inv_cat_encid}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${expiryDate}  ${mrp}  ${batchNo}  ${unitCode}    &{kwargs}
     
     ${inventoryCatalogItem}=    Create Dictionary  encId=${inv_cat_encid} 
-    ${data}=                    Create Dictionary  inventoryCatalogItem=${inventoryCatalogItem}  quantity=${quantity}  freeQuantity=${freeQuantity}  totalQuantity=${totalQuantity}  amount=${amount}  discountAmount=${discountAmount}  discountPercentage=${discountPercentage}  fixedDiscount=${fixedDiscount}  taxableAmount=${taxableAmount}  taxAmount=${taxAmount}  netAmount=${netAmount}  expiryDate=${expiryDate}  mrp=${mrp}  batchNo=${batchNo}  cgst=${cgst}  sgst=${sgst}  unitCode=${unitCode}
+    ${data}=                    Create Dictionary  inventoryCatalogItem=${inventoryCatalogItem}  quantity=${quantity}  freeQuantity=${freeQuantity}  amount=${amount}  discountAmount=${discountAmount}  discountPercentage=${discountPercentage}  fixedDiscount=${fixedDiscount}  expiryDate=${expiryDate}  mrp=${mrp}  batchNo=${batchNo}  unitCode=${unitCode}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
     RETURN  ${data}
 
 Create Purchase
@@ -15457,13 +15467,13 @@ Get Inventory Auditlog Count By Filter
 Get Inventory Auditlog By Uid
     [Arguments]   ${uid}     &{kwargs}
     Check And Create YNW Session
-    ${resp}=    GET On Session     ynw   /provider/inventory/${uid}   params=${kwargs}  expected_status=any
+    ${resp}=    GET On Session     ynw   /provider/inventory/log/${uid}   params=${kwargs}  expected_status=any
     RETURN  ${resp}
 
 Get Inventory Auditlog By id
-    [Arguments]   ${id}     &{kwargs}
+    [Arguments]   ${id}      &{kwargs}
     Check And Create YNW Session
-    ${resp}=    GET On Session     ynw   /provider/inventory/id/${id}   params=${kwargs}  expected_status=any
+    ${resp}=    GET On Session     ynw   /provider/inventory/log/id/${id}  params=${kwargs}    expected_status=any
     RETURN  ${resp}
 
 
@@ -15498,7 +15508,7 @@ Create Custom Variable
 Update Custom Variable 
 
     [Arguments]  ${var_id}  ${var_name}  ${vardis_name}  ${var_value}  
-    ${data}=  Create Dictionary  varName=${var_name}  varDisplayName=${vardis_name}  varValue=${var_value} 
+    ${data}=  Create Dictionary  name=${var_name}  displayName=${vardis_name}  value=${var_value} 
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/comm/template/variable/${var_id}  data=${data}  expected_status=any
@@ -15534,10 +15544,15 @@ Update Custom Variable Status
 
 Create Template  
 
-    [Arguments]  ${temp_name}  ${context}  ${temp_format}  ${temp_type}  ${temp}   ${comm_chanl}  ${spec_id} 
-    ${recipient}=  Create Dictionary  userType=${userType[0]}  sendCategory=${sendCategory[0]}  specificID=${spec_id} 
-    ${data}=  Create Dictionary  name=${temp_name}  context=${context}  templateFormat=${temp_format}  templateType=${temp_type}  
-    ...   template=${temp}  commChannel=${comm_chanl}  recipient=${recipient}
+    [Arguments]  ${temp_name}  ${content}  ${temp_format}  ${context}  ${commTarget}   ${comm_chanl}  &{kwargs}
+   
+    ${data}=  Create Dictionary  templateName=${temp_name}  content=${content}  templateFormat=${temp_format}  context=${context}  
+    ...   commTarget=${commTarget}  commChannel=${comm_chanl} 
+
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/comm/template  data=${data}  expected_status=any
@@ -15545,10 +15560,14 @@ Create Template
 
 Update Template  
 
-    [Arguments]  ${temp_id}  ${temp_name}  ${context}  ${temp_format}  ${temp_type}  ${temp}   ${comm_chanl}  ${spec_id} 
-    ${recipient}=  Create Dictionary  userType=${userType[0]}  sendCategory=${sendCategory[0]}  specificID=${spec_id} 
-    ${data}=  Create Dictionary  name=${temp_name}  context=${context}  templateFormat=${temp_format}  templateType=${temp_type}  
-    ...   template=${temp}  commChannel=${comm_chanl}  recipient=${recipient}
+    [Arguments]  ${temp_id}  ${temp_name}  ${content}  ${temp_format}  ${context}  ${commTarget}   ${comm_chanl}  &{kwargs}
+   
+    ${data}=  Create Dictionary  templateName=${temp_name}  content=${content}  templateFormat=${temp_format}  context=${context}  
+    ...   commTarget=${commTarget}  commChannel=${comm_chanl} 
+
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/comm/template/${temp_id}  data=${data}  expected_status=any
@@ -15558,7 +15577,7 @@ Update Template Status
 
     [Arguments]  ${temp_id}  ${status} 
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/comm/template/${temp_id}/${status}   expected_status=any
+    ${resp}=  PUT On Session  ynw  /provider/comm/template/${temp_id}/status/${status}   expected_status=any
     RETURN  ${resp} 
 
 Get Template By Id
@@ -15586,7 +15605,7 @@ Get Dynamic Variable List By Context
 
     [Arguments]  ${context_id} 
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/comm/template/dynamic/variable/${context_id}   expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/comm/template/dynamic/variable/context/${context_id}   expected_status=any
     RETURN  ${resp}
 
 Get Dynamic Variable List
@@ -15594,6 +15613,94 @@ Get Dynamic Variable List
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/comm/template/dynamic/variable   expected_status=any
     RETURN  ${resp}
+
+Get Dynamic Variable List By SendComm
+
+    [Arguments]  ${sendcomm_id} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/comm/template/dynamic/variable/sendComm/${sendcomm_id}   expected_status=any
+    RETURN  ${resp}
+
+Create Send Comm Settings
+
+    [Arguments]  ${temp_id}   ${context}  ${sendcomm_id}  ${commTarget}  ${comm_chanl}  &{kwargs}
+   
+    ${data}=  Create Dictionary  templateId=${temp_id}  context=${context}  sendCommId=${sendcomm_id}  commTarget=${commTarget}   commChannel=${comm_chanl} 
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/comm/template/settings  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get Send Comm List
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/comm/template/sendComms   expected_status=any
+    RETURN  ${resp}
+
+Get Send Comm List By Context
+
+    [Arguments]  ${context_id} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/comm/template/sendComms/context/${context_id}   expected_status=any
+    RETURN  ${resp}
+
+Update Send Comm Settings
+
+    [Arguments]  ${setttings_id}  ${temp_id}   ${context}  ${sendcomm_id}  ${commTarget}  ${comm_chanl}  &{kwargs}
+   
+    ${data}=  Create Dictionary  templateId=${temp_id}  context=${context}  sendCommId=${sendcomm_id}  commTarget=${commTarget}   commChannel=${comm_chanl} 
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/comm/template/settings/${setttings_id}  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get Global Variable List
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/comm/template/dynamic/variable/global   expected_status=any
+    RETURN  ${resp}
+
+Get Default Template List by sendComm
+
+    [Arguments]  ${sendcomm_id}
+    Check And Create YNW Session
+    ${resp}=  GET On Session   ynw  /provider/comm/template/default/sendComm/${sendcomm_id}   expected_status=any
+    RETURN  ${resp}
+
+Get Send Comm Settings By Id
+
+    [Arguments]  ${settings_id} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/comm/template/settings/${settings_id}  expected_status=any
+    RETURN  ${resp}
+
+Update Send Comm Settings Status
+
+    [Arguments]  ${setting_id}  ${status} 
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/comm/template/settings/${setting_id}/status/${status}   expected_status=any
+    RETURN  ${resp} 
+
+Get All Settings By Filter
+
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/comm/template/settings  params=${param}  expected_status=any
+    RETURN  ${resp}
+
+
+Get Available Slots for Month Year
+    [Arguments]  ${location}  ${service}  ${month}  ${year}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/appointment/availability/location/${location}/service/${service}/${month}/${year}  params=${param}  expected_status=any
+    RETURN  ${resp}
+
 
 # ...............LINKING AND UNLNKING...................
 

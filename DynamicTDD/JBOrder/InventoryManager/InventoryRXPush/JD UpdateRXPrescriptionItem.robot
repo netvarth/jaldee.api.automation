@@ -43,7 +43,7 @@ JD-TC-UpdateRXPrescriptionItem-1
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+45789754
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+45789753
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
@@ -346,7 +346,7 @@ JD-TC-UpdateRXPrescriptionItem-1
     ${purchaseNote}=                FakerLibrary.Sentence
     ${roundOff}=                    Random Int  min=1  max=10
 
-    ${purchaseItemDtoList1}=        Create purchaseItemDtoList   ${ic_Item_id}   ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  0  ${netTotal}   ${expiryDate}  ${mrp}  ${EMPTY}  0   0   ${iu_id}
+    ${purchaseItemDtoList1}=        Create purchaseItemDtoList   ${ic_Item_id}   ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}   ${iu_id}
     Set Suite Variable              ${purchaseItemDtoList1}
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${Catalog_EncIds}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
@@ -464,7 +464,7 @@ JD-TC-UpdateRXPrescriptionItem-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
 
-    ${frequency}=       Random Int  min=1  max=10
+    ${frequency}=       Random Int  min=111  max=115
     ${dosage}=          Random Int  min=1  max=3000
     ${description}=     FakerLibrary.sentence
     ${remark}=          FakerLibrary.sentence
@@ -571,3 +571,65 @@ JD-TC-UpdateRXPrescriptionItem-1
     Should Be Equal As Strings      ${resp.json()['description']}           ${description}  
     Should Be Equal As Strings      ${resp.json()['quantity']}              ${quantity1}  
     Should Be Equal As Strings      ${resp.json()['prescriptioinUid']}      ${prescription_id}  
+
+
+JD-TC-UpdateRXPrescriptionItem-2
+
+    [Documentation]    Update RX Prescription Item - 
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${displayName1}=     FakerLibrary.name
+    ${dur}=        Random Int  min=1  max=100
+    ${qt}=        Random Int  min=1  max=10
+    ${duration1}=             Evaluate    float(${dur})
+    ${quantity1}=             Evaluate    float(${qt})
+    
+    ${resp}=    RX Update Prescription Item  ${pitm_id}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+
+    ${resp}=    Get RX Prescription Item By EncId  ${pitm_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()['spItemCode']}    ${item1}
+    Should Be Equal As Strings      ${resp.json()['medicineName']}          ${displayName1}    
+    Should Be Equal As Strings      ${resp.json()['duration']}              ${duration1}    
+    Should Be Equal As Strings      ${resp.json()['frequency']['id']}       ${frequency_id}    
+    Should Be Equal As Strings      ${resp.json()['dosage']}                ${dos}    
+    Should Be Equal As Strings      ${resp.json()['description']}           ${description}  
+    Should Be Equal As Strings      ${resp.json()['quantity']}              ${quantity1}  
+    Should Be Equal As Strings      ${resp.json()['prescriptioinUid']}      ${prescription_id} 
+
+
+
+
+
+*** Comments ***
+
+
+JD-TC-UpdateRXPrescriptionItem-2
+
+    [Documentation]    Update RX Prescription Item - 
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    RX Update Prescription Item  ${pitm_id}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+
+    ${resp}=    Get RX Prescription Item By EncId  ${pitm_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()['spItemCode']}    ${item1}
+    Should Be Equal As Strings      ${resp.json()['medicineName']}          ${displayName1}    
+    Should Be Equal As Strings      ${resp.json()['duration']}              ${duration1}    
+    Should Be Equal As Strings      ${resp.json()['frequency']['id']}       ${frequency_id}    
+    Should Be Equal As Strings      ${resp.json()['dosage']}                ${dos}    
+    Should Be Equal As Strings      ${resp.json()['description']}           ${description}  
+    Should Be Equal As Strings      ${resp.json()['quantity']}              ${quantity1}  
+    Should Be Equal As Strings      ${resp.json()['prescriptioinUid']}      ${prescription_id} 

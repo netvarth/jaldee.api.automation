@@ -169,7 +169,7 @@ JD-TC-Get PaymentsOut-1
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
     ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}     ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}
     Log  ${resp.json()}
@@ -215,7 +215,7 @@ JD-TC-Get PaymentsOut-2
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     ${merchantId}=   FakerLibrary.word
     Set Suite Variable   ${merchantId}
     ${merchantKey}=   FakerLibrary.word
@@ -296,7 +296,7 @@ JD-TC-Get PaymentsOut-3
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
 
 
@@ -351,7 +351,7 @@ JD-TC-Get PaymentsOut-4
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 

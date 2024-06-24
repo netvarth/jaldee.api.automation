@@ -84,7 +84,7 @@ JD-TC-UpdateItemGroup-UH1
     ${resp}=    Update Item group Provider  ${ig_id}  ${groupName2}  ${groupCode}  ${groupDesc}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}         ${NAME_ALREADY_EXIST}
+    Should Be Equal As Strings    ${resp.json()}         ${GROUP_NAME_ALREADY_EXIST}
 
 JD-TC-UpdateItemGroup-2
 
@@ -129,7 +129,9 @@ JD-TC-UpdateItemGroup-4
 
     ${resp}=    Update Item group Provider  ${ig_id}  ${empty}  ${groupCode}  ${groupDesc}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}         ${INVALID_GROUP_NAME}
+    
 
 JD-TC-UpdateItemGroup-5
 

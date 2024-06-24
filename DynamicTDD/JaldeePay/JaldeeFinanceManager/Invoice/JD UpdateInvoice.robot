@@ -267,7 +267,7 @@ JD-TC-UpdateInvoice-2
     ${invoiceId}=   FakerLibrary.word
 
     ${amount1}=   Random Int  min=500  max=2000
-    ${amount1}=     roundval    ${amount1}   1
+    ${amount1}=     roundoff    ${amount1}   1
 
 
 
@@ -370,7 +370,7 @@ JD-TC-UpdateInvoice-3
     ${invoiceId}=   FakerLibrary.word
 
     ${amount1}=   Random Int  min=500  max=2000
-    ${amount1}=     roundval    ${amount1}   1
+    ${amount1}=     roundoff    ${amount1}   1
 
 
 
@@ -462,7 +462,7 @@ JD-TC-UpdateInvoice-UH4
     ${invoiceId}=   FakerLibrary.word
 
     ${amount1}=   Random Int  min=500  max=2000
-    ${amount1}=     roundval    ${amount1}   1
+    ${amount1}=     roundoff    ${amount1}   1
 
     ${billStatusNote}=   FakerLibrary.word
 

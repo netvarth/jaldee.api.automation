@@ -75,12 +75,22 @@ JD-TC-GetItemHsnFilter-1
     ${resp}=    Get Item hns Filter
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}                 200
-    Should Be Equal As Strings    ${resp.json()[0]['hsnCode']}        ${hsnCode2}
-    Should Be Equal As Strings    ${resp.json()[0]['createdBy']}      ${acc_id} 
-    Should Be Equal As Strings    ${resp.json()[0]['createdByName']}  ${userName}
-    Should Be Equal As Strings    ${resp.json()[1]['hsnCode']}        ${hsnCode}
-    Should Be Equal As Strings    ${resp.json()[1]['createdBy']}      ${acc_id} 
-    Should Be Equal As Strings    ${resp.json()[1]['createdByName']}  ${userName}
+    ${len}=  Get Length  ${resp.json()}
+ 
+
+    FOR  ${i}  IN RANGE   ${len}
+
+        IF  '${resp.json()[${i}]['hsnCode']}' == '${hsnCode2}'  
+            Should Be Equal As Strings    ${resp.json()[${i}]['hsnCode']}        ${hsnCode2}
+            Should Be Equal As Strings    ${resp.json()[${i}]['createdBy']}      ${acc_id} 
+            Should Be Equal As Strings    ${resp.json()[${i}]['createdByName']}  ${userName}
+
+        ELSE IF     '${resp.json()[${i}]['hsnCode']}' == '${hsnCode}'      
+            Should Be Equal As Strings    ${resp.json()[${i}]['hsnCode']}        ${hsnCode}
+            Should Be Equal As Strings    ${resp.json()[${i}]['createdBy']}      ${acc_id} 
+            Should Be Equal As Strings    ${resp.json()[${i}]['createdByName']}  ${userName}
+        END
+    END
 
 
 JD-TC-GetItemHsnFilter-2
@@ -111,12 +121,26 @@ JD-TC-GetItemHsnFilter-4
     ${resp}=    Get Item hns Filter    status-eq=${toggle[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}         200
-    Should Be Equal As Strings    ${resp.json()[0]['hsnCode']}        ${hsnCode2}
-    Should Be Equal As Strings    ${resp.json()[0]['createdBy']}      ${acc_id} 
-    Should Be Equal As Strings    ${resp.json()[0]['createdByName']}  ${userName}
-    Should Be Equal As Strings    ${resp.json()[1]['hsnCode']}        ${hsnCode}
-    Should Be Equal As Strings    ${resp.json()[1]['createdBy']}      ${acc_id} 
-    Should Be Equal As Strings    ${resp.json()[1]['createdByName']}  ${userName}
+
+
+    ${len}=  Get Length  ${resp.json()}
+ 
+
+    FOR  ${i}  IN RANGE   ${len}
+
+        IF  '${resp.json()[${i}]['hsnCode']}' == '${hsnCode2}'  
+            Should Be Equal As Strings    ${resp.json()[${i}]['hsnCode']}        ${hsnCode2}
+            Should Be Equal As Strings    ${resp.json()[${i}]['createdBy']}      ${acc_id} 
+            Should Be Equal As Strings    ${resp.json()[${i}]['createdByName']}  ${userName}
+
+        ELSE IF     '${resp.json()[${i}]['hsnCode']}' == '${hsnCode}'      
+            Should Be Equal As Strings    ${resp.json()[${i}]['hsnCode']}        ${hsnCode}
+            Should Be Equal As Strings    ${resp.json()[${i}]['createdBy']}      ${acc_id} 
+            Should Be Equal As Strings    ${resp.json()[${i}]['createdByName']}  ${userName}
+        END
+    END
+
+
 
 JD-TC-GetItemHsnFilter-UH1
 

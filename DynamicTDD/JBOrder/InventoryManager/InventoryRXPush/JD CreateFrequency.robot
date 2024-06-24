@@ -33,7 +33,7 @@ JD-TC-CreateFrequency-1
 
     [Documentation]  Create Frequency
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME107}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -83,7 +83,7 @@ JD-TC-CreateFrequency-2
 
     [Documentation]  Create Frequency - description and remark not given
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME107}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -100,7 +100,7 @@ JD-TC-CreateFrequency-3
 
     [Documentation]  Create Frequency - where frequency is empty
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME107}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -118,7 +118,7 @@ JD-TC-CreateFrequency-4
 
     [Documentation]  Create Frequency - frequency is above 1000
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME107}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -135,7 +135,7 @@ JD-TC-CreateFrequency-5
 
     [Documentation]  Create Frequency - Dosage is empty
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME107}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -151,11 +151,11 @@ JD-TC-CreateFrequency-6
 
     [Documentation]  Create Frequency - dosage is above 1000
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME107}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${frequency3}=       Random Int  min=1  max=10
+    ${frequency3}=       Random Int  min=186  max=190
     ${dosage3}=          Random Int  min=1000  max=3000
     ${dos3}=             Evaluate    float(${dosage3})
 

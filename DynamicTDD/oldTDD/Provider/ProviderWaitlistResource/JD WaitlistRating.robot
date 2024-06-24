@@ -318,7 +318,7 @@ JD-TC-Waitist Rating-3
     Should Be Equal As Strings  ${resp.json()['rating']['feedback'][0]['comments']}   ${rating[3]}
     ${avg_rating2}=   Evaluate    ${rating_stars[0]}.0+${rating_stars[1]}.0+${rating_stars[3]}
     ${avg_rating3}=    Evaluate   ${avg_rating2}/3.0 
-    ${avg_round}=     roundval    ${avg_rating3}   2
+    ${avg_round}=     roundoff    ${avg_rating3}   2
     Set Suite Variable    ${avg_round}    
   
 JD-TC-Waitlist Rating -UH1

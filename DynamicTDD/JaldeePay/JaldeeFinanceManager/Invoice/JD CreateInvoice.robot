@@ -379,7 +379,7 @@ JD-TC-CreateInvoice-3
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     ${resp}=   Get next invoice Id   ${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -475,7 +475,7 @@ JD-TC-CreateInvoice-4
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     ${resp}=   Get next invoice Id   ${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

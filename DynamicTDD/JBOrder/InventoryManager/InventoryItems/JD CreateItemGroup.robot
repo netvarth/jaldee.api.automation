@@ -68,7 +68,9 @@ JD-TC-CreateItemGroup-UH1
 
     ${resp}=    Create Item group Provider  ${empty}  ${groupCode}  ${groupDesc}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}         ${INVALID_GROUP_NAME}
+    
 
 JD-TC-CreateItemGroup-UH2
 
@@ -81,7 +83,7 @@ JD-TC-CreateItemGroup-UH2
     ${resp}=    Create Item group Provider  ${groupName}  ${groupCode}  ${groupDesc}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}         ${NAME_ALREADY_EXIST}
+    Should Be Equal As Strings    ${resp.json()}         ${GROUP_NAME_ALREADY_EXIST}
 
 JD-TC-CreateItemGroup-UH3
 

@@ -43,7 +43,7 @@ JD-TC-OrderRequest-1
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+4548754
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+4348754
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
@@ -362,7 +362,7 @@ JD-TC-OrderRequest-1
     ${purchaseNote}=                FakerLibrary.Sentence
     ${roundOff}=                    Random Int  min=1  max=10
 
-    ${purchaseItemDtoList1}=        Create purchaseItemDtoList   ${ic_Item_id}   ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  0  ${netTotal}   ${expiryDate}  ${mrp}  ${EMPTY}  0   0   ${iu_id}
+    ${purchaseItemDtoList1}=        Create purchaseItemDtoList   ${ic_Item_id}   ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}   ${iu_id}
     Set Suite Variable              ${purchaseItemDtoList1}
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${Catalog_EncIds}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
@@ -480,7 +480,7 @@ JD-TC-OrderRequest-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
 
-    ${frequency}=       Random Int  min=1  max=10
+    ${frequency}=       Random Int  min=36  max=40
     ${dosage}=          Random Int  min=1  max=3000
     ${description}=     FakerLibrary.sentence
     ${remark}=          FakerLibrary.sentence
@@ -599,6 +599,7 @@ JD-TC-OrderRequest-1
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
 
+
     ${resp}=    Get Sorder By Filter  
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
@@ -614,21 +615,8 @@ JD-TC-OrderRequest-1
     Should Be Equal As Strings      ${resp.json()[0]['doctorId']}    ${doc1}
     Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
 
-JD-TC-OrderRequest-UH3
 
-    [Documentation]    Order Request - same request after order Declined 
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    Update SOrder Status  ${sorder_uid}  ${pushedStatus[2]}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    Order Request    ${store_id}  ${prescription_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}             200
 
 JD-TC-OrderRequest-UH1
 
@@ -655,6 +643,7 @@ JD-TC-OrderRequest-UH2
     ${resp}=    Convert to order  ${sorder_uid}  ${orderStatus[0]}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
+
 
     ${resp}=    Get Sorder By Filter  
     Log   ${resp.content}
@@ -724,9 +713,9 @@ JD-TC-OrderRequest-UH5
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${inv}=     Random Int  min=1000  max=9999
 
-    ${resp}=    Order Request    ${store_id}  ${inv}
+
+    ${resp}=    Order Request    ${store_id}  ${firstName}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}        422
     Should Be Equal As Strings      ${resp.json()}             ${ALREADY_HAVE_ACTIVE_REQUEST}
@@ -740,6 +729,27 @@ JD-TC-OrderRequest-UH6
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}        419
     Should Be Equal As Strings      ${resp.json()}             ${SESSION_EXPIRED}
+
+
+JD-TC-OrderRequest-UH7
+
+    [Documentation]    Here is the corrected version of your sentence:"Order Request: If the same request is declined,  try to place the order again with the declined request."
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Update SOrder Status  ${sorder_uid}  ${pushedStatus[2]}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${RECORD_STATUS_SAME}=        format String   ${RECORD_STATUS_SAME}   ${pushedStatus[2]}
+
+    ${resp}=    Order Request    ${store_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             422
+    Should Be Equal As Strings      ${resp.json()}             ${RECORD_STATUS_SAME}
+
 
 
 

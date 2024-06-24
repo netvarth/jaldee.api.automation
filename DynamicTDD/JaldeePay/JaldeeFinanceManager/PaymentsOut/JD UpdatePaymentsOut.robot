@@ -169,7 +169,7 @@ JD-TC-Update PaymentOut-1
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
     ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}    
     Log  ${resp.json()}
@@ -213,7 +213,7 @@ JD-TC-Update PaymentOut-2
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     ${merchantId}=   FakerLibrary.word
     Set Suite Variable   ${merchantId}
     ${merchantKey}=   FakerLibrary.word
@@ -288,7 +288,7 @@ JD-TC-Update PaymentOut-3
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
 
     ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[1]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
@@ -340,7 +340,7 @@ JD-TC-Update PaymentOut-4
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
 
     ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[8]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
@@ -392,7 +392,7 @@ JD-TC-Update PaymentOut-5
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
 
     ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[6]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
@@ -444,7 +444,7 @@ JD-TC-Update PaymentOut-6
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
 
     ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[7]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
@@ -496,7 +496,7 @@ JD-TC-Update PaymentOut-7
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
 
     ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[9]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
@@ -548,7 +548,7 @@ JD-TC-Update PaymentOut-8
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
 
     ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[9]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
@@ -600,7 +600,7 @@ JD-TC-Update PaymentOut-9
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
 
     ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}  merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
@@ -651,7 +651,7 @@ JD-TC-Update PaymentOut-10
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
 
     ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[3]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
@@ -703,7 +703,7 @@ JD-TC-Update PaymentOut-11
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
 
     ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[10]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
@@ -755,7 +755,7 @@ JD-TC-Update PaymentOut-12
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
 
     ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[13]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
@@ -806,7 +806,7 @@ JD-TC-Update PaymentOut-13
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
 
     ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[14]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
@@ -858,7 +858,7 @@ JD-TC-Update PaymentOut-14
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
 
     ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[2]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
@@ -910,7 +910,7 @@ JD-TC-Update PaymentOut-15
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
 
     ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[15]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
@@ -962,7 +962,7 @@ JD-TC-Update PaymentOut-16
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
 
     ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
@@ -1014,7 +1014,7 @@ JD-TC-Update PaymentOut-17
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
 
     ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
@@ -1068,7 +1068,7 @@ JD-TC-Update PaymentOut-18
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
 
     ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${SPACE}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
@@ -1120,7 +1120,7 @@ JD-TC-Update PaymentOut-UH1
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     ${fakeid}=   FakerLibrary.Random Number
 
 
@@ -1143,7 +1143,7 @@ JD-TC-Update PaymentOut-UH2
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     ${fakeid}=   FakerLibrary.Random Number
 
 
@@ -1168,7 +1168,7 @@ JD-TC-Update PaymentOut-UH3
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     ${fakeid}=   FakerLibrary.Random Number
 
 
@@ -1194,7 +1194,7 @@ JD-TC-Update PaymentOut-UH4
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     ${fake}=      FakerLibrary.Random Number
 
 
@@ -1220,7 +1220,7 @@ JD-TC-Update PaymentOut-UH5
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     ${fakeid}=   FakerLibrary.Random Number
 
 
@@ -1246,7 +1246,7 @@ JD-TC-Update PaymentOut-UH6
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
 
     ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${EMPTY}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}

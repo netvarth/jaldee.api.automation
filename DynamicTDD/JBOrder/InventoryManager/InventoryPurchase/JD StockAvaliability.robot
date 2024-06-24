@@ -49,6 +49,16 @@ JD-TC-StockAvaliability-1
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
+    IF  ${resp.json()['enableSalesOrder']}==${bool[0]}
+        ${resp1}=  Enable/Disable SalesOrder  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+
+        ${resp}=  Get Account Settings
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['enableSalesOrder']}  ${bool[1]}
+    END
 
 
     ${resp}=  Get Business Profile
@@ -457,11 +467,11 @@ JD-TC-StockAvaliability-1
     ${netTotal}=        Evaluate    ${quantity} * ${amount}
     ${discountAmount}=  Evaluate    ${netTotal} * ${discountPercentage} / 100
     ${taxableAmount}=   Evaluate    ${netTotal} - ${discountAmount}
-    ${cgstamount}=      Evaluate    ${taxableAmount} * ${cgst} / 100
-    ${cgstamount}=               Convert To Number  ${cgstamount}  2
-    ${sgstamount}=      Evaluate    ${taxableAmount} * ${sgst} / 100
-    ${sgstamount}=               Convert To Number  ${sgstamount}  2
-    ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
+    ${cgstamount_actual}=      Evaluate    ${taxableAmount} * ${cgst} / 100
+    ${cgstamount}=               Convert To Number  ${cgstamount_actual}  2
+    ${sgstamount_actual}=      Evaluate    ${taxableAmount} * ${sgst} / 100
+    ${sgstamount}=               Convert To Number  ${sgstamount_actual}  2
+    ${taxAmount}=       Evaluate    ${cgstamount_actual} + ${sgstamount_actual}
     ${taxAmount}=               Convert To Number  ${taxAmount}  2
     ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
     ${netRate}=               Convert To Number  ${netRate}  2
@@ -545,7 +555,7 @@ JD-TC-StockAvaliability-1
     Set Suite Variable          ${salesRate}
     Set Suite Variable          ${batchNo}
 
-    ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}    
+    ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}    
     Set Suite Variable              ${purchaseItemDtoList1}
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
@@ -692,6 +702,7 @@ JD-TC-StockAvaliability-1
     ${resp}=   Create Catalog Item Batch-invMgmt True   ${SO_itemEncIds}    ${catalog_details}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${SO_Cata_Item_Batch_Encid}  ${resp.json()[0]}
 
     ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_Cata_Item_Batch_Encid}
 

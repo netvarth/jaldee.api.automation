@@ -168,7 +168,7 @@ JD-TC-UploadPaymentInAttachment-1
     ${receivedDate}=   db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${receivedDate}  
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     Set Suite Variable  ${amount} 
     ${merchantId}=   FakerLibrary.word
     Set Suite Variable   ${merchantId}

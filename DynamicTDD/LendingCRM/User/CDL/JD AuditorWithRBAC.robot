@@ -1245,7 +1245,7 @@ JD-TC-Auditor-8
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${datetime1}    ${resp.json()}   
-    ${datetime01}    Convert Date    ${datetime1}    result_format=%Y-%m-%d %H:%M
+    ${datetime01}    Convert Date    ${datetime1}    result_format=%Y-%m-%d   
 
     ${resp}=                               Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
@@ -1279,7 +1279,7 @@ JD-TC-Auditor-8
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${datetime2}    ${resp.json()} 
-    ${datetime02}    Convert Date    ${datetime2}    result_format=%Y-%m-%d %H:%M
+    ${datetime02}    Convert Date    ${datetime2}    result_format=%Y-%m-%d   
 
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
@@ -1319,7 +1319,7 @@ JD-TC-Auditor-8
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${datetime3}    ${resp.json()} 
-    ${datetime03}    Convert Date    ${datetime3}    result_format=%Y-%m-%d %H:%M
+    ${datetime03}    Convert Date    ${datetime3}    result_format=%Y-%m-%d   
 
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
@@ -1346,7 +1346,7 @@ JD-TC-Auditor-8
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${datetime4}    ${resp.json()} 
-    ${datetime04}    Convert Date    ${datetime4}    result_format=%Y-%m-%d %H:%M
+    ${datetime04}    Convert Date    ${datetime4}    result_format=%Y-%m-%d   
 
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
@@ -1459,7 +1459,7 @@ JD-TC-Auditor-8
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${datetime5}    ${resp.json()} 
-    ${datetime05}    Convert Date    ${datetime5}    result_format=%Y-%m-%d %H:%M
+    ${datetime05}    Convert Date    ${datetime5}    result_format=%Y-%m-%d   
 
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
@@ -1498,7 +1498,7 @@ JD-TC-Auditor-8
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${datetime6}    ${resp.json()} 
-    ${datetime06}    Convert Date    ${datetime6}    result_format=%Y-%m-%d %H:%M
+    ${datetime06}    Convert Date    ${datetime6}    result_format=%Y-%m-%d   
 
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
@@ -1787,7 +1787,7 @@ JD-TC-Auditor-16
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${datetime12}    ${resp.json()} 
-    ${datetime012}    Convert Date    ${datetime12}    result_format=%Y-%m-%d %H:%M
+    ${datetime012}    Convert Date    ${datetime12}    result_format=%Y-%m-%d   
 
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
@@ -1809,7 +1809,7 @@ JD-TC-Auditor-16
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${datetime13}    ${resp.json()} 
-    ${datetime013}    Convert Date    ${datetime13}    result_format=%Y-%m-%d %H:%M
+    ${datetime013}    Convert Date    ${datetime13}    result_format=%Y-%m-%d   
 
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
@@ -1851,7 +1851,7 @@ JD-TC-Auditor-16
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${datetime14}    ${resp.json()} 
-    ${datetime014}    Convert Date    ${datetime14}    result_format=%Y-%m-%d %H:%M
+    ${datetime014}    Convert Date    ${datetime14}    result_format=%Y-%m-%d   
 
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}

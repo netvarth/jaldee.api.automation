@@ -78,7 +78,9 @@ JD-TC-UpdateItemComposition-UH1
 
     ${resp}=    Update Item Composition     ${empty}  ${compositionCode}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${INVALID_ITEM_COMPOSITION}
+
 
 JD-TC-UpdateItemComposition-UH2
 

@@ -29,7 +29,7 @@ JD-TC-GetFrequencySA-1
 
     [Documentation]   Get Frequency SA
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -46,7 +46,7 @@ JD-TC-GetFrequencySA-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${frequency}=       Random Int  min=1  max=10
+    ${frequency}=       Random Int  min=96  max=100
     ${dosage}=          Random Int  min=1  max=3000
     ${description}=     FakerLibrary.sentence
     ${remark}=          FakerLibrary.sentence
@@ -79,7 +79,7 @@ JD-TC-GetFrequencySA-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${inv}=     Random Int  min=1  max=100
+    ${inv}=     Random Int  min=1000  max=1500
 
     ${resp}=    SA Get Frequency  ${inv}
     Log   ${resp.content}

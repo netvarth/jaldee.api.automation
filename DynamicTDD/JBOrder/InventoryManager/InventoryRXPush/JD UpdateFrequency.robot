@@ -33,7 +33,7 @@ JD-TC-UpdateFrequency-1
 
     [Documentation]  Update Frequency - frequency updated
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -42,7 +42,7 @@ JD-TC-UpdateFrequency-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
-    ${frequency0}=       Random Int  min=1  max=10
+    ${frequency0}=       Random Int  min=41  max=45
     ${dosage0}=          Random Int  min=1  max=3000
     ${description0}=     FakerLibrary.sentence
     ${remark0}=          FakerLibrary.sentence
@@ -62,7 +62,7 @@ JD-TC-UpdateFrequency-1
     Should Be Equal As Strings      ${resp.json()['remark']}        ${remark0}
     Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos0}
 
-    ${frequency}=       Random Int  min=1  max=10
+    ${frequency}=       Random Int  min=46  max=48
     ${dosage}=          Random Int  min=1  max=3000
     ${description}=     FakerLibrary.sentence
     ${remark}=          FakerLibrary.sentence
@@ -86,7 +86,7 @@ JD-TC-UpdateFrequency-1
     Should Be Equal As Strings      ${resp.json()['remark']}        ${remark}
     Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos}
 
-    ${frequency2}=       Random Int  min=1  max=10
+    ${frequency2}=       Random Int  min=49  max=51
     
     ${resp}=    Update Frequency  ${frequency_id}  ${frequency2}  ${dos}  description=${description}  remark=${remark}
     Log   ${resp.content}
@@ -105,13 +105,13 @@ JD-TC-UpdateFrequency-2
 
     [Documentation]  Update Frequency - dosage is updated
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${dosage2}=          Random Int  min=1  max=3000
     ${dos2}=             Evaluate    float(${dosage2})
-
+    ${frequency}=       Random Int  min=52  max=54
     ${resp}=    Update Frequency  ${frequency_id}  ${frequency}  ${dos2}  description=${description}  remark=${remark}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
@@ -129,10 +129,10 @@ JD-TC-UpdateFrequency-3
 
     [Documentation]  Update Frequency - description is updated
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-
+    ${frequency}=       Random Int  min=55  max=58
     ${description2}=     FakerLibrary.sentence
 
     ${resp}=    Update Frequency  ${frequency_id}  ${frequency}  ${dos}  description=${description2}  remark=${remark}
@@ -152,10 +152,10 @@ JD-TC-UpdateFrequency-4
 
     [Documentation]  Update Frequency - remark is updated
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-
+    ${frequency}=       Random Int  min=180  max=185
     ${remark2}=     FakerLibrary.sentence
 
     ${resp}=    Update Frequency  ${frequency_id}  ${frequency}  ${dos}  description=${description}  remark=${remark2}
@@ -175,10 +175,10 @@ JD-TC-UpdateFrequency-5
 
     [Documentation]  Update Frequency - remarks is empty
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-
+    ${frequency}=       Random Int  min=62  max=64
     ${resp}=    Update Frequency  ${frequency_id}  ${frequency}  ${dos}  description=${description}  remark=${empty}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
@@ -196,10 +196,10 @@ JD-TC-UpdateFrequency-6
 
     [Documentation]  Update Frequency - description is empty
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-
+    ${frequency}=       Random Int  min=201  max=205
     ${resp}=    Update Frequency  ${frequency_id}  ${frequency}  ${dos}  description=${empty}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
@@ -217,12 +217,12 @@ JD-TC-UpdateFrequency-7
 
     [Documentation]  Update Frequency - dosage is empty
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${FIELD_REQUIRED}=  format String   ${FIELD_REQUIRED}   Dosage
-
+    ${frequency}=       Random Int  min=1  max=5
     ${resp}=    Update Frequency  ${frequency_id}  ${frequency}  ${empty}  description=${description}  remark=${remark}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
@@ -232,7 +232,7 @@ JD-TC-UpdateFrequency-8
 
     [Documentation]  Update Frequency - frequency is empty
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -247,10 +247,10 @@ JD-TC-UpdateFrequency-9
 
     [Documentation]  Update Frequency - frequency id is empty
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-
+    ${frequency}=       Random Int  min=10  max=20
     ${INVALID_X_ID}=    format String   ${INVALID_X_ID}   Frequency
 
     ${resp}=    Update Frequency  ${empty}  ${frequency}  ${dos}  description=${description}  remark=${remark}
@@ -262,12 +262,12 @@ JD-TC-UpdateFrequency-10
 
     [Documentation]  Update Frequency - frequency id is invalid
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${inv}=     Random Int  min=90  max=99
-
+    ${frequency}=       Random Int  min=30  max=40
     ${INVALID_X_ID}=    format String   ${INVALID_X_ID}   Frequency
 
     ${resp}=    Update Frequency  ${inv}  ${frequency}  ${dos}  description=${description}  remark=${remark}

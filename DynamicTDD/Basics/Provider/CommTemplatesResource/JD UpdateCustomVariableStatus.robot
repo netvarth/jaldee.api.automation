@@ -15,10 +15,6 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
-*** Variables ***
-
-@{context}   ALL
-
 *** Test Cases ***
 
 JD-TC-UpdateCustomVariableStatus-1
@@ -178,7 +174,7 @@ JD-TC-UpdateCustomVariableStatus-UH1
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  ${resp.json()}   ${VARIABLE_STATUS}
 
-JD-TC-UpdateCustomVariableStatus-4
+JD-TC-UpdateCustomVariableStatus-UH2
 
     [Documentation]  Create a custom variable and update the status to disabled, even if it is already disabled.
 
@@ -233,7 +229,4 @@ JD-TC-UpdateCustomVariableStatus-4
     ${resp}=  Update Custom Variable Status  ${var_id1}   ${VarStatus[1]} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings  ${resp.json()}   ${VARIABLE_STATUS}
-    
-
-
+    Should Be Equal As Strings  ${resp.json()}   ${VARIABLE_STATUS} 

@@ -181,7 +181,7 @@ JD-TC-GetPayLinkDetails-1
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
 
     ${item}=   FakerLibrary.word

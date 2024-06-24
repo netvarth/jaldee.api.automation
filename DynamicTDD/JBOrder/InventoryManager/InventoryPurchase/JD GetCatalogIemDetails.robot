@@ -33,7 +33,7 @@ JD-TC-GetCataologItemDetails-1
 
     [Documentation]  Get Cataolog Item Details
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -117,7 +117,7 @@ JD-TC-GetCataologItemDetails-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -455,11 +455,11 @@ JD-TC-GetCataologItemDetails-1
     ${netTotal}=        Evaluate    ${quantity} * ${amount}
     ${discountAmount}=  Evaluate    ${netTotal} * ${discountPercentage} / 100
     ${taxableAmount}=   Evaluate    ${netTotal} - ${discountAmount}
-    ${cgstamount}=      Evaluate    ${taxableAmount} * ${cgst} / 100
-    ${cgstamount}=               Convert To Number  ${cgstamount}  2
-    ${sgstamount}=      Evaluate    ${taxableAmount} * ${sgst} / 100
-    ${sgstamount}=               Convert To Number  ${sgstamount}  2
-    ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
+    ${cgstamount_actual}=      Evaluate    ${taxableAmount} * ${cgst} / 100
+    ${cgstamount}=               Convert To Number  ${cgstamount_actual}  2
+    ${sgstamount_actual}=      Evaluate    ${taxableAmount} * ${sgst} / 100
+    ${sgstamount}=               Convert To Number  ${sgstamount_actual}  2
+    ${taxAmount}=       Evaluate    ${cgstamount_actual} + ${sgstamount_actual}
     ${taxAmount}=               Convert To Number  ${taxAmount}  2
     ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
     ${netRate}=               Convert To Number  ${netRate}  2
@@ -532,7 +532,7 @@ JD-TC-GetCataologItemDetails-1
     ${purchaseNote}=                FakerLibrary.Sentence
     ${roundOff}=                    Random Int  min=1  max=10
 
-    ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}   ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}    
+    ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}   ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}    
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
     Log   ${resp.content}

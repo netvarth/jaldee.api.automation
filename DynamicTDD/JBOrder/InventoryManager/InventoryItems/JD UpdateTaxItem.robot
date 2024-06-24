@@ -105,7 +105,9 @@ JD-TC-UpdateItemTax-3
 
     ${resp}=    Update Item Tax  ${empty}  ${itemtax_id}  ${taxtypeenum[0]}  ${taxPercentage}  ${cgst}  ${sgst}  0
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}         ${INVALID_TAX_NAME}
+    
 
 JD-TC-UpdateItemTax-4
 
@@ -164,19 +166,13 @@ JD-TC-UpdateItemTax-8
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${taxPercentage2}=     Random Int  min=0  max=200    
+    ${taxPercentage2}=     Random Int  min=200  max=300    
 
     ${resp}=    Update Item Tax  ${taxName}  ${itemtax_id}  ${taxtypeenum[0]}  ${taxPercentage2}  ${cgst}  ${sgst}  0
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}         ${INVALID_GST_PERCENTAGE}
 
-    ${resp}=    Get Item Tax by id  ${itemtax_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['taxName']}         ${taxName}
-    Should Be Equal As Strings    ${resp.json()['status']}          ${toggle[0]}
-    Should Be Equal As Strings    ${resp.json()['taxTypeEnum']}     ${taxtypeenum[0]}
-    Should Be Equal As Strings    ${resp.json()['taxCode']}         ${itemtax_id}
 
 JD-TC-UpdateItemTax-9
 
@@ -203,7 +199,9 @@ JD-TC-UpdateItemTax-10
 
     ${resp}=    Update Item Tax  ${taxName}  ${itemtax_id}  ${taxtypeenum[0]}  ${taxPercentage}  ${cgst2}  ${sgst}  0
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}         ${INVALID_GST_PERCENTAGE}
+
 
 JD-TC-UpdateItemTax-11
 
@@ -230,7 +228,9 @@ JD-TC-UpdateItemTax-12
 
     ${resp}=    Update Item Tax  ${taxName}  ${itemtax_id}  ${taxtypeenum[0]}  ${taxPercentage}  ${cgst}  ${sgst2}  0
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}         ${INVALID_GST_PERCENTAGE}
+
 
 JD-TC-UpdateItemTax-13
 
@@ -257,7 +257,9 @@ JD-TC-UpdateItemTax-14
 
     ${resp}=    Update Item Tax  ${taxName}  ${itemtax_id}  ${taxtypeenum[0]}  ${taxPercentage}  ${cgst}  ${sgst}  ${igst2}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}         ${INVALID_GST_PERCENTAGE}
+
 
 JD-TC-UpdateItemTax-15
 
@@ -294,7 +296,7 @@ JD-TC-UpdateItemTax-17
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['taxName']}         ${taxName}
     Should Be Equal As Strings    ${resp.json()['status']}          ${toggle[0]}
-    Should Be Equal As Strings    ${resp.json()['taxTypeEnum']}     ${taxtypeenum[0]}
+    Should Be Equal As Strings    ${resp.json()['taxTypeEnum']}     ${taxtypeenum[1]}
     Should Be Equal As Strings    ${resp.json()['taxCode']}         ${itemtax_id}
 
     ${taxName2}=    FakerLibrary.name

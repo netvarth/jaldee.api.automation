@@ -258,7 +258,7 @@ JD-TC-PCAddAppointmentRating-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME99}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${rating1} =  roundval  ${rating1}  2
+    ${rating1} =  roundoff  ${rating1}  2
 
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
@@ -380,7 +380,7 @@ JD-TC-PCAddAppointmentRating-2
 
     ${rating}=   Evaluate   ${rating1}.0 + ${rating2}.0 + ${rating3}.0
     ${avg_rating}=   Evaluate   ${rating}/3.0
-    ${avg_round}=     roundval    ${avg_rating}   2
+    ${avg_round}=     roundoff    ${avg_rating}   2
     Set Suite Variable   ${avg_round}   
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME99}  ${PASSWORD}
@@ -480,7 +480,7 @@ JD-TC-PCAddAppointmentRating-3
 
     ${rating}=   Evaluate   ${rating1}.0 + ${rating2}.0 + ${rating3}.0 + ${rating}.0
     ${avg_rating}=   Evaluate   ${rating}/4.0
-    ${avg_round1}=     roundval    ${avg_rating}   2
+    ${avg_round1}=     roundoff    ${avg_rating}   2
     Set Suite Variable   ${avg_round1}  
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME99}  ${PASSWORD}

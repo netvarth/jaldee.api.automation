@@ -1094,7 +1094,7 @@ JD-TC-RequstForPanValidation-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${datetime1}    ${resp.json()}   
-    ${datetime01}    Convert Date    ${datetime1}    result_format=%Y-%m-%d %H:%M
+    ${datetime01}    Convert Date    ${datetime1}    result_format=%Y-%m-%d  
 
     ${resp}=                               Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
@@ -1128,7 +1128,7 @@ JD-TC-RequstForPanValidation-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${datetime2}    ${resp.json()} 
-    ${datetime02}    Convert Date    ${datetime2}    result_format=%Y-%m-%d %H:%M
+    ${datetime02}    Convert Date    ${datetime2}    result_format=%Y-%m-%d  
 
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
@@ -1168,7 +1168,7 @@ JD-TC-RequstForPanValidation-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${datetime3}    ${resp.json()} 
-    ${datetime03}    Convert Date    ${datetime3}    result_format=%Y-%m-%d %H:%M
+    ${datetime03}    Convert Date    ${datetime3}    result_format=%Y-%m-%d  
 
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}

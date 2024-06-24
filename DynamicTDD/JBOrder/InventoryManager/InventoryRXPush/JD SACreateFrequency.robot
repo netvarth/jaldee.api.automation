@@ -46,12 +46,12 @@ JD-TC-CreateFrequencySA-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${frequency}=       Random Int  min=1  max=10
+    ${frequency}=       Random Int  min=120  max=125
     ${dosage}=          Random Int  min=1  max=3000
     ${description}=     FakerLibrary.sentence
     ${remark}=          FakerLibrary.sentence
     ${dos}=             Evaluate    float(${dosage})
-    Set Suite Variable      ${frequency}
+
     Set Suite Variable      ${dosage}
     Set Suite Variable      ${description}
     Set Suite Variable      ${remark}
@@ -78,34 +78,37 @@ JD-TC-CreateFrequencySA-2
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
+    ${frequency}=       Random Int  min=6  max=10
     ${resp}=    SA Create Frequency  ${frequency}  ${dosage}  description=${description}  remark=${remark}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-JD-TC-CreateFrequencySA-3
+JD-TC-CreateFrequencySA-UH1
 
     [Documentation]   Create Frequency SA - frequency is empty
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
+    ${frequency}=       Random Int  min=11  max=15
     ${resp}=    SA Create Frequency  ${empty}  ${dosage}  description=${description}  remark=${remark}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}             ${FREEQUENCY_REQUIRED}
+    
 
-JD-TC-CreateFrequencySA-4
+JD-TC-CreateFrequencySA-UH2
 
     [Documentation]   Create Frequency SA - dosage is empty
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
+    ${frequency}=       Random Int  min=16  max=20
     ${resp}=    SA Create Frequency  ${frequency}  ${empty}  description=${description}  remark=${remark}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}             ${DOSAGE_REQUIRED}
 
 JD-TC-CreateFrequencySA-5
 
@@ -114,7 +117,7 @@ JD-TC-CreateFrequencySA-5
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
+    ${frequency}=       Random Int  min=210  max=250
     ${resp}=    SA Create Frequency  ${frequency}  ${dosage}  description=${empty}  remark=${remark}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
@@ -126,15 +129,16 @@ JD-TC-CreateFrequencySA-6
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
+    ${frequency}=       Random Int  min=30  max=35
     ${resp}=    SA Create Frequency  ${frequency}  ${dosage}  description=${description}  remark=${empty}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-JD-TC-CreateFrequencySA-7
+JD-TC-CreateFrequencySA-UH3
 
     [Documentation]   Create Frequency SA - without login
-
+    ${frequency}=       Random Int  min=36  max=40
     ${resp}=    SA Create Frequency  ${frequency}  ${dosage}  description=${description}  remark=${remark}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.status_code}        419
+    Should Be Equal As Strings      ${resp.json()}             ${SA_SESSION_EXPIRED}

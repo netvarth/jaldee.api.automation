@@ -165,7 +165,7 @@ JD-TC-GetExpenseById-1
     ${quantity}=   Random Int  min=5  max=10
     ${rate}=   Random Int  min=50  max=1000
     ${amount}=   Random Int  min=50  max=1000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
 
     ${deptId}=   Random Int  min=50  max=100
     ${deptName}=  FakerLibrary.word

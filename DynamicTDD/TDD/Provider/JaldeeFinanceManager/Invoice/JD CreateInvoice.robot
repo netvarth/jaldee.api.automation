@@ -162,7 +162,7 @@ JD-TC-CreateInvoice-1
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
     
     ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${pcid18}
@@ -198,7 +198,7 @@ JD-TC-CreateInvoice-2
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
     
     ${resp}=  Create Invoice   ${category_id2}  ${EMPTY}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${pcid18}
@@ -222,7 +222,7 @@ JD-TC-CreateInvoice-3
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
     
     ${resp}=  Create Invoice   ${EMPTY}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${pcid18}
@@ -246,7 +246,7 @@ JD-TC-CreateInvoice-4
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
     
     ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${EMPTY}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${pcid18}
@@ -270,7 +270,7 @@ JD-TC-CreateInvoice-5
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    ${amount}=     roundoff    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
     
     ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${EMPTY}   ${address}   ${vendor_uid1}   ${invoiceId}    ${pcid18}

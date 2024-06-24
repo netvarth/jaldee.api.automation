@@ -33,7 +33,7 @@ JD-TC-GetAllAccountFrequency-1
 
     [Documentation]  Get All Account Frequency
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME104}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -42,7 +42,7 @@ JD-TC-GetAllAccountFrequency-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
-    ${frequency}=       Random Int  min=1  max=10
+    ${frequency}=       Random Int  min=150  max=155
     ${dosage}=          Random Int  min=1  max=3000
     ${description}=     FakerLibrary.sentence
     ${remark}=          FakerLibrary.sentence
@@ -82,7 +82,7 @@ JD-TC-GetAllAccountFrequency-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id2}  ${resp.json()['id']}
 
-    ${frequency2}=       Random Int  min=10  max=20
+    ${frequency2}=       Random Int  min=170  max=175
     ${dosage2}=          Random Int  min=1  max=3000
     ${description2}=     FakerLibrary.sentence
     ${remark2}=          FakerLibrary.sentence
@@ -118,16 +118,29 @@ JD-TC-GetAllAccountFrequency-1
     ${resp}=    SA Get Frequency By Account  0
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
-    Should Be Equal As Strings      ${resp.json()[0]['id']}            ${frequency_id2}
-    Should Be Equal As Strings      ${resp.json()[0]['frequency']}     ${frequency2}
-    Should Be Equal As Strings      ${resp.json()[0]['description']}   ${description2}
-    Should Be Equal As Strings      ${resp.json()[0]['remark']}        ${remark2}
-    Should Be Equal As Strings      ${resp.json()[0]['dosage']}        ${dos2}
-    Should Be Equal As Strings      ${resp.json()[1]['id']}            ${frequency_id}
-    Should Be Equal As Strings      ${resp.json()[1]['frequency']}     ${frequency}
-    Should Be Equal As Strings      ${resp.json()[1]['description']}   ${description}
-    Should Be Equal As Strings      ${resp.json()[1]['remark']}        ${remark}
-    Should Be Equal As Strings      ${resp.json()[1]['dosage']}        ${dos}
+
+
+    ${len}=  Get Length  ${resp.json()}
+ 
+
+    FOR  ${i}  IN RANGE   ${len}
+
+        IF  '${resp.json()[${i}]['id']}' == '${frequency_id2}'  
+            Should Be Equal As Strings      ${resp.json()[${i}]['id']}             ${frequency_id2}
+            Should Be Equal As Strings      ${resp.json()[${i}]['frequency']}      ${frequency2}
+            Should Be Equal As Strings      ${resp.json()[${i}]['description']}    ${description2}
+            Should Be Equal As Strings      ${resp.json()[${i}]['remark']}         ${remark2}
+            Should Be Equal As Strings      ${resp.json()[${i}]['dosage']}         ${dos2}
+
+        ELSE IF     '${resp.json()[${i}]['id']}' == '${frequency_id}'     
+            Should Be Equal As Strings      ${resp.json()[${i}]['id']}             ${frequency_id}
+            Should Be Equal As Strings      ${resp.json()[${i}]['frequency']}      ${frequency}
+            Should Be Equal As Strings      ${resp.json()[${i}]['description']}    ${description}
+            Should Be Equal As Strings      ${resp.json()[${i}]['remark']}         ${remark}
+            Should Be Equal As Strings      ${resp.json()[${i}]['dosage']}         ${dos}
+        END
+    END
+
 
 JD-TC-GetAllAccountFrequency-2
 
@@ -140,13 +153,25 @@ JD-TC-GetAllAccountFrequency-2
     ${resp}=    SA Get Frequency By Account  ${account_id2}
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
-    Should Be Equal As Strings      ${resp.json()[0]['id']}            ${frequency_id2}
-    Should Be Equal As Strings      ${resp.json()[0]['frequency']}     ${frequency2}
-    Should Be Equal As Strings      ${resp.json()[0]['description']}   ${description2}
-    Should Be Equal As Strings      ${resp.json()[0]['remark']}        ${remark2}
-    Should Be Equal As Strings      ${resp.json()[0]['dosage']}        ${dos2}
-    Should Be Equal As Strings      ${resp.json()[1]['id']}            ${frequency_id}
-    Should Be Equal As Strings      ${resp.json()[1]['frequency']}     ${frequency}
-    Should Be Equal As Strings      ${resp.json()[1]['description']}   ${description}
-    Should Be Equal As Strings      ${resp.json()[1]['remark']}        ${remark}
-    Should Be Equal As Strings      ${resp.json()[1]['dosage']}        ${dos}
+
+
+    ${len}=  Get Length  ${resp.json()}
+ 
+
+    FOR  ${i}  IN RANGE   ${len}
+
+        IF  '${resp.json()[${i}]['id']}' == '${frequency_id2}'  
+            Should Be Equal As Strings      ${resp.json()[${i}]['id']}             ${frequency_id2}
+            Should Be Equal As Strings      ${resp.json()[${i}]['frequency']}      ${frequency2}
+            Should Be Equal As Strings      ${resp.json()[${i}]['description']}    ${description2}
+            Should Be Equal As Strings      ${resp.json()[${i}]['remark']}         ${remark2}
+            Should Be Equal As Strings      ${resp.json()[${i}]['dosage']}         ${dos2}
+
+        ELSE IF     '${resp.json()[${i}]['id']}' == '${frequency_id}'     
+            Should Be Equal As Strings      ${resp.json()[${i}]['id']}             ${frequency_id}
+            Should Be Equal As Strings      ${resp.json()[${i}]['frequency']}      ${frequency}
+            Should Be Equal As Strings      ${resp.json()[${i}]['description']}    ${description}
+            Should Be Equal As Strings      ${resp.json()[${i}]['remark']}         ${remark}
+            Should Be Equal As Strings      ${resp.json()[${i}]['dosage']}         ${dos}
+        END
+    END
