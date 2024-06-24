@@ -15658,7 +15658,7 @@ Get Default Template List by sendComm
 
     [Arguments]  ${sendcomm_id}
     Check And Create YNW Session
-    ${resp}=  GET On Session    sion  ynw  /provider/comm/template/default/sendComm/${sendcomm_id}   expected_status=any
+    ${resp}=  GET On Session   ynw  /provider/comm/template/default/sendComm/${sendcomm_id}   expected_status=any
     RETURN  ${resp}
 
 Get Send Comm Settings By Id
