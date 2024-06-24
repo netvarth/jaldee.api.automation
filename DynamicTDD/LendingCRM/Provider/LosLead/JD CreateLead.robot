@@ -271,7 +271,7 @@ JD-TC-CreateLead-2
     Should Be Equal As Strings    ${resp.json()['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()['progress']['name']}                    ${Pname}
-    # Should Be Equal As Strings    ${resp.json()['consumerKyc']['id']}                   ${consumerId}
+    # Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerId']}                   ${consumerId}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
@@ -449,7 +449,7 @@ JD-TC-CreateLead-3
     Should Be Equal As Strings    ${resp.json()['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['id']}                   ${consumerId}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerId']}                   ${consumerId}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
@@ -508,6 +508,7 @@ JD-TC-CreateLead-4
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+    clear_customer   ${PUSERNAME200}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -625,7 +626,7 @@ JD-TC-CreateLead-4
     # Should Be Equal As Strings    ${resp.json()['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['id']}                   ${consumerId}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerId']}                   ${consumerId}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
@@ -658,6 +659,7 @@ JD-TC-CreateLead-5
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+    clear_customer   ${PUSERNAME200}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -754,7 +756,7 @@ JD-TC-CreateLead-5
     Should Be Equal As Strings    ${resp.json()['status']['name']}                      ${Sname}
     # Should Be Equal As Strings    ${resp.json()['progress']['id']}                      ${progress_id}
     # Should Be Equal As Strings    ${resp.json()['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['id']}                   ${consumerId}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerId']}                   ${consumerId}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
@@ -906,7 +908,7 @@ JD-TC-CreateLead-6
     Should Be Equal As Strings    ${resp.json()['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['id']}                   ${consumerId}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerId']}                   ${consumerId}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
@@ -1080,7 +1082,7 @@ JD-TC-CreateLead-7
     Should Be Equal As Strings    ${resp.json()['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['id']}                   ${consumerId}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerId']}                   ${consumerId}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
@@ -1228,7 +1230,7 @@ JD-TC-CreateLead-8
     Should Be Equal As Strings    ${resp.json()['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['id']}                   ${consumerId}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerId']}                   ${consumerId}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
@@ -1403,7 +1405,7 @@ JD-TC-CreateLead-9
     Should Be Equal As Strings    ${resp.json()['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['id']}                   ${consumerId}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerId']}                   ${consumerId}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
@@ -1435,6 +1437,7 @@ JD-TC-CreateLead-10
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+    clear_customer   ${PUSERNAME200}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -1552,7 +1555,7 @@ JD-TC-CreateLead-10
     Should Be Equal As Strings    ${resp.json()['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['id']}                   ${consumerId}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerId']}                   ${consumerId}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
@@ -1701,7 +1704,7 @@ JD-TC-CreateLead-11
     Should Be Equal As Strings    ${resp.json()['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['id']}                   ${consumerId}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerId']}                   ${consumerId}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
@@ -1850,7 +1853,7 @@ JD-TC-CreateLead-12
     Should Be Equal As Strings    ${resp.json()['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['id']}                   ${consumerId}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerId']}                   ${consumerId}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
@@ -1999,7 +2002,7 @@ JD-TC-CreateLead-13
     Should Be Equal As Strings    ${resp.json()['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['id']}                   ${consumerId}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerId']}                   ${consumerId}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
@@ -2149,7 +2152,7 @@ JD-TC-CreateLead-14
     Should Be Equal As Strings    ${resp.json()['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['id']}                   ${consumerId}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerId']}                   ${consumerId}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
@@ -2299,7 +2302,7 @@ JD-TC-CreateLead-15
     Should Be Equal As Strings    ${resp.json()['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['id']}                   ${consumerId}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerId']}                   ${consumerId}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
@@ -2448,7 +2451,7 @@ JD-TC-CreateLead-16
     Should Be Equal As Strings    ${resp.json()['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['id']}                   ${consumerId}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerId']}                   ${consumerId}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
@@ -2598,7 +2601,7 @@ JD-TC-CreateLead-17
     Should Be Equal As Strings    ${resp.json()['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['id']}                   ${consumerId}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerId']}                   ${consumerId}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
@@ -2729,7 +2732,7 @@ JD-TC-CreateLead-18
     Should Be Equal As Strings    ${resp.json()['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['id']}                   ${consumerId}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerId']}                   ${consumerId}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
@@ -2879,7 +2882,7 @@ JD-TC-CreateLead-19
     Should Be Equal As Strings    ${resp.json()['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['id']}                   ${consumerId}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerId']}                   ${consumerId}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}

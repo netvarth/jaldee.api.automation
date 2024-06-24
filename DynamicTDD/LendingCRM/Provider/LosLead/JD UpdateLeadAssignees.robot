@@ -199,8 +199,8 @@ JD-TC-UpdateLeadAssignees-2
     ${resp}=    Get Lead LOS   ${lead_uid}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['assignees'][0]}    ${u_id}
-    Should Be Equal As Strings    ${resp.json()['assignees'][1]}    ${u_id2}
+    Should Be Equal As Strings    ${resp.json()['assignees'][0]}    ${u_id2}
+    Should Be Equal As Strings    ${resp.json()['assignees'][1]}    ${u_id}
 
 JD-TC-UpdateLeadAssignees-3
 

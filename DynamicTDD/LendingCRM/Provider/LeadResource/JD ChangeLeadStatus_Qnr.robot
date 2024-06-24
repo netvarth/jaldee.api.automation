@@ -69,9 +69,9 @@ ${telephoneType}    Residence
 @{relationType}    Wife    Mother    Father
 ${idTypes}    Passport
 ${permanentPinCode}    679581
-${customerName}    Hisham
-${customerName1}    Sreekanth
-${customerName2}    Amal
+${customerName}     manu
+${customerName1}    appu
+${customerName2}    babu
 @{if_dt_list}   ${QnrDatatypes[5]}   ${QnrDatatypes[7]}  ${QnrDatatypes[8]}
 &{id_zero}      id=${0}
 ${xlFilestatus}      ${EXECDIR}/TDD/creditverification.xlsx  
@@ -252,6 +252,7 @@ JD-TC-LeadStatus-1
     ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}   ${xlFilestatus}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    
 
   
     ${resp}=  Get Questionnaire List By Provider   
@@ -285,11 +286,15 @@ JD-TC-LeadStatus-1
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
 
 # *** Comments ***
-     ${cookie}  ${resp}=  Imageupload.SALogin    ${SUSERNAME}  ${SPASSWORD}
+    ${cookie}  ${resp}=  Imageupload.SALogin    ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}   ${loansanctionXlfile}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}   ${xlFile}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -991,9 +996,7 @@ JD-TC-LeadStatus-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['status']['id']}   ${status_id14}
-
-
-
+    
 JD-TC-LeadStatus-2
     [Documentation]  kyc updated to Credit Score Generated
     

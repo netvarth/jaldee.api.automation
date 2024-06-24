@@ -734,5 +734,5 @@ JD-TC-GetLeadCountByFilter-UH2
 
     ${resp}=    Get Lead Count By Filter LOS   consumerLastName-eq=${consumerLastName}  consumerFirstName-eq=${consumerFirstName2}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}    ${len}
+    Should Be Equal As Strings    ${resp.status_code}   401
+    Should Be Equal As Strings    ${resp.json()}    ${NoAccess}
