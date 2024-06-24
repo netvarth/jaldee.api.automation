@@ -49,7 +49,9 @@ JD-TC-List_ALL_LINKS-1
     Set Suite Variable      ${firstname}
     Set Suite Variable      ${lastname}
 
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph}   1
+    ${highest_package}=  get_highest_license_pkg
+
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph}   ${highest_package[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
@@ -67,7 +69,7 @@ JD-TC-List_ALL_LINKS-1
     ${resp}=  Provider Login  ${loginId}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph}${\n}
+    Set Suite Variable          ${username1}      ${resp.json()['userName']}
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -100,7 +102,7 @@ JD-TC-List_ALL_LINKS-1
     ${resp}=  Provider Login  ${loginId2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph}${\n}
+    Set Suite Variable          ${username2}      ${resp.json()['userName']}
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -117,7 +119,7 @@ JD-TC-List_ALL_LINKS-1
     ${resp}=    List all links of a loginId
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]}     ${loginId2}
+    Should Be Equal As Strings    ${resp.json()[0]['userName']}     ${username2}
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -152,7 +154,7 @@ JD-TC-List_ALL_LINKS-2
     ${resp}=  Provider Login  ${loginId3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph}${\n}
+    Set Suite Variable          ${username3}      ${resp.json()['userName']}
 
     ${resp}=    List all links of a loginId
     Log   ${resp.content}
@@ -174,7 +176,7 @@ JD-TC-List_ALL_LINKS-3
     ${resp}=    List all links of a loginId
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]}     ${loginId2}
+    Should Be Equal As Strings    ${resp.json()[0]['userName']}     ${username2}
 
     ${resp}=    Unlink one login  ${loginId2}
     Log   ${resp.content}
@@ -198,3 +200,116 @@ JD-TC-List_ALL_LINKS-UH1
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED}
 
+JD-TC-Link_With_Other_Login-4
+
+    [Documentation]    Link With other login - provider 1 create a user and linking that user with provider 1 and getting linked listes from provider 1 and user      
+
+    ${resp}=  Provider Login  ${loginId}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+     #..... User Creation ......
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${acc_id}   ${resp.json()['id']}
+    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}' 
+        ${dep_name1}=  FakerLibrary.bs
+        ${dep_code1}=   Random Int  min=100   max=999
+        ${dep_desc1}=   FakerLibrary.word  
+        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Suite Variable  ${dep_id}  ${resp1.json()}
+    ELSE
+        Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    END
+
+    ${user1}=  Create Sample User 
+    Set suite Variable                    ${user1}
+    
+    ${resp}=  Get User By Id              ${user1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Set Suite Variable  ${user1_id}       ${resp.json()['id']}
+    Set Suite Variable  ${user_num}    ${resp.json()['mobileNo']}
+
+    ${loginId_n}=     Random Int  min=1  max=9999
+    Set Suite Variable      ${loginId_n}
+
+    ${resp}=    Reset LoginId  ${user1_id}  ${loginId_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${Password_n}=    Random Int  min=11111111  max=99999999
+
+    ${resp}=    Forgot Password   loginId=${loginId_n}  password=${Password_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${user_num}  ${OtpPurpose['ProviderResetPassword']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key} =   db.Verify Accnt   ${user_num}    ${OtpPurpose['ProviderResetPassword']}
+    Set Suite Variable   ${key}
+
+    ${resp}=    Forgot Password     otp=${key}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Provider Login  ${loginId_n}  ${Password_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Provider Login  ${loginId}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #... linking user to the provider 1 and get linked lists
+
+    ${resp}=    Connect with other login  ${loginId_n}  ${Password_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    List all links of a loginId
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['userName']}     ${username1}
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Provider Login  ${loginId_n}  ${Password_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    List all links of a loginId
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['userName']}     ${username1}
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200

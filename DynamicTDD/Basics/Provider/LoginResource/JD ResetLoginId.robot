@@ -49,7 +49,9 @@ JD-TC-Reset_LoginId-1
     Set Suite Variable      ${firstname}
     Set Suite Variable      ${lastname}
 
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph}   1
+    ${highest_package}=  get_highest_license_pkg
+
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph}   ${highest_package[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
@@ -194,7 +196,7 @@ JD-TC-Reset_LoginId-3
 
 JD-TC-Reset_LoginId-UH3
 
-    [Documentation]    Reset login Id - reset loginid whith existing password   
+    [Documentation]    Reset login Id - reset loginid whith existing   
 
     ${resp}=  Provider Login  ${new}  ${PASSWORD}
     Log   ${resp.content}
@@ -256,7 +258,90 @@ JD-TC-Reset_LoginId-UH7
     ${resp}=    Reset LoginId  ${id}  ${empty}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${EXISTING_LOGINID}
+    Should Be Equal As Strings    ${resp.json()}    ${LOGINID_CANNOT_BE_EMPTY}
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+JD-TC-Reset_LoginId-4
+
+    [Documentation]    Reset login Id - provider create a user and user reset login id
+
+    ${resp}=  Provider Login  ${loginId_n}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #..... User Creation ......
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${acc_id}   ${resp.json()['id']}
+    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}' 
+        ${dep_name1}=  FakerLibrary.bs
+        ${dep_code1}=   Random Int  min=100   max=999
+        ${dep_desc1}=   FakerLibrary.word  
+        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Suite Variable  ${dep_id}  ${resp1.json()}
+    ELSE
+        Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    END
+
+    ${user1}=  Create Sample User 
+    Set suite Variable                    ${user1}
+    
+    ${resp}=  Get User By Id              ${user1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Set Suite Variable  ${user1_id}       ${resp.json()['id']}
+    Set Suite Variable  ${user_num}    ${resp.json()['mobileNo']}
+
+    ${loginId_n}=     Random Int  min=1  max=9999
+    Set Suite Variable      ${loginId_n}
+
+    ${resp}=    Reset LoginId  ${user1_id}  ${loginId_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${Password_n}=    Random Int  min=11111111  max=99999999
+
+    ${resp}=    Forgot Password   loginId=${loginId_n}  password=${Password_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${user_num}  ${OtpPurpose['ProviderResetPassword']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key} =   db.Verify Accnt   ${user_num}    ${OtpPurpose['ProviderResetPassword']}
+    Set Suite Variable   ${key}
+
+    ${resp}=    Forgot Password     otp=${key}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Provider Login  ${loginId_n}  ${Password_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Provider Logout
     Log   ${resp.content}

@@ -81,11 +81,11 @@ JD-TC-Forgot_Password-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
-    ${resp}=    Account Activation  ${loginId}  ${OtpPurpose['ProviderResetPassword']}
+    ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderResetPassword']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${key} =   db.Verify Accnt   ${loginId}    ${OtpPurpose['ProviderResetPassword']}
+    ${key} =   db.Verify Accnt   ${ph}    ${OtpPurpose['ProviderResetPassword']}
     Set Suite Variable   ${key}
 
     ${resp}=    Forgot Password     otp=${key}

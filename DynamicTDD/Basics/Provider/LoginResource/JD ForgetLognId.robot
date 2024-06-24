@@ -94,6 +94,7 @@ JD-TC-Forget_LoginId-1
     ${resp}=    Forgot LoginId     otp=${key2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()}        ${userName}
     ${loginId_str}=  Convert To String  ${loginId}
     Dictionary Should Contain Key    ${resp.json()}      ${loginId_str}
 
@@ -384,7 +385,6 @@ JD-TC-Forget_LoginId-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-*** comments ***
 
 JD-TC-Forget_LoginId-6
 

@@ -303,3 +303,39 @@ JD-TC-UNLINK_ONE_LOGIN-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED}
+
+JD-TC-UNLINK_ONE_LOGIN-UH3
+
+    [Documentation]    Unlink Login - self unlinking
+
+    ${resp}=  Provider Login  ${loginId}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Unlink one login  ${loginId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}    ${ALREADY_UNLINKED}
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-UNLINK_ONE_LOGIN-UH4
+
+    [Documentation]    Unlink Login - unlinking with invalid login id
+
+    ${resp}=  Provider Login  ${loginId}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${inv}=  Random Int  min=100  max=200
+
+    ${resp}=    Unlink one login  ${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}    ${UNLINKING_LOGINID_NOT_EXIST}
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200

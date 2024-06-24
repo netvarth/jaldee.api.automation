@@ -121,3 +121,4 @@ JD-TC-Switch_Login-1
     ${resp}=    Provider Logout
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    
