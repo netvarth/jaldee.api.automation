@@ -29,7 +29,7 @@ JD-TC-GetSendCommList-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-GetSendCommList-UH2
+JD-TC-GetSendCommList-UH1
 
     [Documentation]  Get Send Comm List without login.
 
@@ -38,7 +38,7 @@ JD-TC-GetSendCommList-UH2
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-GetSendCommList-UH3
+JD-TC-GetSendCommList-UH2
 
     [Documentation]  Get Send Comm List with provider consumer login.
 
