@@ -469,12 +469,6 @@ Get Cart By Provider Consumer
     ${resp}=  GET On Session  ynw  /consumer/cart/procon/${providerConsumerId}  expected_status=any
     RETURN  ${resp}
 
-Get Cart By Provider Consumer 
-    [Arguments]     ${providerConsumerId} 
-
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/cart/procon/${providerConsumerId}  expected_status=any
-    RETURN  ${resp}
 
 Update Cart Items
 
