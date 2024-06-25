@@ -34,6 +34,24 @@ JD-TC-GetDefaultTemplateListBySendComm-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+JD-TC-GetDefaultTemplateListBySendComm-2
+
+    [Documentation]  Get Default Template List By Send Comm(trigger) and edit the channel and create a new template for the same send comm(trigger point).
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME121}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Send Comm List
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${sendcomm_id1}   ${resp.json()[0]['id']}
+
+    ${resp}=  Get Default Template List by sendComm   ${sendcomm_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    
 
 JD-TC-GetDefaultTemplateListBySendComm-UH1
 
