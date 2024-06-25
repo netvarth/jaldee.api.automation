@@ -18,19 +18,6 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
-*** Keywords ***
-Get Provider Catalog Filter
-    [Arguments]  &{param}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/so/catalog   params=${param}   expected_status=any
-    RETURN  ${resp} 
-
-Get Provider Catalog Count Filter
-    [Arguments]  &{param}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/so/catalog/count   params=${param}   expected_status=any
-    RETURN  ${resp} 
-
 
 *** Test Cases ***
 
