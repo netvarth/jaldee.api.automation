@@ -373,3 +373,51 @@ SPConsumer Deactivation
 #     # ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  expected_status=any   headers=${cons_headers}
 #     ${resp}=  POST On Session  ynw   url=/consumer/appointment/add  params=${cons_params}  data=${data}  expected_status=any   headers=${cons_headers}
 #     RETURN  ${resp}
+
+#----------- CONSUMER ORDER ---------
+
+Get Provider Catalog Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/so/catalog   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+
+Get Provider Catalog Count Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/so/catalog/count   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+
+Get Provider Catalog Item Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/so/catalog/item   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get Provider Catalog Item Count Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/so/catalog/item/count   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Create Cart From Consumerside
+
+    [Arguments]    ${store}    ${providerConsumer}    ${deliveryType}     @{vargs} 
+
+    ${stores}=  Create Dictionary    encId=${store}
+    ${providerConsumer}=  Create Dictionary    id=${providerConsumer}
+    
+    ${len}=  Get Length  ${vargs}
+    ${items}=  Create List
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${items}  ${vargs[${index}]}
+    END
+    ${data}=    Create Dictionary    store=${stores}    providerConsumer=${providerConsumer}    deliveryType=${deliveryType}    items=${items}    
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw   /consumer/cart  data=${data}  expected_status=any
+    RETURN  ${resp}
