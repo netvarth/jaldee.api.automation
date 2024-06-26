@@ -185,6 +185,7 @@ ONLY_NUM_ALLOWED = "Only numbers are allowed"
 # NOT_REGISTERED_CUSTOMER = "Sorry, you are not a registered user at Jaldee. If you are a new user, please register at www.jaldee.com to avail our services."
 # NOT_REGISTERED_CUSTOMER = "This mobile number/email is not registered with Jaldee. Sign up now with Jaldee to avail our services."
 NOT_REGISTERED_CUSTOMER= "This login id is not registered with Jaldee. Sign up now with Jaldee to avail our services."
+NOT_REGISTERED_PROVIDER = "Sorry, you are not a registered provider. If you are a new user, please sign up to serve your customers better."
 S3_UPLOAD_FAILED = "Upload to S3 failed"
 
 

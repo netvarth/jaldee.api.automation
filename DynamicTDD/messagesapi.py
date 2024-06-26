@@ -240,7 +240,7 @@ NO_INTERNAL_NOTE_EXISTS= "Sorry, no notes available"
 NO_COMMUNICATION_MESSAGE_EXISTS= "Sorry, no messages available"
 NOT_REGISTERED_USER= "Sorry, you are not a registered user at Jaldee. If you are a new user, please register at www.jaldee.com to avail our services."
 NOT_REGISTERED_CUSTOMER= "This login id is not registered with Jaldee. Sign up now with Jaldee to avail our services."
-NOT_REGISTERED_PROVIDER= "This mobile number/email is not registered with Jaldee. Sign up now to grow your practice/business with Jaldee."
+NOT_REGISTERED_PROVIDER = "Sorry, you are not a registered provider. If you are a new user, please sign up to serve your customers better."
 NOT_REGISTERED_SUPPORT_USER= "Sorry, you are not a registered support user."
 NOT_SUPERADMIN= "Sorry, you are not a super admin."
 
