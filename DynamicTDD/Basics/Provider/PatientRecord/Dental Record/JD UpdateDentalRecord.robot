@@ -439,6 +439,32 @@ JD-TC-Update Dental Record-9
     Should Be Equal As Strings    ${resp.json()['investigation'][0]}     ${note1} 
     Should Be Equal As Strings    ${resp.json()['toothSurfaces']}     ${toothSurfaces1} 
 
+JD-TC-Update Dental Record-10
+
+    [Documentation]    Update Dental records with new toothConditions.
+
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME15}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${toothSurfaces}=    Create List   ${toothSurfaces[0]}
+    ${toothConditions1}    Random Element  ${toothConditions}
+    ${toothConditions}=    Create List   ${toothConditions1} 
+
+    ${resp}=    Update DentalRecord    ${id}    ${toothNo1}  ${toothType[1]}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces}    toothConditions=${toothConditions}
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200
+
+    ${resp}=    Get DentalRecord ById   ${id}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['id']}     ${id} 
+    Should Be Equal As Strings    ${resp.json()['toothNo']}     ${toothNo1} 
+    Should Be Equal As Strings    ${resp.json()['toothType']}     ${toothType[1]} 
+    Should Be Equal As Strings    ${resp.json()['orginUid']}     ${caseUId} 
+    Should Be Equal As Strings    ${resp.json()['investigation'][0]}     ${note1} 
+    Should Be Equal As Strings    ${resp.json()['toothSurfaces']}     ${toothSurfaces} 
+    Should Be Equal As Strings    ${resp.json()['toothConditions']}     ${toothConditions1} 
 
 JD-TC-Update Dental Record-UH1
 

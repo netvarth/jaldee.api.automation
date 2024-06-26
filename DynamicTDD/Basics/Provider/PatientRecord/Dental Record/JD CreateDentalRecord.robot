@@ -307,6 +307,66 @@ JD-TC-Create Dental Record-10
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
+JD-TC-Create Dental Record-11
+
+    [Documentation]    Try to Create Dental record with toothConditions field.
+
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${note1}=  FakerLibrary.word
+    ${note2}=  FakerLibrary.word
+    ${investigation}=    Create List   ${note1}    ${note2}
+    ${toothSurfaces}=    Create List   ${toothSurfaces[2]}    ${toothSurfaces[1]}    ${toothSurfaces[0]}
+    ${toothConditions}    Random Element  ${toothConditions}
+    ${toothConditions}=    Create List   ${toothConditions}    
+
+    ${resp}=    Create DentalRecord    ${toothNo}  ${toothType[1]}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces}   toothConditions=${toothConditions}
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200    
+
+JD-TC-Create Dental Record-12
+
+    [Documentation]    Try to Create Dental record with toothRestorations field.
+
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${note1}=  FakerLibrary.word
+    ${note2}=  FakerLibrary.word
+    ${investigation}=    Create List   ${note1}    ${note2}
+    ${toothSurfaces}=    Create List   ${toothSurfaces[2]}    ${toothSurfaces[1]}    ${toothSurfaces[0]}
+    ${toothRestorations}    Random Element  ${toothRestorations}
+    ${toothRestorations}=    Create List   ${toothRestorations}    
+
+    ${resp}=    Create DentalRecord    ${toothNo}  ${toothType[1]}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces}   toothRestorations=${toothRestorations}
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200 
+
+JD-TC-Create Dental Record-13
+
+    [Documentation]    Try to Create Dental record with All fields.
+
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${note1}=  FakerLibrary.word
+    ${note2}=  FakerLibrary.word
+    ${investigation}=    Create List   ${note1}    ${note2}
+    ${toothSurfaces}=    Create List   ${toothSurfaces[2]}    ${toothSurfaces[1]}    ${toothSurfaces[0]}
+    ${toothConditions}    Random Element  ${toothConditions}
+    ${toothConditions}=    Create List   ${toothConditions}    
+
+    ${toothRestorations}    Random Element  ${toothRestorations}
+    ${toothRestorations}=    Create List   ${toothRestorations}    
+
+    ${resp}=    Create DentalRecord    ${toothNo}  ${toothType[1]}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces}      toothConditions=${toothConditions}    toothRestorations=${toothRestorations}
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200 
+
 JD-TC-Create Dental Record-UH1
 
     [Documentation]    Create Dental Record with another provider login.

@@ -293,6 +293,110 @@ JD-TC-Get Dental Record-4
     Should Be Equal As Strings    ${resp.json()['consumer']['firstName']}     ${proconfname} 
     Should Be Equal As Strings    ${resp.json()['consumer']['lastName']}     ${proconlname}
 
+JD-TC-Get Dental Record-5
+
+    [Documentation]    Try to Create Dental record with toothConditions field and Get that record by id.
+
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${toothNo}=   Random Int  min=10   max=47
+    ${note1}=  FakerLibrary.word
+    ${note2}=  FakerLibrary.word
+    ${investigation}=    Create List   ${note1}    ${note2}
+    ${toothSurfaces}=    Create List   ${toothSurfaces[2]}    ${toothSurfaces[1]}    ${toothSurfaces[0]}
+    ${toothConditions1}    Random Element  ${toothConditions}
+    ${toothConditions}=    Create List   ${toothConditions1}    
+
+    ${resp}=    Create DentalRecord    ${toothNo}  ${toothType[1]}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces}   toothConditions=${toothConditions}
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200  
+    Set Test Variable      ${id}           ${resp.json()}
+
+    ${resp}=    Get DentalRecord ById   ${id}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['id']}     ${id} 
+    Should Be Equal As Strings    ${resp.json()['toothNo']}     ${toothNo} 
+    Should Be Equal As Strings    ${resp.json()['toothType']}     ${toothType[1]} 
+    Should Be Equal As Strings    ${resp.json()['orginUid']}     ${caseUId} 
+    Should Be Equal As Strings    ${resp.json()['investigation'][0]}     ${note1} 
+    Should Be Equal As Strings    ${resp.json()['toothSurfaces'][0]}     ${toothSurfaces[0]} 
+    Should Be Equal As Strings    ${resp.json()['toothSurfaces'][1]}     ${toothSurfaces[1]} 
+    Should Be Equal As Strings    ${resp.json()['toothConditions'][0]}     ${toothConditions1} 
+
+JD-TC-Get Dental Record-6
+
+    [Documentation]    Try to Create Dental record with toothRestorations field and Get that record by id.
+
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${toothNo}=   Random Int  min=10   max=47
+    ${note1}=  FakerLibrary.word
+    ${note2}=  FakerLibrary.word
+    ${investigation}=    Create List   ${note1}    ${note2}
+    ${toothSurfaces}=    Create List   ${toothSurfaces[2]}    ${toothSurfaces[1]}    ${toothSurfaces[0]}
+    ${toothRestorations1}    Random Element  ${toothRestorations}
+    ${toothRestorations}=    Create List   ${toothRestorations1}    
+
+    ${resp}=    Create DentalRecord    ${toothNo}  ${toothType[1]}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces}   toothRestorations=${toothRestorations}
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200  
+    Set Test Variable      ${id}           ${resp.json()}
+
+    ${resp}=    Get DentalRecord ById   ${id}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['id']}     ${id} 
+    Should Be Equal As Strings    ${resp.json()['toothNo']}     ${toothNo} 
+    Should Be Equal As Strings    ${resp.json()['toothType']}     ${toothType[1]} 
+    Should Be Equal As Strings    ${resp.json()['orginUid']}     ${caseUId} 
+    Should Be Equal As Strings    ${resp.json()['investigation'][0]}     ${note1} 
+    Should Be Equal As Strings    ${resp.json()['toothSurfaces'][0]}     ${toothSurfaces[0]} 
+    Should Be Equal As Strings    ${resp.json()['toothSurfaces'][1]}     ${toothSurfaces[1]} 
+    Should Be Equal As Strings    ${resp.json()['toothRestorations'][0]}     ${toothRestorations1} 
+
+JD-TC-Get Dental Record-7
+
+    [Documentation]    Try to Create Dental record with all the fields and Get that record by id.
+
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${toothNo}=   Random Int  min=10   max=47
+    ${note1}=  FakerLibrary.word
+    ${note2}=  FakerLibrary.word
+    ${investigation}=    Create List   ${note1}    ${note2}
+    ${toothSurfaces}=    Create List   ${toothSurfaces[2]}    ${toothSurfaces[1]}    ${toothSurfaces[0]}
+    ${toothRestorations1}    Random Element  ${toothRestorations}
+    ${toothRestorations}=    Create List   ${toothRestorations1}   
+
+    ${toothConditions1}    Random Element  ${toothConditions}
+    ${toothConditions}=    Create List   ${toothConditions1}   
+
+    ${resp}=    Create DentalRecord    ${toothNo}  ${toothType[1]}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces}   toothConditions=${toothConditions}   toothRestorations=${toothRestorations}
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200  
+    Set Test Variable      ${id}           ${resp.json()}
+
+    ${resp}=    Get DentalRecord ById   ${id}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['id']}     ${id} 
+    Should Be Equal As Strings    ${resp.json()['toothNo']}     ${toothNo} 
+    Should Be Equal As Strings    ${resp.json()['toothType']}     ${toothType[1]} 
+    Should Be Equal As Strings    ${resp.json()['orginUid']}     ${caseUId} 
+    Should Be Equal As Strings    ${resp.json()['investigation'][0]}     ${note1} 
+    Should Be Equal As Strings    ${resp.json()['toothSurfaces'][0]}     ${toothSurfaces[0]} 
+    Should Be Equal As Strings    ${resp.json()['toothSurfaces'][1]}     ${toothSurfaces[1]} 
+    Should Be Equal As Strings    ${resp.json()['toothRestorations'][0]}     ${toothRestorations1} 
+
+
+
 JD-TC-Get Dental Record-UH1
 
     [Documentation]    Get Dental records using invalid id.
