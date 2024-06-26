@@ -473,8 +473,8 @@ Get Cart By Provider Consumer
 Update Cart Items
 
     [Arguments]    ${cartUid}  ${encId}   ${quantity}       &{kwargs}
-
-    ${data}=    Create Dictionary    catalogItem=${encId}    quantity=${quantity}    
+    ${catalogItem}=    Create Dictionary    encId=${encId} 
+    ${data}=    Create Dictionary    catalogItem=${catalogItem}    quantity=${quantity}    
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary   ${data}   ${key}=${value}
     END  
