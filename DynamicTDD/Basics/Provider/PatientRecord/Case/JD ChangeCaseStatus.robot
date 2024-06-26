@@ -149,7 +149,7 @@ JD-TC-Change Case Status-1
     Should Be Equal As Strings    ${resp.json()['createdDate']}     ${DAY1}
     Should Be Equal As Strings    ${resp.json()['spInternalStatus']}     ${PRStatus[0]}
 
-    ${note}=  FakerLibrary.name
+    ${note}=  FakerLibrary.lastName
     Set Suite Variable    ${note}
 
     ${resp}=    Change Case Status    ${caseUId}   ${PRStatus[1]}  ${note}

@@ -347,7 +347,7 @@ JD-TC-Create Dental Record-12
 
 JD-TC-Create Dental Record-13
 
-    [Documentation]    Try to Create Dental record with All fields.
+    [Documentation]    Try to Create Dental record with all the fields.
 
     ${resp}=  Encrypted Provider Login    ${HLPUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}         
