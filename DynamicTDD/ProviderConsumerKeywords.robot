@@ -459,7 +459,7 @@ Get ConsumerCart With Items By Uid
     [Arguments]     ${cartUid}  
 
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/cart/${cartUid}/cartitem  expected_status=any
+    ${resp}=  GET On Session  ynw  /consumer/cart/${cartUid}/getitems  expected_status=any
     RETURN  ${resp}
 
 Get Cart By Provider Consumer 
@@ -481,7 +481,7 @@ Update Cart Items
     ${data}=  Create List    ${data}
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw   /consumer/cart/${cartUid}  data=${data}  expected_status=any
+    ${resp}=  PUT On Session  ynw   /consumer/cart/${cartUid}/updateitems  data=${data}  expected_status=any
     RETURN  ${resp}
 
 Get Cart Item By Uid

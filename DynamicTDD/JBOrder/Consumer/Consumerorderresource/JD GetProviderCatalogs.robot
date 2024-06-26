@@ -107,7 +107,7 @@ JD-TC-Get Provider Catalogs-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id}  ${resp.json()}
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}   onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[0]}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}   onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[0]}  storePickup=${boolean[1]}  courierService=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable              ${soc_id1}    ${resp.json()}
@@ -174,7 +174,7 @@ JD-TC-Get Provider Catalogs-2
 
     ${Name1}=    FakerLibrary.first name
     Set Suite Variable    ${Name1}
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name1}  ${boolean[0]}   onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[1]}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name1}  ${boolean[0]}   onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[1]}  storePickup=${boolean[1]}  courierService=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable              ${soc_id2}    ${resp.json()}
@@ -355,7 +355,7 @@ JD-TC-Get Provider Catalogs-UH2
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${Name2}=    FakerLibrary. name
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name2}  ${boolean[0]}   onlineSelfOrder=${boolean[0]}  walkInOrder=${boolean[1]}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name2}  ${boolean[0]}   onlineSelfOrder=${boolean[0]}  walkInOrder=${boolean[1]}  storePickup=${boolean[1]}  courierService=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable              ${soc_id3}    ${resp.json()}
@@ -423,20 +423,20 @@ JD-TC-Get Provider Catalogs-6
     Set Test Variable  ${inv_cat_encid}  ${resp.json()}
     ${inv_cat_encid1}=  Create List  ${inv_cat_encid}
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id1}  ${Name-of-store}  ${boolean[1]}  ${inv_cat_encid1}  onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[1]}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id1}  ${Name-of-store}  ${boolean[1]}  ${inv_cat_encid1}  onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[1]}  storePickup=${boolean[1]}  courierService=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${sa_catlog_id1}  ${resp.json()}
 
     ${Name3}=    FakerLibrary. name
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id1}   ${Name3}  ${boolean[0]}   onlineSelfOrder=${boolean[0]}  walkInOrder=${boolean[1]}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id1}   ${Name3}  ${boolean[0]}   onlineSelfOrder=${boolean[0]}  walkInOrder=${boolean[1]}   storePickup=${boolean[1]}  courierService=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable              ${sa_catlog_id2}    ${resp.json()}
 
     ${Name4}=    FakerLibrary. name
     Set Suite Variable              ${Name4}
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id1}   ${Name4}  ${boolean[0]}   onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[1]}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id1}   ${Name4}  ${boolean[0]}   onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[1]}  storePickup=${boolean[1]}  courierService=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable              ${sa_catlog_id3}    ${resp.json()}
@@ -589,7 +589,7 @@ JD-TC-Get Provider Catalogs-7
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${Name5}=    FakerLibrary. name
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id1}   ${Name5}  ${boolean[0]}   onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[1]}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id1}   ${Name5}  ${boolean[0]}   onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[1]}  storePickup=${boolean[1]}  courierService=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable              ${sa_catlog_id4}    ${resp.json()}

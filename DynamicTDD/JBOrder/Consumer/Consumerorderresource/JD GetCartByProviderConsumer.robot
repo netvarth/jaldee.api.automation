@@ -106,7 +106,7 @@ JD-TC-Get Cart By Uid-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id}  ${resp.json()}
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}   onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[0]}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}   onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[0]}   storePickup=${boolean[1]}  homeDelivery=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable              ${soc_id1}    ${resp.json()}
@@ -279,7 +279,7 @@ JD-TC-Get Cart By Uid-1
     ${resp}=  Create Cart From Consumerside      ${store_id}    ${cid}      ${deliveryType[0]}    ${catalogItems}   ${catalogItems1}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable              ${cartUid}    ${resp.json()}
+    Set Suite Variable    ${cartUid}    ${resp.json()['uid']}
 
 
     ${resp}=    Get Cart By Provider Consumer    ${cid}
