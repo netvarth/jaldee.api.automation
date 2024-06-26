@@ -483,6 +483,54 @@ JD-TC-Initial Setup-1
     ${apptid}=  Get From Dictionary  ${resp.json()}  ${firstname}
     Set Suite Variable  ${walkin_appt2}  ${apptid}
 
+#........complete a future appointment today, then do the follow for next day........
+
+    ${FUT_DAY}=  db.add_timezone_date  ${tz}  1
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Take Appointment For Consumer  ${cid1}  ${s_id}  ${sch_id}  ${FUT_DAY}  ${cnote}  ${apptfor}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${apptid}=  Get From Dictionary  ${resp.json()}  ${firstname}
+    Set Suite Variable  ${walkin_fappt1}  ${apptid}
+
+    ${resp}=  Get Appointment EncodedID   ${walkin_fappt1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${encId2}  ${resp.json()}
+
+    ${resp}=  Get Appointment By Id   ${walkin_fappt1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uid']}                ${walkin_fappt1}
+    Should Be Equal As Strings  ${resp.json()['appointmentEncId']}   ${encId2}
+
+    ${resp}=  Appointment Action   ${apptStatus[6]}   ${walkin_fappt1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    GetFollowUpDetailsofAppmt  ${walkin_fappt1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${FUT_DAY1}=  db.add_timezone_date  ${tz}  2 
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${FUT_DAY1}  ${s_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
+    Set Test Variable   ${slots4}   ${resp.json()['availableSlots'][0]['time']}
+
+    ${apptfor1}=  Create Dictionary  id=${cid1}   apptTime=${slots4}
+    ${apptfor}=   Create List  ${apptfor1}
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Take Appointment For Consumer  ${cid1}  ${s_id}  ${sch_id}  ${FUT_DAY1}  ${cnote}  ${apptfor}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${apptid}=  Get From Dictionary  ${resp.json()}  ${firstname}
+    Set Suite Variable  ${walkin_fappt2}  ${apptid}
+
 #........After starting the booking process, confirm the appointment again....
 
     ${apptfor1}=  Create Dictionary  id=${cid1}   apptTime=${slots[1]}
