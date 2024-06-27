@@ -15682,6 +15682,32 @@ Get All Settings By Filter
     ${resp}=  GET On Session  ynw  /provider/comm/template/settings  params=${param}  expected_status=any
     RETURN  ${resp}
 
+Create Template Preview
+
+    [Arguments]   ${context}  ${content}   &{kwargs}
+   
+    ${data}=  Create Dictionary    context=${context}    content=${content}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/comm/template/preview  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get Custom Template Preview By Id
+
+    [Arguments]  ${temp_id} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/comm/template/preview/${temp_id}  expected_status=any
+    RETURN  ${resp}
+
+Get Default Template Preview 
+
+    [Arguments]  ${sendcomm_id}  ${temp_id} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/comm/template/default/preview/${sendcomm_id}/${temp_id}  expected_status=any
+    RETURN  ${resp}
 
 Get Available Slots for Month Year
     [Arguments]  ${location}  ${service}  ${month}  ${year}
