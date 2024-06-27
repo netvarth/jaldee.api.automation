@@ -287,6 +287,10 @@ JD-TC-ReplaceUserScope-2
     Should Be Equal As Strings  ${resp.json()['userRoles'][0]['roleName']}         ${role_name1}
     Should Be Equal As Strings  ${resp.json()['userRoles'][0]['defaultRole']}      ${bool[1]}
 
+    ${resp}=    Enable Disable Branch    ${status[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${branchCode}=    FakerLibrary.Random Number
     Set Suite Variable    ${branchCode}
     ${branchName}=    FakerLibrary.name
@@ -297,7 +301,7 @@ JD-TC-ReplaceUserScope-2
     ${state}=    Evaluate     "${state}".title()
     ${state}=    String.RemoveString  ${state}    ${SPACE}
 
-    ${resp}=    Create BranchMaster    ${branchCode}    ${branchName}    ${locId}    ${status[0]}    ${district}    ${state}    ${pin}
+    ${resp}=    Create BranchMaster    ${branchCode}    ${branchName}    ${locId}    ${status[0]} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${branchId1}  ${resp.json()['id']}

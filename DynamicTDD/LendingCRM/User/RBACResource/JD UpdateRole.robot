@@ -32,7 +32,7 @@ JD-TC-UpdateRole-1
     Set Suite Variable  ${role_id1}    ${resp.json()[0]['roleId']}
     Set Suite Variable  ${role_name1}  ${resp.json()[0]['displayName']}
     Set Suite Variable  ${cap1}  ${resp.json()[3]['capabilityList'][2]}
-    Set Suite Variable  ${cap2}  ${resp.json()[5]['capabilityList'][6]}
+    Set Suite Variable  ${cap2}  ${resp.json()[5]['capabilityList'][3]}
     Set Suite Variable  ${cap3}  ${resp.json()[5]['capabilityList'][4]}
     Set Suite Variable  ${cap4}  ${resp.json()[2]['capabilityList'][3]}
 
@@ -208,7 +208,7 @@ JD-TC-UpdateRole-UH3
 
     ${description2}=    Fakerlibrary.Sentence    
     ${featureName2}=    FakerLibrary.name    
-    ${invalid_id}=  Random Int  min=20   max=40
+    ${invalid_id}=  Random Int  min=200   max=400
     ${resp}=  Update Role   ${invalid_id}      ${role_name1}    ${description2}    ${featureName2}     ${Capabilities}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422

@@ -134,7 +134,7 @@ JD-TC-CreateRole-2
     Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName2}
     Should Be Equal As Strings  ${resp.json()['roleName']}  ${role_name1}
 
-    ${resp}=  Restore role by id    
+    ${resp}=  Restore role by id    ${id2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

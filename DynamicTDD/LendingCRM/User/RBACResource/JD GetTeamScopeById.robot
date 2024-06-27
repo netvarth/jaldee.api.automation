@@ -26,12 +26,27 @@ JD-TC-CreateUserWithRolesAndScope-1
 
     [Documentation]  Create User With Roles And Scope for an existing provider.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable   ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableCdl']}==${bool[0]}
+        ${resp1}=  Enable Disable CDL RBAC  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableRbac']}  ${bool[1]}
 
     ${resp}=  Get roles
     Log  ${resp.json()}
@@ -90,7 +105,7 @@ JD-TC-CreateUserWithRolesAndScope-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${PUSERNAME23}'
+            IF   not '${user_phone}' == '${HLPUSERNAME6}'
                 clear_users  ${user_phone}
             END
         END
@@ -136,7 +151,7 @@ JD-TC-CreateUserWithRolesAndScope-1
     ${resp}=  Get User By Id  ${u_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['userRoles'][0]['d']}       ${role_id1}
+    Should Be Equal As Strings  ${resp.json()['userRoles'][0]['id']}       ${role_id1}
     Should Be Equal As Strings  ${resp.json()['userRoles'][0]['roleName']}     ${role_name1}
     # Should Be Equal As Strings  ${resp.json()['userRoles'][0]['defaultRole']}  ${bool[0]}
     
