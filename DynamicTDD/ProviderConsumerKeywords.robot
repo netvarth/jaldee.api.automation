@@ -495,7 +495,7 @@ Get Item List By Cart Uid
     [Arguments]     ${cartUid} 
 
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw /consumer/cart/${cartUid}/item  expected_status=any
+    ${resp}=  GET On Session  ynw   /consumer/cart/${cartUid}/item  expected_status=any
     RETURN  ${resp}
 
 Get Cart Item List- Filter

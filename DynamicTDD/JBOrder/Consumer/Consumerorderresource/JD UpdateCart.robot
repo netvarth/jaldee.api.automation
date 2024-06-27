@@ -18,6 +18,10 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
+*** Variables ***
+${minSaleQuantity}  1
+${maxSaleQuantity}   50
+
 
 *** Test Cases ***
 
@@ -122,7 +126,7 @@ JD-TC-Update cart-1
     ${price}=    Random Int  min=2   max=40
     ${price}=                    Convert To Number  ${price}  1
     Set Suite Variable              ${price} 
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${soc_id1}     ${itemEncId1}     ${price}         
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${soc_id1}     ${itemEncId1}     ${price}     minSaleQuantity=${minSaleQuantity}  maxSaleQuantity=${maxSaleQuantity}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SOC_itemEncIds1}  ${resp.json()[0]}
@@ -146,7 +150,7 @@ JD-TC-Update cart-1
     ${price1}=    Random Int  min=70  max=90
     ${price1}=                    Convert To Number  ${price1}  1
     Set Suite Variable    ${price1}  
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${soc_id1}    ${itemEncId2}      ${price1}         
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${soc_id1}    ${itemEncId2}      ${price1}         minSaleQuantity=${minSaleQuantity}  maxSaleQuantity=${maxSaleQuantity}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SOC_itemEncIds2}  ${resp.json()[0]}
@@ -155,7 +159,7 @@ JD-TC-Update cart-1
     ${price2}=    Random Int  min=50   max=60
     ${price2}=                    Convert To Number  ${price2}  1
     Set Suite Variable    ${price2}  
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${soc_id1}      ${itemEncId3}    ${price2}         
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${soc_id1}      ${itemEncId3}    ${price2}    minSaleQuantity=${minSaleQuantity}  maxSaleQuantity=${maxSaleQuantity}     
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SOC_itemEncIds3}  ${resp.json()[0]}
@@ -259,16 +263,14 @@ JD-TC-Update cart-1
     END
 
 
-    ${resp}=    Customer Logout 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME46}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${quantity}=    Random Int  min=1   max=10
+    ${quantity}=  FakerLibrary.Random Int  min=${minSaleQuantity}   max=${maxSaleQuantity}
     ${quantity}=                    Convert To Number  ${quantity}  1
+    ${item1}=  Evaluate  ${price}*${quantity}
+    ${item2}=  Evaluate  ${price1}*${quantity}
+    ${item3}=  Evaluate  ${price2}*${quantity}
+    ${Total}=  Evaluate  ${item1}+${item2}+${item3}
+
     ${catalogItem}=  Create Dictionary    encId=${SOC_itemEncIds1}
     ${catalogItem1}=  Create Dictionary    encId=${SOC_itemEncIds2}
     ${catalogItem2}=  Create Dictionary    encId=${SOC_itemEncIds3}
@@ -289,6 +291,18 @@ JD-TC-Update cart-1
     ${resp}=    Get ConsumerCart By Uid   ${cartUid} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                                              ${cid}
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['name']}                                            ${firstName} ${lastName}
+    Should Be Equal As Strings    ${resp.json()['store']['encId']}                                                      ${store_id}
+    Should Be Equal As Strings    ${resp.json()['store']['name']}                                                       ${Name} 
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                                           ${accountId}
+    Should Be Equal As Strings    ${resp.json()['uid']}                                                                 ${cartUid}
+    Should Be Equal As Strings    ${resp.json()['deliveryType']}                                                        ${deliveryType[0]}
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                                            ${Total}
+    Should Be Equal As Strings    ${resp.json()['locationId']}                                                            ${locId1}
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                                             ${Total}
+
+
 
 
 
