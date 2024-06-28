@@ -475,8 +475,8 @@ JD-TC-GetTemplateById-11
 
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence   
-    ${content_msg}=     Set Variable  ${content_msg} [${custom_var1}].
-    ${content}=    Create Dictionary  intro=${content_msg}
+    ${content_msg1}=     Set Variable  ${content_msg} [${custom_var1}].
+    ${content}=    Create Dictionary  intro=${content_msg1}
     ${out_content}=  Set Variable   ${content_msg} ${name}
     ${tempheader_sub}=      FakerLibrary.sentence   5
     ${salutation}=      FakerLibrary.word

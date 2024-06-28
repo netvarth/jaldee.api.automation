@@ -279,3 +279,105 @@ JD-TC-GetCustomTemplatePreview-4
     Should Be Equal As Strings  ${resp.json()['content']['intro']}              ${content_msg}
     Should Be Equal As Strings  ${resp.json()['commTarget']}                    ${comm_target} 
     Should Be Equal As Strings  ${resp.json()['status']}                        ${VarStatus[0]} 
+
+JD-TC-GetCustomTemplatePreview-UH1
+
+    [Documentation]  get custom template preview without login.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${temp_name}=    FakerLibrary.word
+    ${content_msg}=      FakerLibrary.sentence   
+    ${content}=    Create Dictionary  intro=${content_msg}
+    ${tempheader_sub}=      FakerLibrary.sentence   5
+    ${salutation}=      FakerLibrary.word
+    ${comm_chanl}=  Create List   ${CommChannel[2]}  
+    ${comm_target}=  Create List   ${CommTarget[0]}  
+    ${signature}=   FakerLibrary.hostname
+    ${closing}=    FakerLibrary.bs
+
+    ${temp_header}=    Create Dictionary  subject=${tempheader_sub}   salutation=${salutation}
+    ${temp_footer}=    Create Dictionary  closing=${closing}   signature=${signature}  
+
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl}  
+    ...    templateHeader=${temp_header}  footer=${temp_footer}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${temp_id1}  ${resp.content}
+
+    ${resp}=  ProviderLogout  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Custom Template Preview By Id   ${temp_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
+
+JD-TC-GetCustomTemplatePreview-UH2
+
+    [Documentation]  get custom template preview with provider consumer login.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${temp_name}=    FakerLibrary.word
+    ${content_msg}=      FakerLibrary.sentence   
+    ${content}=    Create Dictionary  intro=${content_msg}
+    ${tempheader_sub}=      FakerLibrary.sentence   5
+    ${salutation}=      FakerLibrary.word
+    ${comm_chanl}=  Create List   ${CommChannel[2]}  
+    ${comm_target}=  Create List   ${CommTarget[0]}  
+    ${signature}=   FakerLibrary.hostname
+    ${closing}=    FakerLibrary.bs
+
+    ${temp_header}=    Create Dictionary  subject=${tempheader_sub}   salutation=${salutation}
+    ${temp_footer}=    Create Dictionary  closing=${closing}   signature=${signature}  
+
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl}  
+    ...    templateHeader=${temp_header}  footer=${temp_footer}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${temp_id1}  ${resp.content}
+
+    #............provider consumer creation..........
+
+    ${NewCustomer}    Generate random string    10    123456789
+    ${NewCustomer}    Convert To Integer  ${NewCustomer}
+
+    ${custf_name}=  FakerLibrary.name    
+    ${custl_name}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${NewCustomer}    firstName=${custf_name}   lastName=${custl_name}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get Custom Template Preview By Id   ${temp_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   401
+    Should Be Equal As Strings  ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
+
