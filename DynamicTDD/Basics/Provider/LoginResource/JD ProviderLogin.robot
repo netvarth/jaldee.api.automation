@@ -194,3 +194,15 @@ JD-TC-Provider_Login-2
     ${resp}=    Provider Logout
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Provider_Login-3
+
+    [Documentation]    Existing provider login 
+
+    ${resp}=  Provider Login  ${PUSERNAME80}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
