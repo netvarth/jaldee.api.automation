@@ -69,6 +69,7 @@ JD-TC-UNLINK_ONE_LOGIN-1
     ${resp}=  Provider Login  ${loginId}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable          ${username}    ${resp.json()['userName']}
 
     #..... User Creation ......
 
@@ -143,7 +144,12 @@ JD-TC-UNLINK_ONE_LOGIN-1
     ${resp}=  Provider Login  ${loginId2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph}${\n}
+    Set Suite Variable          ${username2}    ${resp.json()['userName']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${acc_id2}   ${resp.json()['id']}
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -151,7 +157,7 @@ JD-TC-UNLINK_ONE_LOGIN-1
 
     # ........ Provider 3 ..........
 
-    ${ph3}=  Evaluate  ${PUSERNAME}+5667854
+    ${ph3}=  Evaluate  ${PUSERNAME}+5667542
     Set Suite Variable  ${ph3}
     ${firstname3}=  FakerLibrary.first_name
     ${lastname3}=  FakerLibrary.last_name
@@ -176,7 +182,12 @@ JD-TC-UNLINK_ONE_LOGIN-1
     ${resp}=  Provider Login  ${loginId3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph}${\n}
+    Set Suite Variable          ${username3}    ${resp.json()['userName']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${acc_id3}   ${resp.json()['id']}
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -193,7 +204,9 @@ JD-TC-UNLINK_ONE_LOGIN-1
     ${resp}=    List all links of a loginId
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]}     ${loginId2}
+    Should Be Equal As Strings    ${resp.json()['${loginId2}']['userName']}     ${username2}
+    Should Be Equal As Strings    ${resp.json()['${loginId2}']['accountId']}    ${acc_id2}
+
 
     ${resp}=    Connect with other login  ${loginId3}  ${PASSWORD}
     Log   ${resp.content}
@@ -202,8 +215,10 @@ JD-TC-UNLINK_ONE_LOGIN-1
     ${resp}=    List all links of a loginId
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]}     ${loginId2}
-    Should Be Equal As Strings    ${resp.json()[1]}     ${loginId3}
+    Should Be Equal As Strings    ${resp.json()['${loginId2}']['userName']}     ${username2}
+    Should Be Equal As Strings    ${resp.json()['${loginId2}']['accountId']}    ${acc_id2}
+    Should Be Equal As Strings    ${resp.json()['${loginId3}']['userName']}     ${username3}
+    Should Be Equal As Strings    ${resp.json()['${loginId3}']['accountId']}    ${acc_id3}
 
     ${resp}=    Unlink one login  ${loginId2}
     Log   ${resp.content}
@@ -212,7 +227,8 @@ JD-TC-UNLINK_ONE_LOGIN-1
     ${resp}=    List all links of a loginId
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]}     ${loginId3}
+    Should Be Equal As Strings    ${resp.json()['${loginId3}']['userName']}     ${username3}
+    Should Be Equal As Strings    ${resp.json()['${loginId3}']['accountId']}    ${acc_id3}
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -226,10 +242,13 @@ JD-TC-UNLINK_ONE_LOGIN-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${dict}=    Create Dictionary
+    Set Suite Variable      ${dict}
+
     ${resp}=    List all links of a loginId
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}        []
+    Should Be Equal As Strings    ${resp.json()}        ${dict}
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -246,7 +265,8 @@ JD-TC-UNLINK_ONE_LOGIN-3
     ${resp}=    List all links of a loginId
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]}     ${loginId}
+    Should Be Equal As Strings    ${resp.json()['${loginId}']['userName']}     ${username}
+    Should Be Equal As Strings    ${resp.json()['${loginId}']['accountId']}    ${acc_id}
 
     ${resp}=    Unlink one login  ${loginId}
     Log   ${resp.content}
@@ -255,7 +275,7 @@ JD-TC-UNLINK_ONE_LOGIN-3
     ${resp}=    List all links of a loginId
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}        []
+    Should Be Equal As Strings    ${resp.json()}        ${dict}
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -272,7 +292,7 @@ JD-TC-UNLINK_ONE_LOGIN-4
     ${resp}=    List all links of a loginId
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}     []
+    Should Be Equal As Strings    ${resp.json()}        ${dict}
     
     ${resp}=    Provider Logout
     Log   ${resp.content}
