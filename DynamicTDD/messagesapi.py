@@ -2454,4 +2454,5 @@ LINKING_LOGINID_NOT_EXIST= "loginId does not exist"
 INCORRECT_CREDENTIALS= "Incorrect Credentials"
 UNLINKING_LOGINID_NOT_EXIST= "Unlinking loginId doesn't exist"
 LOGINID_CANNOT_BE_EMPTY= "LoginId should not be empty"
-
+PHONE_NOT_REGISTERED= "PhoneNo not registered"
+EMAIL_NOT_REGISTERED= "Email not registered"
