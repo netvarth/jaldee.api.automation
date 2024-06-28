@@ -104,6 +104,11 @@ JD-TC-List_ALL_LINKS-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable          ${username2}      ${resp.json()['userName']}
 
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${acc_id2}   ${resp.json()['id']}
+
     ${resp}=    Provider Logout
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -119,7 +124,8 @@ JD-TC-List_ALL_LINKS-1
     ${resp}=    List all links of a loginId
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['userName']}     ${username2}
+    Should Be Equal As Strings    ${resp.json()['${loginId2}']['userName']}     ${username2}
+    Should Be Equal As Strings    ${resp.json()['${loginId2}']['accountId']}    ${acc_id2}
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -156,10 +162,13 @@ JD-TC-List_ALL_LINKS-2
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable          ${username3}      ${resp.json()['userName']}
 
+    ${dict}=    Create Dictionary
+    Set Suite Variable      ${dict}
+
     ${resp}=    List all links of a loginId
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}     []
+    Should Be Equal As Strings    ${resp.json()}     ${dict}
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -176,7 +185,8 @@ JD-TC-List_ALL_LINKS-3
     ${resp}=    List all links of a loginId
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['userName']}     ${username2}
+    Should Be Equal As Strings    ${resp.json()['${loginId2}']['userName']}     ${username2}
+    Should Be Equal As Strings    ${resp.json()['${loginId2}']['accountId']}    ${acc_id2}
 
     ${resp}=    Unlink one login  ${loginId2}
     Log   ${resp.content}
@@ -185,7 +195,7 @@ JD-TC-List_ALL_LINKS-3
     ${resp}=    List all links of a loginId
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}        []
+    Should Be Equal As Strings    ${resp.json()}        ${dict}
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -279,6 +289,10 @@ JD-TC-Link_With_Other_Login-4
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Provider Login  ${loginId_n}  ${Password_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
