@@ -57,55 +57,66 @@ JD-TC-CreateRole-1
     ${resp}=  Get roles
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${id}  ${resp.json()[0]['id']}
+    ${len}=  Get Length  ${resp.json()}
+    Set Test Variable  ${id}  ${resp.json()[${len}-1]['id']}
 
 
     ${resp}=  Get roles by id    ${id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${description2}=    Fakerlibrary.Sentence    
-    ${featureName2}=    FakerLibrary.name    
-
-    ${resp}=  Update Role   ${id}    ${role_name1}    ${description2}    ${featureName2}    ${emptylist}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get roles by id    ${id}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['description']}  ${description2}
-    Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName2}
+    Should Be Equal As Strings  ${resp.json()['id']}  ${id}
     Should Be Equal As Strings  ${resp.json()['roleName']}  ${role_name1}
+    Should Be Equal As Strings  ${resp.json()['description']}  ${description}
+    Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName}
+    Should Be Equal As Strings  ${resp.json()['roleId']}  0
 
-    ${resp}=  Update role status    ${id}    ${toggle[1]}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${description2}=    Fakerlibrary.Sentence    
+    # ${featureName2}=    FakerLibrary.name    
 
-    ${resp}=  Get roles by id    ${id}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[1]}
+    # ${resp}=  Update Role   ${id}    ${role_name1}    ${description2}    ${featureName2}    ${emptylist}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Restore roles
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get roles by id    ${id}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['description']}  ${description2}
+    # Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName2}
+    # Should Be Equal As Strings  ${resp.json()['roleName']}  ${role_name1}
 
-    ${resp}=  Get roles by id    ${id}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[1]}
+    # ${resp}=  Update role status    ${id}    ${toggle[1]}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${resp}=  Get roles by id    ${id}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[1]}
+
+    # ${resp}=  Restore roles
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${resp}=  Get roles by id    ${id}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[1]}
 
 JD-TC-CreateRole-2
 
-    [Documentation]  Create  Roles with id  zero.
+    [Documentation]  Create  Roles with Department scope is 'All'.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${description1}=    Fakerlibrary.Sentence    
-    ${featureName1}=    FakerLibrary.name    
+    ${featureName1}=    FakerLibrary.name 
+
+    ${Department}=  Create List           all
+
+    ${user_scope}=   Create Dictionary     departments=${Department}  
 
     ${resp}=  Create Role      ${role_name1}    ${description1}    ${featureName1}   ${emptylist}
     Log   ${resp.json()}

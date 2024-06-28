@@ -123,7 +123,7 @@ JD-TC-GetLoanApplicationsByUid-1
     END
 
     IF  ${resp.json()['enableRbac']}==${bool[0]}
-        ${resp1}=  Enable Disable RBAC  ${toggle[0]}
+        ${resp1}=  Enable Disable CDL RBAC  ${toggle[0]}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
     END

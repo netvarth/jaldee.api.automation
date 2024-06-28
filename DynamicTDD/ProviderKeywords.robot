@@ -9511,11 +9511,11 @@ Replace Team Scope
     ${resp}=  PUT On Session  ynw  /provider/user/${feature}/team/replaceScope    data=${data}  expected_status=any
     RETURN  ${resp}
 
-Enable Disable RBAC
-   [Arguments]  ${status}  
-   Check And Create YNW Session
-   ${resp}=  PUT On Session  ynw  provider/account/settings/rbac/${status}  expected_status=any
-   RETURN  ${resp}
+# Enable Disable RBAC
+#    [Arguments]  ${status}  
+#    Check And Create YNW Session
+#    ${resp}=  PUT On Session  ynw  provider/account/settings/rbac/${status}  expected_status=any
+#    RETURN  ${resp}
 
 Create Role
     [Arguments]     ${roleName}    ${description}    ${featureName}    ${capabilityList}    &{kwargs}

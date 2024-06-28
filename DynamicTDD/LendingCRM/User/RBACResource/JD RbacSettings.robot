@@ -43,9 +43,11 @@ JD-TC-EnableDisableRbac-2
     Should Be Equal As Strings  ${resp.status_code}  200
     
 
-    ${resp}=  Run Keyword If  ${resp.json()['enableRbac']}==${bool[0]}   Enable Disable RBAC  ${toggle[0]}
-    Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enableRbac']}==${bool[0]}
+        ${resp1}=  Enable Disable CDL RBAC  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -66,7 +68,7 @@ JD-TC-EnableDisableRbac-3
     Should Be Equal As Strings  ${resp.status_code}  200
     
     IF  ${resp.json()['enableRbac']}==${bool[0]}
-        ${resp1}=  Enable Disable RBAC  ${toggle[0]}
+        ${resp1}=  Enable Disable CDL RBAC  ${toggle[0]}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
@@ -76,7 +78,7 @@ JD-TC-EnableDisableRbac-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableRbac']}  ${bool[1]}
 
-    ${resp}=  Enable Disable RBAC  ${toggle[1]}
+    ${resp}=  Enable Disable CDL RBAC  ${toggle[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -99,7 +101,7 @@ JD-TC-EnableDisableRbac-4
     Should Be Equal As Strings  ${resp.status_code}  200
     
     IF  ${resp.json()['enableRbac']}==${bool[0]}
-        ${resp1}=  Enable Disable RBAC  ${toggle[0]}
+        ${resp1}=  Enable Disable CDL RBAC  ${toggle[0]}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
@@ -109,7 +111,7 @@ JD-TC-EnableDisableRbac-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableRbac']}  ${bool[1]}
 
-    ${resp}=  Enable Disable RBAC  ${toggle[1]}
+    ${resp}=  Enable Disable CDL RBAC  ${toggle[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -118,7 +120,7 @@ JD-TC-EnableDisableRbac-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableRbac']}  ${bool[0]}
 
-    ${resp}=  Enable Disable RBAC  ${toggle[0]}
+    ${resp}=  Enable Disable CDL RBAC  ${toggle[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -141,7 +143,7 @@ JD-TC-EnableDisableRbac-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     IF  ${resp.json()['enableRbac']}==${bool[0]}
-        ${resp1}=  Enable Disable RBAC  ${toggle[0]}
+        ${resp1}=  Enable Disable CDL RBAC  ${toggle[0]}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
@@ -151,7 +153,7 @@ JD-TC-EnableDisableRbac-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableRbac']}  ${bool[1]}
 
-    ${resp}=  Enable Disable RBAC  ${toggle[0]}
+    ${resp}=  Enable Disable CDL RBAC  ${toggle[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${RBAC_ALREADY_ENABLED}
@@ -160,7 +162,7 @@ JD-TC-EnableDisableRbac-UH2
 
     [Documentation]   Enable Rbac without login
 
-    ${resp}=  Enable Disable RBAC  ${toggle[0]}
+    ${resp}=  Enable Disable CDL RBAC  ${toggle[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -173,7 +175,7 @@ JD-TC-EnableDisableRbac-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Enable Disable RBAC  ${toggle[0]}
+    ${resp}=  Enable Disable CDL RBAC  ${toggle[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
@@ -192,7 +194,7 @@ JD-TC-EnableDisableRbac-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     
     IF  ${resp.json()['enableRbac']}==${bool[0]}
-        ${resp1}=  Enable Disable RBAC  ${toggle[0]}
+        ${resp1}=  Enable Disable CDL RBAC  ${toggle[0]}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
@@ -202,7 +204,7 @@ JD-TC-EnableDisableRbac-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableRbac']}  ${bool[1]}
 
-    ${resp}=  Enable Disable RBAC  ${toggle[1]}
+    ${resp}=  Enable Disable CDL RBAC  ${toggle[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -211,7 +213,7 @@ JD-TC-EnableDisableRbac-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableRbac']}  ${bool[0]}
 
-    ${resp}=  Enable Disable RBAC  ${toggle[1]}
+    ${resp}=  Enable Disable CDL RBAC  ${toggle[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${RBAC_ALREADY_DISABLED}

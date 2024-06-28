@@ -822,7 +822,7 @@ JD-TC-LeadStatus-1
     # ${qns}   Get Provider Questionnaire By Id   ${id33}  
     # Log  ${qns.content}
     # Should Be Equal As Strings  ${qns.status_code}  200
-    # sleep  07s
+    sleep  05s
    
     ${resp}=  Get Questionnaire By uuid For Lead    ${le_id}
     Log  ${resp.content}
