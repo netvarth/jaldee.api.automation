@@ -95,7 +95,7 @@ JD-TC-Forget_LoginId-1
     ${resp}=    Forgot LoginId     otp=${key2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()}        ${userName}
+    Should Be Equal As Strings    ${resp.json()['${loginId}']['userName']}        ${userName}
     ${loginId_str}=  Convert To String  ${loginId}
     Dictionary Should Contain Key    ${resp.json()}      ${loginId_str}
 
@@ -247,12 +247,8 @@ JD-TC-Forget_LoginId-UH8
 
     ${resp}=    Forgot LoginId    countryCode=${countryCodes[1]}  phoneNo=${ph_inv}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    202
-
-    ${resp}=    Account Activation  ${ph_inv}  ${OtpPurpose['ResetLoginId']}
-    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings      ${resp.json()}      ${OTP_VALIDATION_FAILED}
+    Should Be Equal As Strings      ${resp.json()}      ${PHONE_NOT_REGISTERED}
 
 JD-TC-Forget_LoginId-UH9
 
@@ -263,12 +259,8 @@ JD-TC-Forget_LoginId-UH9
 
     ${resp}=    Forgot LoginId    email=${email_inv}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    202
-
-    ${resp}=    Account Activation  ${email_inv}  ${OtpPurpose['ResetLoginId']}
-    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings      ${resp.json()}      ${OTP_VALIDATION_FAILED}
+    Should Be Equal As Strings      ${resp.json()}      ${EMAIL_NOT_REGISTERED}
 
 JD-TC-Forget_LoginId-UH10
 
@@ -278,12 +270,8 @@ JD-TC-Forget_LoginId-UH10
 
     ${resp}=    Forgot LoginId    countryCode=${countryCodes[1]}  phoneNo=${ph_inv}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    202
-
-    ${resp}=    Account Activation  ${ph_inv}  ${OtpPurpose['ResetLoginId']}
-    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings      ${resp.json()}      ${OTP_VALIDATION_FAILED}
+    Should Be Equal As Strings      ${resp.json()}      ${PHONE_NOT_REGISTERED}
 
 JD-TC-Forget_LoginId-5
 
@@ -390,6 +378,10 @@ JD-TC-Forget_LoginId-5
 JD-TC-Forget_LoginId-6
 
     [Documentation]    Forget login Id - create user for another provider with same number as provider 1 and call forgot login id
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Provider Login  ${loginId}  ${PASSWORD}
     Log   ${resp.content}
