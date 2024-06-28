@@ -9518,9 +9518,12 @@ Enable Disable RBAC
    RETURN  ${resp}
 
 Create Role
-    [Arguments]     ${roleName}    ${description}    ${featureName}    ${capabilityList}
+    [Arguments]     ${roleName}    ${description}    ${featureName}    ${capabilityList}    &{kwargs}
 
     ${data}=    Create Dictionary      roleName=${roleName}    description=${description}    featureName=${featureName}    capabilityList=${capabilityList}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+            Set To Dictionary  ${data}   ${key}=${value}
+    END
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  provider/accessscope/role    data=${data}   expected_status=any
