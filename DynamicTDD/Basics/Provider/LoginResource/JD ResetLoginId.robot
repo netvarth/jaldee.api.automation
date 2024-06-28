@@ -82,6 +82,7 @@ JD-TC-Reset_LoginId-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+
 JD-TC-Reset_LoginId-2
 
     [Documentation]    Reset login Id - Login after reseting the login id with new login id

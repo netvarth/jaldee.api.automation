@@ -117,7 +117,7 @@ JD-TC-Forgot_Password-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
-JD-TC-Forgot_Password-4
+JD-TC-Forgot_Password-UH1
 
     [Documentation]    Forgot Password - verify otp using invalid mobile
 
@@ -132,7 +132,7 @@ JD-TC-Forgot_Password-4
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings      ${resp.json()}      ${OTP_VALIDATION_FAILED}
 
-JD-TC-Forgot_Password-5
+JD-TC-Forgot_Password-UH2
 
     [Documentation]    Forgot Password - verify otp using empty mobile
 
@@ -145,7 +145,7 @@ JD-TC-Forgot_Password-5
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings      ${resp.json()}      ${OTP_VALIDATION_FAILED}
 
-JD-TC-Forgot_Password-6
+JD-TC-Forgot_Password-UH3
 
     [Documentation]    Forgot Password - otp purpose is wrong
 
@@ -158,7 +158,7 @@ JD-TC-Forgot_Password-6
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings      ${resp.json()}      ${OTP_VALIDATION_FAILED}
 
-JD-TC-Forgot_Password-7
+JD-TC-Forgot_Password-UH4
 
     [Documentation]    Forgot Password - otp is invalid
 
@@ -176,3 +176,37 @@ JD-TC-Forgot_Password-7
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings      ${resp.json()}      ${ENTER_VALID_OTP}
+
+JD-TC-Forgot_Password-4
+
+    [Documentation]    Forgot Password - after setting new password try to login with old password 
+
+    ${resp}=  Provider Login  ${loginId}  ${Password_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${Password_new}=    Random Int  min=1111  max=99999
+    Set Suite Variable      ${Password_new}
+
+    ${resp}=    Forgot Password   loginId=${loginId}  password=${Password_new}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderResetPassword']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key} =   db.Verify Accnt   ${ph}    ${OtpPurpose['ProviderResetPassword']}
+    Set Suite Variable   ${key}
+
+    ${resp}=    Forgot Password     otp=${key}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Provider Login  ${loginId}  ${Password_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
