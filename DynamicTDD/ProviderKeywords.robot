@@ -15709,6 +15709,18 @@ Get Default Template Preview
     ${resp}=  GET On Session  ynw  /provider/comm/template/default/preview/${sendcomm_id}/${temp_id}  expected_status=any
     RETURN  ${resp}
 
+Get Contexts
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/context   expected_status=any
+    RETURN  ${resp}
+
+Get CommTargets
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/commTarget   expected_status=any
+    RETURN  ${resp}
+
 Get Available Slots for Month Year
     [Arguments]  ${location}  ${service}  ${month}  ${year}
     Check And Create YNW Session
