@@ -975,3 +975,41 @@ JD-TC-UpdateTemplate-UH4
     Should Be Equal As Strings  ${resp.json()['commTarget']}                    ${comm_target} 
     Should Be Equal As Strings  ${resp.json()['status']}                        ${VarStatus[0]} 
 
+JD-TC-UpdateTemplate-UH5
+
+    [Documentation]  get a default template and try to update that template with a new content.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Send Comm List
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${sendcomm_id1}   ${resp.json()[0]['id']}
+
+    ${resp}=  Get Default Template List by sendComm   ${sendcomm_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${deftemp_id1}   ${resp.json()['templates'][0]['id']}
+
+    ${resp}=  Get Default Template Preview   ${sendcomm_id1}  ${deftemp_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${temp_id1}   ${resp.json()['id']}
+    Set Test Variable   ${temp_name1}   ${resp.json()['templateName']}
+    Set Test Variable   ${content1}    ${resp.json()['content']['intro']}
+    Set Test Variable   ${dyn_var1}    ${resp.json()['variables']['content'][0]}
+    Set Test Variable   ${dyn_var2}    ${resp.json()['variables']['content'][1]}
+
+    ${comm_chanl}=  Create List   ${CommChannel[0]}  
+    ${comm_target}=  Create List   ${CommTarget[0]}  
+    ${content_msg}=      FakerLibrary.sentence
+    ${content_msg1}=     Set Variable  ${content1} ${content_msg}
+    ${new_content}=    Create Dictionary  intro=${content_msg1}
+
+    ${resp}=  Update Template   ${temp_id1}  ${temp_name1}  ${new_content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}   ${TEMPLATE_NOT_FOUND}
+

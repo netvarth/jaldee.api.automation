@@ -293,7 +293,7 @@ JD-TC-CreateTemplate-13
 
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence   
-    ${content_msg}=     Set Variable  ${content_msg} ${custom_var1}.
+    ${content_msg}=     Set Variable  ${content_msg} [${custom_var1}].
     ${content}=    Create Dictionary  intro=${content_msg}
     ${tempheader_sub}=      FakerLibrary.sentence   5
     ${salutation}=      FakerLibrary.word
@@ -605,6 +605,51 @@ JD-TC-CreateTemplate-20
     
     ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl}  
     ...       templateHeader=${temp_header}   sendComm=${sendcomm_list}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200  
+
+JD-TC-CreateTemplate-21
+
+    [Documentation]  Create a template for ALL context for (sms, email and whatsapp)
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${resp}=  Get Send Comm List
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${sendcomm_id1}   ${resp.json()[1]['id']}
+    Set Test Variable   ${context_id1}  ${resp.json()[0]['context']}
+
+    ${resp}=  Get Dynamic Variable List By Context   ${context_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${dynamic_var1}   ${resp.json()[1]['name']}
+ 
+    ${temp_name}=    FakerLibrary.word
+    ${details}=  Create Dictionary   JALDEE OTP=${EMPTY}
+    ${content_msg}=      FakerLibrary.sentence   
+    ${content_msg}=     Catenate   SEPARATOR=\n
+    ...             ${content_msg} [${dynamic_var1}].
+    ${content}=    Create Dictionary  intro=${content_msg}   cts=${EMPTY}  
+    ${tempheader_sub}=      FakerLibrary.sentence   5
+    ${salutation}=      FakerLibrary.word
+    ${comm_chanl}=  Create List   ${CommChannel[0]}  ${CommChannel[1]}  ${CommChannel[2]}
+    ${comm_target}=  Create List   ${CommTarget[1]}  
+    ${signature}=   FakerLibrary.hostname
+    ${salutation}=     Set Variable  ${salutation} [${dynamic_var1}].
+
+    ${temp_header}=    Create Dictionary  subject=${tempheader_sub}   salutation=${salutation}  note=${EMPTY}
+    ${temp_footer}=    Create Dictionary  closing=${EMPTY}   signature=${signature}  
+
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl}  
+    ...    templateHeader=${temp_header}  footer=${temp_footer}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200  
 
@@ -939,3 +984,41 @@ JD-TC-CreateTemplate-UH8
     ...    templateHeader=${temp_header}  footer=${temp_footer}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-CreateTemplate-UH9
+
+    [Documentation]  get a default template and try to create a template with a new content for SMS.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Send Comm List
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${sendcomm_id1}   ${resp.json()[0]['id']}
+
+    ${resp}=  Get Default Template List by sendComm   ${sendcomm_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${deftemp_id1}   ${resp.json()['templates'][0]['id']}
+
+    ${resp}=  Get Default Template Preview   ${sendcomm_id1}  ${deftemp_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${temp_id1}   ${resp.json()['id']}
+    Set Test Variable   ${temp_name1}   ${resp.json()['templateName']}
+    Set Test Variable   ${content1}    ${resp.json()['content']['intro']}
+    Set Test Variable   ${dyn_var1}    ${resp.json()['variables']['content'][0]}
+    Set Test Variable   ${dyn_var2}    ${resp.json()['variables']['content'][1]}
+
+    ${comm_chanl}=  Create List   ${CommChannel[0]}  
+    ${comm_target}=  Create List   ${CommTarget[0]}  
+    ${content_msg}=      FakerLibrary.sentence
+    ${content_msg1}=     Set Variable  ${content1} ${content_msg}
+    ${new_content}=    Create Dictionary  intro=${content_msg1}
+
+    ${resp}=  Create Template   ${temp_name1}  ${new_content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}   ${TEMPLATE_NOT_FOUND}
