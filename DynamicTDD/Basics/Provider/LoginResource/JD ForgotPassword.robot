@@ -76,6 +76,7 @@ JD-TC-Forgot_Password-1
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${Password_n}=    Random Int  min=11111111  max=99999999
+    Set Suite Variable      ${Password_n}
 
     ${resp}=    Forgot Password   loginId=${loginId}  password=${Password_n}
     Log   ${resp.content}
@@ -99,3 +100,79 @@ JD-TC-Forgot_Password-1
     ${resp}=    Provider Logout
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Forgot_Password-2
+
+    [Documentation]    Forgot Password - where login id is empty
+
+    ${resp}=    Forgot Password   loginId=${empty}  password=${Password_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+JD-TC-Forgot_Password-3
+
+    [Documentation]    Forgot Password - where Password is empty
+
+    ${resp}=    Forgot Password   loginId=${loginId}  password=${empty}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+JD-TC-Forgot_Password-4
+
+    [Documentation]    Forgot Password - verify otp using invalid mobile
+
+    ${resp}=    Forgot Password   loginId=${loginId}  password=${Password_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${inv}=     Random Int  min=999  max=99999
+
+    ${resp}=    Account Activation  ${inv}  ${OtpPurpose['ProviderResetPassword']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings      ${resp.json()}      ${OTP_VALIDATION_FAILED}
+
+JD-TC-Forgot_Password-5
+
+    [Documentation]    Forgot Password - verify otp using empty mobile
+
+    ${resp}=    Forgot Password   loginId=${loginId}  password=${Password_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${empty}  ${OtpPurpose['ProviderResetPassword']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings      ${resp.json()}      ${OTP_VALIDATION_FAILED}
+
+JD-TC-Forgot_Password-6
+
+    [Documentation]    Forgot Password - otp purpose is wrong
+
+    ${resp}=    Forgot Password   loginId=${loginId}  password=${Password_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${loginId}  ${OtpPurpose['ProviderSignUp']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings      ${resp.json()}      ${OTP_VALIDATION_FAILED}
+
+JD-TC-Forgot_Password-7
+
+    [Documentation]    Forgot Password - otp is invalid
+
+    ${resp}=    Forgot Password   loginId=${loginId}  password=${Password_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderResetPassword']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${otp}=      Random Int  min=999  max=99999
+
+    ${resp}=    Forgot Password     otp=${otp}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings      ${resp.json()}      ${ENTER_VALID_OTP}
