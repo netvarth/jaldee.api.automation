@@ -769,9 +769,8 @@ JD-TC-UpdateTemplate-12
     Should Be Equal As Strings  ${resp.json()['commTarget']}                    ${comm_target} 
     Should Be Equal As Strings  ${resp.json()['status']}                        ${VarStatus[0]} 
 
-    ${content_msg1}=     Set Variable  ${content_msg} [${custom_var1}].
-    ${content1}=    Create Dictionary  intro=${content_msg1}
-    ${out_content}=  Set Variable   ${content_msg} ${dis_name}
+    ${content_msg}=     Set Variable  ${content_msg} [${custom_var1}].
+    ${content1}=    Create Dictionary  intro=${content_msg}
 
     ${resp}=  Update Template   ${temp_id1}  ${temp_name}  ${content1}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl}  
     ...    templateHeader=${temp_header}  footer=${temp_footer}
@@ -789,7 +788,7 @@ JD-TC-UpdateTemplate-12
     Should Be Equal As Strings  ${resp.json()['templateHeader']['subject']}     ${tempheader_sub}
     Should Be Equal As Strings  ${resp.json()['templateHeader']['salutation']}  ${salutation}
     Should Be Equal As Strings  ${resp.json()['footer']['signature']}           ${signature}
-    Should Be Equal As Strings  ${resp.json()['content']['intro']}              ${out_content}
+    Should Be Equal As Strings  ${resp.json()['content']['intro']}              ${content_msg}
     Should Be Equal As Strings  ${resp.json()['variables']['content'][0]}       ${custom_var1}
     Should Be Equal As Strings  ${resp.json()['commTarget']}                    ${comm_target} 
     Should Be Equal As Strings  ${resp.json()['status']}                        ${VarStatus[0]} 
@@ -819,11 +818,6 @@ JD-TC-UpdateTemplate-13
     Set Test Variable   ${dynamic_var2}   ${resp.json()[1]['name']}
     Set Test Variable   ${dynamic_var3}   ${resp.json()[2]['name']}
     Set Test Variable   ${dynamic_var4}   ${resp.json()[3]['name']}
-
-    Set Test Variable   ${dynamic_sval1}   ${resp.json()[0]['sampleValue']}
-    Set Test Variable   ${dynamic_sval2}   ${resp.json()[1]['sampleValue']}
-    Set Test Variable   ${dynamic_sval3}   ${resp.json()[2]['sampleValue']}
-    Set Test Variable   ${dynamic_sval4}   ${resp.json()[3]['sampleValue']}
 
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence   
@@ -858,18 +852,13 @@ JD-TC-UpdateTemplate-13
     Should Be Equal As Strings  ${resp.json()['commTarget']}                    ${comm_target} 
     Should Be Equal As Strings  ${resp.json()['status']}                        ${VarStatus[0]} 
 
-    ${content_msg1}=     Catenate   SEPARATOR=\n
+    ${content_msg}=     Catenate   SEPARATOR=\n
     ...             ${content_msg} [${dynamic_var1}].
     ...             [${dynamic_var2}]
     ...             [${dynamic_var3}]
     ...             [${dynamic_var4}]  
-    ${content1}=    Create Dictionary  intro=${content_msg1}
-    ${out_content}=  Catenate   SEPARATOR=\n
-    ...             ${content_msg} ${dynamic_sval1}.
-    ...             ${dynamic_sval2} 
-    ...             ${dynamic_sval3}
-    ...             ${dynamic_sval4}  
-
+    ${content1}=    Create Dictionary  intro=${content_msg}
+    
     ${resp}=  Update Template   ${temp_id1}  ${temp_name}  ${content1}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl}  
     ...    templateHeader=${temp_header}  footer=${temp_footer}
     Log   ${resp.content}
@@ -886,8 +875,11 @@ JD-TC-UpdateTemplate-13
     Should Be Equal As Strings  ${resp.json()['templateHeader']['subject']}     ${tempheader_sub}
     Should Be Equal As Strings  ${resp.json()['templateHeader']['salutation']}  ${salutation}
     Should Be Equal As Strings  ${resp.json()['footer']['signature']}           ${signature}
-    Should Be Equal As Strings  ${resp.json()['content']['intro']}              ${out_content}
-    Should Be Equal As Strings  ${resp.json()['variables']['content'][0]}       ${custom_var1}
+    Should Be Equal As Strings  ${resp.json()['content']['intro']}              ${content_msg}
+    Should Be Equal As Strings  ${resp.json()['variables']['content'][0]}       ${dynamic_var1}
+    Should Be Equal As Strings  ${resp.json()['variables']['content'][1]}       ${dynamic_var2}
+    Should Be Equal As Strings  ${resp.json()['variables']['content'][2]}       ${dynamic_var3}
+    Should Be Equal As Strings  ${resp.json()['variables']['content'][3]}       ${dynamic_var4}
     Should Be Equal As Strings  ${resp.json()['commTarget']}                    ${comm_target} 
     Should Be Equal As Strings  ${resp.json()['status']}                        ${VarStatus[0]} 
 
