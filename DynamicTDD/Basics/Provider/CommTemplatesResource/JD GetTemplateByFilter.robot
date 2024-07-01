@@ -325,3 +325,88 @@ JD-TC-GetTemplateByFilter-5
     Should Be Equal As Strings  ${resp.json()[0]['commTarget']}                  ${comm_target} 
     Should Be Equal As Strings  ${resp.json()[0]['status']}                      ${VarStatus[0]} 
     Should Not Contain          ${resp.json()}                       ${temp_id1} 
+
+JD-TC-GetTemplateByFilter-UH1
+
+    [Documentation]  Get template by filter without login
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME202}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${temp_name}=    FakerLibrary.word
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
+    ${comm_target}=  Create List   ${CommTarget[0]}  
+    
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${temp_id1}  ${resp.content}
+
+    ${resp}=  ProviderLogout  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Template By Filter 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
+
+JD-TC-GetTemplateByFilter-UH2
+
+    [Documentation]  Get template by filter with consumer login.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME203}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${temp_name}=    FakerLibrary.word
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
+    ${comm_target}=  Create List   ${CommTarget[0]}  
+    
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${temp_id1}  ${resp.content}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    #............provider consumer creation..........
+
+    ${NewCustomer}    Generate random string    10    123456789
+    ${NewCustomer}    Convert To Integer  ${NewCustomer}
+
+    ${custf_name}=  FakerLibrary.name    
+    ${custl_name}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${NewCustomer}    firstName=${custf_name}   lastName=${custl_name}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get Template By Filter   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   401
+    Should Be Equal As Strings  ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}

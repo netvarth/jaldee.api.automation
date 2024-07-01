@@ -604,7 +604,7 @@ JD-TC-CreateTemplate-20
 
 JD-TC-CreateTemplate-21
 
-    [Documentation]  Create a template for ALL context for (telegram, email and whatsapp, App)
+    [Documentation]  Create a template for ALL context with channels :(telegram, email and whatsapp, App)
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}
     Log   ${resp.content}
@@ -646,6 +646,42 @@ JD-TC-CreateTemplate-21
     ...    templateHeader=${temp_header}  footer=${temp_footer}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200  
+
+JD-TC-CreateTemplate-22
+
+    [Documentation]  Create template without any channel.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${temp_name}=    FakerLibrary.word
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
+    ${comm_chanl}=  Create List  
+    ${comm_target}=  Create List   ${CommTarget[0]}  
+    
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-CreateTemplate-23
+
+    [Documentation]  Create template without comm target.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME135}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${temp_name}=    FakerLibrary.word
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
+    ${comm_target}=  Create List  
+    
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateTemplate-UH1
 
