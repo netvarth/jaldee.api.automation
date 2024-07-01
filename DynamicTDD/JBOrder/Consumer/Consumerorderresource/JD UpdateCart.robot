@@ -362,6 +362,70 @@ JD-TC-Update cart-UH3
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  ${resp.json()}   ${CANT_UPDATE_DEL_TYPEOF_CART_ITEMS_EXISTS_WITH_OLD_DEL_TYPE}
 
+JD-TC-Update cart-UH4
+
+    [Documentation]    update catalog with invalid consumer id
+   
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+    ${quantity}=  FakerLibrary.Random Int  min=${minSaleQuantity}   max=${maxSaleQuantity}
+    ${quantity}=                    Convert To Number  ${quantity}  1
+
+    ${catalogItem2}=  Create Dictionary    encId=${SOC_itemEncIds3}
+    ${catalogItems2}=  Create Dictionary    catalogItem=${catalogItem2}  quantity=${quantity}
+
+
+    ${INVALID_FIELD2}=  format String   ${INVALID_FIELD}   consumer
+    ${resp}=  Update Cart From Consumerside     ${cartUid}   ${store_id}    1000      ${deliveryType[0]}      ${catalogItems2}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_FIELD2}
+
+JD-TC-Update cart-UH4
+
+    [Documentation]    update catalog with invalid store
+   
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+    ${quantity}=  FakerLibrary.Random Int  min=${minSaleQuantity}   max=${maxSaleQuantity}
+    ${quantity}=                    Convert To Number  ${quantity}  1
+
+    ${catalogItem2}=  Create Dictionary    encId=${SOC_itemEncIds3}
+    ${catalogItems2}=  Create Dictionary    catalogItem=${catalogItem2}  quantity=${quantity}
+
+
+    ${INVALID_FIELD2}=  format String   ${INVALID_FIELD}   store
+    ${resp}=  Update Cart From Consumerside     ${cartUid}  1000   ${cid}     ${deliveryType[0]}      ${catalogItems2}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_FIELD2}
+
+JD-TC-Update cart-UH5
+
+    [Documentation]    update catalog with empty catalog
+   
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+    ${quantity}=  FakerLibrary.Random Int  min=${minSaleQuantity}   max=${maxSaleQuantity}
+    ${quantity}=                    Convert To Number  ${quantity}  1
+
+    ${catalogItem2}=  Create Dictionary    encId=${SOC_itemEncIds3}
+    ${catalogItems2}=  Create Dictionary    catalogItem=${catalogItem2}  quantity=${quantity}
+
+    ${FIELD_REQUIRED}=  format String   ${FIELD_REQUIRED}   items
+    ${resp}=  Update Cart From Consumerside     ${cartUid}  ${cid}   ${cid}     ${deliveryType[0]}     
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}   ${FIELD_REQUIRED}
+
+
+
 
 
 
