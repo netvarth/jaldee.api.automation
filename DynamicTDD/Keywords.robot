@@ -284,7 +284,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{InventoryAuditContext}            PURCHASE        INVENTORY        ITEM        CATALOG
 @{InventoryAuditLogAction}          ADD             UPDATE             REMOVE             UPDATE_STATUS
 @{templateFormat}                   PlainText
-@{CommChannel}                      SMS  Whatsapp  Email  Telegram
+@{CommChannel}                      SMS  Whatsapp  Email  Telegram  App
 @{CommTarget}                    	SPConsumer  SPUser  SPAdminUser
 @{toothConditions}                    ABRASION_TOOTH   ATTRITION_TOOTH   FRACTURE_TOOTH    IMPACTED_TOOTH       MISSING_TOOTH     MOBILE_TOOTH    ROOT_STUMP_TOOTH
 @{toothRestorations}                BRIDGE_TOOTH     CROWN_TOOTH     EXTRACTED_TOOTH
