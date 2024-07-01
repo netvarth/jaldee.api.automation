@@ -509,18 +509,12 @@ JD-TC-CreateTemplate-17
     ${resp}=  Get Dynamic Variable List By Context   ${context_id1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${dynamic_var1}   ${resp.json()[0]['name']}
-    Set Test Variable   ${dynamic_var2}   ${resp.json()[1]['name']}
-    Set Test Variable   ${dynamic_var3}   ${resp.json()[2]['name']}
-    Set Test Variable   ${dynamic_var4}   ${resp.json()[3]['name']}
-
+    Set Test Variable   ${dynamic_var1}   ${resp.json()[1]['name']}
+    
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence   
     ${content_msg}=     Catenate   SEPARATOR=\n
-    ...             ${content_msg} ${dynamic_var1}.
-    ...             ${dynamic_var2} 
-    ...             ${dynamic_var3}
-    ...             ${dynamic_var4}  
+    ...             ${content_msg} [${dynamic_var1}].
     ${content}=    Create Dictionary  intro=${content_msg}
     ${tempheader_sub}=      FakerLibrary.sentence   5
     ${salutation}=      FakerLibrary.word

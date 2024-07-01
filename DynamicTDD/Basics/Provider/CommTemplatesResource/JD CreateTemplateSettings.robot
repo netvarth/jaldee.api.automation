@@ -19,7 +19,7 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 JD-TC-CreateTemplateSettings-1
 
-    [Documentation]  create a template without trigger point(send comm) for signup, SMS, SPConsumer, then add that using template settings.
+    [Documentation]  create a template without trigger point(send comm) for signup, Whatsapp, SPConsumer, then add that using template settings.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME299}  ${PASSWORD}
     Log   ${resp.content}
@@ -47,6 +47,53 @@ JD-TC-CreateTemplateSettings-1
     Set Test Variable   ${sendcomm_id1}   ${resp.json()[0]['id']}
 
     ${resp}=  Create Template Settings   ${temp_id1}  ${VariableContext[0]}  ${sendcomm_id1}  ${CommTarget[0]}    ${CommChannel[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Template By Id   ${temp_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['accountId']}                   ${account_id} 
+    Should Be Equal As Strings  ${resp.json()['templateName']}                ${temp_name}
+    Should Be Equal As Strings  ${resp.json()['context']}                     ${VariableContext[0]} 
+    Should Be Equal As Strings  ${resp.json()['commChannel']}                 ${comm_chanl} 
+    Should Be Equal As Strings  ${resp.json()['templateFormat']}              ${templateFormat[0]}
+    Should Be Equal As Strings  ${resp.json()['content']['intro']}            ${content_msg}
+    Should Be Equal As Strings  ${resp.json()['commTarget']}                  ${comm_target} 
+    Should Be Equal As Strings  ${resp.json()['status']}                      ${VarStatus[0]} 
+
+JD-TC-CreateTemplateSettings-2
+
+    [Documentation]  create a template with a trigger point(send comm) for signup, Whatsapp, SPConsumer, then add another trigger using template settings.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME298}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${resp}=  Get Send Comm List
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${sendcomm_id1}   ${resp.json()[0]['id']}
+    Set Test Variable   ${sendcomm_id2}   ${resp.json()[1]['id']}
+
+    ${temp_name}=    FakerLibrary.word
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
+    ${comm_chanl}=   Create List   ${CommChannel[1]}  
+    ${comm_target}=  Create List   ${CommTarget[0]}  
+    ${sendcomm_list}=  Create List   ${sendcomm_id1}  
+    
+    ${resp}=  Create Template  ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}  ${comm_chanl}  sendComm=${sendcomm_list}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${temp_id1}  ${resp.json()}
+
+    ${resp}=  Create Template Settings   ${temp_id1}  ${VariableContext[0]}  ${sendcomm_id2}  ${CommTarget[0]}    ${CommChannel[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

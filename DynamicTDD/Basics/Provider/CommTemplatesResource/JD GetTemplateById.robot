@@ -792,6 +792,66 @@ JD-TC-GetTemplateById-15
     Should Be Equal As Strings  ${resp.json()['commTarget']}                    ${comm_target} 
     Should Be Equal As Strings  ${resp.json()['status']}                        ${VarStatus[0]} 
 
+JD-TC-GetTemplateById-16
+
+    [Documentation]  Create a template for signup context with dynamic variable in content then verify it..
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${resp}=  Get Send Comm List
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${context_id1}  ${resp.json()[0]['context']}
+
+    ${resp}=  Get Dynamic Variable List By Context   ${context_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${dynamic_var1}   ${resp.json()[1]['name']}
+    Set Test Variable   ${dynamic_sval1}   ${resp.json()[1]['sampleValue']}
+
+    ${temp_name}=    FakerLibrary.word
+    ${content_msg}=      FakerLibrary.sentence   
+    ${content_msg1}=     Set Variable  ${content_msg} [${dynamic_var1}].
+    ${content}=    Create Dictionary  intro=${content_msg1}
+    ${out_content}=  Set Variable   ${content_msg} ${dynamic_sval1}
+    ${tempheader_sub}=      FakerLibrary.sentence   5
+    ${salutation}=      FakerLibrary.word
+    ${comm_chanl}=  Create List   ${CommChannel[2]}  
+    ${comm_target}=  Create List   ${CommTarget[0]}  
+    ${signature}=   FakerLibrary.hostname
+
+    ${temp_header}=    Create Dictionary  subject=${tempheader_sub}   salutation=${salutation}
+    ${temp_footer}=    Create Dictionary  signature=${signature}  
+
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl}  
+    ...    templateHeader=${temp_header}  footer=${temp_footer}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${temp_id1}  ${resp.content}
+
+    ${resp}=  Get Template By Id   ${temp_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['accountId']}                     ${account_id} 
+    Should Be Equal As Strings  ${resp.json()['templateName']}                  ${temp_name}
+    Should Be Equal As Strings  ${resp.json()['context']}                       ${VariableContext[0]} 
+    Should Be Equal As Strings  ${resp.json()['commChannel']}                   ${comm_chanl} 
+    Should Be Equal As Strings  ${resp.json()['templateFormat']}                ${templateFormat[0]}
+    Should Be Equal As Strings  ${resp.json()['templateHeader']['subject']}     ${tempheader_sub}
+    Should Be Equal As Strings  ${resp.json()['templateHeader']['salutation']}  ${salutation}
+    Should Be Equal As Strings  ${resp.json()['footer']['signature']}           ${signature}
+    Should Be Equal As Strings  ${resp.json()['content']['intro']}              ${out_content} 
+    Should Be Equal As Strings  ${resp.json()['variables']['content'][0]}       ${custom_var1}
+    Should Be Equal As Strings  ${resp.json()['commTarget']}                    ${comm_target} 
+    Should Be Equal As Strings  ${resp.json()['status']}                        ${VarStatus[0]} 
+
 JD-TC-GetTemplateById-UH1
 
     [Documentation]  Get template by id with invalid variable id.
