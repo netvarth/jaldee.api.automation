@@ -110,7 +110,7 @@ JD-TC-Update cart-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id}  ${resp.json()}
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}   onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[0]}  storePickup=${boolean[1]}  courierService=${boolean[1]}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}   onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[0]}  storePickup=${boolean[1]}  courierService=${boolean[1]}  homeDelivery=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable              ${soc_id1}    ${resp.json()}
@@ -301,6 +301,69 @@ JD-TC-Update cart-1
     Should Be Equal As Strings    ${resp.json()['netTotal']}                                                            ${Total}
     Should Be Equal As Strings    ${resp.json()['locationId']}                                                            ${locId1}
     Should Be Equal As Strings    ${resp.json()['netRate']}                                                             ${Total}
+
+
+JD-TC-Update cart-UH1
+
+    [Documentation]    update catalog with empty quantity
+   
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+
+
+    ${catalogItem2}=  Create Dictionary    encId=${SOC_itemEncIds3}
+    ${catalogItems2}=  Create Dictionary    catalogItem=${catalogItem2}  quantity=${EMPTY}
+
+    ${FIELD_REQUIRED}=  format String   ${FIELD_REQUIRED}   quantity
+    ${resp}=  Update Cart From Consumerside     ${cartUid}   ${store_id}    ${cid}      ${deliveryType[0]}      ${catalogItems2}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}   ${FIELD_REQUIRED}
+
+JD-TC-Update cart-UH2
+
+    [Documentation]    update catalog with delivery type as home delivery
+   
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+    ${quantity}=  FakerLibrary.Random Int  min=${minSaleQuantity}   max=${maxSaleQuantity}
+    ${quantity}=                    Convert To Number  ${quantity}  1
+
+    ${catalogItem2}=  Create Dictionary    encId=${SOC_itemEncIds3}
+    ${catalogItems2}=  Create Dictionary    catalogItem=${catalogItem2}  quantity=${quantity}
+
+    ${CANT_UPDATE_DEL_TYPEOF_CART_ITEMS_EXISTS_WITH_OLD_DEL_TYPE}=  format String   ${CANT_UPDATE_DEL_TYPEOF_CART_ITEMS_EXISTS_WITH_OLD_DEL_TYPE}   Home Delivery   Store Pickup
+    ${resp}=  Update Cart From Consumerside     ${cartUid}   ${store_id}    ${cid}      ${deliveryType[1]}      ${catalogItems2}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}   ${CANT_UPDATE_DEL_TYPEOF_CART_ITEMS_EXISTS_WITH_OLD_DEL_TYPE}
+
+JD-TC-Update cart-UH3
+
+    [Documentation]    update catalog with delivery type as courrier service
+   
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+    ${quantity}=  FakerLibrary.Random Int  min=${minSaleQuantity}   max=${maxSaleQuantity}
+    ${quantity}=                    Convert To Number  ${quantity}  1
+
+    ${catalogItem2}=  Create Dictionary    encId=${SOC_itemEncIds3}
+    ${catalogItems2}=  Create Dictionary    catalogItem=${catalogItem2}  quantity=${quantity}
+
+    ${CANT_UPDATE_DEL_TYPEOF_CART_ITEMS_EXISTS_WITH_OLD_DEL_TYPE}=  format String   ${CANT_UPDATE_DEL_TYPEOF_CART_ITEMS_EXISTS_WITH_OLD_DEL_TYPE}   Courier Service   Store Pickup
+    ${resp}=  Update Cart From Consumerside     ${cartUid}   ${store_id}    ${cid}      ${deliveryType[2]}      ${catalogItems2}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}   ${CANT_UPDATE_DEL_TYPEOF_CART_ITEMS_EXISTS_WITH_OLD_DEL_TYPE}
+
+
+
 
 
 

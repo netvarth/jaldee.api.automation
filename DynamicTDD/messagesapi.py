@@ -2462,3 +2462,6 @@ CATALOG_NOT_FOR_ONLINE_ORDER = "Online self-ordering is not enabled for this cat
 ITEM_NOT_AVAILABLE_FOR_DELIVERY_TYPE= "{} is not avaialable for {}"
 ITEM_NOT_IN_CART_STORE= "{} is not available in the store {}"
 FIELD_REQUIRED_FOR = "{} required for {}"
+ADD_ONE_ITEM_IN_ONE_CART = "{} cannot be repeated in the same Cart"
+INVALID_FILTER_SO_CAT_ENC_ID = "Order Catalog EncId is required"
+CANT_UPDATE_DEL_TYPEOF_CART_ITEMS_EXISTS_WITH_OLD_DEL_TYPE = "The delivery type of your cart cannot be changed to {} because there are items in the cart with the delivery type {}"
