@@ -2449,6 +2449,8 @@ TEMPLATE_SETTINGS_TEMPLATE_SHOULD_BE_NOT_NULL = "Template should be selected"
 TEMPLATE_SETTINGS_CONTEXT_SHOULD_BE_NOT_NULL = "Context should be selected"
 TEMPLATE_SETTINGS_CHANNEL_SHOULD_BE_NOT_NULL = "Communication channel should be selected"
 TEMPLATE_SETTINGS_STATUS = "This template settings is already '{}'"
+SMS_TEMPLATE_NOT_ALLOWED = "Cannot create a SMS template"
+
 
 #   ConsumerOrder
 
@@ -2457,3 +2459,6 @@ IN_STORE_LOWER_CASE = "in store"
 ADD_ONE_ITEM_IN_ONE_CART = "{} cannot be repeated in the same Cart"
 ITEM_NOT_FOR_ONLINE_ORDER = "{} cannot be purchased online"
 CATALOG_NOT_FOR_ONLINE_ORDER = "Online self-ordering is not enabled for this catalog"
+ITEM_NOT_AVAILABLE_FOR_DELIVERY_TYPE= "{} is not avaialable for {}"
+ITEM_NOT_IN_CART_STORE= "{} is not available in the store {}"
+FIELD_REQUIRED_FOR = "{} required for {}"
