@@ -15,6 +15,9 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
+*** Variables ***
+
+${textfile}    ${EXECDIR}/TDD/textsample.txt
 
 *** Test Cases ***
 
@@ -276,6 +279,80 @@ JD-TC-CreateCustomVariable-13
     ${dis_name1}=    FakerLibrary.word
 
     ${resp}=  Create Custom Variable   ${name1}  ${dis_name1}  ${value}  ${VariableValueType[1]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-CreateCustomVariable-14
+
+    [Documentation]  Create custom variable for random contexts.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Contexts   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${context_values} =    Create List
+    FOR    ${item}    IN    @{resp.json()}
+        Append To List    ${context_values}    ${item['context']}
+    END
+    Log    Context values: ${context_values}
+
+    ${rand_context}=   Random Element   ${context_values}
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.hostname
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[1]}  ${rand_context}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-CreateCustomVariable-15
+
+    [Documentation]  Create custom variable for a date value.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.date
+
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[3]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-CreateCustomVariable-16
+
+    [Documentation]  Create custom variable for a file value.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+   
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${textfile}  ${VariableValueType[5]}  ${VariableContext[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-CreateCustomVariable-17
+
+    [Documentation]  Create custom variable for a link value.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${name}=    FakerLibrary.word
+    ${dis_name}=    FakerLibrary.word
+    ${value}=   FakerLibrary.url
+   
+    ${resp}=  Create Custom Variable   ${name}  ${dis_name}  ${value}  ${VariableValueType[4]}  ${VariableContext[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

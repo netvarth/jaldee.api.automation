@@ -33,7 +33,7 @@ JD-TC-CreateTemplateSettings-1
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence
     ${content}=    Create Dictionary  intro=${content_msg}
-    ${comm_chanl}=   Create List   ${CommChannel[0]}  
+    ${comm_chanl}=   Create List   ${CommChannel[1]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
     ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
@@ -46,7 +46,7 @@ JD-TC-CreateTemplateSettings-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${sendcomm_id1}   ${resp.json()[0]['id']}
 
-    ${resp}=  Create Template Settings   ${temp_id1}  ${VariableContext[0]}  ${sendcomm_id1}  ${CommTarget[0]}    ${CommChannel[0]}
+    ${resp}=  Create Template Settings   ${temp_id1}  ${VariableContext[0]}  ${sendcomm_id1}  ${CommTarget[0]}    ${CommChannel[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -78,7 +78,7 @@ JD-TC-CreateTemplateSettings-UH1
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence
     ${content}=    Create Dictionary  intro=${content_msg}
-    ${comm_chanl}=   Create List   ${CommChannel[0]}  
+    ${comm_chanl}=   Create List   ${CommChannel[1]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     ${sendcomm_list}=  Create List   ${sendcomm_id1}  
     
@@ -87,9 +87,9 @@ JD-TC-CreateTemplateSettings-UH1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${temp_id1}  ${resp.json()}
 
-    ${TEMPLATE_SETTINGS_EXISTS}=  format String   ${TEMPLATE_SETTINGS_EXISTS}   ${CommChannel[0]} 
+    ${TEMPLATE_SETTINGS_EXISTS}=  format String   ${TEMPLATE_SETTINGS_EXISTS}   ${CommChannel[1]} 
 
-    ${resp}=  Create Template Settings   ${temp_id1}  ${VariableContext[0]}  ${sendcomm_id1}  ${CommTarget[0]}    ${CommChannel[0]}  
+    ${resp}=  Create Template Settings   ${temp_id1}  ${VariableContext[0]}  ${sendcomm_id1}  ${CommTarget[0]}    ${CommChannel[1]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  ${resp.json()}   ${TEMPLATE_SETTINGS_EXISTS}
@@ -107,7 +107,7 @@ JD-TC-CreateTemplateSettings-UH2
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${sendcomm_id1}   ${resp.json()[0]['id']}
 
-    ${resp}=  Create Template Settings   ${EMPTY}  ${VariableContext[0]}  ${sendcomm_id1}  ${CommTarget[0]}    ${CommChannel[0]}
+    ${resp}=  Create Template Settings   ${EMPTY}  ${VariableContext[0]}  ${sendcomm_id1}  ${CommTarget[0]}    ${CommChannel[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  ${resp.json()}   ${TEMPLATE_SETTINGS_TEMPLATE_SHOULD_BE_NOT_NULL}
@@ -123,7 +123,7 @@ JD-TC-CreateTemplateSettings-UH3
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence
     ${content}=    Create Dictionary  intro=${content_msg}
-    ${comm_chanl}=   Create List   ${CommChannel[0]}  
+    ${comm_chanl}=   Create List   ${CommChannel[1]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
     ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
@@ -136,7 +136,7 @@ JD-TC-CreateTemplateSettings-UH3
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${sendcomm_id1}   ${resp.json()[0]['id']}
 
-    ${resp}=  Create Template Settings   ${temp_id1}  ${NULL}  ${sendcomm_id1}  ${CommTarget[0]}    ${CommChannel[0]}
+    ${resp}=  Create Template Settings   ${temp_id1}  ${NULL}  ${sendcomm_id1}  ${CommTarget[0]}    ${CommChannel[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  ${resp.json()}   ${TEMPLATE_SETTINGS_CONTEXT_SHOULD_BE_NOT_NULL}
@@ -152,7 +152,7 @@ JD-TC-CreateTemplateSettings-UH4
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence
     ${content}=    Create Dictionary  intro=${content_msg}
-    ${comm_chanl}=   Create List   ${CommChannel[0]}  
+    ${comm_chanl}=   Create List   ${CommChannel[1]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
     ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
@@ -165,7 +165,7 @@ JD-TC-CreateTemplateSettings-UH4
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${sendcomm_id1}   ${resp.json()[0]['id']}
 
-    ${resp}=  Create Template Settings   ${temp_id1}  ${VariableContext[0]}  ${sendcomm_id1}  ${NULL}    ${CommChannel[0]}
+    ${resp}=  Create Template Settings   ${temp_id1}  ${VariableContext[0]}  ${sendcomm_id1}  ${NULL}    ${CommChannel[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  ${resp.json()}   ${TEMPLATE_SETTINGS_TARGET_SHOULD_BE_NOT_NULL}
@@ -181,7 +181,7 @@ JD-TC-CreateTemplateSettings-UH5
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence
     ${content}=    Create Dictionary  intro=${content_msg}
-    ${comm_chanl}=   Create List   ${CommChannel[0]}  
+    ${comm_chanl}=   Create List   ${CommChannel[1]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
     ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
@@ -189,7 +189,7 @@ JD-TC-CreateTemplateSettings-UH5
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${temp_id1}  ${resp.json()}
 
-    ${resp}=  Create Template Settings   ${temp_id1}  ${VariableContext[0]}  ${EMPTY}  ${CommTarget[0]}    ${CommChannel[0]}
+    ${resp}=  Create Template Settings   ${temp_id1}  ${VariableContext[0]}  ${EMPTY}  ${CommTarget[0]}    ${CommChannel[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  ${resp.json()}   ${TEMPLATE_SETTINGS_COMM_POINT_SHOULD_BE_NOT_NULL}
@@ -205,7 +205,7 @@ JD-TC-CreateTemplateSettings-UH6
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence
     ${content}=    Create Dictionary  intro=${content_msg}
-    ${comm_chanl}=   Create List   ${CommChannel[0]}  
+    ${comm_chanl}=   Create List   ${CommChannel[1]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
     ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 

@@ -34,7 +34,7 @@ JD-TC-UpdateTemplate-1
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence
     ${content}=    Create Dictionary  intro=${content_msg}
-    ${comm_chanl}=  Create List   ${CommChannel[0]}  
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
     ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
@@ -86,7 +86,7 @@ JD-TC-UpdateTemplate-2
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence
     ${content}=    Create Dictionary  intro=${content_msg}
-    ${comm_chanl}=  Create List   ${CommChannel[0]}  
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
     ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
@@ -140,7 +140,7 @@ JD-TC-UpdateTemplate-3
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence
     ${content}=    Create Dictionary  intro=${content_msg}
-    ${comm_chanl}=  Create List   ${CommChannel[0]}  
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
     ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
@@ -196,7 +196,7 @@ JD-TC-UpdateTemplate-4
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence
     ${content}=    Create Dictionary  intro=${content_msg}
-    ${comm_chanl}=  Create List   ${CommChannel[0]}  
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
     ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
@@ -251,7 +251,7 @@ JD-TC-UpdateTemplate-5
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence
     ${content}=    Create Dictionary  intro=${content_msg}
-    ${comm_chanl}=  Create List   ${CommChannel[0]}  
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
     ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
@@ -808,7 +808,7 @@ JD-TC-UpdateTemplate-UH1
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence
     ${content}=    Create Dictionary  intro=${content_msg}
-    ${comm_chanl}=  Create List   ${CommChannel[0]}  
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
     ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
@@ -860,7 +860,7 @@ JD-TC-UpdateTemplate-UH2
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence
     ${content}=    Create Dictionary  intro=${content_msg}
-    ${comm_chanl}=  Create List   ${CommChannel[0]}  
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
     ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
@@ -893,7 +893,7 @@ JD-TC-UpdateTemplate-UH3
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence
     ${content}=    Create Dictionary  intro=${content_msg}
-    ${comm_chanl}=  Create List   ${CommChannel[0]}  
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
     ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
@@ -1002,7 +1002,7 @@ JD-TC-UpdateTemplate-UH5
     Set Test Variable   ${dyn_var1}    ${resp.json()['variables']['content'][0]}
     Set Test Variable   ${dyn_var2}    ${resp.json()['variables']['content'][1]}
 
-    ${comm_chanl}=  Create List   ${CommChannel[0]}  
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     ${content_msg}=      FakerLibrary.sentence
     ${content_msg1}=     Set Variable  ${content1} ${content_msg}

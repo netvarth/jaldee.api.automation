@@ -33,7 +33,7 @@ JD-TC-GetTemplateSettingsByFilter-1
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence
     ${content}=    Create Dictionary  intro=${content_msg}
-    ${comm_chanl}=   Create List   ${CommChannel[0]}  
+    ${comm_chanl}=   Create List   ${CommChannel[1]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
     ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
@@ -58,7 +58,7 @@ JD-TC-GetTemplateSettingsByFilter-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${sendcomm_id1}   ${resp.json()[0]['id']}
 
-    ${resp}=  Create Template Settings   ${temp_id1}  ${VariableContext[0]}  ${sendcomm_id1}  ${CommTarget[0]}    ${CommChannel[0]}
+    ${resp}=  Create Template Settings   ${temp_id1}  ${VariableContext[0]}  ${sendcomm_id1}  ${CommTarget[0]}    ${CommChannel[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${temp_setid1}  ${resp.json()}
@@ -71,7 +71,7 @@ JD-TC-GetTemplateSettingsByFilter-1
     Should Be Equal As Strings  ${resp.json()[0]['context']}                     ${VariableContext[0]} 
     Should Be Equal As Strings  ${resp.json()[0]['sendCommId']}                  ${sendcomm_id1} 
     Should Be Equal As Strings  ${resp.json()[0]['commTarget']}                  ${CommTarget[0]} 
-    Should Be Equal As Strings  ${resp.json()[0]['commChannel']}                 ${CommChannel[0]} 
+    Should Be Equal As Strings  ${resp.json()[0]['commChannel']}                 ${CommChannel[1]} 
     Should Be Equal As Strings  ${resp.json()[0]['status']}                      ${VarStatus[0]} 
 
 JD-TC-GetTemplateSettingsByFilter-2
@@ -96,7 +96,7 @@ JD-TC-GetTemplateSettingsByFilter-2
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence
     ${content}=    Create Dictionary  intro=${content_msg}
-    ${comm_chanl}=   Create List   ${CommChannel[0]}  
+    ${comm_chanl}=   Create List   ${CommChannel[1]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     ${sendcomm_list}=  Create List   ${sendcomm_id1}  
     
@@ -118,7 +118,7 @@ JD-TC-GetTemplateSettingsByFilter-2
     Should Be Equal As Strings  ${resp.json()['commTarget']}                  ${comm_target} 
     Should Be Equal As Strings  ${resp.json()['status']}                      ${VarStatus[0]} 
 
-    ${resp}=  Create Template Settings   ${temp_id1}  ${VariableContext[0]}  ${sendcomm_id2}  ${CommTarget[0]}    ${CommChannel[0]}
+    ${resp}=  Create Template Settings   ${temp_id1}  ${VariableContext[0]}  ${sendcomm_id2}  ${CommTarget[0]}    ${CommChannel[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${temp_setid1}  ${resp.json()}
@@ -131,7 +131,7 @@ JD-TC-GetTemplateSettingsByFilter-2
     Should Be Equal As Strings  ${resp.json()[0]['context']}                     ${VariableContext[0]} 
     Should Be Equal As Strings  ${resp.json()[0]['sendCommId']}                  ${sendcomm_id1} 
     Should Be Equal As Strings  ${resp.json()[0]['commTarget']}                  ${CommTarget[0]} 
-    Should Be Equal As Strings  ${resp.json()[0]['commChannel']}                 ${CommChannel[0]} 
+    Should Be Equal As Strings  ${resp.json()[0]['commChannel']}                 ${CommChannel[1]} 
     Should Be Equal As Strings  ${resp.json()[0]['status']}                      ${VarStatus[0]} 
 
     Should Be Equal As Strings  ${resp.json()[1]['accountId']}                   ${account_id} 
@@ -139,7 +139,7 @@ JD-TC-GetTemplateSettingsByFilter-2
     Should Be Equal As Strings  ${resp.json()[1]['context']}                     ${VariableContext[0]} 
     Should Be Equal As Strings  ${resp.json()[1]['sendCommId']}                  ${sendcomm_id2} 
     Should Be Equal As Strings  ${resp.json()[1]['commTarget']}                  ${CommTarget[0]} 
-    Should Be Equal As Strings  ${resp.json()[1]['commChannel']}                 ${CommChannel[0]} 
+    Should Be Equal As Strings  ${resp.json()[1]['commChannel']}                 ${CommChannel[1]} 
     Should Be Equal As Strings  ${resp.json()[1]['status']}                      ${VarStatus[0]} 
 
    

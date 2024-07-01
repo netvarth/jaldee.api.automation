@@ -34,7 +34,7 @@ JD-TC-GetTemplateByFilter-1
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence
     ${content}=    Create Dictionary  intro=${content_msg}
-    ${comm_chanl}=  Create List   ${CommChannel[0]}  
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
     ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
@@ -70,7 +70,7 @@ JD-TC-GetTemplateByFilter-2
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence
     ${content}=    Create Dictionary  intro=${content_msg}
-    ${comm_chanl}=  Create List   ${CommChannel[0]}  
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
     ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
@@ -81,7 +81,7 @@ JD-TC-GetTemplateByFilter-2
     ${temp_name1}=    FakerLibrary.word
     ${content_msg1}=      FakerLibrary.sentence
     ${content1}=    Create Dictionary  intro=${content_msg1}
-    ${comm_chanl}=  Create List   ${CommChannel[0]}  
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
     ${resp}=  Create Template   ${temp_name1}  ${content1}  ${templateFormat[0]}  ${VariableContext[2]}  ${comm_target}    ${comm_chanl} 
@@ -135,7 +135,7 @@ JD-TC-GetTemplateByFilter-3
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence
     ${content}=    Create Dictionary  intro=${content_msg}
-    ${comm_chanl}=  Create List   ${CommChannel[0]}  
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
     ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
@@ -146,7 +146,7 @@ JD-TC-GetTemplateByFilter-3
     ${temp_name1}=    FakerLibrary.word
     ${content_msg1}=      FakerLibrary.sentence
     ${content1}=    Create Dictionary  intro=${content_msg1}
-    ${comm_chanl}=  Create List   ${CommChannel[0]}  
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
     ${resp}=  Create Template   ${temp_name1}  ${content1}  ${templateFormat[0]}  ${VariableContext[2]}  ${comm_target}    ${comm_chanl} 
@@ -196,7 +196,7 @@ JD-TC-GetTemplateByFilter-4
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence
     ${content}=    Create Dictionary  intro=${content_msg}
-    ${comm_chanl}=  Create List   ${CommChannel[0]}  
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
     ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
@@ -207,7 +207,7 @@ JD-TC-GetTemplateByFilter-4
     ${temp_name1}=    FakerLibrary.word
     ${content_msg1}=      FakerLibrary.sentence
     ${content1}=    Create Dictionary  intro=${content_msg1}
-    ${comm_chanl}=  Create List   ${CommChannel[0]}  
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
     ${resp}=  Create Template   ${temp_name1}  ${content1}  ${templateFormat[0]}  ${VariableContext[2]}  ${comm_target}    ${comm_chanl} 
@@ -261,7 +261,7 @@ JD-TC-GetTemplateByFilter-5
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence
     ${content}=    Create Dictionary  intro=${content_msg}
-    ${comm_chanl}=  Create List   ${CommChannel[0]}  
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
     ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
@@ -272,7 +272,7 @@ JD-TC-GetTemplateByFilter-5
     ${temp_name1}=    FakerLibrary.word
     ${content_msg1}=      FakerLibrary.sentence
     ${content1}=    Create Dictionary  intro=${content_msg1}
-    ${comm_chanl}=  Create List   ${CommChannel[0]}  
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
     ${resp}=  Create Template   ${temp_name1}  ${content1}  ${templateFormat[0]}  ${VariableContext[2]}  ${comm_target}    ${comm_chanl} 
