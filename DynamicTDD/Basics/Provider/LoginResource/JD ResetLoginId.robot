@@ -270,7 +270,7 @@ JD-TC-Reset_LoginId-4
 
     [Documentation]    Reset login Id - provider create a user and user reset login id
 
-    ${resp}=  Provider Login  ${loginId_n}  ${PASSWORD}
+    ${resp}=  Provider Login  ${new}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -320,6 +320,10 @@ JD-TC-Reset_LoginId-4
     Set Suite Variable      ${loginId_n}
 
     ${resp}=    Reset LoginId  ${user1_id}  ${loginId_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

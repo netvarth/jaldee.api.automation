@@ -478,3 +478,31 @@ JD-TC-Forget_LoginId-7
     Should Be Equal As Strings    ${resp.status_code}    200
     ${loginId_555}=  Convert To String  ${loginId555}
     Dictionary Should Contain Key    ${resp.json()}      ${loginId_555}
+
+JD-TC-Forget_LoginId-8
+
+    [Documentation]    Forget login Id - using Existing provider and login after forgot login id
+
+    ${resp}=    Forgot LoginId  countryCode=${countryCodes[1]}  phoneNo=${PUSERNAME100}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${PUSERNAME100}  ${OtpPurpose['ResetLoginId']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${keyog} =   db.Verify Accnt   ${PUSERNAME100}    ${OtpPurpose['ResetLoginId']}
+    Set Suite Variable   ${keyog}
+    ${resp}=    Forgot LoginId     otp=${keyog}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${loginId_str}=  Convert To String  ${PUSERNAME100}
+    Dictionary Should Contain Key    ${resp.json()}      ${loginId_str}
+
+    ${resp}=  Provider Login  ${loginId_str}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200

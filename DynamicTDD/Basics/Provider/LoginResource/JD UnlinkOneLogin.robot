@@ -359,3 +359,32 @@ JD-TC-UNLINK_ONE_LOGIN-UH4
     ${resp}=    Provider Logout
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-UNLINK_ONE_LOGIN-5
+
+    [Documentation]    Unlink Login - login existing login and link one and after unlink and check   
+
+    ${resp}=  Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Connect with other login  ${loginId2}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    List all links of a loginId
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['${loginId2}']['userName']}     ${username2}
+    Should Be Equal As Strings    ${resp.json()['${loginId2}']['accountId']}    ${acc_id2}
+
+    ${resp}=    Unlink one login  ${loginId2}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${dict}=    Create Dictionary
+
+    ${resp}=    List all links of a loginId
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}        ${dict}

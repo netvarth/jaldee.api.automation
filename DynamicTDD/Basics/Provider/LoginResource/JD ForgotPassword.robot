@@ -107,7 +107,8 @@ JD-TC-Forgot_Password-2
 
     ${resp}=    Forgot Password   loginId=${empty}  password=${Password_n}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    202
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings      ${resp.json()}      ${LOGIN_ID_REQ}
 
 JD-TC-Forgot_Password-3
 
@@ -177,7 +178,7 @@ JD-TC-Forgot_Password-UH4
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings      ${resp.json()}      ${ENTER_VALID_OTP}
 
-JD-TC-Forgot_Password-4
+JD-TC-Forgot_Password-UH5
 
     [Documentation]    Forgot Password - after setting new password try to login with old password 
 
@@ -209,4 +210,61 @@ JD-TC-Forgot_Password-4
 
     ${resp}=  Provider Login  ${loginId}  ${Password_n}
     Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    401
+    Should Be Equal As Strings      ${resp.json()}      ${LOGIN_INVALID_USERID_PASSWORD}
+
+JD-TC-Forgot_Password-5
+
+    [Documentation]    Forgot Password - existing provider reset password and login
+
+    ${resp}=  Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200 
+
+    ${Password_ep}=    Random Int  min=1111  max=99999
+    Set Suite Variable      ${Password_ep}
+
+    ${resp}=    Forgot Password   loginId=${PUSERNAME100}  password=${Password_ep}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${PUSERNAME100}  ${OtpPurpose['ProviderResetPassword']}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key_ep} =   db.Verify Accnt   ${PUSERNAME100}    ${OtpPurpose['ProviderResetPassword']}
+
+    ${resp}=    Forgot Password     otp=${key_ep}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #.... Login using new password
+
+    ${resp}=  Provider Login  ${PUSERNAME100}  ${Password_ep}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    # .... Set Password to the old password
+
+    ${resp}=    Forgot Password   loginId=${PUSERNAME100}  password=${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${PUSERNAME100}  ${OtpPurpose['ProviderResetPassword']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key_old} =   db.Verify Accnt   ${PUSERNAME100}    ${OtpPurpose['ProviderResetPassword']}
+
+    ${resp}=    Forgot Password     otp=${key_old}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+

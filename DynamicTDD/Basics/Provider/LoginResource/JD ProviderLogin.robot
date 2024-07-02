@@ -111,7 +111,7 @@ JD-TC-Provider_Login-UH4
 
 JD-TC-Provider_Login-2
 
-    [Documentation]    Provider User Login
+    [Documentation]    Provider User Login - user trying to login before reseting password
 
     ${resp}=  Provider Login  ${loginId}  ${PASSWORD}
     Log   ${resp.content}
@@ -170,6 +170,15 @@ JD-TC-Provider_Login-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Provider Login  ${loginId_n}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    401
+    Should Be Equal As Strings   ${resp.json()}         ${LOGIN_INVALID_USERID_PASSWORD}
+
+JD-TC-Provider_Login-3
+
+    [Documentation]    Provider User Login
+
     ${Password_n}=    Random Int  min=11111111  max=99999999
 
     ${resp}=    Forgot Password   loginId=${loginId_n}  password=${Password_n}
@@ -206,3 +215,4 @@ JD-TC-Provider_Login-3
     ${resp}=    Provider Logout
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    

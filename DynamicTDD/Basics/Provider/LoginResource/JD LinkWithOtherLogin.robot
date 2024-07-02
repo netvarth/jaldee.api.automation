@@ -345,10 +345,12 @@ JD-TC-Link_With_Other_Login-7
     
     ${resp}=  Get User By Id              ${user1}
     Log   ${resp.json()}
-    Should Be Equal As Strings            ${resp.status_code}  200
-    Set Suite Variable  ${user1_id}       ${resp.json()['id']}
-    Set Suite Variable  ${user_num}    ${resp.json()['mobileNo']}
-
+    Should Be Equal As Strings              ${resp.status_code}  200
+    Set Suite Variable  ${user1_id}         ${resp.json()['id']}
+    Set Suite Variable  ${user_num}         ${resp.json()['mobileNo']}
+    Set Suite Variable  ${user_firstName}   ${resp.json()['firstName']}
+    Set Suite Variable  ${user_lastName}    ${resp.json()['lastName']}
+    
     ${loginId_n}=     Random Int  min=1  max=9999
     Set Suite Variable      ${loginId_n}
 
@@ -357,6 +359,7 @@ JD-TC-Link_With_Other_Login-7
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${Password_n}=    Random Int  min=11111111  max=99999999
+    Set Suite Variable      ${Password_n}
 
     ${resp}=    Forgot Password   loginId=${loginId_n}  password=${Password_n}
     Log   ${resp.content}
@@ -382,7 +385,9 @@ JD-TC-Link_With_Other_Login-7
     ${resp}=    List all links of a loginId
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]}     ${loginId_n}
+    Should Be Equal As Strings    ${resp.json()['${loginId2}']['userName']}     ${username2}
+    Should Be Equal As Strings    ${resp.json()['${loginId2}']['accountId']}    ${acc_id2}
+    Should Be Equal As Strings    ${resp.json()['${loginId_n}']['userName']}    ${user_firstName} ${user_lastName} 
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -395,7 +400,8 @@ JD-TC-Link_With_Other_Login-7
     ${resp}=    List all links of a loginId
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['userName']}     ${username1}
+    Should Be Equal As Strings    ${resp.json()['${loginId}']['userName']}     ${username}
+    Should Be Equal As Strings    ${resp.json()['${loginId}']['accountId']}    ${acc_id}
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -404,12 +410,6 @@ JD-TC-Link_With_Other_Login-7
 JD-TC-Link_With_Other_Login-8
 
     [Documentation]    Link With other login - provider 2 link with provider 1 created user and get linked list from both sides
-
-    #... clear this logout when above case is passed
-
-    ${resp}=    Provider Logout
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Provider Login  ${loginId2}  ${PASSWORD}
     Log   ${resp.content}
@@ -422,8 +422,11 @@ JD-TC-Link_With_Other_Login-8
     ${resp}=    List all links of a loginId
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['userName']}     ${username1}
-    Should Be Equal As Strings    ${resp.json()[0]}     ${loginId_n}
+    Should Be Equal As Strings    ${resp.json()['${loginId_n}']['userName']}    ${user_firstName} ${user_lastName} 
+    Should Be Equal As Strings    ${resp.json()['${loginId}']['userName']}     ${username}
+    Should Be Equal As Strings    ${resp.json()['${loginId}']['accountId']}    ${acc_id}
+    Should Be Equal As Strings    ${resp.json()['${loginId3}']['userName']}     ${username3}
+    Should Be Equal As Strings    ${resp.json()['${loginId3}']['accountId']}    ${acc_id3}
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -436,8 +439,10 @@ JD-TC-Link_With_Other_Login-8
     ${resp}=    List all links of a loginId
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]}     ${loginId}
-    Should Be Equal As Strings    ${resp.json()[0]}     ${loginId2}
+    Should Be Equal As Strings    ${resp.json()['${loginId}']['userName']}     ${username}
+    Should Be Equal As Strings    ${resp.json()['${loginId}']['accountId']}    ${acc_id}
+    Should Be Equal As Strings    ${resp.json()['${loginId2}']['userName']}     ${username2}
+    Should Be Equal As Strings    ${resp.json()['${loginId2}']['accountId']}    ${acc_id2}
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -477,6 +482,10 @@ JD-TC-Link_With_Other_Login-UH4
 
     [Documentation]    Link With other login - where login id is invalid
 
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
     ${resp}=  Provider Login  ${loginId}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -510,3 +519,4 @@ JD-TC-Link_With_Other_Login-UH5
     ${resp}=    Provider Logout
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
