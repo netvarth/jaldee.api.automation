@@ -3726,10 +3726,13 @@ Get User Search Status
     ${resp}=    GET On Session     ynw   /provider/user/search/${u_id}   expected_status=any  
     RETURN  ${resp}
 
-Create Team For User
-    [Arguments]  ${name}  ${team_size}  ${desc}
+Create Team For User    
+    [Arguments]  ${name}  ${team_size}  ${desc}   &{kwargs}
     Check And Create YNW Session
     ${data}=  Create Dictionary  name=${name}  size=${team_size}  description=${desc}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END 
     ${data}=  json.dumps  ${data}
     ${resp}=  POST On Session  ynw  /provider/user/team   data=${data}  expected_status=any
     RETURN  ${resp}
