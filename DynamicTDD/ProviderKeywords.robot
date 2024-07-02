@@ -15652,9 +15652,8 @@ Get Send Comm List By Context
 
 Update Template Settings
 
-    [Arguments]  ${setttings_id}  ${temp_id}   ${context}  ${sendcomm_id}  ${commTarget}  ${comm_chanl}  &{kwargs}
-   
-    ${data}=  Create Dictionary  templateId=${temp_id}  context=${context}  sendCommId=${sendcomm_id}  commTarget=${commTarget}   commChannel=${comm_chanl} 
+    [Arguments]  ${setttings_id}   &{kwargs}
+    ${data}=  Create Dictionary   
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
@@ -15700,7 +15699,6 @@ Get All Settings By Filter
 Create Template Preview
 
     [Arguments]   ${context}  ${content}   &{kwargs}
-   
     ${data}=  Create Dictionary    context=${context}    content=${content}
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
