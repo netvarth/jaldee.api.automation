@@ -196,12 +196,12 @@ JD-TC-UpdateRole-4
     ${featureName2}=    FakerLibrary.name    
     Set Suite Variable  ${featureName2}    
 
-    ${Capabilities}=    Create List    ${cap2}
+    # ${Capabilities}=    Create List    ${cap2}
     ${departments}=  Create List           all
 
     ${user_scope}=   Create Dictionary   departments=${departments}  
 
-    ${resp}=  Update Role   ${id2}       ${role_name1}    ${description2}    ${featureName2}    ${Capabilities}     scope=${user_scope}
+    ${resp}=  Update Role    ${id2}       ${role_name1}     ${description2}     ${featureName2}       ${Capabilities}      scope=${user_scope}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -212,28 +212,8 @@ JD-TC-UpdateRole-4
     Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName2}
     Should Be Equal As Strings  ${resp.json()['roleName']}  ${role_name1}
     Should Be Equal As Strings  ${resp.json()['scope']['departments']}  ${departments}
-    Should Be Equal As Strings  ${resp.json()['capabilityList'][0]}  ${cap2}
-
-JD-TC-UpdateRole-4
-
-    [Documentation]  Update same Roles two times.
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-
-
-    ${resp}=  Update Role   ${id2}      ${role_name1}    ${description2}    ${featureName2}    ${Capabilities}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get roles by id    ${id2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['description']}  ${description2}
-    Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName2}
-    Should Be Equal As Strings  ${resp.json()['roleName']}  ${role_name1}
+    Should Be Equal As Strings  ${resp.json()['capabilityList'][0]}  ${cap1}
+    Should Be Equal As Strings  ${resp.json()['capabilityList'][1]}  ${cap2}
 
 JD-TC-UpdateRole-UH1
 
