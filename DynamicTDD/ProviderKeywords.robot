@@ -15549,13 +15549,25 @@ Create Template
     ${resp}=  POST On Session  ynw  /provider/comm/template  data=${data}  expected_status=any
     RETURN  ${resp} 
 
+# Update Template  
+
+#     [Arguments]  ${temp_id}  ${temp_name}  ${content}  ${temp_format}  ${context}  ${commTarget}   ${comm_chanl}  &{kwargs}
+   
+#     ${data}=  Create Dictionary  templateName=${temp_name}  content=${content}  templateFormat=${temp_format}  context=${context}  
+#     ...   commTarget=${commTarget}  commChannel=${comm_chanl} 
+
+#     FOR  ${key}  ${value}  IN  &{kwargs}
+#         Set To Dictionary  ${data}   ${key}=${value}
+#     END
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session
+#     ${resp}=  PUT On Session  ynw  /provider/comm/template/${temp_id}  data=${data}  expected_status=any
+#     RETURN  ${resp} 
+
 Update Template  
 
-    [Arguments]  ${temp_id}  ${temp_name}  ${content}  ${temp_format}  ${context}  ${commTarget}   ${comm_chanl}  &{kwargs}
-   
-    ${data}=  Create Dictionary  templateName=${temp_name}  content=${content}  templateFormat=${temp_format}  context=${context}  
-    ...   commTarget=${commTarget}  commChannel=${comm_chanl} 
-
+    [Arguments]  ${temp_id}    &{kwargs}
+    ${data}=  Create Dictionary
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
