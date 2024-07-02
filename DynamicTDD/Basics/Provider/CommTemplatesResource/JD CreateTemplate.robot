@@ -7,6 +7,7 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library           random
 Library           /ebs/TDD/Imageupload.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
@@ -683,6 +684,202 @@ JD-TC-CreateTemplate-23
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+JD-TC-CreateTemplate-24
+
+    [Documentation]  Create template for random contexts.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME136}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Contexts   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${context_values} =    Create List
+    FOR    ${item}    IN    @{resp.json()}
+        Append To List    ${context_values}    ${item['context']}
+    END
+
+    ${rand_context}=   Random Element   ${context_values}
+    ${temp_name}=    FakerLibrary.word
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
+    ${comm_target}=  Create List   ${CommTarget[0]}  
+    
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${rand_context}  ${comm_target}    ${comm_chanl} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-CreateTemplate-25
+
+    [Documentation]  Create template for random comm Targets.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME136}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Contexts   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${context_values} =    Create List
+    FOR    ${item}    IN    @{resp.json()}
+        Append To List    ${context_values}    ${item['context']}
+    END
+
+    ${resp}=  Get CommTargets   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${comm_targets} =  Set Variable   ${resp.json()}
+    ${rand_comtarget}=  Random Element   ${comm_targets}
+    ${rand_context}=   Random Element   ${context_values}
+    ${temp_name}=    FakerLibrary.word
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
+    ${comm_target}=  Create List   ${rand_comtarget}  
+    
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${rand_context}  ${comm_target}    ${comm_chanl} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-CreateTemplate-26
+
+    [Documentation]  get a default template and try to create a template with a new content for EMAIL, Whatsapp, Telegram, App.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME137}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Send Comm List
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${sendcomm_id1}   ${resp.json()[0]['id']}
+
+    ${resp}=  Get Default Template List by sendComm   ${sendcomm_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${deftemp_id1}   ${resp.json()['templates'][0]['id']}
+
+    ${resp}=  Get Default Template Preview   ${sendcomm_id1}  ${deftemp_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${temp_id1}   ${resp.json()['id']}
+    Set Test Variable   ${temp_name1}   ${resp.json()['templateName']}
+    Set Test Variable   ${content1}    ${resp.json()['content']['intro']}
+    Set Test Variable   ${dyn_vars}    ${resp.json()['variables']['content']}
+
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  ${CommChannel[2]}  ${CommChannel[3]}  ${CommChannel[4]}  
+    ${comm_target}=  Create List   ${CommTarget[0]}  
+    ${content_msg}=      FakerLibrary.sentence
+    ${content_msg1}=     Set Variable  ${content1} ${content_msg}
+    ${new_content}=    Create Dictionary  intro=${content_msg1}
+
+    ${resp}=  Create Template   ${temp_name1}  ${new_content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+JD-TC-CreateTemplate-27
+
+    [Documentation]  Create template for a provider without template format.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME161}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${temp_name}=    FakerLibrary.word
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
+    ${comm_target}=  Create List   ${CommTarget[0]}  
+    
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${NULL}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-CreateTemplate-28
+
+    [Documentation]  get a default template and try to create a template with same details(email).
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Send Comm List
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${sendcomm_id1}   ${resp.json()[0]['id']}
+
+    ${resp}=  Get Default Template List by sendComm   ${sendcomm_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${deftemp_id1}   ${resp.json()['templates'][3]['id']}
+
+    ${resp}=  Get Default Template Preview   ${sendcomm_id1}  ${deftemp_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${temp_id1}         ${resp.json()['id']}
+    Set Test Variable   ${temp_name1}       ${resp.json()['templateName']}
+    Set Test Variable   ${content1}         ${resp.json()['content']}
+    Set Test Variable   ${context1}         ${resp.json()['context']}
+    Set Test Variable   ${comm_chanl1}      ${resp.json()['commChannel']}
+    Set Test Variable   ${comm_target1}     ${resp.json()['commTarget']}
+    Set Test Variable   ${temp_format1}     ${resp.json()['templateFormat']}
+    Set Test Variable   ${temp_header1}     ${resp.json()['templateHeader']}
+    Set Test Variable   ${temp_footer1}     ${resp.json()['footer']}
+    Set Test Variable   ${temp_format1}     ${resp.json()['templateFormat']}
+    Set Test Variable   ${temp_format1}     ${resp.json()['templateFormat']}
+    Set Test Variable   ${dyn_vars}         ${resp.json()['variables']['content']}
+
+    ${resp}=  Create Template   ${temp_name1}  ${content1}  ${temp_format1}  ${context1}  ${comm_target1}    ${comm_chanl1} 
+    ...     templateHeader=${temp_header1}  footer=${temp_footer1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-CreateTemplate-29
+
+    [Documentation]  get a default template and try to create a template with a new template name(email).
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Send Comm List
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${sendcomm_id1}   ${resp.json()[0]['id']}
+
+    ${resp}=  Get Default Template List by sendComm   ${sendcomm_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${deftemp_id1}   ${resp.json()['templates'][2]['id']}
+
+    ${resp}=  Get Default Template Preview   ${sendcomm_id1}  ${deftemp_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${temp_id1}         ${resp.json()['id']}
+    Set Test Variable   ${temp_name1}       ${resp.json()['templateName']}
+    Set Test Variable   ${content1}         ${resp.json()['content']}
+    Set Test Variable   ${context1}         ${resp.json()['context']}
+    Set Test Variable   ${comm_chanl1}      ${resp.json()['commChannel']}
+    Set Test Variable   ${comm_target1}     ${resp.json()['commTarget']}
+    Set Test Variable   ${temp_format1}     ${resp.json()['templateFormat']}
+    Set Test Variable   ${temp_header1}     ${resp.json()['templateHeader']}
+    Set Test Variable   ${temp_footer1}     ${resp.json()['footer']}
+    Set Test Variable   ${temp_format1}     ${resp.json()['templateFormat']}
+    Set Test Variable   ${temp_format1}     ${resp.json()['templateFormat']}
+    Set Test Variable   ${dyn_vars}         ${resp.json()['variables']['content']}
+
+    ${new_tempname}=      FakerLibrary.word
+
+    ${resp}=  Create Template   ${new_tempname}  ${content1}  ${temp_format1}  ${context1}  ${comm_target1}    ${comm_chanl1} 
+    ...     templateHeader=${temp_header1}  footer=${temp_footer1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
 JD-TC-CreateTemplate-UH1
 
     [Documentation]  Create template with same template name.
@@ -1052,40 +1249,3 @@ JD-TC-CreateTemplate-UH9
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings    ${resp.json()}   ${SMS_TEMPLATE_NOT_ALLOWED}
-
-JD-TC-CreateTemplate-UH10
-
-    [Documentation]  get a default template and try to create a template with same content for SMS.
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get Send Comm List
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable   ${sendcomm_id1}   ${resp.json()[0]['id']}
-
-    ${resp}=  Get Default Template List by sendComm   ${sendcomm_id1}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable   ${deftemp_id1}   ${resp.json()['templates'][0]['id']}
-
-    ${resp}=  Get Default Template Preview   ${sendcomm_id1}  ${deftemp_id1}  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${temp_id1}   ${resp.json()['id']}
-    Set Test Variable   ${temp_name1}   ${resp.json()['templateName']}
-    Set Test Variable   ${content1}    ${resp.json()['content']['intro']}
-    Set Test Variable   ${dyn_var1}    ${resp.json()['variables']['content'][0]}
-    Set Test Variable   ${dyn_var2}    ${resp.json()['variables']['content'][1]}
-
-    ${comm_chanl}=  Create List   ${CommChannel[0]}  
-    ${comm_target}=  Create List   ${CommTarget[0]}  
-    ${content_msg1}=     Set Variable  ${content1} 
-    ${new_content}=    Create Dictionary  intro=${content_msg1}
-
-    ${resp}=  Create Template   ${temp_name1}  ${new_content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}   Template Already Exists

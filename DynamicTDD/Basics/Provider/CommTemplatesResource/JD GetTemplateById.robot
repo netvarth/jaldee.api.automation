@@ -873,7 +873,6 @@ JD-TC-GetTemplateById-17
     Set Test Variable   ${dynamic_var1}   ${resp.json()[0]['name']}
     Set Test Variable   ${dynamic_var2}   ${resp.json()[1]['name']}
 
-
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence   
     ${content_msg}=     Catenate   SEPARATOR=\n
