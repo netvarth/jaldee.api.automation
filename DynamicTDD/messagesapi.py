@@ -1982,8 +1982,8 @@ STATUS_IS_ALREADY_CREDITAPPROVED= "Unable to change internal status. Current Loa
 INVALID_APPLICATION_ID = "Invalid Loan Application ID"
 INVALID_LOAN_REQUESTED_AMOUNT = "Invalid Loan Requested Amount"
 
-X_RBAC_ALREADY_ENABLED = "{}RBAC already enabled"
-X_RBAC_ALREADY_DISABLED = "{}RBAC already disabled"
+X_RBAC_ALREADY_ENABLED = "{} RBAC already enabled"
+X_RBAC_ALREADY_DISABLED = "{} RBAC already disabled"
 
 # Branch Master
 
