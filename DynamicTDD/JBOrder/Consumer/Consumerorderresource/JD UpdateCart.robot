@@ -105,7 +105,7 @@ JD-TC-Update cart-1
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
-    ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
+    ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}   onlineOrder=${boolean[1]}    walkinOrder=${boolean[1]}   partnerOrder=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id}  ${resp.json()}
@@ -397,12 +397,11 @@ JD-TC-Update cart-UH4
     ${catalogItem2}=  Create Dictionary    encId=${SOC_itemEncIds3}
     ${catalogItems2}=  Create Dictionary    catalogItem=${catalogItem2}  quantity=${quantity}
 
-
-    ${INVALID_FIELD2}=  format String   ${INVALID_FIELD}   store
+    ${ITEM_NOT_IN_CART_STORE}=  format String    ${ITEM_NOT_IN_CART_STORE}   ${displayName}  ${Name}
     ${resp}=  Update Cart From Consumerside     ${cartUid}  1000   ${cid}     ${deliveryType[0]}      ${catalogItems2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings  ${resp.json()}   ${INVALID_FIELD2}
+    Should Be Equal As Strings  ${resp.json()}   ${ITEM_NOT_IN_CART_STORE}
 
 JD-TC-Update cart-UH5
 
@@ -418,11 +417,11 @@ JD-TC-Update cart-UH5
     ${catalogItem2}=  Create Dictionary    encId=${SOC_itemEncIds3}
     ${catalogItems2}=  Create Dictionary    catalogItem=${catalogItem2}  quantity=${quantity}
 
-    ${FIELD_REQUIRED}=  format String   ${FIELD_REQUIRED}   items
+    ${ITEM_NOT_IN_CART_STORE}=  format String    ${ITEM_NOT_IN_CART_STORE}   ${displayName}  ${Name}
     ${resp}=  Update Cart From Consumerside     ${cartUid}  ${cid}   ${cid}     ${deliveryType[0]}     
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings  ${resp.json()}   ${FIELD_REQUIRED}
+    Should Be Equal As Strings  ${resp.json()}   ${ITEM_NOT_IN_CART_STORE}
 
 
 
