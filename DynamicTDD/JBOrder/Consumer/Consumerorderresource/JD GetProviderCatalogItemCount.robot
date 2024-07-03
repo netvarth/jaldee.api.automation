@@ -263,18 +263,18 @@ JD-TC-Get Provider Catalogs Items Count-UH1
 
 JD-TC-Get Provider Catalogs Items Count-UH2
 
-    [Documentation]  Get Provider Catalog Item Filter  without salesordercatalog encid
+    [Documentation]  Get Provider Catalog Item Filter  without account id
 
     ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-
+    ${FIELD_REQUIRED}=  format String   ${FIELD_REQUIRED}   account id 
     ${resp}=    Get Provider Catalog Item Count Filter    status-eq=${toggle[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${SO_CATA_ENCID_FILTER_REQUIRED}
+    Should Be Equal As Strings    ${resp.json()}    ${FIELD_REQUIRED}
 
 JD-TC-Get Provider Catalogs Items Count-3
 

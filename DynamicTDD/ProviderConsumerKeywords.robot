@@ -523,3 +523,9 @@ Remove All Items From Cart
     Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw  /consumer/cart/${cartUid}/removeitems  expected_status=any
     RETURN  ${resp}
+
+CheckOut Cart Items
+    [Arguments]     ${cartUid}  
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /consumer/cart/${cartUid}/checkout   expected_status=any
+    RETURN  ${resp}

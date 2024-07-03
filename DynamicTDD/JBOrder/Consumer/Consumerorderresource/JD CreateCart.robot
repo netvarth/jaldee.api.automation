@@ -590,6 +590,9 @@ JD-TC-create cart-2
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${cart_uid1}    ${resp.json()['uid']}
 
+    ${resp}=    Get ConsumerCart With Items By Uid   ${cartUid1} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get ConsumerCart By Uid   ${cartUid1} 
     Log   ${resp.content}
@@ -606,9 +609,6 @@ JD-TC-create cart-2
     Should Be Equal As Strings    ${resp.json()['netRate']}                                                             ${Total}
     Should Be Equal As Strings    ${resp.json()['taxTotal']}                                                             ${taxtot}
 
-    ${resp}=    Get ConsumerCart With Items By Uid   ${cartUid1} 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-create cart-UH2
@@ -1763,6 +1763,211 @@ JD-TC-create cart-UH14
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  ${resp.json()}   ${SALE_TYPE_NOTENABLED_IN_STORE}
+
+
+JD-TC-create cart-4
+
+    [Documentation]  Store have prepayment type as fixed and prepayment amount as 10 then check create cart from consumer side
+
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME370}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Store Type By Filter     
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${TypeName}=    FakerLibrary.name
+    Set Test Variable  ${TypeName}
+# -------------------------------- Create store type -----------------------------------
+    ${resp}=  Create Store Type   ${TypeName}    ${storeNature[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable    ${St_Id}    ${resp.json()}
+    sleep  02s
+
+
+    ${resp}=  Get Store Type By EncId   ${St_Id}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
+    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
+    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME370}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${accountId}=  get_acc_id  ${PUSERNAME370}
+    Set Test Variable    ${accountId} 
+
+    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
+    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
+    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${locId1}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ELSE
+        Set Test Variable  ${locId1}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    END
+
+    ${Name}=    FakerLibrary.last name
+    Set Test Variable    ${Name}
+    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+101187748
+    Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
+    ${email}=  Create List  ${email_id}
+
+    ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}   onlineOrder=${boolean[1]}    walkinOrder=${boolean[1]}   partnerOrder=${boolean[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${store_id}  ${resp.json()}
+
+    ${resp}=  Update Store Settings For OnlineOrder   ${store_id}    minOrderAmount=10.0   maxOrderAmount=100000.0   prepaymentRequired=true   prepaymentType=FIXED   prepaymentAmount=10.0   autoConfirm=true   deliveryCharges=0.0   minNumberItem=${minSaleQuantity}  maxNumberItem=${maxSaleQuantity}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Store Settings For OnlineOrder   ${store_id}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                                           ${accountId}
+    Should Be Equal As Strings    ${resp.json()['locationId']}                                                            ${locId1}
+    Should Be Equal As Strings    ${resp.json()['store']['encId']}                                                      ${store_id}
+    Should Be Equal As Strings    ${resp.json()['minOrderAmount']}                                                      10.0
+    Should Be Equal As Strings    ${resp.json()['maxOrderAmount']}                                                       100000.0
+    Should Be Equal As Strings    ${resp.json()['prepaymentRequired']}                                                    ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()['prepaymentType']}                                                       FIXED
+    Should Be Equal As Strings    ${resp.json()['prepaymentAmount']}                                                      10.0
+    Should Be Equal As Strings    ${resp.json()['autoConfirm']}                                                    ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()['deliveryCharges']}                                                    0.0
+    Should Be Equal As Strings    ${resp.json()['minNumberItem']}                                                    ${minSaleQuantity}
+    Should Be Equal As Strings    ${resp.json()['maxNumberItem']}                                                    ${maxSaleQuantity}
+    Should Be Equal As Strings    ${resp.json()['isDirect']}                                                     ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['deliveryChargesType']}                                                   NONE
+
+
+
+    ${displayName}=     FakerLibrary.name
+    Set Test Variable              ${displayName} 
+
+    ${resp}=    Create Item Inventory  ${displayName}     isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${itemEncId1}  ${resp.json()}
+
+    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${inv_cat_encid1}  ${resp.json()}
+    ${inv_cat_encid}=  Create List  ${inv_cat_encid1}
+
+    ${resp}=   Create Inventory Catalog Item  ${inv_cat_encid1}   ${itemEncId1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${Inv_Cata_Item_Encid1}  ${resp.json()[0]}
+
+    ${price}=    Random Int  min=2   max=40
+    ${price}=                    Convert To Number  ${price}  1
+    Set Test Variable              ${price} 
+
+
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}   ${Name}  ${boolean[0]}  ${inv_cat_encid}  onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[0]}  storePickup=${boolean[1]}  courierService=${boolean[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable              ${soc_id1}    ${resp.json()}
+
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${soc_id1}    ${boolean[1]}     ${Inv_Cata_Item_Encid1}     ${price}    ${boolean[1]}   minSaleQuantity=${minSaleQuantity}  maxSaleQuantity=${maxSaleQuantity}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${SOC_itemEncIds1}  ${resp.json()[0]}
+
+
+    ${resp}=  Provider Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+# -------------------------------- Add a provider Consumer -----------------------------------
+
+    ${firstName}=  FakerLibrary.name
+    Set Test Variable    ${firstName}
+    ${lastName}=  FakerLibrary.last_name
+    Set Test Variable    ${lastName}
+    ${primaryMobileNo}    Generate random string    10    123458679
+    ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
+    Set Test Variable    ${primaryMobileNo}
+    # ${email}=    FakerLibrary.Email
+    # Set Test Variable    ${email}
+
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   12
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token2}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email_id}    ${primaryMobileNo}     ${accountId}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200    
+   
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token2} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${cid2}    ${resp.json()['providerConsumer']}
+
+   ${quantity}=  FakerLibrary.Random Int  min=${minSaleQuantity}   max=${maxSaleQuantity}
+    ${quantity}=                    Convert To Number  ${quantity}  1
+    ${item1}=  Evaluate  ${price}*${quantity}
+
+
+    ${catalogItem}=  Create Dictionary    encId=${SOC_itemEncIds1}
+
+    ${catalogItems}=  Create Dictionary    catalogItem=${catalogItem}  quantity=${quantity}
+
+    ${resp}=  Create Cart From Consumerside      ${store_id}    ${cid2}      ${deliveryType[0]}    ${catalogItems}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable    ${cart_uid1}    ${resp.json()['uid']}
+
+
+    ${resp}=    Get ConsumerCart By Uid   ${cartUid1} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                                              ${cid2}
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['name']}                                            ${firstName} ${lastName}
+    Should Be Equal As Strings    ${resp.json()['store']['encId']}                                                      ${store_id}
+    Should Be Equal As Strings    ${resp.json()['store']['name']}                                                       ${Name} 
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                                           ${accountId}
+    Should Be Equal As Strings    ${resp.json()['uid']}                                                                 ${cartUid1}
+    Should Be Equal As Strings    ${resp.json()['deliveryType']}                                                        ${deliveryType[0]}
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                                            ${item1}
+    Should Be Equal As Strings    ${resp.json()['locationId']}                                                            ${locId1}
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                                             ${item1}
+
+    ${resp}=    Get ConsumerCart With Items By Uid   ${cartUid1} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
 
 
 
