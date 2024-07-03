@@ -15745,3 +15745,38 @@ Get Available Slots for Month Year
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/appointment/availability/location/${location}/service/${service}/${month}/${year}  params=${param}  expected_status=any
     RETURN  ${resp}
+
+
+#................Store Settings...............
+
+Get Store Settings For OnlineOrder
+    [Arguments]   ${store_id}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/store/${store_id}/settings      expected_status=any
+    RETURN  ${resp}
+
+Update Store Settings For OnlineOrder
+
+    [Arguments]     ${store_id}      &{kwargs}  
+    ${store}=  Create Dictionary  encId=${store_id} 
+    ${data}=  Create Dictionary  store=${store} 
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END 
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/store/${store_id}/settings    data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+#................RBAC...............
+Enable Disable Booking RBAC
+    [Arguments]  ${status}  
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/account/settings/bookingrbac/${status}  expected_status=any
+    RETURN  ${resp}
+
+Enable Disable Medical Record RBAC
+    [Arguments]  ${status}  
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/account/settings/medicalrecordrbac/${status}  expected_status=any
+    RETURN  ${resp}
