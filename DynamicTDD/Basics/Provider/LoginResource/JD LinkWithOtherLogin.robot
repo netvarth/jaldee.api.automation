@@ -466,13 +466,14 @@ JD-TC-Link_With_Other_Login-UH3
 
     ${resp}=    Connect with other login  ${loginId}  ${PASSWORD}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    4222
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${CANT_LINK_YOURSELF}
 
     ${resp}=    List all links of a loginId
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['userName']}     ${username2}
-    Should Be Equal As Strings    ${resp.json()[0]['userName']}     ${username2}
+    Should Be Equal As Strings    ${resp.json()['${loginId2}']['userName']}     ${username2}
+    Should Be Equal As Strings    ${resp.json()['${loginId2}']['accountId']}    ${acc_id2}
 
     ${resp}=    Provider Logout
     Log   ${resp.content}

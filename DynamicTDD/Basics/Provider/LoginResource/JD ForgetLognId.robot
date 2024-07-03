@@ -366,7 +366,7 @@ JD-TC-Forget_LoginId-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${loginId}  ${Password_n}
+    ${resp}=  Provider Login  ${loginId_n}  ${Password_n}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -377,7 +377,7 @@ JD-TC-Forget_LoginId-5
 
 JD-TC-Forget_LoginId-6
 
-    [Documentation]    Forget login Id - create user for another provider with same number as provider 1 and call forgot login id
+    [Documentation]    Forget login Id - create user for another provider with same number as provider 1 and call forgot login id (in same account provider and user cant have same number)
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -388,13 +388,9 @@ JD-TC-Forget_LoginId-6
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${firstname_u}=  FakerLibrary.name
-    Set Suite Variable  ${firstname_u}
     ${lastname_u}=  FakerLibrary.last_name
-    Set Suite Variable  ${lastname_u}
     ${address}=  get_address
-    Set Suite Variable  ${address}
     ${dob}=  FakerLibrary.Date
-    Set Suite Variable  ${dob}
     FOR    ${i}    IN RANGE    3
     ${pin}=  get_pincode
     ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
@@ -412,8 +408,8 @@ JD-TC-Forget_LoginId-6
 
     ${resp}=  Create User  ${firstname_u}  ${lastname_u}  ${dob}  ${Genderlist[0]}  ${lastname_u}${ph}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL} 
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${u_id}  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}     422
+    Should Be Equal As Strings  ${resp.json()}          ${MOBILE_NO_USED}
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
