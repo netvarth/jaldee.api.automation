@@ -98,13 +98,16 @@ JD-TC-Auditor-1
 
     ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCPUSERNAME1}    ${highest_package[0]}
     Log  ${resp.json()}
-    Should Be Equal As Strings            ${resp.status_code}    200
+    Should Be Equal As Strings            ${resp.status_code}    202
     
-    ${resp}=  Account Activation          ${NBFCPUSERNAME1}  0
+    ${resp}=  Account Activation          ${NBFCPUSERNAME1}  ${OtpPurpose['ProviderSignUp']}
     Log   ${resp.json()}
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential      ${NBFCPUSERNAME1}  ${PASSWORD}  0
+    ${loginId}=     Random Int  min=1  max=9999
+    Set Suite Variable      ${loginId}
+
+    ${resp}=  Account Set Credential      ${NBFCPUSERNAME1}    ${PASSWORD}    ${OtpPurpose['ProviderSignUp']}    ${loginId}
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login    ${NBFCPUSERNAME1}  ${PASSWORD}

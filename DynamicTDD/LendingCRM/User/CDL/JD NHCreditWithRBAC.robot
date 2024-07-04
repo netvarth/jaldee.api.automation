@@ -126,7 +126,7 @@ JD-TC-NHCreditWithRBAC-1
 
     ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCPUSERNAME1}    ${highest_package[0]}
     Log  ${resp.json()}
-    Should Be Equal As Strings            ${resp.status_code}    200
+    Should Be Equal As Strings            ${resp.status_code}    202
     
     ${resp}=  Account Activation          ${NBFCPUSERNAME1}  0
     Log   ${resp.json()}
@@ -1571,7 +1571,7 @@ JD-TC-NHCreditWithRBAC-UH5
 
     ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCPUSERNAME1}    ${highest_package[0]}
     Log  ${resp.json()}
-    Should Be Equal As Strings            ${resp.status_code}    200
+    Should Be Equal As Strings            ${resp.status_code}    202
     
     ${resp}=  Account Activation          ${NBFCPUSERNAME1}  0
     Log   ${resp.json()}
@@ -2996,7 +2996,7 @@ JD-TC-NHCreditWithRBAC-UH6
 
     ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCPUSERNAME1}    ${highest_package[0]}
     Log  ${resp.json()}
-    Should Be Equal As Strings            ${resp.status_code}    200
+    Should Be Equal As Strings            ${resp.status_code}    202
     
     ${resp}=  Account Activation          ${NBFCPUSERNAME1}  0
     Log   ${resp.json()}
