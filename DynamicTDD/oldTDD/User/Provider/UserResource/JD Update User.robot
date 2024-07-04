@@ -39,7 +39,7 @@ JD-TC-UpdateUser-1
      ${resp}=  Account Activation  ${PUSERNAME_E}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}   
      Log  ${resp.json()}
@@ -510,7 +510,7 @@ JD-TC-UpdateUser-UH9
      ${resp}=  Account Activation  ${PUSERNAME_E2}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${PUSERNAME_E2}  ${PASSWORD}  0
+     ${resp}=  Account Set Credential  ${PUSERNAME_E2}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E2}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E2}  ${PASSWORD}
      Log  ${resp.json()}
@@ -905,7 +905,7 @@ JD-TC-UpdateUser -10
     ${resp}=  Account Activation  ${BUSERPH0}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${BUSERPH0}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
@@ -1012,7 +1012,7 @@ JD-TC-UpdateUser -11
     ${resp}=  Account Activation  ${BUSERPH0}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${BUSERPH0}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
@@ -1162,7 +1162,7 @@ JD-TC-UpdateUser -12
     ${resp}=  Account Activation  ${BUSERPH0}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${BUSERPH0}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
@@ -1307,7 +1307,7 @@ JD-TC-UpdateUser -13
     ${resp}=  Account Activation  ${BUSERPH0}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${BUSERPH0}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
@@ -1388,7 +1388,7 @@ JD-TC-UpdateUser -14
     ${resp}=  Account Activation  ${BUSERPH0}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${BUSERPH0}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
@@ -1471,7 +1471,7 @@ JD-TC-UpdateUser -15
     ${resp}=  Account Activation  ${BUSERPH0}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${BUSERPH0}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
@@ -1562,7 +1562,7 @@ JD-TC-UpdateUser -16
     ${resp}=  Account Activation  ${BUSERPH0}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${BUSERPH0}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
@@ -1653,7 +1653,7 @@ JD-TC-UpdateUser -17
     ${resp}=  Account Activation  ${BUSERPH0}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${BUSERPH0}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
@@ -1748,7 +1748,7 @@ JD-TC-UpdateUser -18
     ${resp}=  Account Activation  ${BUSERPH0}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${BUSERPH0}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
@@ -1839,7 +1839,7 @@ JD-TC-UpdateUser -19
     ${resp}=  Account Activation  ${BUSERPH0}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${BUSERPH0}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
@@ -1930,7 +1930,7 @@ JD-TC-UpdateUser -20
     ${resp}=  Account Activation  ${BUSERPH0}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${BUSERPH0}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}

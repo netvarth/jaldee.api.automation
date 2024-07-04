@@ -57,7 +57,7 @@ JD-TC-ONLINE_ORDER and RECEIVED_ORDER-1
     ${resp}=  Account Activation  ${PUSERNAME_A}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
@@ -391,7 +391,7 @@ JD-TC-BRAND_NEW_ORDERS-2
     ${resp}=  Account Activation  ${PUSERNAME_A}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
@@ -716,7 +716,7 @@ JD-TC-PHONE_IN_ORDER-3
     ${resp}=  Account Activation  ${PUSERNAME_A}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
@@ -1055,7 +1055,7 @@ JD-TC-WALK_IN_ORDER-4
     ${resp}=  Account Activation  ${PUSERNAME_A}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
@@ -1393,7 +1393,7 @@ JD-TC-ACKNOWLEDGED_ORDER-5
     ${resp}=  Account Activation  ${PUSERNAME_A}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
@@ -1755,7 +1755,7 @@ JD-TC-CONFIRMED_ORDER-6
     ${resp}=  Account Activation  ${PUSERNAME_A}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
@@ -2116,7 +2116,7 @@ JD-TC-PREPARING_ORDER-7
     ${resp}=  Account Activation  ${PUSERNAME_A}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
@@ -2476,7 +2476,7 @@ JD-TC-PACKING_ORDER-8
     ${resp}=  Account Activation  ${PUSERNAME_A}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
@@ -2836,7 +2836,7 @@ JD-TC-READY_FOR_PICKUP_ORDER-9
     ${resp}=  Account Activation  ${PUSERNAME_A}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
@@ -3186,7 +3186,7 @@ JD-TC-READY_FOR_SHIPMENT_ORDER-10
     ${resp}=  Account Activation  ${PUSERNAME_A}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
@@ -3548,7 +3548,7 @@ JD-TC-READY_FOR_DELIVERY_ORDER-11
     ${resp}=  Account Activation  ${PUSERNAME_A}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
@@ -3908,7 +3908,7 @@ JD-TC-COMPLETED_ORDER-12
     ${resp}=  Account Activation  ${PUSERNAME_A}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
@@ -4268,7 +4268,7 @@ JD-TC-PAYMENT_REQUIRED_ORDER-13
     ${resp}=  Account Activation  ${PUSERNAME_A}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
@@ -4628,7 +4628,7 @@ JD-TC-IN_TRANSIT_ORDER-14
     ${resp}=  Account Activation  ${PUSERNAME_A}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
@@ -4989,7 +4989,7 @@ JD-TC-SHIPPED_ORDER-15
     ${resp}=  Account Activation  ${PUSERNAME_A}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
@@ -5350,7 +5350,7 @@ JD-TC-ORDERS_FOR_BILLING-17
     ${resp}=  Account Activation  ${PUSERNAME_A}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
@@ -5711,7 +5711,7 @@ JD-TC-CANCEL_ORDER-16
     ${resp}=  Account Activation  ${PUSERNAME_A}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}

@@ -61,7 +61,7 @@ JD-TC-Take Appointment-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME_B}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_B}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_B}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_B}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
@@ -893,7 +893,7 @@ JD-TC-Take Appointment-9
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME_X}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_X}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_X}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_X}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_X}  ${PASSWORD}
@@ -3586,7 +3586,7 @@ JD-TC-Take Appointment-UH12
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME_W}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_W}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_W}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_W}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_W}  ${PASSWORD}
@@ -4622,7 +4622,7 @@ JD-TC-Take Appointment-UH14
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME_D}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_D}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_D}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_D}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}

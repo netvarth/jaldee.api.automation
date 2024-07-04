@@ -48,24 +48,36 @@ Claim SignUp
     ${resp}=    POST On Session   ynw    /provider    data=${data}  expected_status=any
     RETURN  ${resp}
 
+# Account Activation
+#     [Arguments]  ${email}  ${purpose}
+#     Check And Create YNW Session
+#     ${key}=   verify accnt  ${email}  ${purpose}
+#     ${resp_val}=  POST On Session   ynw  /provider/${key}/verify  expected_status=any
+#     RETURN  ${resp_val}
+# This URL Has Been Commented in rest side
+
 Account Activation
-    [Arguments]  ${email}  ${purpose}
+    [Arguments]  ${loginid}  ${purpose}
     Check And Create YNW Session
-    ${key}=   verify accnt  ${email}  ${purpose}
-    ${resp_val}=  POST On Session   ynw  /provider/${key}/verify  expected_status=any
-    RETURN  ${resp_val}
+    ${key}=   verify accnt  ${loginid}  ${purpose}
+    ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
+    ${resp}=    POST On Session    ynw    /provider/oauth/otp/${key}/verify  headers=${headers2}  expected_status=any
+    RETURN  ${resp}
 
 Account Set Credential
-    [Arguments]  ${email}  ${password}  ${purpose}  ${countryCode}=91
-    ${auth}=     Create Dictionary   password=${password}  countryCode=${countryCode}
+    [Arguments]  ${email}  ${password}  ${purpose}  ${loginId}
+    ${auth}=     Create Dictionary   password=${password}  loginId=${loginId}
     ${key}=   verify accnt  ${email}  ${purpose}
     ${apple}=    json.dumps    ${auth}
     ${resp}=    PUT On Session    ynw    /provider/${key}/activate    data=${apple}    expected_status=any
     RETURN  ${resp}
 
 Provider Login
-    [Arguments]    ${usname}  ${passwrd}   ${countryCode}=91
-    ${log}=  Login  ${usname}  ${passwrd}   countryCode=${countryCode}
+    [Arguments]    ${usname}  ${passwrd}   
+
+    ${login}=    Create Dictionary    loginId=${usname}  password=${passwrd}
+    ${log}=    json.dumps    ${login}
+
     ${resp}=    POST On Session    ynw    /provider/login    data=${log}  expected_status=any
     RETURN  ${resp}
 
@@ -15747,6 +15759,64 @@ Get Available Slots for Month Year
     RETURN  ${resp}
 
 
+# ...............LINKING AND UNLNKING...................
+
+Connect with other login
+
+    [Arguments]  ${loginId}  ${password}
+    ${data}=  Create Dictionary  loginId=${loginId}  password=${password}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/login/connections/${loginId}  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+List all links of a loginId
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/login/connections   expected_status=any
+    RETURN  ${resp}
+
+Unlink one login
+
+    [Arguments]  ${loginId} 
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/login/connections/${loginId}   expected_status=any
+    RETURN  ${resp} 
+
+Switch login
+
+    [Arguments]  ${loginId} 
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/login/switch/${loginId}   expected_status=any
+    RETURN  ${resp}
+
+Reset LoginId
+
+    [Arguments]  ${userid}    ${loginId} 
+
+    ${data}=  Create Dictionary  userId=${userId}  loginId=${loginId}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/login/reset/loginId   data=${data}   expected_status=any
+    RETURN  ${resp}
+
+Forgot LoginId
+
+    [Arguments]   &{kwargs}  #... countryCode, phoneNo, email ( countryCode is mandatory with phoneNo )
+
+    ${data}=    json.dumps    ${kwargs}   
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/login/forgot/loginId   data=${data}   expected_status=any
+    RETURN  ${resp}
+
+Forgot Password 
+
+    [Arguments]   &{kwargs}  #... pasword and login id )  
+
+    ${data}=    json.dumps    ${kwargs} 
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/login/forgot/password   data=${data}   expected_status=any
+    RETURN  ${resp} 
 #................Store Settings...............
 
 Get Store Settings For OnlineOrder

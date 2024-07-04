@@ -34,7 +34,7 @@ JD-TC-Update Account Contact information-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
     Log  ${resp.json()}
@@ -191,7 +191,7 @@ JD-TC-Update Account Contact information-2
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME0}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME0}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Log  ${resp.json()}
@@ -380,7 +380,7 @@ JD-TC-Update Account Contact information-3
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME_00}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_00}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_00}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_00}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_00}  ${PASSWORD}
     Log  ${resp.json()}
@@ -572,7 +572,7 @@ JD-TC-Update Account Contact information-4
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${e-mail}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${e-mail}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${e-mail}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${e-mail}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
@@ -725,7 +725,7 @@ JD-TC-Update Account Contact information-5
     ${resp}=  Account Activation  ${PUSERNAME_K}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_K}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_K}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_K}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_K}  ${PASSWORD}
@@ -784,7 +784,7 @@ JD-TC-Update Account Contact information-6
     ${resp}=  Account Activation  ${PUSERNAME_L}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_L}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_L}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_L}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_L}  ${PASSWORD}
     Log  ${resp.json()}
@@ -1252,7 +1252,7 @@ JD-TC-Update Account Contact information-13
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME_N}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_N}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_N}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_N}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_N}  ${PASSWORD}
     Log  ${resp.json()}
@@ -1348,7 +1348,7 @@ JD-TC-Update Account Contact information-14
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${e-mail}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${e-mail}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${e-mail}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${e-mail}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
@@ -1444,7 +1444,7 @@ JD-TC-Update Account Contact information-15
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME0}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME0}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Log  ${resp.json()}
@@ -1583,7 +1583,7 @@ JD-TC-Update Account Contact information-UH3
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME5}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME5}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME5}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME5}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
@@ -1628,7 +1628,7 @@ JD-TC-Update Account Contact information-UH4
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
     Log  ${resp.json()}
@@ -1755,7 +1755,7 @@ JD-TC-Update Account Contact information-3
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME0}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME0}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Log  ${resp.json()}
@@ -1903,7 +1903,7 @@ JD-TC-Update Account Contact information-2
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME0}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME0}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Log  ${resp.json()}

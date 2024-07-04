@@ -217,7 +217,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 ...             ConsumerVerifyEmail=5  VersionChange=6  AdminResetPassword=7  ManagerResetPassword=8  AssistantResetPassword=9  
 ...             AccountContactUpdate=10  SignIn=11  Authentication=12  ConsumerVerifyPhone=13  ProviderVerifyPhone=14  ConsumerAcceptance=15  
 ...             PartnerResetPassword=16  CoApplicantVerifyPhone=17  CoApplicantVerifyEmail=18  MultiFactorAuthentication=19  EquifaxScoreGenerate=20
-...             CibilScoreGenerate=21  SPDataImport=22  CONSENT_FORM=23
+...             CibilScoreGenerate=21  SPDataImport=22  CONSENT_FORM=23  ResetLoginId=24
 
 @{LoanApplicationStatus}            Active      Completed       Cancelled       Rejected    Inactive
 @{custdeets}                        firstName  lastName  phoneNo  countryCode  gender  dob

@@ -531,7 +531,7 @@ JD-TC-AddDelay-UH4
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Activation  ${PUSERNAME}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
+      ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME}
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
       Log  ${resp.json()}
@@ -567,7 +567,7 @@ JD-TC-AddDelay-UH5
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Activation  ${PUSERNAME0}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Set Credential  ${PUSERNAME0}  ${PASSWORD}  0
+      ${resp}=  Account Set Credential  ${PUSERNAME0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME0}
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
       Log  ${resp.json()}

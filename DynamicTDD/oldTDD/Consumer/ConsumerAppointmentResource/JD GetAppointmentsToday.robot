@@ -42,7 +42,7 @@ JD-TC-GetAppointmentToday-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME_T}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_T}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_T}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_T}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_T}  ${PASSWORD}
@@ -1225,7 +1225,7 @@ JD-TC-GetAppointmentToday-10
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME_A}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}

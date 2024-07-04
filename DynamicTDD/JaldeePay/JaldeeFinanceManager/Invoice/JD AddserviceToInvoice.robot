@@ -73,7 +73,7 @@ JD-TC-Apply Service to Finance-1
     Should Be Equal As Strings  "${resp.json()}"    "true"
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
 
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -997,7 +997,7 @@ JD-TC-Apply Services to Invoice-5
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.content}    "true"
     
-    ${resp}=  Account Set Credential  ${PUSERPH1}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH1}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -41,7 +41,7 @@ JD-TC-Provider_Signup-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${ph}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${ph}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -615,7 +615,7 @@ JD-TC-Provider Signup-UH6
     # Should Be Equal As Strings    ${resp.status_code}    200
     # Should Be Equal As Strings    ${resp.json()}    "true"
     
-    # ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0   countryCode=${country_code}
+    # ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}   countryCode=${country_code}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -849,7 +849,7 @@ JD-TC-Provider_Signup-6
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${ph}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${ph}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200

@@ -74,7 +74,7 @@ JD-TC-Get JDN Settings-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERPH0}
     
@@ -176,7 +176,7 @@ JD-TC-Get JDN Settings-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Account Set Credential  ${PUSERPH3}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH3}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH3}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERPH3}
     
@@ -316,7 +316,7 @@ JD-TC-Get JDN Settings-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Account Set Credential  ${INACTIVE_PUSER}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${INACTIVE_PUSER}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${INACTIVE_PUSER}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${INACTIVE_PUSER}  ${PASSWORD}

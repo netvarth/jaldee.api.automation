@@ -34,7 +34,7 @@ JD-TC-Update Account Payment Settings-1
        Should Be Equal As Strings    ${resp.status_code}    200
        ${resp}=  Account Activation  ${PUSERNAME_B}  0
        Should Be Equal As Strings    ${resp.status_code}    200
-       ${resp}=  Account Set Credential  ${PUSERNAME_B}  ${PASSWORD}  0
+       ${resp}=  Account Set Credential  ${PUSERNAME_B}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_B}
        Should Be Equal As Strings    ${resp.status_code}    200
        ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
        Log  ${resp.json()}
@@ -122,7 +122,7 @@ JD-TC-Update Account Payment Settings-3
        Should Be Equal As Strings    ${resp.status_code}    200
        ${resp}=  Account Activation  ${email}  0
        Should Be Equal As Strings    ${resp.status_code}    200
-       ${resp}=  Account Set Credential  ${email}  ${PASSWORD}  0
+       ${resp}=  Account Set Credential  ${email}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${email}
        Should Be Equal As Strings    ${resp.status_code}    200
        ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
        Log  ${resp.json()}
@@ -280,7 +280,7 @@ JD-TC-Update Account Payment Settings-UH12
        Should Be Equal As Strings    ${resp.status_code}    200
        ${resp}=  Account Activation  ${email}  0
        Should Be Equal As Strings    ${resp.status_code}    200
-       ${resp}=  Account Set Credential  ${email}  ${PASSWORD}  0
+       ${resp}=  Account Set Credential  ${email}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${email}
        Should Be Equal As Strings    ${resp.status_code}    200
        sleep  2s
        ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}

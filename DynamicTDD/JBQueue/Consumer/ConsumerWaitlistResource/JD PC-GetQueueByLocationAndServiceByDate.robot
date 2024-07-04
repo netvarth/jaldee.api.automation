@@ -43,7 +43,7 @@ JD-TC-Get Queue By Location and Service By Date-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME_P}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_P}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_P}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_P}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${PUSERNAME_P}
     

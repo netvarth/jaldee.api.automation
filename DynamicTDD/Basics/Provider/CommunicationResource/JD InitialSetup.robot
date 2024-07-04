@@ -87,7 +87,7 @@ JD-TC-Initial Setup-1
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
-        ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  0
+        ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${ph}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         sleep  03s

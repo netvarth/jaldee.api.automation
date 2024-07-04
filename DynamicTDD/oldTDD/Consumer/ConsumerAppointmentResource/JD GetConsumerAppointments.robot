@@ -833,7 +833,7 @@ JD-TC-GetConsumerAppointments-9
     ${resp}=  Account Activation  ${PUSERNAME_D}  0
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_D}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_D}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_D}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}

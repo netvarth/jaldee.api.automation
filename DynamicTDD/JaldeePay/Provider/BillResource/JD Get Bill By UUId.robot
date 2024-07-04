@@ -53,7 +53,7 @@ JD-TC-Get Bill By UUId -1
         ${resp}=  Account Activation  ${PUSERNAME_Z}  0
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${resp}=  Account Set Credential  ${PUSERNAME_Z}  ${PASSWORD}  0
+        ${resp}=  Account Set Credential  ${PUSERNAME_Z}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_Z}
         Should Be Equal As Strings    ${resp.status_code}    200
         Set Suite Variable  ${PUSERNAME_Z}
         ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}

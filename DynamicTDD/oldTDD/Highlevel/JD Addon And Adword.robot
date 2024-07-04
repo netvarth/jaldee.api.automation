@@ -34,7 +34,7 @@ JD-TC-AddonAndAdwords -1
        Should Be Equal As Strings    ${resp.status_code}    200
        ${resp}=  Account Activation  ${PUSERNAME}  0
        Should Be Equal As Strings    ${resp.status_code}    200
-       ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
+       ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME}
        Should Be Equal As Strings    ${resp.status_code}    200
        ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
        Should Be Equal As Strings    ${resp.status_code}    200
@@ -96,7 +96,7 @@ JD-TC-AddonAndAdwords -2
        Should Be Equal As Strings    ${resp.status_code}    200
        ${resp}=  Account Activation  ${PUSERNAMEA}  0
        Should Be Equal As Strings    ${resp.status_code}    200
-       ${resp}=  Account Set Credential  ${PUSERNAMEA}  ${PASSWORD}  0
+       ${resp}=  Account Set Credential  ${PUSERNAMEA}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAMEA}
        Should Be Equal As Strings    ${resp.status_code}    200
        ${resp}=  Encrypted Provider Login  ${PUSERNAMEA}  ${PASSWORD}
        Should Be Equal As Strings    ${resp.status_code}    200

@@ -939,7 +939,7 @@ JD-TC-PCTakeIndividualScheduleAppointment-9
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME_X}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_X}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_X}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_X}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_X}  ${PASSWORD}
@@ -4046,7 +4046,7 @@ JD-TC-PCTakeIndividualScheduleAppointment-UH13
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME_W}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_W}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_W}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_W}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_W}  ${PASSWORD}

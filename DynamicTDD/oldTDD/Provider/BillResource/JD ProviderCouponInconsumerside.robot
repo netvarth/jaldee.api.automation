@@ -648,7 +648,7 @@ JD-TC-ProviderCouponBill-3
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    "${resp.json()}"    "true"
     
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     

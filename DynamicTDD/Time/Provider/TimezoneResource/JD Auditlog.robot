@@ -85,7 +85,7 @@ JD-TC-GetAuditLog -2
 
     ${resp}=  Account Activation  ${USProvider}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${USProvider}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${USProvider}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${USProvider}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     sleep  01s

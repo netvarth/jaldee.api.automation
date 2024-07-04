@@ -36,7 +36,7 @@ JD-TC-EnableLocation-1
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Activation  ${PUSERNAME_D}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Set Credential  ${PUSERNAME_D}  ${PASSWORD}  0
+      ${resp}=  Account Set Credential  ${PUSERNAME_D}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_D}
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
       Log  ${resp.json()}
@@ -122,7 +122,7 @@ JD-TC-EnableLocation-2
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Activation  ${PUSERNAME_E}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
+      ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E}
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Log  ${resp.json()}
@@ -178,7 +178,7 @@ JD-TC-EnableLocation-2
 #       Should Be Equal As Strings    ${resp.status_code}    200
 #       ${resp}=  Account Activation  ${PUSERNAME_E}  0
 #       Should Be Equal As Strings    ${resp.status_code}    200
-#       ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
+#       ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E}
 #       Should Be Equal As Strings    ${resp.status_code}    200
 #       ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
 #       Log  ${resp.json()}
@@ -234,7 +234,7 @@ JD-TC-EnableLocation-UH2
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Activation  ${PUSERNAME_G}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Set Credential  ${PUSERNAME_G}  ${PASSWORD}  0
+      ${resp}=  Account Set Credential  ${PUSERNAME_G}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_G}
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
       Log  ${resp.json()}

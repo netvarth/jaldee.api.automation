@@ -45,7 +45,7 @@ JD-TC-DisableJDN-1
     ${resp}=  Account Activation  ${PUSERNAME_Z}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_Z}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_Z}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_Z}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME_Z}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
@@ -236,7 +236,7 @@ JD-TC-DisableJDN-3
     ${resp}=  Account Activation  ${PUSERNAME_Y}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_Y}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_Y}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_Y}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME_Y}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_Y}  ${PASSWORD}
@@ -415,7 +415,7 @@ JD-TC-DisableJDN-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME_A}
     

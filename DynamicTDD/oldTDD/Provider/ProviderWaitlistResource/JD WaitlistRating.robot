@@ -106,7 +106,7 @@ JD-TC-Waitist Rating-2
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME_U}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_U}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_U}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_U}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U}  ${PASSWORD}
     Log  ${resp.json()}

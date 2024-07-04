@@ -34,7 +34,7 @@ JD-TC-Get Next Available Dates-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME_P}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_P}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_P}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_P}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${PUSERNAME_P}
     
@@ -651,7 +651,7 @@ JD-TC-Get Next Available Dates-8
     ${resp}=  Account Activation  ${PUSERNAME_L}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_L}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_L}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_L}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_L}  ${PASSWORD}

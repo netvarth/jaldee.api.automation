@@ -331,7 +331,7 @@ JD-TC-UpdateProviderConsumer-4
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME_N}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_N}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_N}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_N}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_N}  ${PASSWORD}
     Log  ${resp.json()}

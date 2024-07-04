@@ -61,7 +61,7 @@ JD-TC-Apply Service Level Discount-1
     Should Be Equal As Strings  "${resp.json()}"    "true"
     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH10}${\n}
 
-    ${resp}=  Account Set Credential  ${PUSERPH10}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH10}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH10}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

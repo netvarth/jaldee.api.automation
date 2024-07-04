@@ -65,7 +65,7 @@ JD-TC-AccountLevelAnalyticsforDonation-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.content}    "true"
     
-    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

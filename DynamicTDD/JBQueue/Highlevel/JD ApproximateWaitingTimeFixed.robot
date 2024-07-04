@@ -294,7 +294,7 @@ JD-TC-High Level Test Case-2
     ${resp}=  Account Activation  ${PUSERPH2}  0
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERPH2}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH2}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

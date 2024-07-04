@@ -150,7 +150,7 @@ JD-TC-AddFavouriteProvider-UH5
       ${resp}=  Account Activation  ${INACTIVE_PUSER}  0
       Log   ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Set Credential  ${INACTIVE_PUSER}  ${PASSWORD}  0
+      ${resp}=  Account Set Credential  ${INACTIVE_PUSER}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${INACTIVE_PUSER}
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Encrypted Provider Login  ${INACTIVE_PUSER}  ${PASSWORD}
       Should Be Equal As Strings    ${resp.status_code}    200

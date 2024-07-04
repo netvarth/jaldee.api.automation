@@ -158,7 +158,7 @@ JD-TC-GetAuditLog -5
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME_P}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_P}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_P}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_P}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${PUSERNAME_P}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
@@ -221,7 +221,7 @@ JD-TC-GetAuditLog -6
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME_K}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_K}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_K}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_K}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${PUSERNAME_NEW}   ${PUSERNAME_K}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_NEW}  ${PASSWORD}
@@ -871,7 +871,7 @@ JD-TC-GetAuditLog -28
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
     Log  ${resp.json()}
@@ -927,7 +927,7 @@ JD-TC-GetAuditLog -30
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
     Log  ${resp.json()}
@@ -999,7 +999,7 @@ JD-TC-GetAuditLog -32
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
     Log  ${resp.json()}
@@ -1651,7 +1651,7 @@ JD-TC-GetAuditLog -42
 
     ${resp}=  Account Activation  ${USProvider}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${USProvider}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${USProvider}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${USProvider}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     sleep  01s

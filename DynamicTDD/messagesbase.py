@@ -183,14 +183,16 @@ IMAGE_TYPE_NOT_SUPPORTED = "Selected image type not supported"
 JC_ALREADY_EXISTS = "Jaldee Coupon Already Exists"
 ONLY_NUM_ALLOWED = "Only numbers are allowed"
 # NOT_REGISTERED_CUSTOMER = "Sorry, you are not a registered user at Jaldee. If you are a new user, please register at www.jaldee.com to avail our services."
-NOT_REGISTERED_CUSTOMER = "This mobile number/email is not registered with Jaldee. Sign up now with Jaldee to avail our services."
+# NOT_REGISTERED_CUSTOMER = "This mobile number/email is not registered with Jaldee. Sign up now with Jaldee to avail our services."
+NOT_REGISTERED_CUSTOMER= "This login id is not registered with Jaldee. Sign up now with Jaldee to avail our services."
+NOT_REGISTERED_PROVIDER = "Sorry, you are not a registered provider. If you are a new user, please sign up to serve your customers better."
 S3_UPLOAD_FAILED = "Upload to S3 failed"
 
 
 ACCOUNT_PAYMENT_SETTINGS_DOES_NOT_EXIST = "Account payment settings entity is null"
 
 ENTER_PASSWORD = "Please enter password";
-ENTER_PHONE_EMAIL = "Please enter your mobile number or email address"
+ENTER_PHONE_EMAIL = "Please enter your login ID"
 INVALID_ADDON = "Invalid Addon"
 ADDON_ALREADY_ADDED_IN_ACCOUNT = "Addon is already added in this account"
 PROVIDER_CANNOT_DOWNGRADE_PACKAGE = "Please contact support person to downgrade license package"

@@ -65,7 +65,7 @@ JD-TC-orderreport-0
     ${resp}=  Account Activation  ${MEProvider}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential  ${MEProvider}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${MEProvider}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${MEProvider}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     sleep  01s

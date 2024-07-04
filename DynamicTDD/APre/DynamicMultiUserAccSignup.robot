@@ -163,7 +163,7 @@ SignUp Account
         ${resp}=  Account Activation   ${PUSER}  0
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${resp}=  Account Set Credential   ${PUSER}  ${PASSWORD}  0
+        ${resp}=  Account Set Credential   ${PUSER}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSER}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         # ${is_corp}=  check_is_corp  ${sd}

@@ -42,7 +42,7 @@ JD-TC-DeleteVacation-1
     ${resp}=  Account Activation  ${PUSERNAME_E1}  0
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_E1}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_E1}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E1}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.content}

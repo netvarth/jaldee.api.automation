@@ -33,7 +33,7 @@ Jaldee-TC-UpdateIQ-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSER_J}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSER_J}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSER_J}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSER_J}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${PUSER_J}
     ${resp}=  Encrypted Provider Login  ${PUSER_J}  ${PASSWORD}

@@ -69,7 +69,7 @@ JD-TC-Add To WaitlistByConsumer-1
     ${resp}=  Account Activation  ${PUSERPH0}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2392,7 +2392,7 @@ JD-TC-Add To WaitlistByConsumer-UH16
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential  ${PUSERPH3}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH3}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH3}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2980,7 +2980,7 @@ JD-TC-Add To WaitlistByConsumer-24
     ${resp}=  Account Activation  ${PUSERPH8}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERPH8}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH8}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH8}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

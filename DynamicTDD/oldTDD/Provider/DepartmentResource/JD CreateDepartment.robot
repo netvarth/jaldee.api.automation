@@ -51,7 +51,7 @@ JD-TC-Create Department-1
     ${resp}=  Account Activation  ${PUSERNAME_H}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_H}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_H}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_H}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_H}  ${PASSWORD}
     Log  ${resp.json()}
@@ -299,7 +299,7 @@ JD-TC-Create Department-6
     ${resp}=  Account Activation  ${PUSERNAME_I}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_I}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_I}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_I}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_I}  ${PASSWORD}
     Log  ${resp.json()}
@@ -361,7 +361,7 @@ JD-TC-Create Department-8
     ${resp}=  Account Activation  ${PUSERNAME_J}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_J}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERNAME_J}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_J}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_J}  ${PASSWORD}
     Log  ${resp.json()}

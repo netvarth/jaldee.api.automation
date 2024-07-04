@@ -135,7 +135,7 @@ JD-TC-Create Item-1
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Activation  ${PUSERNAME}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
+#     ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
 #     Log  ${resp.json()}
