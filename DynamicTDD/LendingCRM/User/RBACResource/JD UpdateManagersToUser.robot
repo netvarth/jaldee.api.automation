@@ -26,7 +26,7 @@ JD-TC-UpdateManagersToUser-1
 
     [Documentation]  Create User With Roles And Scope then update his manager.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -100,7 +100,7 @@ JD-TC-UpdateManagersToUser-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${PUSERNAME49}'
+            IF   not '${user_phone}' == '${HLPUSERNAME4}'
                 clear_users  ${user_phone}
             END
         END

@@ -1982,6 +1982,9 @@ STATUS_IS_ALREADY_CREDITAPPROVED= "Unable to change internal status. Current Loa
 INVALID_APPLICATION_ID = "Invalid Loan Application ID"
 INVALID_LOAN_REQUESTED_AMOUNT = "Invalid Loan Requested Amount"
 
+X_RBAC_ALREADY_ENABLED = "{} RBAC already enabled"
+X_RBAC_ALREADY_DISABLED = "{} RBAC already disabled"
+
 # Branch Master
 
 INVALID_BRANCH_CODE = "Branch code is Required"
@@ -2436,7 +2439,7 @@ TEMPLATE_STATUS = "This template is already '{}'"
 TEMPLATE_NAME_EXISTS = "Template name already exists"
 TEMPLATE_HEADER = "Template header should be provided"
 TEMPLATE_FOOTER = "Template Footer should be provided"
-TEMPLATE_CONTENT = "Template Content should be provided"
+TEMPLATE_CONTENT = "Template content should be provided"
 TEMPLATE_NAME_SHOULD_NOT_BE_NULL = "Please enter template name"
 VARIABLE_STATUS_DISABLED = "Variable '{}' is Disabled"
 
@@ -2460,3 +2463,30 @@ LOGIN_INVALID_USERID_PASSWORD = "Invalid password."
 LOGIN_ID_REQ= "LoginId Required"
 CANT_SWITCH_TO_YOURSELF= "You can't switch to yourself"
 CANT_LINK_YOURSELF= "You can't link with yourself"
+TEMPLATE_SETTINGS_EXISTS = "Template settings already exists for {}"
+SEND_COMM_NOT_EXISTS = "Trigger doest not exist"
+TEMPLATE_SETTINGS_SHOULD_BE_NOT_NULL = "Template settings data should be provided"
+TEMPLATE_SETTINGS_TARGET_SHOULD_BE_NOT_NULL = "Target recipient should be provided"
+TEMPLATE_SETTINGS_COMM_POINT_SHOULD_BE_NOT_NULL = "Communication point should be provided"
+TEMPLATE_SETTINGS_TEMPLATE_SHOULD_BE_NOT_NULL = "Template should be selected"
+TEMPLATE_SETTINGS_CONTEXT_SHOULD_BE_NOT_NULL = "Context should be selected"
+TEMPLATE_SETTINGS_CHANNEL_SHOULD_BE_NOT_NULL = "Communication channel should be selected"
+TEMPLATE_SETTINGS_STATUS = "This template settings is already '{}'"
+SMS_TEMPLATE_NOT_ALLOWED = "Cannot create a SMS template"
+
+
+#   ConsumerOrder
+
+CATALOG_ID = "Catalog Id"
+IN_STORE_LOWER_CASE = "in store"
+ADD_ONE_ITEM_IN_ONE_CART = "{} cannot be repeated in the same Cart"
+ITEM_NOT_FOR_ONLINE_ORDER = "{} cannot be purchased online"
+CATALOG_NOT_FOR_ONLINE_ORDER = "Online self-ordering is not enabled for this catalog"
+ITEM_NOT_AVAILABLE_FOR_DELIVERY_TYPE= "{} is not avaialable for {}"
+ITEM_NOT_IN_CART_STORE= "{} is not available in the store {}"
+FIELD_REQUIRED_FOR = "{} required for {}"
+ADD_ONE_ITEM_IN_ONE_CART = "{} cannot be repeated in the same Cart"
+INVALID_FILTER_SO_CAT_ENC_ID = "Order Catalog EncId is required"
+CANT_UPDATE_DEL_TYPEOF_CART_ITEMS_EXISTS_WITH_OLD_DEL_TYPE = "The delivery type of your cart cannot be changed to {} because there are items in the cart with the delivery type {}"
+SALE_TYPE_NOTENABLED_IN_STORE = "{} cannot be enabled because it is not enabled in store {}"
+NO_ITEMS_AVAILABLE = "No {} available for {}"

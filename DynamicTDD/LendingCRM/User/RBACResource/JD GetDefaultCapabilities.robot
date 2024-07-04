@@ -24,7 +24,7 @@ JD-TC-GetDefaultCapabilities-1
 
     [Documentation]  Get default capabilities of an existing provider.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -77,7 +77,7 @@ JD-TC-GetDefaultCapabilities-3
 
     [Documentation]  Get default capabilities by user login.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}

@@ -130,7 +130,7 @@ JD-TC-RestoreRoles-2
     Set Suite Variable  ${capability1}  ${resp.json()[0]['capabilityList']}
     Set Suite Variable  ${capability2}  ${resp.json()[1]['capabilityList']}
     Set Suite Variable  ${cap1}  ${resp.json()[3]['capabilityList'][2]}
-    Set Suite Variable  ${cap2}  ${resp.json()[5]['capabilityList'][6]}
+    Set Suite Variable  ${cap2}  ${resp.json()[5]['capabilityList'][1]}
     Set Suite Variable  ${cap3}  ${resp.json()[5]['capabilityList'][4]}
     Set Suite Variable  ${cap4}  ${resp.json()[2]['capabilityList'][3]}
 

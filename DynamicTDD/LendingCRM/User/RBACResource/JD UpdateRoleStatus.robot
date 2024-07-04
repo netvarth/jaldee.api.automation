@@ -17,7 +17,7 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 JD-TC-UpdateRoleStatus-1
 
-    [Documentation]  Create  Roles and  Update role status.
+    [Documentation]  Create  Roles and  Update role status as Disabled.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
@@ -26,15 +26,25 @@ JD-TC-UpdateRoleStatus-1
     Log  ${decrypted_data}
     Set Test Variable   ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    IF  ${resp.json()['enableRbac']}==${bool[0]}
+        ${resp1}=  Enable Disable CDL RBAC  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
     ${resp}=  Get Default Roles With Capabilities  ${rbac_feature[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${role_id1}    ${resp.json()[0]['roleId']}
     Set Suite Variable  ${role_name1}  ${resp.json()[0]['displayName']}
     Set Suite Variable  ${cap1}  ${resp.json()[3]['capabilityList'][2]}
-    Set Suite Variable  ${cap2}  ${resp.json()[5]['capabilityList'][6]}
-    Set Suite Variable  ${cap3}  ${resp.json()[5]['capabilityList'][4]}
-    Set Suite Variable  ${cap4}  ${resp.json()[2]['capabilityList'][3]}
+    Set Suite Variable  ${cap2}  ${resp.json()[5]['capabilityList'][5]}
+    Set Suite Variable  ${cap3}  ${resp.json()[5]['capabilityList'][3]}
+    Set Suite Variable  ${cap4}  ${resp.json()[2]['capabilityList'][4]}
 
     # ${resp}=  Get roles
     # Log   ${resp.json()}
@@ -51,14 +61,16 @@ JD-TC-UpdateRoleStatus-1
     ${featureName}=    FakerLibrary.name    
     ${Capabilities}=    Create List    ${cap1}    ${cap2}
     Set Suite Variable  ${Capabilities}
+
     ${resp}=  Create Role     ${role_name1}    ${description}    ${featureName}    ${Capabilities}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${id}  ${resp.json()}
 
-    ${resp}=  Get roles
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${id}  ${resp.json()[0]['id']}
+    # ${resp}=  Get roles
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${id}  ${resp.json()[0]['id']}
 
 
     ${resp}=  Get roles by id    ${id}
@@ -87,6 +99,23 @@ JD-TC-UpdateRoleStatus-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[1]}
+
+JD-TC-UpdateRoleStatus-2
+
+    [Documentation]  Update role status to Enable.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update role status    ${id}    ${toggle[0]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get roles by id    ${id}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[0]}
 
 JD-TC-UpdateRoleStatus-UH1
 
@@ -118,18 +147,17 @@ JD-TC-UpdateRoleStatus-UH3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Update role status    ${id}    ${toggle[0]}
+    ${description}=    Fakerlibrary.Sentence    
+    ${featureName}=    FakerLibrary.name    
+
+    ${resp}=  Create Role     ${role_name1}    ${description}    ${featureName}    ${Capabilities}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${id1}  ${resp.json()}
 
-    ${resp}=  Get roles by id    ${id}
+    ${resp}=  Update role status    ${id1}    ${toggle[0]}
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[0]}
-
-    ${resp}=  Update role status    ${id}    ${toggle[0]}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}   ${ALREADY_ENABLED}
 
 JD-TC-UpdateRoleStatus-UH4
@@ -140,16 +168,16 @@ JD-TC-UpdateRoleStatus-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Update role status    ${id}    ${toggle[1]}
+    ${resp}=  Update role status    ${id1}    ${toggle[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get roles by id    ${id}
+    ${resp}=  Get roles by id    ${id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[1]}
 
-    ${resp}=  Update role status    ${id}    ${toggle[1]}
+    ${resp}=  Update role status    ${id1}    ${toggle[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${ALREADY_DISABLED}

@@ -22,7 +22,7 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 JD-TC-CreateRole-1
 
-    [Documentation]  Create  Roles for an existing provider.
+    [Documentation]   Provider Create a role empty capability and scope.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
@@ -57,131 +57,683 @@ JD-TC-CreateRole-1
     ${resp}=  Get roles
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${id}  ${resp.json()[0]['id']}
-
-
-    ${resp}=  Get roles by id    ${id}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${description2}=    Fakerlibrary.Sentence    
-    ${featureName2}=    FakerLibrary.name    
-
-    ${resp}=  Update Role   ${id}    ${role_name1}    ${description2}    ${featureName2}    ${emptylist}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
+    Set Test Variable  ${id}  ${resp.json()[${len}-1]['id']}
 
     ${resp}=  Get roles by id    ${id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['description']}  ${description2}
-    Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName2}
+    Should Be Equal As Strings  ${resp.json()['id']}  ${id}
+    # Should Be Equal As Strings  ${resp.json()['roleId']}  0
     Should Be Equal As Strings  ${resp.json()['roleName']}  ${role_name1}
+    Should Be Equal As Strings  ${resp.json()['description']}  ${description}
+    Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName}
 
-    ${resp}=  Update role status    ${id}    ${toggle[1]}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get roles by id    ${id}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[1]}
-
-    ${resp}=  Restore roles
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get roles by id    ${id}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[1]}
 
 JD-TC-CreateRole-2
 
-    [Documentation]  Create  Roles with id  zero.
+    [Documentation]  Create  Roles with Department scope is 'All'.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${description1}=    Fakerlibrary.Sentence    
-    ${featureName1}=    FakerLibrary.name    
+    ${featureName1}=    FakerLibrary.name 
 
-    ${resp}=  Create Role      ${role_name1}    ${description1}    ${featureName1}   ${emptylist}
+    ${Department}=  Create List           all
+
+    ${user_scope}=   Create Dictionary     departments=${Department}  
+
+    ${resp}=  Create Role      ${role_name1}    ${description1}    ${featureName1}   ${emptylist}   scope=${user_scope}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${id_2}  ${resp.json()}
 
     ${resp}=  Get roles
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${id2}  ${resp.json()[1]['id']}
+    ${len}=  Get Length  ${resp.json()}
+    Set Test Variable  ${id2}  ${resp.json()[${len}-1]['id']}
 
     ${resp}=  Get roles by id    ${id2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${description2}=    Fakerlibrary.Sentence    
-    ${featureName2}=    FakerLibrary.name    
-
-    ${resp}=  Update Role   ${id2}     ${role_name1}    ${description2}    ${featureName2}  ${emptylist}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get roles by id    ${id2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['description']}  ${description2}
-    Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName2}
+    Should Be Equal As Strings  ${resp.json()['id']}  ${id2}
+    # Should Be Equal As Strings  ${resp.json()['roleId']}   ${id_2}
     Should Be Equal As Strings  ${resp.json()['roleName']}  ${role_name1}
-
-    ${resp}=  Restore role by id    
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get roles by id    ${id2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()['description']}  ${description1}
+    Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName1}
+    Should Be Equal As Strings  ${resp.json()['scope']['departments']}  ${Department}
 
 JD-TC-CreateRole-3
 
-    [Documentation]  Create  Roles with id  3.
+    [Documentation]  Create  Roles with labels scope is 'All'.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${description1}=    Fakerlibrary.Sentence    
-    ${featureName1}=    FakerLibrary.name    
+    ${featureName1}=    FakerLibrary.name 
+    ${role_name3}=    FakerLibrary.name 
 
-    ${resp}=  Create Role    ${role_name1}    ${description1}    ${featureName1}    ${emptylist}
+    ${labels}=  Create List           all
+
+    ${user_scope}=   Create Dictionary     labels=${labels}  
+
+    ${resp}=  Create Role      ${role_name3}    ${description1}    ${featureName1}   ${emptylist}   scope=${user_scope}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${id_3}  ${resp.json()}
 
     ${resp}=  Get roles
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${id3}  ${resp.json()[2]['id']}
+    ${len}=  Get Length  ${resp.json()}
+    Set Test Variable  ${id3}  ${resp.json()[${len}-1]['id']}
 
     ${resp}=  Get roles by id    ${id3}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['id']}  ${id3}
+    # Should Be Equal As Strings  ${resp.json()['roleId']}   ${id_3}
+    Should Be Equal As Strings  ${resp.json()['roleName']}  ${role_name3}
+    Should Be Equal As Strings  ${resp.json()['description']}  ${description1}
+    Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName1}
+    Should Be Equal As Strings  ${resp.json()['scope']['labels']}  ${labels}
+
+
+JD-TC-CreateRole-4
+
+    [Documentation]  Create  Roles with internalStatus scope is 'All'.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${description1}=    Fakerlibrary.Sentence    
+    ${featureName1}=    FakerLibrary.name 
+    ${role_name4}=    FakerLibrary.name 
+
+    ${internalStatus}=  Create List           all
+
+    ${user_scope}=   Create Dictionary     internalStatus=${internalStatus}  
+
+    ${resp}=  Create Role      ${role_name4}    ${description1}    ${featureName1}   ${emptylist}   scope=${user_scope}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${id_4}  ${resp.json()}
+
+    ${resp}=  Get roles
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
+    Set Test Variable  ${id4}  ${resp.json()[${len}-1]['id']}
+
+    ${resp}=  Get roles by id    ${id4}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['id']}  ${id4}
+    # Should Be Equal As Strings  ${resp.json()['roleId']}   ${id_4}
+    Should Be Equal As Strings  ${resp.json()['roleName']}  ${role_name4}
+    Should Be Equal As Strings  ${resp.json()['description']}  ${description1}
+    Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName1}
+    Should Be Equal As Strings  ${resp.json()['scope']['internalStatus']}  ${internalStatus}
+
+JD-TC-CreateRole-5
+
+    [Documentation]  Create  Roles with pincodes scope is 'All'.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${description1}=    Fakerlibrary.Sentence    
+    ${featureName1}=    FakerLibrary.name 
+    ${role_name5}=    FakerLibrary.name 
+
+    ${pincodes}=  Create List           all
+
+    ${user_scope}=   Create Dictionary     pincodes=${pincodes}  
+
+    ${resp}=  Create Role      ${role_name5}    ${description1}    ${featureName1}   ${emptylist}   scope=${user_scope}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${id_5}  ${resp.json()}
+
+    ${resp}=  Get roles
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
+    Set Test Variable  ${id5}  ${resp.json()[${len}-1]['id']}
+
+    ${resp}=  Get roles by id    ${id5}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['id']}  ${id5}
+    # Should Be Equal As Strings  ${resp.json()['roleId']}   ${id_5}
+    Should Be Equal As Strings  ${resp.json()['roleName']}  ${role_name5}
+    Should Be Equal As Strings  ${resp.json()['description']}  ${description1}
+    Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName1}
+    Should Be Equal As Strings  ${resp.json()['scope']['pincodes']}  ${pincodes}
+
+JD-TC-CreateRole-6
+
+    [Documentation]  Create  Roles with services scope is 'All'.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${description1}=    Fakerlibrary.Sentence    
+    ${featureName1}=    FakerLibrary.name 
+    ${role_name6}=    FakerLibrary.name 
+
+    ${services}=  Create List           all
+
+    ${user_scope}=   Create Dictionary     services=${services}  
+
+    ${resp}=  Create Role      ${role_name6}    ${description1}    ${featureName1}   ${emptylist}   scope=${user_scope}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${id_6}  ${resp.json()}
+
+    ${resp}=  Get roles
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
+    Set Test Variable  ${id6}  ${resp.json()[${len}-1]['id']}
+
+    ${resp}=  Get roles by id    ${id6}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['id']}  ${id6}
+    # Should Be Equal As Strings  ${resp.json()['roleId']}   ${id_6}
+    Should Be Equal As Strings  ${resp.json()['roleName']}  ${role_name6}
+    Should Be Equal As Strings  ${resp.json()['description']}  ${description1}
+    Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName1}
+    Should Be Equal As Strings  ${resp.json()['scope']['services']}  ${services}
+
+JD-TC-CreateRole-7
+
+    [Documentation]  Create  Roles with partners scope is 'All'.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${description1}=    Fakerlibrary.Sentence    
+    ${featureName1}=    FakerLibrary.name 
+    ${role_name7}=    FakerLibrary.name 
+
+    ${partners}=  Create List           all
+
+    ${user_scope}=   Create Dictionary     partners=${partners}  
+
+    ${resp}=  Create Role      ${role_name7}    ${description1}    ${featureName1}   ${emptylist}   scope=${user_scope}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${id_7}  ${resp.json()}
+
+    ${resp}=  Get roles
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
+    Set Test Variable  ${id7}  ${resp.json()[${len}-1]['id']}
+
+    ${resp}=  Get roles by id    ${id7}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['id']}  ${id7}
+    # Should Be Equal As Strings  ${resp.json()['roleId']}   ${id_7}
+    Should Be Equal As Strings  ${resp.json()['roleName']}  ${role_name7}
+    Should Be Equal As Strings  ${resp.json()['description']}  ${description1}
+    Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName1}
+    Should Be Equal As Strings  ${resp.json()['scope']['partners']}  ${partners}
+
+JD-TC-CreateRole-8
+
+    [Documentation]  Create  Roles with branches scope is 'All'.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${description1}=    Fakerlibrary.Sentence    
+    ${featureName1}=    FakerLibrary.name 
+    ${role_name8}=    FakerLibrary.name 
+
+    ${branches}=  Create List           all
+
+    ${user_scope}=   Create Dictionary     branches=${branches}  
+
+    ${resp}=  Create Role      ${role_name8}    ${description1}    ${featureName1}   ${emptylist}   scope=${user_scope}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${id_8}  ${resp.json()}
+
+    ${resp}=  Get roles
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
+    Set Test Variable  ${id8}  ${resp.json()[${len}-1]['id']}
+
+    ${resp}=  Get roles by id    ${id8}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['id']}  ${id8}
+    # Should Be Equal As Strings  ${resp.json()['roleId']}   ${id_8}
+    Should Be Equal As Strings  ${resp.json()['roleName']}  ${role_name8}
+    Should Be Equal As Strings  ${resp.json()['description']}  ${description1}
+    Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName1}
+    Should Be Equal As Strings  ${resp.json()['scope']['branches']}  ${branches}
+
+JD-TC-CreateRole-9
+
+    [Documentation]  Create  Roles with businessLocations scope is 'All'.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${description1}=    Fakerlibrary.Sentence    
+    ${featureName1}=    FakerLibrary.name 
+    ${role_name9}=    FakerLibrary.name 
+
+    ${businessLocations}=  Create List           all
+
+    ${user_scope}=   Create Dictionary     businessLocations=${businessLocations}  
+
+    ${resp}=  Create Role      ${role_name9}    ${description1}    ${featureName1}   ${emptylist}   scope=${user_scope}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${id_9}  ${resp.json()}
+
+    ${resp}=  Get roles
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
+    Set Test Variable  ${id9}  ${resp.json()[${len}-1]['id']}
+
+    ${resp}=  Get roles by id    ${id9}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['id']}  ${id9}
+    # Should Be Equal As Strings  ${resp.json()['roleId']}   ${id_9}
+    Should Be Equal As Strings  ${resp.json()['roleName']}  ${role_name9}
+    Should Be Equal As Strings  ${resp.json()['description']}  ${description1}
+    Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName1}
+    Should Be Equal As Strings  ${resp.json()['scope']['businessLocations']}  ${businessLocations}
+
+JD-TC-CreateRole-10
+
+    [Documentation]  Create  Roles with areaIds scope is 'All'.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${description1}=    Fakerlibrary.Sentence    
+    ${featureName1}=    FakerLibrary.name 
+    ${role_name10}=    FakerLibrary.name 
+
+    ${areaIds}=  Create List           all
+
+    ${user_scope}=   Create Dictionary     areaIds=${areaIds}  
+
+    ${resp}=  Create Role      ${role_name10}    ${description1}    ${featureName1}   ${emptylist}   scope=${user_scope}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${id_10}  ${resp.json()}
+
+    ${resp}=  Get roles
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
+    Set Test Variable  ${id10}  ${resp.json()[${len}-1]['id']}
+
+    ${resp}=  Get roles by id    ${id10}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['id']}  ${id10}
+    # Should Be Equal As Strings  ${resp.json()['roleId']}   ${id_10}
+    Should Be Equal As Strings  ${resp.json()['roleName']}  ${role_name10}
+    Should Be Equal As Strings  ${resp.json()['description']}  ${description1}
+    Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName1}
+    Should Be Equal As Strings  ${resp.json()['scope']['areaIds']}  ${areaIds}
+
+JD-TC-CreateRole-11
+
+    [Documentation]  Create  Roles with regionIds scope is 'All'.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${description1}=    Fakerlibrary.Sentence    
+    ${featureName1}=    FakerLibrary.name 
+    ${role_name11}=    FakerLibrary.name 
+
+    ${regionIds}=  Create List           all
+
+    ${user_scope}=   Create Dictionary     regionIds=${regionIds}  
+
+    ${resp}=  Create Role      ${role_name11}    ${description1}    ${featureName1}   ${emptylist}   scope=${user_scope}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${id_11}  ${resp.json()}
+
+    ${resp}=  Get roles
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
+    Set Test Variable  ${id11}  ${resp.json()[${len}-1]['id']}
+
+    ${resp}=  Get roles by id    ${id11}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['id']}  ${id11}
+    # Should Be Equal As Strings  ${resp.json()['roleId']}   ${id_11}
+    Should Be Equal As Strings  ${resp.json()['roleName']}  ${role_name11}
+    Should Be Equal As Strings  ${resp.json()['description']}  ${description1}
+    Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName1}
+    Should Be Equal As Strings  ${resp.json()['scope']['regionIds']}  ${regionIds}
+
+JD-TC-CreateRole-12
+
+    [Documentation]  Create  Roles with users scope is 'All'.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${description1}=    Fakerlibrary.Sentence    
+    ${featureName1}=    FakerLibrary.name 
+    ${role_name12}=    FakerLibrary.name 
+
+    ${users}=  Create List           all
+
+    ${user_scope}=   Create Dictionary     users=${users}  
+
+    ${resp}=  Create Role      ${role_name12}    ${description1}    ${featureName1}   ${emptylist}   scope=${user_scope}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${id_12}  ${resp.json()}
+
+    ${resp}=  Get roles
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
+    Set Test Variable  ${id12}  ${resp.json()[${len}-1]['id']}
+
+    ${resp}=  Get roles by id    ${id12}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['id']}  ${id12}
+    # Should Be Equal As Strings  ${resp.json()['roleId']}   ${id_12}
+    Should Be Equal As Strings  ${resp.json()['roleName']}  ${role_name12}
+    Should Be Equal As Strings  ${resp.json()['description']}  ${description1}
+    Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName1}
+    Should Be Equal As Strings  ${resp.json()['scope']['users']}  ${users}
+
+JD-TC-CreateRole-13
+
+    [Documentation]  Create  Roles with all scope is 'All'.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${description1}=    Fakerlibrary.Sentence    
+    ${featureName1}=    FakerLibrary.name 
+    ${role_name12}=    FakerLibrary.name 
+
+    ${departments}=  Create List           all
+    ${labels}=  Create List           all
+    ${internalStatus}=  Create List           all
+    ${pincodes}=  Create List           all
+    ${services}=  Create List           all
+    ${partners}=  Create List           all
+    ${branches}=  Create List           all
+    ${businessLocations}=  Create List           all
+    ${areaIds}=  Create List           all
+    ${regionIds}=  Create List           all
+    ${users}=  Create List           all
+
+    ${user_scope}=   Create Dictionary   departments=${departments}      labels=${labels}   internalStatus=${internalStatus}     pincodes=${pincodes}      services=${services}      partners=${partners}      branches=${branches}      businessLocations=${businessLocations}   areaIds=${areaIds}      regionIds=${regionIds}       users=${users}  
+
+    ${resp}=  Create Role      ${role_name12}    ${description1}    ${featureName1}   ${emptylist}   scope=${user_scope}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${id_12}  ${resp.json()}
+
+    ${resp}=  Get roles
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
+    Set Test Variable  ${id12}  ${resp.json()[${len}-1]['id']}
+
+    ${resp}=  Get roles by id    ${id12}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['id']}  ${id12}
+    # Should Be Equal As Strings  ${resp.json()['roleId']}   ${id_12}
+    Should Be Equal As Strings  ${resp.json()['roleName']}  ${role_name12}
+    Should Be Equal As Strings  ${resp.json()['description']}  ${description1}
+    Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName1}
+    Should Be Equal As Strings  ${resp.json()['scope']['users']}  ${users}
+
+JD-TC-CreateRole-14
+
+    [Documentation]  Create  Roles with capabilities is 'actionRequired,viewLeadCreditStatus'.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${description1}=    Fakerlibrary.Sentence    
+    ${featureName1}=    FakerLibrary.name 
+    ${role_name13}=    FakerLibrary.name 
+    ${departments}=  Create List           all
+
+    ${user_scope}=   Create Dictionary   departments=${departments}  
+
+    ${resp}=  Get Default Roles With Capabilities  ${rbac_feature[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${role_id1}    ${resp.json()[0]['roleId']}
+    Set Suite Variable  ${role_name1}  ${resp.json()[0]['displayName']}
+    Set Suite Variable  ${cap1}  ${resp.json()[3]['capabilityList'][2]}
+    Set Suite Variable  ${cap2}  ${resp.json()[5]['capabilityList'][3]}
+    Set Suite Variable  ${cap3}  ${resp.json()[5]['capabilityList'][4]}
+    Set Suite Variable  ${cap4}  ${resp.json()[2]['capabilityList'][3]}
+    Set Suite Variable  ${cap5}  ${resp.json()[1]['capabilityList'][4]}
+
+    ${Capabilities}=    Create List    ${cap1}    ${cap2} 
+
+    ${resp}=  Create Role      ${role_name13}    ${description1}    ${featureName1}   ${Capabilities}   scope=${user_scope}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${id_13}  ${resp.json()}
+
+    ${resp}=  Get roles by id    ${id_13}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['id']}  ${id_13}
+    # Should Be Equal As Strings  ${resp.json()['roleId']}   ${id_13}
+    Should Be Equal As Strings  ${resp.json()['roleName']}  ${role_name13}
+    Should Be Equal As Strings  ${resp.json()['description']}  ${description1}
+    Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName1}
+    Should Be Equal As Strings  ${resp.json()['scope']['departments']}  ${departments}
+    Should Be Equal As Strings  ${resp.json()['capabilityList'][0]}  ${cap1}
+    Should Be Equal As Strings  ${resp.json()['capabilityList'][1]}  ${cap2}
+
+JD-TC-CreateRole-15
+
+    [Documentation]  Create  Roles with five capabilities.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${description1}=    Fakerlibrary.Sentence    
+    ${featureName1}=    FakerLibrary.name 
+    ${role_name13}=    FakerLibrary.name 
+    ${departments}=  Create List           all
+
+    ${user_scope}=   Create Dictionary   departments=${departments}  
+
+    ${Capabilities}=    Create List    ${cap1}    ${cap2}  ${cap3}   ${cap4}   ${cap5}
+
+    ${resp}=  Create Role      ${role_name13}    ${description1}    ${featureName1}   ${Capabilities}   scope=${user_scope}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${id_13}  ${resp.json()}
+
+    ${resp}=  Get roles by id    ${id_13}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['id']}  ${id_13}
+    # Should Be Equal As Strings  ${resp.json()['roleId']}   ${id_13}
+    Should Be Equal As Strings  ${resp.json()['roleName']}  ${role_name13}
+    Should Be Equal As Strings  ${resp.json()['description']}  ${description1}
+    Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName1}
+    Should Be Equal As Strings  ${resp.json()['scope']['departments']}  ${departments}
+    Should Be Equal As Strings  ${resp.json()['capabilityList'][0]}  ${cap1}
+    Should Be Equal As Strings  ${resp.json()['capabilityList'][1]}  ${cap2}
+    Should Be Equal As Strings  ${resp.json()['capabilityList'][2]}  ${cap3}
+    Should Be Equal As Strings  ${resp.json()['capabilityList'][3]}  ${cap4}
+    Should Be Equal As Strings  ${resp.json()['capabilityList'][4]}  ${cap5}
 
 JD-TC-CreateRole-UH1
 
-    [Documentation]   Enable Rbac without login
+    [Documentation]  Create  Roles with ten capabilities include dublicates.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${description1}=    Fakerlibrary.Sentence    
-    ${featureName1}=    FakerLibrary.name    
+    ${featureName1}=    FakerLibrary.name 
+    ${role_name13}=    FakerLibrary.name 
+    ${departments}=  Create List           all
 
-    ${resp}=  Create Role        ${role_name1}    ${description1}    ${featureName1}    ${emptylist}
+    ${user_scope}=   Create Dictionary   departments=${departments}  
+
+    ${Capabilities}=    Create List    ${cap1}    ${cap2}  ${cap3}   ${cap4}   ${cap5}  ${cap1}    ${cap2}  ${cap3}   ${cap4}   ${cap5}
+
+    ${resp}=  Create Role      ${role_name13}    ${description1}    ${featureName1}   ${Capabilities}   scope=${user_scope}
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  419
-    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${id_13}  ${resp.json()}
+
+    ${resp}=  Get roles by id    ${id_13}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
 
 JD-TC-CreateRole-UH2
 
-    [Documentation]   Enable Rbac Using Consumer Login
+    [Documentation]  Create  Roles with invalid capabilities.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${description1}=    Fakerlibrary.Sentence    
+    ${featureName1}=    FakerLibrary.name 
+    ${role_name13}=    FakerLibrary.name 
+    ${departments}=  Create List           all
+
+    ${user_scope}=   Create Dictionary   departments=${departments}  
+
+    ${Capabilities}=    Create List    4_45
+
+    ${resp}=  Create Role      ${role_name13}    ${description1}    ${featureName1}   ${Capabilities}   scope=${user_scope}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+
+JD-TC-CreateRole-UH3
+
+    [Documentation]  Create  Roles with EMPTY role name.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${description1}=    Fakerlibrary.Sentence    
+    ${featureName1}=    FakerLibrary.name 
+    ${role_name13}=    FakerLibrary.name 
+    ${departments}=  Create List           all
+
+    ${user_scope}=   Create Dictionary   departments=${departments}  
+
+    ${Capabilities}=    Create List    ${cap1}
+
+    ${resp}=  Create Role      ${EMPTY}    ${description1}    ${featureName1}   ${Capabilities}   scope=${user_scope}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+
+JD-TC-CreateRole-UH4
+
+    [Documentation]  Create  Roles with EMPTY description.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${description1}=    Fakerlibrary.Sentence    
+    ${featureName1}=    FakerLibrary.name 
+    ${role_name13}=    FakerLibrary.name 
+    ${departments}=  Create List           all
+
+    ${user_scope}=   Create Dictionary   departments=${departments}  
+
+    ${Capabilities}=    Create List    ${cap1}
+
+    ${resp}=  Create Role      ${role_name13}    ${EMPTY}    ${featureName1}   ${Capabilities}   scope=${user_scope}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+
+JD-TC-CreateRole-UH5
+
+    [Documentation]  Create  Roles with EMPTY featureName.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${description1}=    Fakerlibrary.Sentence    
+    ${featureName1}=    FakerLibrary.name 
+    ${role_name13}=    FakerLibrary.name 
+    ${departments}=  Create List           all
+
+    ${user_scope}=   Create Dictionary   departments=${departments}  
+
+    ${Capabilities}=    Create List    ${cap1}
+
+    ${resp}=  Create Role      ${role_name13}    ${description1}    ${EMPTY}   ${Capabilities}   scope=${user_scope}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+
+JD-TC-CreateRole-UH6
+
+    [Documentation]   Create Role Using Consumer Login
 
     ${resp}=  ConsumerLogin  ${CUSERNAME1}  ${PASSWORD}
     Log  ${resp.content}
@@ -194,3 +746,15 @@ JD-TC-CreateRole-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
+
+JD-TC-CreateRole-UH7
+
+    [Documentation]   Create Role Using Without Login
+
+    ${description1}=    Fakerlibrary.Sentence    
+    ${featureName1}=    FakerLibrary.name    
+
+    ${resp}=  Create Role       ${role_name1}    ${description1}    ${featureName1}     ${emptylist}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}

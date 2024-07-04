@@ -26,7 +26,7 @@ JD-TC-GetUserWithRoleFilter-1
 
     [Documentation]  Create User With Roles And Scope for an existing provider and get the user with role id filter.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -100,7 +100,7 @@ JD-TC-GetUserWithRoleFilter-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${PUSERNAME48}'
+            IF   not '${user_phone}' == '${HLPUSERNAME5}'
                 clear_users  ${user_phone}
             END
         END
@@ -153,7 +153,6 @@ JD-TC-GetUserWithRoleFilter-1
     ${resp}=  Get User   userRoles-eq=roleId::${role_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['userRoles'][0]['id']}       ${role_id1}
     Should Be Equal As Strings  ${resp.json()[0]['userRoles'][0]['roleName']}     ${role_name1}
     Should Be Equal As Strings  ${resp.json()[0]['userRoles'][0]['defaultRole']}  ${bool[1]}
@@ -162,13 +161,14 @@ JD-TC-GetUserWithRoleFilter-2
 
     [Documentation]  Create User With Roles And Scope for an existing provider and get the user with role name filter.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    sleep  02s
+
     ${resp}=  Get User   userRoles-eq=roleName::${role_name1}
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['userRoles'][0]['id']}       ${role_id1}
     Should Be Equal As Strings  ${resp.json()[0]['userRoles'][0]['roleName']}     ${role_name1}

@@ -241,18 +241,18 @@ JD-TC-GetUserScopeById-UH3
     Log  ${decrypted_data}
     Set Test Variable   ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
     
-    ${highest_package}=  get_highest_license_pkg
-    Log  ${highest_package}
-    Set Suite variable  ${lic2}  ${highest_package[0]}
+    # ${highest_package}=  get_highest_license_pkg
+    # Log  ${highest_package}
+    # Set Suite variable  ${lic2}  ${highest_package[0]}
 
     # ${resp}=   Run Keyword If  '${lic_id}' != '${lic2}'  Change License Package  ${highest_package[0]}
     # Run Keyword If   '${resp}' != '${None}'  Log  ${resp.json()}
     # Run Keyword If   '${resp}' != '${None}'  Should Be Equal As Strings  ${resp.status_code}  200
-    IF  '${lic_id}' != '${lic2}'
-        ${resp1}=   Change License Package  ${highest_package[0]}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    END
+    # IF  '${lic_id}' != '${lic2}'
+    #     ${resp1}=   Change License Package  ${highest_package[0]}
+    #     Log  ${resp1.content}
+    #     Should Be Equal As Strings  ${resp1.status_code}  200
+    # END
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -284,6 +284,7 @@ JD-TC-GetUserScopeById-UH3
     ELSE
         Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
     END
+    clear_users  ${PUSERNAME15}
 
     ${u_id2}=  Create Sample User 
     Set Suite Variable  ${u_id2}

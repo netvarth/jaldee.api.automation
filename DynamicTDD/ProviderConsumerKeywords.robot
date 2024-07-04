@@ -373,3 +373,159 @@ SPConsumer Deactivation
 #     # ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  expected_status=any   headers=${cons_headers}
 #     ${resp}=  POST On Session  ynw   url=/consumer/appointment/add  params=${cons_params}  data=${data}  expected_status=any   headers=${cons_headers}
 #     RETURN  ${resp}
+
+#----------- CONSUMER ORDER ---------
+
+Get Provider Catalog Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/so/catalog   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+
+Get Provider Catalog Count Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/so/catalog/count   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+
+Get Provider Catalog Item Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/so/catalog/item   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get Provider Catalog Item Count Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/so/catalog/item/count   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Create Cart From Consumerside
+
+    [Arguments]    ${store}    ${providerConsumer}    ${deliveryType}     @{vargs}   &{kwargs}
+
+    ${stores}=  Create Dictionary    encId=${store}
+    ${providerConsumer}=  Create Dictionary    id=${providerConsumer}
+    
+    ${len}=  Get Length  ${vargs}
+    ${items}=  Create List
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${items}  ${vargs[${index}]}
+    END
+    ${data}=    Create Dictionary    store=${stores}    providerConsumer=${providerConsumer}    deliveryType=${deliveryType}    items=${items}  
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END  
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw   /consumer/cart  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Update Cart From Consumerside
+
+    [Arguments]    ${cartUid}   ${store}    ${providerConsumer}    ${deliveryType}     @{vargs}   &{kwargs}
+
+    ${stores}=  Create Dictionary    encId=${store}
+    ${providerConsumer}=  Create Dictionary    id=${providerConsumer}
+    
+    ${len}=  Get Length  ${vargs}
+    ${items}=  Create List
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${items}  ${vargs[${index}]}
+    END
+    ${data}=    Create Dictionary    store=${stores}    providerConsumer=${providerConsumer}    deliveryType=${deliveryType}    items=${items}  
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END  
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw   /consumer/cart/update/${cartUid}  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Get ConsumerCart By Uid
+    [Arguments]     ${cartUid}  
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/cart/${cartUid}  expected_status=any
+    RETURN  ${resp}
+
+Get ConsumerCart With Items By Uid
+    [Arguments]     ${cartUid}  
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/cart/${cartUid}/getitems  expected_status=any
+    RETURN  ${resp}
+
+Get Cart By Provider Consumer 
+    [Arguments]     ${providerConsumerId} 
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/cart/procon/${providerConsumerId}  expected_status=any
+    RETURN  ${resp}
+
+
+Update Cart Items
+
+    [Arguments]    ${cartUid}  ${encId}   ${quantity}       &{kwargs}
+    ${catalogItem}=    Create Dictionary    encId=${encId} 
+    ${data}=    Create Dictionary    catalogItem=${catalogItem}    quantity=${quantity}    
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END  
+    ${data}=  Create List    ${data}
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw   /consumer/cart/${cartUid}/updateitems  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Get Cart Item By Uid
+    [Arguments]     ${cartItemUid}  
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/cart/item/${cartItemUid}  expected_status=any
+    RETURN  ${resp}
+
+Get Item List By Cart Uid
+    [Arguments]     ${cartUid} 
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /consumer/cart/${cartUid}/item  expected_status=any
+    RETURN  ${resp}
+
+Get Cart Item List- Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/cart/item   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get Cart Item Count- Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/cart/item/count   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Remove Item From Cart
+    [Arguments]     ${itemUid}
+
+    Check And Create YNW Session
+    ${resp}=  DELETE On Session  ynw  /consumer/cart/item/${itemUid}  expected_status=any
+    RETURN  ${resp}
+
+Remove All Items From Cart
+    [Arguments]     ${cartUid}
+
+    Check And Create YNW Session
+    ${resp}=  DELETE On Session  ynw  /consumer/cart/${cartUid}/removeitems  expected_status=any
+    RETURN  ${resp}
+
+CheckOut Cart Items
+    [Arguments]     ${cartUid}  
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /consumer/cart/${cartUid}/checkout   expected_status=any
+    RETURN  ${resp}

@@ -69,14 +69,15 @@ ${telephoneType}    Residence
 @{relationType}    Wife    Mother    Father
 ${idTypes}    Passport
 ${permanentPinCode}    679581
-${customerName}    Hisham
-${customerName1}    Sreekanth
-${customerName2}    Amal
+${customerName}     manu
+${customerName1}    appu
+${customerName2}    babu
 @{if_dt_list}   ${QnrDatatypes[5]}   ${QnrDatatypes[7]}  ${QnrDatatypes[8]}
 &{id_zero}      id=${0}
 ${xlFilestatus}      ${EXECDIR}/TDD/creditverification.xlsx  
 ${loansanctionXlfile}     ${EXECDIR}/TDD/LoanSanction.xlsx
 ${Transaction_Name}       Credit Recommendation
+${Transaction_Name1}       Home Loan
 
 ${task_temp_name1}   Follow Up 1
 ${task_temp_name2}   Follow Up 2
@@ -192,7 +193,7 @@ JD-TC-LeadStatus-1
 
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${len}
-        IF  '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[9]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[0]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[0]}'
+        IF  '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[9]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[0]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[0]}'  
             ${id}   Set Variable  ${resp.json()[${i}]['id']}
             ${qnrid}   Set Variable  ${resp.json()[${i}]['questionnaireId']}
             Exit For Loop If   '${id}' != '${None}'
@@ -221,7 +222,7 @@ JD-TC-LeadStatus-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${len}
-        IF  '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[9]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[0]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}'
+        IF  '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[9]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[0]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}'  
             ${id1}   Set Variable  ${resp.json()[${i}]['id']}
             ${qnrid1}   Set Variable  ${resp.json()[${i}]['questionnaireId']}
             Exit For Loop If   '${id}' != '${None}'
@@ -252,6 +253,7 @@ JD-TC-LeadStatus-1
     ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}   ${xlFilestatus}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    
 
   
     ${resp}=  Get Questionnaire List By Provider   
@@ -284,12 +286,42 @@ JD-TC-LeadStatus-1
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
 
+    ${len}=  Get Length  ${resp.json()}
+    FOR  ${i}  IN RANGE   ${len}
+        IF  '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[9]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[0]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[0]}'
+            ${id22}   Set Variable  ${resp.json()[${i}]['id']}
+            ${qnrid22}   Set Variable  ${resp.json()[${i}]['questionnaireId']}
+            Exit For Loop If   '${id}' != '${None}'
+        END
+    END
+    Set Suite Variable   ${id22}
+    Set Suite Variable   ${qnrid22}
+    
+    ${qns}   Get Provider Questionnaire By Id   ${id22}  
+    Log  ${qns.content}
+    Should Be Equal As Strings  ${qns.status_code}  200
+    # Should Be Equal As Strings  ${qns.json()['transactionId']}  ${category_id1}
+    IF  '${qns.json()['status']}' == '${status[1]}' 
+        ${resp1}=   Provider Change Questionnaire Status  ${id22}  ${status[0]}  
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+   
+
+    ${qns}   Get Provider Questionnaire By Id   ${id22}  
+    Log  ${qns.content}
+    Should Be Equal As Strings  ${qns.status_code}  200
+    Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
+
 # *** Comments ***
-     ${cookie}  ${resp}=  Imageupload.SALogin    ${SUSERNAME}  ${SPASSWORD}
+    ${cookie}  ${resp}=  Imageupload.SALogin    ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}   ${loansanctionXlfile}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}   ${xlFile}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -322,6 +354,37 @@ JD-TC-LeadStatus-1
    
 
     ${qns}   Get Provider Questionnaire By Id   ${id33}  
+    Log  ${qns.content}
+    Should Be Equal As Strings  ${qns.status_code}  200
+    Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
+
+    ${resp}=  Get Questionnaire List By Provider   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${len}=  Get Length  ${resp.json()}
+    FOR  ${i}  IN RANGE   ${len}
+        IF  '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[9]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[0]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[2]}' and '${resp.json()[${i}]['questionnaireId']}' == '${Transaction_Name1}' 
+        # and '${resp.json()[${i}]['name']}' == '${QnrId[0]}'
+            ${id55}   Set Variable  ${resp.json()[${i}]['id']}
+            ${qnrid55}   Set Variable  ${resp.json()[${i}]['questionnaireId']}
+            Exit For Loop If   '${id}' != '${None}'
+        END
+    END
+    Set Suite Variable   ${id55}
+    Set Suite Variable   ${qnrid55}
+    
+    ${qns}   Get Provider Questionnaire By Id   ${id55}  
+    Log  ${qns.content}
+    Should Be Equal As Strings  ${qns.status_code}  200
+    # Should Be Equal As Strings  ${qns.json()['transactionId']}  ${category_id1}
+    IF  '${qns.json()['status']}' == '${status[1]}' 
+        ${resp1}=   Provider Change Questionnaire Status  ${id55}  ${status[0]}  
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+   
+
+    ${qns}   Get Provider Questionnaire By Id   ${id55}  
     Log  ${qns.content}
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
@@ -764,14 +827,14 @@ JD-TC-LeadStatus-1
     ${resp}=  Get Questionnaire By uuid For Lead    ${le_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings   ${resp.json()[1]['questionnaireId']}  ${qnrid}
-    Should Be Equal As Strings  ${resp.json()[1]['id']}   ${id}
+    Should Be Equal As Strings   ${resp.json()[0]['questionnaireId']}  ${qnrid1}
+    Should Be Equal As Strings  ${resp.json()[0]['id']}   ${id1}
 
 
-    ${fudata}=  db.fileUploadDT   ${resp.json()[1]}  ${FileAction[0]}  ${mp4file}  ${mp3file}
+    ${fudata}=  db.fileUploadDT   ${resp.json()[0]}  ${FileAction[0]}  ${mp4file}  ${mp3file}
     Log  ${fudata}
 
-    ${data}=  db.QuestionnaireAnswers   ${resp.json()[1]}   ${pcid18}   &{fudata}
+    ${data}=  db.QuestionnaireAnswers   ${resp.json()[0]}   ${pcid18}   &{fudata}
     Log  ${data}
     ${resp}=  Provider Validate Questionnaire  ${data}
     Log  ${resp.content}
@@ -991,9 +1054,7 @@ JD-TC-LeadStatus-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['status']['id']}   ${status_id14}
-
-
-
+    
 JD-TC-LeadStatus-2
     [Documentation]  kyc updated to Credit Score Generated
     

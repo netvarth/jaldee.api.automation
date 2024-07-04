@@ -3738,10 +3738,13 @@ Get User Search Status
     ${resp}=    GET On Session     ynw   /provider/user/search/${u_id}   expected_status=any  
     RETURN  ${resp}
 
-Create Team For User
-    [Arguments]  ${name}  ${team_size}  ${desc}
+Create Team For User    
+    [Arguments]  ${name}  ${team_size}  ${desc}   &{kwargs}
     Check And Create YNW Session
     ${data}=  Create Dictionary  name=${name}  size=${team_size}  description=${desc}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END 
     ${data}=  json.dumps  ${data}
     ${resp}=  POST On Session  ynw  /provider/user/team   data=${data}  expected_status=any
     RETURN  ${resp}
@@ -9523,16 +9526,19 @@ Replace Team Scope
     ${resp}=  PUT On Session  ynw  /provider/user/${feature}/team/replaceScope    data=${data}  expected_status=any
     RETURN  ${resp}
 
-Enable Disable RBAC
-   [Arguments]  ${status}  
-   Check And Create YNW Session
-   ${resp}=  PUT On Session  ynw  provider/account/settings/rbac/${status}  expected_status=any
-   RETURN  ${resp}
+# Enable Disable RBAC
+#    [Arguments]  ${status}  
+#    Check And Create YNW Session
+#    ${resp}=  PUT On Session  ynw  provider/account/settings/rbac/${status}  expected_status=any
+#    RETURN  ${resp}
 
 Create Role
-    [Arguments]     ${roleName}    ${description}    ${featureName}    ${capabilityList}
+    [Arguments]     ${roleName}    ${description}    ${featureName}    ${capabilityList}    &{kwargs}
 
     ${data}=    Create Dictionary      roleName=${roleName}    description=${description}    featureName=${featureName}    capabilityList=${capabilityList}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+            Set To Dictionary  ${data}   ${key}=${value}
+    END
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  provider/accessscope/role    data=${data}   expected_status=any
@@ -9551,9 +9557,12 @@ Get roles by id
     RETURN  ${resp}
 
 Update Role
-    [Arguments]      ${id}       ${roleName}    ${description}    ${featureName}    ${capabilityList}
+    [Arguments]      ${id}       ${roleName}    ${description}    ${featureName}    ${capabilityList}   &{kwargs}
 
     ${data}=    Create Dictionary      roleName=${roleName}    description=${description}    featureName=${featureName}    capabilityList=${capabilityList}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+            Set To Dictionary  ${data}   ${key}=${value}
+    END
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/accessscope/role/${id}    data=${data}   expected_status=any
@@ -15558,13 +15567,25 @@ Create Template
     ${resp}=  POST On Session  ynw  /provider/comm/template  data=${data}  expected_status=any
     RETURN  ${resp} 
 
+# Update Template  
+
+#     [Arguments]  ${temp_id}  ${temp_name}  ${content}  ${temp_format}  ${context}  ${commTarget}   ${comm_chanl}  &{kwargs}
+   
+#     ${data}=  Create Dictionary  templateName=${temp_name}  content=${content}  templateFormat=${temp_format}  context=${context}  
+#     ...   commTarget=${commTarget}  commChannel=${comm_chanl} 
+
+#     FOR  ${key}  ${value}  IN  &{kwargs}
+#         Set To Dictionary  ${data}   ${key}=${value}
+#     END
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session
+#     ${resp}=  PUT On Session  ynw  /provider/comm/template/${temp_id}  data=${data}  expected_status=any
+#     RETURN  ${resp} 
+
 Update Template  
 
-    [Arguments]  ${temp_id}  ${temp_name}  ${content}  ${temp_format}  ${context}  ${commTarget}   ${comm_chanl}  &{kwargs}
-   
-    ${data}=  Create Dictionary  templateName=${temp_name}  content=${content}  templateFormat=${temp_format}  context=${context}  
-    ...   commTarget=${commTarget}  commChannel=${comm_chanl} 
-
+    [Arguments]  ${temp_id}    &{kwargs}
+    ${data}=  Create Dictionary
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
@@ -15621,7 +15642,7 @@ Get Dynamic Variable List By SendComm
     ${resp}=  GET On Session  ynw  /provider/comm/template/dynamic/variable/sendComm/${sendcomm_id}   expected_status=any
     RETURN  ${resp}
 
-Create Send Comm Settings
+Create Template Settings
 
     [Arguments]  ${temp_id}   ${context}  ${sendcomm_id}  ${commTarget}  ${comm_chanl}  &{kwargs}
    
@@ -15647,11 +15668,10 @@ Get Send Comm List By Context
     ${resp}=  GET On Session  ynw  /provider/comm/template/sendComms/context/${context_id}   expected_status=any
     RETURN  ${resp}
 
-Update Send Comm Settings
+Update Template Settings
 
-    [Arguments]  ${setttings_id}  ${temp_id}   ${context}  ${sendcomm_id}  ${commTarget}  ${comm_chanl}  &{kwargs}
-   
-    ${data}=  Create Dictionary  templateId=${temp_id}  context=${context}  sendCommId=${sendcomm_id}  commTarget=${commTarget}   commChannel=${comm_chanl} 
+    [Arguments]  ${setttings_id}   &{kwargs}
+    ${data}=  Create Dictionary   
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
@@ -15673,14 +15693,14 @@ Get Default Template List by sendComm
     ${resp}=  GET On Session   ynw  /provider/comm/template/default/sendComm/${sendcomm_id}   expected_status=any
     RETURN  ${resp}
 
-Get Send Comm Settings By Id
+Get Template Settings By Id
 
     [Arguments]  ${settings_id} 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/comm/template/settings/${settings_id}  expected_status=any
     RETURN  ${resp}
 
-Update Send Comm Settings Status
+Update Template Settings Status
 
     [Arguments]  ${setting_id}  ${status} 
     Check And Create YNW Session
@@ -15694,6 +15714,43 @@ Get All Settings By Filter
     ${resp}=  GET On Session  ynw  /provider/comm/template/settings  params=${param}  expected_status=any
     RETURN  ${resp}
 
+Create Template Preview
+
+    [Arguments]   ${context}  ${content}   &{kwargs}
+    ${data}=  Create Dictionary    context=${context}    content=${content}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/comm/template/preview  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get Custom Template Preview By Id
+
+    [Arguments]  ${temp_id} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/comm/template/preview/${temp_id}  expected_status=any
+    RETURN  ${resp}
+
+Get Default Template Preview 
+
+    [Arguments]  ${sendcomm_id}  ${temp_id} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/comm/template/default/preview/${sendcomm_id}/${temp_id}  expected_status=any
+    RETURN  ${resp}
+
+Get Contexts
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/context   expected_status=any
+    RETURN  ${resp}
+
+Get CommTargets
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/commTarget   expected_status=any
+    RETURN  ${resp}
 
 Get Available Slots for Month Year
     [Arguments]  ${location}  ${service}  ${month}  ${year}
@@ -15760,3 +15817,36 @@ Forgot Password
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/login/forgot/password   data=${data}   expected_status=any
     RETURN  ${resp} 
+#................Store Settings...............
+
+Get Store Settings For OnlineOrder
+    [Arguments]   ${store_id}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/store/${store_id}/settings      expected_status=any
+    RETURN  ${resp}
+
+Update Store Settings For OnlineOrder
+
+    [Arguments]     ${store_id}      &{kwargs}  
+    ${store}=  Create Dictionary  encId=${store_id} 
+    ${data}=  Create Dictionary  store=${store} 
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END 
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/store/${store_id}/settings    data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+#................RBAC...............
+Enable Disable Booking RBAC
+    [Arguments]  ${status}  
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/account/settings/bookingrbac/${status}  expected_status=any
+    RETURN  ${resp}
+
+Enable Disable Medical Record RBAC
+    [Arguments]  ${status}  
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/account/settings/medicalrecordrbac/${status}  expected_status=any
+    RETURN  ${resp}

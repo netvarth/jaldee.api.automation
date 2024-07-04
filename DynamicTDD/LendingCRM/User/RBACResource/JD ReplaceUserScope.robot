@@ -256,9 +256,11 @@ JD-TC-ReplaceUserScope-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['enableRbac']}==${bool[0]}   Enable Disable RBAC  ${toggle[0]}
-    Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enableRbac']}==${bool[0]}
+        ${resp1}=  Enable Disable CDL RBAC  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -287,6 +289,10 @@ JD-TC-ReplaceUserScope-2
     Should Be Equal As Strings  ${resp.json()['userRoles'][0]['roleName']}         ${role_name1}
     Should Be Equal As Strings  ${resp.json()['userRoles'][0]['defaultRole']}      ${bool[1]}
 
+    ${resp}=    Enable Disable Branch    ${status[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${branchCode}=    FakerLibrary.Random Number
     Set Suite Variable    ${branchCode}
     ${branchName}=    FakerLibrary.name
@@ -297,7 +303,7 @@ JD-TC-ReplaceUserScope-2
     ${state}=    Evaluate     "${state}".title()
     ${state}=    String.RemoveString  ${state}    ${SPACE}
 
-    ${resp}=    Create BranchMaster    ${branchCode}    ${branchName}    ${locId}    ${status[0]}    ${district}    ${state}    ${pin}
+    ${resp}=    Create BranchMaster    ${branchCode}    ${branchName}    ${locId}    ${status[0]} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${branchId1}  ${resp.json()['id']}

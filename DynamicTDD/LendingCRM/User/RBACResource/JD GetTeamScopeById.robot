@@ -26,12 +26,27 @@ JD-TC-CreateUserWithRolesAndScope-1
 
     [Documentation]  Create User With Roles And Scope for an existing provider.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable   ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableCdl']}==${bool[0]}
+        ${resp1}=  Enable Disable CDL RBAC  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableRbac']}  ${bool[1]}
 
     ${resp}=  Get roles
     Log  ${resp.json()}
@@ -90,7 +105,7 @@ JD-TC-CreateUserWithRolesAndScope-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${PUSERNAME23}'
+            IF   not '${user_phone}' == '${HLPUSERNAME6}'
                 clear_users  ${user_phone}
             END
         END
@@ -136,7 +151,56 @@ JD-TC-CreateUserWithRolesAndScope-1
     ${resp}=  Get User By Id  ${u_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['userRoles'][0]['d']}       ${role_id1}
+    Should Be Equal As Strings  ${resp.json()['userRoles'][0]['id']}       ${role_id1}
     Should Be Equal As Strings  ${resp.json()['userRoles'][0]['roleName']}     ${role_name1}
     # Should Be Equal As Strings  ${resp.json()['userRoles'][0]['defaultRole']}  ${bool[0]}
+
+    ${team_name1}=  FakerLibrary.name
+    Set Suite Variable  ${team_name1}
+    ${team_size1}=  Random Int  min=10  max=50
+    Set Suite Variable  ${team_size1}
+    ${desc}=   FakerLibrary.sentence
+    Set Suite Variable  ${desc}
+    ${resp}=  Create Team For User  ${team_name1}  ${team_size1}  ${desc}   teamRoles=${user_roles}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${t_id1}  ${resp.json()}
+
+    ${resp}=  Get Team By Id  ${t_id1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Verify Response  ${resp}  id=${t_id1}  name=${team_name1}  size=0  description=${desc}  status=${status[0]}  users=[]
+    ${u_id2}=  Create Sample User 
+    ${u_id3}=  Create Sample User 
+
+    ${user_for_teams}=  Create List  ${u_id2}  ${u_id3}
+    ${length}=  Get Length   ${user_for_teams}
+
+    ${resp}=   Assign Team To User  ${user_for_teams}  ${t_id1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get User By Id  ${u_id2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get User By Id  ${u_id3}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Team By Id  ${t_id1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['name']}       ${team_name1}
+    Should Be Equal As Strings  ${resp.json()['size']}       ${length}
+    Should Be Equal As Strings  ${resp.json()['description']}       ${desc}
+    Should Be Equal As Strings  ${resp.json()['defaultRoleName']}       ${role_name1}
+    Should Be Equal As Strings  ${resp.json()['deafultRoleId']}       ${role_id1}
+    Should Be Equal As Strings  ${resp.json()['status']}       ${status[0]}
+    Should Be Equal As Strings  ${resp.json()['teamRoles'][0]['roleId']}       ${role_id1}
+    Should Be Equal As Strings  ${resp.json()['teamRoles'][0]['roleName']}       ${role_name1}
+    Should Be Equal As Strings  ${resp.json()['teamRoles'][0]['defaultRole']}       ${bool[1]}
+    Variable Should Exist   ${resp.json()['teamRoles'][0]['capabilities'] }   @{rbac_capabilities}
+    Should Be Equal As Strings  ${resp.json()['users'][0]['id']}       ${u_id2}
+    Should Be Equal As Strings  ${resp.json()['users'][1]['id']}       ${u_id3}
     
