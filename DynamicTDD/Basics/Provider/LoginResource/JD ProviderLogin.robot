@@ -8,6 +8,7 @@ Library           /ebs/TDD/db.py
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables       /ebs/TDD/varfiles/providers.py
 Variables       /ebs/TDD/varfiles/consumerlist.py 
 
@@ -204,7 +205,7 @@ JD-TC-Provider_Login-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Provider_Login-3
+JD-TC-Provider_Login-4
 
     [Documentation]    Existing provider login 
 
@@ -216,3 +217,154 @@ JD-TC-Provider_Login-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
+JD-TC-Provider_Login-5
+
+    [Documentation]    ProviderConsumer  Login with token After Sign up
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${accountId}=    get_acc_id       ${PUSERNAME70}
+
+    ${resp}=   Get jaldeeIntegration Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${firstName}=  FakerLibrary.name
+    Set Suite Variable    ${firstName}
+    ${lastName}=  FakerLibrary.last_name
+    Set Suite Variable    ${lastName}
+    ${primaryMobileNo}    Generate random string    10    123456789
+    ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
+    Set Suite Variable    ${primaryMobileNo}
+    ${email}=    FakerLibrary.Email
+    Set Suite Variable    ${email}
+
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   12
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${accountId}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200    
+   
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Provider_Login-6
+
+    [Documentation]    creating two user with same mobile number in same account
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Provider Login  ${loginId}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #..........  User 1 ..........
+
+    ${user1}=  Evaluate  ${PUSERNAME}+5687965
+
+    ${firstname_u}=  FakerLibrary.name
+    ${lastname_u}=  FakerLibrary.last_name
+    ${address}=  get_address
+    ${dob}=  FakerLibrary.Date
+    FOR    ${i}    IN RANGE    3
+    ${pin}=  get_pincode
+    ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+    IF    '${kwstatus}' == 'FAIL'
+            Continue For Loop
+    ELSE IF    '${kwstatus}' == 'PASS'
+            Exit For Loop
+    END
+    END
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
+    Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
+
+    ${resp}=  Create User  ${firstname_u}  ${lastname_u}  ${dob}  ${Genderlist[0]}  ${lastname_u}${user1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${user1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}     200
+
+    #..........  User 2 ..........
+
+    ${firstname_u2}=  FakerLibrary.name
+    ${lastname_u2}=  FakerLibrary.last_name
+    ${dob2}=  FakerLibrary.Date   
+
+    ${resp}=  Create User  ${firstname_u2}  ${lastname_u2}  ${dob2}  ${Genderlist[0]}  ${lastname_u2}${user1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${user1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}     422
+    Should Be Equal As Strings  ${resp.json()}          ${MOBILE_NO_USED}
+
+
+JD-TC-Provider_Login-7
+
+    [Documentation]    creating two user with same email in same account
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Provider Login  ${loginId}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #..........  User 1 ..........
+
+    ${user1}=  Evaluate  ${PUSERNAME}+5687784
+
+    ${firstname_u}=  FakerLibrary.name
+    ${lastname_u}=  FakerLibrary.last_name
+    ${address}=  get_address
+    ${dob}=  FakerLibrary.Date
+    FOR    ${i}    IN RANGE    3
+    ${pin}=  get_pincode
+    ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+    IF    '${kwstatus}' == 'FAIL'
+            Continue For Loop
+    ELSE IF    '${kwstatus}' == 'PASS'
+            Exit For Loop
+    END
+    END
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
+    Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
+
+    ${resp}=  Create User  ${firstname_u}  ${lastname_u}  ${dob}  ${Genderlist[0]}  ${lastname_u}${user1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${user1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}     200
+
+    #..........  User 2 ..........
+
+    ${user2}=  Evaluate  ${PUSERNAME}+568845
+
+    ${firstname_u2}=  FakerLibrary.name
+    ${lastname_u2}=  FakerLibrary.last_name
+    ${dob2}=  FakerLibrary.Date   
+
+    ${resp}=  Create User  ${firstname_u2}  ${lastname_u2}  ${dob2}  ${Genderlist[0]}  ${lastname_u}${user1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${user2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}     422
+    Should Be Equal As Strings  ${resp.json()}          ${EMAIL_EXISTS}

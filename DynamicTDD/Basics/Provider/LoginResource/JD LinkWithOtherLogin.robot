@@ -521,3 +521,52 @@ JD-TC-Link_With_Other_Login-UH5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+JD-TC-Link_With_Other_Login-UH6
+
+    [Documentation]    Link With other login - where provider is Deactivated 
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    DeActivate Service Provider 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+    ${phone}=  Evaluate  ${PUSERNAME}+5666400
+    Set Suite Variable  ${phone}
+    ${firstname_u1}=  FakerLibrary.first_name
+    ${lastname_u1}=  FakerLibrary.last_name
+    Set Suite Variable      ${firstname_u1}
+    Set Suite Variable      ${lastname_u1}
+
+    ${highest_package}=  get_highest_license_pkg
+
+    ${resp}=  Account SignUp  ${firstname_u1}  ${lastname_u1}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${phone}   ${highest_package[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${phone}  ${OtpPurpose['ProviderSignUp']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${loginId_u1}=     Random Int  min=1  max=9999
+    Set Suite Variable      ${loginId_u1}
+    
+    ${resp}=  Account Set Credential  ${phone}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId_u1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Provider Login  ${loginId_u1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    DeActivate Service Provider 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Provider Login  ${loginId_u1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
