@@ -64,7 +64,7 @@ JD-TC-Consumer-Payment-Transaction-1
     # Should Be Equal As Strings    ${resp.status_code}    200
     # Should Be Equal As Strings    ${resp.content}    "true"
     
-    # ${resp}=  Account Set Credential  ${PUSERNAME210}  ${PASSWORD}  0
+    # ${resp}=  Account Set Credential  ${PUSERNAME210}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME210}
     # Log   ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
