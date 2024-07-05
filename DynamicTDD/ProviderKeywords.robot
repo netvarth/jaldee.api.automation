@@ -8,6 +8,7 @@ Library           db.py
 Resource          Keywords.robot
 Library	          Imageupload.py
 Library           FakerLibrary
+Library           RequestsLibrary
 
 # *** Variables ***
 # @{emptylist}
@@ -67,6 +68,7 @@ Account Activation
 Account Set Credential
     [Arguments]  ${email}  ${password}  ${purpose}  ${loginId}  &{kwargs}
     ${auth}=     Create Dictionary   password=${password}  loginId=${loginId}
+    Check And Create YNW Session
     FOR  ${key}  ${value}  IN  &{kwargs}
         IF  '${key}' == 'JSESSIONYNW'
             ${sessionid}=  Set Variable  ${value}
