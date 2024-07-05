@@ -200,7 +200,7 @@ JD-TC-Update cart-1
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
 
-    ${resp}=    Get Provider Catalog Item Filter    sorderCatalogEncId-eq=${soc_id1}
+    ${resp}=    Get Provider Catalog Item Filter    sorderCatalogEncId-eq=${soc_id1}   accountId-eq=${accountId}   storeEncId-eq=${store_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${len}=  Get Length  ${resp.json()}
@@ -383,7 +383,7 @@ JD-TC-Update cart-UH4
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  ${resp.json()}   ${INVALID_FIELD2}
 
-JD-TC-Update cart-UH4
+JD-TC-Update cart-UH5
 
     [Documentation]    update catalog with invalid store
    
@@ -403,7 +403,7 @@ JD-TC-Update cart-UH4
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  ${resp.json()}   ${ITEM_NOT_IN_CART_STORE}
 
-JD-TC-Update cart-UH5
+JD-TC-Update cart-UH6
 
     [Documentation]    update catalog with empty catalog
    
