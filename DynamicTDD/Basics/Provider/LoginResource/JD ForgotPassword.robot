@@ -13,9 +13,10 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 
 *** Variables ***
       
-${withsym}      *#147erd
-${onlyspl}      !@#$%^&
-${alph_digits}  D3r52A
+${validpasswithsym}    ABCD1234@
+${lesspass}     ABCD123
+${validpass}    ABCD1234
+${validpass2}    EFGH1234
 
 *** Test Cases ***
 
@@ -59,7 +60,7 @@ JD-TC-Forgot_Password-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${loginId}=     Random Int  min=1  max=9999
+    ${loginId}=     Random Int  min=1111  max=9999
     Set Suite Variable      ${loginId}
     
     ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId}
@@ -75,10 +76,7 @@ JD-TC-Forgot_Password-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${Password_n}=    Random Int  min=11111111  max=99999999
-    Set Suite Variable      ${Password_n}
-
-    ${resp}=    Forgot Password   loginId=${loginId}  password=${Password_n}
+    ${resp}=    Forgot Password   loginId=${loginId}  password=${validpass}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
@@ -93,7 +91,7 @@ JD-TC-Forgot_Password-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${loginId}  ${Password_n}
+    ${resp}=  Provider Login  ${loginId}  ${validpass}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -105,7 +103,7 @@ JD-TC-Forgot_Password-2
 
     [Documentation]    Forgot Password - where login id is empty
 
-    ${resp}=    Forgot Password   loginId=${empty}  password=${Password_n}
+    ${resp}=    Forgot Password   loginId=${empty}  password=${validpass}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings      ${resp.json()}      ${LOGIN_ID_REQ}
@@ -122,7 +120,7 @@ JD-TC-Forgot_Password-UH1
 
     [Documentation]    Forgot Password - verify otp using invalid mobile
 
-    ${resp}=    Forgot Password   loginId=${loginId}  password=${Password_n}
+    ${resp}=    Forgot Password   loginId=${loginId}  password=${validpass}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
@@ -137,7 +135,7 @@ JD-TC-Forgot_Password-UH2
 
     [Documentation]    Forgot Password - verify otp using empty mobile
 
-    ${resp}=    Forgot Password   loginId=${loginId}  password=${Password_n}
+    ${resp}=    Forgot Password   loginId=${loginId}  password=${validpass}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
@@ -150,7 +148,7 @@ JD-TC-Forgot_Password-UH3
 
     [Documentation]    Forgot Password - otp purpose is wrong
 
-    ${resp}=    Forgot Password   loginId=${loginId}  password=${Password_n}
+    ${resp}=    Forgot Password   loginId=${loginId}  password=${validpass}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
@@ -163,7 +161,7 @@ JD-TC-Forgot_Password-UH4
 
     [Documentation]    Forgot Password - otp is invalid
 
-    ${resp}=    Forgot Password   loginId=${loginId}  password=${Password_n}
+    ${resp}=    Forgot Password   loginId=${loginId}  password=${validpass}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
@@ -182,14 +180,11 @@ JD-TC-Forgot_Password-UH5
 
     [Documentation]    Forgot Password - after setting new password try to login with old password 
 
-    ${resp}=  Provider Login  ${loginId}  ${Password_n}
+    ${resp}=  Provider Login  ${loginId}  ${validpass}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${Password_new}=    Random Int  min=1111  max=99999
-    Set Suite Variable      ${Password_new}
-
-    ${resp}=    Forgot Password   loginId=${loginId}  password=${Password_new}
+    ${resp}=    Forgot Password   loginId=${loginId}  password=${validpass2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
@@ -208,7 +203,7 @@ JD-TC-Forgot_Password-UH5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${loginId}  ${Password_n}
+    ${resp}=  Provider Login  ${loginId}  ${validpass}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    401
     Should Be Equal As Strings      ${resp.json()}      ${LOGIN_INVALID_USERID_PASSWORD}
@@ -221,10 +216,7 @@ JD-TC-Forgot_Password-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${Password_ep}=    Random Int  min=1111  max=99999
-    Set Suite Variable      ${Password_ep}
-
-    ${resp}=    Forgot Password   loginId=${PUSERNAME100}  password=${Password_ep}
+    ${resp}=    Forgot Password   loginId=${PUSERNAME100}  password=${validpass}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
@@ -244,7 +236,7 @@ JD-TC-Forgot_Password-5
 
     #.... Login using new password
 
-    ${resp}=  Provider Login  ${PUSERNAME100}  ${Password_ep}
+    ${resp}=  Provider Login  ${PUSERNAME100}  ${validpass}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

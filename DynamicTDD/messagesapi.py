@@ -2477,7 +2477,7 @@ CANT_LINK_SA= "You can't link with System Accounts"
 LOGIN_ID_LIMIT= "Loginid must a string of with  minimum of 4 characters and maximum of 40 characters."
 ACCOUNT_DEACTIVATED_BASE = "Your account has been disabled. To restore your account, please contact your service provider."
 LOGIN_LOGINiD_VALIDATION_NOT_FOUND = "Loginid validation failed."
-LOGIN_PASSWORD_VALIDATION_NOT_FOUND = "Password must be of minimum 4 chars"
+LOGIN_PASSWORD_VALIDATION_NOT_FOUND = "Password must be of minimum 8 chars with  one Number and one Capical letter"
 
 #   ConsumerOrder
 
