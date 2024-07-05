@@ -2494,3 +2494,4 @@ CANT_UPDATE_DEL_TYPEOF_CART_ITEMS_EXISTS_WITH_OLD_DEL_TYPE = "The delivery type 
 SALE_TYPE_NOTENABLED_IN_STORE = "{} cannot be enabled because it is not enabled in store {}"
 NO_ITEMS_AVAILABLE = "No {} available for {}"
 ERR_IN = "Error while generating {}"
+ITEM_REQ_QTY_NOTAVALIABLE_WITHOUT_QTY = "Required quantity is not avalable for the item {}."
