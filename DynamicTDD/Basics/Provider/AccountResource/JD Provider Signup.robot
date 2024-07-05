@@ -16,7 +16,14 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 ${withsym}      *#147erd
 ${onlyspl}      !@#$%^&.-
 ${alph_digits}  D3r52A
-${withus}       Abc_12
+${withus}       Abc_1234
+${withat}       ABC@12
+${withdot}      ABC.12
+${withatanuc}  ABC_@12
+${ucafterat}   ABC@_d
+${validpasswithsym}    ABCD1234@
+${lesspass}     ABCD123
+${validpass}    ABCD1234
 
 *** Test Cases ***
 
@@ -46,6 +53,9 @@ JD-TC-Provider_Signup-1
     ${lastname}=  FakerLibrary.last_name
     Set Suite Variable      ${firstname}
     Set Suite Variable      ${lastname}
+
+    ${highest_package}=  get_highest_license_pkg
+    Set Suite Variable      ${highest_package}
 
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph}   1
     Log   ${resp.content}
@@ -152,15 +162,8 @@ JD-TC-Provider_Signup-4
 
     ${resp}=  Account Set Credential  ${ph4}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${withsym}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
-    ${resp}=  Provider Login  ${withsym}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Provider Logout
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${LOGIN_LOGINiD_VALIDATION_NOT_FOUND}
 
 JD-TC-Provider_Signup-5
 
@@ -181,15 +184,8 @@ JD-TC-Provider_Signup-5
 
     ${resp}=  Account Set Credential  ${ph5}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${onlyspl}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
-    ${resp}=  Provider Login  ${onlyspl}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Provider Logout
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}       422
+    Should Be Equal As Strings      ${resp.json()}          ${LOGIN_LOGINiD_VALIDATION_NOT_FOUND}
 
 JD-TC-Provider_Signup-6
 
@@ -330,7 +326,7 @@ JD-TC-Provider_Signup-UH2
 
     [Documentation]  Provider sign up where firstname is empty
 
-    ${phone}=  Evaluate  ${PUSERNAME}+5666555
+    ${phone}=  Evaluate  ${PUSERNAME}+5666578
     Set Suite Variable  ${phone}
     ${lastname2}=  FakerLibrary.last_name
 
@@ -343,7 +339,7 @@ JD-TC-Provider_Signup-UH3
 
     [Documentation]  Provider sign up where last name is empty
 
-    ${phone}=  Evaluate  ${PUSERNAME}+5666555
+    ${phone}=  Evaluate  ${PUSERNAME}+5666579
     Set Suite Variable  ${phone}
     ${firstname2}=  FakerLibrary.first_name
 
@@ -356,7 +352,7 @@ JD-TC-Provider_Signup-UH4
 
     [Documentation]  Provider sign up where domain name is empty
 
-    ${phone}=  Evaluate  ${PUSERNAME}+5666555
+    ${phone}=  Evaluate  ${PUSERNAME}+5666580
     Set Suite Variable  ${phone}
     ${firstname2}=  FakerLibrary.first_name
     ${lastname2}=  FakerLibrary.last_name
@@ -370,7 +366,7 @@ JD-TC-Provider_Signup-UH5
 
     [Documentation]  Provider sign up where subdomain is empty
 
-    ${phone}=  Evaluate  ${PUSERNAME}+5666555
+    ${phone}=  Evaluate  ${PUSERNAME}+5666581
     Set Suite Variable  ${phone}
     ${firstname2}=  FakerLibrary.first_name
     ${lastname2}=  FakerLibrary.last_name
@@ -384,7 +380,7 @@ JD-TC-Provider_Signup-UH6
 
     [Documentation]  Provider sign up where phone is empty
 
-    ${phone}=  Evaluate  ${PUSERNAME}+5666555
+    ${phone}=  Evaluate  ${PUSERNAME}+5666582
     Set Suite Variable  ${phone}
     ${firstname2}=  FakerLibrary.first_name
     ${lastname2}=  FakerLibrary.last_name
@@ -398,7 +394,7 @@ JD-TC-Provider_Signup-11
 
     [Documentation]  Provider sign up where licence pkg id is empty
 
-    ${phone}=  Evaluate  ${PUSERNAME}+5666555
+    ${phone}=  Evaluate  ${PUSERNAME}+5666583
     Set Suite Variable  ${phone}
     ${firstname2}=  FakerLibrary.first_name
     ${lastname2}=  FakerLibrary.last_name
@@ -416,7 +412,7 @@ JD-TC-Provider_Signup-UH7
 
     [Documentation]  Provider sign up where account activation id is empty
 
-    ${phone}=  Evaluate  ${PUSERNAME}+5666555
+    ${phone}=  Evaluate  ${PUSERNAME}+5666584
     Set Suite Variable  ${phone}
     ${firstname2}=  FakerLibrary.first_name
     ${lastname2}=  FakerLibrary.last_name
@@ -434,7 +430,7 @@ JD-TC-Provider_Signup-UH8
 
     [Documentation]  Provider sign up where otp purpose is wrong
 
-    ${phone}=  Evaluate  ${PUSERNAME}+5666555
+    ${phone}=  Evaluate  ${PUSERNAME}+5666587
     Set Suite Variable  ${phone}
     ${firstname2}=  FakerLibrary.first_name
     ${lastname2}=  FakerLibrary.last_name
@@ -452,7 +448,7 @@ JD-TC-Provider_Signup-12
 
     [Documentation]  Provider sign up where otp purpose is empty
 
-    ${phone}=  Evaluate  ${PUSERNAME}+5666555
+    ${phone}=  Evaluate  ${PUSERNAME}+5666523
     Set Suite Variable  ${phone}
     ${firstname2}=  FakerLibrary.first_name
     ${lastname2}=  FakerLibrary.last_name
@@ -483,7 +479,7 @@ JD-TC-Provider_Signup-UH9
 
     [Documentation]  Provider sign up activate phone is empty
 
-    ${phone}=  Evaluate  ${PUSERNAME}+5666555
+    ${phone}=  Evaluate  ${PUSERNAME}+5666524
     Set Suite Variable  ${phone}
     ${firstname2}=  FakerLibrary.first_name
     ${lastname2}=  FakerLibrary.last_name
@@ -507,7 +503,7 @@ JD-TC-Provider_Signup-14
 
     [Documentation]  Provider sign up activate password is empty
 
-    ${phone}=  Evaluate  ${PUSERNAME}+5666555
+    ${phone}=  Evaluate  ${PUSERNAME}+5666525
     Set Suite Variable  ${phone}
     ${firstname2}=  FakerLibrary.first_name
     ${lastname2}=  FakerLibrary.last_name
@@ -524,21 +520,13 @@ JD-TC-Provider_Signup-14
     
     ${resp}=  Account Set Credential  ${phone}  ${empty}  ${OtpPurpose['ProviderSignUp']}  ${loginId}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
-    ${resp}=  Provider Login  ${loginId}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Provider Logout
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
 
 JD-TC-Provider_Signup-15
 
     [Documentation]  Provider sign up activate otp purpose is empty
 
-    ${phone}=  Evaluate  ${PUSERNAME}+5666555
+    ${phone}=  Evaluate  ${PUSERNAME}+5666526
     Set Suite Variable  ${phone}
     ${firstname2}=  FakerLibrary.first_name
     ${lastname2}=  FakerLibrary.last_name
@@ -569,7 +557,7 @@ JD-TC-Provider_Signup-16
 
     [Documentation]  Provider sign up activate loginid is empty
 
-    ${phone}=  Evaluate  ${PUSERNAME}+5666555
+    ${phone}=  Evaluate  ${PUSERNAME}+5666527
     Set Suite Variable  ${phone}
     ${firstname2}=  FakerLibrary.first_name
     ${lastname2}=  FakerLibrary.last_name
@@ -600,7 +588,7 @@ JD-TC-Provider_Signup-UH10
 
     [Documentation]  Provider sign up activate otp purpose is invalid
 
-    ${phone}=  Evaluate  ${PUSERNAME}+5666555
+    ${phone}=  Evaluate  ${PUSERNAME}+5666528
     Set Suite Variable  ${phone}
     ${firstname2}=  FakerLibrary.first_name
     ${lastname2}=  FakerLibrary.last_name
@@ -624,7 +612,7 @@ JD-TC-Provider_Signup-UH11
 
     [Documentation]  Provider sign up activate phone is invalid
 
-    ${phone}=  Evaluate  ${PUSERNAME}+5666555
+    ${phone}=  Evaluate  ${PUSERNAME}+5666529
     Set Suite Variable  ${phone}
     ${firstname2}=  FakerLibrary.first_name
     ${lastname2}=  FakerLibrary.last_name
@@ -682,7 +670,7 @@ JD-TC-Provider_Signup-17
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${loginId}=     Random Int  min=1  max=9999
+    ${loginId}=     Random Int  min=1111  max=9999
     
     ${resp}=  Account Set Credential  ${P_Phone}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId}
     Log   ${resp.content}
@@ -718,5 +706,299 @@ JD-TC-Provider_Signup-18
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Provider_Signup-UH13
+
+    [Documentation]    Provider Signup -login id is les than 4 digit
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${phn}=  Evaluate  ${PUSERNAME}+785482
+    Set Suite Variable  ${phn}
+
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${phn}   ${highest_package[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${phn}  ${OtpPurpose['ProviderSignUp']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${loginId_Phn}=     Random Int  min=111  max=999
+    
+    ${resp}=  Account Set Credential  ${phn}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId_Phn}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}          ${LOGIN_ID_LIMIT}
+
+
+JD-TC-Provider_Signup-UH14
+
+    [Documentation]    Provider Signup - login id is grater than 40 digit
+
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph}   ${highest_package[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderSignUp']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${random_number}=    Random Number 	       digits=41
+    
+    ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${random_number}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}          ${LOGIN_ID_LIMIT}
+
+JD-TC-Provider_Signup-19
+
+    [Documentation]  Provider sign up - with @
+
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph}   1
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderSignUp']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${withat}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Provider Login  ${withat}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Provider_Signup-20
+
+    [Documentation]  Provider sign up - with dot
+
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph}   1
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderSignUp']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${withdot}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Provider Login  ${withdot}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Provider_Signup-21
+
+    [Documentation]  Provider sign up - with @ and _
+
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph}   1
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderSignUp']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${withatanuc}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Provider Login  ${withatanuc}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Provider_Signup-UH15
+
+    [Documentation]  Provider sign up - _ after @
+
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph}   1
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderSignUp']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${ucafterat}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings      ${resp.json()}          ${LOGIN_LOGINiD_VALIDATION_NOT_FOUND}
+
+
+JD-TC-Provider_Signup-UH16
+
+    [Documentation]    Provider Signup -password is only number
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${phn}=  Evaluate  ${PUSERNAME}+785482
+    Set Suite Variable  ${phn}
+
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${phn}   ${highest_package[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${phn}  ${OtpPurpose['ProviderSignUp']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${lg}=     Random Int  min=111111  max=999999
+    ${pass}=     Random Int  min=111111  max=999999
+    
+    ${resp}=  Account Set Credential  ${phn}  ${pass}  ${OtpPurpose['ProviderSignUp']}  ${lg}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}          ${LOGIN_PASSWORD_VALIDATION_NOT_FOUND}
+
+JD-TC-Provider_Signup-UH17
+
+    [Documentation]    Provider Signup -password is less than 8 digit
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${phn}=  Evaluate  ${PUSERNAME}+785482
+    Set Suite Variable  ${phn}
+
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${phn}   ${highest_package[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${phn}  ${OtpPurpose['ProviderSignUp']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${lg}=     Random Int  min=111111  max=999999
+    
+    ${resp}=  Account Set Credential  ${phn}  ${lesspass}  ${OtpPurpose['ProviderSignUp']}  ${lg}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}          ${LOGIN_PASSWORD_VALIDATION_NOT_FOUND}
+
+
+JD-TC-Provider_Signup-UH18
+
+    [Documentation]    Provider Signup -password contain only symbols
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${phn}=  Evaluate  ${PUSERNAME}+785482
+    Set Suite Variable  ${phn}
+
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${phn}   ${highest_package[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${phn}  ${OtpPurpose['ProviderSignUp']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${lg}=     Random Int  min=111111  max=999999
+    
+    ${resp}=  Account Set Credential  ${phn}  ${onlyspl}  ${OtpPurpose['ProviderSignUp']}  ${lg}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}          ${LOGIN_PASSWORD_VALIDATION_NOT_FOUND}
+
+
+JD-TC-Provider_Signup-UH19
+
+    [Documentation]    Provider Signup -password contain with _
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${phn}=  Evaluate  ${PUSERNAME}+785482
+    Set Suite Variable  ${phn}
+
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${phn}   ${highest_package[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${phn}  ${OtpPurpose['ProviderSignUp']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${lg}=     Random Int  min=111111  max=999999
+    
+    ${resp}=  Account Set Credential  ${phn}  ${withus}  ${OtpPurpose['ProviderSignUp']}  ${lg}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}          ${LOGIN_PASSWORD_VALIDATION_NOT_FOUND}
+
+
+JD-TC-Provider_Signup-22
+
+    [Documentation]    Provider Signup -password is valid
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${phn}=  Evaluate  ${PUSERNAME}+785482
+    Set Suite Variable  ${phn}
+
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${phn}   ${highest_package[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${phn}  ${OtpPurpose['ProviderSignUp']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${lg}=     Random Int  min=111111  max=999999
+    
+    ${resp}=  Account Set Credential  ${phn}  ${validpasswithsym}  ${OtpPurpose['ProviderSignUp']}  ${lg}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Provider_Signup-23
+
+    [Documentation]    Provider Signup -password is valid
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${phn}=  Evaluate  ${PUSERNAME}+785482
+    Set Suite Variable  ${phn}
+
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${phn}   ${highest_package[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${phn}  ${OtpPurpose['ProviderSignUp']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${lg}=     Random Int  min=111111  max=999999
+    
+    ${resp}=  Account Set Credential  ${phn}  ${validpass}  ${OtpPurpose['ProviderSignUp']}  ${lg}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
