@@ -577,6 +577,18 @@ Get invoice Count- Filter
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/so/invoice   params=${param}   expected_status=any
     RETURN  ${resp}
+
+Make Prepayment From Consumerside
+
+    [Arguments]    ${uuid}    ${amount}    ${purpose}  ${accountId}  ${paymentMode}  ${isInternational}  ${mockResponse}   ${custId}     &{kwargs}
+    ${data}=    Create Dictionary    uuid=${uuid}    amount=${amount}    purpose=${purpose}    accountId=${accountId}   paymentMode=${paymentMode}  isInternational=${isInternational}  mockResponse=${mockResponse}   custId=${custId} 
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END  
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw   /consumer/so/pay  data=${data}  expected_status=any
+    RETURN  ${resp}
  
 
 

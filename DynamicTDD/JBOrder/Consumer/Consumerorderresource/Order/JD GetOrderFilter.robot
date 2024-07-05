@@ -151,6 +151,11 @@ JD-TC-Get Order Filter-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id}  ${resp.json()}
 
+    ${resp}=    Get Store ByEncId   ${store_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable    ${Stidd}    ${resp.json()['id']}
+
     ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}   onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[0]}  storePickup=${boolean[1]}  homeDelivery=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -305,10 +310,15 @@ JD-TC-Get Order Filter-1
 
     ${quantity}=  FakerLibrary.Random Int  min=${minSaleQuantity}   max=${maxSaleQuantity}
     ${quantity}=                    Convert To Number  ${quantity}  1
+    Set Suite Variable    ${quantity} 
     ${item1}=  Evaluate  ${price}*${quantity}
+    Set Suite Variable    ${item1} 
     ${item2}=  Evaluate  ${price1}*${quantity}
+    Set Suite Variable    ${item2} 
     ${item3}=  Evaluate  ${price2}*${quantity}
+    Set Suite Variable    ${item3} 
     ${Total}=  Evaluate  ${item1}+${item2}+${item3}
+    Set Suite Variable    ${Total} 
 
     ${catalogItem}=  Create Dictionary    encId=${SOC_itemEncIds1}
     ${catalogItem1}=  Create Dictionary    encId=${SOC_itemEncIds2}
@@ -345,10 +355,45 @@ JD-TC-Get Order Filter-1
     ${resp}=    GetOrder using uid   ${orderUid} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable    ${orderType}    ${resp.json()['orderType']}
+    Set Suite Variable    ${orderStatus}    ${resp.json()['orderStatus']}
+    Set Suite Variable    ${deliveryType}    ${resp.json()['deliveryType']}
+    Set Suite Variable    ${deliveryStatus}    ${resp.json()['deliveryStatus']}
 
-    ${resp}=    Get Order- Filter   providerConsumerId-eq=${cid}   soCatalgEncId-eq=${soc_id1}   accountId-eq=${accountId}   storeEncId-eq=${store_id}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable    ${DAY1} 
+    ${resp}=    Get Order- Filter   providerConsumerId-eq=${cid}   soCatalogEncId-eq=${soc_id1}   accountId-eq=${accountId}   storeEncId-eq=${store_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                                               ${accountId}
+    Should Be Equal As Strings    ${resp.json()[0]['location']['id']}                                                            ${locId1}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['id']}                                                              ${Stidd}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['name']}                                                              ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['encId']}                                                              ${store_id}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['encId']}                                                        ${soc_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['name']}                                                          ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['invMgmt']}                                                       ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['id']}                                                  ${cid}
+    Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['name']}                                                ${firstName} ${lastName}
+    Should Be Equal As Strings    ${resp.json()[0]['orderFor']['id']}                                                          ${cid}
+    Should Be Equal As Strings    ${resp.json()[0]['orderFor']['name']}                                                        ${firstName} ${lastName}
+    Should Be Equal As Strings    ${resp.json()[0]['orderType']}                                                            ${orderType}
+    Should Be Equal As Strings    ${resp.json()[0]['orderStatus']}                                                            ${orderStatus}
+    Should Be Equal As Strings    ${resp.json()[0]['deliveryType']}                                                            ${deliveryType}
+    Should Be Equal As Strings    ${resp.json()[0]['deliveryStatus']}                                                            ${deliveryStatus}
+    Should Be Equal As Strings    ${resp.json()[0]['deliveryDate']}                                                               ${DAY1}
+    Should Be Equal As Strings    ${resp.json()[0]['createdDate']}                                                               ${DAY1}
+    Should Be Equal As Strings    ${resp.json()[0]['contactInfo']['phone']['number']}                                          ${primaryMobileNo}
+    Should Be Equal As Strings    ${resp.json()[0]['contactInfo']['email']}                                                     ${email_id}
+    Should Be Equal As Strings    ${resp.json()[0]['itemCount']}                                                                3
+    Should Be Equal As Strings    ${resp.json()[0]['netTotal']}                                                                ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['netTotalWithTax']}                                                         ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                                                 ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['amountDue']}                                                                 ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['prePaymentAmount']}                                                                 ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['order']['uid']}                                                            ${orderUid}
+    Should Be Equal As Strings    ${resp.json()[0]['catEncIds'][0]}                                                            ${soc_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['catNames']['name']}                                                        ${Name}
 
 
 JD-TC-Get Order Filter-2
@@ -362,6 +407,35 @@ JD-TC-Get Order Filter-2
     ${resp}=    Get Order- Filter   providerConsumerId-eq=${cid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                                               ${accountId}
+    Should Be Equal As Strings    ${resp.json()[0]['location']['id']}                                                            ${locId1}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['id']}                                                              ${Stidd}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['name']}                                                              ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['encId']}                                                              ${store_id}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['encId']}                                                        ${soc_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['name']}                                                          ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['invMgmt']}                                                       ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['id']}                                                  ${cid}
+    Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['name']}                                                ${firstName} ${lastName}
+    Should Be Equal As Strings    ${resp.json()[0]['orderFor']['id']}                                                          ${cid}
+    Should Be Equal As Strings    ${resp.json()[0]['orderFor']['name']}                                                        ${firstName} ${lastName}
+    Should Be Equal As Strings    ${resp.json()[0]['orderType']}                                                            ${orderType}
+    Should Be Equal As Strings    ${resp.json()[0]['orderStatus']}                                                            ${orderStatus}
+    Should Be Equal As Strings    ${resp.json()[0]['deliveryType']}                                                            ${deliveryType}
+    Should Be Equal As Strings    ${resp.json()[0]['deliveryStatus']}                                                            ${deliveryStatus}
+    Should Be Equal As Strings    ${resp.json()[0]['deliveryDate']}                                                               ${DAY1}
+    Should Be Equal As Strings    ${resp.json()[0]['createdDate']}                                                               ${DAY1}
+    Should Be Equal As Strings    ${resp.json()[0]['contactInfo']['phone']['number']}                                          ${primaryMobileNo}
+    Should Be Equal As Strings    ${resp.json()[0]['contactInfo']['email']}                                                     ${email_id}
+    Should Be Equal As Strings    ${resp.json()[0]['itemCount']}                                                                3
+    Should Be Equal As Strings    ${resp.json()[0]['netTotal']}                                                                ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['netTotalWithTax']}                                                         ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                                                 ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['amountDue']}                                                                 ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['prePaymentAmount']}                                                                 ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['order']['uid']}                                                            ${orderUid}
+    Should Be Equal As Strings    ${resp.json()[0]['catEncIds'][0]}                                                            ${soc_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['catNames']['name']}                                                        ${Name}
 
 JD-TC-Get Order Filter-3
     [Documentation]  Get order filter using sorderCatalogEncId
@@ -371,9 +445,39 @@ JD-TC-Get Order Filter-3
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-    ${resp}=    Get Order- Filter   soCatalgEncId-eq=${soc_id1} 
+    ${resp}=    Get Order- Filter   soCatalogEncId-eq=${soc_id1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                                               ${accountId}
+    Should Be Equal As Strings    ${resp.json()[0]['location']['id']}                                                            ${locId1}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['id']}                                                              ${Stidd}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['name']}                                                              ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['encId']}                                                              ${store_id}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['encId']}                                                        ${soc_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['name']}                                                          ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['invMgmt']}                                                       ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['id']}                                                  ${cid}
+    Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['name']}                                                ${firstName} ${lastName}
+    Should Be Equal As Strings    ${resp.json()[0]['orderFor']['id']}                                                          ${cid}
+    Should Be Equal As Strings    ${resp.json()[0]['orderFor']['name']}                                                        ${firstName} ${lastName}
+    Should Be Equal As Strings    ${resp.json()[0]['orderType']}                                                            ${orderType}
+    Should Be Equal As Strings    ${resp.json()[0]['orderStatus']}                                                            ${orderStatus}
+    Should Be Equal As Strings    ${resp.json()[0]['deliveryType']}                                                            ${deliveryType}
+    Should Be Equal As Strings    ${resp.json()[0]['deliveryStatus']}                                                            ${deliveryStatus}
+    Should Be Equal As Strings    ${resp.json()[0]['deliveryDate']}                                                               ${DAY1}
+    Should Be Equal As Strings    ${resp.json()[0]['createdDate']}                                                               ${DAY1}
+    Should Be Equal As Strings    ${resp.json()[0]['contactInfo']['phone']['number']}                                          ${primaryMobileNo}
+    Should Be Equal As Strings    ${resp.json()[0]['contactInfo']['email']}                                                     ${email_id}
+    Should Be Equal As Strings    ${resp.json()[0]['itemCount']}                                                                3
+    Should Be Equal As Strings    ${resp.json()[0]['netTotal']}                                                                ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['netTotalWithTax']}                                                         ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                                                 ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['amountDue']}                                                                 ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['prePaymentAmount']}                                                                 ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['order']['uid']}                                                            ${orderUid}
+    Should Be Equal As Strings    ${resp.json()[0]['catEncIds'][0]}                                                            ${soc_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['catNames']['name']}                                                        ${Name}
+
 
 JD-TC-Get Order Filter-4
     [Documentation]  Get order filter using ordertype
@@ -382,9 +486,39 @@ JD-TC-Get Order Filter-4
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-    ${resp}=    Get Order- Filter   orderType-eq=${soc_id1} 
+    ${resp}=    Get Order- Filter   orderType-eq=${orderType} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                                               ${accountId}
+    Should Be Equal As Strings    ${resp.json()[0]['location']['id']}                                                            ${locId1}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['id']}                                                              ${Stidd}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['name']}                                                              ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['encId']}                                                              ${store_id}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['encId']}                                                        ${soc_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['name']}                                                          ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['invMgmt']}                                                       ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['id']}                                                  ${cid}
+    Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['name']}                                                ${firstName} ${lastName}
+    Should Be Equal As Strings    ${resp.json()[0]['orderFor']['id']}                                                          ${cid}
+    Should Be Equal As Strings    ${resp.json()[0]['orderFor']['name']}                                                        ${firstName} ${lastName}
+    Should Be Equal As Strings    ${resp.json()[0]['orderType']}                                                            ${orderType}
+    Should Be Equal As Strings    ${resp.json()[0]['orderStatus']}                                                            ${orderStatus}
+    Should Be Equal As Strings    ${resp.json()[0]['deliveryType']}                                                            ${deliveryType}
+    Should Be Equal As Strings    ${resp.json()[0]['deliveryStatus']}                                                            ${deliveryStatus}
+    Should Be Equal As Strings    ${resp.json()[0]['deliveryDate']}                                                               ${DAY1}
+    Should Be Equal As Strings    ${resp.json()[0]['createdDate']}                                                               ${DAY1}
+    Should Be Equal As Strings    ${resp.json()[0]['contactInfo']['phone']['number']}                                          ${primaryMobileNo}
+    Should Be Equal As Strings    ${resp.json()[0]['contactInfo']['email']}                                                     ${email_id}
+    Should Be Equal As Strings    ${resp.json()[0]['itemCount']}                                                                3
+    Should Be Equal As Strings    ${resp.json()[0]['netTotal']}                                                                ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['netTotalWithTax']}                                                         ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                                                 ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['amountDue']}                                                                 ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['prePaymentAmount']}                                                                 ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['order']['uid']}                                                            ${orderUid}
+    Should Be Equal As Strings    ${resp.json()[0]['catEncIds'][0]}                                                            ${soc_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['catNames']['name']}                                                        ${Name}
+
 
 JD-TC-Get Order Filter-5
     [Documentation]  Get order filter using orderStatus
@@ -393,9 +527,39 @@ JD-TC-Get Order Filter-5
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-    ${resp}=    Get Order- Filter   orderStatus-eq=${soc_id1} 
+    ${resp}=    Get Order- Filter   orderStatus-eq=${orderStatus} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                                               ${accountId}
+    Should Be Equal As Strings    ${resp.json()[0]['location']['id']}                                                            ${locId1}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['id']}                                                              ${Stidd}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['name']}                                                              ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['encId']}                                                              ${store_id}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['encId']}                                                        ${soc_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['name']}                                                          ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['invMgmt']}                                                       ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['id']}                                                  ${cid}
+    Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['name']}                                                ${firstName} ${lastName}
+    Should Be Equal As Strings    ${resp.json()[0]['orderFor']['id']}                                                          ${cid}
+    Should Be Equal As Strings    ${resp.json()[0]['orderFor']['name']}                                                        ${firstName} ${lastName}
+    Should Be Equal As Strings    ${resp.json()[0]['orderType']}                                                            ${orderType}
+    Should Be Equal As Strings    ${resp.json()[0]['orderStatus']}                                                            ${orderStatus}
+    Should Be Equal As Strings    ${resp.json()[0]['deliveryType']}                                                            ${deliveryType}
+    Should Be Equal As Strings    ${resp.json()[0]['deliveryStatus']}                                                            ${deliveryStatus}
+    Should Be Equal As Strings    ${resp.json()[0]['deliveryDate']}                                                               ${DAY1}
+    Should Be Equal As Strings    ${resp.json()[0]['createdDate']}                                                               ${DAY1}
+    Should Be Equal As Strings    ${resp.json()[0]['contactInfo']['phone']['number']}                                          ${primaryMobileNo}
+    Should Be Equal As Strings    ${resp.json()[0]['contactInfo']['email']}                                                     ${email_id}
+    Should Be Equal As Strings    ${resp.json()[0]['itemCount']}                                                                3
+    Should Be Equal As Strings    ${resp.json()[0]['netTotal']}                                                                ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['netTotalWithTax']}                                                         ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                                                 ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['amountDue']}                                                                 ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['prePaymentAmount']}                                                                 ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['order']['uid']}                                                            ${orderUid}
+    Should Be Equal As Strings    ${resp.json()[0]['catEncIds'][0]}                                                            ${soc_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['catNames']['name']}                                                        ${Name}
+
 
 JD-TC-Get Order Filter-6
     [Documentation]  Get order filter using deliveryType
@@ -404,9 +568,39 @@ JD-TC-Get Order Filter-6
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-    ${resp}=    Get Order- Filter   deliveryType-eq=${soc_id1} 
+    ${resp}=    Get Order- Filter   deliveryType-eq=${deliveryType} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                                               ${accountId}
+    Should Be Equal As Strings    ${resp.json()[0]['location']['id']}                                                            ${locId1}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['id']}                                                              ${Stidd}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['name']}                                                              ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['encId']}                                                              ${store_id}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['encId']}                                                        ${soc_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['name']}                                                          ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['invMgmt']}                                                       ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['id']}                                                  ${cid}
+    Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['name']}                                                ${firstName} ${lastName}
+    Should Be Equal As Strings    ${resp.json()[0]['orderFor']['id']}                                                          ${cid}
+    Should Be Equal As Strings    ${resp.json()[0]['orderFor']['name']}                                                        ${firstName} ${lastName}
+    Should Be Equal As Strings    ${resp.json()[0]['orderType']}                                                            ${orderType}
+    Should Be Equal As Strings    ${resp.json()[0]['orderStatus']}                                                            ${orderStatus}
+    Should Be Equal As Strings    ${resp.json()[0]['deliveryType']}                                                            ${deliveryType}
+    Should Be Equal As Strings    ${resp.json()[0]['deliveryStatus']}                                                            ${deliveryStatus}
+    Should Be Equal As Strings    ${resp.json()[0]['deliveryDate']}                                                               ${DAY1}
+    Should Be Equal As Strings    ${resp.json()[0]['createdDate']}                                                               ${DAY1}
+    Should Be Equal As Strings    ${resp.json()[0]['contactInfo']['phone']['number']}                                          ${primaryMobileNo}
+    Should Be Equal As Strings    ${resp.json()[0]['contactInfo']['email']}                                                     ${email_id}
+    Should Be Equal As Strings    ${resp.json()[0]['itemCount']}                                                                3
+    Should Be Equal As Strings    ${resp.json()[0]['netTotal']}                                                                ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['netTotalWithTax']}                                                         ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                                                 ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['amountDue']}                                                                 ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['prePaymentAmount']}                                                                 ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['order']['uid']}                                                            ${orderUid}
+    Should Be Equal As Strings    ${resp.json()[0]['catEncIds'][0]}                                                            ${soc_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['catNames']['name']}                                                        ${Name}
+
 
 JD-TC-Get Order Filter-7
     [Documentation]  Get order filter using createdDate
@@ -415,6 +609,35 @@ JD-TC-Get Order Filter-7
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-    ${resp}=    Get Order- Filter   createdDate-eq=${soc_id1} 
+    ${resp}=    Get Order- Filter   createdDate-eq=${DAY1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                                               ${accountId}
+    Should Be Equal As Strings    ${resp.json()[0]['location']['id']}                                                            ${locId1}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['id']}                                                              ${Stidd}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['name']}                                                              ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['encId']}                                                              ${store_id}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['encId']}                                                        ${soc_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['name']}                                                          ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['invMgmt']}                                                       ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['id']}                                                  ${cid}
+    Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['name']}                                                ${firstName} ${lastName}
+    Should Be Equal As Strings    ${resp.json()[0]['orderFor']['id']}                                                          ${cid}
+    Should Be Equal As Strings    ${resp.json()[0]['orderFor']['name']}                                                        ${firstName} ${lastName}
+    Should Be Equal As Strings    ${resp.json()[0]['orderType']}                                                            ${orderType}
+    Should Be Equal As Strings    ${resp.json()[0]['orderStatus']}                                                            ${orderStatus}
+    Should Be Equal As Strings    ${resp.json()[0]['deliveryType']}                                                            ${deliveryType}
+    Should Be Equal As Strings    ${resp.json()[0]['deliveryStatus']}                                                            ${deliveryStatus}
+    Should Be Equal As Strings    ${resp.json()[0]['deliveryDate']}                                                               ${DAY1}
+    Should Be Equal As Strings    ${resp.json()[0]['createdDate']}                                                               ${DAY1}
+    Should Be Equal As Strings    ${resp.json()[0]['contactInfo']['phone']['number']}                                          ${primaryMobileNo}
+    Should Be Equal As Strings    ${resp.json()[0]['contactInfo']['email']}                                                     ${email_id}
+    Should Be Equal As Strings    ${resp.json()[0]['itemCount']}                                                                3
+    Should Be Equal As Strings    ${resp.json()[0]['netTotal']}                                                                ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['netTotalWithTax']}                                                         ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                                                 ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['amountDue']}                                                                 ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['prePaymentAmount']}                                                                 ${Total}
+    Should Be Equal As Strings    ${resp.json()[0]['order']['uid']}                                                            ${orderUid}
+    Should Be Equal As Strings    ${resp.json()[0]['catEncIds'][0]}                                                            ${soc_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['catNames']['name']}                                                        ${Name}

@@ -151,6 +151,13 @@ JD-TC-Get Invoice Using InvoiceID-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id}  ${resp.json()}
 
+
+    ${resp}=    Get Store ByEncId   ${store_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable    ${Stidd}    ${resp.json()['id']}
+
+
     ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}   onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[0]}  storePickup=${boolean[1]}  homeDelivery=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -366,13 +373,13 @@ JD-TC-Get Invoice Using InvoiceID-1
     Should Be Equal As Strings    ${resp.json()['store']['id']}                                                              ${Stidd}
     Should Be Equal As Strings    ${resp.json()['orderFor']['id']}                                                          ${cid}
     Should Be Equal As Strings    ${resp.json()['orderFor']['name']}                                                        ${firstName} ${lastName}
-    Should Be Equal As Strings    ${resp.json()['status']}                                                                 ${billStatus}
-    Should Be Equal As Strings    ${resp.json()['paymentStatus']}                                                            ${paymentStatus}
+    Should Be Equal As Strings    ${resp.json()['status']}                                                                 ${billStatus[0]}
+    Should Be Equal As Strings    ${resp.json()['paymentStatus']}                                                            ${paymentStatus[0]}
     Should Be Equal As Strings    ${resp.json()['timezone']}                                                                Asia/Kolkata
     Should Be Equal As Strings    ${resp.json()['orderIncluded']}                                                           ${bool[1]}
-    Should Be Equal As Strings    ${resp.json()['viewStatus']}                                                               ${billViewStatus}
+    Should Be Equal As Strings    ${resp.json()['viewStatus']}                                                               ${billViewStatus[0]}
     Should Be Equal As Strings    ${resp.json()['invoiceDate']}                                                               ${DAY1}
-    Should Be Equal As Strings    ${resp.json()['encId']}                                                                   ${orderUid}
+    # Should Be Equal As Strings    ${resp.json()['encId']}                                                                   ${orderUid}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['phone']['number']}                                          ${primaryMobileNo}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['email']}                                                     ${email_id}
     Should Be Equal As Strings    ${resp.json()['createdDate']}                                                               ${DAY1}

@@ -24,11 +24,11 @@ ${maxSaleQuantity}   50
 
 *** Test Cases ***
 
-JD-TC-Get Invoice Using Order ID-1
+JD-TC-Get Invoice Using InvoiceID-1
 
     [Documentation]  Create cart then checkout items
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -74,6 +74,16 @@ JD-TC-Get Invoice Using Order ID-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
+
+    ${resp}=  Get Account Payment Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+    
+
     ${resp}=  Get Store Type By Filter     
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -113,10 +123,10 @@ JD-TC-Get Invoice Using Order ID-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLPUSERNAME23}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME28}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -142,7 +152,7 @@ JD-TC-Get Invoice Using Order ID-1
 
     ${Name}=    FakerLibrary.last name
     Set Suite Variable    ${Name}
-    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+308187748
+    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+307187748
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
@@ -326,7 +336,7 @@ JD-TC-Get Invoice Using Order ID-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${cart_uid}    ${resp.json()['uid']}
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
+
 
     ${resp}=    Get ConsumerCart By Uid   ${cart_uid} 
     Log   ${resp.content}
@@ -346,36 +356,15 @@ JD-TC-Get Invoice Using Order ID-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${orderUid}    ${resp.json()}
-
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${resp}=    Get invoice Using order uid   ${accountId}   ${orderUid} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                                               ${accountId}
-    Should Be Equal As Strings    ${resp.json()[0]['order']['uid']}                                                            ${orderUid}
-    Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['id']}                                                  ${cid}
-    Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['name']}                                                ${firstName} ${lastName}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['encId']}                                                        ${soc_id1}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['name']}                                                          ${Name}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['invMgmt']}                                                       ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['netTotal']}                                                                ${Total}
-    Should Be Equal As Strings    ${resp.json()[0]['netTotalWithTax']}                                                         ${Total}
-    Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                                                 ${Total}
-    Should Be Equal As Strings    ${resp.json()[0]['amountDue']}                                                                 ${Total}
-    Should Be Equal As Strings    ${resp.json()[0]['location']['id']}                                                            ${locId1}
-    Should Be Equal As Strings    ${resp.json()[0]['store']['id']}                                                              ${Stidd}
-    Should Be Equal As Strings    ${resp.json()[0]['orderFor']['id']}                                                          ${cid}
-    Should Be Equal As Strings    ${resp.json()[0]['orderFor']['name']}                                                        ${firstName} ${lastName}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}                                                                 ${billStatus[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['paymentStatus']}                                                            ${paymentStatus[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['timezone']}                                                                Asia/Kolkata
-    Should Be Equal As Strings    ${resp.json()[0]['orderIncluded']}                                                           ${bool[1]}
-    Should Be Equal As Strings    ${resp.json()[0]['viewStatus']}                                                               ${billViewStatus[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['invoiceDate']}                                                               ${DAY1}
-    # Should Be Equal As Strings    ${resp.json()[0]['encId']}                                                                   ${orderUid}
-    Should Be Equal As Strings    ${resp.json()[0]['contactInfo']['phone']['number']}                                          ${primaryMobileNo}
-    Should Be Equal As Strings    ${resp.json()[0]['contactInfo']['email']}                                                     ${email_id}
-    Should Be Equal As Strings    ${resp.json()[0]['createdDate']}                                                               ${DAY1}
-    Should Be Equal As Strings    ${resp.json()[0]['prePaymentAmount']}                                                           ${Total}
+    Set Suite Variable    ${invoiceUid}    ${resp.json()[0]['uid']}
 
+
+    ${resp}=  Make Prepayment From Consumerside     ${invoiceUid}    ${Total}      ${purpose[0]}    ${accountId}   ${finance_payment_modes[8]}   ${bool[0]}  ${bool[1]}   ${cid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
