@@ -182,7 +182,7 @@ JD-TC-Get Provider Catalogs Count-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Provider Catalog Count Filter  name-eq=${Name1}
+    ${resp}=    Get Provider Catalog Count Filter  name-eq=${Name1}  accountId-eq=${accountId}   storeEncId-eq=${store_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings   ${resp.json()}    1
@@ -196,7 +196,7 @@ JD-TC-Get Provider Catalogs Count-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Provider Catalog Count Filter   storeEncId-eq=${store_id}
+    ${resp}=    Get Provider Catalog Count Filter   storeEncId-eq=${store_id}  accountId-eq=${accountId}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings   ${resp.json()}    2
@@ -211,7 +211,7 @@ JD-TC-Get Provider Catalogs Count-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Provider Catalog Count Filter  storeName-eq=${Name}
+    ${resp}=    Get Provider Catalog Count Filter  storeName-eq=${Name}   accountId-eq=${accountId}   storeEncId-eq=${store_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings   ${resp.json()}    2
@@ -226,7 +226,7 @@ JD-TC-Get Provider Catalogs Count-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Provider Catalog Count Filter  status-eq=${toggle[0]}
+    ${resp}=    Get Provider Catalog Count Filter  status-eq=${toggle[0]}   accountId-eq=${accountId}   storeEncId-eq=${store_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings   ${resp.json()}    2
@@ -240,7 +240,7 @@ JD-TC-Get Provider Catalogs Count-UH1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Provider Catalog Count Filter  invMgmt-eq= ${bool[1]}
+    ${resp}=    Get Provider Catalog Count Filter  invMgmt-eq= ${bool[1]}  accountId-eq=${accountId}   storeEncId-eq=${store_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings   ${resp.json()}    0
@@ -268,7 +268,7 @@ JD-TC-Get Provider Catalogs Count-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Provider Catalog Count Filter  name-eq=${Name2}
+    ${resp}=    Get Provider Catalog Count Filter  name-eq=${Name2}  accountId-eq=${accountId}   storeEncId-eq=${store_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings   ${resp.json()}    0
@@ -474,7 +474,7 @@ JD-TC-Get Provider Catalogs Count-7
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
 
-    ${resp}=    Get Provider Catalog Count Filter   storeEncId-eq=${store_id1}
+    ${resp}=    Get Provider Catalog Count Filter   storeEncId-eq=${store_id1}  accountId-eq=${accountId52}   storeEncId-eq=${store_id1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings   ${resp.json()}    3

@@ -162,7 +162,7 @@ JD-TC-Get Provider Catalogs Items Count-1
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
 
-    ${resp}=    Get Provider Catalog Item Count Filter    sorderCatalogEncId-eq=${soc_id1}
+    ${resp}=    Get Provider Catalog Item Count Filter    sorderCatalogEncId-eq=${soc_id1}  accountId-eq=${accountId}   storeEncId-eq=${store_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()}                                              1
@@ -224,7 +224,7 @@ JD-TC-Get Provider Catalogs Items Count-2
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
 
-    ${resp}=    Get Provider Catalog Item Count Filter    sorderCatalogEncId-eq=${soc_id1}
+    ${resp}=    Get Provider Catalog Item Count Filter    sorderCatalogEncId-eq=${soc_id1}  accountId-eq=${accountId}   storeEncId-eq=${store_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()}                                              3
@@ -255,11 +255,11 @@ JD-TC-Get Provider Catalogs Items Count-UH1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-
-    ${resp}=    Get Provider Catalog Item Count Filter    sorderCatalogEncId-eq=${soc_id1}
+    ${NO_ITEMS_AVAILABLE}=  format String   ${NO_ITEMS_AVAILABLE}   items  online shopping
+    ${resp}=    Get Provider Catalog Item Count Filter    sorderCatalogEncId-eq=${soc_id1}  accountId-eq=${accountId}   storeEncId-eq=${store_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${CATALOG_NOT_FOR_ONLINE_ORDER}
+    Should Be Equal As Strings    ${resp.json()}    ${NO_ITEMS_AVAILABLE}
 
 JD-TC-Get Provider Catalogs Items Count-UH2
 
@@ -270,8 +270,8 @@ JD-TC-Get Provider Catalogs Items Count-UH2
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-    ${FIELD_REQUIRED}=  format String   ${FIELD_REQUIRED}   account id 
-    ${resp}=    Get Provider Catalog Item Count Filter    status-eq=${toggle[0]}
+    ${FIELD_REQUIRED}=  format String   ${FIELD_REQUIRED}   account id  
+    ${resp}=    Get Provider Catalog Item Count Filter    status-eq=${toggle[0]}    storeEncId-eq=${store_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings    ${resp.json()}    ${FIELD_REQUIRED}
@@ -302,7 +302,7 @@ JD-TC-Get Provider Catalogs Items Count-3
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
 
-    ${resp}=    Get Provider Catalog Item Count Filter    sorderCatalogEncId-eq=${soc_id1}
+    ${resp}=    Get Provider Catalog Item Count Filter    sorderCatalogEncId-eq=${soc_id1}  accountId-eq=${accountId}   storeEncId-eq=${store_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()}                                              3
@@ -360,10 +360,10 @@ JD-TC-Get Provider Catalogs Items Count-4
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
 
-    ${resp}=    Get Provider Catalog Item Count Filter   sorderCatalogEncId-eq=${SO_Cata_Encid1}
+    ${resp}=    Get Provider Catalog Item Count Filter   sorderCatalogEncId-eq=${SO_Cata_Encid1}   accountId-eq=${accountId}   storeEncId-eq=${store_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()}                                              1
+    Should Be Equal As Strings    ${resp.json()}                                              4
 
 
 
@@ -381,7 +381,7 @@ JD-TC-Get Provider Catalogs Items Count-5
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
 
-    ${resp}=    Get Provider Catalog Item Count Filter   sorderCatalogEncId-eq=${SO_Cata_Encid1}   spItemName-eq=${displayName}
+    ${resp}=    Get Provider Catalog Item Count Filter   sorderCatalogEncId-eq=${SO_Cata_Encid1}   spItemName-eq=${displayName}  accountId-eq=${accountId}   storeEncId-eq=${store_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()}                                              1
@@ -400,7 +400,7 @@ JD-TC-Get Provider Catalogs Items Count-6
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
 
-    ${resp}=    Get Provider Catalog Item Count Filter    sorderCatalogEncId-eq=${SO_Cata_Encid1}   status-eq=${toggle[0]}
+    ${resp}=    Get Provider Catalog Item Count Filter    sorderCatalogEncId-eq=${SO_Cata_Encid1}   status-eq=${toggle[0]}  accountId-eq=${accountId}   storeEncId-eq=${store_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()}                                              1
@@ -420,7 +420,7 @@ JD-TC-Get Provider Catalogs Items Count-7
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
 
-    ${resp}=    Get Provider Catalog Item Count Filter    sorderCatalogEncId-eq=${SO_Cata_Encid1}   encId-eq=${SOC_itemEncIds4}
+    ${resp}=    Get Provider Catalog Item Count Filter    sorderCatalogEncId-eq=${SO_Cata_Encid1}   encId-eq=${SOC_itemEncIds4}  accountId-eq=${accountId}   storeEncId-eq=${store_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()}                                              1
@@ -440,7 +440,7 @@ JD-TC-Get Provider Catalogs Items Count-UH3
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
 
-    ${resp}=    Get Provider Catalog Item Count Filter    sorderCatalogEncId-eq=${SO_Cata_Encid1}   encId-eq=${SOC_itemEncIds4}  status-eq=${toggle[1]}
+    ${resp}=    Get Provider Catalog Item Count Filter    sorderCatalogEncId-eq=${SO_Cata_Encid1}   encId-eq=${SOC_itemEncIds4}  status-eq=${toggle[1]}  accountId-eq=${accountId}   storeEncId-eq=${store_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()}                                             0
@@ -474,7 +474,7 @@ JD-TC-Get Provider Catalogs Items Count-8
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
 
-    ${resp}=    Get Provider Catalog Item Count Filter    sorderCatalogEncId-eq=${SO_Cata_Encid1}
+    ${resp}=    Get Provider Catalog Item Count Filter    sorderCatalogEncId-eq=${SO_Cata_Encid1}  accountId-eq=${accountId}   storeEncId-eq=${store_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()}                                              1

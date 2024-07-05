@@ -210,7 +210,7 @@ JD-TC-Get Item List By CartUid-1
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
 
-    ${resp}=    Get Provider Catalog Item Filter    sorderCatalogEncId-eq=${soc_id1}
+    ${resp}=    Get Provider Catalog Item Filter    sorderCatalogEncId-eq=${soc_id1}   accountId-eq=${accountId}   storeEncId-eq=${store_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${len}=  Get Length  ${resp.json()}

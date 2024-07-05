@@ -65,7 +65,7 @@ Account Activation
     RETURN  ${resp}
 
 Account Set Credential
-    [Arguments]  ${email}  ${password}  ${purpose}  ${loginId}=${email}
+    [Arguments]  ${email}  ${password}  ${purpose}  ${loginId}
     ${auth}=     Create Dictionary   password=${password}  loginId=${loginId}
     ${key}=   verify accnt  ${email}  ${purpose}
     ${apple}=    json.dumps    ${auth}
