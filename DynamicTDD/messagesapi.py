@@ -2475,7 +2475,7 @@ CANT_SWITCH_TO_YOURSELF= "You can't switch to yourself"
 CANT_LINK_YOURSELF= "You can't link with yourself"
 CANT_LINK_SA= "You can't link with System Accounts"
 LOGIN_ID_LIMIT= "Loginid must a string of with  minimum of 6 characters and maximum of 40 characters."
-
+ACCOUNT_DEACTIVATED_BASE = "Your account has been disabled. To restore your account, please contact your service provider."
 
 
 #   ConsumerOrder
