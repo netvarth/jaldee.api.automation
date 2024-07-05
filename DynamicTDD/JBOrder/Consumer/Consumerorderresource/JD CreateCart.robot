@@ -432,7 +432,7 @@ JD-TC-create cart-2
 
     ${Name}=    FakerLibrary.last name
     Set Test Variable    ${Name}
-    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
+    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+101187748
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
@@ -688,7 +688,7 @@ JD-TC-create cart-UH2
 
     ${Name}=    FakerLibrary.last name
     Set Test Variable    ${Name}
-    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
+    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+102187748
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
@@ -730,7 +730,7 @@ JD-TC-create cart-UH2
     Set Test Variable    ${firstName}
     ${lastName}=  FakerLibrary.last_name
     Set Test Variable    ${lastName}
-    ${primaryMobileNo}    Generate random string    10    123456789
+    ${primaryMobileNo}    Generate random string    10    123654789
     ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
     Set Test Variable    ${primaryMobileNo}
     # ${email}=    FakerLibrary.Email
@@ -832,7 +832,7 @@ JD-TC-create cart-UH3
 
     ${Name}=    FakerLibrary.last name
     Set Test Variable    ${Name}
-    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
+    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+103187748
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
@@ -976,7 +976,7 @@ JD-TC-create cart-UH4
 
     ${Name}=    FakerLibrary.last name
     Set Test Variable    ${Name}
-    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
+    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+104187748
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
@@ -1122,7 +1122,7 @@ JD-TC-create cart-3
 
     ${Name}=    FakerLibrary.last name
     Set Test Variable    ${Name}
-    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+101187748
+    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+105187748
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
@@ -1299,7 +1299,7 @@ JD-TC-create cart-UH5
 
     ${Name}=    FakerLibrary.last name
     Set Test Variable    ${Name}
-    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
+    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+106187748
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
@@ -1620,7 +1620,7 @@ JD-TC-create cart-UH13
 
     ${Name}=    FakerLibrary.last name
     Set Test Variable    ${Name}
-    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+101187748
+    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+107187748
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
@@ -1724,7 +1724,7 @@ JD-TC-create cart-UH14
 
     ${Name}=    FakerLibrary.last name
     Set Test Variable    ${Name}
-    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+101187748
+    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+108187748
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
@@ -1828,7 +1828,7 @@ JD-TC-create cart-4
 
     ${Name}=    FakerLibrary.last name
     Set Test Variable    ${Name}
-    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+101187748
+    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+109187748
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 

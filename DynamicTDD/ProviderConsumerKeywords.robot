@@ -529,3 +529,55 @@ CheckOut Cart Items
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /consumer/cart/${cartUid}/checkout   expected_status=any
     RETURN  ${resp}
+
+Get catalog item by item encId
+    [Arguments]     ${itemEncId} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /consumer/so/catalog/item/${itemEncId}  expected_status=any
+    RETURN  ${resp}
+
+GetOrder using uid
+    [Arguments]     ${orderUid} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /consumer/sorder/${orderUid}  expected_status=any
+    RETURN  ${resp}
+
+Get Order- Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/sorder   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get Order Count- Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/sorder/count   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Get invoice Using order uid
+    [Arguments]     ${accountId}  ${orderUid} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /consumer/so/invoice/${accountId}/order/${orderUid}/invoice  expected_status=any
+    RETURN  ${resp}
+
+Get invoice Using Invoice uid
+    [Arguments]     ${accountId}  ${invoiceUid} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /consumer/so/invoice/${accountId}/${invoiceUid}  expected_status=any
+    RETURN  ${resp}
+
+Get invoice- Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/so/invoice   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get invoice Count- Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/so/invoice   params=${param}   expected_status=any
+    RETURN  ${resp}
+ 
+
+
+

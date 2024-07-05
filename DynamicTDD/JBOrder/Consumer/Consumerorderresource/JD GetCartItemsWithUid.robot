@@ -47,21 +47,7 @@ JD-TC-Get Cart Item With Uid-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${St_Id}    ${resp.json()}
     sleep  02s
-    ${TypeName1}=    FakerLibrary.name
-    Set Suite Variable  ${TypeName1}
 
-    ${resp}=  Create Store Type   ${TypeName1}    ${storeNature[1]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${St_Id1}    ${resp.json()}
-    sleep  02s
-    ${TypeName2}=    FakerLibrary.name
-    Set Suite Variable  ${TypeName2}
-
-    ${resp}=  Create Store Type   ${TypeName2}    ${storeNature[2]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${St_Id2}    ${resp.json()}
 
     ${resp}=  Get Store Type By EncId   ${St_Id}    
     Log   ${resp.content}
@@ -99,7 +85,7 @@ JD-TC-Get Cart Item With Uid-1
 
     ${Name}=    FakerLibrary.last name
     Set Suite Variable    ${Name}
-    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
+    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+207187748
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 

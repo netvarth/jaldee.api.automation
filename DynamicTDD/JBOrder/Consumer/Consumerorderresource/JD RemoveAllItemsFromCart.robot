@@ -99,7 +99,7 @@ JD-TC-Remove All Item From Cart-1
 
     ${Name}=    FakerLibrary.last name
     Set Suite Variable    ${Name}
-    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
+    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+303187748
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
@@ -181,7 +181,7 @@ JD-TC-Remove All Item From Cart-1
     Set Suite Variable    ${firstName}
     ${lastName}=  FakerLibrary.last_name
     Set Suite Variable    ${lastName}
-    ${primaryMobileNo}    Generate random string    10    123456789
+    ${primaryMobileNo}    Generate random string    10    123458769
     ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
     Set Suite Variable    ${primaryMobileNo}
     # ${email}=    FakerLibrary.Email
