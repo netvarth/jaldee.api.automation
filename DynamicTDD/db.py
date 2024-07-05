@@ -133,7 +133,7 @@ def log_request(response):
         # print ("Exception at line no:", e.__traceback__.tb_lineno)
 
 
-def verify_accnt(email,purpose):
+def verify_accnt(email,purpose,sessionID=''):
     if str(email).isdigit() and str(email).startswith('55'):
         print ("if:")
         return 55555
@@ -145,9 +145,13 @@ def verify_accnt(email,purpose):
                 # cur = dbconn.cursor()
                 # select_stmt = "SELECT * FROM employees WHERE emp_no = %(emp_no)s"
                 # cursor.execute(select_stmt, { 'emp_no': 2 })
-                select_stmt = ("SELECT sharedkey FROM access_key_tbl WHERE login_id='%s' and otp_purpose='%s'")
-                print ('Executing Query:',(select_stmt %(email,purpose)))
-                cur.execute(select_stmt %(email,purpose))
+                select_stmt = f"SELECT sharedkey FROM access_key_tbl WHERE login_id='{email}' and otp_purpose='{purpose}'"
+                # print('Executing Query:', select_stmt)
+                if sessionID!='':
+                    additional_stmt=f" and sessionId='{sessionID}'"
+                    select_stmt= select_stmt+additional_stmt
+                print('Executing Query:', select_stmt)
+                cur.execute(select_stmt)
                 row = cur.fetchone()
                 return row[0]
         except Exception as e:
