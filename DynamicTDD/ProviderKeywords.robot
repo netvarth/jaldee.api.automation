@@ -72,7 +72,12 @@ Account Set Credential
             ${sessionid}=  Set Variable  ${value}
         END
     END
-    ${key}=   verify accnt  ${email}  ${purpose}  ${sessionid}
+    ${session_given}=    Get Variable Value    ${sessionid}
+    IF  '${session_given}'=='${None}'
+        ${key}=   verify accnt  ${email}  ${purpose}
+    ELSE
+        ${key}=   verify accnt  ${email}  ${purpose}  ${sessionid}
+    END
     ${apple}=    json.dumps    ${auth}
     ${resp}=    PUT On Session    ynw    /provider/${key}/activate    data=${apple}    expected_status=any
     RETURN  ${resp}
