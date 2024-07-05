@@ -59,7 +59,7 @@ JD-TC-Link_With_Other_Login-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${loginId}=     Random Int  min=1  max=9999
+    ${loginId}=     Random Int  min=111111  max=999999
     Set Suite Variable      ${loginId}
     
     ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId}
@@ -106,7 +106,7 @@ JD-TC-Link_With_Other_Login-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${loginId2}=     Random Int  min=1  max=9999
+    ${loginId2}=     Random Int  min=111111  max=999999
     Set Suite Variable      ${loginId2}
     
     ${resp}=  Account Set Credential  ${ph2}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId2}
@@ -196,7 +196,7 @@ JD-TC-Link_With_Other_Login-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${loginId3}=     Random Int  min=1  max=9999
+    ${loginId3}=     Random Int  min=111111  max=999999
     Set Suite Variable      ${loginId3}
     
     ${resp}=  Account Set Credential  ${ph3}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId3}
@@ -351,7 +351,7 @@ JD-TC-Link_With_Other_Login-7
     Set Suite Variable  ${user_firstName}   ${resp.json()['firstName']}
     Set Suite Variable  ${user_lastName}    ${resp.json()['lastName']}
     
-    ${loginId_n}=     Random Int  min=1  max=9999
+    ${loginId_n}=     Random Int  min=111111  max=999999
     Set Suite Variable      ${loginId_n}
 
     ${resp}=    Reset LoginId  ${user1_id}  ${loginId_n}
@@ -491,7 +491,7 @@ JD-TC-Link_With_Other_Login-UH4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${inv}=     Random Int  min=100  max=200
+    ${inv}=     Random Int  min=100000  max=200000
 
     ${resp}=    Connect with other login  ${inv}  ${PASSWORD}
     Log   ${resp.content}
@@ -510,7 +510,7 @@ JD-TC-Link_With_Other_Login-UH5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${inv}=     Random Int  min=100  max=200
+    ${inv}=     Random Int  min=100000  max=200000
 
     ${resp}=    Connect with other login  ${loginId}  ${inv}
     Log   ${resp.content}
@@ -524,16 +524,6 @@ JD-TC-Link_With_Other_Login-UH5
 JD-TC-Link_With_Other_Login-UH6
 
     [Documentation]    Link With other login - where provider is Deactivated 
-
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    DeActivate Service Provider 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
 
     ${phone}=  Evaluate  ${PUSERNAME}+5666400
     Set Suite Variable  ${phone}
@@ -552,7 +542,7 @@ JD-TC-Link_With_Other_Login-UH6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${loginId_u1}=     Random Int  min=1  max=9999
+    ${loginId_u1}=     Random Int  min=111111  max=999999
     Set Suite Variable      ${loginId_u1}
     
     ${resp}=  Account Set Credential  ${phone}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId_u1}
@@ -567,6 +557,45 @@ JD-TC-Link_With_Other_Login-UH6
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Provider Login  ${loginId_u1}  ${PASSWORD}
+    ${resp}=    Provider Logout
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Provider Login  ${loginId_u1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}   ${ACCOUNT_DEACTIVATED_BASE}
+
+    ${resp}=  Provider Login  ${loginId}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Connect with other login  ${loginId_u1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Link_With_Other_Login-UH7
+
+    [Documentation]    Link With other login - link with superadmin
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Provider Login  ${loginId}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Connect with other login  ${SUSERNAME}  ${SPASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${CANT_LINK_SA}
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+

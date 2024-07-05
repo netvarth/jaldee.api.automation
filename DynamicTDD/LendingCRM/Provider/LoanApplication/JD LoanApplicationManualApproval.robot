@@ -102,7 +102,7 @@ JD-TC-Loan Application Manual Approval-1
     Log   ${resp.json()}
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential      ${NBFCPUSERNAME1}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential      ${NBFCPUSERNAME1}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${NBFCPUSERNAME1}
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login    ${NBFCPUSERNAME1}  ${PASSWORD}
@@ -1480,7 +1480,7 @@ JD-TC-Loan Application Manual Approval-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential      ${NBFCPUSERNAME1}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential      ${NBFCPUSERNAME1}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${NBFCPUSERNAME1}
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login    ${NBFCPUSERNAME1}  ${PASSWORD}

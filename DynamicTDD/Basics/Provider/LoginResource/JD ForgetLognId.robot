@@ -58,11 +58,13 @@ JD-TC-Forget_LoginId-1
     ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderSignUp']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${session_header}=    Get From Dictionary    ${resp.headers}    JSESSIONYNW
 
     ${loginId}=     Random Int  min=1  max=9999
     Set Suite Variable      ${loginId}
-    
-    ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId}
+
+
+    ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId}  JSESSIONYNW=${session_header}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

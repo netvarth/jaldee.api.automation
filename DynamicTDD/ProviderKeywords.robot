@@ -65,9 +65,19 @@ Account Activation
     RETURN  ${resp}
 
 Account Set Credential
-    [Arguments]  ${email}  ${password}  ${purpose}  ${loginId}=${email}
+    [Arguments]  ${email}  ${password}  ${purpose}  ${loginId}  &{kwargs}
     ${auth}=     Create Dictionary   password=${password}  loginId=${loginId}
-    ${key}=   verify accnt  ${email}  ${purpose}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        IF  '${key}' == 'JSESSIONYNW'
+            ${sessionid}=  Set Variable  ${value}
+        END
+    END
+    ${session_given}=    Get Variable Value    ${sessionid}
+    IF  '${session_given}'=='${None}'
+        ${key}=   verify accnt  ${email}  ${purpose}
+    ELSE
+        ${key}=   verify accnt  ${email}  ${purpose}  ${sessionid}
+    END
     ${apple}=    json.dumps    ${auth}
     ${resp}=    PUT On Session    ynw    /provider/${key}/activate    data=${apple}    expected_status=any
     RETURN  ${resp}

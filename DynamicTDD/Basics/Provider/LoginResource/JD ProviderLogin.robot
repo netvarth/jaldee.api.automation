@@ -6,7 +6,9 @@ Library           String
 Library           json
 Library           /ebs/TDD/db.py
 Library           FakerLibrary
+Library             RandomNumber.py
 Resource          /ebs/TDD/ProviderKeywords.robot
+Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables       /ebs/TDD/varfiles/providers.py
@@ -48,6 +50,7 @@ JD-TC-Provider_Login-1
     Set Suite Variable      ${lastname}
 
     ${highest_package}=  get_highest_license_pkg
+    Set Suite Variable      ${highest_package}
 
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph}   ${highest_package[0]}
     Log   ${resp.content}
@@ -57,7 +60,7 @@ JD-TC-Provider_Login-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${loginId}=     Random Int  min=1  max=9999
+    ${loginId}=     Random Int  min=111111  max=999999
     Set Suite Variable      ${loginId}
     
     ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId}
@@ -160,7 +163,7 @@ JD-TC-Provider_Login-2
     Set Suite Variable  ${user1_id}       ${resp.json()['id']}
     Set Suite Variable  ${user_num}    ${resp.json()['mobileNo']}
 
-    ${loginId_n}=     Random Int  min=1  max=9999
+    ${loginId_n}=     Random Int  min=111111  max=999999
     Set Suite Variable      ${loginId_n}
 
     ${resp}=    Reset LoginId  ${user1_id}  ${loginId_n}
@@ -368,3 +371,69 @@ JD-TC-Provider_Login-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}     422
     Should Be Equal As Strings  ${resp.json()}          ${EMAIL_EXISTS}
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Provider_Login-8
+
+    [Documentation]    login id is les than 4 digit
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${phn}=  Evaluate  ${PUSERNAME}+785482
+    Set Suite Variable  ${phn}
+
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${phn}   ${highest_package[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${phn}  ${OtpPurpose['ProviderSignUp']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${loginId_Phn}=     Random Int  min=111  max=999
+    
+    ${resp}=  Account Set Credential  ${phn}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId_Phn}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Provider Login  ${loginId_Phn}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}          ${LOGIN_ID_LIMIT}
+
+
+JD-TC-Provider_Login-9
+
+    [Documentation]    login id is grater than 40 digit
+
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph}   ${highest_package[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderSignUp']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${random_number}=    Random Number 	       digits=41
+    
+    ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${random_number}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Provider Login  ${random_number}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}          ${LOGIN_ID_LIMIT}
+
+JD-TC-Provider_Login-10
+
+    [Documentation]    SA Login
+
+    ${resp}=   SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
