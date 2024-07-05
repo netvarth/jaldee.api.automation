@@ -2442,6 +2442,16 @@ TEMPLATE_FOOTER = "Template Footer should be provided"
 TEMPLATE_CONTENT = "Template content should be provided"
 TEMPLATE_NAME_SHOULD_NOT_BE_NULL = "Please enter template name"
 VARIABLE_STATUS_DISABLED = "Variable '{}' is Disabled"
+TEMPLATE_SETTINGS_EXISTS = "Template settings already exists for {}"
+SEND_COMM_NOT_EXISTS = "Trigger doest not exist"
+TEMPLATE_SETTINGS_SHOULD_BE_NOT_NULL = "Template settings data should be provided"
+TEMPLATE_SETTINGS_TARGET_SHOULD_BE_NOT_NULL = "Target recipient should be provided"
+TEMPLATE_SETTINGS_COMM_POINT_SHOULD_BE_NOT_NULL = "Communication point should be provided"
+TEMPLATE_SETTINGS_TEMPLATE_SHOULD_BE_NOT_NULL = "Template should be selected"
+TEMPLATE_SETTINGS_CONTEXT_SHOULD_BE_NOT_NULL = "Context should be selected"
+TEMPLATE_SETTINGS_CHANNEL_SHOULD_BE_NOT_NULL = "Communication channel should be selected"
+TEMPLATE_SETTINGS_STATUS = "This template settings is already '{}'"
+SMS_TEMPLATE_NOT_ALLOWED = "Cannot create a SMS template"
 
 #   Linking and Unlinking
 
@@ -2463,16 +2473,9 @@ LOGIN_INVALID_USERID_PASSWORD = "Invalid password."
 LOGIN_ID_REQ= "LoginId Required"
 CANT_SWITCH_TO_YOURSELF= "You can't switch to yourself"
 CANT_LINK_YOURSELF= "You can't link with yourself"
-TEMPLATE_SETTINGS_EXISTS = "Template settings already exists for {}"
-SEND_COMM_NOT_EXISTS = "Trigger doest not exist"
-TEMPLATE_SETTINGS_SHOULD_BE_NOT_NULL = "Template settings data should be provided"
-TEMPLATE_SETTINGS_TARGET_SHOULD_BE_NOT_NULL = "Target recipient should be provided"
-TEMPLATE_SETTINGS_COMM_POINT_SHOULD_BE_NOT_NULL = "Communication point should be provided"
-TEMPLATE_SETTINGS_TEMPLATE_SHOULD_BE_NOT_NULL = "Template should be selected"
-TEMPLATE_SETTINGS_CONTEXT_SHOULD_BE_NOT_NULL = "Context should be selected"
-TEMPLATE_SETTINGS_CHANNEL_SHOULD_BE_NOT_NULL = "Communication channel should be selected"
-TEMPLATE_SETTINGS_STATUS = "This template settings is already '{}'"
-SMS_TEMPLATE_NOT_ALLOWED = "Cannot create a SMS template"
+CANT_LINK_SA= "You can't link with System Accounts"
+LOGIN_ID_LIMIT= "Loginid must a string of with  minimum of 6 characters and maximum of 40 characters."
+
 
 
 #   ConsumerOrder
