@@ -20,17 +20,17 @@ Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
-*** Keywords ***
-SendProviderResetMail
-   [Arguments]    &{kwargs}
-   ${data}=  Create Dictionary  
-   FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary 	${data} 	${key}=${value}
-   END 
-   ${data}=  json.dumps  ${data}
-   Check And Create YNW Session
-   ${resp}=  POST On Session  ynw     /provider/login/forgot/loginId	data=${data}  expected_status=any
-   RETURN  ${resp}
+# *** Keywords ***
+# SendProviderResetMail
+#    [Arguments]    &{kwargs}
+#    ${data}=  Create Dictionary  
+#    FOR    ${key}    ${value}    IN    &{kwargs}
+#         Set To Dictionary 	${data} 	${key}=${value}
+#    END 
+#    ${data}=  json.dumps  ${data}
+#    Check And Create YNW Session
+#    ${resp}=  POST On Session  ynw     /provider/login/forgot/loginId	data=${data}  expected_status=any
+#    RETURN  ${resp}
 
 *** Variables ***
 

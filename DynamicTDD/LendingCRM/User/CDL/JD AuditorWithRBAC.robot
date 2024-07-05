@@ -104,10 +104,8 @@ JD-TC-Auditor-1
     Log   ${resp.json()}
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${loginId}=     Random Int  min=1  max=9999
-    Set Suite Variable      ${loginId}
 
-    ${resp}=  Account Set Credential      ${NBFCPUSERNAME1}    ${PASSWORD}    ${OtpPurpose['ProviderSignUp']}    ${loginId}
+    ${resp}=  Account Set Credential      ${NBFCPUSERNAME1}    ${PASSWORD}    ${OtpPurpose['ProviderSignUp']}    ${NBFCPUSERNAME1}
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login    ${NBFCPUSERNAME1}  ${PASSWORD}
@@ -647,12 +645,34 @@ JD-TC-Auditor-1
 
 # .....Create Dealer By Sales Officer.......
 
-    ${resp}=  SendProviderResetMail        ${SO_USERNAME}
-    Should Be Equal As Strings             ${resp.status_code}   200
+    ${resp}=    Reset LoginId  ${SO}  ${SO_USERNAME}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ResetProviderPassword        ${SO_USERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
-    Should Be Equal As Strings             ${resp[0].status_code}   200
-    Should Be Equal As Strings             ${resp[1].status_code}   200
+    ${resp}=    Forgot Password   loginId=${SO_USERNAME}  password=${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${SO_USERNAME}  ${OtpPurpose['ProviderResetPassword']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key} =   db.Verify Accnt   ${SO_USERNAME}    ${OtpPurpose['ProviderResetPassword']}
+    Set Suite Variable   ${key}
+
+    ${resp}=    Forgot Password     otp=${key}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #... linking user to the provider 1 and get linked lists
+
+    ${resp}=    Connect with other login  ${SO_USERNAME}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
     Log   ${resp.json()}
@@ -728,12 +748,41 @@ JD-TC-Auditor-1
     Should Be Equal As Strings             ${resp.status_code}      200
     Set Suite Variable                     ${loanproductSubcatid}   ${resp.json()[0]['id']}
 
-    ${resp}=  SendProviderResetMail        ${ADT_USERNME}
-    Should Be Equal As Strings             ${resp.status_code}   200
+    ${resp}=    Reset LoginId  ${ADT}  ${ADT_USERNME}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ResetProviderPassword        ${ADT_USERNME}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
-    Should Be Equal As Strings             ${resp[0].status_code}   200
-    Should Be Equal As Strings             ${resp[1].status_code}   200
+    ${resp}=    Forgot Password   loginId=${ADT_USERNME}  password=${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${ADT_USERNME}  ${OtpPurpose['ProviderResetPassword']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key} =   db.Verify Accnt   ${ADT_USERNME}    ${OtpPurpose['ProviderResetPassword']}
+    Set Suite Variable   ${key}
+
+    ${resp}=    Forgot Password     otp=${key}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #... linking user to the provider 1 and get linked lists
+
+    ${resp}=    Connect with other login  ${ADT_USERNME}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    # ${resp}=  SendProviderResetMail        ${ADT_USERNME}
+    # Should Be Equal As Strings             ${resp.status_code}   200
+
+    # ${resp}=  ResetProviderPassword        ${ADT_USERNME}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
+    # Should Be Equal As Strings             ${resp[0].status_code}   200
+    # Should Be Equal As Strings             ${resp[1].status_code}   200
 
     ${resp}=  Encrypted Provider Login     ${ADT_USERNME}  ${PASSWORD}
     Log   ${resp.json()}
@@ -1034,13 +1083,40 @@ JD-TC-Auditor-4
 
     [Documentation]  Auditor - Update Sales and Credit officer
 
-    ${resp}=  SendProviderResetMail        ${BM_USERNAME}
+    ${resp}=  Encrypted Provider Login     ${ADT_USERNME}  ${PASSWORD}
+    Log  ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}      200
 
-    @{resp}=  ResetProviderPassword        ${BM_USERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
-    Should Be Equal As Strings             ${resp[0].status_code}   200
-    Should Be Equal As Strings             ${resp[1].status_code}   200
+    ${resp}=    Reset LoginId  ${BM}  ${BM_USERNAME}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=    Forgot Password   loginId=${BM_USERNAME}  password=${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${BM_USERNAME}  ${OtpPurpose['ProviderResetPassword']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key} =   db.Verify Accnt   ${BM_USERNAME}    ${OtpPurpose['ProviderResetPassword']}
+    Set Suite Variable   ${key}
+
+    ${resp}=    Forgot Password     otp=${key}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #... linking user to the provider 1 and get linked lists
+
+    ${resp}=    Connect with other login  ${BM_USERNAME}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    
     ${resp}=  Encrypted Provider Login     ${BM_USERNAME}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}      200
@@ -1612,12 +1688,38 @@ JD-TC-Auditor-14
 
     [Documentation]  Auditor - Manual Approval
 
-    ${resp}=  SendProviderResetMail        ${BCH_USERNAME}
-    Should Be Equal As Strings             ${resp.status_code}  200
+    ${resp}=  Encrypted Provider Login     ${ADT_USERNME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
 
-    @{resp}=  ResetProviderPassword        ${BCH_USERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
-    Should Be Equal As Strings             ${resp[0].status_code}        200
-    Should Be Equal As Strings             ${resp[1].status_code}        200
+    ${resp}=    Reset LoginId  ${BCH}  ${BCH_USERNAME}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Forgot Password   loginId=${BCH_USERNAME}  password=${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${BCH_USERNAME}  ${OtpPurpose['ProviderResetPassword']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key} =   db.Verify Accnt   ${BCH_USERNAME}    ${OtpPurpose['ProviderResetPassword']}
+    Set Suite Variable   ${key}
+
+    ${resp}=    Forgot Password     otp=${key}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #... linking user to the provider 1 and get linked lists
+
+    ${resp}=    Connect with other login  ${BCH_USERNAME}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login     ${BCH_USERNAME}  ${PASSWORD}
     Log   ${resp.json()}
