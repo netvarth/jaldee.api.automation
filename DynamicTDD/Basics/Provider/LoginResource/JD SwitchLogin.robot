@@ -396,7 +396,7 @@ JD-TC-Switch_Login-UH6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Switch login    ${loginId2}
+    ${resp}=    Switch login    ${PUSERNAME1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    00
 

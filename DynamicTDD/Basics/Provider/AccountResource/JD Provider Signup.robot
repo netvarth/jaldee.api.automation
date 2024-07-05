@@ -14,8 +14,9 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 *** Variables ***
       
 ${withsym}      *#147erd
-${onlyspl}      !@#$%^&
+${onlyspl}      !@#$%^&.-
 ${alph_digits}  D3r52A
+${withus}       Abc_12
 
 *** Test Cases ***
 
@@ -54,7 +55,7 @@ JD-TC-Provider_Signup-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${loginId}=     Random Int  min=1  max=9999
+    ${loginId}=     Random Int  min=1111  max=9999
     
     ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId}
     Log   ${resp.content}
@@ -236,7 +237,7 @@ JD-TC-Provider_Signup-7
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${loginId_sm}=     Random Int  min=1  max=9999
+    ${loginId_sm}=     Random Int  min=1111  max=9999
     Set Suite Variable      ${loginId_sm}
 
     ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId_sm}
@@ -691,6 +692,30 @@ JD-TC-Provider_Signup-17
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph}${\n}
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Provider_Signup-18
+
+    [Documentation]  Provider sign up - where login id is having _
+
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph}   1
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderSignUp']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${withus}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Provider Login  ${withus}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
