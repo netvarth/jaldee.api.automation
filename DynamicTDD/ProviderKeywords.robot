@@ -15862,3 +15862,15 @@ Enable Disable Medical Record RBAC
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/medicalrecordrbac/${status}  expected_status=any
     RETURN  ${resp}
+Get Capabilities By Feature 
+
+    [Arguments]  ${feature} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/accessscope/capabilities/${feature}    expected_status=any
+    RETURN  ${resp}
+
+Get All Capabilities 
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/accessscope/capabilities    expected_status=any
+    RETURN  ${resp}

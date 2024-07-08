@@ -1076,6 +1076,10 @@ JD-TC-RegionalManager-4
 
     [Documentation]  Regional Manager - Update Sales and Credit officer
 
+    ${resp}=  Encrypted Provider Login     ${RM_USERNAME}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}      200
+
     ${resp}=    Reset LoginId  ${BM}  ${BM_USERNAME}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1675,6 +1679,10 @@ JD-TC-RegionalManager-13
 JD-TC-RegionalManager-14
 
     [Documentation]  Regional Manager - Manual Approval
+
+    ${resp}=  Encrypted Provider Login     ${RM_USERNAME}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}      200
 
     ${resp}=    Reset LoginId  ${BCH}  ${BCH_USERNAME}
     Log   ${resp.content}

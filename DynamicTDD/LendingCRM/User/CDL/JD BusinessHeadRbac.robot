@@ -716,6 +716,10 @@ JD-TC-BussinessHeadWithRBAC-3
                                   
     [Documentation]               Approval Request - Business Head
 
+    ${resp}=  Encrypted Provider Login    ${NBFCPUSERNAME1}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
     ${resp}=    Reset LoginId  ${SO}  ${SO_USERNAME}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200

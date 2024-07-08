@@ -975,7 +975,9 @@ JD-TC-SalesOfficerWithRbac-4
 
     [Documentation]  Sales Officer - Create Lead
 
-
+    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
 # .....Approve Dealer By Branch Manager......
 
     ${resp}=    Reset LoginId  ${BM}  ${BM_USERNAME}
@@ -1524,6 +1526,10 @@ JD-TC-SalesOfficerWithRbac-8
 
     [Documentation]  Sales Officer - Sales Officer Approval
 
+    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
+
 # ....... Branch Credit Head Login .......
 
     ${resp}=    Reset LoginId  ${BCH}  ${BCH_USERNAME}
@@ -1889,6 +1895,10 @@ JD-TC-SalesOfficerWithRbac-12
     [Documentation]  Sales Officer - Get Loan Application
 
 # ....... Loging Operational Head for Approval .......
+
+    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
 
     ${resp}=    Reset LoginId  ${BOH}  ${BOH_USERNAME}
 	    Log   ${resp.content}

@@ -1621,6 +1621,10 @@ JD-TC-SupportUser-14
 
     [Documentation]  Support User - Manual Approval
 
+    ${resp}=  Encrypted Provider Login     ${SPT_USERNME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
     ${resp}=    Reset LoginId  ${BCH}  ${BCH_USERNAME}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200

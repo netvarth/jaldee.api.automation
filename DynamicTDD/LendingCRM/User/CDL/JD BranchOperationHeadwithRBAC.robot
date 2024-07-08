@@ -1003,6 +1003,10 @@ JD-TC-BranchOperationHead-3
 
     [Documentation]  branch operation head -try to approve partner who is already approved.
 
+    ${resp}=  Encrypted Provider Login  ${BOH_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=    Reset LoginId  ${BM}  ${BM_USERNAME}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200

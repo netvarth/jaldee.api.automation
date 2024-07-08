@@ -978,6 +978,10 @@ JD-TC-NHSalesWithRbac-4
 
 # .....Approve Dealer By Branch Manager......
 
+    ${resp}=  Encrypted Provider Login     ${NHSO_USRNME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
+
     ${resp}=    Reset LoginId  ${BM}  ${BM_USERNAME}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1526,6 +1530,10 @@ JD-TC-NHSalesWithRbac-8
 
 # ....... Branch Credit Head Login .......
 
+    ${resp}=  Encrypted Provider Login     ${NHSO_USRNME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
+
     ${resp}=    Reset LoginId  ${BCH}  ${BCH_USERNAME}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1889,6 +1897,10 @@ JD-TC-NHSalesWithRbac-12
     [Documentation]  NH Sales - Get Loan Application
 
 # ....... Loging Operational Head for Approval .......
+
+    ${resp}=  Encrypted Provider Login     ${NHSO_USRNME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
 
     ${resp}=    Reset LoginId  ${BOH}  ${BOH_USERNAME}
     Log   ${resp.content}

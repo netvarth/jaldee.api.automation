@@ -945,12 +945,30 @@ JD-TC-NHOperation-1
 
 # ......branch operation head view partner.......
 
-    ${resp}=  SendProviderResetMail   ${NHO_USERNAME}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=    Reset LoginId  ${NHO}  ${NHO_USERNAME}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    @{resp}=  ResetProviderPassword  ${NHO_USERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
+    ${resp}=    Forgot Password   loginId=${NHO_USERNAME}  password=${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${NHO_USERNAME}  ${OtpPurpose['ProviderResetPassword']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key} =   db.Verify Accnt   ${NHO_USERNAME}    ${OtpPurpose['ProviderResetPassword']}
+    Set Suite Variable   ${key}
+
+    ${resp}=    Forgot Password     otp=${key}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #... linking user to the provider 1 and get linked lists
+
+    ${resp}=    Connect with other login  ${NHO_USERNAME}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${NHO_USERNAME}  ${PASSWORD}
     Log   ${resp.json()}
@@ -980,6 +998,10 @@ JD-TC-NHOperation-2
 JD-TC-NHOperation-3
 
     [Documentation]  NH Operation -try to approve partner who is already approved.
+
+    {resp}=  Encrypted Provider Login  ${NHO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Reset LoginId  ${BM}  ${BM_USERNAME}
     Log   ${resp.content}
