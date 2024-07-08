@@ -679,9 +679,9 @@ JD-TC-GetTemplateByFilter-10
     Set Test Variable   ${temp_id1}  ${resp.content}
 
     ${temp_name1}=    FakerLibrary.word
-    ${content_msg}=      FakerLibrary.sentence   
+    ${new_content_msg}=      FakerLibrary.sentence   
     ${content_msg1}=     Catenate   SEPARATOR=\n
-    ...             ${content_msg} [${dynamic_var2}].
+    ...             ${new_content_msg} [${dynamic_var2}].
     ${content1}=    Create Dictionary  intro=${content_msg1}
     ${tempheader_sub1}=      FakerLibrary.sentence   5
     ${salutation1}=      FakerLibrary.word
@@ -820,9 +820,9 @@ JD-TC-GetTemplateByFilter-12
     ${content_msg}=      FakerLibrary.sentence
     ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[1]}  
-    ${comm_target}=  Create List   ${CommTarget[0]}  
+    ${comm_target1}=  Create List   ${CommTarget[0]}  
     
-    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target1}    ${comm_chanl} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${temp_id1}  ${resp.content}
@@ -831,9 +831,9 @@ JD-TC-GetTemplateByFilter-12
     ${content_msg1}=      FakerLibrary.sentence
     ${content1}=    Create Dictionary  intro=${content_msg1}
     ${comm_chanl}=  Create List   ${CommChannel[1]}  
-    ${comm_target}=  Create List   ${CommTarget[0]}  
+    ${comm_target2}=  Create List   ${CommTarget[0]}  
     
-    ${resp}=  Create Template   ${temp_name1}  ${content1}  ${templateFormat[0]}  ${VariableContext[2]}  ${comm_target}    ${comm_chanl} 
+    ${resp}=  Create Template   ${temp_name1}  ${content1}  ${templateFormat[0]}  ${VariableContext[2]}  ${comm_target2}    ${comm_chanl} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${temp_id2}  ${resp.content}
@@ -842,9 +842,9 @@ JD-TC-GetTemplateByFilter-12
     ${content_msg2}=      FakerLibrary.sentence
     ${content2}=    Create Dictionary  intro=${content_msg2}
     ${comm_chanl2}=  Create List   ${CommChannel[2]}    ${CommChannel[3]}
-    ${comm_target2}=  Create List   ${CommTarget[1]}  
+    ${comm_target3}=  Create List   ${CommTarget[1]}  
     
-    ${resp}=  Create Template   ${temp_name2}  ${content2}  ${templateFormat[0]}  ${VariableContext[1]}  ${comm_target2}    ${comm_chanl2} 
+    ${resp}=  Create Template   ${temp_name2}  ${content2}  ${templateFormat[0]}  ${VariableContext[1]}  ${comm_target3}    ${comm_chanl2} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${temp_id3}  ${resp.content}
@@ -863,7 +863,7 @@ JD-TC-GetTemplateByFilter-12
             Should Be Equal As Strings  ${resp.json()[${i}]['commChannel']}                 ${comm_chanl} 
             Should Be Equal As Strings  ${resp.json()[${i}]['templateFormat']}              ${templateFormat[0]}
             Should Be Equal As Strings  ${resp.json()[${i}]['content']['intro']}            ${content_msg}
-            Should Be Equal As Strings  ${resp.json()[${i}]['commTarget']}                  ${comm_target} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['commTarget']}                  ${comm_target1} 
             Should Be Equal As Strings  ${resp.json()[${i}]['status']}                      ${VarStatus[0]} 
 
         ELSE IF     '${resp.json()[${i}]['id']}' == '${temp_id2}'            
@@ -873,10 +873,242 @@ JD-TC-GetTemplateByFilter-12
             Should Be Equal As Strings  ${resp.json()[${i}]['commChannel']}                 ${comm_chanl} 
             Should Be Equal As Strings  ${resp.json()[${i}]['templateFormat']}              ${templateFormat[0]}
             Should Be Equal As Strings  ${resp.json()[${i}]['content']['intro']}            ${content_msg1}
-            Should Be Equal As Strings  ${resp.json()[${i}]['commTarget']}                  ${comm_target} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['commTarget']}                  ${comm_target2} 
             Should Be Equal As Strings  ${resp.json()[${i}]['status']}                      ${VarStatus[0]} 
         END
     END
+
+JD-TC-GetTemplateByFilter-13
+
+    [Documentation]  Create multiple templates then get it by comm channel filter and verify.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME252}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${temp_name}=    FakerLibrary.word
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
+    ${comm_target1}=  Create List   ${CommTarget[0]}  
+    
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target1}    ${comm_chanl} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${temp_id1}  ${resp.content}
+
+    ${temp_name1}=    FakerLibrary.word
+    ${content_msg1}=      FakerLibrary.sentence
+    ${content1}=    Create Dictionary  intro=${content_msg1}
+    ${comm_chanl1}=  Create List   ${CommChannel[1]}   ${CommChannel[2]} 
+    ${comm_target2}=  Create List   ${CommTarget[0]}  
+    
+    ${resp}=  Create Template   ${temp_name1}  ${content1}  ${templateFormat[0]}  ${VariableContext[2]}  ${comm_target2}    ${comm_chanl1} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${temp_id2}  ${resp.content}
+
+    ${temp_name2}=    FakerLibrary.word
+    ${content_msg2}=      FakerLibrary.sentence
+    ${content2}=    Create Dictionary  intro=${content_msg2}
+    ${comm_chanl2}=  Create List   ${CommChannel[2]}    ${CommChannel[3]}
+    ${comm_target3}=  Create List   ${CommTarget[1]}  
+    
+    ${resp}=  Create Template   ${temp_name2}  ${content2}  ${templateFormat[0]}  ${VariableContext[1]}  ${comm_target3}    ${comm_chanl2} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${temp_id3}  ${resp.content}
+
+    ${resp}=  Get Template By Filter   CommChannel-eq=${CommChannel[1]}, ${CommChannel[3]}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${len}=  Get Length  ${resp.json()}
+
+    FOR  ${i}  IN RANGE   ${len}
+
+        IF  '${resp.json()[${i}]['id']}' == '${temp_id1}'  
+            Should Be Equal As Strings  ${resp.json()[${i}]['accountId']}                   ${account_id} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['templateName']}                ${temp_name}
+            Should Be Equal As Strings  ${resp.json()[${i}]['context']}                     ${VariableContext[0]} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['commChannel']}                 ${comm_chanl} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['templateFormat']}              ${templateFormat[0]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['content']['intro']}            ${content_msg}
+            Should Be Equal As Strings  ${resp.json()[${i}]['commTarget']}                  ${comm_target1} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['status']}                      ${VarStatus[0]} 
+
+        ELSE IF     '${resp.json()[${i}]['id']}' == '${temp_id2}'            
+            Should Be Equal As Strings  ${resp.json()[${i}]['accountId']}                   ${account_id} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['templateName']}                ${temp_name1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['context']}                     ${VariableContext[2]} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['commChannel']}                 ${comm_chanl1} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['templateFormat']}              ${templateFormat[0]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['content']['intro']}            ${content_msg1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['commTarget']}                  ${comm_target2} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['status']}                      ${VarStatus[0]} 
+        END
+    END
+
+    ${resp}=  Get Template By Filter   CommChannel-eq=${CommChannel[2]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()[0]['id']}                          ${temp_id3} 
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}                   ${account_id} 
+    Should Be Equal As Strings  ${resp.json()[0]['templateName']}                ${temp_name1}
+    Should Be Equal As Strings  ${resp.json()[0]['context']}                     ${VariableContext[0]} 
+    Should Be Equal As Strings  ${resp.json()[0]['commChannel']}                 ${comm_chanl} 
+    Should Be Equal As Strings  ${resp.json()[0]['templateFormat']}              ${templateFormat[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['content']['intro']}            ${content_msg}
+    Should Be Equal As Strings  ${resp.json()[0]['commTarget']}                  ${comm_target} 
+    Should Be Equal As Strings  ${resp.json()[0]['status']}                      ${VarStatus[0]} 
+
+JD-TC-GetTemplateByFilter-14
+
+    [Documentation]  Create multiple templates then get it by comm target filter and verify.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME253}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${temp_name}=    FakerLibrary.word
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
+    ${comm_target1}=  Create List   ${CommTarget[0]}  
+    
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target1}    ${comm_chanl} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${temp_id1}  ${resp.content}
+
+    ${temp_name1}=    FakerLibrary.word
+    ${content_msg1}=      FakerLibrary.sentence
+    ${content1}=    Create Dictionary  intro=${content_msg1}
+    ${comm_chanl1}=  Create List   ${CommChannel[1]}   ${CommChannel[2]} 
+    ${comm_target2}=  Create List   ${CommTarget[0]}  
+    
+    ${resp}=  Create Template   ${temp_name1}  ${content1}  ${templateFormat[0]}  ${VariableContext[2]}  ${comm_target2}    ${comm_chanl1} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${temp_id2}  ${resp.content}
+
+    ${temp_name2}=    FakerLibrary.word
+    ${content_msg2}=      FakerLibrary.sentence
+    ${content2}=    Create Dictionary  intro=${content_msg2}
+    ${comm_chanl2}=  Create List   ${CommChannel[2]}    ${CommChannel[3]}
+    ${comm_target3}=  Create List   ${CommTarget[1]}  
+    
+    ${resp}=  Create Template   ${temp_name2}  ${content2}  ${templateFormat[0]}  ${VariableContext[1]}  ${comm_target3}    ${comm_chanl2} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${temp_id3}  ${resp.content}
+
+    ${resp}=  Get Template By Filter   CommTarget-eq=${CommTarget[0]}, ${CommChannel[1]}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${len}=  Get Length  ${resp.json()}
+
+    FOR  ${i}  IN RANGE   ${len}
+
+        IF  '${resp.json()[${i}]['id']}' == '${temp_id1}'  
+            Should Be Equal As Strings  ${resp.json()[${i}]['accountId']}                   ${account_id} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['templateName']}                ${temp_name}
+            Should Be Equal As Strings  ${resp.json()[${i}]['context']}                     ${VariableContext[0]} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['commChannel']}                 ${comm_chanl} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['templateFormat']}              ${templateFormat[0]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['content']['intro']}            ${content_msg}
+            Should Be Equal As Strings  ${resp.json()[${i}]['commTarget']}                  ${comm_target1} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['status']}                      ${VarStatus[0]} 
+
+        ELSE IF     '${resp.json()[${i}]['id']}' == '${temp_id2}'            
+            Should Be Equal As Strings  ${resp.json()[${i}]['accountId']}                   ${account_id} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['templateName']}                ${temp_name1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['context']}                     ${VariableContext[2]} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['commChannel']}                 ${comm_chanl1} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['templateFormat']}              ${templateFormat[0]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['content']['intro']}            ${content_msg1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['commTarget']}                  ${comm_target2} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['status']}                      ${VarStatus[0]} 
+        
+        ELSE IF     '${resp.json()[${i}]['id']}' == '${temp_id3}'            
+            Should Be Equal As Strings  ${resp.json()[${i}]['accountId']}                   ${account_id} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['templateName']}                ${temp_name2}
+            Should Be Equal As Strings  ${resp.json()[${i}]['context']}                     ${VariableContext[2]} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['commChannel']}                 ${comm_chanl2} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['templateFormat']}              ${templateFormat[0]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['content']['intro']}            ${content_msg2}
+            Should Be Equal As Strings  ${resp.json()[${i}]['commTarget']}                  ${comm_target3} 
+            Should Be Equal As Strings  ${resp.json()[${i}]['status']}                      ${VarStatus[0]} 
+        END
+    END
+
+JD-TC-GetTemplateByFilter-15
+
+    [Documentation]  Create multiple templates then get it by send comm id filter and verify.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME254}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${resp}=  Get Send Comm List
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${sendcomm_id1}   ${resp.json()[1]['id']}
+    Set Test Variable   ${context_id1}  ${resp.json()[0]['context']}
+
+    ${resp}=  Get Dynamic Variable List By Context   ${context_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${dynamic_var1}   ${resp.json()[1]['name']}
+ 
+    ${temp_name}=    FakerLibrary.word
+    ${details}=  Create Dictionary   JALDEE OTP=${EMPTY}
+    ${content_msg}=      FakerLibrary.sentence   
+    ${content_msg}=     Catenate   SEPARATOR=\n
+    ...             ${content_msg} [${dynamic_var1}].
+    ${content}=    Create Dictionary  intro=${content_msg}   cts=${EMPTY}  
+    ${tempheader_sub}=      FakerLibrary.sentence   5
+    ${salutation}=      FakerLibrary.word
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  ${CommChannel[2]}  ${CommChannel[3]}  ${CommChannel[4]}
+    ${comm_target}=  Create List   ${CommTarget[1]}  
+    ${signature}=   FakerLibrary.hostname
+    ${salutation}=     Set Variable  ${salutation} [${dynamic_var1}].
+
+    ${temp_header}=    Create Dictionary  subject=${tempheader_sub}   salutation=${salutation}  note=${EMPTY}
+    ${temp_footer}=    Create Dictionary  closing=${EMPTY}   signature=${signature}  
+
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl}  
+    ...    templateHeader=${temp_header}  footer=${temp_footer}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200  
+    Set Test Variable   ${temp_id1}   ${resp.content}
+
+    ${resp}=  Get Template By Filter   CommChannel-eq=${CommChannel[2]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()[0]['id']}                          ${temp_id3} 
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}                   ${account_id} 
+    Should Be Equal As Strings  ${resp.json()[0]['templateName']}                ${temp_name1}
+    Should Be Equal As Strings  ${resp.json()[0]['context']}                     ${VariableContext[0]} 
+    Should Be Equal As Strings  ${resp.json()[0]['commChannel']}                 ${comm_chanl} 
+    Should Be Equal As Strings  ${resp.json()[0]['templateFormat']}              ${templateFormat[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['content']['intro']}            ${content_msg}
+    Should Be Equal As Strings  ${resp.json()[0]['commTarget']}                  ${comm_target} 
+    Should Be Equal As Strings  ${resp.json()[0]['status']}                      ${VarStatus[0]} 
 
 JD-TC-GetTemplateByFilter-UH1
 

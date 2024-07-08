@@ -51,7 +51,7 @@ JD-TC-UpdateTemplateSettings-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${temp_setid1}  ${resp.json()}
 
-    ${resp}=  Update Template Settings   ${temp_setid1}  ${temp_id1}  ${VariableContext[0]}  ${sendcomm_id1}  ${CommTarget[0]}    ${CommChannel[1]}
+    ${resp}=  Update Template Settings   ${temp_setid1}   sendComm=${sendcomm_id1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -113,7 +113,7 @@ JD-TC-UpdateTemplateSettings-2
     Should Be Equal As Strings  ${resp.json()['commChannel']}                 ${CommChannel[1]} 
     Should Be Equal As Strings  ${resp.json()['status']}                      ${VarStatus[0]} 
 
-    ${resp}=  Update Template Settings   ${temp_setid1}  ${temp_id1}  ${VariableContext[0]}  ${sendcomm_id2}  ${CommTarget[0]}    ${CommChannel[1]}
+    ${resp}=  Update Template Settings   ${temp_setid1}   sendComm=${sendcomm_id2}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

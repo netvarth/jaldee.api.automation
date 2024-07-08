@@ -279,7 +279,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{spItemSource}                     RX       Ayur
 @{VariableValueType}                String  Number  Decimal  Date  Link  File
 @{VarStatus}                        Enabled  Disabled
-@{VariableContext}                  Signup  Appointment  Token  Order  Donation  Payment  All
+@{VariableContext}                  CHECKIN  APPOINTMENT  DONATION  ACCOUNT  ORDER  COMMUNICATION  TASK  LOGIN  MEMBERSHIP  DEALEAR  LOAN_APPLICATION  CLOUD_ADMIN
 @{InventoryAuditType}               PURCHASE        STOCK_ADJUST        INV_CATALOG        REMARK
 @{InventoryAuditContext}            PURCHASE        INVENTORY        ITEM        CATALOG
 @{InventoryAuditLogAction}          ADD             UPDATE             REMOVE             UPDATE_STATUS
