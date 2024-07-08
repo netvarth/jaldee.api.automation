@@ -2470,14 +2470,15 @@ LOGINID_CANNOT_BE_EMPTY= "LoginId should not be empty"
 PHONE_NOT_REGISTERED= "PhoneNo not registered"
 EMAIL_NOT_REGISTERED= "Email not registered"
 LOGIN_INVALID_USERID_PASSWORD = "Invalid password."
-LOGIN_ID_REQ= "LoginId Required"
+LOGIN_ID_REQ= "A valid LoginId Required"
 CANT_SWITCH_TO_YOURSELF= "You can't switch to yourself"
 CANT_LINK_YOURSELF= "You can't link with yourself"
 CANT_LINK_SA= "You can't link with System Accounts"
 LOGIN_ID_LIMIT= "Loginid must a string of with  minimum of 4 characters and maximum of 40 characters."
 ACCOUNT_DEACTIVATED_BASE = "Your account has been disabled. To restore your account, please contact your service provider."
-LOGIN_LOGINiD_VALIDATION_NOT_FOUND = "Loginid validation failed."
+# LOGIN_LOGINiD_VALIDATION_NOT_FOUND = "Loginid validation failed."
 LOGIN_PASSWORD_VALIDATION_NOT_FOUND = "Password must be of minimum 8 chars with  one Number and one Capical letter"
+LOGIN_LOGINiD_VALIDATION_NOT_FOUND = "LogiId must be string with charectors number seperated by dot,underScore or @  "
 
 #   ConsumerOrder
 
