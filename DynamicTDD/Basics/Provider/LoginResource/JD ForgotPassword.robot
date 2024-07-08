@@ -259,4 +259,3 @@ JD-TC-Forgot_Password-5
     ${resp}=    Forgot Password     otp=${key_old}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-

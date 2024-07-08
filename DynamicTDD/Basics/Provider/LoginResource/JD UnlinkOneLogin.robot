@@ -349,7 +349,7 @@ JD-TC-UNLINK_ONE_LOGIN-UH4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${inv}=  Random Int  min=100  max=200
+    ${inv}=  Random Int  min=1111  max=999999
 
     ${resp}=    Unlink one login  ${inv}
     Log   ${resp.content}

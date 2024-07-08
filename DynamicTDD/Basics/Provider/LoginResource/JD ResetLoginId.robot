@@ -14,8 +14,16 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 *** Variables ***
       
 ${withsym}      *#147erd
-${onlyspl}      !@#$%^&
+${onlyspl}      !@#$%^&.-
 ${alph_digits}  D3r52A
+${withus}       Abc_1234
+${withat}       ABC@12
+${withdot}      ABC.12
+${withatanuc}  ABC_@12
+${ucafterat}   ABC@_d
+${validpasswithsym}    ABCD1234@
+${lesspass}     ABCD123
+${validpass}    ABCD1234
 
 *** Test Cases ***
 
@@ -59,7 +67,7 @@ JD-TC-Reset_LoginId-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${loginId}=     Random Int  min=1  max=9999
+    ${loginId}=     Random Int  min=1111  max=9999
     Set Suite Variable      ${loginId}
     
     ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId}
@@ -71,7 +79,7 @@ JD-TC-Reset_LoginId-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable      ${id}  ${resp.json()['id']}
 
-    ${loginId_n}=     Random Int  min=1  max=9999
+    ${loginId_n}=     Random Int  min=1111  max=9999
     Set Suite Variable      ${loginId_n}
 
     ${resp}=    Reset LoginId  ${id}  ${loginId_n}
@@ -112,7 +120,7 @@ JD-TC-Reset_LoginId-UH2
 
     [Documentation]    Reset login Id - without login
 
-    ${loginId_n2}=     Random Int  min=1  max=9999
+    ${loginId_n2}=     Random Int  min=1111  max=9999
 
     ${resp}=    Reset LoginId  ${id}  ${loginId_n2}
     Log   ${resp.content}
@@ -140,7 +148,7 @@ JD-TC-Reset_LoginId-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${loginId2}=     Random Int  min=1  max=9999
+    ${loginId2}=     Random Int  min=1111  max=9999
     Set Suite Variable      ${loginId2}
     
     ${resp}=  Account Set Credential  ${ph2}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId2}
@@ -150,7 +158,7 @@ JD-TC-Reset_LoginId-3
     ${resp}=  Provider Login  ${loginId2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph}${\n}
+    Set Suite Variable      ${id2}  ${resp.json()['id']}
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -176,7 +184,7 @@ JD-TC-Reset_LoginId-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${new}=     Random Int  min=100   max=200
+    ${new}=     Random Int  min=1111  max=9999
     Set Suite Variable      ${new}
 
     ${resp}=    Reset LoginId  ${id}  ${new}
@@ -259,12 +267,11 @@ JD-TC-Reset_LoginId-UH7
     ${resp}=    Reset LoginId  ${id}  ${empty}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${LOGINID_CANNOT_BE_EMPTY}
+    Should Be Equal As Strings    ${resp.json()}    ${INV_LOGIN_ID}
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-
 
 JD-TC-Reset_LoginId-4
 
@@ -316,7 +323,7 @@ JD-TC-Reset_LoginId-4
     Set Suite Variable  ${user1_id}       ${resp.json()['id']}
     Set Suite Variable  ${user_num}    ${resp.json()['mobileNo']}
 
-    ${loginId_n}=     Random Int  min=1  max=9999
+    ${loginId_n}=     Random Int  min=1111  max=9999
     Set Suite Variable      ${loginId_n}
 
     ${resp}=    Reset LoginId  ${user1_id}  ${loginId_n}
@@ -345,6 +352,172 @@ JD-TC-Reset_LoginId-4
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Provider Login  ${loginId_n}  ${Password_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Reset_LoginId-UH8
+
+    [Documentation]    Reset login Id - login id with * and #
+
+    ${resp}=  Provider Login  ${new}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Reset LoginId  ${id}  ${withsym}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${LOGIN_LOGINiD_VALIDATION_NOT_FOUND}
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Reset_LoginId-UH9
+
+    [Documentation]    Reset login Id - login id only with symbols
+
+    ${resp}=  Provider Login  ${new}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Reset LoginId  ${id}  ${onlyspl}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${LOGIN_LOGINiD_VALIDATION_NOT_FOUND}
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Reset_LoginId-5
+
+    [Documentation]    Reset login Id - login id only with alphabet and digits
+
+    ${resp}=  Provider Login  ${new}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Reset LoginId  ${id}  ${alph_digits}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Reset_LoginId-6
+
+    [Documentation]    Reset login Id - login id only with _
+
+    ${resp}=  Provider Login  ${alph_digits}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Reset LoginId  ${id}  ${withus}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Reset_LoginId-7
+
+    [Documentation]    Reset login Id - login id with @
+
+    ${resp}=  Provider Login  ${withus}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Reset LoginId  ${id}  ${withat}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Reset_LoginId-8
+
+    [Documentation]    Reset login Id - login id with .
+
+    ${resp}=  Provider Login  ${withat}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Reset LoginId  ${id}  ${withdot}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+JD-TC-Reset_LoginId-9
+
+    [Documentation]    Reset login Id - login id with _ and @
+
+    ${resp}=  Provider Login  ${withdot}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Reset LoginId  ${id}  ${withatanuc}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Reset_LoginId-UH10
+
+    [Documentation]    Reset login Id - login id where _ is after @
+
+    ${resp}=  Provider Login  ${withatanuc}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Reset LoginId  ${id}  ${ucafterat}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${LOGIN_LOGINiD_VALIDATION_NOT_FOUND}
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Reset_LoginId-UH11
+
+    [Documentation]    Reset login Id - reset login id where same mobile number have 2 logins
+
+    ${resp}=  Account SignUp  ${firstname2}  ${lastname2}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph2}   1
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${ph2}  ${OtpPurpose['ProviderSignUp']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${loginId_22}=     Random Int  min=1111  max=9999
+    Set Suite Variable      ${loginId_22}
+    
+    ${resp}=  Account Set Credential  ${ph2}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId_22}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Provider Login  ${loginId_22}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable      ${id22}  ${resp.json()['id']}
+
+    ${log2}=    Random Int  min=1111  max=9999
+
+    ${resp}=    Reset LoginId  ${id22}  ${log2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

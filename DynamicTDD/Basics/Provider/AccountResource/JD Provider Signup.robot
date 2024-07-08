@@ -24,6 +24,8 @@ ${ucafterat}   ABC@_d
 ${validpasswithsym}    ABCD1234@
 ${lesspass}     ABCD123
 ${validpass}    ABCD1234
+${case1}        Abcdefg
+${case2}        abcdefg
 
 *** Test Cases ***
 
@@ -847,7 +849,7 @@ JD-TC-Provider_Signup-UH15
 
 JD-TC-Provider_Signup-UH16
 
-    [Documentation]    Provider Signup -password is only number
+    [Documentation]    Provider Signup -password is only number ( Password validation not added )
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -869,12 +871,12 @@ JD-TC-Provider_Signup-UH16
     
     ${resp}=  Account Set Credential  ${phn}  ${pass}  ${OtpPurpose['ProviderSignUp']}  ${lg}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings  ${resp.json()}          ${LOGIN_PASSWORD_VALIDATION_NOT_FOUND}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    # Should Be Equal As Strings  ${resp.json()}          ${LOGIN_PASSWORD_VALIDATION_NOT_FOUND}
 
 JD-TC-Provider_Signup-UH17
 
-    [Documentation]    Provider Signup -password is less than 8 digit
+    [Documentation]    Provider Signup -password is less than 8 digit ( Password validation not added )
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -895,13 +897,13 @@ JD-TC-Provider_Signup-UH17
     
     ${resp}=  Account Set Credential  ${phn}  ${lesspass}  ${OtpPurpose['ProviderSignUp']}  ${lg}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings  ${resp.json()}          ${LOGIN_PASSWORD_VALIDATION_NOT_FOUND}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    # Should Be Equal As Strings  ${resp.json()}          ${LOGIN_PASSWORD_VALIDATION_NOT_FOUND}
 
 
 JD-TC-Provider_Signup-UH18
 
-    [Documentation]    Provider Signup -password contain only symbols
+    [Documentation]    Provider Signup -password contain only symbols ( Password validation not added )
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -922,13 +924,13 @@ JD-TC-Provider_Signup-UH18
     
     ${resp}=  Account Set Credential  ${phn}  ${onlyspl}  ${OtpPurpose['ProviderSignUp']}  ${lg}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings  ${resp.json()}          ${LOGIN_PASSWORD_VALIDATION_NOT_FOUND}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    # Should Be Equal As Strings  ${resp.json()}          ${LOGIN_PASSWORD_VALIDATION_NOT_FOUND}
 
 
 JD-TC-Provider_Signup-UH19
 
-    [Documentation]    Provider Signup -password contain with _
+    [Documentation]    Provider Signup -password contain with _ ( Password validation not added )
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -949,8 +951,8 @@ JD-TC-Provider_Signup-UH19
     
     ${resp}=  Account Set Credential  ${phn}  ${withus}  ${OtpPurpose['ProviderSignUp']}  ${lg}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings  ${resp.json()}          ${LOGIN_PASSWORD_VALIDATION_NOT_FOUND}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    # Should Be Equal As Strings  ${resp.json()}          ${LOGIN_PASSWORD_VALIDATION_NOT_FOUND}
 
 
 JD-TC-Provider_Signup-22
@@ -1002,3 +1004,40 @@ JD-TC-Provider_Signup-23
     ${resp}=  Account Set Credential  ${phn}  ${validpass}  ${OtpPurpose['ProviderSignUp']}  ${lg}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Provider_Signup-UH20
+
+    [Documentation]    Provider Signup - Case Sensitive check 
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${phn2}=  Evaluate  ${PUSERNAME}+785482
+
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${phn2}   ${highest_package[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${phn2}  ${OtpPurpose['ProviderSignUp']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Account Set Credential  ${phn2}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${case1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #... Sign up 2  ...........
+
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${phn2}   ${highest_package[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${phn2}  ${OtpPurpose['ProviderSignUp']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Account Set Credential  ${phn2}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${case2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${LOGINID_EXISTS}

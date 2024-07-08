@@ -11,11 +11,6 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables       /ebs/TDD/varfiles/providers.py
 Variables       /ebs/TDD/varfiles/consumerlist.py 
 
-*** Variables ***
-      
-${withsym}      *#147erd
-${onlyspl}      !@#$%^&
-${alph_digits}  D3r52A
 
 *** Test Cases ***
 

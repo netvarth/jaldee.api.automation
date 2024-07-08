@@ -6,7 +6,6 @@ Library           String
 Library           json
 Library           /ebs/TDD/db.py
 Library           FakerLibrary
-Library             RandomNumber.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
@@ -399,10 +398,6 @@ JD-TC-Provider_Login-8
     
     ${resp}=  Account Set Credential  ${phn}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId_Phn}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
-    ${resp}=  Provider Login  ${loginId_Phn}  ${PASSWORD}
-    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  ${resp.json()}          ${LOGIN_ID_LIMIT}
 
@@ -422,10 +417,6 @@ JD-TC-Provider_Login-9
     ${random_number}=    Random Number 	       digits=41
     
     ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${random_number}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
-    ${resp}=  Provider Login  ${random_number}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  ${resp.json()}          ${LOGIN_ID_LIMIT}
