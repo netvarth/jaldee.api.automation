@@ -2459,7 +2459,7 @@ INVALID_PACKAGE_ID = "Invalid license package"
 # NOT_REGISTERED_CUSTOMER = "This login is not registered with Jaldee. Sign up now with Jaldee to avail our services."
 ENTER_LOGIN_ID = "Please enter your login ID"
 LOGINID_EXISTS = "LoginId already Exists, Please try with another"
-ALREADY_UNLINKED = "Unlinking loginId doesn't link with logged in logId"
+ALREADY_UNLINKED = "Unlinking loginId doesn't link with logged in account"
 EXISTING_LOGINID = "LoginId already Exists"
 ALREADY_LINKED = "loginId already linked"
 EMAIL_OR_PHONE_REQ= "Phone No or Email Required"
@@ -2479,6 +2479,7 @@ ACCOUNT_DEACTIVATED_BASE = "Your account has been disabled. To restore your acco
 # LOGIN_LOGINiD_VALIDATION_NOT_FOUND = "Loginid validation failed."
 LOGIN_PASSWORD_VALIDATION_NOT_FOUND = "Password must be of minimum 8 chars with  one Number and one Capical letter"
 LOGIN_LOGINiD_VALIDATION_NOT_FOUND = "LogiId must be string with charectors number seperated by dot,underScore or @  "
+INV_LOGIN_ID=   "Invalid LoginId"
 
 #   ConsumerOrder
 
