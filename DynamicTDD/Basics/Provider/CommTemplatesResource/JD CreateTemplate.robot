@@ -816,7 +816,7 @@ JD-TC-CreateTemplate-28
     ${resp}=  Get Default Template List by sendComm   ${sendcomm_id1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable   ${deftemp_id1}   ${resp.json()['templates'][3]['id']}
+    Set Suite Variable   ${deftemp_id1}   ${resp.json()['templates'][0]['id']}
 
     ${resp}=  Get Default Template Preview   ${sendcomm_id1}  ${deftemp_id1}  
     Log   ${resp.content}
@@ -834,7 +834,8 @@ JD-TC-CreateTemplate-28
     Set Test Variable   ${temp_format1}     ${resp.json()['templateFormat']}
     Set Test Variable   ${dyn_vars}         ${resp.json()['variables']['content']}
 
-    ${resp}=  Create Template   ${temp_name1}  ${content1}  ${temp_format1}  ${context1}  ${comm_target1}    ${comm_chanl1} 
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
+    ${resp}=  Create Template   ${temp_name1}  ${content1}  ${temp_format1}  ${context1}  ${comm_target1}    ${comm_chanl} 
     ...     templateHeader=${temp_header1}  footer=${temp_footer1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200

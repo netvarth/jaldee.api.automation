@@ -46,7 +46,7 @@ JD-TC-CreateTemplatePreview-2
     ${resp}=  Get Send Comm List
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable   ${context_id1}  ${resp.json()[0]['context']}
+    Set Suite Variable   ${context_id1}  ${resp.json()[0]['context'][0]}
 
     ${resp}=  Get Dynamic Variable List By Context   ${context_id1}
     Log   ${resp.content}

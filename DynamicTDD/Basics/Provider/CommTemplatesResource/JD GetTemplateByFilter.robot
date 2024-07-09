@@ -549,7 +549,7 @@ JD-TC-GetTemplateByFilter-9
     ${resp}=  Get Send Comm List
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${context_id1}  ${resp.json()[0]['context']}
+    Set Test Variable   ${context_id1}  ${resp.json()[0]['context'][0]}
 
     ${resp}=  Get Dynamic Variable List By Context   ${context_id1}
     Log   ${resp.content}
@@ -650,7 +650,7 @@ JD-TC-GetTemplateByFilter-10
     ${resp}=  Get Send Comm List
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${context_id1}  ${resp.json()[0]['context']}
+    Set Test Variable   ${context_id1}  ${resp.json()[0]['context'][0]}
 
     ${resp}=  Get Dynamic Variable List By Context   ${context_id1}
     Log   ${resp.content}
@@ -1068,7 +1068,7 @@ JD-TC-GetTemplateByFilter-15
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${sendcomm_id1}   ${resp.json()[1]['id']}
-    Set Test Variable   ${context_id1}  ${resp.json()[0]['context']}
+    Set Test Variable   ${context_id1}  ${resp.json()[0]['context'][0]}
 
     ${resp}=  Get Dynamic Variable List By Context   ${context_id1}
     Log   ${resp.content}

@@ -790,7 +790,7 @@ JD-TC-UpdateTemplate-13
     ${resp}=  Get Send Comm List
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${context_id1}  ${resp.json()[0]['context']}
+    Set Test Variable   ${context_id1}  ${resp.json()[0]['context'][0]}
 
     ${resp}=  Get Dynamic Variable List By Context   ${context_id1}
     Log   ${resp.content}
