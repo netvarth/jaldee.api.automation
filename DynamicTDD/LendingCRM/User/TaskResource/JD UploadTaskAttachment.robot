@@ -31,10 +31,6 @@ ${docfile}     /ebs/TDD/docsample.doc
 ${txtfile}     /ebs/TDD/textsample.txt
 ${self}         0
 
-
-
-
-
 *** Test Cases ***
 
 JD-TC-UploadTaskAttachment-1

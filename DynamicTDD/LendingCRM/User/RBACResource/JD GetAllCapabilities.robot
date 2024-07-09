@@ -42,3 +42,33 @@ JD-TC-Get All Capabilities-1
 
     ${resp}=  Get All Capabilities      
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${cnt}=    Get length    ${resp.json()}
+    should be equal as numbers  ${cnt}  3
+
+JD-TC-Get All Capabilities-2
+
+    [Documentation]   Provider  enable cdl rbac then try to get capabilities by feature.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    IF  ${resp.json()['enableRbac']}==${bool[0]}
+        ${resp1}=  Enable Disable CDL RBAC  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get All Capabilities      
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${cnt}=    Get length    ${resp.json()}
+    should be equal as numbers  ${cnt}  3
+     
