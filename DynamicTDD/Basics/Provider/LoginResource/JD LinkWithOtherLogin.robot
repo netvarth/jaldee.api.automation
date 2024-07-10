@@ -42,7 +42,7 @@ JD-TC-Link_With_Other_Login-1
 
     # ........ Provider 1 ..........
 
-    ${ph}=  Evaluate  ${PUSERNAME}+5666400
+    ${ph}=  Evaluate  ${PUSERNAME}+5666514
     Set Suite Variable  ${ph}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -182,7 +182,7 @@ JD-TC-Link_With_Other_Login-4
 
     # ........ Provider 3 ..........
 
-    ${ph3}=  Evaluate  ${PUSERNAME}+5666400
+    ${ph3}=  Evaluate  ${PUSERNAME}+8745862
     Set Suite Variable  ${ph3}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -526,7 +526,7 @@ JD-TC-Link_With_Other_Login-UH6
 
     [Documentation]    Link With other login - where provider is Deactivated 
 
-    ${phone}=  Evaluate  ${PUSERNAME}+5666400
+    ${phone}=  Evaluate  ${PUSERNAME}+5741548
     Set Suite Variable  ${phone}
     ${firstname_u1}=  FakerLibrary.first_name
     ${lastname_u1}=  FakerLibrary.last_name
