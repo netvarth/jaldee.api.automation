@@ -1187,3 +1187,233 @@ JD-TC-Get Order By UID-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings    ${resp.json()}    ${FIELD_REQUIRED}
+
+JD-TC-Get Order By UID-5
+
+    [Documentation]  add one item to cart then remove that item then add another item ,update that one.again update from cart then try to checkout order
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME153}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableInventory']}==${bool[0]}
+        ${resp1}=  Enable Disable Inventory  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+
+        ${resp}=  Get Account Settings
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['enableInventory']}  ${bool[1]}
+    END
+
+    IF  ${resp.json()['enableSalesOrder']}==${bool[0]}
+        ${resp1}=  Enable/Disable SalesOrder  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+
+        ${resp}=  Get Account Settings
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['enableSalesOrder']}  ${bool[1]}
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
+    ${resp}=  Get Store Type By Filter     
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${TypeName}=    FakerLibrary.name
+    Set Test Variable  ${TypeName}
+# -------------------------------- Create store type -----------------------------------
+    ${resp}=  Create Store Type   ${TypeName}    ${storeNature[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable    ${St_Id}    ${resp.json()}
+    sleep  02s
+
+    ${resp}=  Get Store Type By EncId   ${St_Id}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
+    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
+    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME153}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${accountId}=  get_acc_id  ${PUSERNAME153}
+    Set Test Variable    ${accountId} 
+
+    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
+    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
+    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${locId1}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ELSE
+        Set Test Variable  ${locId1}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    END
+
+    ${Name}=    FakerLibrary.last name
+    Set Test Variable    ${Name}
+    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+309167748
+    Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
+    ${email}=  Create List  ${email_id}
+
+    ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}   onlineOrder=${boolean[1]}    walkinOrder=${boolean[1]}   partnerOrder=${boolean[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${store_id}  ${resp.json()}
+
+    ${resp}=    Get Store ByEncId   ${store_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable    ${Stidd}    ${resp.json()['id']}
+
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}   onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[0]}  storePickup=${boolean[1]}  homeDelivery=${boolean[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable              ${soc_id1}    ${resp.json()}
+
+
+    ${displayName}=     FakerLibrary.name
+    Set Test Variable              ${displayName} 
+
+    ${resp}=    Create Item Inventory  ${displayName}     isBatchApplicable=${boolean[0]}    isInventoryItem=${bool[0]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${itemEncId1}  ${resp.json()}
+
+    ${price}=    Random Int  min=2   max=40
+    ${price}=                    Convert To Number  ${price}  1
+    Set Test Variable              ${price} 
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${soc_id1}     ${itemEncId1}     ${price}      minSaleQuantity=${minSaleQuantity}  maxSaleQuantity=${maxSaleQuantity}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${SOC_itemEncIds1}  ${resp.json()[0]}
+
+
+
+
+
+# -------------------------------- Add a provider Consumer -----------------------------------
+
+    ${firstName}=  FakerLibrary.name
+    Set Test Variable    ${firstName}
+    ${lastName}=  FakerLibrary.last_name
+    Set Test Variable    ${lastName}
+    ${primaryMobileNo}    Generate random string    10    123456789
+    ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
+    Set Test Variable    ${primaryMobileNo}
+ 
+
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   12
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email_id}    ${primaryMobileNo}     ${accountId}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200    
+   
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+
+
+
+    ${quantity}=  FakerLibrary.Random Int  min=${minSaleQuantity}   max=${maxSaleQuantity}
+    ${quantity}=                    Convert To Number  ${quantity}  1
+    ${item1}=  Evaluate  ${price}*${quantity}
+
+
+    ${catalogItem}=  Create Dictionary    encId=${SOC_itemEncIds1}
+
+    ${catalogItems}=  Create Dictionary    catalogItem=${catalogItem}  quantity=${quantity}
+
+
+
+    ${resp}=  Create Cart From Consumerside      ${store_id}    ${cid}      ${deliveryType[0]}    ${catalogItems}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable    ${cart_uid}    ${resp.json()['uid']}
+
+    ${resp}=    Get ConsumerCart With Items By Uid   ${cart_uid} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable    ${cartItemUid1}    ${resp.json()['items'][0]['uid']}                     
+
+
+    ${resp}=    Remove Item From Cart   ${cartItemUid1} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Create Cart From Consumerside      ${store_id}    ${cid}      ${deliveryType[0]}    ${catalogItems}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable    ${cart_uid}    ${resp.json()['uid']}
+
+    ${resp}=    Get ConsumerCart With Items By Uid   ${cart_uid} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable    ${cartItemUid1}    ${resp.json()['items'][0]['uid']}  
+
+    ${quantity1}=  FakerLibrary.Random Int  min=${minSaleQuantity}   max=${maxSaleQuantity}
+    ${quantity1}=                    Convert To Number  ${quantity1}  1
+    ${resp}=  Update Cart Items     ${cartUid}   ${SOC_itemEncIds1}    ${quantity1}     uid=${cartItemUid1}      
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${FIELD_REQUIRED}=  format String   ${FIELD_REQUIRED}   items 
+    ${postcode}=  FakerLibrary.postcode
+    ${phone}=  Create Dictionary    number=${primaryMobileNo}   countryCode=91
+    ${homeDeliveryAddress}=  Create Dictionary    firstName=${firstName}  lastName=${lastName}  email=${email_id}   address=${Name}  city=${firstName}  postalCode=${postcode}   phone=${phone}
+    ${resp}=    CheckOut Cart Items   ${cart_uid}   homeDeliveryAddress=${homeDeliveryAddress}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${FIELD_REQUIRED}
