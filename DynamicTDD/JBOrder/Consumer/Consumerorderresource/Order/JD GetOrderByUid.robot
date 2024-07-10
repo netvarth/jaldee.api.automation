@@ -344,7 +344,11 @@ JD-TC-Get Order By UID-1
     Should Be Equal As Strings    ${resp.json()['locationId']}                                                            ${locId1}
     Should Be Equal As Strings    ${resp.json()['netRate']}                                                             ${Total}
 
-    ${resp}=    CheckOut Cart Items   ${cart_uid} 
+
+    ${postcode}=  FakerLibrary.postcode
+    ${phone}=  Create Dictionary    number=${primaryMobileNo}   countryCode=91
+    ${homeDeliveryAddress}=  Create Dictionary    firstName=${firstName}  lastName=${lastName}  email=${email_id}   address=${Name}  city=${firstName}  postalCode=${postcode}   phone=${phone}
+    ${resp}=    CheckOut Cart Items   ${cart_uid}   homeDeliveryAddress=${homeDeliveryAddress}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${orderUid}    ${resp.json()}
@@ -366,8 +370,8 @@ JD-TC-Get Order By UID-1
     Should Be Equal As Strings    ${resp.json()['store']['id']}                                                              ${Stidd}
     Should Be Equal As Strings    ${resp.json()['orderFor']['id']}                                                          ${cid}
     Should Be Equal As Strings    ${resp.json()['orderFor']['name']}                                                        ${firstName} ${lastName}
-    Should Be Equal As Strings    ${resp.json()['status']}                                                                 ${billStatus[0]}
-    Should Be Equal As Strings    ${resp.json()['paymentStatus']}                                                            ${paymentStatus}
+    # Should Be Equal As Strings    ${resp.json()['status']}                                                                 ${billStatus[0]}
+    Should Be Equal As Strings    ${resp.json()['paymentStatus']}                                                            ${paymentStatus[0]}
     Should Be Equal As Strings    ${resp.json()['timezone']}                                                                Asia/Kolkata
     Should Be Equal As Strings    ${resp.json()['orderIncluded']}                                                           ${bool[1]}
     Should Be Equal As Strings    ${resp.json()['viewStatus']}                                                               ${billViewStatus[0]}

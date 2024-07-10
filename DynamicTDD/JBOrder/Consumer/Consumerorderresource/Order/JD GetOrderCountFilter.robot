@@ -348,7 +348,10 @@ JD-TC-Get OrderCount Filter-1
     Should Be Equal As Strings    ${resp.json()['locationId']}                                                            ${locId1}
     Should Be Equal As Strings    ${resp.json()['netRate']}                                                             ${Total}
 
-    ${resp}=    CheckOut Cart Items   ${cart_uid} 
+    ${postcode}=  FakerLibrary.postcode
+    ${phone}=  Create Dictionary    number=${primaryMobileNo}   countryCode=91
+    ${homeDeliveryAddress}=  Create Dictionary    firstName=${firstName}  lastName=${lastName}  email=${email_id}   address=${Name}  city=${firstName}  postalCode=${postcode}   phone=${phone}
+    ${resp}=    CheckOut Cart Items   ${cart_uid}   homeDeliveryAddress=${homeDeliveryAddress}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${orderUid}    ${resp.json()}
@@ -435,8 +438,7 @@ JD-TC-Get OrderCount Filter-6
 
     ${resp}=    Get Order Count- Filter   deliveryType-eq=${deliveryType} 
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['accountId']}                                                               ${accountId}
+    Should Be Equal As Strings    ${resp.status_code}    200                                                            ${accountId}
     Should Be Equal As Strings   ${resp.json()}    1
 
 

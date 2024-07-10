@@ -262,6 +262,6 @@ JD-TC-Get Catalog Items Using ItemEncid-1
     # END
 
 
-    ${resp}=    Get catalog item by item encId   ${SOC_itemEncIds1} 
+    ${resp}=    Get catalog item by item encId      ${accountId}   ${SOC_itemEncIds1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200

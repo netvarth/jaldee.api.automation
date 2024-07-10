@@ -342,7 +342,11 @@ JD-TC-Get Invoice Filter-1
     Should Be Equal As Strings    ${resp.json()['locationId']}                                                            ${locId1}
     Should Be Equal As Strings    ${resp.json()['netRate']}                                                             ${Total}
 
-    ${resp}=    CheckOut Cart Items   ${cart_uid} 
+
+    ${postcode}=  FakerLibrary.postcode
+    ${phone}=  Create Dictionary    number=${primaryMobileNo}   countryCode=91
+    ${homeDeliveryAddress}=  Create Dictionary    firstName=${firstName}  lastName=${lastName}  email=${email_id}   address=${Name}  city=${firstName}  postalCode=${postcode}   phone=${phone}
+    ${resp}=    CheckOut Cart Items   ${cart_uid}   homeDeliveryAddress=${homeDeliveryAddress}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${orderUid}    ${resp.json()}
@@ -379,7 +383,7 @@ JD-TC-Get Invoice Filter-1
     # Should Be Equal As Strings    ${resp.json()[0]['prePaymentAmount']}                                                           ${Total}
 
 
-    ${resp}=    Get invoice- Filter   providerconsumerId-eq=${cid}   invoiceNum-eq=${invoiceNum}   paymentStatus-eq= ${paymentStatus[0]}   orderUid-eq=${orderUid}    amountDue-eq=${Total}   netRate-eq=${Total}
+    ${resp}=    Get invoice- Filter   providerConsumerId-eq=${cid}   invoiceNum-eq=${invoiceNum}   paymentStatus-eq=${paymentStatus[0]}   orderUid-eq=${orderUid}    amountDue-eq=${Total}   netRate-eq=${Total}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

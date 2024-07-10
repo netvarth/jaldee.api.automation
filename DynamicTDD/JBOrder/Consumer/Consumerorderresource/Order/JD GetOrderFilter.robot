@@ -347,7 +347,12 @@ JD-TC-Get Order Filter-1
     Should Be Equal As Strings    ${resp.json()['locationId']}                                                            ${locId1}
     Should Be Equal As Strings    ${resp.json()['netRate']}                                                             ${Total}
 
-    ${resp}=    CheckOut Cart Items   ${cart_uid} 
+
+    ${postcode}=  FakerLibrary.postcode
+    ${phone}=  Create Dictionary    number=${primaryMobileNo}   countryCode=91
+    ${homeDeliveryAddress}=  Create Dictionary    firstName=${firstName}  lastName=${lastName}  email=${email_id}   address=${Name}  city=${firstName}  postalCode=${postcode}   phone=${phone}
+
+    ${resp}=    CheckOut Cart Items   ${cart_uid}    homeDeliveryAddress=${homeDeliveryAddress}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${orderUid}    ${resp.json()}
@@ -391,9 +396,9 @@ JD-TC-Get Order Filter-1
     Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                                                 ${Total}
     Should Be Equal As Strings    ${resp.json()[0]['amountDue']}                                                                 ${Total}
     Should Be Equal As Strings    ${resp.json()[0]['prePaymentAmount']}                                                                 ${Total}
-    Should Be Equal As Strings    ${resp.json()[0]['order']['uid']}                                                            ${orderUid}
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                                            ${orderUid}
     Should Be Equal As Strings    ${resp.json()[0]['catEncIds'][0]}                                                            ${soc_id1}
-    Should Be Equal As Strings    ${resp.json()[0]['catNames']['name']}                                                        ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['catNames'][0]}                                                        ${Name}
 
 
 JD-TC-Get Order Filter-2
@@ -433,9 +438,9 @@ JD-TC-Get Order Filter-2
     Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                                                 ${Total}
     Should Be Equal As Strings    ${resp.json()[0]['amountDue']}                                                                 ${Total}
     Should Be Equal As Strings    ${resp.json()[0]['prePaymentAmount']}                                                                 ${Total}
-    Should Be Equal As Strings    ${resp.json()[0]['order']['uid']}                                                            ${orderUid}
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                                            ${orderUid}
     Should Be Equal As Strings    ${resp.json()[0]['catEncIds'][0]}                                                            ${soc_id1}
-    Should Be Equal As Strings    ${resp.json()[0]['catNames']['name']}                                                        ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['catNames'][0]}                                                        ${Name}
 
 JD-TC-Get Order Filter-3
     [Documentation]  Get order filter using sorderCatalogEncId
@@ -474,9 +479,9 @@ JD-TC-Get Order Filter-3
     Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                                                 ${Total}
     Should Be Equal As Strings    ${resp.json()[0]['amountDue']}                                                                 ${Total}
     Should Be Equal As Strings    ${resp.json()[0]['prePaymentAmount']}                                                                 ${Total}
-    Should Be Equal As Strings    ${resp.json()[0]['order']['uid']}                                                            ${orderUid}
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                                            ${orderUid}
     Should Be Equal As Strings    ${resp.json()[0]['catEncIds'][0]}                                                            ${soc_id1}
-    Should Be Equal As Strings    ${resp.json()[0]['catNames']['name']}                                                        ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['catNames'][0]}                                                        ${Name}
 
 
 JD-TC-Get Order Filter-4
@@ -515,9 +520,9 @@ JD-TC-Get Order Filter-4
     Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                                                 ${Total}
     Should Be Equal As Strings    ${resp.json()[0]['amountDue']}                                                                 ${Total}
     Should Be Equal As Strings    ${resp.json()[0]['prePaymentAmount']}                                                                 ${Total}
-    Should Be Equal As Strings    ${resp.json()[0]['order']['uid']}                                                            ${orderUid}
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                                            ${orderUid}
     Should Be Equal As Strings    ${resp.json()[0]['catEncIds'][0]}                                                            ${soc_id1}
-    Should Be Equal As Strings    ${resp.json()[0]['catNames']['name']}                                                        ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['catNames'][0]}                                                        ${Name}
 
 
 JD-TC-Get Order Filter-5
@@ -556,9 +561,9 @@ JD-TC-Get Order Filter-5
     Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                                                 ${Total}
     Should Be Equal As Strings    ${resp.json()[0]['amountDue']}                                                                 ${Total}
     Should Be Equal As Strings    ${resp.json()[0]['prePaymentAmount']}                                                                 ${Total}
-    Should Be Equal As Strings    ${resp.json()[0]['order']['uid']}                                                            ${orderUid}
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                                            ${orderUid}
     Should Be Equal As Strings    ${resp.json()[0]['catEncIds'][0]}                                                            ${soc_id1}
-    Should Be Equal As Strings    ${resp.json()[0]['catNames']['name']}                                                        ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['catNames'][0]}                                                        ${Name}
 
 
 JD-TC-Get Order Filter-6
@@ -597,9 +602,9 @@ JD-TC-Get Order Filter-6
     Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                                                 ${Total}
     Should Be Equal As Strings    ${resp.json()[0]['amountDue']}                                                                 ${Total}
     Should Be Equal As Strings    ${resp.json()[0]['prePaymentAmount']}                                                                 ${Total}
-    Should Be Equal As Strings    ${resp.json()[0]['order']['uid']}                                                            ${orderUid}
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                                            ${orderUid}
     Should Be Equal As Strings    ${resp.json()[0]['catEncIds'][0]}                                                            ${soc_id1}
-    Should Be Equal As Strings    ${resp.json()[0]['catNames']['name']}                                                        ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['catNames'][0]}                                                        ${Name}
 
 
 JD-TC-Get Order Filter-7
@@ -638,6 +643,6 @@ JD-TC-Get Order Filter-7
     Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                                                 ${Total}
     Should Be Equal As Strings    ${resp.json()[0]['amountDue']}                                                                 ${Total}
     Should Be Equal As Strings    ${resp.json()[0]['prePaymentAmount']}                                                                 ${Total}
-    Should Be Equal As Strings    ${resp.json()[0]['order']['uid']}                                                            ${orderUid}
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                                            ${orderUid}
     Should Be Equal As Strings    ${resp.json()[0]['catEncIds'][0]}                                                            ${soc_id1}
-    Should Be Equal As Strings    ${resp.json()[0]['catNames']['name']}                                                        ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['catNames'][0]}                                                        ${Name}

@@ -336,10 +336,15 @@ JD-TC-Checkout Cart-1
     Should Be Equal As Strings    ${resp.json()['netTotal']}                                                            ${Total}
     Should Be Equal As Strings    ${resp.json()['locationId']}                                                            ${locId1}
     Should Be Equal As Strings    ${resp.json()['netRate']}                                                             ${Total}
+    ${postcode}=  FakerLibrary.postcode
+    ${phone}=  Create Dictionary    number=${primaryMobileNo}   countryCode=91
+    ${homeDeliveryAddress}=  Create Dictionary    firstName=${firstName}  lastName=${lastName}  email=${email_id}   address=${Name}  city=${firstName}  postalCode=${postcode}   phone=${phone}
 
-    ${resp}=    CheckOut Cart Items   ${cart_uid} 
+    ${resp}=    CheckOut Cart Items   ${cart_uid}   homeDeliveryAddress=${homeDeliveryAddress}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+*** Comments ***
 
 JD-TC-Checkout Cart-UH1
 

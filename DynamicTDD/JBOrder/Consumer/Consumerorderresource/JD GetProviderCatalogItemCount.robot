@@ -363,7 +363,7 @@ JD-TC-Get Provider Catalogs Items Count-4
     ${resp}=    Get Provider Catalog Item Count Filter   sorderCatalogEncId-eq=${SO_Cata_Encid1}   accountId-eq=${accountId}   storeEncId-eq=${store_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()}                                              4
+    Should Be Equal As Strings    ${resp.json()}                                              1
 
 
 

@@ -525,15 +525,20 @@ Remove All Items From Cart
     RETURN  ${resp}
 
 CheckOut Cart Items
-    [Arguments]     ${cartUid}  
+    [Arguments]     ${cartUid}   &{kwargs}
+    ${data}=    Create Dictionary   
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END  
+    ${data}=    json.dumps    ${data}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /consumer/cart/${cartUid}/checkout   expected_status=any
+    ${resp}=  POST On Session  ynw  /consumer/cart/${cartUid}/checkout    data=${data}   expected_status=any
     RETURN  ${resp}
 
 Get catalog item by item encId
-    [Arguments]     ${itemEncId} 
+    [Arguments]     ${accountId}   ${catItemEncId}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   /consumer/so/catalog/item/${itemEncId}  expected_status=any
+    ${resp}=  GET On Session  ynw   /consumer/so/catalog/${accountId}/item/${catItemEncId}  expected_status=any
     RETURN  ${resp}
 
 GetOrder using uid
