@@ -143,7 +143,7 @@ JD-TC-Get Order Filter-1
     ${Name}=    FakerLibrary.last name
     Set Suite Variable    ${Name}
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+400187748
-    Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
+    Set Suite Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
     ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}   onlineOrder=${boolean[1]}    walkinOrder=${boolean[1]}   partnerOrder=${boolean[1]}
