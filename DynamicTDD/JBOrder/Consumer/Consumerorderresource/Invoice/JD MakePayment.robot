@@ -24,9 +24,9 @@ ${maxSaleQuantity}   50
 
 *** Test Cases ***
 
-JD-TC-Get Invoice Using InvoiceID-1
+JD-TC-Make Prepayment From Consumerside-1
 
-    [Documentation]  Create cart then checkout items
+    [Documentation]  Create cart then checkout items make paymenyment by consumer.provider complete the order
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Log   ${resp.content}
@@ -370,5 +370,23 @@ JD-TC-Get Invoice Using InvoiceID-1
     ${resp}=  Make Prepayment From Consumerside     ${invoiceUid}    ${Total}      ${purpose[0]}    ${accountId}   ${finance_payment_modes[8]}   ${bool[0]}  ${bool[1]}   ${cid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    sleep  01s
+
+    ${resp}=    GetOrder using uid   ${orderUid} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Sales Order    ${orderUid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Update SalesOrder Status    ${orderUid}     ${orderStatus[2]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
 

@@ -1369,7 +1369,7 @@ JD-TC-Get Order By UID-5
 
     ${quantity}=  FakerLibrary.Random Int  min=${minSaleQuantity}   max=${maxSaleQuantity}
     ${quantity}=                    Convert To Number  ${quantity}  1
-    ${item1}=  Evaluate  ${price}*${quantity}
+
 
 
     ${catalogItem}=  Create Dictionary    encId=${SOC_itemEncIds1}
@@ -1393,19 +1393,20 @@ JD-TC-Get Order By UID-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Cart From Consumerside      ${store_id}    ${cid}      ${deliveryType[0]}    ${catalogItems}  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable    ${cart_uid}    ${resp.json()['uid']}
+    # ${resp}=  Create Cart From Consumerside      ${store_id}    ${cid}      ${deliveryType[0]}    ${catalogItems}  
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Test Variable    ${cart_uid}    ${resp.json()['uid']}
 
     ${resp}=    Get ConsumerCart With Items By Uid   ${cart_uid} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable    ${cartItemUid1}    ${resp.json()['items'][0]['uid']}  
-
+    # Set Test Variable    ${cartItemUid1}    ${resp.json()['items'][0]['uid']}  
+#  uid=${cartItemUid1}    
     ${quantity1}=  FakerLibrary.Random Int  min=${minSaleQuantity}   max=${maxSaleQuantity}
     ${quantity1}=                    Convert To Number  ${quantity1}  1
-    ${resp}=  Update Cart Items     ${cartUid}   ${SOC_itemEncIds1}    ${quantity1}     uid=${cartItemUid1}      
+    ${item1}=  Evaluate  ${price}*${quantity1}
+    ${resp}=  Update Cart Items     ${cartUid}   ${SOC_itemEncIds1}    ${quantity1}      
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1415,5 +1416,50 @@ JD-TC-Get Order By UID-5
     ${homeDeliveryAddress}=  Create Dictionary    firstName=${firstName}  lastName=${lastName}  email=${email_id}   address=${Name}  city=${firstName}  postalCode=${postcode}   phone=${phone}
     ${resp}=    CheckOut Cart Items   ${cart_uid}   homeDeliveryAddress=${homeDeliveryAddress}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${FIELD_REQUIRED}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable    ${orderUid}    ${resp.json()}
+
+    ${resp}=    GetOrder using uid   ${orderUid} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                                               ${accountId}
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                                                  ${cid}
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['name']}                                                ${firstName} ${lastName}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                                        ${soc_id1}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                                          ${Name}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                                                       ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                                                ${item1}
+    Should Be Equal As Strings    ${resp.json()['netTotalWithTax']}                                                         ${item1}
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                                                 ${item1}
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                                                 ${item1}
+    Should Be Equal As Strings    ${resp.json()['location']['id']}                                                            ${locId1}
+    Should Be Equal As Strings    ${resp.json()['store']['id']}                                                              ${Stidd}
+    Should Be Equal As Strings    ${resp.json()['orderFor']['id']}                                                          ${cid}
+    Should Be Equal As Strings    ${resp.json()['orderFor']['name']}                                                        ${firstName} ${lastName}
+    Should Be Equal As Strings    ${resp.json()['gst']}                                                                 0.0
+    Should Be Equal As Strings    ${resp.json()['paymentStatus']}                                                            ${paymentStatus[0]}
+    Should Be Equal As Strings    ${resp.json()['timezone']}                                                                Asia/Kolkata
+    Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                                           0.0
+    Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                                               0.0
+    Should Be Equal As Strings    ${resp.json()['taxTotal']}                                                               0.0
+    # Should Be Equal As Strings    ${resp.json()['encId']}                                                                   ${orderUid}
+    Should Be Equal As Strings    ${resp.json()['contactInfo']['phone']['number']}                                          ${primaryMobileNo}
+    Should Be Equal As Strings    ${resp.json()['contactInfo']['email']}                                                     ${email_id}
+    Should Be Equal As Strings    ${resp.json()['createdDate']}                                                               ${DAY1}
+    Should Be Equal As Strings    ${resp.json()['prePaymentAmount']}                                                           ${item1}
+    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['accountId']}                                                           ${accountId}
+    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['location']['id']}                                                            ${locId1}
+    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['store']['id']}                                                              ${Stidd}
+    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['order']['uid']}                                                            ${orderUid}
+    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['catalog']['encId']}                                                        ${soc_id1}
+    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['catalogItem']['encId']}                                                        ${SOC_itemEncIds1}
+    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItem']['encId']}                                        ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['spItem']['name']}                                         ${displayName}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['cgst']}                                                       ${cgsttot}
+    # Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['sgst']}                                                       ${cgsttot}
+    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['orderQuantity']}                                                       ${quantity1}
+    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['status']}                                                        ${toggle[0]}
+    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['dueQuantity']}                                                       ${quantity1}
+    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['itemAmount']}                                                        ${price}
+    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['netTotal']}                                                        ${item1}
+    Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['netRate']}                                                            ${item1} 
