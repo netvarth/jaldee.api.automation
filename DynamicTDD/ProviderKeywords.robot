@@ -4538,8 +4538,8 @@ Get Appointment By EncodedId
     RETURN  ${resp}    
 
 Provider Cancel Appointment
-    [Arguments]  ${appmntId}  ${cancelReason}  ${message}   ${date}
-    ${data}=  Create Dictionary  cancelReason=${cancelReason}  communicationMessage=${message}   date=${date}
+    [Arguments]  ${appmntId}  ${cancelReason}  ${message}   
+    ${data}=  Create Dictionary  cancelReason=${cancelReason}  communicationMessage=${message}   
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session   ynw  /provider/appointment/statuschange/Cancelled/${appmntId}    data=${data}  expected_status=any 

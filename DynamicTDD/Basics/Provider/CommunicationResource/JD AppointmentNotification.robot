@@ -13,17 +13,6 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 
-*** Keywords ***
-
-Cancel Appointment By Provider
-    [Arguments]  ${appmntId}  ${cancelReason}  ${message}  
-    ${data}=  Create Dictionary  cancelReason=${cancelReason}  communicationMessage=${message}  
-    ${data}=    json.dumps    ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session   ynw  /provider/appointment/statuschange/Cancelled/${appmntId}    data=${data}  expected_status=any 
-    RETURN  ${resp}
-
-
 *** Variables ***
 
 ${PSUSERNAME}          5550004756
@@ -35,7 +24,7 @@ ${self}                0
 
 *** Test Cases ***
 
-JD-TC-Initial Setup-1
+JD-TC-AppointmentNotification-1
 
     [Documentation]   sign up
 
@@ -433,8 +422,20 @@ JD-TC-Initial Setup-1
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=    Cancel Appointment By Provider  ${walkin_appt1}  ${reason}  ${msg}  
+    ${resp}=    Provider Cancel Appointment  ${walkin_appt1}  ${reason}  ${msg}  
     Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider communications
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+   
+    ${resp}=  Consumer Login  ${CUSERNAME1}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  Get Consumer Communications
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 #........change the status to confirmed............
@@ -613,6 +614,18 @@ JD-TC-Initial Setup-1
 
 #......online appointment with prepayment..........
 
+    ${resp}=  Get ProviderConsumer
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${firstname}=  FakerLibrary.first_name
+    ${lastname}=  FakerLibrary.last_name
+    Set Test Variable  ${pc_email1}  ${firstname}${C_Email}.${test_mail}
+
+    ${resp}=    Update ProviderConsumer    ${cid1}    email=${pc_email1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${locId}  ${prepay_serid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -639,9 +652,7 @@ JD-TC-Initial Setup-1
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${prepay_apptid1}  ${apptid[0]}
 
-
-
-
+    
 
 
 
