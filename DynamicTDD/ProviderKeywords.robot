@@ -15829,6 +15829,17 @@ Forgot Password
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/login/forgot/password   data=${data}   expected_status=any
     RETURN  ${resp} 
+
+Reset Password LoginId Login
+
+    [Arguments]     ${oldpassword}  ${password}
+
+    ${data}=    Create Dictionary   oldpassword=${oldpassword}  password=${password}
+    ${data}=    json.dumps    ${data} 
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/login/reset/password   data=${data}   expected_status=any
+    RETURN  ${resp}
+
 #................Store Settings...............
 
 Get Store Settings For OnlineOrder
