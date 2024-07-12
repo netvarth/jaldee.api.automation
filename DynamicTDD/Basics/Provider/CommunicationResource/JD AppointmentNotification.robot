@@ -262,6 +262,8 @@ JD-TC-Initial Setup-1
         Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
     END
 
+#.....create user...........
+
     ${resp}=  Get User
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
