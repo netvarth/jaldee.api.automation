@@ -2480,6 +2480,8 @@ ACCOUNT_DEACTIVATED_BASE = "Your account has been disabled. To restore your acco
 LOGIN_PASSWORD_VALIDATION_NOT_FOUND = "Password must be of minimum 8 chars with  one Number and one Capical letter"
 LOGIN_LOGINiD_VALIDATION_NOT_FOUND = "LogiId must be string with charectors number seperated by dot,underScore or @  "
 INV_LOGIN_ID=   "Invalid loginId"
+PASSWORD_MANDATORY=   "Old password and new password are mandatory"
+INCORRECT_OLD_PASSWORD=  "Incorrect old password"
 
 #   ConsumerOrder
 
