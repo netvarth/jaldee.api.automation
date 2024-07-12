@@ -27,7 +27,7 @@ ${NEW_PASSWORD}        Jaldee123
 
 *** Test Cases ***
 
-JD-TC-SignupNotification-1
+JD-TC-LoginNotification-1
 
     [Documentation]  signup a provider
 
@@ -73,7 +73,7 @@ JD-TC-SignupNotification-1
     ${lname}=  FakerLibrary.lastname
     ${resp}=  Account SignUp  ${fname}  ${lname}  ${None}  ${domain}  ${subdomain}  ${ph}  ${licpkgid}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    202
 
     ${resp}=  Account Activation  ${ph}   ${OtpPurpose['ProviderSignUp']}
     Log   ${resp.content}
@@ -90,7 +90,7 @@ JD-TC-SignupNotification-1
 
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
-    Set Test Variable  ${pro_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${pro_id}  ${decrypted_data['id']}
 
     Append To File  ${EXECDIR}/TDD/${ENVIRONMENT}data/${ENVIRONMENT}phnumbers.txt  ${ph} - ${PASSWORD}${\n}
     Append To File  ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py  PUSERNAME${num}=${ph}${\n}
@@ -217,43 +217,40 @@ JD-TC-SignupNotification-1
     Set Test Variable  ${userf_name}  ${resp.json()['firstName']}
     Set Test Variable  ${userl_name}  ${resp.json()['lastName']}
 
-JD-TC-SignupNotification-2
+JD-TC-LoginNotification-2
 
-    [Documentation]  change mobile number of account(no notification)
+    [Documentation]  change login id of account provider(no notification)
 
-#........change mobile number notification for user..............
+#........change mobile number notification for account..............
 
     ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Send Verify Login   ${ph1}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}  200
+    ${login_id}    Random Number 	digits=5 
+    ${login_id}=    Evaluate    f'{${login_id}:0>7d}'
+    Log  ${login_id}
+    Set Test Variable  ${new_login}  555${login_id}
 
-    ${resp}=  Verify Login        ${ph1}   ${OtpPurpose['ProviderVerifyEmail']}
+    ${resp}=    Reset LoginId  ${pro_id}  ${new_login}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}  200
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${ph1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${new_login}  ${PASSWORD} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     #(revert)
 
-    ${resp}=  Send Verify Login   ${ph}
+    ${resp}=    Reset LoginId  ${pro_id}  ${ph}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}  200
-
-    ${resp}=  Verify Login        ${ph}   ${OtpPurpose['ProviderVerifyEmail']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}  200
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
  
-JD-TC-SignupNotification-3
+JD-TC-LoginNotification-3
 
     [Documentation]  change mobile number of a user(email)
 
@@ -300,7 +297,7 @@ JD-TC-SignupNotification-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-SignupNotification-4
+JD-TC-LoginNotification-4
 
     [Documentation]  change mobile number of a user(email)
 
@@ -335,41 +332,6 @@ JD-TC-SignupNotification-4
     ${resp}=  Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-*** comments ***
-
- ${resp}=  Get Send Comm List
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable   ${sendcomm_id1}   ${resp.json()[4]['id']}
-
-    ${resp}=  Get Default Template List by sendComm   ${sendcomm_id1}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${temp_name}=    FakerLibrary.word
-    ${content_msg}=      FakerLibrary.sentence   
-    ${content}=    Create Dictionary  intro=${content_msg}
-    ${tempheader_sub}=      FakerLibrary.sentence   5
-    ${salutation}=      FakerLibrary.word
-    ${comm_chanl}=  Create List   ${CommChannel[2]}  
-    ${comm_target}=  Create List   ${CommTarget[1]}  
-    ${sendcomm_list}=  Create List   ${sendcomm_id1}  
-    ${temp_header}=    Create Dictionary  subject=${tempheader_sub}   salutation=${salutation}
-    
-    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl}  
-    ...       templateHeader=${temp_header}   sendComm=${sendcomm_list}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200  
-    Set Test Variable   ${temp_id1}  ${resp.content}
-
-    ${resp}=  Get Template By Id   ${temp_id1}  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get provider communications
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
 
 
 
