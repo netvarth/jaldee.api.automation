@@ -1267,20 +1267,6 @@ JD-TC-Switch_Login-15
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    # Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    # Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
-
-    
-
-    # ${lid}=  Create Sample Location
-
-    # ${resp}=    Get Business Profile
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-    # Set Suite Variable    ${accountId}        ${resp.json()['id']}
-    # # Set Suite Variable    ${accountName}      ${resp.json()['businessName']}
-
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1349,11 +1335,17 @@ JD-TC-Switch_Login-15
     Set Suite Variable    ${proconlname}    ${resp.json()['lastName']} 
     Set Suite Variable    ${fullname}       ${proconfname}${space}${proconlname}
 
-    
+    ${resp}=    Customer Logout 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
+    ${resp}=  Provider Login  ${loginId}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Switch login    ${loginId2}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${consumer}=  Create Dictionary  id=${cid} 
     Set Suite Variable    ${consumer} 
@@ -1448,9 +1440,15 @@ JD-TC-Switch_Login-15
     Set Suite Variable  ${uid}   ${resp.json()[0]['uid']}
     Set Suite Variable  ${prescriptionStatus}   ${resp.json()[0]['prescriptionStatus']} 
 
-    
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp1}=  Get Prescription By Filter   providerConsumerId-eq=${cid}  uid-eq=${uid}
+    ${resp}=  Provider Login  ${loginId2}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp1}=  Get Prescription By Filter
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}    ${prescription_uid} 
@@ -1468,6 +1466,584 @@ JD-TC-Switch_Login-15
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedBy']}     ${id} 
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedDate']}     ${DAY1}
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionNotes']}     ${note}
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Switch_Login-16
+
+    [Documentation]    Switch login - Appoinment Reports
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${phn3}=  Evaluate  ${PUSERNAME}+5666400
+    Set Suite Variable  ${phn3}
+    ${firstname33}=  FakerLibrary.first_name
+    ${lastname33}=  FakerLibrary.last_name
+    Set Suite Variable      ${firstname33}
+    Set Suite Variable      ${lastname33}
+
+    ${resp}=  Account SignUp  ${firstname33}  ${lastname33}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${phn3}   1
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${phn3}  ${OtpPurpose['ProviderSignUp']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${loginId33}=     Random Int  min=1111  max=9999
+    Set Suite Variable      ${loginId33}
+    
+    ${resp}=  Account Set Credential  ${phn3}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId33}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Provider Login  ${loginId33}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable    ${pro_id3}      ${resp.json()['id']}
+    
+    ${resp}=  Get Provider Details    ${pro_id3}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['basicInfo']['id']}          ${pro_id3}
+    Should Be Equal As Strings  ${resp.json()['basicInfo']['mobile']}      ${phn3}
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Provider Login  ${loginId2}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Connect with other login  ${loginId33}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200 
+
+    ${resp}=    Switch login    ${loginId33}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Get Appointment Settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=   Get Appointment Settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
+
+    ${resp}=  Get Account Settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Business Profile
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id33}  ${resp.json()['id']}
+   
+    ${resp}=  View Waitlist Settings
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${locId}=  Create Sample Location
+        Set Test Variable   ${locId}
+
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${loc_name}  ${resp.json()['place']}
+
+    ELSE
+        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+        Set Test Variable  ${loc_name}  ${resp.json()[0]['place']}
+    END
+
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${dep_name1}=  FakerLibrary.bs
+        ${dep_code1}=   Random Int  min=100   max=999
+        ${dep_desc1}=   FakerLibrary.word  
+        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Test Variable  ${dep_id}  ${resp1.content}
+    ELSE
+        Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+        Set Test Variable  ${dep_name1}  ${resp.json()['departments'][0]['departmentName']}
+    END
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_two   ${sTime1}  ${delta}
+    ${empty_list}=   Create List
+
+    ${SERVICE1}=    FakerLibrary.word
+    ${user_id}=   Create Dictionary  id=${pro_id3}
+    ${s_id}=  Create Sample Service  ${SERVICE1}   department=${dep_id}   provider=${user_id}
+   
+    ${resp}=   Get Service By Id  ${s_id}
+    Log   ${resp.content}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${ser_dur}      ${resp.json()['serviceDuration']}
+    Set Test Variable   ${ser_amount}   ${resp.json()['totalAmount']}
+    Should Be Equal As Strings  ${resp.json()['serviceCategory']}       ${serviceCategory[1]}
+    Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[0]}
+
+    ${schedule_name}=  FakerLibrary.bs
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    ${maxval}=  Convert To Integer   ${delta/2}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${bool1}=  Random Element  ${bool}
+
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${locId}  ${duration}  ${bool1}  ${s_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${sch_id}  ${resp.json()}
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
+    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+
+    #............provider consumer creation..........
+
+    ${NewCustomer}    Generate random string    10    123456789
+    ${NewCustomer}    Convert To Integer  ${NewCustomer}
+
+    ${custf_name}=  FakerLibrary.name    
+    ${custl_name}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${NewCustomer}    firstName=${custf_name}   lastName=${custl_name}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${account_id33}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${account_id33}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+ 
+    ${resp}=    Customer Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Provider Login  ${loginId2}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Switch login    ${loginId33}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${cid}  ${resp.json()[0]['jaldeeId']}
+
+    ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
+    ${apptfor}=   Create List  ${apptfor1}
+    
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  provider=${user_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+          
+    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+    Set Test Variable  ${apptid1}  ${apptid[0]}
+
+    ${resp}=  Get Appointment EncodedID   ${apptid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${encId}=  Set Variable   ${resp.json()}
+
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceId']}        ${s_id}
+
+    ${filter}=  Create Dictionary    
+    ${resp}=  Generate Report REST details  ${reportType[1]}  ${Report_Date_Category[4]}  ${filter}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${token_id1}   ${resp.json()}
+
+    ${appt_date} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
+    ${appt_date} =	Set Variable	${appt_date} [${slot1}]	
+   
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Provider Login  ${loginId33}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Report Status By Token Id  ${token_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    Should Be Equal As Strings  ${resp.json()['reportContent']['count']}                        1
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportName']}                   Appointment Report
+    Should Be Equal As Strings  ${resp.json()['reportType']}                                    ${reportType[1]}
+    Should Be Equal As Strings  ${resp.json()['reportResponseType']}                            ${ReportResponseType[0]}
+    Should Be Equal As Strings  ${resp.json()['reportTokenID']}                                 ${token_id1}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['reportHeader']['Time Period']}  ${Report_Date_filter[4]}  
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['2']}                 ${cid} 
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['3']}                 ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['4']}                 ${countryCodes[0]} ${NewCustomer}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['5']}                 ${schedule_name} 
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['6']}                 ${loc_name} 
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['7']}                 ${SERVICE1} 
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['8']}                 ${encId} 
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['9']}                 ${apptStatus[1]} 
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['10']}                ${Checkin_mode[1]} 
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['11']}                0.00
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['12']}                ${prov_name} 
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['13']}                ${dep_name1} 
+
+JD-TC-Switch_Login-17
+
+    [Documentation]    Switch login - inventory
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+
+
+
+
+
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    sleep  02s
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableInventory']}==${bool[0]}
+        ${resp1}=  Enable Disable Inventory  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+
+        ${resp}=  Get Account Settings
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['enableInventory']}  ${bool[1]}
+    END
+    IF  ${resp.json()['enableSalesOrder']}==${bool[0]}
+        ${resp1}=  Enable/Disable SalesOrder  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+
+        ${resp}=  Get Account Settings
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['enableSalesOrder']}  ${bool[1]}
+    END
+
+    ${resp}=  Get Store Type By Filter     
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+# --------------------- Create Store Type from sa side -------------------------------
+    ${TypeName}=    FakerLibrary.name
+    Set Suite Variable  ${TypeName}
+    sleep  02s
+
+    ${resp}=  Create Store Type   ${TypeName}    ${storeNature[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable    ${St_Id}    ${resp.json()}
+
+    ${resp}=  Get Store Type By EncId   ${St_Id}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
+    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
+    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+# --------------------- ---------------------------------------------------------------
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${accountId}=  get_acc_id  ${HLPUSERNAME16}
+    Set Suite Variable    ${accountId} 
+
+    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
+    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
+    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${locId1}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ELSE
+        Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    END
+
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    Set Suite Variable  ${address}
+    Set Suite Variable  ${postcode}
+    Set Suite Variable  ${city}
+
+# ------------------------ Create Store ----------------------------------------------------------
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1} 
+
+    ${Name}=    FakerLibrary.first name
+    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
+    Set Suite Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
+    ${email}=  Create List  ${email_id}
+
+    ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${store_id}  ${resp.json()}
+
+# ---------------------------------------------------------------------------------------------------
+
+# --------------------------- Create SalesOrder Inventory Catalog-InvMgr False ------------------------------------
+
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${SO_Cata_Encid}  ${resp.json()}
+# --------------------------------------------------------------------------------------------------------------
+# ----------------------------------------  Create Item ---------------------------------------------------
+
+    ${displayName}=     FakerLibrary.name
+    ${displayName1}=     FakerLibrary.name
+    ${resp}=    Create Item Inventory  ${displayName}    
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${itemEncId1}  ${resp.json()}
+
+    ${resp}=    Create Item Inventory  ${displayName1}    
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${itemEncId2}  ${resp.json()}
+
+    ${itemdata}=   FakerLibrary.words    	nb=4
+
+    ${displayName1}=   FakerLibrary.user name    
+    ${price1}=  Evaluate    random.uniform(50.0,300) 
+    ${itemName1}=   Set Variable     ${itemdata[0]} 
+    ${itemCode1}=   Set Variable     ${itemdata[1]}
+    ${resp}=  Create Sample Item   ${displayName1}   ${itemName1}  ${itemCode1}  ${price1}  ${bool[0]}     
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${item_id1}  ${resp.json()}
+# -------------------------------------------------------------------------------------------------------------------
+# -------------------------------- Create SalesOrder Catalog Item-invMgmt False -----------------------------------
+
+    ${price}=    Random Int  min=2   max=40
+    ${invCatItem}=     Create Dictionary       encId=${itemEncId2}
+    ${Item_details}=  Create Dictionary        spItem=${invCatItem}    price=${price}   
+
+
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${SO_Cata_Encid}     ${itemEncId1}     ${price}     ${Item_details}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
+    Set Suite Variable  ${SO_itemEncIds2}  ${resp.json()[1]}
+
+# -------------------------------- Add a provider Consumer -----------------------------------
+
+    ${firstName}=  FakerLibrary.name
+    Set Suite Variable    ${firstName}
+    ${lastName}=  FakerLibrary.last_name
+    Set Suite Variable    ${lastName}
+    ${primaryMobileNo}    Generate random string    10    123456789
+    ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
+    Set Suite Variable    ${primaryMobileNo}
+    # ${email}=    FakerLibrary.Email
+    # Set Suite Variable    ${email}
+
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   12
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email_id}    ${primaryMobileNo}     ${accountId}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200    
+   
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
+
+    ${resp}=    Customer Logout 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+# --------------------------------------------------------------------------------------------------------
+
+# ----------------------------- Provider take a Sales Order ------------------------------------------------
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${quantity}=    Random Int  min=2   max=5
+
+    ${Cg_encid}=  Create Dictionary   encId=${SO_Cata_Encid}   
+    ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
+    Set Suite Variable  ${SO_Cata_Encid_List}
+
+    ${store}=  Create Dictionary   encId=${store_id}  
+    Set Suite Variable  ${store}
+
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   
+
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${items}    store=${store}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${SO_Uid}  ${resp.json()}
+
+    ${netTotal}=  Evaluate  ${price}*${quantity}
+    ${netTotal}=  Convert To Number  ${netTotal}   1
+
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable   ${SO_Encid}     ${resp.json()['encId']}
+
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
+    Should Be Equal As Strings    ${resp.json()['store']['name']}                                   ${Name}
+    Should Be Equal As Strings    ${resp.json()['store']['encId']}                                  ${store_id}
+
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                 ${Name}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${SO_Cata_Encid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
+
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
+    Should Be Equal As Strings    ${resp.json()['orderFor']['id']}                                  ${cid}
+    Should Be Equal As Strings    ${resp.json()['orderFor']['name']}                                ${firstName} ${lastName}
+
+    Should Be Equal As Strings    ${resp.json()['orderType']}                                       ${bookingChannel[0]}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[0]}
+    Should Be Equal As Strings    ${resp.json()['deliveryType']}                                    ${deliveryType[0]}
+    Should Be Equal As Strings    ${resp.json()['deliveryStatus']}                                  ${deliveryStatus[0]}
+    Should Be Equal As Strings    ${resp.json()['originFrom']}                                      ${originFrom}
+
+    Should Be Equal As Strings    ${resp.json()['orderNum']}                                        1
+    Should Be Equal As Strings    ${resp.json()['orderRef']}                                        1
+    Should Be Equal As Strings    ${resp.json()['deliveryDate']}                                    ${DAY1}
+
+    Should Be Equal As Strings    ${resp.json()['contactInfo']['phone']['number']}                  ${primaryMobileNo}
+    Should Be Equal As Strings    ${resp.json()['contactInfo']['email']}                            ${email_id}
+
+    Should Be Equal As Strings    ${resp.json()['itemCount']}                                       1
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                        ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['taxTotal']}                                        0.0
+    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                   0.0
+    Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                               0.0
+    Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                             0.0
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                         ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
+
+    Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
