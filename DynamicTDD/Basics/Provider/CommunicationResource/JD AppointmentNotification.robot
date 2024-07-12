@@ -81,7 +81,7 @@ JD-TC-Initial Setup-1
         ${lname}=  FakerLibrary.lastname
         ${resp}=  Account SignUp  ${fname}  ${lname}  ${None}  ${domain}  ${subdomain}  ${ph}  ${licpkgid}
         Log   ${resp.content}
-        Should Be Equal As Strings    ${resp.status_code}    200
+        Should Be Equal As Strings    ${resp.status_code}    202
 
         ${resp}=  Account Activation  ${ph}  0
         Log   ${resp.content}
