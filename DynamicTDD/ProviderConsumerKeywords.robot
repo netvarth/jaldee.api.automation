@@ -594,6 +594,55 @@ Make Prepayment From Consumerside
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /consumer/so/pay  data=${data}  expected_status=any
     RETURN  ${resp}
+
+Get sp item category Filter
+    [Arguments]  ${accountId}   &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/spitem/settings/${accountId}/category   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get sp item category Count Filter
+    [Arguments]  ${accountId}   &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/spitem/settings/${accountId}/category/count   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get sp item type Filter
+    [Arguments]  ${accountId}   &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/spitem/settings/${accountId}/type   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get sp item type Count Filter
+    [Arguments]  ${accountId}   &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/spitem/settings/${accountId}/type/count   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get sp item group Filter
+    [Arguments]  ${accountId}   &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/spitem/settings/${accountId}/group   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get sp item group Count Filter
+    [Arguments]  ${accountId}   &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/spitem/settings/${accountId}/group/count   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get sp item manufacturer Filter
+    [Arguments]  ${accountId}   &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/spitem/settings/${accountId}/manufacturer   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get sp item manufacturer Count Filter
+    [Arguments]  ${accountId}   &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/spitem/settings/${accountId}/manufacturer/count   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
  
 
 

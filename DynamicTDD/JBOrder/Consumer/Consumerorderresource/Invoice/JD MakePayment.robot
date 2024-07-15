@@ -367,7 +367,7 @@ JD-TC-Make Prepayment From Consumerside-1
     Set Suite Variable    ${invoiceUid}    ${resp.json()[0]['uid']}
 
 
-    ${resp}=  Make Prepayment From Consumerside     ${invoiceUid}    ${Total}      ${purpose[0]}    ${accountId}   ${finance_payment_modes[8]}   ${bool[0]}  ${bool[1]}   ${cid}
+    ${resp}=  Make Prepayment From Consumerside     ${invoiceUid}    ${Total}      ${purpose[0]}    ${accountId}   ${finance_payment_modes[5]}   ${boolean[0]}  ${boolean[1]}   ${cid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

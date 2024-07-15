@@ -1463,3 +1463,4 @@ JD-TC-Get Order By UID-5
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['itemAmount']}                                                        ${price}
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['netTotal']}                                                        ${item1}
     Should Be Equal As Strings    ${resp.json()['itemDtoList'][0]['netRate']}                                                            ${item1} 
+
