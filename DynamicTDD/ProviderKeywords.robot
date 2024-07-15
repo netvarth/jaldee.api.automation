@@ -15840,6 +15840,14 @@ Reset Password LoginId Login
     ${resp}=  POST On Session  ynw  /provider/login/reset/password   data=${data}   expected_status=any
     RETURN  ${resp}
 
+Get LoginId
+
+    [Arguments]     ${userid}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/login/suggestion/loginId/${userid}   expected_status=any
+    RETURN  ${resp}
+
 #................Store Settings...............
 
 Get Store Settings For OnlineOrder
