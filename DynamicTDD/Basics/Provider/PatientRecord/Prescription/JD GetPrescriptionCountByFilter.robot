@@ -48,7 +48,7 @@ JD-TC-Get Prescription Count By Filter-1
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    202
     ${resp}=  Account Activation  ${PUSERNAME_E}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -382,15 +382,38 @@ JD-TC-Get Prescription Count By Filter-UH1
     Set Suite Variable      ${PUSERNAME_U1}     ${resp.json()['mobileNo']}
     Set Suite Variable      ${sam_email}     ${resp.json()['email']}
 
-    ${resp}=  SendProviderResetMail   ${sam_email}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=    Reset LoginId  ${u_id}  ${PUSERNAME_U1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    @{resp}=  ResetProviderPassword  ${sam_email}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
+    ${resp}=    Forgot Password   loginId=${PUSERNAME_U1}  password=${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
 
-    ${resp}=  Encrypted Provider Login  ${sam_email}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=    Account Activation  ${PUSERNAME_U1}  ${OtpPurpose['ProviderResetPassword']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key} =   db.Verify Accnt   ${PUSERNAME_U1}    ${OtpPurpose['ProviderResetPassword']}
+    Set Suite Variable   ${key}
+
+    ${resp}=    Forgot Password     otp=${key}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #... linking user to the provider 1 and get linked lists
+
+    ${resp}=    Connect with other login  ${PUSERNAME_U1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
 
     ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
     Log   ${resp.content}

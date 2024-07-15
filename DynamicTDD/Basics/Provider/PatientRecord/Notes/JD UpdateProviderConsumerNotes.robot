@@ -512,15 +512,38 @@ JD-TC-Update Provider Consumer Notes-8
     Set Suite Variable    ${note_id1}    ${resp.json()[0]['id']}   
 
     
-    ${resp}=  SendProviderResetMail   ${sam_email}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=    Reset LoginId  ${u_id}  ${PUSERNAME_U1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    @{resp}=  ResetProviderPassword  ${sam_email}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
+    ${resp}=    Forgot Password   loginId=${PUSERNAME_U1}  password=${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
 
-    ${resp}=  Encrypted Provider Login  ${sam_email}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=    Account Activation  ${PUSERNAME_U1}  ${OtpPurpose['ProviderResetPassword']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key} =   db.Verify Accnt   ${PUSERNAME_U1}    ${OtpPurpose['ProviderResetPassword']}
+    Set Suite Variable   ${key}
+
+    ${resp}=    Forgot Password     otp=${key}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #... linking user to the provider 1 and get linked lists
+
+    ${resp}=    Connect with other login  ${PUSERNAME_U1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
 
     ${users1}=   Create List   ${u_id}
     ${title2}=  FakerLibrary.Text     max_nb_chars=255

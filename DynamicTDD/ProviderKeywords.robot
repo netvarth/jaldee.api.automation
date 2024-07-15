@@ -11739,8 +11739,8 @@ Get Case Filter
 
 Change Case Status
     [Arguments]      ${uid}  ${statusName}  ${note}
-    ${data}=    Create Dictionary  note=${note}
-    ${date}=    json.dumps  ${data}
+    ${Notes}=    Create Dictionary  note=${note}
+    ${data}=    json.dumps  ${Notes}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/medicalrecord/case/${uid}/status/${statusName}  data=${data}   expected_status=any
     RETURN  ${resp}
