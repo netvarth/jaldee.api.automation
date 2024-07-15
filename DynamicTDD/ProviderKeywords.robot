@@ -5232,6 +5232,17 @@ Update MR prescription
     ${resp}=  PUT On Session  ynw  /provider/mr/prescription/${mrId}  data=${prescriptions}  expected_status=any
     RETURN  ${resp}
 
+Get Treatment Plan List
+    [Arguments]    ${case_uid}        ${toothNo}
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw    /provider/medicalrecord/treatment/case/${case_uid}/toothno/${toothNo}   expected_status=any
+    RETURN  ${resp}
+
+Get PC Case By ToothNo
+    [Arguments]  ${consumerID}        ${toothNo}
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw    /provider/dental/providerconsumer/${consumerID}/toothno/${toothNo}/case   expected_status=any
+    RETURN  ${resp}
 
 
 Reschedule Consumer Checkin
