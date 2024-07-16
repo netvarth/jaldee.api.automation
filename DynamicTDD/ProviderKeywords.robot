@@ -15786,11 +15786,10 @@ Get Available Slots for Month Year
 
 Connect with other login
 
-    [Arguments]  ${loginId}  ${password}
-    ${data}=  Create Dictionary  loginId=${loginId}  password=${password}
-    ${data}=  json.dumps  ${data}
+    [Arguments]  &{kwargs}
+    ${data}=    json.dumps    ${kwargs}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/login/connections/${loginId}  data=${data}  expected_status=any
+    ${resp}=  POST On Session  ynw  /provider/login/connections  data=${data}  expected_status=any
     RETURN  ${resp}
 
 List all links of a loginId
