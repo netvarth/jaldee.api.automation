@@ -221,7 +221,7 @@ JD-TC-LoginNotification-2
 
     [Documentation]  change login id of account provider(no notification)
 
-#........change mobile number notification for account..............
+#........change login id notification for account..............
 
     ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     Log   ${resp.content}

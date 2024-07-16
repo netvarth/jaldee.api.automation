@@ -36,7 +36,7 @@ JD-TC-CreateTemplateSettings-1
     ${comm_chanl}=   Create List   ${CommChannel[1]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
     
-    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[3]}  ${comm_target}    ${comm_chanl} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${temp_id1}  ${resp.json()}
@@ -46,7 +46,7 @@ JD-TC-CreateTemplateSettings-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${sendcomm_id1}   ${resp.json()[0]['id']}
 
-    ${resp}=  Create Template Settings   ${temp_id1}  ${VariableContext[0]}  ${sendcomm_id1}  ${CommTarget[0]}    ${CommChannel[1]}
+    ${resp}=  Create Template Settings   ${temp_id1}  ${VariableContext[3]}  ${sendcomm_id1}  ${CommTarget[0]}    ${CommChannel[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -55,7 +55,7 @@ JD-TC-CreateTemplateSettings-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['accountId']}                   ${account_id} 
     Should Be Equal As Strings  ${resp.json()['templateName']}                ${temp_name}
-    Should Be Equal As Strings  ${resp.json()['context']}                     ${VariableContext[0]} 
+    Should Be Equal As Strings  ${resp.json()['context']}                     ${VariableContext[3]} 
     Should Be Equal As Strings  ${resp.json()['commChannel']}                 ${comm_chanl} 
     Should Be Equal As Strings  ${resp.json()['templateFormat']}              ${templateFormat[0]}
     Should Be Equal As Strings  ${resp.json()['content']['intro']}            ${content_msg}

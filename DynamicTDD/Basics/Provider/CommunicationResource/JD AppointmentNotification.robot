@@ -267,9 +267,6 @@ JD-TC-AppointmentNotification-1
     ${resp}=  Get Features  ${subdomain}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${service_name}  ${resp.json()['features']['defaultServices'][0]['service']}
-    Set Test Variable  ${service_duration}  ${resp.json()['features']['defaultServices'][0]['duration']}
-    Set Test Variable  ${service_status}  ${resp.json()['features']['defaultServices'][0]['status']}   
 
     ${resp}=  Update Service Provider With Emailid   ${pro_id}   ${fname}   ${fname}   ${Genderlist[0]}  ${EMPTY}  ${email_id}
     Log  ${resp.json()}
@@ -357,23 +354,6 @@ JD-TC-AppointmentNotification-1
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-    END
-
-    ${resp}=    Get Locations
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${locId}=  Create Sample Location
-        Set Test Variable   ${locId}
-
-        ${resp}=   Get Location ById  ${locId}
-        Log   ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
-
-    ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${resp}=  Get Departments

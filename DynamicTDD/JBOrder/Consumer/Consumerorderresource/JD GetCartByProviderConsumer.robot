@@ -296,3 +296,22 @@ JD-TC-Get Cart By ProviderConsumer-1
     Should Be Equal As Strings    ${resp.json()['netTotal']}                                                            ${Total}
     Should Be Equal As Strings    ${resp.json()['locationId']}                                                            ${locId1}
     Should Be Equal As Strings    ${resp.json()['netRate']}                                                             ${Total}
+
+
+      ${new_no}=  Evaluate  ${CUSERNAME21}+257831
+      ${firstname}=  FakerLibrary.first_name
+      ${lastname}=  FakerLibrary.first_name
+      Set Test Variable  ${email}  ${firstname}${CUSERNAME21}.${test_mail}
+      ${city}=   get_place
+      ${address}=  get_address
+      ${landmark}=   FakerLibrary.sentence
+      ${postcode}=  FakerLibrary.postcode
+
+      ${resp}=   Update Consumer Delivery Address    ${new_no}    ${firstname}    ${lastname}    ${email}    ${address}    ${city}  ${postcode}   ${landmark}
+      Log   ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp}=    Get Consumer Delivery Address   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
