@@ -117,7 +117,7 @@ JD-TC-CreateTemplatePreview-4
    
 JD-TC-CreateTemplatePreview-5
 
-    [Documentation]  Create template preview for context signup with one dynamic variable provider name(will return a sample value).
+    [Documentation]  Create template preview for context CHECKIN with one dynamic variable provider name(will return a sample value).
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME131}  ${PASSWORD}
     Log   ${resp.content}
