@@ -9,6 +9,7 @@ Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ApiKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables       /ebs/TDD/varfiles/providers.py
 Variables       /ebs/TDD/varfiles/consumerlist.py 
@@ -2019,45 +2020,74 @@ JD-TC-Switch_Login-17
     Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 
+JD-TC-Switch_Login-18
 
+    [Documentation]    Switch login - sa link to a provider and switch to provider
 
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=   SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=    Connect with other login  ${loginId}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
 
+    ${resp}=    Switch login    ${loginId2}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
 
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
+JD-TC-Switch_Login-19
 
+    [Documentation]    Switch login - switch to deactivated provider
 
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Provider Login  ${loginId3}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=    DeActivate Service Provider 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
+    #... Trying to login deactivated provider
 
+    ${resp}=  Provider Login  ${loginId3}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}   ${ACCOUNT_DEACTIVATED_BASE}
 
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Provider Login  ${loginId2}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=    Switch login    ${loginId3}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-Switch_Login-20

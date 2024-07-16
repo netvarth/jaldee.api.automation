@@ -2482,6 +2482,7 @@ LOGIN_LOGINiD_VALIDATION_NOT_FOUND = "LogiId must be string with charectors numb
 INV_LOGIN_ID=   "Invalid loginId"
 PASSWORD_MANDATORY=   "Old password and new password are mandatory"
 INCORRECT_OLD_PASSWORD=  "Incorrect old password"
+INACTIVE_ACCOUNT=   "Account is InActive. Please contact SuperAdmin"
 
 #   ConsumerOrder
 
