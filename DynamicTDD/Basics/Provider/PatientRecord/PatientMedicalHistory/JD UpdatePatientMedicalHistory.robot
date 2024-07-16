@@ -521,9 +521,37 @@ JD-TC-Update Patient Medical History-UH6
 
     [Documentation]    Update Provider Consumer Medical history using another consumer login.
 
-    ${resp}=  ConsumerLogin  ${CUSERNAME1}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${accountId}=    get_acc_id       ${PUSERNAME70}
+
+    ${firstName}=  FakerLibrary.name
+    ${lastName}=  FakerLibrary.last_name
+    ${primaryMobileNo}    Generate random string    10    123456789
+    ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
+    ${email}=    FakerLibrary.Email
+
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${accountId}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200  
+   
+    ${resp}=    ProviderConsumer Login with token    ${primaryMobileNo}    ${accountId}    ${token}    ${countryCodes[0]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${title1}=  FakerLibrary.name      
     ${description1}=  FakerLibrary.name     	

@@ -485,7 +485,7 @@ JD-TC-Create Treatment Plan-7
     Should Be Equal As Strings    ${resp.json()['treatment']}     ${treatment}
     Should Be Equal As Strings    ${resp.json()['assignees'][0]}     ${u_id}
 
-    ${resp}=  Encrypted Provider Login  ${sam_email}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Treatment Plan By Id   ${treatmentId}    
@@ -572,10 +572,8 @@ JD-TC-Create Treatment Plan-UH5
 
     ${resp}=    Create Treatment Plan    ${caseUId}    ${id1}  ${treatment}  ${works}  
     Log   ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}  400
-    Should Be Equal As Strings  ${resp.json()}    ${LOGIN_INVALID_URL}
-
-
+     Should Be Equal As Strings    ${resp.status_code}  401
+    Should Be Equal As Strings  ${resp.json()}    ${NoAccess}
 
 
 *** Comments ***

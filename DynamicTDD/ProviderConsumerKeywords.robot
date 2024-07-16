@@ -21,7 +21,20 @@ Send Otp For Login
     RETURN  ${resp}
 
 Verify Otp For Login
-    [Arguments]  ${loginid}  ${purpose}
+    [Arguments]  ${loginid}  ${purpose}    &{kwargs}
+
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        IF  '${key}' == 'JSESSIONYNW'
+            ${sessionid}=  Set Variable  ${value}
+        END
+    END
+    ${session_given}=    Get Variable Value    ${sessionid}
+    IF  '${session_given}'=='${None}'
+        ${key}=   verify accnt  ${loginid}  ${purpose}
+    ELSE
+        ${key}=   verify accnt  ${loginid}  ${purpose}  ${sessionid}
+    END
+
     Check And Create YNW Session
     ${key}=   verify accnt  ${loginid}  ${purpose}
     ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser

@@ -566,8 +566,8 @@ JD-TC-Update Treatment Plan-UH5
 
     ${resp}=    Update Treatment Plan   ${treatmentId}  ${treatment}  ${PRStatus[0]}
     Log   ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}  400
-    Should Be Equal As Strings  ${resp.json()}    ${LOGIN_INVALID_URL}
+     Should Be Equal As Strings    ${resp.status_code}  401
+    Should Be Equal As Strings  ${resp.json()}    ${NoAccess}
     
 JD-TC-Update Treatment Plan-UH6
 

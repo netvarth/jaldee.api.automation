@@ -202,8 +202,8 @@ JD-TC-Get Treatment Plan By case Id-UH1
 
     ${resp}=    Get Treatment Plan By case Id   ${caseUId}    
     Log   ${resp.content}
-    Should Be Equal As Strings       ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}  []
+    Should Be Equal As Strings       ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}    ${NO_PERMISSION}
    
 
 JD-TC-Get Treatment Plan By case Id-UH2
@@ -240,5 +240,5 @@ JD-TC-Get Treatment Plan By case Id-UH4
 
    ${resp}=    Get Treatment Plan By case Id   ${caseUId}    
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}  400
-    Should Be Equal As Strings  ${resp.json()}    ${LOGIN_INVALID_URL}
+    Should Be Equal As Strings    ${resp.status_code}  401
+    Should Be Equal As Strings  ${resp.json()}    ${NoAccess}

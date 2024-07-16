@@ -550,9 +550,38 @@ JD-TC-Update Dental Record-UH3
 
     [Documentation]   Update Dental Record with consumer login.
 
-    ${resp}=   Consumer Login  ${CUSERNAME8}   ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${accountId}=    get_acc_id       ${PUSERNAME70}
+
+    ${firstName}=  FakerLibrary.name
+    ${lastName}=  FakerLibrary.last_name
+    ${primaryMobileNo}    Generate random string    10    123456789
+    ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
+    ${email}=    FakerLibrary.Email
+
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${accountId}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200  
+   
+    ${resp}=    ProviderConsumer Login with token    ${primaryMobileNo}    ${accountId}    ${token}    ${countryCodes[0]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
     ${resp}=    Update DentalRecord    ${id}    ${toothNo}  ${toothType[1]}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces}
     Log   ${resp.json()}

@@ -38,7 +38,7 @@ JD-TC-Get Treatment Plan By ProviderConsumer Id-1
 
     [Documentation]    Get Treatment Plan By ProviderConsumer Id
 
-    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -127,7 +127,7 @@ JD-TC-Get Treatment Plan By ProviderConsumer Id-1
 
     
 
-    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

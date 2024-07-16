@@ -292,8 +292,8 @@ JD-TC-Update Work list in Treatment Plan-UH4
     
     ${resp}=    Update Work list in Treatment Plan   ${treatmentId}  ${works}
     Log   ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}  400
-    Should Be Equal As Strings  ${resp.json()}    ${LOGIN_INVALID_URL}
+     Should Be Equal As Strings    ${resp.status_code}  401
+    Should Be Equal As Strings  ${resp.json()}    ${NoAccess}
     
 JD-TC-Update Work list in Treatment Plan-UH6
 
