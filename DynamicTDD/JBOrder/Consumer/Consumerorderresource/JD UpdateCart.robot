@@ -320,7 +320,7 @@ JD-TC-Update cart-UH1
     ${resp}=  Update Cart From Consumerside     ${cartUid}   ${store_id}    ${cid}      ${deliveryType[0]}      ${catalogItems2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings  ${resp.json()}   ${FIELD_REQUIRED}
+    Should Be Equal As Strings  ${resp.json()}   ${QTY_MUST_GREATER_THAN_ZERO}
 
 JD-TC-Update cart-UH2
 

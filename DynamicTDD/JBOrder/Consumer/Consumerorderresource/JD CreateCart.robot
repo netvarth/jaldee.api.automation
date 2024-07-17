@@ -1506,7 +1506,7 @@ JD-TC-create cart-UH10
     ${resp}=  Create Cart From Consumerside      ${store_id}    ${cid}      ${deliveryType[0]}    ${catalogItems11}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings  ${resp.json()}   ${FIELD_REQUIRED}
+    Should Be Equal As Strings  ${resp.json()}   ${QTY_MUST_GREATER_THAN_ZERO}
 
 JD-TC-create cart-UH11
 
