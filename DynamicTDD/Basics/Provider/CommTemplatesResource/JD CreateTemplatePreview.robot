@@ -117,7 +117,7 @@ JD-TC-CreateTemplatePreview-4
    
 JD-TC-CreateTemplatePreview-5
 
-    [Documentation]  Create template preview for context CHECKIN with one dynamic variable provider name(will return a sample value).
+    [Documentation]  Create template preview for context SIGNUP with one dynamic variable provider name(will return a sample value).
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME131}  ${PASSWORD}
     Log   ${resp.content}
@@ -134,10 +134,10 @@ JD-TC-CreateTemplatePreview-5
     ${content}=    Create Dictionary  intro=${content_msg1}
     ${out_content}=  Set Variable   ${content_msg} ${sprov_name}
     
-    ${resp}=  Create Template Preview  ${VariableContext[0]}  ${content}  
+    ${resp}=  Create Template Preview  ${VariableContext[3]}  ${content}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()['context']}           ${VariableContext[0]} 
+    Should Be Equal As Strings  ${resp.json()['context']}           ${VariableContext[3]} 
     Should Be Equal As Strings  ${resp.json()['content']['intro']}  ${out_content} 
 
 JD-TC-CreateTemplatePreview-6
@@ -192,7 +192,7 @@ JD-TC-CreateTemplatePreview-7
 
 JD-TC-CreateTemplatePreview-8
 
-    [Documentation]  Create template preview for context signup with one dynamic variable mobile number(will return a sample value).
+    [Documentation]  Create template preview for context SIGNUP with one dynamic variable mobile number(will return a sample value).
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME131}  ${PASSWORD}
     Log   ${resp.content}
@@ -209,10 +209,10 @@ JD-TC-CreateTemplatePreview-8
     ${content}=    Create Dictionary  intro=${content_msg1}
     ${out_content}=  Set Variable   ${content_msg} ${smob_no}
     
-    ${resp}=  Create Template Preview  ${VariableContext[0]}  ${content}  
+    ${resp}=  Create Template Preview  ${VariableContext[3]}  ${content}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()['context']}           ${VariableContext[0]} 
+    Should Be Equal As Strings  ${resp.json()['context']}           ${VariableContext[3]} 
     Should Be Equal As Strings  ${resp.json()['content']['intro']}  ${out_content} 
 
 JD-TC-CreateTemplatePreview-9
@@ -233,6 +233,30 @@ JD-TC-CreateTemplatePreview-9
     ${content_msg1}=     Set Variable  ${content_msg} [${dynamic_var1}]
     ${content}=    Create Dictionary  intro=${content_msg1}
     ${out_content}=  Set Variable   ${content_msg} ${sdate}
+    
+    ${resp}=  Create Template Preview  ${VariableContext[0]}  ${content}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['context']}           ${VariableContext[0]} 
+    Should Be Equal As Strings  ${resp.json()['content']['intro']}  ${out_content} 
+
+JD-TC-CreateTemplatePreview-10
+
+    [Documentation]  Create template preview for context CHECKIN with one dynamic variable which is not in that context(will rerurn a space)
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME131}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Dynamic Variable List By Context   ${context_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${dynamic_var1}   ${resp.json()[3]['name']}
+    
+    ${content_msg}=      FakerLibrary.sentence
+    ${content_msg1}=     Set Variable  ${content_msg} [${dynamic_var1}]
+    ${content}=    Create Dictionary  intro=${content_msg1}
+    ${out_content}=  Set Variable   ${content_msg} ${SPACE}
     
     ${resp}=  Create Template Preview  ${VariableContext[0]}  ${content}  
     Log   ${resp.content}

@@ -50,6 +50,8 @@ JD-TC-CreateTemplateSettings-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${sendcomm_list}=  Create List   ${sendcomm_id1}  
+
     ${resp}=  Get Template By Id   ${temp_id1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -60,6 +62,7 @@ JD-TC-CreateTemplateSettings-1
     Should Be Equal As Strings  ${resp.json()['templateFormat']}              ${templateFormat[0]}
     Should Be Equal As Strings  ${resp.json()['content']['intro']}            ${content_msg}
     Should Be Equal As Strings  ${resp.json()['commTarget']}                  ${comm_target} 
+    Should Be Equal As Strings  ${resp.json()['sendComm']}                    ${sendcomm_list} 
     Should Be Equal As Strings  ${resp.json()['status']}                      ${VarStatus[0]} 
 
 JD-TC-CreateTemplateSettings-2
@@ -269,3 +272,51 @@ JD-TC-CreateTemplateSettings-UH6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  ${resp.json()}   ${TEMPLATE_SETTINGS_CHANNEL_SHOULD_BE_NOT_NULL}
+
+JD-TC-CreateTemplateSettings-UH7
+
+    [Documentation]  create a template settings with
+    ...    context : checkin, trigger : token confirmation, channel : email, whatsapp, target : consumer, provider
+    ...    then disable the template and try to create the same template again.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Send Comm List
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${sendcomm_id1}   ${resp.json()[66]['id']}
+
+    ${temp_name}=    FakerLibrary.word
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
+    ${comm_chanl}=  Create List   ${CommChannel[1]}   ${CommChannel[2]}
+    ${comm_target}=  Create List   ${CommTarget[0]}  ${CommTarget[1]}
+    ${sendcomm_list}=  Create List   ${sendcomm_id1}  
+    
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}   ${comm_chanl} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${temp_id1}  ${resp.content}
+
+    ${resp}=  Create Template Settings   ${temp_id1}  ${VariableContext[0]}  ${sendcomm_id1}  ${CommTarget[0]}    ${CommChannel[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+
+    ${resp}=  Get Template By Id   ${temp_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['accountId']}                   ${account_id} 
+    Should Be Equal As Strings  ${resp.json()['templateName']}                ${temp_name}
+    Should Be Equal As Strings  ${resp.json()['context']}                     ${VariableContext[0]} 
+    Should Be Equal As Strings  ${resp.json()['commChannel']}                 ${comm_chanl} 
+    Should Be Equal As Strings  ${resp.json()['templateFormat']}              ${templateFormat[0]}
+    Should Be Equal As Strings  ${resp.json()['content']['intro']}            ${content_msg}
+    Should Be Equal As Strings  ${resp.json()['commTarget']}                  ${comm_target} 
+    Should Be Equal As Strings  ${resp.json()['status']}                      ${VarStatus[0]} 
+
+    ${resp}=  Update Template Status   ${temp_id1}  ${VarStatus[1]}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200

@@ -343,9 +343,10 @@ JD-TC-TokenNotification-3
     ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[1]}   ${CommChannel[2]}
     ${comm_target}=  Create List   ${CommTarget[0]}  ${CommTarget[1]}
+    ${sendcomm_list}=  Create List   ${sendcomm_id1}  
     
     ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}   ${comm_chanl} 
-    ...    sendComm=${sendcomm_id1}
+    ...    sendComm=${sendcomm_list}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${temp_id1}  ${resp.content}

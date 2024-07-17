@@ -36,7 +36,7 @@ JD-TC-GetDynamicVariableListBySendComm-1
 
 JD-TC-GetDynamicVariableListBySendComm-UH1
 
-    [Documentation]  Get Dynamic Variable List By non existing Send Comm id.
+    [Documentation]  Get Dynamic Variable List By non existing Send Comm id(will return global values).
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Log   ${resp.content}
@@ -45,7 +45,7 @@ JD-TC-GetDynamicVariableListBySendComm-UH1
     ${invsend_comid}=  Random Int   min=1000  max=10000
     ${resp}=  Get Dynamic Variable List By SendComm   ${invsend_comid}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-GetDynamicVariableListBySendComm-UH2
 

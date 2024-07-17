@@ -47,8 +47,8 @@ JD-TC-GetCustomTemplatePreview-1
 
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence   
-    ${content_msg}=     Set Variable  ${content_msg} [${custom_var1}].
-    ${content}=    Create Dictionary  intro=${content_msg}
+    ${content_msg1}=     Set Variable  ${content_msg} [${custom_var1}].
+    ${content}=    Create Dictionary  intro=${content_msg1}
     ${tempheader_sub}=      FakerLibrary.sentence   5
     ${salutation}=      FakerLibrary.word
     ${comm_chanl}=  Create List   ${CommChannel[2]}  
@@ -81,7 +81,7 @@ JD-TC-GetCustomTemplatePreview-1
     Should Be Equal As Strings  ${resp.json()['templateHeader']['salutation']}  ${salutation}
     Should Be Equal As Strings  ${resp.json()['footer']['signature']}           ${signature}
     Should Be Equal As Strings  ${resp.json()['footer']['closing']}             ${closing}
-    Should Be Equal As Strings  ${resp.json()['content']['intro']}              ${content_msg}
+    Should Be Equal As Strings  ${resp.json()['content']['intro']}              ${content_msg} ${SPACE}.
     Should Be Equal As Strings  ${resp.json()['commTarget']}                    ${comm_target} 
     Should Be Equal As Strings  ${resp.json()['status']}                        ${VarStatus[0]} 
 

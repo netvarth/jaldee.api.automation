@@ -924,7 +924,7 @@ JD-TC-GetTemplateByFilter-13
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${temp_id3}  ${resp.content}
 
-    ${resp}=  Get Template By Filter   CommChannel-eq=${CommChannel[1]}, ${CommChannel[3]}  
+    ${resp}=  Get Template By Filter   commChannel-eq=${CommChannel[1]}, ${CommChannel[3]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${len}=  Get Length  ${resp.json()}
@@ -953,7 +953,7 @@ JD-TC-GetTemplateByFilter-13
         END
     END
 
-    ${resp}=  Get Template By Filter   CommChannel-eq=${CommChannel[2]}
+    ${resp}=  Get Template By Filter   commChannel-eq=${CommChannel[2]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()[0]['id']}                          ${temp_id3} 
@@ -1012,7 +1012,7 @@ JD-TC-GetTemplateByFilter-14
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${temp_id3}  ${resp.content}
 
-    ${resp}=  Get Template By Filter   CommTarget-eq=${CommTarget[0]}, ${CommChannel[1]}  
+    ${resp}=  Get Template By Filter   commTarget-eq=${CommTarget[0]}, ${CommChannel[1]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${len}=  Get Length  ${resp.json()}
@@ -1097,7 +1097,7 @@ JD-TC-GetTemplateByFilter-15
     Should Be Equal As Strings    ${resp.status_code}    200  
     Set Test Variable   ${temp_id1}   ${resp.content}
 
-    ${resp}=  Get Template By Filter   CommChannel-eq=${CommChannel[2]}
+    ${resp}=  Get Template By Filter   commChannel-eq=${CommChannel[2]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()[0]['id']}                          ${temp_id3} 
