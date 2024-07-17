@@ -31,129 +31,60 @@ JD-TC-TokenNotification-1
 
     [Documentation]  signup a provider
 
-    #...........signup a provider.......
+# ...........signup a provider.......
 
-    # Create Directory   ${EXECDIR}/TDD/${ENVIRONMENT}data/
-    # Create Directory   ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/
-    # Log  ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py
-    # ${num}=  find_last  ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py
+    Create Directory   ${EXECDIR}/TDD/${ENVIRONMENT}data/
+    Create Directory   ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/
+    Log  ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py
+    ${num}=  find_last  ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py
 
-    # ${PH_Number}    Random Number 	digits=5 
-    # ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    # Log  ${PH_Number}
-    # Set Suite Variable  ${ph}  555${PH_Number}
+    ${PH_Number}    Random Number 	digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Suite Variable  ${ph}  555${PH_Number}
 
-    # ${PH_Number}    Random Number 	digits=5 
-    # ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    # Log  ${PH_Number}
-    # Set Suite Variable  ${ph1}  555${PH_Number}
+    ${PH_Number}    Random Number 	digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Suite Variable  ${ph1}  555${PH_Number}
 
-    # ${ph1}=  Evaluate  ${ph}+1000000000
-    # ${ph2}=  Evaluate  ${ph}+2000000000
-    # ${licpkgid}  ${licpkgname}=  get_highest_license_pkg
-    # ${corp_resp}=   get_iscorp_subdomains  1
+    ${ph1}=  Evaluate  ${ph}+1000000000
+    ${ph2}=  Evaluate  ${ph}+2000000000
+    ${licpkgid}  ${licpkgname}=  get_highest_license_pkg
+    ${corp_resp}=   get_iscorp_subdomains  1
 
-    # ${resp}=  Get BusinessDomainsConf
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # ${dom_len}=  Get Length  ${resp.json()}
-    # ${dom}=  random.randint  ${0}  ${dom_len-1}
-    # ${sdom_len}=  Get Length  ${resp.json()[${dom}]['subDomains']}
-    # Set Test Variable  ${domain}  ${resp.json()[${dom}]['domain']}
-    # Log   ${domain}
+    ${resp}=  Get BusinessDomainsConf
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${dom_len}=  Get Length  ${resp.json()}
+    ${dom}=  random.randint  ${0}  ${dom_len-1}
+    ${sdom_len}=  Get Length  ${resp.json()[${dom}]['subDomains']}
+    Set Test Variable  ${domain}  ${resp.json()[${dom}]['domain']}
+    Log   ${domain}
     
-    # FOR  ${subindex}  IN RANGE  ${sdom_len}
-    #     ${sdom}=  random.randint  ${0}  ${sdom_len-1}
-    #     Set Test Variable  ${subdomain}  ${resp.json()[${dom}]['subDomains'][${subindex}]['subDomain']}
-    #     ${is_corp}=  check_is_corp  ${subdomain}
-    #     Exit For Loop If  '${is_corp}' == 'False'
-    # END
-    # Log   ${subdomain}
+    FOR  ${subindex}  IN RANGE  ${sdom_len}
+        ${sdom}=  random.randint  ${0}  ${sdom_len-1}
+        Set Test Variable  ${subdomain}  ${resp.json()[${dom}]['subDomains'][${subindex}]['subDomain']}
+        ${is_corp}=  check_is_corp  ${subdomain}
+        Exit For Loop If  '${is_corp}' == 'False'
+    END
+    Log   ${subdomain}
 
-    # ${fname}=  FakerLibrary.name
-    # ${lname}=  FakerLibrary.lastname
-    # ${resp}=  Account SignUp  ${fname}  ${lname}  ${None}  ${domain}  ${subdomain}  ${ph}  ${licpkgid}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    202
+    ${fname}=  FakerLibrary.name
+    ${lname}=  FakerLibrary.lastname
+    ${resp}=  Account SignUp  ${fname}  ${lname}  ${None}  ${domain}  ${subdomain}  ${ph}  ${licpkgid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
 
-    # ${resp}=  Account Activation  ${ph}   ${OtpPurpose['ProviderSignUp']}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Account Activation  ${ph}   ${OtpPurpose['ProviderSignUp']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${ph}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # sleep  03s
+    ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${ph}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    sleep  03s
 
-    # ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    # Log  ${decrypted_data}
-    # Set Suite Variable  ${pro_id}  ${decrypted_data['id']}
-
-    # Append To File  ${EXECDIR}/TDD/${ENVIRONMENT}data/${ENVIRONMENT}phnumbers.txt  ${ph} - ${PASSWORD}${\n}
-    # Append To File  ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py  PUSERNAME${num}=${ph}${\n}
-    
-    # ${list}=  Create List  1  2  3  4  5  6  7
-    # ${views}=  Evaluate  random.choice($Views)  random
-    # ${name1}=  FakerLibrary.name
-    # ${name2}=  FakerLibrary.name
-    # ${name3}=  FakerLibrary.name
-    # ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
-    # ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    # ${emails1}=  Emails  ${name3}  Email  ${P_Email}${ph}.${test_mail}  ${views}
-    # ${bs}=  FakerLibrary.bs
-    # ${companySuffix}=  FakerLibrary.companySuffix
-    # ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    # ${parking}   Random Element   ${parkingType}
-    # ${24hours}    Random Element    ['True','False']
-    # ${desc}=   FakerLibrary.sentence
-    # ${url}=   FakerLibrary.url
-    # ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    # Set Suite Variable  ${tz}
-    # ${DAY1}=  db.get_date_by_timezone  ${tz}
-    # ${Time}=  db.get_time_by_timezone  ${tz}
-    # ${sTime}=  db.add_timezone_time  ${tz}  0  15  
-    # ${eTime}=  db.add_timezone_time  ${tz}  0  45  
-    # ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${resp}=  Get Business Profile
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${account_id}  ${resp.json()['id']}
-    # Set Test Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
-
-    # ${fields}=   Get subDomain level Fields  ${domain}  ${subdomain}
-    # Log  ${fields.content}
-    # Should Be Equal As Strings    ${fields.status_code}   200
-
-    # ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
-
-    # ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${subdomain}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=  Get specializations Sub Domain  ${domain}  ${subdomain}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-
-    # ${spec}=  get_Specializations  ${resp.json()}
-    
-    # ${resp}=  Update Specialization  ${spec}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-
-    # ${resp}=  Get Features  ${subdomain}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-   
-    # ${resp}=  Update Service Provider With Emailid   ${pro_id}   ${fname}   ${fname}   ${Genderlist[0]}  ${EMPTY}  ${email_id}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -161,12 +92,77 @@ JD-TC-TokenNotification-1
     Log  ${decrypted_data}
     Set Suite Variable  ${pro_id}  ${decrypted_data['id']}
 
+    Append To File  ${EXECDIR}/TDD/${ENVIRONMENT}data/${ENVIRONMENT}phnumbers.txt  ${ph} - ${PASSWORD}${\n}
+    Append To File  ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py  PUSERNAME${num}=${ph}${\n}
+    
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${views}=  Evaluate  random.choice($Views)  random
+    ${name1}=  FakerLibrary.name
+    ${name2}=  FakerLibrary.name
+    ${name3}=  FakerLibrary.name
+    ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
+    ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${ph}.${test_mail}  ${views}
+    ${bs}=  FakerLibrary.bs
+    ${companySuffix}=  FakerLibrary.companySuffix
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${parking}   Random Element   ${parkingType}
+    ${24hours}    Random Element    ['True','False']
+    ${desc}=   FakerLibrary.sentence
+    ${url}=   FakerLibrary.url
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${Time}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.add_timezone_time  ${tz}  0  15  
+    ${eTime}=  db.add_timezone_time  ${tz}  0  45  
+    ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+    Set Test Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+
+    ${fields}=   Get subDomain level Fields  ${domain}  ${subdomain}
+    Log  ${fields.content}
+    Should Be Equal As Strings    ${fields.status_code}   200
+
+    ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+
+    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${subdomain}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get specializations Sub Domain  ${domain}  ${subdomain}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${spec}=  get_Specializations  ${resp.json()}
+    
+    ${resp}=  Update Specialization  ${spec}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get Features  ${subdomain}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+   
+    ${resp}=  Update Service Provider With Emailid   ${pro_id}   ${fname}   ${fname}   ${Genderlist[0]}  ${EMPTY}  ${email_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
     ${resp}=  Get Service
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Enable Waitlist
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Business Profile
@@ -186,11 +182,11 @@ JD-TC-TokenNotification-1
         ${resp}=   Get Location ById  ${locId}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
 #....create service with pre payment.....
@@ -204,7 +200,7 @@ JD-TC-TokenNotification-1
     ${prepay_sername}=    FakerLibrary.firstname
    
     ${resp}=  Create Service    ${prepay_sername}  ${desc}  ${prepay_serdur}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${prepay_price}   ${prepay_serprice}
-    ...    ${bool[1]}   ${bool[0]}   serviceCategory=${serviceCategory[1]}
+    ...    ${bool[1]}   ${bool[0]}   serviceCategory=${serviceCategory[1]}  maxBookingsAllowed=10
     Log   ${resp.content}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${prepay_serid1}  ${resp.json()}
@@ -216,7 +212,7 @@ JD-TC-TokenNotification-1
     ${sername}=    FakerLibrary.firstname
    
     ${resp}=  Create Service    ${sername}  ${desc}  ${serdur}   ${status[0]}   ${btype}  ${bool[1]}   ${notifytype[2]}   ${EMPTY}   ${serprice}
-    ...    ${bool[0]}   ${bool[0]}  
+    ...    ${bool[0]}   ${bool[0]}  maxBookingsAllowed=10
     Log   ${resp.content}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${serid1}  ${resp.json()}
@@ -273,7 +269,7 @@ JD-TC-TokenNotification-2
 
     [Documentation]  take a walkin checkin for today without create any template and check default notifications.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -329,7 +325,7 @@ JD-TC-TokenNotification-3
     [Documentation]  create a template for checkin context and take a walkin checkin and verify the notifications.
     ...    context : checkin, trigger : token confirmation, channel : email, whatsapp, target : consumer, provider
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

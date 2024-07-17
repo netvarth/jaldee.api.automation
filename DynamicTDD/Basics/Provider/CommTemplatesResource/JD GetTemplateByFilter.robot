@@ -958,12 +958,12 @@ JD-TC-GetTemplateByFilter-13
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()[0]['id']}                          ${temp_id3} 
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}                   ${account_id} 
-    Should Be Equal As Strings  ${resp.json()[0]['templateName']}                ${temp_name1}
-    Should Be Equal As Strings  ${resp.json()[0]['context']}                     ${VariableContext[0]} 
-    Should Be Equal As Strings  ${resp.json()[0]['commChannel']}                 ${comm_chanl} 
+    Should Be Equal As Strings  ${resp.json()[0]['templateName']}                ${temp_name2}
+    Should Be Equal As Strings  ${resp.json()[0]['context']}                     ${VariableContext[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['commChannel']}                 ${comm_chanl2} 
     Should Be Equal As Strings  ${resp.json()[0]['templateFormat']}              ${templateFormat[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['content']['intro']}            ${content_msg}
-    Should Be Equal As Strings  ${resp.json()[0]['commTarget']}                  ${comm_target} 
+    Should Be Equal As Strings  ${resp.json()[0]['content']['intro']}            ${content_msg2}
+    Should Be Equal As Strings  ${resp.json()[0]['commTarget']}                  ${comm_target3} 
     Should Be Equal As Strings  ${resp.json()[0]['status']}                      ${VarStatus[0]} 
 
 JD-TC-GetTemplateByFilter-14
@@ -1012,7 +1012,7 @@ JD-TC-GetTemplateByFilter-14
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${temp_id3}  ${resp.content}
 
-    ${resp}=  Get Template By Filter   commTarget-eq=${CommTarget[0]}, ${CommChannel[1]}  
+    ${resp}=  Get Template By Filter   commTarget-eq=${CommTarget[0]}, ${CommChannel[2]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${len}=  Get Length  ${resp.json()}
@@ -1053,7 +1053,7 @@ JD-TC-GetTemplateByFilter-14
 
 JD-TC-GetTemplateByFilter-15
 
-    [Documentation]  Create multiple templates then get it by send comm id filter and verify.
+    [Documentation]  Create template then get it by send comm id filter and verify.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME254}  ${PASSWORD}
     Log   ${resp.content}
@@ -1090,14 +1090,15 @@ JD-TC-GetTemplateByFilter-15
 
     ${temp_header}=    Create Dictionary  subject=${tempheader_sub}   salutation=${salutation}  note=${EMPTY}
     ${temp_footer}=    Create Dictionary  closing=${EMPTY}   signature=${signature}  
+    ${sendcomm_list}=  Create List   ${sendcomm_id1}  
 
     ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl}  
-    ...    templateHeader=${temp_header}  footer=${temp_footer}
+    ...    templateHeader=${temp_header}  footer=${temp_footer}  sendComm=${sendcomm_list}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200  
     Set Test Variable   ${temp_id1}   ${resp.content}
 
-    ${resp}=  Get Template By Filter   commChannel-eq=${CommChannel[2]}
+    ${resp}=  Get Template By Filter   sendComm-eq=${sendcomm_id1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()[0]['id']}                          ${temp_id3} 
@@ -1107,7 +1108,8 @@ JD-TC-GetTemplateByFilter-15
     Should Be Equal As Strings  ${resp.json()[0]['commChannel']}                 ${comm_chanl} 
     Should Be Equal As Strings  ${resp.json()[0]['templateFormat']}              ${templateFormat[0]}
     Should Be Equal As Strings  ${resp.json()[0]['content']['intro']}            ${content_msg}
-    Should Be Equal As Strings  ${resp.json()[0]['commTarget']}                  ${comm_target} 
+    Should Be Equal As Strings  ${resp.json()[0]['commTarget']}                  ${comm_target}
+    Should Be Equal As Strings  ${resp.json()[0]['sendComm']}                    ${sendcomm_list}  
     Should Be Equal As Strings  ${resp.json()[0]['status']}                      ${VarStatus[0]} 
 
 JD-TC-GetTemplateByFilter-UH1

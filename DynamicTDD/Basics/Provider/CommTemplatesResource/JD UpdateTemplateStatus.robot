@@ -294,4 +294,5 @@ JD-TC-UpdateTemplateStatus-UH3
 
     ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}   ${TEMPLATE_NAME_EXISTS}
