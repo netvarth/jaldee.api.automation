@@ -2501,5 +2501,6 @@ SALE_TYPE_NOTENABLED_IN_STORE = "{} cannot be enabled because it is not enabled 
 NO_ITEMS_AVAILABLE = "No {} available for {}"
 ERR_IN = "Error while generating {}"
 ITEM_REQ_QTY_NOTAVALIABLE_WITHOUT_QTY = "Required quantity is not avalable for the item {}."
+QTY_MUST_GREATER_THAN_ZERO = "Quantity must be greater than zero"
 
 INVALID_FEATURE = "Invalid RBAC feature name"
