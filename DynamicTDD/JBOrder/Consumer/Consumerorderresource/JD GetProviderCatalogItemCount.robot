@@ -256,7 +256,7 @@ JD-TC-Get Provider Catalogs Items Count-UH1
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
     ${NO_ITEMS_AVAILABLE}=  format String   ${NO_ITEMS_AVAILABLE}   items  online shopping
-    ${resp}=    Get Provider Catalog Item Count Filter    sorderCatalogEncId-eq=${soc_id1}  accountId-eq=${accountId}   storeEncId-eq=${store_id}
+    ${resp}=    Get Provider Catalog Item Count Filter    sorderCatalogEncId-eq=${soc_id1}  accountId-eq=${accountId}   storeEncId-eq=${store_id}  onlineSelfOrder=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings    ${resp.json()}    ${NO_ITEMS_AVAILABLE}
