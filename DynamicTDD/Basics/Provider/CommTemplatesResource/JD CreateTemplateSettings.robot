@@ -304,7 +304,6 @@ JD-TC-CreateTemplateSettings-UH7
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-
     ${resp}=  Get Template By Id   ${temp_id1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200

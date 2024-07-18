@@ -421,7 +421,13 @@ JD-TC-TokenNotification-3
     Should Be Equal As Strings  ${resp.json()['commChannel']}                 ${comm_chanl} 
     Should Be Equal As Strings  ${resp.json()['templateFormat']}              ${templateFormat[0]}
     Should Be Equal As Strings  ${resp.json()['content']['intro']}            ${content_msg}
-    Should Be Equal As Strings  ${resp.json()['commTarget']}                  ${comm_target} 
+    Should Be Equal As Strings  ${resp.json()['commTarget']}                  ${comm_target}
+    Should Be Equal As Strings  ${resp.json()['sendComm']}                              ${sendcomm_list}
+    Should Be Equal As Strings  ${resp.json()['sendCommDetails'][0]['id']}              ${sendcomm_id1}
+    Should Be Equal As Strings  ${resp.json()['sendCommDetails'][0]['name']}            ${sendcomm_name1}
+    Should Be Equal As Strings  ${resp.json()['sendCommDetails'][0]['displayName']}     ${sendcomm_disname1}
+    Should Be Equal As Strings  ${resp.json()['sendCommDetails'][0]['context']}         ${sendcomm_context1}
+    Should Be Equal As Strings  ${resp.json()['sendCommDetails'][0]['variables']}       ${sendcomm_vars1}  
     Should Be Equal As Strings  ${resp.json()['status']}                      ${VarStatus[1]} 
 
     ${resp}=  Update Template Status   ${temp_id1}  ${VarStatus[0]}  

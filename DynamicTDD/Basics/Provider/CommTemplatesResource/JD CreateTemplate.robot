@@ -900,7 +900,30 @@ JD-TC-TokenNotification-30
     ...    sendComm=${sendcomm_list}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-   
+
+JD-TC-CreateTemplate-31
+
+    [Documentation]  Create template with different template name.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${temp_name}=    FakerLibrary.word
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
+    ${comm_target}=  Create List   ${CommTarget[0]}  
+
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[2]}  ${comm_target}    ${comm_chanl} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${temp_name1}=    FakerLibrary.word
+    ${resp}=  Create Template   ${temp_name1}  ${content}  ${templateFormat[0]}  ${VariableContext[2]}  ${comm_target}    ${comm_chanl} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
 JD-TC-CreateTemplate-UH1
 
     [Documentation]  Create template with same template name.
