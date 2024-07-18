@@ -24,6 +24,7 @@ ${test_mail}           test@jaldee.com
 ${count}               ${5}
 ${email_id}            reshma.test@jaldee.com
 ${NEW_PASSWORD}        Jaldee123
+${self}                0
 
 *** Test Cases ***
 
@@ -165,6 +166,14 @@ JD-TC-TokenNotification-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${checkin_emails}=  Create List   ${email_id}
+    ${push_msg_nos}=  Create Dictionary   number=${ph}   countryCode=${countryCodes[1]}
+    ${push_msg_nos}=  Create List   ${push_msg_nos}
+
+    ${resp}=  Update Provider Notification Settings  ${NotificationResourceType[0]}  ${EventType[0]}  ${EMPTY_List}  ${checkin_emails}  ${push_msg_nos}  ${self}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -253,9 +262,11 @@ JD-TC-TokenNotification-1
         Log  ${resp.content}
         Should Be Equal As Strings      ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
-            ${firstname}=  FakerLibrary.name
+            ${firstname}=  FakerLibrary.first_name
             ${lastname}=  FakerLibrary.last_name
-            ${resp1}=  AddCustomer  ${CUSERPH${a}}   firstName=${firstname}   lastName=${lastname}  countryCode=${countryCodes[1]}
+            Set Test Variable  ${pc_email}  ${firstname}${C_Email}.${test_mail}
+
+            ${resp1}=  AddCustomer  ${CUSERPH${a}}   firstName=${firstname}   lastName=${lastname}  countryCode=${countryCodes[1]}  email=${pc_email}
             Log  ${resp1.content}
             Should Be Equal As Strings  ${resp1.status_code}  200
             Append To List  ${prov_cons_list}  ${resp.json()}
@@ -291,6 +302,12 @@ JD-TC-TokenNotification-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=   Get Waitlist EncodedId    ${wid}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid_encId}=  Set Variable   ${resp.json()}
+    Set Suite Variable  ${wid_encId}
+
     ${resp}=  Get provider communications
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -322,8 +339,8 @@ JD-TC-TokenNotification-2
     
 JD-TC-TokenNotification-3
 
-    [Documentation]  create a template for checkin context and take a walkin checkin and verify the notifications.
-    ...    context : checkin, trigger : token confirmation, channel : email, whatsapp, target : consumer, provider
+    [Documentation]  create a template for checkin context and canel the walkin checkin and verify the notifications.
+    ...    context : checkin, trigger : token cancellation, channel : email, whatsapp, target : consumer, provider
 
     ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     Log   ${resp.content}
@@ -332,11 +349,21 @@ JD-TC-TokenNotification-3
     ${resp}=  Get Send Comm List
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${sendcomm_id1}   ${resp.json()[66]['id']}
+    Set Test Variable   ${sendcomm_id1}         ${resp.json()[41]['id']}
+    Set Test Variable   ${sendcomm_name1}       ${resp.json()[41]['name']}
+    Set Test Variable   ${sendcomm_disname1}    ${resp.json()[41]['displayName']}
+    Set Test Variable   ${sendcomm_context1}    ${resp.json()[41]['context']}
+    Set Test Variable   ${sendcomm_vars1}       ${resp.json()[41]['variables']}
+
+    ${resp}=  Get Dynamic Variable List By SendComm   ${sendcomm_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${cons_name}        ${resp.json()[0]['name']}
+    Set Test Variable   ${book_enid}        ${resp.json()[15]['name']}
+    Set Test Variable   ${book_date}        ${resp.json()[16]['name']}
 
     ${temp_name}=    FakerLibrary.word
-    ${content_msg}=      FakerLibrary.sentence
-    ${content}=    Create Dictionary  intro=${content_msg}
+    ${content}=    Create Dictionary  intro=${EMPTY}
     ${comm_chanl}=  Create List   ${CommChannel[1]}   ${CommChannel[2]}
     ${comm_target}=  Create List   ${CommTarget[0]}  ${CommTarget[1]}
     ${sendcomm_list}=  Create List   ${sendcomm_id1}  
@@ -350,55 +377,74 @@ JD-TC-TokenNotification-3
     ${resp}=  Get Template By Id   ${temp_id1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['accountId']}                             ${account_id} 
+    Should Be Equal As Strings  ${resp.json()['templateName']}                          ${temp_name}
+    Should Be Equal As Strings  ${resp.json()['context']}                               ${VariableContext[0]} 
+    Should Be Equal As Strings  ${resp.json()['commChannel']}                           ${comm_chanl} 
+    Should Be Equal As Strings  ${resp.json()['templateFormat']}                        ${templateFormat[0]}
+    Should Be Equal As Strings  ${resp.json()['content']['intro']}                      ${EMPTY}
+    Should Be Equal As Strings  ${resp.json()['commTarget']}                            ${comm_target}
+    Should Be Equal As Strings  ${resp.json()['sendComm']}                              ${sendcomm_list}
+    Should Be Equal As Strings  ${resp.json()['sendCommDetails'][0]['id']}              ${sendcomm_id1}
+    Should Be Equal As Strings  ${resp.json()['sendCommDetails'][0]['name']}            ${sendcomm_name1}
+    Should Be Equal As Strings  ${resp.json()['sendCommDetails'][0]['displayName']}     ${sendcomm_disname1}
+    Should Be Equal As Strings  ${resp.json()['sendCommDetails'][0]['context']}         ${sendcomm_context1}
+    Should Be Equal As Strings  ${resp.json()['sendCommDetails'][0]['variables']}       ${sendcomm_vars1} 
+    Should Be Equal As Strings  ${resp.json()['status']}                                ${VarStatus[1]} 
+
+    ${booking_details}=  Catenate   SEPARATOR=\n
+    ...                   'Name': [${cons_name}],
+    ...                   'Booking Reference Number': [${book_enid}],
+    ...                   'Check-in Date': [${book_date}],
+    ...                   'Check-out Date': [${book_date}]
+    ${content_msg}=  Set Variable    I hope this message finds you well. 
+    ${tempheader_sub}=    Set Variable    Cancellation of Booking
+    ${salutation}=      Set Variable  Dear [${cons_name}] 
+    ${signature}=   FakerLibrary.hostname
+    ${salutation}=     Set Variable  ${salutation}.
+
+    ${temp_header}=    Create Dictionary  subject=${tempheader_sub}   salutation=${salutation}  note=${EMPTY}
+    ${temp_footer}=    Create Dictionary  closing=${EMPTY}   signature=${signature}  
+
+    ${content1}=    Create Dictionary  intro=${content_msg}  details=${booking_details}   cts=${EMPTY}  
+
+    ${resp}=  Update Template  ${temp_id1}  content=${content1}  templateHeader=${temp_header}  footer=${temp_footer}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Template By Id   ${temp_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['accountId']}                   ${account_id} 
+    Should Be Equal As Strings  ${resp.json()['templateName']}                ${temp_name}
+    Should Be Equal As Strings  ${resp.json()['context']}                     ${VariableContext[0]} 
+    Should Be Equal As Strings  ${resp.json()['commChannel']}                 ${comm_chanl} 
+    Should Be Equal As Strings  ${resp.json()['templateFormat']}              ${templateFormat[0]}
+    Should Be Equal As Strings  ${resp.json()['content']['intro']}            ${content_msg}
+    Should Be Equal As Strings  ${resp.json()['commTarget']}                  ${comm_target} 
+    Should Be Equal As Strings  ${resp.json()['status']}                      ${VarStatus[1]} 
+
+    ${resp}=  Update Template Status   ${temp_id1}  ${VarStatus[0]}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Template By Id   ${temp_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['accountId']}                   ${account_id} 
+    Should Be Equal As Strings  ${resp.json()['templateName']}                ${temp_name}
+    Should Be Equal As Strings  ${resp.json()['context']}                     ${VariableContext[0]} 
+    Should Be Equal As Strings  ${resp.json()['commChannel']}                 ${comm_chanl} 
+    Should Be Equal As Strings  ${resp.json()['templateFormat']}              ${templateFormat[0]}
+    Should Be Equal As Strings  ${resp.json()['content']['intro']}            ${content_msg}
+    Should Be Equal As Strings  ${resp.json()['commTarget']}                  ${comm_target} 
+    Should Be Equal As Strings  ${resp.json()['status']}                      ${VarStatus[0]} 
 
     ${resp}=  Get Custom Template Preview By Id   ${temp_id1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${prov_cons_list[1]}  
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${cid2}  ${resp.json()[0]['id']}
-    Set Test Variable  ${PCPHONENO2}  ${resp.json()[0]['phoneNo']}
-
-    ${desc}=   FakerLibrary.word
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${resp}=  Add To Waitlist  ${cid2}  ${serid1}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${wid}=  Get Dictionary Values  ${resp.json()}
-    Set Suite Variable  ${wid1}  ${wid[0]}
-
-    ${resp}=  Get Waitlist By Id  ${wid1} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get provider communications
+    ${msg}=  Fakerlibrary.word
+    ${resp}=  Waitlist Action Cancel  ${wid}  ${waitlist_cancl_reasn[4]}   ${msg}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=  ProviderLogout
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Send Otp For Login    ${PCPHONENO2}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO2}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token2}  ${resp.json()['token']}
-
-    ${resp}=    Customer Logout
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO2}    ${account_id}  ${token2} 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=  Get consumer communications
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    

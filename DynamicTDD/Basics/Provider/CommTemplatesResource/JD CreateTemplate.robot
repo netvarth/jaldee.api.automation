@@ -632,7 +632,7 @@ JD-TC-CreateTemplate-21
     ${content_msg}=      FakerLibrary.sentence   
     ${content_msg}=     Catenate   SEPARATOR=\n
     ...             ${content_msg} [${dynamic_var1}].
-    ${content}=    Create Dictionary  intro=${content_msg}   cts=${EMPTY}  
+    ${content}=    Create Dictionary  intro=${content_msg}   details=${details}  cts=${EMPTY}  
     ${tempheader_sub}=      FakerLibrary.sentence   5
     ${salutation}=      FakerLibrary.word
     ${comm_chanl}=  Create List   ${CommChannel[1]}  ${CommChannel[2]}  ${CommChannel[3]}  ${CommChannel[4]}
