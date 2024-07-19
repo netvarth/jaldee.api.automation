@@ -598,6 +598,10 @@ JD-TC-Link_With_Other_Login-UH6
 
     [Documentation]    Link With other login - where provider is Deactivated 
 
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
     ${phone}=  Evaluate  ${PUSERNAME}+5741548
     Set Suite Variable  ${phone}
     ${firstname_u1}=  FakerLibrary.first_name
@@ -645,18 +649,8 @@ JD-TC-Link_With_Other_Login-UH6
 
     ${resp}=    Connect with other login  ${loginId_u1}    password=${PASSWORD}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    202
-
-    ${resp}=    Account Activation      ${phone}  ${OtpPurpose['LinkLogin']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${key2} =   db.Verify Accnt   ${phone}    ${OtpPurpose['LinkLogin']}
-    Set Suite Variable   ${key2}
-
-    ${resp}=    Connect with other login  ${loginId}   otp=${key2}
-    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}   ${INACTIVE_ACCOUNT}
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -694,3 +688,120 @@ JD-TC-Link_With_Other_Login-UH7
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+JD-TC-Link_With_Other_Login-UH8
+
+    [Documentation]    Link With other login - Deactivate user then link and switch 
+
+    ${resp}=  Provider Login  ${loginId}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  EnableDisable User  ${user1_id}   ${toggle[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get User By Id  ${user1_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${user1_id}   status=${status[1]}
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Provider Login  ${loginId_n}  ${Password_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    401
+    Should Be Equal As Strings    ${resp.json()}    ${LOGIN_DEACTIVATED}
+
+    ${resp}=  Provider Login  ${loginId3}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Connect with other login  ${loginId_n}  password=${Password_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation      ${user_num}  ${OtpPurpose['LinkLogin']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key2} =   db.Verify Accnt   ${user_num}    ${OtpPurpose['LinkLogin']}
+    Set Suite Variable   ${key2}
+
+    ${resp}=    Connect with other login  ${loginId_n}   otp=${key2}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Provider Login  ${loginId}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  EnableDisable User  ${user1_id}   ${toggle[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get User By Id  ${user1_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${user1_id}   status=${status[0]}
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Provider Login  ${loginId3}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Connect with other login  ${loginId_n}  password=${Password_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation      ${user_num}  ${OtpPurpose['LinkLogin']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key2} =   db.Verify Accnt   ${user_num}    ${OtpPurpose['LinkLogin']}
+    Set Suite Variable   ${key2}
+
+    ${resp}=    Connect with other login  ${loginId_n}   otp=${key2}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Provider Login  ${loginId}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  EnableDisable User  ${user1_id}   ${toggle[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get User By Id  ${user1_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${user1_id}   status=${status[1]}
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Provider Login  ${loginId3}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Switch login    ${loginId_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
