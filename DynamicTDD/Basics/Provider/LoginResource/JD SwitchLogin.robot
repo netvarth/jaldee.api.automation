@@ -126,7 +126,18 @@ JD-TC-Switch_Login-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Connect with other login  ${loginId2}  ${PASSWORD}
+    ${resp}=    Connect with other login  ${loginId2}  password=${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation      ${ph2}  ${OtpPurpose['LinkLogin']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key2} =   db.Verify Accnt   ${ph2}    ${OtpPurpose['LinkLogin']}
+    Set Suite Variable   ${key2}
+
+    ${resp}=    Connect with other login  ${loginId2}   otp=${key2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -319,7 +330,18 @@ JD-TC-Switch_Login-UH4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Connect with other login  ${loginId3}  ${PASSWORD}
+    ${resp}=    Connect with other login  ${loginId3}  password=${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation      ${ph3}  ${OtpPurpose['LinkLogin']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key2} =   db.Verify Accnt   ${ph3}    ${OtpPurpose['LinkLogin']}
+    Set Suite Variable   ${key2}
+
+    ${resp}=    Connect with other login  ${loginId2}   otp=${key2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1521,7 +1543,18 @@ JD-TC-Switch_Login-16
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Connect with other login  ${loginId33}  ${PASSWORD}
+    ${resp}=    Connect with other login  ${loginId33}  password=${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation      ${phn3}  ${OtpPurpose['LinkLogin']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key2} =   db.Verify Accnt   ${phn3}    ${OtpPurpose['LinkLogin']}
+    Set Suite Variable   ${key2}
+
+    ${resp}=    Connect with other login  ${loginId2}   otp=${key2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -2032,7 +2065,18 @@ JD-TC-Switch_Login-18
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Connect with other login  ${loginId}  ${PASSWORD}
+    ${resp}=    Connect with other login  ${loginId}  password=${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation      ${ph}  ${OtpPurpose['LinkLogin']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key2} =   db.Verify Accnt   ${ph}    ${OtpPurpose['LinkLogin']}
+    Set Suite Variable   ${key2}
+
+    ${resp}=    Connect with other login  ${loginId2}   otp=${key2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    419
     Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}

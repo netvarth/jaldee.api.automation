@@ -168,7 +168,18 @@ JD-TC-Reset_LoginId-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Connect with other login  ${loginId2}  ${PASSWORD}
+    ${resp}=    Connect with other login  ${loginId2}  password=${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation      ${ph2}  ${OtpPurpose['LinkLogin']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key2} =   db.Verify Accnt   ${ph2}    ${OtpPurpose['LinkLogin']}
+    Set Suite Variable   ${key2}
+
+    ${resp}=    Connect with other login  ${loginId2}   otp=${key2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

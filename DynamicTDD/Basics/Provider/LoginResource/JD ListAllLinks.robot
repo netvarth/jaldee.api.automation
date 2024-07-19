@@ -54,7 +54,7 @@ JD-TC-List_ALL_LINKS-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${loginId}=     Random Int  min=1  max=9999
+    ${loginId}=     Random Int  min=1111  max=9999
     Set Suite Variable      ${loginId}
     
     ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId}
@@ -92,7 +92,7 @@ JD-TC-List_ALL_LINKS-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${loginId2}=     Random Int  min=1  max=9999
+    ${loginId2}=     Random Int  min=1111  max=9999
     Set Suite Variable      ${loginId2}
     
     ${resp}=  Account Set Credential  ${ph2}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId2}
@@ -117,7 +117,18 @@ JD-TC-List_ALL_LINKS-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Connect with other login  ${loginId2}  ${PASSWORD}
+    ${resp}=    Connect with other login  ${loginId2}  password=${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation      ${ph2}  ${OtpPurpose['LinkLogin']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key2} =   db.Verify Accnt   ${ph2}    ${OtpPurpose['LinkLogin']}
+    Set Suite Variable   ${key2}
+
+    ${resp}=    Connect with other login  ${loginId2}   otp=${key2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -150,7 +161,7 @@ JD-TC-List_ALL_LINKS-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${loginId3}=     Random Int  min=1  max=9999
+    ${loginId3}=     Random Int  min=1111  max=9999
     Set Suite Variable      ${loginId3}
     
     ${resp}=  Account Set Credential  ${ph3}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId3}
@@ -262,7 +273,7 @@ JD-TC-List_ALL_LINKS-4
     Set Suite Variable  ${user_firstName}   ${resp.json()['firstName']}
     Set Suite Variable  ${user_lastName}    ${resp.json()['lastName']}
 
-    ${loginId_n}=     Random Int  min=1  max=9999
+    ${loginId_n}=     Random Int  min=11111  max=99999
     Set Suite Variable      ${loginId_n}
 
     ${resp}=    Reset LoginId  ${user1_id}  ${loginId_n}
@@ -304,7 +315,18 @@ JD-TC-List_ALL_LINKS-4
 
     #... linking user to the provider 1 and get linked lists
 
-    ${resp}=    Connect with other login  ${loginId_n}  ${Password_n}
+    ${resp}=    Connect with other login  ${loginId_n}  password=${Password_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation      ${user_num}  ${OtpPurpose['LinkLogin']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key2} =   db.Verify Accnt   ${user_num}    ${OtpPurpose['LinkLogin']}
+    Set Suite Variable   ${key2}
+
+    ${resp}=    Connect with other login  ${loginId_n}   otp=${key2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -341,7 +363,18 @@ JD-TC-List_ALL_LINKS-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Connect with other login  ${loginId2}  ${PASSWORD}
+    ${resp}=    Connect with other login  ${loginId2}  password=${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation      ${ph2}  ${OtpPurpose['LinkLogin']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key2} =   db.Verify Accnt   ${ph2}    ${OtpPurpose['LinkLogin']}
+    Set Suite Variable   ${key2}
+
+    ${resp}=    Connect with other login  ${loginId2}   otp=${key2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
