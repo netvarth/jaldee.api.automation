@@ -57,12 +57,11 @@ JD-TC-UpdateRoleStatus-1
     # Set Suite Variable  ${cap3}  ${resp.json()[5]['capabilityList'][4]}
     # Set Suite Variable  ${cap4}  ${resp.json()[2]['capabilityList'][3]}
 
-    ${description}=    Fakerlibrary.Sentence    
-    ${featureName}=    FakerLibrary.name    
+    ${description}=    Fakerlibrary.Sentence        
     ${Capabilities}=    Create List    ${cap1}    ${cap2}
     Set Suite Variable  ${Capabilities}
 
-    ${resp}=  Create Role     ${role_name1}    ${description}    ${featureName}    ${Capabilities}
+    ${resp}=  Create Role     ${role_name1}    ${description}    ${rbac_feature[0]}    ${Capabilities}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${id}  ${resp.json()}
@@ -77,10 +76,9 @@ JD-TC-UpdateRoleStatus-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${description2}=    Fakerlibrary.Sentence    
-    ${featureName2}=    FakerLibrary.name    
+    ${description2}=    Fakerlibrary.Sentence     
 
-    ${resp}=  Update Role   ${id}     ${role_name1}    ${description2}    ${featureName2}    ${Capabilities}
+    ${resp}=  Update Role   ${id}     ${role_name1}    ${description2}     ${rbac_feature[1]}    ${Capabilities}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -88,7 +86,7 @@ JD-TC-UpdateRoleStatus-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['description']}  ${description2}
-    Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName2}
+    Should Be Equal As Strings  ${resp.json()['featureName']}   ${rbac_feature[1]}
     Should Be Equal As Strings  ${resp.json()['roleName']}  ${role_name1}
 
     ${resp}=  Update role status    ${id}    ${toggle[1]}
@@ -147,10 +145,9 @@ JD-TC-UpdateRoleStatus-UH3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${description}=    Fakerlibrary.Sentence    
-    ${featureName}=    FakerLibrary.name    
+    ${description}=    Fakerlibrary.Sentence        
 
-    ${resp}=  Create Role     ${role_name1}    ${description}    ${featureName}    ${Capabilities}
+    ${resp}=  Create Role     ${role_name1}    ${description}    ${rbac_feature[0]}    ${Capabilities}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${id1}  ${resp.json()}

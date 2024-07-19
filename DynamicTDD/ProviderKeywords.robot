@@ -3599,11 +3599,11 @@ Change StatusBoard Status
     RETURN  ${resp}
 
 Create User
-    [Arguments]  ${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${user_type}  ${pincode}  ${countryCode}  ${mob_no}  ${dept_id}  ${sub_domain}  ${admin}  ${whatsApp_countrycode}  ${WhatsApp_num}  ${telegram_countrycode}  ${telegram_num}   @{vargs} 
+    [Arguments]  ${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${user_type}  ${pincode}  ${countryCode}  ${mob_no}  ${dept_id}  ${sub_domain}  ${admin}  ${whatsApp_countrycode}  ${WhatsApp_num}  ${telegram_countrycode}  ${telegram_num}   &{kwargs} 
     ${whatsAppNum}=  Create Dictionary  countryCode=${whatsApp_countrycode}  number=${WhatsApp_num}
     ${telegramNum}=  Create Dictionary  countryCode=${telegram_countrycode}  number=${telegram_num}
     ${data}=  Create Dictionary  firstName=${fname}  lastName=${lname}  dob=${dob}  gender=${gender}  email=${email}  userType=${user_type}  pincode=${pincode}  countryCode=${countryCode}  mobileNo=${mob_no}  deptId=${dept_id}  subdomain=${sub_domain}  admin=${admin}  whatsAppNum=${whatsAppNum}  telegramNum=${telegramNum}
-    FOR  ${key}  ${value}  IN  @{vargs} 
+    FOR  ${key}  ${value}  IN  &{kwargs} 
             Set To Dictionary  ${data}   ${key}=${value}
     END
     ${data}=  json.dumps  ${data}

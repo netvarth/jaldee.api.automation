@@ -65,10 +65,9 @@ JD-TC-RestoreRoles-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${description2}=    Fakerlibrary.Sentence    
-    ${featureName2}=    FakerLibrary.name    
+    ${description2}=    Fakerlibrary.Sentence     
 
-    ${resp}=  Update Role   ${id}     ${role_name1}    ${description2}    ${featureName2}    ${emptylist}
+    ${resp}=  Update Role   ${id}     ${role_name1}    ${description2}    ${rbac_feature[0]}    ${emptylist}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -76,7 +75,7 @@ JD-TC-RestoreRoles-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['description']}  ${description2}
-    Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName2}
+    Should Be Equal As Strings  ${resp.json()['featureName']}  ${rbac_feature[0]}
     Should Be Equal As Strings  ${resp.json()['roleName']}  ${role_name1}
 
     ${resp}=  Update role status    ${id}    ${toggle[1]}

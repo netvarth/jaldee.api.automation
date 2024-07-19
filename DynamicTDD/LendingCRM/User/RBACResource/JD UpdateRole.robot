@@ -49,12 +49,11 @@ JD-TC-UpdateRole-1
     ${Department}=  Create List           all
     ${user_scope}=   Create Dictionary     departments=${Department}
 
-    ${description}=    Fakerlibrary.Sentence    
-    ${featureName}=    FakerLibrary.name    
+    ${description}=    Fakerlibrary.Sentence     
     ${Capabilities}=    Create List    ${cap1}    ${cap2}
     Set Suite Variable  ${Capabilities}
 
-    ${resp}=  Create Role       ${role_name1}    ${description}    ${featureName}    ${Capabilities}    scope=${user_scope}
+    ${resp}=  Create Role       ${role_name1}    ${description}    ${rbac_feature[0]}    ${Capabilities}    scope=${user_scope}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${role_id}  ${resp.json()}
@@ -70,9 +69,8 @@ JD-TC-UpdateRole-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${description2}=    Fakerlibrary.Sentence    
-    ${featureName2}=    FakerLibrary.name    
 
-    ${resp}=  Update Role   ${role_id}     ${role_name1}    ${description2}    ${featureName}    ${Capabilities}
+    ${resp}=  Update Role   ${role_id}     ${role_name1}    ${description2}    ${rbac_feature[0]}    ${Capabilities}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -80,7 +78,7 @@ JD-TC-UpdateRole-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['description']}  ${description2}
-    Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName}
+    Should Be Equal As Strings  ${resp.json()['featureName']}  ${rbac_feature[0]}
     Should Be Equal As Strings  ${resp.json()['roleName']}  ${role_name1}
 
 JD-TC-UpdateRole-2
@@ -91,10 +89,9 @@ JD-TC-UpdateRole-2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${description}=    Fakerlibrary.Sentence    
-    ${featureName}=    FakerLibrary.name    
+    ${description}=    Fakerlibrary.Sentence     
 
-    ${resp}=  Create Role      ${role_name1}    ${description}    ${featureName}    ${Capabilities}
+    ${resp}=  Create Role      ${role_name1}    ${description}    ${rbac_feature[0]}    ${Capabilities}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -109,9 +106,8 @@ JD-TC-UpdateRole-2
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${description2}=    Fakerlibrary.Sentence    
-    ${featureName2}=    FakerLibrary.name    
 
-    ${resp}=  Update Role   ${id1}     ${role_name1}    ${description}    ${featureName2}    ${Capabilities}
+    ${resp}=  Update Role   ${id1}     ${role_name1}    ${description}    ${rbac_feature[1]}    ${Capabilities}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -119,7 +115,7 @@ JD-TC-UpdateRole-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['description']}  ${description}
-    Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName2}
+    Should Be Equal As Strings  ${resp.json()['featureName']}  ${rbac_feature[1]}
     Should Be Equal As Strings  ${resp.json()['roleName']}  ${role_name1}
 
 JD-TC-UpdateRole-3
@@ -130,10 +126,9 @@ JD-TC-UpdateRole-3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${description}=    Fakerlibrary.Sentence    
-    ${featureName}=    FakerLibrary.name    
+    ${description}=    Fakerlibrary.Sentence     
 
-    ${resp}=  Create Role     ${role_name1}    ${description}    ${featureName}    ${Capabilities}
+    ${resp}=  Create Role     ${role_name1}    ${description}    ${rbac_feature[0]}    ${Capabilities}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -149,12 +144,11 @@ JD-TC-UpdateRole-3
 
     ${description2}=    Fakerlibrary.Sentence 
     Set Suite Variable  ${description2}    
-    ${featureName2}=    FakerLibrary.name    
-    Set Suite Variable  ${featureName2}    
+        
 
     ${Capabilities}=    Create List    ${cap2}
 
-    ${resp}=  Update Role   ${id2}       ${role_name1}    ${description2}    ${featureName2}    ${Capabilities}
+    ${resp}=  Update Role   ${id2}       ${role_name1}    ${description2}    ${rbac_feature[1]}    ${Capabilities}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -162,7 +156,7 @@ JD-TC-UpdateRole-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['description']}  ${description2}
-    Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName2}
+    Should Be Equal As Strings  ${resp.json()['featureName']}  ${rbac_feature[1]}
     Should Be Equal As Strings  ${resp.json()['roleName']}  ${role_name1}
     Should Be Equal As Strings  ${resp.json()['capabilityList'][0]}  ${cap2}
 
@@ -174,10 +168,9 @@ JD-TC-UpdateRole-4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${description}=    Fakerlibrary.Sentence    
-    ${featureName}=    FakerLibrary.name    
+    ${description}=    Fakerlibrary.Sentence     
 
-    ${resp}=  Create Role     ${role_name1}    ${description}    ${featureName}    ${Capabilities}
+    ${resp}=  Create Role     ${role_name1}    ${description}    ${rbac_feature[0]}    ${Capabilities}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -193,15 +186,14 @@ JD-TC-UpdateRole-4
 
     ${description2}=    Fakerlibrary.Sentence 
     Set Suite Variable  ${description2}    
-    ${featureName2}=    FakerLibrary.name    
-    Set Suite Variable  ${featureName2}    
+        
 
     # ${Capabilities}=    Create List    ${cap2}
     ${departments}=  Create List           all
 
     ${user_scope}=   Create Dictionary   departments=${departments}  
 
-    ${resp}=  Update Role    ${id2}       ${role_name1}     ${description2}     ${featureName2}       ${Capabilities}      scope=${user_scope}
+    ${resp}=  Update Role    ${id2}       ${role_name1}     ${description2}     ${rbac_feature[1]}       ${Capabilities}      scope=${user_scope}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -209,7 +201,7 @@ JD-TC-UpdateRole-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['description']}  ${description2}
-    Should Be Equal As Strings  ${resp.json()['featureName']}  ${featureName2}
+    Should Be Equal As Strings  ${resp.json()['featureName']}  ${rbac_feature[1]}
     Should Be Equal As Strings  ${resp.json()['roleName']}  ${role_name1}
     Should Be Equal As Strings  ${resp.json()['scope']['departments']}  ${departments}
     Should Be Equal As Strings  ${resp.json()['capabilityList'][0]}  ${cap1}
@@ -220,9 +212,8 @@ JD-TC-UpdateRole-UH1
     [Documentation]   Update Role without login
 
     ${description2}=    Fakerlibrary.Sentence    
-    ${featureName2}=    FakerLibrary.name    
 
-    ${resp}=  Update Role   ${id2}       ${role_name1}    ${description2}    ${featureName2}    ${Capabilities}
+    ${resp}=  Update Role   ${id2}       ${role_name1}    ${description2}    ${rbac_feature[1]}    ${Capabilities}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -236,9 +227,8 @@ JD-TC-UpdateRole-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${description2}=    Fakerlibrary.Sentence    
-    ${featureName2}=    FakerLibrary.name    
 
-    ${resp}=  Update Role   ${id2}       ${role_name1}    ${description2}    ${featureName2}    ${Capabilities}
+    ${resp}=  Update Role   ${id2}       ${role_name1}    ${description2}    ${rbac_feature[1]}    ${Capabilities}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
@@ -252,9 +242,8 @@ JD-TC-UpdateRole-UH3
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${description2}=    Fakerlibrary.Sentence    
-    ${featureName2}=    FakerLibrary.name    
     ${invalid_id}=  Random Int  min=200   max=400
-    ${resp}=  Update Role   ${invalid_id}      ${role_name1}    ${description2}    ${featureName2}     ${Capabilities}
+    ${resp}=  Update Role   ${invalid_id}      ${role_name1}    ${description2}    ${rbac_feature[1]}     ${Capabilities}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${ENTER_VALID_ROLE_ID}
@@ -268,9 +257,8 @@ JD-TC-UpdateRole-UH4
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${description2}=    Fakerlibrary.Sentence    
-    ${featureName2}=    FakerLibrary.name    
 
-    ${resp}=  Update Role   ${id2}     ${EMPTY}    ${description2}    ${featureName2}     ${Capabilities}
+    ${resp}=  Update Role   ${id2}     ${EMPTY}    ${description2}    ${rbac_feature[1]}     ${Capabilities}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -283,9 +271,8 @@ JD-TC-UpdateRole-UH5
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${description2}=    Fakerlibrary.Sentence    
-    ${featureName2}=    FakerLibrary.name    
 
-    ${resp}=  Update Role   ${id2}      ${role_name1}    ${EMPTY}    ${featureName2}     ${Capabilities}
+    ${resp}=  Update Role   ${id2}      ${role_name1}    ${EMPTY}    ${rbac_feature[1]}     ${Capabilities}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -298,7 +285,6 @@ JD-TC-UpdateRole-UH6
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${description2}=    Fakerlibrary.Sentence    
-    ${featureName2}=    FakerLibrary.name    
 
     ${resp}=  Update Role   ${id2}       ${role_name1}    ${description2}    ${EMPTY}     ${Capabilities}
     Log   ${resp.json()}
