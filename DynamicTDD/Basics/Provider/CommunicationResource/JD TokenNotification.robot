@@ -339,7 +339,7 @@ JD-TC-TokenNotification-2
     
 JD-TC-TokenNotification-3
 
-    [Documentation]  create a template for checkin context and canel the walkin checkin and verify the notifications.
+    [Documentation]  create a template for checkin context and cancel the walkin checkin and verify the notifications.
     ...    context : checkin, trigger : token cancellation, channel : email, whatsapp, target : consumer, provider
 
     ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
@@ -454,3 +454,107 @@ JD-TC-TokenNotification-3
     ${resp}=  Waitlist Action Cancel  ${wid}  ${waitlist_cancl_reasn[4]}   ${msg}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+  
+JD-TC-TokenNotification-4
+
+    [Documentation]  create a template for checkin context and take a walkin checkin and verify the notifications.
+    ...    context : checkin, trigger : token confirmation, channel : email, whatsapp, target : provider
+
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Send Comm List
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${sendcomm_id1}         ${resp.json()[40]['id']}
+    Set Test Variable   ${sendcomm_name1}       ${resp.json()[40]['name']}
+    Set Test Variable   ${sendcomm_disname1}    ${resp.json()[40]['displayName']}
+    Set Test Variable   ${sendcomm_context1}    ${resp.json()[40]['context']}
+    Set Test Variable   ${sendcomm_vars1}       ${resp.json()[40]['variables']}
+
+    ${resp}=  Get Dynamic Variable List By SendComm   ${sendcomm_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${cons_name}        ${resp.json()[0]['name']}
+    Set Test Variable   ${book_enid}        ${resp.json()[15]['name']}
+    Set Test Variable   ${book_date}        ${resp.json()[16]['name']}
+
+    ${temp_name}=    FakerLibrary.word
+    ${booking_details}=  Catenate   SEPARATOR=\n
+    ...                   'Name': [${cons_name}],
+    ...                   'Booking Reference Number': [${book_enid}],
+    ...                   'Check-in Date': [${book_date}],
+    ...                   'Check-out Date': [${book_date}]
+    ${content_msg}=  Set Variable    I hope this message finds you well. 
+    ${tempheader_sub}=    Set Variable    Confirmation of Booking
+    ${salutation}=      Set Variable  Dear [${cons_name}] 
+    ${signature}=   FakerLibrary.hostname
+    ${salutation}=     Set Variable  ${salutation}.
+
+    ${temp_header}=    Create Dictionary  subject=${tempheader_sub}   salutation=${salutation}  note=${EMPTY}
+    ${temp_footer}=    Create Dictionary  closing=${EMPTY}   signature=${signature}  
+
+    ${content}=    Create Dictionary  intro=${content_msg}  details=${booking_details}   cts=${EMPTY}  
+    ${comm_chanl}=  Create List   ${CommChannel[1]}   ${CommChannel[2]}
+    ${comm_target}=  Create List    ${CommTarget[1]}
+    ${sendcomm_list}=  Create List   ${sendcomm_id1}  
+    
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}   ${comm_chanl} 
+    ...    sendComm=${sendcomm_list}  templateHeader=${temp_header}  footer=${temp_footer}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${temp_id2}  ${resp.content}
+
+    ${resp}=  GetCustomer  phoneNo-eq=${prov_cons_list[0]}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
+    Set Test Variable  ${PCPHONENO}  ${resp.json()[0]['phoneNo']}
+
+    ${desc}=   FakerLibrary.word
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${resp}=  Add To Waitlist  ${cid1}  ${serid1}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Suite Variable  ${wid1}  ${wid[0]}
+
+    ${resp}=  Get Waitlist By Id  ${wid1} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-TokenNotification-5
+
+    [Documentation]  update the template for checkin context and take a walkin checkin and verify the notifications.
+    ...    context : checkin, trigger : token confirmation, channel : email, whatsapp, target : provider, consumer
+
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${comm_target1}=  Create List    ${CommTarget[1]}  ${CommTarget[0]}
+   
+    ${resp}=  Update Template   ${temp_id2}  CommTarget=${comm_target1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${prov_cons_list[2]}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
+    Set Test Variable  ${PCPHONENO}  ${resp.json()[0]['phoneNo']}
+
+    ${desc}=   FakerLibrary.word
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${resp}=  Add To Waitlist  ${cid1}  ${serid1}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Suite Variable  ${wid1}  ${wid[0]}
+
+    ${resp}=  Get Waitlist By Id  ${wid1} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    

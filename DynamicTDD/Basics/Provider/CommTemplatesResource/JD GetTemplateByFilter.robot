@@ -1053,12 +1053,13 @@ JD-TC-GetTemplateByFilter-14
 
 JD-TC-GetTemplateByFilter-15
 
-    [Documentation]  Create template then get it by send comm id filter and verify.
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME254}  ${PASSWORD}
+    [Documentation]  Create template without content, then get the template by filter 
+    ...     context : Account, trigger : signup, commchannel : email , target : consumer.
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME255}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-
+ 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1067,50 +1068,215 @@ JD-TC-GetTemplateByFilter-15
     ${resp}=  Get Send Comm List
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${sendcomm_id1}   ${resp.json()[1]['id']}
-    Set Test Variable   ${context_id1}  ${resp.json()[0]['context'][0]}
+    Set Test Variable   ${sendcomm_id1}   ${resp.json()[0]['id']}
+    Set Test Variable   ${sendcomm_name1}       ${resp.json()[0]['name']}
+    Set Test Variable   ${sendcomm_disname1}    ${resp.json()[0]['displayName']}
+    Set Test Variable   ${sendcomm_context1}    ${resp.json()[0]['context']}
+    Set Test Variable   ${sendcomm_vars1}       ${resp.json()[0]['variables']}
 
-    ${resp}=  Get Dynamic Variable List By Context   ${context_id1}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${dynamic_var1}   ${resp.json()[1]['name']}
- 
     ${temp_name}=    FakerLibrary.word
-    ${details}=  Create Dictionary   JALDEE OTP=${EMPTY}
-    ${content_msg}=      FakerLibrary.sentence   
-    ${content_msg}=     Catenate   SEPARATOR=\n
-    ...             ${content_msg} [${dynamic_var1}].
-    ${content}=    Create Dictionary  intro=${content_msg}   cts=${EMPTY}  
-    ${tempheader_sub}=      FakerLibrary.sentence   5
-    ${salutation}=      FakerLibrary.word
-    ${comm_chanl}=  Create List   ${CommChannel[1]}  ${CommChannel[2]}  ${CommChannel[3]}  ${CommChannel[4]}
-    ${comm_target}=  Create List   ${CommTarget[1]}  
-    ${signature}=   FakerLibrary.hostname
-    ${salutation}=     Set Variable  ${salutation} [${dynamic_var1}].
-
-    ${temp_header}=    Create Dictionary  subject=${tempheader_sub}   salutation=${salutation}  note=${EMPTY}
-    ${temp_footer}=    Create Dictionary  closing=${EMPTY}   signature=${signature}  
-    ${sendcomm_list}=  Create List   ${sendcomm_id1}  
-
-    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl}  
-    ...    templateHeader=${temp_header}  footer=${temp_footer}  sendComm=${sendcomm_list}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200  
-    Set Test Variable   ${temp_id1}   ${resp.content}
-
-    ${resp}=  Get Template By Filter   sendComm-eq=${sendcomm_id1}
+    ${content}=    Create Dictionary  intro=${EMPTY}
+    ${comm_chanl}=  Create List   ${CommChannel[2]}  
+    ${comm_target}=  Create List   ${CommTarget[0]}  
+    ${sendcomm_list}=  Create List   ${sendcomm_id1}
+    
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
+    ...   sendComm=${sendcomm_list}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()[0]['id']}                          ${temp_id3} 
+    Set Test Variable   ${temp_id1}  ${resp.content}
+
+    ${resp}=  Get Template By Filter   commChannel-eq=${CommChannel[2]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}                   ${account_id} 
-    Should Be Equal As Strings  ${resp.json()[0]['templateName']}                ${temp_name1}
+    Should Be Equal As Strings  ${resp.json()[0]['templateName']}                ${temp_name}
     Should Be Equal As Strings  ${resp.json()[0]['context']}                     ${VariableContext[0]} 
     Should Be Equal As Strings  ${resp.json()[0]['commChannel']}                 ${comm_chanl} 
     Should Be Equal As Strings  ${resp.json()[0]['templateFormat']}              ${templateFormat[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['content']['intro']}            ${content_msg}
-    Should Be Equal As Strings  ${resp.json()[0]['commTarget']}                  ${comm_target}
-    Should Be Equal As Strings  ${resp.json()[0]['sendComm']}                    ${sendcomm_list}  
-    Should Be Equal As Strings  ${resp.json()[0]['status']}                      ${VarStatus[0]} 
+    Should Be Equal As Strings  ${resp.json()[0]['content']['intro']}            ${EMPTY}
+    Should Be Equal As Strings  ${resp.json()[0]['commTarget']}                  ${comm_target} 
+    Should Be Equal As Strings  ${resp.json()[0]['sendComm']}                              ${sendcomm_list}
+    Should Be Equal As Strings  ${resp.json()[0]['sendCommDetails'][0]['id']}              ${sendcomm_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['sendCommDetails'][0]['name']}            ${sendcomm_name1}
+    Should Be Equal As Strings  ${resp.json()[0]['sendCommDetails'][0]['displayName']}     ${sendcomm_disname1}
+    Should Be Equal As Strings  ${resp.json()[0]['sendCommDetails'][0]['context']}         ${sendcomm_context1}
+    Should Be Equal As Strings  ${resp.json()[0]['sendCommDetails'][0]['variables']}       ${sendcomm_vars1} 
+    Should Be Equal As Strings  ${resp.json()[0]['status']}                             ${VarStatus[1]} 
+
+JD-TC-GetTemplateByFilter-16
+
+    [Documentation]  Create template without content, then get the template by filter and
+    ...     context : Account, trigger : signup, commchannel : email , target : consumer.
+    ...     update the channel and get by filter
+    ...     context : Account, trigger : signup, commchannel : whatsapp , target : consumer.
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME256}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+ 
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${resp}=  Get Send Comm List
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${sendcomm_id1}   ${resp.json()[0]['id']}
+    Set Test Variable   ${sendcomm_name1}       ${resp.json()[0]['name']}
+    Set Test Variable   ${sendcomm_disname1}    ${resp.json()[0]['displayName']}
+    Set Test Variable   ${sendcomm_context1}    ${resp.json()[0]['context']}
+    Set Test Variable   ${sendcomm_vars1}       ${resp.json()[0]['variables']}
+
+    ${temp_name}=    FakerLibrary.word
+    ${content}=    Create Dictionary  intro=${EMPTY}
+    ${comm_chanl}=  Create List   ${CommChannel[2]}  
+    ${comm_target}=  Create List   ${CommTarget[0]}  
+    ${sendcomm_list}=  Create List   ${sendcomm_id1}
+    
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
+    ...   sendComm=${sendcomm_list}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${temp_id1}  ${resp.content}
+
+    ${resp}=  Get Template By Filter   commChannel-eq=${CommChannel[2]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}                   ${account_id} 
+    Should Be Equal As Strings  ${resp.json()[0]['templateName']}                ${temp_name}
+    Should Be Equal As Strings  ${resp.json()[0]['context']}                     ${VariableContext[0]} 
+    Should Be Equal As Strings  ${resp.json()[0]['commChannel']}                 ${comm_chanl} 
+    Should Be Equal As Strings  ${resp.json()[0]['templateFormat']}              ${templateFormat[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['content']['intro']}            ${EMPTY}
+    Should Be Equal As Strings  ${resp.json()[0]['commTarget']}                  ${comm_target} 
+    Should Be Equal As Strings  ${resp.json()[0]['sendComm']}                              ${sendcomm_list}
+    Should Be Equal As Strings  ${resp.json()[0]['sendCommDetails'][0]['id']}              ${sendcomm_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['sendCommDetails'][0]['name']}            ${sendcomm_name1}
+    Should Be Equal As Strings  ${resp.json()[0]['sendCommDetails'][0]['displayName']}     ${sendcomm_disname1}
+    Should Be Equal As Strings  ${resp.json()[0]['sendCommDetails'][0]['context']}         ${sendcomm_context1}
+    Should Be Equal As Strings  ${resp.json()[0]['sendCommDetails'][0]['variables']}       ${sendcomm_vars1} 
+    Should Be Equal As Strings  ${resp.json()[0]['status']}                             ${VarStatus[1]} 
+
+    ${comm_chanl1}=  Create List   ${CommChannel[1]}  
+
+    ${resp}=  Update Template   ${temp_id1}   commChannel=${comm_chanl1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Template By Filter   commChannel-eq=${CommChannel[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}                   ${account_id} 
+    Should Be Equal As Strings  ${resp.json()[0]['templateName']}                ${temp_name}
+    Should Be Equal As Strings  ${resp.json()[0]['context']}                     ${VariableContext[0]} 
+    Should Be Equal As Strings  ${resp.json()[0]['commChannel']}                 ${comm_chanl1} 
+    Should Be Equal As Strings  ${resp.json()[0]['templateFormat']}              ${templateFormat[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['content']['intro']}            ${EMPTY}
+    Should Be Equal As Strings  ${resp.json()[0]['commTarget']}                  ${comm_target} 
+    Should Be Equal As Strings  ${resp.json()[0]['sendComm']}                              ${sendcomm_list}
+    Should Be Equal As Strings  ${resp.json()[0]['sendCommDetails'][0]['id']}              ${sendcomm_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['sendCommDetails'][0]['name']}            ${sendcomm_name1}
+    Should Be Equal As Strings  ${resp.json()[0]['sendCommDetails'][0]['displayName']}     ${sendcomm_disname1}
+    Should Be Equal As Strings  ${resp.json()[0]['sendCommDetails'][0]['context']}         ${sendcomm_context1}
+    Should Be Equal As Strings  ${resp.json()[0]['sendCommDetails'][0]['variables']}       ${sendcomm_vars1} 
+    Should Be Equal As Strings  ${resp.json()[0]['status']}                             ${VarStatus[1]} 
+
+    ${resp}=  Get Template By Filter   commChannel-eq=${CommChannel[2]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()}            []
+
+JD-TC-GetTemplateByFilter-17
+
+    [Documentation]  Create template without content, then get the template by filter and
+    ...     context : appointment, trigger : appnt Reconfirm, commchannel : email , target : consumer.
+    ...     update the template with content and get by filter
+   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME257}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+ 
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${resp}=  Get Send Comm List
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${sendcomm_id1}   ${resp.json()[56]['id']}
+    Set Test Variable   ${sendcomm_name1}       ${resp.json()[56]['name']}
+    Set Test Variable   ${sendcomm_disname1}    ${resp.json()[56]['displayName']}
+    Set Test Variable   ${sendcomm_context1}    ${resp.json()[56]['context']}
+    Set Test Variable   ${sendcomm_vars1}       ${resp.json()[56]['variables']}
+
+    ${resp}=  Get Dynamic Variable List By SendComm   ${sendcomm_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${cons_name}        ${resp.json()[0]['name']}
+    Set Test Variable   ${book_enid}        ${resp.json()[15]['name']}
+    Set Test Variable   ${book_date}        ${resp.json()[16]['name']}
+
+    ${temp_name}=    FakerLibrary.word
+    ${content}=    Create Dictionary  intro=${EMPTY}
+    ${comm_chanl}=  Create List   ${CommChannel[2]}  
+    ${comm_target}=  Create List   ${CommTarget[0]}  
+    ${sendcomm_list}=  Create List   ${sendcomm_id1}
+    
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
+    ...   sendComm=${sendcomm_list}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${temp_id1}  ${resp.content}
+
+    ${resp}=  Get Template By Filter   commChannel-eq=${CommChannel[2]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}                   ${account_id} 
+    Should Be Equal As Strings  ${resp.json()[0]['templateName']}                ${temp_name}
+    Should Be Equal As Strings  ${resp.json()[0]['context']}                     ${VariableContext[0]} 
+    Should Be Equal As Strings  ${resp.json()[0]['commChannel']}                 ${comm_chanl} 
+    Should Be Equal As Strings  ${resp.json()[0]['templateFormat']}              ${templateFormat[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['content']['intro']}            ${EMPTY}
+    Should Be Equal As Strings  ${resp.json()[0]['commTarget']}                  ${comm_target} 
+    Should Be Equal As Strings  ${resp.json()[0]['sendComm']}                              ${sendcomm_list}
+    Should Be Equal As Strings  ${resp.json()[0]['sendCommDetails'][0]['id']}              ${sendcomm_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['sendCommDetails'][0]['name']}            ${sendcomm_name1}
+    Should Be Equal As Strings  ${resp.json()[0]['sendCommDetails'][0]['displayName']}     ${sendcomm_disname1}
+    Should Be Equal As Strings  ${resp.json()[0]['sendCommDetails'][0]['context']}         ${sendcomm_context1}
+    Should Be Equal As Strings  ${resp.json()[0]['sendCommDetails'][0]['variables']}       ${sendcomm_vars1} 
+    Should Be Equal As Strings  ${resp.json()[0]['status']}                             ${VarStatus[1]} 
+
+    ${booking_details}=  Catenate   SEPARATOR=\n
+    ...                   'Name': [${cons_name}],
+    ...                   'Booking Reference Number': [${book_enid}],
+    ...                   'Check-in Date': [${book_date}],
+    ...                   'Check-out Date': [${book_date}]
+    ${content1}=    Create Dictionary  intro=${booking_details} 
+
+    ${resp}=  Update Template   ${temp_id1}   content=${content1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Template By Filter   commChannel-eq=${CommChannel[2]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}                   ${account_id} 
+    Should Be Equal As Strings  ${resp.json()[0]['templateName']}                ${temp_name}
+    Should Be Equal As Strings  ${resp.json()[0]['context']}                     ${VariableContext[0]} 
+    Should Be Equal As Strings  ${resp.json()[0]['commChannel']}                 ${comm_chanl} 
+    Should Be Equal As Strings  ${resp.json()[0]['templateFormat']}              ${templateFormat[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['content']['intro']}            ${booking_details}
+    Should Be Equal As Strings  ${resp.json()[0]['commTarget']}                  ${comm_target} 
+    Should Be Equal As Strings  ${resp.json()[0]['sendComm']}                              ${sendcomm_list}
+    Should Be Equal As Strings  ${resp.json()[0]['sendCommDetails'][0]['id']}              ${sendcomm_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['sendCommDetails'][0]['name']}            ${sendcomm_name1}
+    Should Be Equal As Strings  ${resp.json()[0]['sendCommDetails'][0]['displayName']}     ${sendcomm_disname1}
+    Should Be Equal As Strings  ${resp.json()[0]['sendCommDetails'][0]['context']}         ${sendcomm_context1}
+    Should Be Equal As Strings  ${resp.json()[0]['sendCommDetails'][0]['variables']}       ${sendcomm_vars1} 
+    Should Be Equal As Strings  ${resp.json()[0]['status']}                             ${VarStatus[1]} 
 
 JD-TC-GetTemplateByFilter-UH1
 

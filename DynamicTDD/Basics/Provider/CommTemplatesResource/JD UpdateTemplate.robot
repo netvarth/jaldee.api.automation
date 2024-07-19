@@ -928,6 +928,105 @@ JD-TC-UpdateTemplate-14
     Should Be Equal As Strings  ${resp.json()['commTarget']}                    ${comm_target} 
     Should Be Equal As Strings  ${resp.json()['status']}                        ${VarStatus[0]} 
 
+JD-TC-UpdateTemplate-15
+
+    [Documentation]  Create template without content, then get the template by id, 
+    ...     context : Account, trigger : signup, commchannel : email , target : consumer.
+    ...     then update it with content and verify the status.
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME240}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+ 
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+    ${resp}=  Get Send Comm List
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${sendcomm_id1}   ${resp.json()[0]['id']}
+    Set Test Variable   ${sendcomm_name1}       ${resp.json()[0]['name']}
+    Set Test Variable   ${sendcomm_disname1}    ${resp.json()[0]['displayName']}
+    Set Test Variable   ${sendcomm_context1}    ${resp.json()[0]['context']}
+    Set Test Variable   ${sendcomm_vars1}       ${resp.json()[0]['variables']}
+
+    ${resp}=  Get Dynamic Variable List By SendComm   ${sendcomm_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${cons_name}        ${resp.json()[0]['name']}
+    Set Test Variable   ${business1}        ${resp.json()[1]['name']}
+    Set Test Variable   ${prov_name}        ${resp.json()[2]['name']}
+
+    ${temp_name}=    FakerLibrary.word
+    ${content}=    Create Dictionary  intro=${EMPTY}
+    ${comm_chanl}=  Create List   ${CommChannel[2]}  
+    ${comm_target}=  Create List   ${CommTarget[0]}  
+    ${sendcomm_list}=  Create List   ${sendcomm_id1}
+    
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
+    ...   sendComm=${sendcomm_list}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${temp_id1}  ${resp.content}
+
+    ${resp}=  Get Template By Id   ${temp_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['accountId']}                             ${account_id} 
+    Should Be Equal As Strings  ${resp.json()['templateName']}                          ${temp_name}
+    Should Be Equal As Strings  ${resp.json()['context']}                               ${VariableContext[0]} 
+    Should Be Equal As Strings  ${resp.json()['commChannel']}                           ${comm_chanl} 
+    Should Be Equal As Strings  ${resp.json()['templateFormat']}                        ${templateFormat[0]}
+    Should Be Equal As Strings  ${resp.json()['content']['intro']}                      ${EMPTY}
+    Should Be Equal As Strings  ${resp.json()['commTarget']}                            ${comm_target}
+    Should Be Equal As Strings  ${resp.json()['sendComm']}                              ${sendcomm_list}
+    Should Be Equal As Strings  ${resp.json()['sendCommDetails'][0]['id']}              ${sendcomm_id1}
+    Should Be Equal As Strings  ${resp.json()['sendCommDetails'][0]['name']}            ${sendcomm_name1}
+    Should Be Equal As Strings  ${resp.json()['sendCommDetails'][0]['displayName']}     ${sendcomm_disname1}
+    Should Be Equal As Strings  ${resp.json()['sendCommDetails'][0]['context']}         ${sendcomm_context1}
+    Should Be Equal As Strings  ${resp.json()['sendCommDetails'][0]['variables']}       ${sendcomm_vars1} 
+    Should Be Equal As Strings  ${resp.json()['status']}                                ${VarStatus[1]} 
+
+    ${booking_details}=  Catenate   SEPARATOR=\n
+    ...                   'Name': [${cons_name}],
+    ...                   'Booking Reference Number': [${book_enid}],
+    ...                   'Check-in Date': [${book_date}],
+    ...                   'Check-out Date': [${book_date}]
+    ${content_msg}=  Set Variable    I hope this message finds you well. 
+    ${tempheader_sub}=    Set Variable    Cancellation of Booking
+    ${salutation}=      Set Variable  Dear [${cons_name}] 
+    ${signature}=   FakerLibrary.hostname
+    ${salutation}=     Set Variable  ${salutation}.
+
+    ${temp_header}=    Create Dictionary  subject=${tempheader_sub}   salutation=${salutation}  note=${EMPTY}
+    ${temp_footer}=    Create Dictionary  closing=${EMPTY}   signature=${signature}  
+
+    ${content1}=    Create Dictionary  intro=${content_msg}  details=${booking_details}   cts=${EMPTY}  
+
+    ${resp}=  Update Template  ${temp_id1}  content=${content1}  templateHeader=${temp_header}  footer=${temp_footer}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Template By Id   ${temp_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['accountId']}                   ${account_id} 
+    Should Be Equal As Strings  ${resp.json()['templateName']}                ${temp_name}
+    Should Be Equal As Strings  ${resp.json()['context']}                     ${VariableContext[0]} 
+    Should Be Equal As Strings  ${resp.json()['commChannel']}                 ${comm_chanl} 
+    Should Be Equal As Strings  ${resp.json()['templateFormat']}              ${templateFormat[0]}
+    Should Be Equal As Strings  ${resp.json()['content']['intro']}            ${content_msg}
+    Should Be Equal As Strings  ${resp.json()['commTarget']}                  ${comm_target}
+    Should Be Equal As Strings  ${resp.json()['sendComm']}                              ${sendcomm_list}
+    Should Be Equal As Strings  ${resp.json()['sendCommDetails'][0]['id']}              ${sendcomm_id1}
+    Should Be Equal As Strings  ${resp.json()['sendCommDetails'][0]['name']}            ${sendcomm_name1}
+    Should Be Equal As Strings  ${resp.json()['sendCommDetails'][0]['displayName']}     ${sendcomm_disname1}
+    Should Be Equal As Strings  ${resp.json()['sendCommDetails'][0]['context']}         ${sendcomm_context1}
+    Should Be Equal As Strings  ${resp.json()['sendCommDetails'][0]['variables']}       ${sendcomm_vars1}  
+    Should Be Equal As Strings  ${resp.json()['status']}                      ${VarStatus[1]} 
+
 JD-TC-UpdateTemplate-UH1
 
     [Documentation]  Update custom variable with provider consumer login.

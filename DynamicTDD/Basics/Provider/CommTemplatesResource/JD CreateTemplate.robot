@@ -875,7 +875,7 @@ JD-TC-CreateTemplate-29
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-TokenNotification-30
+JD-TC-CreateTemplate-30
 
     [Documentation]  create a template 
     ...    context : checkin, trigger : Appointment Reconfirmation, channel : email, whatsapp, target : consumer, provider
@@ -923,7 +923,7 @@ JD-TC-CreateTemplate-31
     ${resp}=  Create Template   ${temp_name1}  ${content}  ${templateFormat[0]}  ${VariableContext[2]}  ${comm_target}    ${comm_chanl} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    
+
 JD-TC-CreateTemplate-UH1
 
     [Documentation]  Create template with same template name.
@@ -1294,3 +1294,54 @@ JD-TC-CreateTemplate-UH9
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings    ${resp.json()}   ${SMS_TEMPLATE_NOT_ALLOWED}
+
+JD-TC-CreateTemplate-UH10
+
+    [Documentation]  Create template then inactive that template and create same template again.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME181}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${temp_name}=    FakerLibrary.word
+    ${content_msg}=      FakerLibrary.sentence
+    ${content}=    Create Dictionary  intro=${content_msg}
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
+    ${comm_target}=  Create List   ${CommTarget[0]}  
+
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[2]}  ${comm_target}    ${comm_chanl} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${temp_id1}  ${resp.content}
+
+    ${resp}=  Update Template Status   ${temp_id1}  ${VarStatus[1]}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[2]}  ${comm_target}    ${comm_chanl} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}   ${TEMPLATE_NAME_EXISTS}
+
+JD-TC-CreateTemplate-UH11
+
+    [Documentation]  Create template without content.(inactive).create same template again.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME181}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${temp_name}=    FakerLibrary.word
+    ${content}=    Create Dictionary  intro=${EMPTY}
+    ${comm_chanl}=  Create List   ${CommChannel[1]}  
+    ${comm_target}=  Create List   ${CommTarget[0]}  
+
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[2]}  ${comm_target}    ${comm_chanl} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${temp_id1}  ${resp.content}
+
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[2]}  ${comm_target}    ${comm_chanl} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}   ${TEMPLATE_NAME_EXISTS}
