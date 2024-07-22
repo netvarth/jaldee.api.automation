@@ -169,6 +169,14 @@ runComms()
     pabot --processes 5 --outputdir "TDD_Output/CommsLog" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
 }
 
+runRBAC()
+{
+    echo "Running $2"
+    mkdir -p "TDD_Output/RBACLog/$Log_DIR"
+    # pabot --processes 5 --outputdir "TDD_Output/RBACLog/$Log_DIR" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
+    pabot --processes 5 --outputdir "TDD_Output/RBACLog" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
+}
+
 runReports()
 {
     echo "Running $2"
@@ -230,6 +238,7 @@ fullRun()
     runJBOrder $1 TDD/JBOrder
     runPay $1 TDD/JaldeePay
     runComms $1 TDD/Communications
+    runRBAC $1 TDD/RBAC
     runReports $1 TDD/Reports
     runLendingCRM $1 TDD/LendingCRM
     runAnalytics $1 TDD/Analytics
@@ -241,7 +250,7 @@ fullRun()
 
 mainRun()
 {
-    echo "Running Basics, Bookings, CRM, JPay, Comms & Reports Resources"
+    echo "Running Basics, Bookings, CRM, JPay, Comms, RBAC & Reports Resources"
     
     runBasics $1 TDD/Basics
     runJBQueue $1 TDD/JBQueue
@@ -249,6 +258,7 @@ mainRun()
     runJBOrder $1 TDD/JBOrder
     runPay $1 TDD/JaldeePay
     runComms $1 TDD/Communications
+    runRBAC $1 TDD/RBAC
     runReports $1 TDD/Reports
     runLendingCRM $1 TDD/LendingCRM
     
@@ -390,6 +400,9 @@ case $ENV_KEY in
     elif [ "${var}" == "Communications" ]; then
         echo "Executing case *- Jenkins- Communications"
         runComms VariablesForJenkins.py "$tddpath"
+    elif [ "${var}" == "RBAC" ]; then
+        echo "Executing case *- Jenkins- RBAC"
+        runRBAC VariablesForJenkins.py "$tddpath"
     elif [ "${var}" == "Reports" ]; then
         echo "Executing case *- Jenkins- Reports"
         runReports VariablesForJenkins.py "$tddpath"
@@ -482,6 +495,9 @@ case $ENV_KEY in
     elif [ "${var}" == "JCloudAPI" ]; then
         echo "Executing case *- Test- JCloudAPI"
         runAPI VariablesForTest.py "$tddpath"
+    elif [ "${var}" == "RBAC" ]; then
+        echo "Executing case *- Test- RBAC"
+        runRBAC VariablesForTest.py "$tddpath"
     elif [ "${var}" == "Reports" ]; then
         echo "Executing case *- Test- Reports"
         runReports VariablesForTest.py "$tddpath"
@@ -554,6 +570,9 @@ case $ENV_KEY in
     elif [ "${var}" == "JCloudAPI" ]; then
         echo "Executing case *- Scale- JCloudAPI"
         runAPI VariablesForScale.py "$tddpath"
+    elif [ "${var}" == "RBAC" ]; then
+        echo "Executing case *- Scale- RBAC"
+        runRBAC VariablesForScale.py "$tddpath"
     elif [ "${var}" == "Reports" ]; then
         echo "Executing case *- Scale- Reports"
         runReports VariablesForScale.py "$tddpath"
@@ -640,6 +659,9 @@ case $ENV_KEY in
     elif [ "${var}" == "Communications" ]; then
         echo "Executing case *- local- Communications"
         runComms VariablesForLocalServer.py "$tddpath"
+    elif [ "${var}" == "RBAC" ]; then
+        echo "Executing case *- local- RBAC"
+        runRBAC VariablesForLocalServer.py "$tddpath"
     elif [ "${var}" == "Reports" ]; then
         echo "Executing case *- local- Reports"
         runReports VariablesForLocalServer.py "$tddpath"

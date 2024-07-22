@@ -51,13 +51,14 @@ usage()
     echo -e "\n[--JaldeePay | --jaldeepay] - Runs Billing and Payment resources. Example usage: $0 --JaldeePay"
     echo -e "\n[--JCloudAPI | --jcloudapi] - Runs Jaldee Cloud Platform API Resource. Example usage: $0 --JCloudAPI"
     echo -e "\n[--Communications | --communications | --comms] - Runs Jaldee Communication Resource. Example usage: $0 --Communications"
+    echo -e "\n[--RBAC | --rbac] - Runs Rbac Resources. Example usage: $0 --RBAC"
     echo -e "\n[--Reports | --reports] - Runs Reports Resource. Example usage: $0 --Reports"
     echo -e "\n[--Analytics | --analytics] - Runs Reports Resource. Example usage: $0 --Analytics"
-    echo -e "\n[-cpu] - Runs Basics, JBQueue, JBAppointment, JBOrder, JaldeePay, Communications, Reports & LendingCRM. Example usage: $0 -cpu"
+    echo -e "\n[-cpu] - Runs Basics, JBQueue, JBAppointment, JBOrder, JaldeePay, Communications, RBAC, Reports & LendingCRM. Example usage: $0 -cpu"
     echo -e "\n[-h | --help] - displays this help message."
     echo -e "\n Examples: $0 -env dev -na -c 2  ---> runs entire tdd, without provider/consumer signup(APre), in the development environment, in 2 docker containers"
     echo -e "\n Examples: $0 -cpu -c 2  ---> runs Provider, Consumer and User, in 2 docker containers"
-    echo -e "\n Examples: $0 -cpu  ---> Runs Basics, JBQueue, JBAppointment, JBOrder, JaldeePay, Communications, Reports & LendingCRM in singe docker container"
+    echo -e "\n Examples: $0 -cpu  ---> Runs Basics, JBQueue, JBAppointment, JBOrder, JaldeePay, Communications, RBAC, Reports & LendingCRM in singe docker container"
     echo -e "\n Examples: $0 -i ---> runs this script in interactive mode"
 }
 
@@ -828,6 +829,13 @@ while [ "$1" != "" ]; do
                 shift
                 echo "Run Reports."
             ;;
+        "--RBAC" | "--rbac")
+                suite="RBAC"
+                setPaths
+                setPathVariables
+                shift
+                echo "Run RBAC."
+            ;;
         "--Analytics" | "--analytics")
                 suite="Analytics"
                 setPaths
@@ -847,7 +855,7 @@ while [ "$1" != "" ]; do
                 setPathVariables
                 mainres="True"
                 shift
-                echo "Running Basics, Bookings, CRM, JPay, Comms & Reports Resources."
+                echo "Running Basics, Bookings, CRM, JPay, Comms, RBAC & Reports Resources."
             ;;
         "--Provider" | "--provider")
                 suite="Provider"
