@@ -2282,5 +2282,197 @@ JD-TC-Checkout Cart-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+JD-TC-Checkout Cart-UH6
+
+    [Documentation]  In the sales order catalog where inventory manager is on , stock empty,then try to checkout item
+
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME209}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Store Type By Filter     
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${TypeName}=    FakerLibrary.name
+    Set Test Variable  ${TypeName}
+# -------------------------------- Create store type -----------------------------------
+    ${resp}=  Create Store Type   ${TypeName}    ${storeNature[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable    ${St_Id}    ${resp.json()}
+    sleep  02s
+
+
+    ${resp}=  Get Store Type By EncId   ${St_Id}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
+    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
+    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME209}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${accountId}=  get_acc_id  ${PUSERNAME209}
+    Set Test Variable    ${accountId} 
+
+    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
+    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
+    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${locId1}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ELSE
+        Set Test Variable  ${locId1}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    END
+
+    ${Name}=    FakerLibrary.last name
+    Set Test Variable    ${Name}
+    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+105187748
+    Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
+    ${email}=  Create List  ${email_id}
+
+    ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}   onlineOrder=${boolean[1]}    walkinOrder=${boolean[1]}   partnerOrder=${boolean[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${store_id}  ${resp.json()}
+
+    ${resp}=    Get Store ByEncId   ${store_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable    ${Stidd}    ${resp.json()['id']}
+
+
+
+    ${displayName}=     FakerLibrary.name
+    Set Test Variable              ${displayName} 
+
+    ${resp}=    Create Item Inventory  ${displayName}     isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${itemEncId1}  ${resp.json()}
+
+    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${inv_cat_encid1}  ${resp.json()}
+    ${inv_cat_encid}=  Create List  ${inv_cat_encid1}
+
+    ${resp}=   Create Inventory Catalog Item  ${inv_cat_encid1}   ${itemEncId1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${Inv_Cata_Item_Encid1}  ${resp.json()[0]}
+
+    ${price}=    Random Int  min=2   max=40
+    ${price}=                    Convert To Number  ${price}  1
+    Set Test Variable              ${price} 
+
+
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}   ${Name}  ${boolean[0]}  ${inv_cat_encid}  onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[0]}  storePickup=${boolean[1]}  courierService=${boolean[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable              ${soc_id1}    ${resp.json()}
+
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${soc_id1}    ${boolean[1]}     ${Inv_Cata_Item_Encid1}     ${price}    ${boolean[1]}   minSaleQuantity=${minSaleQuantity}  maxSaleQuantity=${maxSaleQuantity}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${SOC_itemEncIds1}  ${resp.json()[0]}
+
+
+    ${resp}=  Provider Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+# -------------------------------- Add a provider Consumer -----------------------------------
+
+    ${firstName}=  FakerLibrary.name
+    Set Test Variable    ${firstName}
+    ${lastName}=  FakerLibrary.last_name
+    Set Test Variable    ${lastName}
+    ${primaryMobileNo}    Generate random string    10    123458679
+    ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
+    Set Test Variable    ${primaryMobileNo}
+    # ${email}=    FakerLibrary.Email
+    # Set Test Variable    ${email}
+
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   12
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token2}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email_id}    ${primaryMobileNo}     ${accountId}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200    
+   
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token2} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${cid2}    ${resp.json()['providerConsumer']}
+
+   ${quantity}=  FakerLibrary.Random Int  min=${minSaleQuantity}   max=${maxSaleQuantity}
+    ${quantity}=                    Convert To Number  ${quantity}  1
+    ${item1}=  Evaluate  ${price}*${quantity}
+
+
+    ${catalogItem}=  Create Dictionary    encId=${SOC_itemEncIds1}
+
+    ${catalogItems}=  Create Dictionary    catalogItem=${catalogItem}  quantity=${quantity}
+
+    ${resp}=  Create Cart From Consumerside      ${store_id}    ${cid2}      ${deliveryType[0]}    ${catalogItems}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable    ${cart_uid1}    ${resp.json()['uid']}
+
+
+    ${resp}=    Get ConsumerCart By Uid   ${cartUid1} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                                              ${cid2}
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['name']}                                            ${firstName} ${lastName}
+    Should Be Equal As Strings    ${resp.json()['store']['encId']}                                                      ${store_id}
+    Should Be Equal As Strings    ${resp.json()['store']['name']}                                                       ${Name} 
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                                           ${accountId}
+    Should Be Equal As Strings    ${resp.json()['uid']}                                                                 ${cartUid1}
+    Should Be Equal As Strings    ${resp.json()['deliveryType']}                                                        ${deliveryType[0]}
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                                            ${item1}
+    Should Be Equal As Strings    ${resp.json()['locationId']}                                                            ${locId1}
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                                             ${item1}
+
+    ${ITEM_REQ_QTY_NOTAVALIABLE_WITHOUT_QTY}=  format String   ${ITEM_REQ_QTY_NOTAVALIABLE_WITHOUT_QTY}   ${displayName}
+    ${postcode}=  FakerLibrary.postcode
+    ${phone}=  Create Dictionary    number=${primaryMobileNo}   countryCode=91
+    ${homeDeliveryAddress}=  Create Dictionary    firstName=${firstName}  lastName=${lastName}  email=${email_id}   address=${Name}  city=${firstName}  postalCode=${postcode}   phone=${phone}
+    ${resp}=    CheckOut Cart Items   ${cart_uid1}    homeDeliveryAddress=${homeDeliveryAddress}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}   ${ITEM_REQ_QTY_NOTAVALIABLE_WITHOUT_QTY}
+
+
 
 
