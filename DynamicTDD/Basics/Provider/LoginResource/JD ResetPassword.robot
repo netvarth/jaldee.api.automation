@@ -136,6 +136,7 @@ JD-TC-Reset_Password-5
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${ran}=     Random Int  min=1111  max=9999
+    Set Suite Variable      ${ran}
 
     ${resp}=    Reset Password LoginId Login  ${ran}  ${newpassword}
     Log   ${resp.content}

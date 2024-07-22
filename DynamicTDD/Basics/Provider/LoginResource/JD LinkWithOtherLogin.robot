@@ -720,18 +720,8 @@ JD-TC-Link_With_Other_Login-UH8
 
     ${resp}=    Connect with other login  ${loginId_n}  password=${Password_n}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    202
-
-    ${resp}=    Account Activation      ${user_num}  ${OtpPurpose['LinkLogin']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${key2} =   db.Verify Accnt   ${user_num}    ${OtpPurpose['LinkLogin']}
-    Set Suite Variable   ${key2}
-
-    ${resp}=    Connect with other login  ${loginId_n}   otp=${key2}
-    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}   ${USER_DISABLED}
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -801,6 +791,7 @@ JD-TC-Link_With_Other_Login-UH8
     ${resp}=    Switch login    ${loginId_n}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}   ${USER_DISABLED}
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
