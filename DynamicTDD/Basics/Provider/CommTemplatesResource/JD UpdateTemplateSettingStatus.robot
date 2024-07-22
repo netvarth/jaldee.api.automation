@@ -246,7 +246,7 @@ JD-TC-UpdateTemplateSettingStatus-UH1
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  ${resp.json()}   ${TEMPLATE_SETTINGS_STATUS}
 
-JD-TC-UpdateTemplateStatus-UH2
+JD-TC-UpdateTemplateSettingStatus-UH2
 
     [Documentation]  Create a template settings and update the status to disabled, even if it is already disabled.
 

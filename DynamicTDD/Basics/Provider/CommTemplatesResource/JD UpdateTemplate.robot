@@ -991,11 +991,10 @@ JD-TC-UpdateTemplate-15
 
     ${booking_details}=  Catenate   SEPARATOR=\n
     ...                   'Name': [${cons_name}],
-    ...                   'Booking Reference Number': [${book_enid}],
-    ...                   'Check-in Date': [${book_date}],
-    ...                   'Check-out Date': [${book_date}]
+    ...                   'Business': [${business1}],
+    ...                   'Provider Name': [${prov_name}]
     ${content_msg}=  Set Variable    I hope this message finds you well. 
-    ${tempheader_sub}=    Set Variable    Cancellation of Booking
+    ${tempheader_sub}=    Set Variable    Signup Confirmation
     ${salutation}=      Set Variable  Dear [${cons_name}] 
     ${signature}=   FakerLibrary.hostname
     ${salutation}=     Set Variable  ${salutation}.

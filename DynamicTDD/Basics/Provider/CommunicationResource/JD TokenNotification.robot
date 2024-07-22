@@ -124,7 +124,7 @@ JD-TC-TokenNotification-1
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
     Set Test Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${fields}=   Get subDomain level Fields  ${domain}  ${subdomain}
@@ -174,10 +174,18 @@ JD-TC-TokenNotification-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Business Profile
+    ${resp}=   Get jaldeeIntegration Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['onlinePresence']}==${bool[0]}
+        ${resp}=  Set jaldeeIntegration Settings    ${bool[1]}  ${EMPTY}  ${EMPTY}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
 #........create location......
 
@@ -476,9 +484,9 @@ JD-TC-TokenNotification-4
     ${resp}=  Get Dynamic Variable List By SendComm   ${sendcomm_id1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${cons_name}        ${resp.json()[0]['name']}
-    Set Test Variable   ${book_enid}        ${resp.json()[15]['name']}
-    Set Test Variable   ${book_date}        ${resp.json()[16]['name']}
+    Set Suite Variable   ${cons_name}        ${resp.json()[0]['name']}
+    Set Suite Variable   ${book_enid}        ${resp.json()[15]['name']}
+    Set Suite Variable   ${book_date}        ${resp.json()[16]['name']}
 
     ${temp_name}=    FakerLibrary.word
     ${booking_details}=  Catenate   SEPARATOR=\n
@@ -557,4 +565,185 @@ JD-TC-TokenNotification-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+JD-TC-TokenNotification-6
+
+    [Documentation]  Inactive the template for checkin context and take a walkin checkin and verify the notifications.
+    ...    context : checkin, trigger : token confirmation, channel : email, whatsapp, target : provider, consumer, status : inactive
+
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update Template Status   ${temp_id2}  ${VarStatus[1]}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Template By Id   ${temp_id2}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['status']}     ${VarStatus[1]} 
+
+    ${resp}=  GetCustomer  phoneNo-eq=${prov_cons_list[0]}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
+    Set Test Variable  ${PCPHONENO}  ${resp.json()[0]['phoneNo']}
+
+    ${desc}=   FakerLibrary.word
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${resp}=  Add To Waitlist  ${cid1}  ${serid1}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Suite Variable  ${wid2}  ${wid[0]}
+
+    ${resp}=  Get Waitlist By Id  ${wid2} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
     
+JD-TC-TokenNotification-7
+
+    [Documentation]  active the inactive template for checkin context and take a walkin checkin(future) and verify the notifications.
+    ...    context : checkin, trigger : token confirmation, channel : email, whatsapp, target : provider, consumer, status : active
+
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update Template Status   ${temp_id2}  ${VarStatus[0]}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Template By Id   ${temp_id2}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['status']}     ${VarStatus[0]} 
+
+    ${resp}=  GetCustomer  phoneNo-eq=${prov_cons_list[0]}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
+    Set Test Variable  ${PCPHONENO}  ${resp.json()[0]['phoneNo']}
+
+    ${desc}=   FakerLibrary.word
+    ${DAY1}=  db.add_timezone_date  ${tz}  2
+    ${resp}=  Add To Waitlist  ${cid1}  ${serid1}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Suite Variable  ${wid3}  ${wid[0]}
+
+    ${resp}=  Get Waitlist By Id  ${wid2} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+JD-TC-TokenNotification-8
+
+    [Documentation]  update the template for checkin context with change in content and take an online checkin(today) and verify the notifications.
+    ...    context : checkin, trigger : token confirmation, channel : email, whatsapp, target : provider, consumer, status : active
+
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${booking_details1}=  Catenate   SEPARATOR=\n
+    ...                   'Name': [${cons_name}],
+    ...                   'Booking Reference Number': [${book_enid}],
+    ...                   'Check-in Date': [${book_date}]
+    
+    ${content1}=    Create Dictionary  details=${booking_details1}   
+    
+    ${resp}=  Update Template   ${temp_id2}  content=${content1} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${prov_cons_list[1]}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
+    Set Test Variable  ${PCPHONENO}  ${resp.json()[0]['phoneNo']}
+
+    ${resp}=  ProviderLogout
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${cnote}=   FakerLibrary.word
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${resp}=  Add To Waitlist Consumers  ${account_id}  ${q_id}  ${DAY1}  ${serid1}  ${cnote}  ${bool[0]}  ${self}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Test Variable  ${online_wid1}  ${wid[0]}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+JD-TC-TokenNotification-9
+
+    [Documentation]  take an online checkin(today) for a user and verify the notifications.
+    ...    context : checkin, trigger : token confirmation, channel : email, whatsapp, target : provider, consumer, status : active
+
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #....user creation...........
+
+    
+
+    ${resp}=  GetCustomer  phoneNo-eq=${prov_cons_list[3]}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
+    Set Test Variable  ${PCPHONENO}  ${resp.json()[0]['phoneNo']}
+
+    ${resp}=  ProviderLogout
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${cnote}=   FakerLibrary.word
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${resp}=  Add To Waitlist Consumers  ${account_id}  ${q_id}  ${DAY1}  ${serid1}  ${cnote}  ${bool[0]}  ${self}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Test Variable  ${online_wid1}  ${wid[0]}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
