@@ -2484,6 +2484,7 @@ PASSWORD_MANDATORY=   "Old password and new password are mandatory"
 INCORRECT_OLD_PASSWORD=  "Incorrect old password"
 INACTIVE_ACCOUNT=   "Account is InActive. Please contact SuperAdmin"
 USER_DISABLED=  "User is disabled"
+NEW_PASSWORD_REQ=   "New password required"
 
 #   ConsumerOrder
 

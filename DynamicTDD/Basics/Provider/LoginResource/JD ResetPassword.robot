@@ -175,13 +175,13 @@ JD-TC-Reset_Password-7
     ${resp}=    Reset Password LoginId Login  ${newpassword}  ${empty}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}        ${PASSWORD_MANDATORY}
+    Should Be Equal As Strings    ${resp.json()}        ${NEW_PASSWORD_REQ}
 
 JD-TC-Reset_Password-8
 
     [Documentation]    Reset Password - without login
 
-    ${resp}=    Reset Password LoginId Login  ${ran}  ${newpassword}
+    ${resp}=    Reset Password LoginId Login  ${newpassword}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings    ${resp.json()}        ${SESSION_EXPIRED}
