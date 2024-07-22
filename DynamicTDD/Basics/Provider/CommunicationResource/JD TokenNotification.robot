@@ -125,7 +125,7 @@ JD-TC-TokenNotification-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
-    Set Test Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${fields}=   Get subDomain level Fields  ${domain}  ${subdomain}
     Log  ${fields.content}
@@ -240,8 +240,7 @@ JD-TC-TokenNotification-1
     ${list}=  Create List  1  2  3  4  5  6  7
     ${DAY2}=  db.add_timezone_date  ${tz}  10
     ${sTime}=  db.get_time_by_timezone  ${tz}
-    ${delta}=  FakerLibrary.Random Int  min=15  max=60
-    ${eTime}=  add_two   ${sTime}  ${delta}
+    ${eTime}=  add_timezone_time  ${tz}  3  30  
     ${parallel}=  Random Int   min=1   max=2
     ${capacity}=  Random Int  min=20   max=40
     ${queue1}=    FakerLibrary.Word
@@ -344,7 +343,7 @@ JD-TC-TokenNotification-2
     ${resp}=  Get consumer communications
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
+*** comments ***  
 JD-TC-TokenNotification-3
 
     [Documentation]  create a template for checkin context and cancel the walkin checkin and verify the notifications.
@@ -705,9 +704,56 @@ JD-TC-TokenNotification-9
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  View Waitlist Settings
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+
+    ${resp}=  Get Departments
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${dep_name1}=  FakerLibrary.bs
+        ${dep_code1}=   Random Int  min=100   max=999
+        ${dep_desc1}=   FakerLibrary.word  
+        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+        Log  ${resp1.json()}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Test Variable  ${dep_id}  ${resp1.json()}
+    ELSE
+        Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    END
+
     #....user creation...........
 
-    
+    ${resp}=  Get User
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF   not '${resp.content}' == '${emptylist}'
+        ${len}=  Get Length  ${resp.json()}
+        FOR   ${i}  IN RANGE   0   ${len}
+            Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
+            Set Test Variable   ${u_id1}        ${resp.json()[${i}]['id']}
+            IF   not '${user_phone}' == '${ph}'
+                BREAK
+            END
+        END
+    END
+
+    ${u_id1}=  Create Sample User
+    Set Test Variable   ${u_id1}
+   
+    ${resp}=  Get User By Id  ${u_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${BUSER_U1}  ${resp.json()['mobileNo']}
+    Set Test Variable  ${userf_name}  ${resp.json()['firstName']}
+    Set Test Variable  ${userl_name}  ${resp.json()['lastName']}
 
     ${resp}=  GetCustomer  phoneNo-eq=${prov_cons_list[3]}  
     Log  ${resp.content}
@@ -738,7 +784,7 @@ JD-TC-TokenNotification-9
 
     ${cnote}=   FakerLibrary.word
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${resp}=  Add To Waitlist Consumers  ${account_id}  ${q_id}  ${DAY1}  ${serid1}  ${cnote}  ${bool[0]}  ${self}  
+    ${resp}=  Add To Waitlist Consumers  ${u_id1}  ${q_id}  ${DAY1}  ${serid1}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${wid}=  Get Dictionary Values  ${resp.json()}
