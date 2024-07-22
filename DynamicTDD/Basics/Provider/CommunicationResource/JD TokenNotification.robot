@@ -343,7 +343,7 @@ JD-TC-TokenNotification-2
     ${resp}=  Get consumer communications
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-*** comments ***  
+
 JD-TC-TokenNotification-3
 
     [Documentation]  create a template for checkin context and cancel the walkin checkin and verify the notifications.
