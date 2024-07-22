@@ -698,6 +698,10 @@ JD-TC-CreateRole-16
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
 
+    ${resp}=  Get User By Id  ${u_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
 
 
 JD-TC-CreateRole-UH1
