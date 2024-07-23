@@ -153,3 +153,5 @@ JD-TC-CreateBooking_Appointment-1
     Should Be Equal As Strings  ${resp.json()['userRoles'][0]['capabilities']}     ${Capabilities}
     Should Be Equal As Strings  ${resp.json()['defaultRoleId']}    ${NewRole_id_1}
     Should Be Equal As Strings  ${resp.json()['defaultRoleName']}  ${New_role_name1}
+
+    

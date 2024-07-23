@@ -9616,6 +9616,11 @@ Enable Disable CDL RBAC
     ${resp}=  PUT On Session  ynw  provider/account/settings/cdlrbac/${status}  expected_status=any
     RETURN  ${resp}
 
+Enable Disable Main RBAC
+    [Arguments]  ${status}  
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  provider/account/settings/accountrbac/${status}  expected_status=any
+    RETURN  ${resp}
 
 #    CDL Setings
 
