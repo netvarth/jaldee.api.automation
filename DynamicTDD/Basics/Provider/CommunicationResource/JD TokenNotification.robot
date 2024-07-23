@@ -295,7 +295,7 @@ JD-TC-TokenNotification-2
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
-    Set Test Variable  ${PCPHONENO}  ${resp.json()[0]['phoneNo']}
+    Set Suite Variable  ${PCPHONENO}  ${resp.json()[0]['phoneNo']}
 
     ${desc}=   FakerLibrary.word
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -345,6 +345,99 @@ JD-TC-TokenNotification-2
     Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-TokenNotification-3
+
+    [Documentation]  cancel a walkin checkin for today without create any template and check default notifications.
+
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${prov_cons_list[1]}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
+    Set Test Variable  ${PCPHONENO}  ${resp.json()[0]['phoneNo']}
+
+    ${desc}=   FakerLibrary.word
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${resp}=  Add To Waitlist  ${cid1}  ${serid1}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Suite Variable  ${walk_wid}  ${wid[0]}
+
+    ${resp}=  Get Waitlist By Id  ${walk_wid} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Waitlist EncodedId    ${walk_wid}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid_encId1}=  Set Variable   ${resp.json()}
+
+    ${resp}=  Get provider communications
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  ProviderLogout
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get consumer communications
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Customer Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${msg}=  Fakerlibrary.word
+    ${resp}=  Waitlist Action Cancel  ${walk_wid}  ${waitlist_cancl_reasn[4]}   ${msg}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider communications
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  ProviderLogout
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get consumer communications
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Customer Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-TokenNotification-4
 
     [Documentation]  create a template for checkin context and cancel the walkin checkin and verify the notifications.
     ...    context : checkin, trigger : token cancellation, channel : email, whatsapp, target : consumer, provider
@@ -461,8 +554,28 @@ JD-TC-TokenNotification-3
     ${resp}=  Waitlist Action Cancel  ${wid}  ${waitlist_cancl_reasn[4]}   ${msg}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider communications
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  ProviderLogout
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get consumer communications
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Customer Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
   
-JD-TC-TokenNotification-4
+JD-TC-TokenNotification-5
 
     [Documentation]  create a template for checkin context and take a walkin checkin and verify the notifications.
     ...    context : checkin, trigger : token confirmation, channel : email, whatsapp, target : provider
@@ -531,7 +644,7 @@ JD-TC-TokenNotification-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-TokenNotification-5
+JD-TC-TokenNotification-6
 
     [Documentation]  update the template for checkin context and take a walkin checkin and verify the notifications.
     ...    context : checkin, trigger : token confirmation, channel : email, whatsapp, target : provider, consumer
@@ -564,7 +677,7 @@ JD-TC-TokenNotification-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-TokenNotification-6
+JD-TC-TokenNotification-7
 
     [Documentation]  Inactive the template for checkin context and take a walkin checkin and verify the notifications.
     ...    context : checkin, trigger : token confirmation, channel : email, whatsapp, target : provider, consumer, status : inactive
@@ -600,7 +713,7 @@ JD-TC-TokenNotification-6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-JD-TC-TokenNotification-7
+JD-TC-TokenNotification-8
 
     [Documentation]  active the inactive template for checkin context and take a walkin checkin(future) and verify the notifications.
     ...    context : checkin, trigger : token confirmation, channel : email, whatsapp, target : provider, consumer, status : active
@@ -636,7 +749,7 @@ JD-TC-TokenNotification-7
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-JD-TC-TokenNotification-8
+JD-TC-TokenNotification-9
 
     [Documentation]  update the template for checkin context with change in content and take an online checkin(today) and verify the notifications.
     ...    context : checkin, trigger : token confirmation, channel : email, whatsapp, target : provider, consumer, status : active
@@ -695,7 +808,7 @@ JD-TC-TokenNotification-8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
-JD-TC-TokenNotification-9
+JD-TC-TokenNotification-10
 
     [Documentation]  take an online checkin(today) for a user and verify the notifications.
     ...    context : checkin, trigger : token confirmation, channel : email, whatsapp, target : provider, consumer, status : active
@@ -789,6 +902,10 @@ JD-TC-TokenNotification-9
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${online_wid1}  ${wid[0]}
+
+    ${resp}=  Get consumer communications
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Customer Logout   
     Log   ${resp.json()}

@@ -28,7 +28,7 @@ ${self}                0
 
 *** Test Cases ***
 
-JD-TC-TokenNotification-1
+JD-TC-PrescriptionSharingNotification-1
 
     [Documentation]  signup a provider
 
@@ -166,6 +166,21 @@ JD-TC-TokenNotification-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  Get jp finance settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.json()}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
     ${checkin_emails}=  Create List   ${email_id}
     ${push_msg_nos}=  Create Dictionary   number=${ph}   countryCode=${countryCodes[1]}
     ${push_msg_nos}=  Create List   ${push_msg_nos}
@@ -226,13 +241,26 @@ JD-TC-TokenNotification-1
     ${serdur}=   Random Int   min=5   max=10
     ${serprice}=   Random Int   min=100   max=500
     ${serprice}=  Convert To Number  ${serprice}  1
+    Set Suite Variable  ${serprice}
     ${sername}=    FakerLibrary.firstname
+    Set Suite Variable  ${sername}
    
     ${resp}=  Create Service    ${sername}  ${desc}  ${serdur}   ${status[0]}   ${btype}  ${bool[1]}   ${notifytype[2]}   ${EMPTY}   ${serprice}
     ...    ${bool[0]}   ${bool[0]}  maxBookingsAllowed=10
     Log   ${resp.content}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${serid1}  ${resp.json()}
+
+    #.........Auto Invoice Generation...............
+
+    ${resp}=  Auto Invoice Generation For Service   ${serid1}    ${toggle[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${serid1}
+    Log   ${resp.content}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[1]}
 
 #.....Create a queue......
 
@@ -282,8 +310,9 @@ JD-TC-TokenNotification-1
             Append To List  ${prov_cons_list}  ${resp.json()[${a}]['firstName']}
         END
     END
+    Log   ${prov_cons_list}
 
-JD-TC-TokenNotification-2
+JD-TC-PrescriptionSharingNotification-2
 
     [Documentation]  take a walkin checkin for today without create any template and check default notifications.
 
@@ -296,6 +325,7 @@ JD-TC-TokenNotification-2
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
     Set Test Variable  ${PCPHONENO}  ${resp.json()[0]['phoneNo']}
+    Set Test Variable  ${pc_emailid1}  ${resp.json()[0]['email']}
 
     ${desc}=   FakerLibrary.word
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -303,13 +333,13 @@ JD-TC-TokenNotification-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${wid}=  Get Dictionary Values  ${resp.json()}
-    Set Suite Variable  ${wid}  ${wid[0]}
+    Set Suite Variable  ${wid1}  ${wid[0]}
 
-    ${resp}=  Get Waitlist By Id  ${wid} 
+    ${resp}=  Get Waitlist By Id  ${wid1} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Get Waitlist EncodedId    ${wid}
+    ${resp}=   Get Waitlist EncodedId    ${wid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${wid_encId}=  Set Variable   ${resp.json()}
@@ -344,6 +374,184 @@ JD-TC-TokenNotification-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    scale.jaldee.com/v1/rest/provider/waitlist/h_47197853-4d13-4860-ba2d-3ae0f7e5f4ee_wl/createInvoice
+    ${resp}=    Customer Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    /rest/provider/jp/finance/pay/createLink
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Bookings Invoices  ${wid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable    ${invoice_uid}    ${resp.json()[0]['invoiceUid']}
+
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}                                        ${account_id}
+    Should Be Equal As Strings  ${resp.json()[0]['categoryName']}                                     ${CategoryName[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['invoiceDate']}                                      ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['providerConsumerId']}                               ${cid1}
+    Should Be Equal As Strings  ${resp.json()[0]['providerConsumerData']['phoneNos'][0]['number']}    ${PCPHONENO}
+    Should Be Equal As Strings   ${resp.json()[0]['ynwUuid']}                                         ${wid1}
+    Should Be Equal As Strings   ${resp.json()[0]['amountPaid']}                                      0.0
+    Should Be Equal As Strings   ${resp.json()[0]['amountDue']}                                       ${serprice}
+    Should Be Equal As Strings   ${resp.json()[0]['amountTotal']}                                     ${serprice}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}                      ${serid1}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}                    ${sername}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}                       1.0
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['taxable']}                        ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['totalPrice']}                     ${serprice}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}                        ${serprice}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceCategory']}                ${serviceCategory[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['assigneeUsers']}                  ${empty_list}
+   
+    ${resp}=  Generate Link For Invoice  ${invoice_uid}   ${PCPHONENO}   ${pc_emailid1}    ${boolean[1]}    ${boolean[1]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-PrescriptionSharingNotification-3
+
+    [Documentation]  create a template and check the notifications.
+    ...    context : Account, trigger : Share Payment Link, channel : email, whatsapp, target : consumer, provider
+
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #....template creation........
+
+    ${resp}=  Get Send Comm List
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${sendcomm_id1}         ${resp.json()[25]['id']}
+    Set Test Variable   ${sendcomm_name1}       ${resp.json()[25]['name']}
+    Set Test Variable   ${sendcomm_disname1}    ${resp.json()[25]['displayName']}
+    Set Test Variable   ${sendcomm_context1}    ${resp.json()[25]['context']}
+    Set Test Variable   ${sendcomm_vars1}       ${resp.json()[25]['variables']}
+
+    ${resp}=  Get Dynamic Variable List By SendComm   ${sendcomm_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${cons_name}        ${resp.json()[0]['name']}
+    Set Suite Variable   ${bus_name}         ${resp.json()[1]['name']}
+    Set Suite Variable   ${prov_name}        ${resp.json()[2]['name']}
+    Set Suite Variable   ${serv_name}        ${resp.json()[3]['name']}
+    Set Suite Variable   ${pay_link}         ${resp.json()[4]['name']}
+
+    ${temp_name}=    FakerLibrary.word
+    ${invoice_details}=  Catenate   SEPARATOR=\n
+    ...                   'Service Provider': [${prov_name}]
+    ...                   'Consumer Name': [${cons_name}],
+    ...                   'Booking Service Name': [${serv_name}],
+    ...                   'Payment Link': [${pay_link}],
+    ${content_msg}=        Set Variable    I hope this message finds you well. 
+    ${tempheader_sub}=     Set Variable    Payment Link
+    ${salutation}=         Set Variable  Dear [${cons_name}] 
+    ${signature}=          Set variable  [${bus_name}]
+   
+    ${temp_header}=    Create Dictionary  subject=${tempheader_sub}   salutation=${salutation}  note=${EMPTY}
+    ${temp_footer}=    Create Dictionary  closing=${EMPTY}   signature=${signature}  
+
+    ${content}=    Create Dictionary  intro=${content_msg}  details=${invoice_details}   cts=${EMPTY}  
+    ${comm_chanl}=  Create List   ${CommChannel[1]}   ${CommChannel[2]}
+    ${comm_target}=  Create List    ${CommTarget[0]}  ${CommTarget[1]}
+    ${sendcomm_list}=  Create List   ${sendcomm_id1}  
+    
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}   ${comm_chanl} 
+    ...    sendComm=${sendcomm_list}  templateHeader=${temp_header}  footer=${temp_footer}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${temp_id1}  ${resp.content}
+
+    ${resp}=  Get Template By Id   ${temp_id1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${prov_cons_list[1]}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
+    Set Test Variable  ${PCPHONENO}  ${resp.json()[0]['phoneNo']}
+    Set Test Variable  ${pc_emailid1}  ${resp.json()[0]['email']}
+
+    ${desc}=   FakerLibrary.word
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${resp}=  Add To Waitlist  ${cid1}  ${serid1}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Suite Variable  ${wid2}  ${wid[0]}
+
+    ${resp}=  Get Waitlist By Id  ${wid2} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Waitlist EncodedId    ${wid2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid_encId1}=  Set Variable   ${resp.json()}
+    Set Suite Variable  ${wid_encId1}
+
+    ${resp}=  Get provider communications
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  ProviderLogout
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get consumer communications
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Customer Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Bookings Invoices  ${wid2}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable    ${invoice_uid1}    ${resp.json()[0]['invoiceUid']}
+
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}                                        ${account_id}
+    Should Be Equal As Strings  ${resp.json()[0]['categoryName']}                                     ${CategoryName[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['invoiceDate']}                                      ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['providerConsumerId']}                               ${cid1}
+    Should Be Equal As Strings  ${resp.json()[0]['providerConsumerData']['phoneNos'][0]['number']}    ${PCPHONENO}
+    Should Be Equal As Strings   ${resp.json()[0]['ynwUuid']}                                         ${wid2}
+    Should Be Equal As Strings   ${resp.json()[0]['amountPaid']}                                      0.0
+    Should Be Equal As Strings   ${resp.json()[0]['amountDue']}                                       ${serprice}
+    Should Be Equal As Strings   ${resp.json()[0]['amountTotal']}                                     ${serprice}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}                      ${serid1}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}                    ${sername}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}                       1.0
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['taxable']}                        ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['totalPrice']}                     ${serprice}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}                        ${serprice}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceCategory']}                ${serviceCategory[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['assigneeUsers']}                  ${empty_list}
+   
+    ${resp}=  Generate Link For Invoice  ${invoice_uid1}   ${PCPHONENO}   ${pc_emailid1}    ${boolean[1]}    ${boolean[1]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
