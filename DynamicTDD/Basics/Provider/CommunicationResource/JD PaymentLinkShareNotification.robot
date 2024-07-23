@@ -202,6 +202,20 @@ JD-TC-PrescriptionSharingNotification-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=   Get Appointment Settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=   Get Appointment Settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
+
 #........create location......
 
     ${resp}=    Get Locations
@@ -304,14 +318,14 @@ JD-TC-PrescriptionSharingNotification-1
             ${resp1}=  AddCustomer  ${CUSERPH${a}}   firstName=${firstname}   lastName=${lastname}  countryCode=${countryCodes[1]}  email=${pc_email}
             Log  ${resp1.content}
             Should Be Equal As Strings  ${resp1.status_code}  200
-            Append To List  ${prov_cons_list}  ${resp.json()}
+            Append To List  ${prov_cons_list}  ${resp1.json()}
         ELSE
             Append To List  ${prov_cons_list}  ${resp.json()[${a}]['id']}
             Append To List  ${prov_cons_list}  ${resp.json()[${a}]['firstName']}
         END
     END
     Log   ${prov_cons_list}
-
+ 
 JD-TC-PrescriptionSharingNotification-2
 
     [Documentation]  take a walkin checkin for today without create any template and check default notifications.
@@ -320,7 +334,7 @@ JD-TC-PrescriptionSharingNotification-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${prov_cons_list[0]}  
+    ${resp}=  GetCustomer  account-eq=${prov_cons_list[0]}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
@@ -411,6 +425,115 @@ JD-TC-PrescriptionSharingNotification-2
 
 JD-TC-PrescriptionSharingNotification-3
 
+    [Documentation]  take a walkin appointment for today without create any template and check default notifications.
+
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${DAY2}=  db.add_timezone_date  ${tz}  10
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_two   ${sTime1}  ${delta}
+    ${empty_list}=   Create List
+
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${schedule_name}=  FakerLibrary.bs
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${maxval}=  Convert To Integer   ${delta/2}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${bool1}=  Random Element  ${bool}
+
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${locId}  ${duration}  ${bool1}   ${serid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sch_id}  ${resp.json()}
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${serid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    ${slots}=  Create List
+    FOR   ${i}  IN RANGE   ${no_of_slots}
+        ${available_slots_cnt}=  Set Variable  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']}
+        FOR   ${j}  IN RANGE   ${available_slots_cnt}
+            Append To List  ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${slots_len}=  Get Length  ${slots}
+
+    ${resp}=  GetCustomer  account-eq=${prov_cons_list[1]}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
+    Set Test Variable  ${PCPHONENO}  ${resp.json()[0]['phoneNo']}
+    Set Test Variable  ${firstname}  ${resp.json()[0]['firstName']}
+    
+    ${apptfor1}=  Create Dictionary  id=${cid1}   apptTime=${slots[0]}
+    ${apptfor}=   Create List  ${apptfor1}
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Take Appointment For Consumer  ${cid1}  ${serid1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${apptid}=  Get From Dictionary  ${resp.json()}  ${firstname}
+    Set Suite Variable  ${walkin_appt1}  ${apptid}
+
+    ${resp}=  Get Appointment EncodedID   ${walkin_appt1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${encId1}  ${resp.json()}
+
+    ${resp}=  Get Appointment By Id   ${walkin_appt1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uid']}                ${walkin_appt1}
+    Should Be Equal As Strings  ${resp.json()['appointmentEncId']}   ${encId1}
+
+    ${resp}=  Get provider communications
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  ProviderLogout
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get consumer communications
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Customer Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-PrescriptionSharingNotification-4
+
     [Documentation]  create a template and check the notifications.
     ...    context : Account, trigger : Share Payment Link, channel : email, whatsapp, target : consumer, provider
 
@@ -467,7 +590,7 @@ JD-TC-PrescriptionSharingNotification-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${prov_cons_list[1]}  
+    ${resp}=  GetCustomer  account-eq=${prov_cons_list[2]}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
@@ -540,6 +663,107 @@ JD-TC-PrescriptionSharingNotification-3
     Should Be Equal As Strings  ${resp.json()[0]['providerConsumerId']}                               ${cid1}
     Should Be Equal As Strings  ${resp.json()[0]['providerConsumerData']['phoneNos'][0]['number']}    ${PCPHONENO}
     Should Be Equal As Strings   ${resp.json()[0]['ynwUuid']}                                         ${wid2}
+    Should Be Equal As Strings   ${resp.json()[0]['amountPaid']}                                      0.0
+    Should Be Equal As Strings   ${resp.json()[0]['amountDue']}                                       ${serprice}
+    Should Be Equal As Strings   ${resp.json()[0]['amountTotal']}                                     ${serprice}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}                      ${serid1}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}                    ${sername}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}                       1.0
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['taxable']}                        ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['totalPrice']}                     ${serprice}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}                        ${serprice}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceCategory']}                ${serviceCategory[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['assigneeUsers']}                  ${empty_list}
+   
+    ${resp}=  Generate Link For Invoice  ${invoice_uid1}   ${PCPHONENO}   ${pc_emailid1}    ${boolean[1]}    ${boolean[1]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-PrescriptionSharingNotification-5
+
+    [Documentation]  take a walkin appointment for today with comm template and check the notifications.
+
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${serid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    ${slots}=  Create List
+    FOR   ${i}  IN RANGE   ${no_of_slots}
+        ${available_slots_cnt}=  Set Variable  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']}
+        FOR   ${j}  IN RANGE   ${available_slots_cnt}
+            Append To List  ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${slots_len}=  Get Length  ${slots}
+
+    ${resp}=  GetCustomer  account-eq=${prov_cons_list[0]}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
+    Set Test Variable  ${PCPHONENO}  ${resp.json()[0]['phoneNo']}
+    Set Test Variable  ${firstname}  ${resp.json()[0]['firstName']}
+    
+    ${apptfor1}=  Create Dictionary  id=${cid1}   apptTime=${slots[0]}
+    ${apptfor}=   Create List  ${apptfor1}
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Take Appointment For Consumer  ${cid1}  ${serid1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${apptid}=  Get From Dictionary  ${resp.json()}  ${firstname}
+    Set Suite Variable  ${walkin_appt2}  ${apptid}
+
+    ${resp}=  Get Appointment EncodedID   ${walkin_appt2}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${encId2}  ${resp.json()}
+
+    ${resp}=  Get Appointment By Id   ${walkin_appt2}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uid']}                ${walkin_appt2}
+    Should Be Equal As Strings  ${resp.json()['appointmentEncId']}   ${encId2}
+
+    ${resp}=  Get provider communications
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  ProviderLogout
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get consumer communications
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Customer Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Bookings Invoices  ${walkin_appt2}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable    ${invoice_uid1}    ${resp.json()[0]['invoiceUid']}
+
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}                                        ${account_id}
+    Should Be Equal As Strings  ${resp.json()[0]['categoryName']}                                     ${CategoryName[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['invoiceDate']}                                      ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['providerConsumerId']}                               ${cid1}
+    Should Be Equal As Strings  ${resp.json()[0]['providerConsumerData']['phoneNos'][0]['number']}    ${PCPHONENO}
+    Should Be Equal As Strings   ${resp.json()[0]['ynwUuid']}                                         ${walkin_appt2}
     Should Be Equal As Strings   ${resp.json()[0]['amountPaid']}                                      0.0
     Should Be Equal As Strings   ${resp.json()[0]['amountDue']}                                       ${serprice}
     Should Be Equal As Strings   ${resp.json()[0]['amountTotal']}                                     ${serprice}

@@ -276,7 +276,7 @@ JD-TC-TokenNotification-1
             ${resp1}=  AddCustomer  ${CUSERPH${a}}   firstName=${firstname}   lastName=${lastname}  countryCode=${countryCodes[1]}  email=${pc_email}
             Log  ${resp1.content}
             Should Be Equal As Strings  ${resp1.status_code}  200
-            Append To List  ${prov_cons_list}  ${resp.json()}
+            Append To List  ${prov_cons_list}  ${resp1.json()}
         ELSE
             Append To List  ${prov_cons_list}  ${resp.json()[${a}]['id']}
             Append To List  ${prov_cons_list}  ${resp.json()[${a}]['firstName']}
@@ -291,7 +291,7 @@ JD-TC-TokenNotification-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${prov_cons_list[0]}  
+    ${resp}=  GetCustomer  account-eq=${prov_cons_list[0]}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
@@ -352,7 +352,7 @@ JD-TC-TokenNotification-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${prov_cons_list[1]}  
+    ${resp}=  GetCustomer  account-eq=${prov_cons_list[1]}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
@@ -626,7 +626,7 @@ JD-TC-TokenNotification-5
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${temp_id2}  ${resp.content}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${prov_cons_list[0]}  
+    ${resp}=  GetCustomer  account-eq=${prov_cons_list[0]}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
@@ -659,7 +659,7 @@ JD-TC-TokenNotification-6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${prov_cons_list[2]}  
+    ${resp}=  GetCustomer  account-eq=${prov_cons_list[2]}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
@@ -695,7 +695,7 @@ JD-TC-TokenNotification-7
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['status']}     ${VarStatus[1]} 
 
-    ${resp}=  GetCustomer  phoneNo-eq=${prov_cons_list[0]}  
+    ${resp}=  GetCustomer  account-eq=${prov_cons_list[0]}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
@@ -731,7 +731,7 @@ JD-TC-TokenNotification-8
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['status']}     ${VarStatus[0]} 
 
-    ${resp}=  GetCustomer  phoneNo-eq=${prov_cons_list[0]}  
+    ${resp}=  GetCustomer  account-eq=${prov_cons_list[0]}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
@@ -769,7 +769,7 @@ JD-TC-TokenNotification-9
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${prov_cons_list[1]}  
+    ${resp}=  GetCustomer  account-eq=${prov_cons_list[1]}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
@@ -868,7 +868,7 @@ JD-TC-TokenNotification-10
     Set Test Variable  ${userf_name}  ${resp.json()['firstName']}
     Set Test Variable  ${userl_name}  ${resp.json()['lastName']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${prov_cons_list[3]}  
+    ${resp}=  GetCustomer  account-eq=${prov_cons_list[3]}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}

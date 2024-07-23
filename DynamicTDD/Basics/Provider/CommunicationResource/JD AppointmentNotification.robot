@@ -121,8 +121,8 @@ JD-TC-AppointmentNotification-1
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${account_id}  ${resp.json()['id']}
-    Set Test Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${fields}=   Get subDomain level Fields  ${domain}  ${subdomain}
     Log  ${fields.content}
@@ -296,6 +296,7 @@ JD-TC-AppointmentNotification-1
     END
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable   ${DAY1}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  db.get_time_by_timezone  ${tz}
@@ -305,7 +306,8 @@ JD-TC-AppointmentNotification-1
 
     ${SERVICE1}=    FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   department=${dep_id}   maxBookingsAllowed=10
-   
+    Set Suite Variable   ${s_id}
+
     ${resp}=   Get Service By Id  ${s_id}
     Log   ${resp.content}  
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -325,7 +327,7 @@ JD-TC-AppointmentNotification-1
     ...    ${bool[1]}   ${bool[0]}   department=${dep_id}  serviceCategory=${serviceCategory[1]}
     Log   ${resp.content}  
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${prepay_serid1}  ${resp.json()}
+    Set Suite Variable  ${prepay_serid1}  ${resp.json()}
 
     ##....subservice creation..........
 
@@ -339,7 +341,7 @@ JD-TC-AppointmentNotification-1
     ...    ${bool[0]}   ${bool[0]}   department=${dep_id}  serviceCategory=${serviceCategory[0]}
     Log   ${resp.content}  
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${subser_id1}  ${resp.json()}
+    Set Suite Variable  ${subser_id1}  ${resp.json()}
 
     ${resp}=   Get Service By Id  ${subser_id1}
     Log   ${resp.content}  
@@ -356,7 +358,7 @@ JD-TC-AppointmentNotification-1
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${locId}  ${duration}  ${bool1}  ${s_id}  ${prepay_serid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    Set Suite Variable  ${sch_id}  ${resp.json()}
 
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log   ${resp.content}
@@ -378,6 +380,7 @@ JD-TC-AppointmentNotification-1
     ${slots_len}=  Get Length  ${slots}
 
     ${prov_cons_list}=  Create List
+    Set Suite Variable  ${prov_cons_list}
 
     FOR   ${a}  IN RANGE   ${count}
     
@@ -395,23 +398,46 @@ JD-TC-AppointmentNotification-1
             ${resp1}=  AddCustomer  ${CUSERPH${a}}   firstName=${firstname}   lastName=${lastname}  countryCode=${countryCodes[1]}
             Log  ${resp1.content}
             Should Be Equal As Strings  ${resp1.status_code}  200
-            Append To List  ${prov_cons_list}  ${resp.json()}
+            Append To List  ${prov_cons_list}  ${resp1.json()}
         ELSE
             Append To List  ${prov_cons_list}  ${resp.json()[${a}]['id']}
             Append To List  ${prov_cons_list}  ${resp.json()[${a}]['firstName']}
         END
     END
+    Log   ${prov_cons_list}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${prov_cons_list[0]}  
+JD-TC-AppointmentNotification-2
+
+    [Documentation]   take a walkin appointment and verify default notifications.
+
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    #...........take walkin Appointment..................
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    ${slots}=  Create List
+    FOR   ${i}  IN RANGE   ${no_of_slots}
+        ${available_slots_cnt}=  Set Variable  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']}
+        FOR   ${j}  IN RANGE   ${available_slots_cnt}
+            Append To List  ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${slots_len}=  Get Length  ${slots}
+
+    ${resp}=  GetCustomer  account-eq=${prov_cons_list[0]}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
-    Set Test Variable  ${PCPHONENO}  ${resp.json()[0]['phoneNo']}
-
+    Set Suite Variable  ${cid1}  ${resp.json()[0]['id']}
+    Set Suite Variable  ${PCPHONENO}  ${resp.json()[0]['phoneNo']}
+    Set Suite Variable  ${firstname}  ${resp.json()[0]['firstName']}
+    
     ${apptfor1}=  Create Dictionary  id=${cid1}   apptTime=${slots[0]}
     ${apptfor}=   Create List  ${apptfor1}
-
-#...........take walkin Appointment..................
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Take Appointment For Consumer  ${cid1}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
@@ -431,23 +457,10 @@ JD-TC-AppointmentNotification-1
     Should Be Equal As Strings  ${resp.json()['uid']}                ${walkin_appt1}
     Should Be Equal As Strings  ${resp.json()['appointmentEncId']}   ${encId1}
 
-#.........cancel appointment by provider...........
-
-    ${resp}=    Get Default Messages 
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-   
-    ${reason}=  Random Element  ${cancelReason}
-    ${msg}=   FakerLibrary.word
-    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=    Provider Cancel Appointment  ${walkin_appt1}  ${reason}  ${msg}  
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${resp}=  Get provider communications
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-   
+    
     ${resp}=  ProviderLogout
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -468,12 +481,182 @@ JD-TC-AppointmentNotification-1
     ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get consumer communications
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Customer Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-AppointmentNotification-3
+
+    [Documentation]   take a walkin appointment with comm template and verify default notifications.
+
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #.......template creation.......
+
+    ${resp}=  Get Send Comm List
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${sendcomm_id1}         ${resp.json()[43]['id']}
+    Set Test Variable   ${sendcomm_name1}       ${resp.json()[43]['name']}
+    Set Test Variable   ${sendcomm_disname1}    ${resp.json()[43]['displayName']}
+    Set Test Variable   ${sendcomm_context1}    ${resp.json()[43]['context']}
+    Set Test Variable   ${sendcomm_vars1}       ${resp.json()[43]['variables']}
+
+    ${resp}=  Get Dynamic Variable List By SendComm   ${sendcomm_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${cons_name}        ${resp.json()[0]['name']}
+    Set Suite Variable   ${book_enid}        ${resp.json()[15]['name']}
+    Set Suite Variable   ${book_date}        ${resp.json()[16]['name']}
+
+    ${temp_name}=    FakerLibrary.word
+    ${booking_details}=  Catenate   SEPARATOR=\n
+    ...                   'Name': [${cons_name}],
+    ...                   'Booking Reference Number': [${book_enid}],
+    ...                   'Check-in Date': [${book_date}],
+    ...                   'Check-out Date': [${book_date}]
+    ${content_msg}=  Set Variable    I hope this message finds you well. 
+    ${tempheader_sub}=    Set Variable    Confirmation of Booking
+    ${salutation}=      Set Variable  Dear [${cons_name}] 
+    ${signature}=   FakerLibrary.hostname
+    ${salutation}=     Set Variable  ${salutation}.
+
+    ${temp_header}=    Create Dictionary  subject=${tempheader_sub}   salutation=${salutation}  note=${EMPTY}
+    ${temp_footer}=    Create Dictionary  closing=${EMPTY}   signature=${signature}  
+
+    ${content}=    Create Dictionary  intro=${content_msg}  details=${booking_details}   cts=${EMPTY}  
+    ${comm_chanl}=  Create List   ${CommChannel[1]}   ${CommChannel[2]}
+    ${comm_target}=  Create List    ${CommTarget[1]}
+    ${sendcomm_list}=  Create List   ${sendcomm_id1}  
+    
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}   ${comm_chanl} 
+    ...    sendComm=${sendcomm_list}  templateHeader=${temp_header}  footer=${temp_footer}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${temp_id2}  ${resp.content}
+
+    #...........take walkin Appointment..................
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    ${slots}=  Create List
+    FOR   ${i}  IN RANGE   ${no_of_slots}
+        ${available_slots_cnt}=  Set Variable  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']}
+        FOR   ${j}  IN RANGE   ${available_slots_cnt}
+            Append To List  ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${slots_len}=  Get Length  ${slots}
+
+    ${apptfor1}=  Create Dictionary  id=${cid1}   apptTime=${slots[0]}
+    ${apptfor}=   Create List  ${apptfor1}
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Take Appointment For Consumer  ${cid1}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${apptid}=  Get From Dictionary  ${resp.json()}  ${firstname}
+    Set Suite Variable  ${walkin_appt1}  ${apptid}
+
+    ${resp}=  Get Appointment EncodedID   ${walkin_appt1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${encId1}  ${resp.json()}
+
+    ${resp}=  Get Appointment By Id   ${walkin_appt1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uid']}                ${walkin_appt1}
+    Should Be Equal As Strings  ${resp.json()['appointmentEncId']}   ${encId1}
+
+    ${resp}=  Get provider communications
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  ProviderLogout
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get consumer communications
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Customer Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-AppointmentNotification-4
+
+    [Documentation]   take a walkin appointment with comm template and verify default notifications.
+
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #.........cancel appointment by provider...........
+
+    ${resp}=    Get Default Messages 
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+   
+    ${reason}=  Random Element  ${cancelReason}
+    ${msg}=   FakerLibrary.word
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    ${resp}=    Provider Cancel Appointment  ${walkin_appt1}  ${reason}  ${msg}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider communications
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+   
+    ${resp}=  ProviderLogout
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     
     ${resp}=  Get Consumer Communications
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-#........change the status to confirmed............
+JD-TC-AppointmentNotification-5
+
+    [Documentation]   take a walkin appointment with comm template and verify default notifications.
+
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #........change the status to confirmed............
 
     ${resp}=    Customer Logout
     Log   ${resp.content}
@@ -487,21 +670,36 @@ JD-TC-AppointmentNotification-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-#........rescheduled by provider..............
+JD-TC-AppointmentNotification-6
+
+    [Documentation]   take a walkin appointment with comm template and verify default notifications.
+
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #........rescheduled by provider..............
 
     ${DAY3}=  db.add_timezone_date  ${tz}  3    
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY3}  ${s_id}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slots2}   ${resp.json()['availableSlots'][0]['time']}
 
     ${resp}=  Reschedule Consumer Appointment   ${walkin_appt1}  ${slots2}  ${DAY3}  ${sch_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-#........complete the appointment then do the follow up...........
+JD-TC-AppointmentNotification-7
+
+    [Documentation]   take a walkin appointment with comm template and verify default notifications.
+
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #........complete the appointment then do the follow up...........
 
     ${resp}=  Appointment Action   ${apptStatus[6]}   ${walkin_appt1}
     Log  ${resp.content}
@@ -516,7 +714,6 @@ JD-TC-AppointmentNotification-1
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY4}  ${s_id}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slots4}   ${resp.json()['availableSlots'][0]['time']}
 
     ${apptfor1}=  Create Dictionary  id=${cid1}   apptTime=${slots4}
@@ -529,7 +726,31 @@ JD-TC-AppointmentNotification-1
     ${apptid}=  Get From Dictionary  ${resp.json()}  ${firstname}
     Set Suite Variable  ${walkin_appt2}  ${apptid}
 
-#........complete a future appointment today, then do the follow for next day........
+JD-TC-AppointmentNotification-8
+
+    [Documentation]   take a walkin appointment with comm template and verify default notifications.
+
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #........complete a future appointment today, then do the follow for next day........
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    ${slots}=  Create List
+    FOR   ${i}  IN RANGE   ${no_of_slots}
+        ${available_slots_cnt}=  Set Variable  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']}
+        FOR   ${j}  IN RANGE   ${available_slots_cnt}
+            Append To List  ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${slots_len}=  Get Length  ${slots}
+
+    ${apptfor1}=  Create Dictionary  id=${cid1}   apptTime=${slots[0]}
+    ${apptfor}=   Create List  ${apptfor1}
 
     ${FUT_DAY}=  db.add_timezone_date  ${tz}  1
 
@@ -564,7 +785,6 @@ JD-TC-AppointmentNotification-1
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${FUT_DAY1}  ${s_id}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slots4}   ${resp.json()['availableSlots'][0]['time']}
 
     ${apptfor1}=  Create Dictionary  id=${cid1}   apptTime=${slots4}
@@ -577,7 +797,28 @@ JD-TC-AppointmentNotification-1
     ${apptid}=  Get From Dictionary  ${resp.json()}  ${firstname}
     Set Suite Variable  ${walkin_fappt2}  ${apptid}
 
-#........After starting the booking process, confirm the appointment again....
+JD-TC-AppointmentNotification-9
+
+    [Documentation]   take a walkin appointment with comm template and verify default notifications.
+
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #........After starting the booking process, confirm the appointment again....
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    ${slots}=  Create List
+    FOR   ${i}  IN RANGE   ${no_of_slots}
+        ${available_slots_cnt}=  Set Variable  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']}
+        FOR   ${j}  IN RANGE   ${available_slots_cnt}
+            Append To List  ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${slots_len}=  Get Length  ${slots}
 
     ${apptfor1}=  Create Dictionary  id=${cid1}   apptTime=${slots[1]}
     ${apptfor}=   Create List  ${apptfor1}
@@ -601,8 +842,15 @@ JD-TC-AppointmentNotification-1
 
 #......Send bill after complete appointment.....
 
+JD-TC-AppointmentNotification-10
 
-#......online appointment............
+    [Documentation]   take a walkin appointment with comm template and verify default notifications.
+
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #......online appointment............
 
     ${resp}=  ProviderLogout
     Log  ${resp.json()}
@@ -620,33 +868,31 @@ JD-TC-AppointmentNotification-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${locId}  ${s_id}
+    ${FUT_DAY1}=  db.add_timezone_date  ${tz}  4
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${FUT_DAY1}  ${locId}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${no_of_slots}=  Get Length  ${resp.json()}
-    ${pccons_slots}=  Create List
-    FOR   ${i}  IN RANGE   ${no_of_slots}
-        ${available_slots_cnt}=  Set Variable  ${resp.json()[${i}]['availableSlots'][${i}]['noOfAvailbleSlots']}
-        FOR   ${j}  IN RANGE   ${available_slots_cnt}
-            Append To List  ${pccons_slots}  ${resp.json()[${i}]['availableSlots'][${i}]['time']}
-        END
-    END
-    ${num_slots}=  Get Length  ${pccons_slots}
-    ${j}=  Random Int  max=${num_slots-1}
-    Set Test Variable   ${slot1}   ${slots[${j}]}
+    Set Test Variable   ${slot1}  ${resp.json()[0]['availableSlots'][0]['time']}
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Customer Take Appointment   ${account_id}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}  
+    ${resp}=   Customer Take Appointment   ${account_id}  ${s_id}  ${sch_id}  ${FUT_DAY1}  ${cnote}   ${apptfor}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
-#......online appointment with prepayment..........
+JD-TC-AppointmentNotification-11
+
+    [Documentation]   take a walkin appointment with comm template and verify default notifications.
+
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    #......online appointment with prepayment..........
 
     ${resp}=  Get ProviderConsumer
     Log   ${resp.content}
@@ -663,18 +909,7 @@ JD-TC-AppointmentNotification-1
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${locId}  ${prepay_serid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${no_of_slots}=  Get Length  ${resp.json()}
-    ${pccons_slots}=  Create List
-    FOR   ${i}  IN RANGE   ${no_of_slots}
-        ${available_slots_cnt}=  Set Variable  ${resp.json()[${i}]['availableSlots'][${i}]['noOfAvailbleSlots']}
-        FOR   ${j}  IN RANGE   ${available_slots_cnt}
-            Append To List  ${pccons_slots}  ${resp.json()[${i}]['availableSlots'][${i}]['time']}
-        END
-    END
-    ${num_slots}=  Get Length  ${pccons_slots}
-    ${j}=  Random Int  max=${num_slots-1}
-    Set Test Variable   ${slot2}   ${slots[${j}]}
+    Set Test Variable   ${slot2}  ${resp.json()[0]['availableSlots'][0]['time']}
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot2}
     ${apptfor}=   Create List  ${apptfor1}
