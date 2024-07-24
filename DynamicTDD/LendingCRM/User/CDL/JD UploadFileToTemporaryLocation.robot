@@ -120,10 +120,13 @@ JD-TC-UpdateFileToTemparyLocation-1
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Should Be Equal As Strings            ${resp.json()['enableRbac']}    ${bool[0]}
+    Should Be Equal As Strings            ${resp.json()['enableCdl']}     ${bool[0]}
+    Should Be Equal As Strings            ${resp.json()['cdlRbac']}       ${bool[0]}
 
     IF  ${resp.json()['enableRbac']}==${bool[0]}
-        ${resp1}=  Enable Disable CDL RBAC  ${toggle[0]}
+        ${resp1}=  Enable Disable Main RBAC  ${toggle[0]}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
@@ -131,8 +134,22 @@ JD-TC-UpdateFileToTemparyLocation-1
     IF  ${resp.json()['enableCdl']}==${bool[0]}
         ${resp1}=  Enable Disable CDL  ${toggle[0]}
         Log  ${resp1.content}
+        Should Be Equal As Strings        ${resp1.status_code}  200
+    END
+
+    IF  ${resp.json()['cdlRbac']}==${bool[0]}
+        ${resp1}=  Enable Disable CDL RBAC  ${toggle[0]}
+        Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Should Be Equal As Strings            ${resp.json()['enableRbac']}    ${bool[1]}
+    Should Be Equal As Strings            ${resp.json()['enableCdl']}     ${bool[1]}
+    Should Be Equal As Strings            ${resp.json()['cdlRbac']}       ${bool[1]}
 
     ${resp}=    Create and Update Account level cdl setting    ${bool[1]}    ${autoApprovalUptoAmount2}    ${bool[1]}    ${toggle[0]}    ${bool[1]}   ${bool[1]}    ${bool[1]}  demandPromissoryNoteRequired=${bool[1]}    securityPostDatedChequesRequired=${bool[1]}    loanNature=ConsumerDurableLoan    autoEmiDeductionRequire=${bool[1]}   partnerRequired=${bool[0]}  documentSignatureRequired=${bool[0]}   digitalSignatureRequired=${bool[1]}   emandateRequired=${bool[1]}   creditScoreRequired=${bool[1]}   equifaxScoreRequired=${bool[1]}   cibilScoreRequired=${bool[1]}   minCreditScoreRequired=${minCreditScoreRequired}   minEquifaxScoreRequired=${minEquifaxScoreRequired}   minCibilScoreRequired=${minCibilScoreRequired}   minAge=${minAge}   maxAge=${maxAge}   minAmount=${minAmount}   maxAmount=${maxAmount}   bankStatementVerificationRequired=${bool[1]}   eStamp=DIGIO 
     Log  ${resp.content}

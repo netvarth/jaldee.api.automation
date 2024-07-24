@@ -206,7 +206,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{catalogType}              submission  itemOrder
 @{originFrom}               Lead   Enquire  LoanApplication  Loan  Task  NONE
 @{serviceBookingType}       booking   request
-@{rbac_feature}             cdl       booking      medicalrecord
+@{rbac_feature}             cdl       booking      medicalrecord      adminSettings
 @{rbac_capabilities}        createLoanApplication  updateLoanApplication  viewLoanApplication  verifyPartnerLoanApplication
 ...                         approveLoanApplication  createPartner  updatePartner  viewPartner  contactPartner  
 ...                         approvePartner  updatePartnerSettings  createLead  viewLead updateLead  invoiceUpdation  

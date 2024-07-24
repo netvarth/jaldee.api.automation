@@ -33,6 +33,12 @@ JD-TC-Get Capabilities By Feature -1
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableRbac']}==${bool[0]}
+        ${resp1}=  Enable Disable Main RBAC  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
     
     IF  ${resp.json()['enableRbac']}==${bool[1]}
         ${resp1}=  Enable Disable CDL RBAC  ${toggle[1]}
@@ -57,6 +63,12 @@ JD-TC-Get Capabilities By Feature -2
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableRbac']}==${bool[0]}
+        ${resp1}=  Enable Disable Main RBAC  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
     
     IF  ${resp.json()['bookingRbac']}==${bool[1]}
         ${resp1}=  Enable Disable Booking RBAC  ${toggle[1]}
@@ -81,6 +93,12 @@ JD-TC-Get Capabilities By Feature -3
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableRbac']}==${bool[0]}
+        ${resp1}=  Enable Disable Main RBAC  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
     
     IF  ${resp.json()['mrRbac']}==${bool[1]}
         ${resp1}=  Enable Disable Medical Record RBAC  ${toggle[1]}
@@ -105,6 +123,12 @@ JD-TC-Get Capabilities By Feature -4
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableRbac']}==${bool[0]}
+        ${resp1}=  Enable Disable Main RBAC  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
     
     IF  ${resp.json()['enableRbac']}==${bool[0]}
         ${resp1}=  Enable Disable CDL RBAC  ${toggle[0]}
@@ -129,6 +153,12 @@ JD-TC-Get Capabilities By Feature -5
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableRbac']}==${bool[0]}
+        ${resp1}=  Enable Disable Main RBAC  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
     
     IF  ${resp.json()['bookingRbac']}==${bool[0]}
         ${resp1}=  Enable Disable Booking RBAC  ${toggle[0]}
@@ -153,6 +183,12 @@ JD-TC-Get Capabilities By Feature -6
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableRbac']}==${bool[0]}
+        ${resp1}=  Enable Disable Main RBAC  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
     
     IF  ${resp.json()['mrRbac']}==${bool[0]}
         ${resp1}=  Enable Disable Medical Record RBAC  ${toggle[0]}

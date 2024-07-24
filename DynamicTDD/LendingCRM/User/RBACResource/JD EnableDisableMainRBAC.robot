@@ -16,7 +16,7 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Test Cases ***
 
-JD-TC-EnableDisableCDLRbac-1
+JD-TC-EnableDisableMainRbac-1
 
     [Documentation]  Get default rbac settings of an existing provider.
 
@@ -34,7 +34,7 @@ JD-TC-EnableDisableCDLRbac-1
     Should Be Equal As Strings  ${resp.json()}   []
     
 
-JD-TC-EnableDisableCDLRbac-2
+JD-TC-EnableDisableMainRbac-2
 
     [Documentation]  enable rbac.
 
@@ -52,12 +52,6 @@ JD-TC-EnableDisableCDLRbac-2
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
 
-    IF  ${resp.json()['enableCdl']}==${bool[0]}
-        ${resp1}=  Enable Disable CDL RBAC  ${toggle[0]}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    END
-
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -66,10 +60,19 @@ JD-TC-EnableDisableCDLRbac-2
     ${resp}=  Get roles
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()}   
+    ${len}=  Get Length  ${resp.json()}
+
+    FOR   ${i}  IN RANGE   0   ${len}
+        Should Contain    ${resp.json()[${i}]['featureName']}        adminSettings
+    END
+
+    ${resp}=  Get User 
+    Log   ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
 
 
-JD-TC-EnableDisableRbac-3
+
+JD-TC-EnableDisableMainRbac-3
 
     [Documentation]  disable rbac.
 
@@ -81,7 +84,7 @@ JD-TC-EnableDisableRbac-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp1}=  Enable Disable CDL RBAC  ${toggle[1]}
+    ${resp1}=  Enable Disable Booking RBAC  ${toggle[1]}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
 
@@ -93,8 +96,13 @@ JD-TC-EnableDisableRbac-3
     ${resp}=  Get roles
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
 
-JD-TC-EnableDisableRbac-4
+    FOR   ${i}  IN RANGE   0   ${len}
+        Should Contain    ${resp.json()[${i}]['featureName']}        adminSettings
+    END
+
+JD-TC-EnableDisableMainRbac-4
 
     [Documentation]  enable rbac  which is disabled.
 
@@ -102,7 +110,7 @@ JD-TC-EnableDisableRbac-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Enable Disable CDL RBAC  ${toggle[0]}
+    ${resp}=  Enable Disable Booking RBAC  ${toggle[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -114,31 +122,38 @@ JD-TC-EnableDisableRbac-4
     ${resp}=  Get roles
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
+
+    FOR   ${i}  IN RANGE   0   ${len}
+        Should Contain    ${resp.json()[${i}]['featureName']}        adminSettings
+    END
 
 
-JD-TC-EnableDisableRbac-UH1
+JD-TC-EnableDisableMainRbac-UH1
 
     [Documentation]  enable already enabled rbac.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${X_RBAC_ALREADY_ENABLED}=    format String   ${X_RBAC_ALREADY_ENABLED}   Booking
    
-    ${resp}=  Enable Disable CDL RBAC  ${toggle[0]}
+    ${resp}=  Enable Disable Booking RBAC  ${toggle[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${RBAC_ALREADY_ENABLED}
+    Should Be Equal As Strings   ${resp.json()}   ${X_RBAC_ALREADY_ENABLED}
 
-JD-TC-EnableDisableRbac-UH2
+JD-TC-EnableDisableMainRbac-UH2
 
     [Documentation]   Enable Rbac without login
 
-    ${resp}=  Enable Disable CDL RBAC  ${toggle[0]}
+    ${resp}=  Enable Disable Booking RBAC  ${toggle[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-EnableDisableRbac-UH3
+JD-TC-EnableDisableMainRbac-UH3
 
     [Documentation]   Enable Rbac Using Consumer Login
 
@@ -146,13 +161,13 @@ JD-TC-EnableDisableRbac-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Enable Disable CDL RBAC  ${toggle[0]}
+    ${resp}=  Enable Disable Booking RBAC  ${toggle[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
 
 
-JD-TC-EnableDisableRbac-UH4
+JD-TC-EnableDisableMainRbac-UH4
 
     [Documentation]  disable rbac which is already disabled.
 
@@ -160,7 +175,7 @@ JD-TC-EnableDisableRbac-UH4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Enable Disable CDL RBAC  ${toggle[1]}
+    ${resp}=  Enable Disable Booking RBAC  ${toggle[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -169,7 +184,9 @@ JD-TC-EnableDisableRbac-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableRbac']}  ${bool[0]}
 
-    ${resp}=  Enable Disable CDL RBAC  ${toggle[1]}
+    ${X_RBAC_ALREADY_DISABLED}=    format String   ${X_RBAC_ALREADY_DISABLED}   Booking
+
+    ${resp}=  Enable Disable Booking RBAC  ${toggle[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${RBAC_ALREADY_DISABLED}
+    Should Be Equal As Strings   ${resp.json()}   ${X_RBAC_ALREADY_DISABLED}

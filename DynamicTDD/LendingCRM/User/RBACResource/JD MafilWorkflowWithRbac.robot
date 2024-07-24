@@ -97,7 +97,7 @@ JD-TC-CdlWorkFlow-1
 
     ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCPUSERNAME1}    ${highest_package[0]}
     Log  ${resp.json()}
-    Should Be Equal As Strings            ${resp.status_code}    200
+    Should Be Equal As Strings            ${resp.status_code}    202
     
     ${resp}=  Account Activation          ${NBFCPUSERNAME1}  0
     Log   ${resp.json()}
@@ -121,6 +121,12 @@ JD-TC-CdlWorkFlow-1
     Should Be Equal As Strings            ${resp.status_code}  200
 
     IF  ${resp.json()['enableRbac']}==${bool[0]}
+        ${resp1}=  Enable Disable Main RBAC  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    IF  ${resp.json()['enableRbac']}==${bool[0]}
         ${resp1}=  Enable Disable CDL RBAC  ${toggle[0]}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
@@ -131,6 +137,10 @@ JD-TC-CdlWorkFlow-1
         Log  ${resp1.content}
         Should Be Equal As Strings        ${resp1.status_code}  200
     END
+
+    ${resp}=  Get User 
+    Log   ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
 
     ${resp}=    Create and Update Account level cdl setting    ${bool[1]}    ${autoApprovalUptoAmount2}    ${bool[1]}    ${toggle[0]}    ${bool[1]}   ${bool[1]}    ${bool[1]}  demandPromissoryNoteRequired=${bool[1]}    securityPostDatedChequesRequired=${bool[1]}    loanNature=ConsumerDurableLoan    autoEmiDeductionRequire=${bool[1]}   partnerRequired=${bool[0]}  documentSignatureRequired=${bool[0]}   digitalSignatureRequired=${bool[1]}   emandateRequired=${bool[1]}   creditScoreRequired=${bool[1]}   equifaxScoreRequired=${bool[1]}   cibilScoreRequired=${bool[1]}   minCreditScoreRequired=${minCreditScoreRequired}   minEquifaxScoreRequired=${minEquifaxScoreRequired}   minCibilScoreRequired=${minCibilScoreRequired}   minAge=${minAge}   maxAge=${maxAge}   minAmount=${minAmount}   maxAmount=${maxAmount}   bankStatementVerificationRequired=${bool[1]}   eStamp=DIGIO 
     Log  ${resp.content}

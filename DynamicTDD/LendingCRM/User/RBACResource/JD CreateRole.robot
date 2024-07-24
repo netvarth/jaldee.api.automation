@@ -33,24 +33,53 @@ JD-TC-CreateRole-1
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Should Be Equal As Strings            ${resp.json()['enableRbac']}    ${bool[0]}
+    Should Be Equal As Strings            ${resp.json()['cdlRbac']}       ${bool[0]}
+
     IF  ${resp.json()['enableRbac']}==${bool[0]}
+        ${resp1}=  Enable Disable Main RBAC  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    IF  ${resp.json()['cdlRbac']}==${bool[0]}
         ${resp1}=  Enable Disable CDL RBAC  ${toggle[0]}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
 
-    ${resp}=  Get roles
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Should Be Equal As Strings            ${resp.json()['enableRbac']}    ${bool[1]}
+    Should Be Equal As Strings            ${resp.json()['cdlRbac']}       ${bool[1]}
+
+    # ${resp}=  Get roles
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${role_id1}    ${resp.json()[0]['id']}
+    # Set Suite Variable  ${role_name1}  ${resp.json()[0]['roleName']}
+
+    ${resp}=  Get Default Roles With Capabilities  ${rbac_feature[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${role_id1}    ${resp.json()[0]['id']}
-    Set Suite Variable  ${role_name1}  ${resp.json()[0]['roleName']}
+    Set Suite Variable  ${role_id1}    ${resp.json()[0]['roleId']}
+    Set Suite Variable  ${role_name1}  ${resp.json()[0]['displayName']}
+    Set Suite Variable  ${cap1}  ${resp.json()[3]['capabilityList'][2]}
+    Set Suite Variable  ${cap2}  ${resp.json()[5]['capabilityList'][3]}
+    Set Suite Variable  ${cap3}  ${resp.json()[5]['capabilityList'][4]}
+    Set Suite Variable  ${cap4}  ${resp.json()[2]['capabilityList'][3]}
+    Set Suite Variable  ${cap5}  ${resp.json()[1]['capabilityList'][4]}
 
     ${description}=    Fakerlibrary.Sentence    
     # ${featureName}=    FakerLibrary.name    
+    ${Capabilities}=    Create List    ${cap1}    
+    Set Suite Variable  ${Capabilities}
+    ${role_name1}=    Fakerlibrary.name    
 
-    ${resp}=  Create Role      ${role_name1}    ${description}    ${rbac_feature[0]}    ${emptylist}
+    ${resp}=  Create Role      ${role_name1}    ${description}    ${rbac_feature[0]}    ${Capabilities}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -84,8 +113,9 @@ JD-TC-CreateRole-2
     ${Department}=  Create List           all
 
     ${user_scope}=   Create Dictionary     departments=${Department}  
+    ${role_name1}=    Fakerlibrary.name    
 
-    ${resp}=  Create Role      ${role_name1}    ${description1}     ${rbac_feature[0]}   ${emptylist}   scope=${user_scope}
+    ${resp}=  Create Role      ${role_name1}    ${description1}     ${rbac_feature[0]}   ${Capabilities}   scope=${user_scope}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${id_2}  ${resp.json()}
@@ -121,8 +151,9 @@ JD-TC-CreateRole-3
     ${labels}=  Create List           all
 
     ${user_scope}=   Create Dictionary     labels=${labels}  
+    ${role_name3}=    Fakerlibrary.name    
 
-    ${resp}=  Create Role      ${role_name3}    ${description1}     ${rbac_feature[0]}   ${emptylist}   scope=${user_scope}
+    ${resp}=  Create Role      ${role_name3}    ${description1}     ${rbac_feature[0]}   ${Capabilities}   scope=${user_scope}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${id_3}  ${resp.json()}
@@ -160,7 +191,7 @@ JD-TC-CreateRole-4
 
     ${user_scope}=   Create Dictionary     internalStatus=${internalStatus}  
 
-    ${resp}=  Create Role      ${role_name4}    ${description1}     ${rbac_feature[0]}   ${emptylist}   scope=${user_scope}
+    ${resp}=  Create Role      ${role_name4}    ${description1}     ${rbac_feature[0]}   ${Capabilities}   scope=${user_scope}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${id_4}  ${resp.json()}
@@ -197,7 +228,7 @@ JD-TC-CreateRole-5
 
     ${user_scope}=   Create Dictionary     pincodes=${pincodes}  
 
-    ${resp}=  Create Role      ${role_name5}    ${description1}     ${rbac_feature[0]}   ${emptylist}   scope=${user_scope}
+    ${resp}=  Create Role      ${role_name5}    ${description1}     ${rbac_feature[0]}   ${Capabilities}   scope=${user_scope}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${id_5}  ${resp.json()}
@@ -234,7 +265,7 @@ JD-TC-CreateRole-6
 
     ${user_scope}=   Create Dictionary     services=${services}  
 
-    ${resp}=  Create Role      ${role_name6}    ${description1}     ${rbac_feature[0]}   ${emptylist}   scope=${user_scope}
+    ${resp}=  Create Role      ${role_name6}    ${description1}     ${rbac_feature[0]}   ${Capabilities}   scope=${user_scope}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${id_6}  ${resp.json()}
@@ -271,7 +302,7 @@ JD-TC-CreateRole-7
 
     ${user_scope}=   Create Dictionary     partners=${partners}  
 
-    ${resp}=  Create Role      ${role_name7}    ${description1}     ${rbac_feature[0]}   ${emptylist}   scope=${user_scope}
+    ${resp}=  Create Role      ${role_name7}    ${description1}     ${rbac_feature[0]}   ${Capabilities}   scope=${user_scope}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${id_7}  ${resp.json()}
@@ -308,7 +339,7 @@ JD-TC-CreateRole-8
 
     ${user_scope}=   Create Dictionary     branches=${branches}  
 
-    ${resp}=  Create Role      ${role_name8}    ${description1}     ${rbac_feature[0]}   ${emptylist}   scope=${user_scope}
+    ${resp}=  Create Role      ${role_name8}    ${description1}     ${rbac_feature[0]}   ${Capabilities}   scope=${user_scope}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${id_8}  ${resp.json()}
@@ -345,7 +376,7 @@ JD-TC-CreateRole-9
 
     ${user_scope}=   Create Dictionary     businessLocations=${businessLocations}  
 
-    ${resp}=  Create Role      ${role_name9}    ${description1}     ${rbac_feature[0]}   ${emptylist}   scope=${user_scope}
+    ${resp}=  Create Role      ${role_name9}    ${description1}     ${rbac_feature[0]}   ${Capabilities}   scope=${user_scope}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${id_9}  ${resp.json()}
@@ -382,7 +413,7 @@ JD-TC-CreateRole-10
 
     ${user_scope}=   Create Dictionary     areaIds=${areaIds}  
 
-    ${resp}=  Create Role      ${role_name10}    ${description1}     ${rbac_feature[0]}   ${emptylist}   scope=${user_scope}
+    ${resp}=  Create Role      ${role_name10}    ${description1}     ${rbac_feature[0]}   ${Capabilities}   scope=${user_scope}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${id_10}  ${resp.json()}
@@ -419,7 +450,7 @@ JD-TC-CreateRole-11
 
     ${user_scope}=   Create Dictionary     regionIds=${regionIds}  
 
-    ${resp}=  Create Role      ${role_name11}    ${description1}     ${rbac_feature[0]}   ${emptylist}   scope=${user_scope}
+    ${resp}=  Create Role      ${role_name11}    ${description1}     ${rbac_feature[0]}   ${Capabilities}   scope=${user_scope}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${id_11}  ${resp.json()}
@@ -456,7 +487,7 @@ JD-TC-CreateRole-12
 
     ${user_scope}=   Create Dictionary     users=${users}  
 
-    ${resp}=  Create Role      ${role_name12}    ${description1}     ${rbac_feature[0]}   ${emptylist}   scope=${user_scope}
+    ${resp}=  Create Role      ${role_name12}    ${description1}     ${rbac_feature[0]}   ${Capabilities}   scope=${user_scope}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${id_12}  ${resp.json()}
@@ -503,7 +534,7 @@ JD-TC-CreateRole-13
 
     ${user_scope}=   Create Dictionary   departments=${departments}      labels=${labels}   internalStatus=${internalStatus}     pincodes=${pincodes}      services=${services}      partners=${partners}      branches=${branches}      businessLocations=${businessLocations}   areaIds=${areaIds}      regionIds=${regionIds}       users=${users}  
 
-    ${resp}=  Create Role      ${role_name12}    ${description1}     ${rbac_feature[0]}   ${emptylist}   scope=${user_scope}
+    ${resp}=  Create Role      ${role_name12}    ${description1}     ${rbac_feature[0]}   ${Capabilities}   scope=${user_scope}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${id_12}  ${resp.json()}
@@ -538,17 +569,6 @@ JD-TC-CreateRole-14
     ${departments}=  Create List           all
 
     ${user_scope}=   Create Dictionary   departments=${departments}  
-
-    ${resp}=  Get Default Roles With Capabilities  ${rbac_feature[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${role_id1}    ${resp.json()[0]['roleId']}
-    Set Suite Variable  ${role_name1}  ${resp.json()[0]['displayName']}
-    Set Suite Variable  ${cap1}  ${resp.json()[3]['capabilityList'][2]}
-    Set Suite Variable  ${cap2}  ${resp.json()[5]['capabilityList'][3]}
-    Set Suite Variable  ${cap3}  ${resp.json()[5]['capabilityList'][4]}
-    Set Suite Variable  ${cap4}  ${resp.json()[2]['capabilityList'][3]}
-    Set Suite Variable  ${cap5}  ${resp.json()[1]['capabilityList'][4]}
 
     ${Capabilities}=    Create List    ${cap1}    ${cap2} 
 
@@ -676,21 +696,37 @@ JD-TC-CreateRole-16
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Should Be Equal As Strings            ${resp.json()['enableRbac']}    ${bool[0]}
+    Should Be Equal As Strings            ${resp.json()['cdlRbac']}       ${bool[0]}
+
     IF  ${resp.json()['enableRbac']}==${bool[0]}
+        ${resp1}=  Enable Disable Main RBAC  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    IF  ${resp.json()['cdlRbac']}==${bool[0]}
         ${resp1}=  Enable Disable CDL RBAC  ${toggle[0]}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Should Be Equal As Strings            ${resp.json()['enableRbac']}    ${bool[1]}
+    Should Be Equal As Strings            ${resp.json()['cdlRbac']}       ${bool[1]}
 
     ${resp}=  Get roles
     Should Be Equal As Strings            ${resp.status_code}  200
     Set Suite Variable  ${role_id1}       ${resp.json()[0]['id']}
     Set Suite Variable  ${role_name1}     ${resp.json()[0]['roleName']}
     Set Suite Variable  ${capability1}    ${resp.json()[0]['capabilityList']}
+    ${role_name13}=    FakerLibrary.name 
 
-    ${role1}=        Create Dictionary     id=${role_id1}    roleId=${role_id1}  roleName=${role_name1}  feature=${rbac_feature[0]}  
+    ${role1}=        Create Dictionary     id=${role_id1}    roleId=${role_id1}  roleName=${role_name13}  feature=${rbac_feature[0]}  
     ${user_roles}=   Create List           ${role1}
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[2]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}  ${EMPTY}  ${bool[1]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}    userRoles=${user_roles}
@@ -722,12 +758,9 @@ JD-TC-CreateRole-UH1
 
     ${resp}=  Create Role      ${role_name13}    ${description1}     ${rbac_feature[0]}   ${Capabilities}   scope=${user_scope}
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${id_13}  ${resp.json()}
-
-    ${resp}=  Get roles by id    ${id_13}
-    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
+
 
 JD-TC-CreateRole-UH2
 
@@ -819,7 +852,7 @@ JD-TC-CreateRole-UH6
 
     ${description1}=    Fakerlibrary.Sentence       
 
-    ${resp}=  Create Role       ${role_name1}    ${description1}     ${rbac_feature[0]}     ${emptylist}
+    ${resp}=  Create Role       ${role_name1}    ${description1}     ${rbac_feature[0]}     ${Capabilities}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
@@ -830,7 +863,7 @@ JD-TC-CreateRole-UH7
 
     ${description1}=    Fakerlibrary.Sentence       
 
-    ${resp}=  Create Role       ${role_name1}    ${description1}     ${rbac_feature[0]}     ${emptylist}
+    ${resp}=  Create Role       ${role_name1}    ${description1}     ${rbac_feature[0]}     ${Capabilities}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}

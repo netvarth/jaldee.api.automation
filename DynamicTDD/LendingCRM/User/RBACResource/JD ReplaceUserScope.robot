@@ -40,6 +40,12 @@ JD-TC-ReplaceUserScope-1
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableRbac']}==${bool[0]}
+        ${resp1}=  Enable Disable Main RBAC  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
     
     IF  ${resp.json()['enableRbac']}==${bool[0]}
         ${resp1}=  Enable Disable CDL RBAC  ${toggle[0]}
@@ -255,6 +261,12 @@ JD-TC-ReplaceUserScope-2
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableRbac']}==${bool[0]}
+        ${resp1}=  Enable Disable Main RBAC  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     IF  ${resp.json()['enableRbac']}==${bool[0]}
         ${resp1}=  Enable Disable CDL RBAC  ${toggle[0]}
