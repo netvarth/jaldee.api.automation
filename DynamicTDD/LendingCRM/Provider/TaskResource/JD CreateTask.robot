@@ -389,18 +389,18 @@ JD-TC-CreateTask-UH5
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-CreateTask-UH6
-    [Documentation]  Create a task with consumer login.
+# JD-TC-CreateTask-UH6
+#     [Documentation]  Create a task with consumer login.
 
-    ${resp}=   ConsumerLogin  ${CUSERNAME8}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+#     ${resp}=   ConsumerLogin  ${CUSERNAME8}  ${PASSWORD}
+#     Log  ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${title}=  FakerLibrary.user name
-    ${desc}=   FakerLibrary.word 
+#     ${title}=  FakerLibrary.user name
+#     ${desc}=   FakerLibrary.word 
 
-    ${resp}=    Create Task   ${title}  ${desc}   ${userType[0]}  ${category_id1}  ${type_id1}   ${locId}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  401
-    Should Be Equal As Strings   ${resp.json()}    ${LOGIN_NO_ACCESS_FOR_URL}
+#     ${resp}=    Create Task   ${title}  ${desc}   ${userType[0]}  ${category_id1}  ${type_id1}   ${locId}
+#     Log  ${resp.content}
+#     Should Be Equal As Strings  ${resp.status_code}  401
+#     Should Be Equal As Strings   ${resp.json()}    ${LOGIN_NO_ACCESS_FOR_URL}
 

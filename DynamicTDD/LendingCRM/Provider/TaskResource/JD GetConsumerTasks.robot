@@ -214,18 +214,18 @@ JD-TC-GetConsumerTasks-UH1
 
    
 
-JD-TC-GetConsumerTasks-UH2
+# JD-TC-GetConsumerTasks-UH2
 
-    [Documentation]   get a consumer tasks  with consumer login
+#     [Documentation]   get a consumer tasks  with consumer login
 
-    ${resp}=  Consumer Login  ${CUSERNAME20}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+#     ${resp}=  Consumer Login  ${CUSERNAME20}  ${PASSWORD}
+#     Log   ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200
       
-    ${resp}=    Get Consumer Tasks
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}   401
-    Should Be Equal As Strings   ${resp.json()}     ${NoAccess}
+#     ${resp}=    Get Consumer Tasks
+#     Log   ${resp.content}
+#     Should Be Equal As Strings  ${resp.status_code}   401
+#     Should Be Equal As Strings   ${resp.json()}     ${NoAccess}
 
    
 

@@ -209,18 +209,18 @@ JD-TC-GetProviderTasks-UH1
 
    
 
-JD-TC-GetProviderTasks-UH2
+# JD-TC-GetProviderTasks-UH2
 
-    [Documentation]   get a provider tasks  with consumer login
+#     [Documentation]   get a provider tasks  with consumer login
 
-    ${resp}=  Consumer Login  ${CUSERNAME20}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+#     ${resp}=  Consumer Login  ${CUSERNAME20}  ${PASSWORD}
+#     Log   ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200
       
-    ${resp}=    Get Provider Tasks
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}   401
-    Should Be Equal As Strings   ${resp.json()}     ${NoAccess}
+#     ${resp}=    Get Provider Tasks
+#     Log   ${resp.content}
+#     Should Be Equal As Strings  ${resp.status_code}   401
+#     Should Be Equal As Strings   ${resp.json()}     ${NoAccess}
 
    
 

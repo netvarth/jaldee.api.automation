@@ -6,6 +6,7 @@ Library           Collections
 Library           FakerLibrary
 Library 	      JSONLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
@@ -23,27 +24,18 @@ JD-TC-Create Enquiry For SP-1
 
     [Documentation]   Create Enquiry for an Independant Service Provider.
 
-    ${resp}=  Consumer Login  ${CUSERNAME14}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
-
-    ${resp}=  Consumer Logout
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
     ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+    Set Test Variable  ${provider_name}  ${decrypted_data['userName']}
 
     ${resp}=  Get Business Profile
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${account_id}  ${resp.json()['id']}
+    Log  ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Set Suite Variable                    ${account_id}       ${resp.json()['id']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -59,11 +51,85 @@ JD-TC-Create Enquiry For SP-1
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Suite Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    ${fname}=   FakerLibrary.first_name
+    ${lname}=    FakerLibrary.last_name
+    Set Suite Variable      ${fname}
+    Set Suite Variable      ${lname}  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${fname}.${test_mail}
+
+    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${fname}   lastName=${lname}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${ageyrs}  ${agemonths}=  db.calculate_age_years_months     ${dob}
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+    Should Be Equal As Strings    ${resp.json()[0]['id']}  ${consumerId}
+    Should Be Equal As Strings    ${resp.json()[0]['firstName']}  ${fname}
+    Should Be Equal As Strings    ${resp.json()[0]['lastName']}  ${lname}
+    Should Be Equal As Strings    ${resp.json()[0]['email']}  ${consumerEmail}
+    Should Be Equal As Strings    ${resp.json()[0]['gender']}  ${gender}
+    Should Be Equal As Strings    ${resp.json()[0]['dob']}  ${dob}
+    Should Be Equal As Strings    ${resp.json()[0]['phoneNo']}  ${consumerPhone}
+    Should Be Equal As Strings    ${resp.json()[0]['countryCode']}  ${countryCodes[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}  ${status[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['favourite']}  ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['phone_verified']}  ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['email_verified']}  ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['whatsAppNum']['countryCode']}  ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['whatsAppNum']['number']}  ${consumerPhone}
+    Should Be Equal As Strings    ${resp.json()[0]['telegramNum']['countryCode']}  ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['telegramNum']['number']}  ${consumerPhone}
+    Should Be Equal As Strings    ${resp.json()[0]['age']['year']}  ${ageyrs}
+    Should Be Equal As Strings    ${resp.json()[0]['age']['month']}  ${agemonths}
+    Should Be Equal As Strings    ${resp.json()[0]['account']}  ${account_id}
+    ${fullName}   Set Variable    ${fname} ${lname}
+    Set Test Variable  ${fullName}
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${account_id}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+    Set Test Variable    ${PCid}   ${resp.json()['id']}
+    Set Suite Variable   ${Customer_Name}    ${resp.json()['userName']} 
+
+    ${resp}=    Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}  firstName=${fname}   lastName=${lname}
+        ${resp1}=  AddCustomer  ${consumerPhone}  firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
@@ -89,7 +155,6 @@ JD-TC-Create Enquiry For SP-1
         END
     END
 
-    # enquiryTemplate(account_id,category_id=0,priority_id=5,type_id=0)
     ${resp}=  enquiryTemplate  ${account_id}  ${en_temp_name}  ${enq_sts_new_id}  creator_provider_id=${provider_id}
 
     ${resp}=  Get Enquiry Template
@@ -110,23 +175,6 @@ JD-TC-Create Enquiry For SP-1
     IF   not '${resp.content}' == '${emptylist}'
         clear_enquiry  ${PUSERNAME26}
     END
-    
-
-    # ${resp}=  Get User
-    # Log  ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # IF   not '${resp.content}' == '${emptylist}'
-    #     ${len}=  Get Length  ${resp.json()}
-    # 
-        # FOR   ${i}  IN RANGE   0   ${len}
-        
-        #     Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-        #     IF   not '${user_phone}' == '${HLPUSERNAME2}'
-        #         clear_users  ${user_phone}
-        #     END
-        # END
-    # END
 
     ${category}=  Create Dictionary   id=${rand_catagory_id}  
 
@@ -183,11 +231,11 @@ JD-TC-Create Enquiry For SP-2
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}  firstName=${fname}   lastName=${lname}
+        ${resp1}=  AddCustomer  ${consumerPhone}  firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
@@ -262,20 +310,17 @@ JD-TC-Create Enquiry For SP-3
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}  firstName=${fname}   lastName=${lname}
+        ${resp1}=  AddCustomer  ${consumerPhone}  firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
     ELSE
         Set Test Variable  ${pcid14}  ${resp.json()[0]['id']}
     END
-
-    # ${resp}=  categorytype  ${account_id}
-    # ${resp}=  tasktype  ${account_id}
     
     ${resp}=  Get Provider Enquiry Category  
     Log  ${resp.content}
@@ -345,24 +390,17 @@ JD-TC-Create Enquiry For SP-4
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}  firstName=${fname}   lastName=${lname}
+        ${resp1}=  AddCustomer  ${consumerPhone}  firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
     ELSE
         Set Test Variable  ${pcid14}  ${resp.json()[0]['id']}
     END
-
-    # ${resp}=  categorytype  ${account_id}
-    # ${resp}=  tasktype      ${account_id}
-
-    # ${resp}=  Get Provider Enquiry Category  
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Provider Enquiry Type  
     Log  ${resp.content}
@@ -441,11 +479,11 @@ JD-TC-Create Enquiry For SP-5
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}  firstName=${fname}   lastName=${lname}
+        ${resp1}=  AddCustomer  ${consumerPhone}  firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
@@ -531,11 +569,11 @@ JD-TC-Create Enquiry For SP-6
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}  firstName=${fname}   lastName=${lname}
+        ${resp1}=  AddCustomer  ${consumerPhone}  firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
@@ -620,16 +658,16 @@ JD-TC-Create Enquiry For SP-7
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}  firstName=${fname}   lastName=${lname}
+        ${resp1}=  AddCustomer  ${consumerPhone}  firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
-        Set Test Variable  ${pcid14}   ${resp1.json()}
+        Set Suite Variable  ${pcid14}   ${resp1.json()}
     ELSE
-        Set Test Variable  ${pcid14}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${pcid14}  ${resp.json()[0]['id']}
     END
 
     ${resp}=  Get Provider Enquiry Category  
@@ -675,11 +713,75 @@ JD-TC-Create Enquiry For SP-8
     [Documentation]   Create Multiple enquiries for same location different customer. 
 
     clear_enquiry  ${PUSERNAME26}
-    ${resp}=  Consumer Login  ${CUSERNAME15}  ${PASSWORD} 
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Suite Variable    ${consumerPhone2}  555${PH_Number}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone2}${\n}
+    ${fname1}=   FakerLibrary.first_name
+    ${lname1}=    FakerLibrary.last_name
+    Set Suite Variable      ${fname1}
+    Set Suite Variable      ${lname1}  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone2}${fname1}.${test_mail}
+
+    ${resp}=  AddCustomer  ${consumerPhone2}  firstName=${fname1}   lastName=${lname1}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${ageyrs}  ${agemonths}=  db.calculate_age_years_months     ${dob}
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId2}  ${resp.json()[0]['id']}
+    Should Be Equal As Strings    ${resp.json()[0]['id']}  ${consumerId2}
+    Should Be Equal As Strings    ${resp.json()[0]['firstName']}  ${fname1}
+    Should Be Equal As Strings    ${resp.json()[0]['lastName']}  ${lname1}
+    Should Be Equal As Strings    ${resp.json()[0]['email']}  ${consumerEmail}
+    Should Be Equal As Strings    ${resp.json()[0]['gender']}  ${gender}
+    Should Be Equal As Strings    ${resp.json()[0]['dob']}  ${dob}
+    Should Be Equal As Strings    ${resp.json()[0]['phoneNo']}  ${consumerPhone2}
+    Should Be Equal As Strings    ${resp.json()[0]['countryCode']}  ${countryCodes[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}  ${status[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['favourite']}  ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['phone_verified']}  ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['email_verified']}  ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['whatsAppNum']['countryCode']}  ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['whatsAppNum']['number']}  ${consumerPhone2}
+    Should Be Equal As Strings    ${resp.json()[0]['telegramNum']['countryCode']}  ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['telegramNum']['number']}  ${consumerPhone2}
+    Should Be Equal As Strings    ${resp.json()[0]['age']['year']}  ${ageyrs}
+    Should Be Equal As Strings    ${resp.json()[0]['age']['month']}  ${agemonths}
+    Should Be Equal As Strings    ${resp.json()[0]['account']}  ${account_id}
+    ${fullName1}   Set Variable    ${fname1} ${lname1}
+    Set Test Variable  ${fullName1}
+
+    ${resp}=    Send Otp For Login    ${consumerPhone2}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone2}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable   ${token2}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone2}    ${account_id}    ${token2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+    Set Test Variable    ${PCid}   ${resp.json()['id']}
 
     ${resp}=  Consumer Logout
     Log  ${resp.content}
@@ -708,28 +810,16 @@ JD-TC-Create Enquiry For SP-8
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone2}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}  firstName=${fname}   lastName=${lname}
+        ${resp1}=  AddCustomer  ${consumerPhone2}  firstName=${fname1}   lastName=${lname1}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
-        Set Test Variable  ${pcid14}   ${resp1.json()}
+        Set Test Variable  ${pcid15}   ${resp1.json()}
     ELSE
-        Set Test Variable  ${pcid14}  ${resp.json()[0]['id']}
-    END
-
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME15}  
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME15}  firstName=${fname1}   lastName=${lname1}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-        Set Suite Variable  ${pcid15}   ${resp1.json()}
-    ELSE
-        Set Suite Variable  ${pcid15}  ${resp.json()[0]['id']}
+        Set Test Variable  ${pcid15}  ${resp.json()[0]['id']}
     END
 
     ${resp}=  Get Provider Enquiry Category  
@@ -823,26 +913,17 @@ JD-TC-Create Enquiry For SP-UH1
 
     ${locId1}=  Create Sample Location
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}  firstName=${fname}   lastName=${lname}
+        ${resp1}=  AddCustomer  ${consumerPhone}  firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
     ELSE
         Set Test Variable  ${pcid14}  ${resp.json()[0]['id']}
     END
-
-    ${resp}=  Consumer Login    ${CUSERNAME14}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${Customer_Name}    ${resp.json()['userName']}  
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Provider Enquiry Category  
     Log  ${resp.content}
@@ -859,8 +940,6 @@ JD-TC-Create Enquiry For SP-UH1
         clear_enquiry  ${PUSERNAME26}
     END
 
-    # ${title}=  FakerLibrary.Job
-    # ${desc}=   FakerLibrary.City
     ${category}=  Create Dictionary   id=${rand_catagory_id}
 
     ${resp}=  Create Enquiry  ${locId}  ${pcid14}  category=${category}
@@ -875,32 +954,19 @@ JD-TC-Create Enquiry For SP-UH1
     Set Test Variable  ${cur_status_name}  ${resp.json()['status']['name']}
     Set Test Variable  ${Enquiryid}  ${resp.json()['enquireId']}
 
-    # ${en_id1_str}=    Evaluate    f'{${en_id1}:05d}'
-    # Log  ${en_id1_str}
     ${ACTIVE_ENQUIRE_FOR_CUSTOMER}=  Format String  ${ACTIVE_ENQUIRE_FOR_CUSTOMER}  ${Customer_Name}     ${Enquiryid}    ${cur_status_name}
 
     ${resp}=  Create Enquiry  ${locId1}  ${pcid14}  category=${category}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${ACTIVE_ENQUIRE_FOR_CUSTOMER}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable   ${en_id2}        ${resp.json()['id']}
-    # Set Test Variable   ${en_uid2}        ${resp.json()['uid']}
 
     ${resp}=  Get Enquiry with filter 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # ${string_resp}= 	Convert JSON To String 	${resp.json()}
     Should Contain 	${resp.text} 	${en_uid1}
-    # Should Contain 	${string_resp} 	${en_uid2}
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${len}
-        # IF  '${resp.json()[${i}]['id']}'=='${en_id2}'
-        #     Should Be Equal As Strings  ${resp.json()[${i}]['id']}   ${en_id2}
-        #     Should Be Equal As Strings  ${resp.json()[${i}]['uid']}   ${en_uid2}
-        #     Should Be Equal As Strings  ${resp.json()[${i}]['customer']['id']}   ${pcid14}
-        #     Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}   ${locId1}
-        # ELSE IF  '${resp.json()[${i}]['id']}'=='${en_id1}'
         IF  '${resp.json()[${i}]['id']}'=='${en_id1}'
             Should Be Equal As Strings  ${resp.json()[${i}]['id']}   ${en_id1}
             Should Be Equal As Strings  ${resp.json()[${i}]['uid']}   ${en_uid1}
@@ -941,11 +1007,11 @@ JD-TC-Create Enquiry For SP-UH2
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}  firstName=${fname}   lastName=${lname}
+        ${resp1}=  AddCustomer  ${consumerPhone}  firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
@@ -993,9 +1059,6 @@ JD-TC-Create Enquiry For SP-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${ACTIVE_ENQUIRE_FOR_CUSTOMER}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable   ${en_id2}        ${resp.json()['id']}
-    # Set Test Variable   ${en_uid2}        ${resp.json()['uid']}
 
     ${resp}=  Get Enquiry with filter 
     Log  ${resp.content}
@@ -1004,13 +1067,7 @@ JD-TC-Create Enquiry For SP-UH2
     Should Contain 	${string_resp} 	${en_uid1}
     # Should Contain 	${string_resp} 	${en_uid2}
     ${len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${len}
-        # IF  '${resp.json()[${i}]['id']}'=='${en_id2}'
-        #     Should Be Equal As Strings  ${resp.json()[${i}]['id']}   ${en_id2}
-        #     Should Be Equal As Strings  ${resp.json()[${i}]['uid']}   ${en_uid2}
-        #     Should Be Equal As Strings  ${resp.json()[${i}]['customer']['id']}   ${pcid14}
-        #     Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}   ${locId}
-        # ELSE IF  '${resp.json()[${i}]['id']}'=='${en_id1}'
+    FOR  ${i}  IN RANGE   ${len}'
         IF  '${resp.json()[${i}]['id']}'=='${en_id1}'
             Should Be Equal As Strings  ${resp.json()[${i}]['id']}   ${en_id1}
             Should Be Equal As Strings  ${resp.json()[${i}]['uid']}   ${en_uid1}
@@ -1051,20 +1108,17 @@ JD-TC-Create Enquiry For SP-9
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}  firstName=${fname}   lastName=${lname}
+        ${resp1}=  AddCustomer  ${consumerPhone}  firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
     ELSE
         Set Test Variable  ${pcid14}  ${resp.json()[0]['id']}
     END
-
-    # ${resp}=  categorytype  ${account_id}
-    # ${resp}=  tasktype      ${account_id}
 
     ${resp}=  Get Provider Enquiry Category  
     Log  ${resp.content}
@@ -1149,20 +1203,17 @@ JD-TC-Create Enquiry For SP-10
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}
+        ${resp1}=  AddCustomer  ${consumerPhone}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
     ELSE
         Set Test Variable  ${pcid14}  ${resp.json()[0]['id']}
     END
-
-    # ${resp}=  categorytype  ${account_id}
-    # ${resp}=  tasktype      ${account_id}
 
     ${resp}=  Get Provider Enquiry Category  
     Log  ${resp.content}
@@ -1283,13 +1334,8 @@ JD-TC-Create Enquiry For SP-10
     Set Test Variable  ${en_temp_id}  ${resp.json()[0]['id']}
 
     taskTemplate  ${account_id}  ${task_temp_name1}  ${new_status_id}  origin_from=3  origin_id=${en_temp_id}  category_id=${rand_task_catagory_id}  type_id=${rand_task_cat_type_id}  priority_id=${rand_task_priority_id}  creator_provider_id=${provider_id} 
-    # setOrigin  crm_task_master_tbl   origin_from  3  template_name   ${task_temp_name1}  account  ${account_id}
-    # setOrigin  crm_task_master_tbl   origin_id  ${en_temp_id}  template_name   ${task_temp_name1}  account  ${account_id}
 
     taskTemplate  ${account_id}  ${task_temp_name2}  ${new_status_id}  origin_from=3  origin_id=${en_temp_id}  category_id=${rand_task_catagory_id}  type_id=${rand_task_cat_type_id}  priority_id=${rand_task_priority_id}  creator_provider_id=${provider_id} 
-    # setOrigin  crm_task_master_tbl   origin_from  3  template_name   ${task_temp_name2}  account  ${account_id}
-    # setOrigin  crm_task_master_tbl   origin_id  ${en_temp_id}  template_name   ${task_temp_name2}  account  ${account_id}
-
     ${resp}=  Get Enquiry with filter
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1331,90 +1377,6 @@ JD-TC-Create Enquiry For SP-10
     Should Be Equal As Strings  ${resp.json()['category']['name']}   ${rand_catagory_name}
     Should Be Equal As Strings  ${resp.json()['status']['id']}  ${status_id0}
     Should Be Equal As Strings  ${resp.json()['status']['name']}  ${status_name0}
-
-    comment  subtasks are not created anymore. instead its just enquiry status now.
-
-    # ${resp}=    Get Task Status
-    # Log   ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # ${len}  Get Length  ${resp.json()}
-    # FOR   ${i}  IN RANGE   ${len}
-    #     IF   '${resp.json()[${i}]['name']}' == 'New'
-
-    #         Set Test Variable  ${new_status_id}    ${resp.json()[${i}]['id']}
-    #         Set Test Variable  ${new_status_name}  ${resp.json()[${i}]['name']}
-
-    #     END
-    # END
-
-    # ${resp}=    Get Provider Tasks
-    # Log   ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()[1]['title']}   ${task_temp_name1}
-    # Should Be Equal As Strings  ${resp.json()[1]['status']['name']}   ${new_status_name}
-    # Set Suite Variable  ${task_id2}  ${resp.json()[1]['id']}
-    # Set Suite Variable  ${task_uid2}  ${resp.json()[1]['taskUid']}
-
-    # Should Be Equal As Strings  ${resp.json()[0]['title']}   ${task_temp_name2}
-    # Should Be Equal As Strings  ${resp.json()[0]['status']['name']}   ${new_status_name}
-    # Set Suite Variable  ${task_id1}  ${resp.json()[0]['id']}
-    # Set Suite Variable  ${task_uid1}  ${resp.json()[0]['taskUid']}
-
-    # ${resp}=    Get Task Status
-    # Log   ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # ${len}  Get Length  ${resp.json()}
-    # FOR   ${i}  IN RANGE   ${len}
-    #     IF   '${resp.json()[${i}]['name']}' == 'Completed'
-
-    #         Set Test Variable  ${status_id}    ${resp.json()[${i}]['id']}
-    #         Set Suite Variable  ${status_name}  ${resp.json()[${i}]['name']}
-
-    #     END
-    # END
-    # Set Test Variable  ${status_id1}    ${resp.json()[0]['id']}
-    # Set Suite Variable  ${status_name1}  ${resp.json()[0]['name']}
-    # Set Test Variable  ${status_id2}    ${resp.json()[1]['id']}
-    # Set Suite Variable  ${status_name2}  ${resp.json()[1]['name']}
-    # Set Test Variable  ${status_id3}    ${resp.json()[2]['id']}
-    # Set Suite Variable  ${status_name3}  ${resp.json()[2]['name']}
-    # Set Test Variable  ${status_id4}    ${resp.json()[3]['id']}
-    # Set Suite Variable  ${status_name4}  ${resp.json()[3]['name']}
-    # Set Test Variable  ${status_id5}    ${resp.json()[4]['id']}
-    # Set Suite Variable  ${status_name5}  ${resp.json()[4]['name']}
-
-    # Comment   Changing task status with status change url (Change Task Status) does not change the enquiry status no. have to use the closed url (Change Task Status to Complete).
-
-    # ${resp}=    Change Task Status   ${task_uid1}  ${status_id5}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=    Change Task Status   ${task_uid2}  ${status_id5}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=    Change Task Status to Complete   ${task_uid1}  
-    # Log   ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=    Change Task Status to Complete   ${task_uid2}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=    Get Provider Tasks  originUid-eq=${en_uid}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()[1]['title']}   ${task_temp_name1}
-    # Should Be Equal As Strings  ${resp.json()[1]['status']['name']}   ${status_name}
-
-    # Should Be Equal As Strings  ${resp.json()[0]['title']}   ${task_temp_name2}
-    # Should Be Equal As Strings  ${resp.json()[0]['status']['name']}   ${status_name}
-
-    # ${resp}=  Get Enquiry by Uuid  ${en_uid}  
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()['status']['id']}             ${status_id0}
-    # Should Be Equal As Strings  ${resp.json()['status']['name']}           ${status_name0}
 
     ${resp}=    Change Enquiry Status   ${en_uid}  ${status_id1}
     Log   ${resp.content}
@@ -1464,11 +1426,11 @@ JD-TC-Create Enquiry For SP-11
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}
+        ${resp1}=  AddCustomer  ${consumerPhone}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
@@ -1558,14 +1520,6 @@ JD-TC-Create Enquiry For SP-11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${en_temp_id}  ${resp.json()[0]['id']}
 
-    # taskTemplate  ${account_id}  ${task_temp_name1}  ${new_status_id}  origin_from=3  origin_id=${en_temp_id}  category_id=${rand_task_catagory_id}  type_id=${rand_task_cat_type_id}  priority_id=${rand_task_priority_id}  creator_provider_id=${provider_id} 
-    # setOrigin  crm_task_master_tbl   origin_from  3  template_name   ${task_temp_name1}  account  ${account_id}
-    # setOrigin  crm_task_master_tbl   origin_id  ${en_temp_id}  template_name   ${task_temp_name1}  account  ${account_id}
-
-    # taskTemplate  ${account_id}  ${task_temp_name2}  ${new_status_id}  origin_from=3  origin_id=${en_temp_id}  category_id=${rand_task_catagory_id}  type_id=${rand_task_cat_type_id}  priority_id=${rand_task_priority_id}  creator_provider_id=${provider_id} 
-    # setOrigin  crm_task_master_tbl   origin_from  3  template_name   ${task_temp_name2}  account  ${account_id}
-    # setOrigin  crm_task_master_tbl   origin_id  ${en_temp_id}  template_name   ${task_temp_name2}  account  ${account_id}
-
     ${resp}=  Get Enquiry with filter
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1596,88 +1550,6 @@ JD-TC-Create Enquiry For SP-11
     Should Be Equal As Strings  ${resp.json()['type']['name']}   ${rand_cat_type_name}
     Should Be Equal As Strings  ${resp.json()['category']['id']}   ${rand_catagory_id}
     Should Be Equal As Strings  ${resp.json()['category']['name']}   ${rand_catagory_name}
-
-    comment  subtasks are not created anymore. instead its just enquiry status now.
-    
-    # ${resp}=    Get Task Status
-    # Log   ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # ${len}  Get Length  ${resp.json()}
-    # FOR   ${i}  IN RANGE   ${len}
-    #     IF   '${resp.json()[${i}]['name']}' == 'New'
-
-    #         Set Test Variable  ${new_status_id}    ${resp.json()[${i}]['id']}
-    #         Set Test Variable  ${new_status_name}  ${resp.json()[${i}]['name']}
-
-    #     END
-    # END
-
-    # ${resp}=    Get Provider Tasks  originUid-eq=${en_uid}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()[1]['title']}   ${task_temp_name1}
-    # Should Be Equal As Strings  ${resp.json()[1]['status']['name']}   ${new_status_name}
-    # Set Suite Variable  ${task_id2}  ${resp.json()[1]['id']}
-    # Set Suite Variable  ${task_uid2}  ${resp.json()[1]['taskUid']}
-
-    # Should Be Equal As Strings  ${resp.json()[0]['title']}   ${task_temp_name2}
-    # Should Be Equal As Strings  ${resp.json()[0]['status']['name']}   ${new_status_name}
-    # Set Suite Variable  ${task_id1}  ${resp.json()[0]['id']}
-    # Set Suite Variable  ${task_uid1}  ${resp.json()[0]['taskUid']}
-
-    # ${resp}=    Get Task Status
-    # Log   ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # ${len}  Get Length  ${resp.json()}
-    # FOR   ${i}  IN RANGE   ${len}
-    #     IF   '${resp.json()[${i}]['name']}' == 'Completed'
-
-    #         Set Test Variable  ${status_id}    ${resp.json()[${i}]['id']}
-    #         Set Suite Variable  ${status_name}  ${resp.json()[${i}]['name']}
-
-    #     END
-    # END
-    # Set Test Variable  ${status_id1}    ${resp.json()[0]['id']}
-    # Set Suite Variable  ${status_name1}  ${resp.json()[0]['name']}
-    # Set Test Variable  ${status_id2}    ${resp.json()[1]['id']}
-    # Set Suite Variable  ${status_name2}  ${resp.json()[1]['name']}
-    # Set Test Variable  ${status_id3}    ${resp.json()[2]['id']}
-    # Set Suite Variable  ${status_name3}  ${resp.json()[2]['name']}
-    # Set Test Variable  ${status_id4}    ${resp.json()[3]['id']}
-    # Set Suite Variable  ${status_name4}  ${resp.json()[3]['name']}
-    # Set Test Variable  ${status_id5}    ${resp.json()[4]['id']}
-    # Set Suite Variable  ${status_name5}  ${resp.json()[4]['name']}
-
-    # Comment   Changing task status with status change url (Change Task Status) does not change the enquiry status. have to use the "closed" url (Change Task Status to Complete).
-
-    # ${resp}=    Change Task Status   ${task_uid1}  ${status_id}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=    Change Task Status   ${task_uid2}  ${status_id}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=    Change Task Status to Complete   ${task_uid1}  
-    # Log   ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=    Change Task Status to Complete   ${task_uid2}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=    Get Provider Tasks  originUid-eq=${en_uid}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()[1]['title']}   ${task_temp_name1}
-    # Should Be Equal As Strings  ${resp.json()[1]['status']['name']}   ${status_name}
-
-    # Should Be Equal As Strings  ${resp.json()[0]['title']}   ${task_temp_name2}
-    # Should Be Equal As Strings  ${resp.json()[0]['status']['name']}   ${status_name}
-
-    # ${resp}=  Get Enquiry by Uuid  ${en_uid}  
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Provider Enquiry Status  
     Log  ${resp.content}
@@ -1733,11 +1605,11 @@ JD-TC-Create Enquiry For SP-12
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}
+        ${resp1}=  AddCustomer  ${consumerPhone}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
@@ -1799,11 +1671,11 @@ JD-TC-Create Enquiry For SP-13
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}
+        ${resp1}=  AddCustomer  ${consumerPhone}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
@@ -1866,11 +1738,11 @@ JD-TC-Create Enquiry For SP-14
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}
+        ${resp1}=  AddCustomer  ${consumerPhone}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
@@ -1936,26 +1808,17 @@ JD-TC-Create Enquiry For SP-15
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}
+        ${resp1}=  AddCustomer  ${consumerPhone}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
     ELSE
         Set Test Variable  ${pcid14}  ${resp.json()[0]['id']}
     END
-
-    # ${resp}=    Get Task Master With Filter
-    # Log  ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${resp}=    Get Lead Templates    
-    # Log  ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # Set Test Variable  ${ld_temp_id}  ${resp.json()[0]['id']}
 
     ${resp}=    Get Lead Templates    
     Log  ${resp.content}
@@ -1997,66 +1860,6 @@ JD-TC-Create Enquiry For SP-15
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=    Get Task Status
-    # Log   ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # ${len}  Get Length  ${resp.json()}
-    # FOR   ${i}  IN RANGE   ${len}
-    #     IF   '${resp.json()[${i}]['name']}' == 'New'
-
-    #         Set Test Variable  ${new_status_id}    ${resp.json()[${i}]['id']}
-    #         Set Test Variable  ${new_status_name}  ${resp.json()[${i}]['name']}
-
-    #     END
-    # END
-
-    # ${resp}=    Get Provider Tasks  originUid-eq=${en_uid}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()[1]['title']}   ${task_temp_name1}
-    # Should Be Equal As Strings  ${resp.json()[1]['status']['name']}   ${new_status_name}
-    # Set Suite Variable  ${task_id2}  ${resp.json()[1]['id']}
-    # Set Suite Variable  ${task_uid2}  ${resp.json()[1]['taskUid']}
-
-    # Should Be Equal As Strings  ${resp.json()[0]['title']}   ${task_temp_name2}
-    # Should Be Equal As Strings  ${resp.json()[0]['status']['name']}   ${new_status_name}
-    # Set Suite Variable  ${task_id1}  ${resp.json()[0]['id']}
-    # Set Suite Variable  ${task_uid1}  ${resp.json()[0]['taskUid']}
-
-    # ${resp}=    Get Task Status
-    # Log   ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # ${len}  Get Length  ${resp.json()}
-    # FOR   ${i}  IN RANGE   ${len}
-    #     IF   '${resp.json()[${i}]['name']}' == 'Completed'
-
-    #         Set Test Variable  ${status_id}    ${resp.json()[${i}]['id']}
-    #         Set Suite Variable  ${status_name}  ${resp.json()[${i}]['name']}
-
-    #     END
-    # END
-
-    # ${resp}=    Change Task Status to Complete   ${task_uid1}  
-    # Log   ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=    Change Task Status to Complete   ${task_uid2}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=    Get Provider Tasks  originUid-eq=${en_uid}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()[1]['title']}   ${task_temp_name1}
-    # Should Be Equal As Strings  ${resp.json()[1]['status']['name']}   ${status_name}
-
-    # Should Be Equal As Strings  ${resp.json()[0]['title']}   ${task_temp_name2}
-    # Should Be Equal As Strings  ${resp.json()[0]['status']['name']}   ${status_name}
-
-    # ${resp}=  Get Enquiry by Uuid  ${en_uid}  
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
     ${resp}=  Get Provider Enquiry Status  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2077,9 +1880,9 @@ JD-TC-Create Enquiry For SP-UH3
     [Documentation]   Create Enquiry with a consumer's jaldee consumer id
 
     # clear_enquiry  ${PUSERNAME26}
-    ${resp}=  Consumer Login  ${CUSERNAME14}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${account_id}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${jdconID}   ${resp.json()['id']}
 
     ${resp}=  Consumer Logout
@@ -2151,11 +1954,11 @@ JD-TC-Create Enquiry For SP-UH4
         Set Test Variable  ${locId1}  ${resp.json()[0]['id']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}
+        ${resp1}=  AddCustomer  ${consumerPhone}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14-1}   ${resp1.json()}
@@ -2229,18 +2032,6 @@ JD-TC-Create Enquiry For SP-UH5
         Set Test Variable  ${locId1}  ${resp.json()[0]['id']}
     END
 
-    # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
-    # Log  ${resp.content}
-    # Should Be Equal As Strings      ${resp.status_code}  200
-    # IF   '${resp.content}' == '${emptylist}'
-    #     ${resp1}=  AddCustomer  ${CUSERNAME14}
-    #     Log  ${resp1.content}
-    #     Should Be Equal As Strings  ${resp1.status_code}  200
-    #     Set Test Variable  ${pcid14-1}   ${resp1.json()}
-    # ELSE
-    #     Set Test Variable  ${pcid14-1}  ${resp.json()[0]['id']}
-    # END
-
     ${resp}=  Provider Logout
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2252,22 +2043,12 @@ JD-TC-Create Enquiry For SP-UH5
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${account_id}  ${resp.json()['id']}
 
-    # ${resp}=    Get Locations
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # IF   '${resp.content}' == '${emptylist}'
-    #     ${locId}=  Create Sample Location
-    # ELSE
-    #     Set Test Variable  ${locId}  ${resp.json()[0]['id']}
-    # END
-
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}
+        ${resp1}=  AddCustomer  ${consumerPhone}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
@@ -2321,11 +2102,11 @@ JD-TC-Create Enquiry For SP-UH6
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}
+        ${resp1}=  AddCustomer  ${consumerPhone}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
@@ -2373,11 +2154,11 @@ JD-TC-Create Enquiry For SP-UH7
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}
+        ${resp1}=  AddCustomer  ${consumerPhone}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
@@ -2393,15 +2174,6 @@ JD-TC-Create Enquiry For SP-UH7
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${CATEGORY_REQUIRES}
-    # Set Test Variable   ${en_id5}        ${resp.json()['id']}
-    # Set Test Variable   ${en_uid5}        ${resp.json()['uid']}
-
-    # ${resp}=  Get Enquiry by Uuid  ${en_uid5}  
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()['id']}   ${en_id5}
-    # Should Be Equal As Strings  ${resp.json()['uid']}   ${en_uid5}
-    # Should Be Equal As Strings  ${resp.json()['accountId']}   ${account_id}
 
 
 JD-TC-Create Enquiry For SP-UH8
@@ -2434,11 +2206,11 @@ JD-TC-Create Enquiry For SP-UH8
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}
+        ${resp1}=  AddCustomer  ${consumerPhone}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
@@ -2496,11 +2268,11 @@ JD-TC-Create Enquiry For SP-16
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}
+        ${resp1}=  AddCustomer  ${consumerPhone}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
@@ -2574,11 +2346,11 @@ JD-TC-Create Enquiry For SP-UH9
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}
+        ${resp1}=  AddCustomer  ${consumerPhone}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
@@ -2644,11 +2416,11 @@ JD-TC-Create Enquiry For SP-UH10
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}
+        ${resp1}=  AddCustomer  ${consumerPhone}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
@@ -2707,11 +2479,11 @@ JD-TC-Create Enquiry For SP-UH11
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}
+        ${resp1}=  AddCustomer  ${consumerPhone}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
@@ -2768,11 +2540,11 @@ JD-TC-Create Enquiry For SP-UH12
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}
+        ${resp1}=  AddCustomer  ${consumerPhone}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
@@ -2838,11 +2610,11 @@ JD-TC-Create Enquiry For SP-UH13
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}
+        ${resp1}=  AddCustomer  ${consumerPhone}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
@@ -2902,11 +2674,11 @@ JD-TC-Create Enquiry For SP-UH14
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}
+        ${resp1}=  AddCustomer  ${consumerPhone}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
@@ -2925,9 +2697,9 @@ JD-TC-Create Enquiry For SP-UH14
     ${resp}=  Provider Logout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME14}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${account_id}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${title}=  FakerLibrary.Job
     ${desc}=   FakerLibrary.City
@@ -2992,11 +2764,11 @@ JD-TC-Create Enquiry For SP-UH15
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}
+        ${resp1}=  AddCustomer  ${consumerPhone}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
@@ -3063,11 +2835,11 @@ JD-TC-Create Enquiry For SP-UH16
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}
+        ${resp1}=  AddCustomer  ${consumerPhone}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
@@ -3170,11 +2942,11 @@ JD-TC-Create Enquiry For SP-UH17
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}
+        ${resp1}=  AddCustomer  ${consumerPhone}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
@@ -3288,11 +3060,11 @@ JD-TC-Create Enquiry For SP-UH18
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}
+        ${resp1}=  AddCustomer  ${consumerPhone}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}

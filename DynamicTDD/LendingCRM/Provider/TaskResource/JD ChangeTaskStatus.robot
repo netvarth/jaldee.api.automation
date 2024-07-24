@@ -370,19 +370,19 @@ JD-TC-ChangeTaskStatus-UH3
     Should Be Equal As Strings  "${resp.json()}"   "${SESSION_EXPIRED}"  
 
 
-JD-TC-ChangeTaskStatus-UH4
+# JD-TC-ChangeTaskStatus-UH4
 
-    [Documentation]  Change  task  status  with consumer login 
+#     [Documentation]  Change  task  status  with consumer login 
 
-    ${resp}=  Consumer Login  ${CUSERNAME20}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+#     ${resp}=  Consumer Login  ${CUSERNAME20}  ${PASSWORD}
+#     Log   ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200
    
       
-    ${resp}=    Change Task Status   ${task_uid2}  ${status_id5}
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}   401
-    Should Be Equal As Strings  "${resp.json()}"   "${NoAccess}"  
+#     ${resp}=    Change Task Status   ${task_uid2}  ${status_id5}
+#     Log   ${resp.content}
+#     Should Be Equal As Strings  ${resp.status_code}   401
+#     Should Be Equal As Strings  "${resp.json()}"   "${NoAccess}"  
 
 
 

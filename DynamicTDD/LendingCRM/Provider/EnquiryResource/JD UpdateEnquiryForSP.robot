@@ -328,10 +328,7 @@ JD-TC-Update Enquiry For SP-2
     ELSE
         Set Test Variable  ${pcid17}  ${resp.json()[0]['id']}
     END
-
-    # ${resp}=  categorytype  ${account_id}
-    # ${resp}=  tasktype      ${account_id}
-
+    
     ${resp}=  Get Provider Enquiry Category  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200

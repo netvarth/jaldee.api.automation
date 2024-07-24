@@ -6,6 +6,7 @@ Library           Collections
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
@@ -21,38 +22,18 @@ ${en_temp_name}   EnquiryName
 JD-TC-GetEnquiriesPriority-1
     [Documentation]   Get Enquiries Priority
 
-    ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
-
-    ${resp}=  Consumer Logout
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Consumer Login  ${CUSERNAME20}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
-
-    ${resp}=  Consumer Logout
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
     ${resp}=   Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
-    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+    Set Test Variable  ${provider_name}  ${decrypted_data['userName']}
 
     ${resp}=  Get Business Profile
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${account_id}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Log  ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Set Suite Variable                    ${account_id}       ${resp.json()['id']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -68,20 +49,76 @@ JD-TC-GetEnquiriesPriority-1
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${locId1}=  Create Sample Location
-    Set Suite Variable  ${locId1}
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Suite Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    ${fname}=   FakerLibrary.first_name
+    ${lname}=    FakerLibrary.last_name
+    Set Suite Variable      ${fname}
+    Set Suite Variable      ${lname}  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${fname}.${test_mail}
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
+    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${fname}   lastName=${lname}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${loc_len}=  Get Length   ${resp.json()}
-    FOR   ${i}  IN RANGE   ${loc_len}
-        IF   '${resp.json()[${i}]['id']}'=='${locId}'
-            Set Suite Variable  ${loc_name}  ${resp.json()[${i}]['place']}
-        ELSE IF  '${resp.json()[${i}]['id']}'=='${locId1}'
-            Set Suite Variable  ${loc_name1}  ${resp.json()[${i}]['place']}
-        END
-    END
+
+    ${ageyrs}  ${agemonths}=  db.calculate_age_years_months     ${dob}
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+    Should Be Equal As Strings    ${resp.json()[0]['id']}  ${consumerId}
+    Should Be Equal As Strings    ${resp.json()[0]['firstName']}  ${fname}
+    Should Be Equal As Strings    ${resp.json()[0]['lastName']}  ${lname}
+    Should Be Equal As Strings    ${resp.json()[0]['email']}  ${consumerEmail}
+    Should Be Equal As Strings    ${resp.json()[0]['gender']}  ${gender}
+    Should Be Equal As Strings    ${resp.json()[0]['dob']}  ${dob}
+    Should Be Equal As Strings    ${resp.json()[0]['phoneNo']}  ${consumerPhone}
+    Should Be Equal As Strings    ${resp.json()[0]['countryCode']}  ${countryCodes[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}  ${status[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['favourite']}  ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['phone_verified']}  ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['email_verified']}  ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['whatsAppNum']['countryCode']}  ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['whatsAppNum']['number']}  ${consumerPhone}
+    Should Be Equal As Strings    ${resp.json()[0]['telegramNum']['countryCode']}  ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['telegramNum']['number']}  ${consumerPhone}
+    Should Be Equal As Strings    ${resp.json()[0]['age']['year']}  ${ageyrs}
+    Should Be Equal As Strings    ${resp.json()[0]['age']['month']}  ${agemonths}
+    Should Be Equal As Strings    ${resp.json()[0]['account']}  ${account_id}
+    ${fullName}   Set Variable    ${fname} ${lname}
+    Set Test Variable  ${fullName}
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${account_id}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Provider Enquiry Category  
     Log  ${resp.content}
@@ -113,9 +150,9 @@ JD-TC-GetEnquiriesPriority-2
 JD-TC-GetEnquiriesPriority-UH1
     [Documentation]   Get Enquiry Priority with Consumer Login
 
-    ${resp}=  Consumer Login  ${CUSERNAME10}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${account_id}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Provider Enquiry Priority  
     Log  ${resp.content}

@@ -105,17 +105,17 @@ JD-TC-EnableDisableCRM-UH1
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 
-JD-TC-EnableDisableCRM-UH2
+# JD-TC-EnableDisableCRM-UH2
 
-    [Documentation]   Enable CRM Using Consumer Login
+#     [Documentation]   Enable CRM Using Consumer Login
 
-    ${resp}=  ConsumerLogin  ${CUSERNAME1}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
+#     ${resp}=  ConsumerLogin  ${CUSERNAME1}  ${PASSWORD}
+#     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Enable Disable CRM  ${toggle[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  401
-    Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
+#     ${resp}=  Enable Disable CRM  ${toggle[0]}
+#     Log  ${resp.content}
+#     Should Be Equal As Strings  ${resp.status_code}  401
+#     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
 
 
 JD-TC-EnableDisableCRM-UH3

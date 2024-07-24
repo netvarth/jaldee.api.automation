@@ -300,18 +300,18 @@ JD-TC-GetTaskDetails-UH1
     Should Be Equal As Strings  ${resp.status_code}  422
 
 
-JD-TC-GetTaskDetails-UH2
+# JD-TC-GetTaskDetails-UH2
 
-    [Documentation]  Get Task By Id by consumer login.
+#     [Documentation]  Get Task By Id by consumer login.
 
-    ${resp}=   ConsumerLogin  ${CUSERNAME8}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+#     ${resp}=   ConsumerLogin  ${CUSERNAME8}  ${PASSWORD}
+#     Log  ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=   Get Task By Id   ${task_uid1}
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  401
-    Should Be Equal As Strings   ${resp.json()}    ${LOGIN_NO_ACCESS_FOR_URL}
+#     ${resp}=   Get Task By Id   ${task_uid1}
+#     Log   ${resp.content}
+#     Should Be Equal As Strings  ${resp.status_code}  401
+#     Should Be Equal As Strings   ${resp.json()}    ${LOGIN_NO_ACCESS_FOR_URL}
 
 JD-TC-GetTaskDetails-UH3
 

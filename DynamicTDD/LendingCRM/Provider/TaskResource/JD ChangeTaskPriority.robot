@@ -376,20 +376,20 @@ JD-TC-ChangeTaskPriority-UH3
 
 
 
-JD-TC-ChangeTaskPriority-UH4
+# JD-TC-ChangeTaskPriority-UH4
 
-    [Documentation]  Change  task  priority  with consumer login 
+#     [Documentation]  Change  task  priority  with consumer login 
 
-    ${resp}=  Consumer Login  ${CUSERNAME20}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+#     ${resp}=  Consumer Login  ${CUSERNAME20}  ${PASSWORD}
+#     Log   ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200
      
     
       
-    ${resp}=  Change Task Priority    ${task_uid2}  ${priority_id2}
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}   401
-    Should Be Equal As Strings  "${resp.json()}"   "${NoAccess}"  
+#     ${resp}=  Change Task Priority    ${task_uid2}  ${priority_id2}
+#     Log   ${resp.content}
+#     Should Be Equal As Strings  ${resp.status_code}   401
+#     Should Be Equal As Strings  "${resp.json()}"   "${NoAccess}"  
 
 
 

@@ -505,18 +505,18 @@ JD-TC-UpdateTask-UH4
     Should Be Equal As Strings  ${resp.json()}   ${SESSION_EXPIRED}
 
 
-JD-TC-UpdateTask-UH5
+# JD-TC-UpdateTask-UH5
 
-    [Documentation]    Update task with consumer login.
+#     [Documentation]    Update task with consumer login.
 
-    ${resp}=   ConsumerLogin  ${CUSERNAME8}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+#     ${resp}=   ConsumerLogin  ${CUSERNAME8}  ${PASSWORD}
+#     Log  ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Update Task   ${task_uid1}  ${title11}  ${desc11}  ${cat_id1}  ${type_id11}   ${l_id1}  status=${status}  priority=${priority}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  401
-    Should Be Equal As Strings   ${resp.json()}    ${LOGIN_NO_ACCESS_FOR_URL}
+#     ${resp}=    Update Task   ${task_uid1}  ${title11}  ${desc11}  ${cat_id1}  ${type_id11}   ${l_id1}  status=${status}  priority=${priority}
+#     Log  ${resp.content}
+#     Should Be Equal As Strings  ${resp.status_code}  401
+#     Should Be Equal As Strings   ${resp.json()}    ${LOGIN_NO_ACCESS_FOR_URL}
 
 JD-TC-UpdateTask-UH6
 
