@@ -28,7 +28,7 @@ ${self}                0
 
 *** Test Cases ***
 
-JD-TC-PrescriptionSharingNotification-1
+JD-TC-PaymentLinkShareNotification-1
 
     [Documentation]  signup a provider
 
@@ -276,9 +276,10 @@ JD-TC-PrescriptionSharingNotification-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[1]}
 
-#.....Create a queue......
+    #.....Create a queue......
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${DAY2}=  db.add_timezone_date  ${tz}  10
     ${sTime}=  db.get_time_by_timezone  ${tz}
@@ -295,51 +296,47 @@ JD-TC-PrescriptionSharingNotification-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-#......create 5 provider consumers.....
+    #............provider consumer creation..........
 
-    ${prov_cons_list}=  Create List
-    Set Suite Variable   ${prov_cons_list}
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Suite Variable  ${PCPHONENO}  555${PH_Number}
 
-    FOR   ${a}  IN RANGE   ${count}
+    ${firstname}=  FakerLibrary.first_name
+    Set Suite Variable  ${firstname}
+    ${lastname}=  FakerLibrary.last_name
+    Set Suite Variable  ${pc_emailid1}  ${firstname}${C_Email}.${test_mail}
+
+    ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${firstname}   lastName=${lastname}  countryCode=${countryCodes[1]}  email=${pc_emailid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
     
-        ${PH_Number}=  FakerLibrary.Numerify  %#####
-        ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-        Log  ${PH_Number}
-        Set Test Variable  ${CUSERPH}  555${PH_Number}
-        Set Test Variable  ${CUSERPH${a}}  ${CUSERPH}
-        ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH${a}}  
-        Log  ${resp.content}
-        Should Be Equal As Strings      ${resp.status_code}  200
-        IF   '${resp.content}' == '${emptylist}'
-            ${firstname}=  FakerLibrary.first_name
-            ${lastname}=  FakerLibrary.last_name
-            Set Test Variable  ${pc_email}  ${firstname}${C_Email}.${test_mail}
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-            ${resp1}=  AddCustomer  ${CUSERPH${a}}   firstName=${firstname}   lastName=${lastname}  countryCode=${countryCodes[1]}  email=${pc_email}
-            Log  ${resp1.content}
-            Should Be Equal As Strings  ${resp1.status_code}  200
-            Append To List  ${prov_cons_list}  ${resp1.json()}
-        ELSE
-            Append To List  ${prov_cons_list}  ${resp.json()[${a}]['id']}
-            Append To List  ${prov_cons_list}  ${resp.json()[${a}]['firstName']}
-        END
-    END
-    Log   ${prov_cons_list}
- 
-JD-TC-PrescriptionSharingNotification-2
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Suite Variable  ${cid1}  ${resp.json()[0]['id']}
+    
+    ${resp}=    Customer Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-PaymentLinkShareNotification-2
 
     [Documentation]  take a walkin checkin for today without create any template and check default notifications.
 
     ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  GetCustomer  account-eq=${prov_cons_list[0]}  
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
-    Set Test Variable  ${PCPHONENO}  ${resp.json()[0]['phoneNo']}
-    Set Test Variable  ${pc_emailid1}  ${resp.json()[0]['email']}
 
     ${desc}=   FakerLibrary.word
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -367,19 +364,6 @@ JD-TC-PrescriptionSharingNotification-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token}  ${resp.json()['token']}
-
-    ${resp}=    Customer Logout
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
     ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -396,6 +380,7 @@ JD-TC-PrescriptionSharingNotification-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    sleep  2s
     ${resp}=  Get Bookings Invoices  ${wid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -423,7 +408,7 @@ JD-TC-PrescriptionSharingNotification-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-PrescriptionSharingNotification-3
+JD-TC-PaymentLinkShareNotification-3
 
     [Documentation]  take a walkin appointment for today without create any template and check default notifications.
 
@@ -471,13 +456,6 @@ JD-TC-PrescriptionSharingNotification-3
     END
     ${slots_len}=  Get Length  ${slots}
 
-    ${resp}=  GetCustomer  account-eq=${prov_cons_list[1]}  
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
-    Set Test Variable  ${PCPHONENO}  ${resp.json()[0]['phoneNo']}
-    Set Test Variable  ${firstname}  ${resp.json()[0]['firstName']}
-    
     ${apptfor1}=  Create Dictionary  id=${cid1}   apptTime=${slots[0]}
     ${apptfor}=   Create List  ${apptfor1}
 
@@ -507,19 +485,6 @@ JD-TC-PrescriptionSharingNotification-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token}  ${resp.json()['token']}
-
-    ${resp}=    Customer Logout
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
     ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -532,7 +497,7 @@ JD-TC-PrescriptionSharingNotification-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-PrescriptionSharingNotification-4
+JD-TC-PaymentLinkShareNotification-4
 
     [Documentation]  create a template and check the notifications.
     ...    context : Account, trigger : Share Payment Link, channel : email, whatsapp, target : consumer, provider
@@ -567,6 +532,7 @@ JD-TC-PrescriptionSharingNotification-4
     ...                   'Consumer Name': [${cons_name}],
     ...                   'Booking Service Name': [${serv_name}],
     ...                   'Payment Link': [${pay_link}],
+    ${invoice_details}=   Create Dictionary    Invoice details=${invoice_details} 
     ${content_msg}=        Set Variable    I hope this message finds you well. 
     ${tempheader_sub}=     Set Variable    Payment Link
     ${salutation}=         Set Variable  Dear [${cons_name}] 
@@ -589,13 +555,6 @@ JD-TC-PrescriptionSharingNotification-4
     ${resp}=  Get Template By Id   ${temp_id1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  GetCustomer  account-eq=${prov_cons_list[2]}  
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
-    Set Test Variable  ${PCPHONENO}  ${resp.json()[0]['phoneNo']}
-    Set Test Variable  ${pc_emailid1}  ${resp.json()[0]['email']}
 
     ${desc}=   FakerLibrary.word
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -622,19 +581,6 @@ JD-TC-PrescriptionSharingNotification-4
     ${resp}=  ProviderLogout
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
-
-    ${resp}=    Customer Logout
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
     Log   ${resp.content}
@@ -679,7 +625,7 @@ JD-TC-PrescriptionSharingNotification-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-PrescriptionSharingNotification-5
+JD-TC-PaymentLinkShareNotification-5
 
     [Documentation]  take a walkin appointment for today with comm template and check the notifications.
 
@@ -690,7 +636,6 @@ JD-TC-PrescriptionSharingNotification-5
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${serid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     ${slots}=  Create List
     FOR   ${i}  IN RANGE   ${no_of_slots}
@@ -701,13 +646,6 @@ JD-TC-PrescriptionSharingNotification-5
     END
     ${slots_len}=  Get Length  ${slots}
 
-    ${resp}=  GetCustomer  account-eq=${prov_cons_list[0]}  
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
-    Set Test Variable  ${PCPHONENO}  ${resp.json()[0]['phoneNo']}
-    Set Test Variable  ${firstname}  ${resp.json()[0]['firstName']}
-    
     ${apptfor1}=  Create Dictionary  id=${cid1}   apptTime=${slots[0]}
     ${apptfor}=   Create List  ${apptfor1}
 

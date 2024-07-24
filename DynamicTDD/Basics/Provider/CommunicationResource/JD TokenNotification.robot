@@ -497,6 +497,7 @@ JD-TC-TokenNotification-4
     ...                   'Booking Reference Number': [${book_enid}],
     ...                   'Check-in Date': [${book_date}],
     ...                   'Check-out Date': [${book_date}]
+    ${booking_details}=  Create Dictionary   Booking Details=${booking_details}
     ${content_msg}=  Set Variable    I hope this message finds you well. 
     ${tempheader_sub}=    Set Variable    Cancellation of Booking
     ${salutation}=      Set Variable  Dear [${cons_name}] 
@@ -606,6 +607,7 @@ JD-TC-TokenNotification-5
     ...                   'Booking Reference Number': [${book_enid}],
     ...                   'Check-in Date': [${book_date}],
     ...                   'Check-out Date': [${book_date}]
+    ${booking_details}=  Create Dictionary   Booking Details=${booking_details}
     ${content_msg}=  Set Variable    I hope this message finds you well. 
     ${tempheader_sub}=    Set Variable    Confirmation of Booking
     ${salutation}=      Set Variable  Dear [${cons_name}] 
@@ -762,7 +764,7 @@ JD-TC-TokenNotification-9
     ...                   'Name': [${cons_name}],
     ...                   'Booking Reference Number': [${book_enid}],
     ...                   'Check-in Date': [${book_date}]
-    
+    ${booking_details1}=  Create Dictionary   Booking Details=${booking_details1}
     ${content1}=    Create Dictionary  details=${booking_details1}   
     
     ${resp}=  Update Template   ${temp_id2}  content=${content1} 
