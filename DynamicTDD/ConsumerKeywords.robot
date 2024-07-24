@@ -2058,15 +2058,17 @@ Get consumer Waitlist MR By Id
 
 Update Consumer Delivery Address
     [Arguments]  ${phoneNumber}  ${firstName}  ${lastName}  ${email}  ${address}  ${city}   ${postalCode}   ${landMark}   ${countryCode}=+91   &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${deliveryaddress}=    Create Dictionary  phoneNumber=${phoneNumber}  firstName=${firstName}  lastName=${lastName}  email=${email}  address=${address}  city=${city}  postalCode=${postalCode}  landMark=${landMark}  countryCode=${countryCode}
-    ${data}=  Create List   ${deliveryaddress}
-    ${data}=   json.dumps    ${data}
+    
     ${cons_headers}=  Create Dictionary  &{headers} 
     ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
     Set To Dictionary  ${cons_params}   &{locparam}
+    ${deliveryaddress}=    Create Dictionary  phoneNumber=${phoneNumber}  firstName=${firstName}  lastName=${lastName}  email=${email}  address=${address}  city=${city}  postalCode=${postalCode}  landMark=${landMark}  countryCode=${countryCode}
+    Set To Dictionary  ${deliveryaddress}   &{kwargs}
+    ${data}=  Create List   ${deliveryaddress}
+    ${data}=   json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /consumer/deliveryAddress    data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     RETURN  ${resp}

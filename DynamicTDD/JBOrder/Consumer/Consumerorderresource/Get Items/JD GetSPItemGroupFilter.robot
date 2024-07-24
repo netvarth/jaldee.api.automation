@@ -272,6 +272,34 @@ JD-TC-Get sp item group Filter -1
 
 JD-TC-Get sp item group Filter -UH1
 
+    [Documentation]  Get sp item group Filter  where status as disbaled
+
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get sp item type Count Filter     ${accountId}   status-eq=${toggle[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()}   0
+
+JD-TC-Get sp item group Filter -UH2
+
+    [Documentation]  Get sp item group Filter  where account is different
+
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get sp item type Count Filter     ${primaryMobileNo}   status-eq=${toggle[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()}   0
+
+
+
+JD-TC-Get sp item group Filter -UH3
+
     [Documentation]  remove item groups and filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME107}  ${PASSWORD}
