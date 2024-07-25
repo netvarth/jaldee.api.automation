@@ -420,27 +420,27 @@ JD-TC-Login Partner-1
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
-    # ${resp}=    Get Partner by UID    ${Puid1}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings     ${resp.status_code}    200 
+    ${resp}=    Get Partner by UID    ${Puid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200 
 
-    # ${resp}=    Partner Reset Password    ${account_id}  ${P_phone}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings     ${resp.status_code}    511 
-    # Should Be Equal As Strings   ${resp.json()}   otp authentication needed
+    ${resp}=    Partner Reset Password    ${account_id}  ${P_phone}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    511 
+    Should Be Equal As Strings   ${resp.json()}   otp authentication needed
 
-    # ${resp}=    Verify Otp For Login Partner  ${P_phone}  ${OtpPurpose['Authentication']}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings     ${resp.status_code}    200 
-    # Set Suite Variable  ${token}  ${resp.json()['token']}
+    ${resp}=    Verify Otp For Login Partner  ${P_phone}  ${OtpPurpose['Authentication']}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200 
+    Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    # ${resp}=    Complete Partner Reset Password    ${account_id}  ${P_phone}  ${PASSWORD}  ${token}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings     ${resp.status_code}    200 
+    ${resp}=    Complete Partner Reset Password    ${account_id}  ${P_phone}  ${PASSWORD}  ${token}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200 
 
-    # ${resp}=    Login Partner with Password    ${account_id}  ${P_phone}  ${PASSWORD}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings     ${resp.status_code}    200
+    ${resp}=    Login Partner with Password    ${account_id}  ${P_phone}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
 
     ${resp}=    Get Partner by UID    ${Puid1}
     Log  ${resp.content}
@@ -451,7 +451,7 @@ JD-TC-Login Partner-1
 
     ${resp}=    Partner Reset Password    ${account_id}  ${P_phone}
     Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    511 
+    Should Be Equal As Strings     ${resp.status_code}    419
     Should Be Equal As Strings   ${resp.json()}   otp authentication needed
     # Set Suite Variable  ${token}  ${resp.json()['token']}
 
