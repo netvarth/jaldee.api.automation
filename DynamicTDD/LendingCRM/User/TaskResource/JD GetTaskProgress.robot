@@ -181,12 +181,35 @@ JD-TC-GetTaskProgress-2
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=    Reset LoginId  ${u_id}  ${PUSERNAME_U1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
+    ${resp}=    Forgot Password   loginId=${PUSERNAME_U1}  password=${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${PUSERNAME_U1}  ${OtpPurpose['ProviderResetPassword']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key} =   db.Verify Accnt   ${PUSERNAME_U1}    ${OtpPurpose['ProviderResetPassword']}
+    Set Suite Variable   ${key}
+
+    ${resp}=    Forgot Password     otp=${key}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #... linking user to the provider 1 and get linked lists
+
+    ${resp}=    Connect with other login  ${PUSERNAME_U1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    # --------------------------------------------------
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
@@ -258,13 +281,35 @@ JD-TC-GetTaskProgress-3
 
     Log  ${PUsrNm}
 
-     
-    ${resp}=  SendProviderResetMail   ${PUsrNm[0]}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=    Reset LoginId  ${usr_id}  ${PUsrNm[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    @{resp}=  ResetProviderPassword  ${PUsrNm[0]}  ${PASSWORD}  2
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
+    ${resp}=    Forgot Password   loginId=${PUsrNm[0]}  password=${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${PUsrNm[0]}  ${OtpPurpose['ProviderResetPassword']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key} =   db.Verify Accnt   ${PUsrNm[0]}    ${OtpPurpose['ProviderResetPassword']}
+    Set Suite Variable   ${key}
+
+    ${resp}=    Forgot Password     otp=${key}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #... linking user to the provider 1 and get linked lists
+
+    ${resp}=    Connect with other login  ${PUsrNm[0]}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    # --------------------------------------------------
 
     ${resp}=  Encrypted Provider Login  ${PUsrNm[0]}  ${PASSWORD}
     Log   ${resp.json()}
@@ -298,12 +343,35 @@ JD-TC-GetTaskProgress-3
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  SendProviderResetMail   ${PUsrNm[1]}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=    Reset LoginId  ${usr_id}  ${PUsrNm[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    @{resp}=  ResetProviderPassword  ${PUsrNm[1]}  ${PASSWORD}  2
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
+    ${resp}=    Forgot Password   loginId=${PUsrNm[1]}  password=${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${PUsrNm[1]}  ${OtpPurpose['ProviderResetPassword']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key} =   db.Verify Accnt   ${PUsrNm[1]}    ${OtpPurpose['ProviderResetPassword']}
+    Set Suite Variable   ${key}
+
+    ${resp}=    Forgot Password     otp=${key}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #... linking user to the provider 1 and get linked lists
+
+    ${resp}=    Connect with other login  ${PUsrNm[1]}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    # --------------------------------------------------
 
     ${resp}=  Encrypted Provider Login  ${PUsrNm[1]}  ${PASSWORD}
     Log   ${resp.json()}
@@ -362,20 +430,39 @@ JD-TC-GetTaskProgress-4
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp}=  SendProviderResetMail   ${PUSERNAME_U2}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=    Reset LoginId  ${u_id1}  ${PUSERNAME_U2}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    @{resp}=  ResetProviderPassword  ${PUSERNAME_U2}  ${PASSWORD}  2
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
+    ${resp}=    Forgot Password   loginId=${PUSERNAME_U2}  password=${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
 
+    ${resp}=    Account Activation  ${PUSERNAME_U2}  ${OtpPurpose['ProviderResetPassword']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key} =   db.Verify Accnt   ${PUSERNAME_U2}    ${OtpPurpose['ProviderResetPassword']}
+    Set Suite Variable   ${key}
+
+    ${resp}=    Forgot Password     otp=${key}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #... linking user to the provider 1 and get linked lists
+
+    ${resp}=    Connect with other login  ${PUSERNAME_U2}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    # --------------------------------------------------
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    
-   
 
     ${title}=  FakerLibrary.user name
     Set Suite Variable  ${title}
@@ -427,13 +514,35 @@ JD-TC-GetTaskProgress-4
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp}=  SendProviderResetMail   ${PUSERNAME_U4}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=    Reset LoginId  ${u_id6}  ${PUSERNAME_U4}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    @{resp}=  ResetProviderPassword  ${PUSERNAME_U4}  ${PASSWORD}  2
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
+    ${resp}=    Forgot Password   loginId=${PUSERNAME_U4}  password=${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
 
+    ${resp}=    Account Activation  ${PUSERNAME_U4}  ${OtpPurpose['ProviderResetPassword']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key} =   db.Verify Accnt   ${PUSERNAME_U4}    ${OtpPurpose['ProviderResetPassword']}
+    Set Suite Variable   ${key}
+
+    ${resp}=    Forgot Password     otp=${key}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    #... linking user to the provider 1 and get linked lists
+
+    ${resp}=    Connect with other login  ${PUSERNAME_U4}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    # --------------------------------------------------
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
     Log   ${resp.json()}
