@@ -3,6 +3,7 @@ LABEL Author="Suvaj S Parathanam" \
 Co-Author="Archana Gopi" \
 Application="Robot Framework" \
 Description="Docker Configurations for JTA"
+MAINTAINER Archana Gopi 
 
 ARG USER_ID=1000
 ARG GROUP_ID=1000

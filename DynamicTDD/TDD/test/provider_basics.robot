@@ -30,18 +30,19 @@ ${coverimg}               /ebs/TDD/cover.jpg
 ${coverpic}               /ebs/TDD/banner.jpg
 ${logoimg}                /ebs/TDD/images1.jpeg
 @{salutations}                  MR  MRS
+${number}       5553643640
 
 *** Test Cases ***
 
 JD-TC-Change Password-1
     [Documentation]  check basic functionalities of a provider
     
-    Log Many  ${var_file}  ${data_file}
-    ${cust_pro}=  Evaluate  random.choice(list(open($var_file)))  random
-    Log  ${cust_pro}
-    ${cust_pro}=   Set Variable  ${cust_pro.strip()}
-    ${variable} 	${number}=   Split String    ${cust_pro}  =  
-    Set Test Variable  ${number}
+    # Log Many  ${var_file}  ${data_file}
+    # ${cust_pro}=  Evaluate  random.choice(list(open($var_file)))  random
+    # Log  ${cust_pro}
+    # ${cust_pro}=   Set Variable  ${cust_pro.strip()}
+    # ${variable} 	${number}=   Split String    ${cust_pro}  =  
+    # Set Test Variable  ${number}
 
     comment  change provider password.
 

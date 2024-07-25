@@ -3,7 +3,7 @@
 
 [ -z "$USER" ] && export USER=$(id -u -n) && echo "$USER"
 dependencies=( 'apt-transport-https' 'ca-certificates' 'curl' 'gnupg-agent' 'software-properties-common' )
-packages=( 'containerd.io' 'unzip' 'docker-ce' 'docker-ce-cli' )
+packages=( 'containerd.io' 'unzip' 'docker-ce' 'docker-ce-cli' 'docker-buildx-plugin' 'docker-compose-plugin' )
 declare -a pkg_list 
 declare -a dep_list
 # pkg_list=()
