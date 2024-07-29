@@ -546,7 +546,7 @@ JD-TC-PaymentLinkShareNotification-4
     ${comm_target}=  Create List    ${CommTarget[0]}  ${CommTarget[1]}
     ${sendcomm_list}=  Create List   ${sendcomm_id1}  
     
-    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}   ${comm_chanl} 
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[3]}  ${comm_target}   ${comm_chanl} 
     ...    sendComm=${sendcomm_list}  templateHeader=${temp_header}  footer=${temp_footer}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
