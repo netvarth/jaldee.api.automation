@@ -1,4 +1,5 @@
 *** Settings ***
+
 Suite Teardown     Delete All Sessions
 Test Teardown      Delete All Sessions
 Force Tags         LOS Lead
