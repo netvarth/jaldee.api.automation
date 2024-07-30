@@ -42,7 +42,7 @@ JD-TC-SendOtp-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${NewCustomer}   12
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -61,7 +61,7 @@ JD-TC-SendOtp-UH1
     ${NewCustomer1}    Generate random string    10    123456789
     ${NewCustomer1}    Convert To Integer  ${NewCustomer1}
 
-    ${resp}=    Verify Otp For Login   ${NewCustomer1}   12
+    ${resp}=    Verify Otp For Login   ${NewCustomer1}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings  ${resp.json()}      ${OTP_VALIDATION_FAILED}
@@ -95,7 +95,7 @@ JD-TC-SendOtp-UH3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${empty}   12
+    ${resp}=    Verify Otp For Login   ${empty}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings  ${resp.json()}      ${OTP_VALIDATION_FAILED}

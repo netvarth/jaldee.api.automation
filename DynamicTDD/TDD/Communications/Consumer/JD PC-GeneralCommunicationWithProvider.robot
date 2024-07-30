@@ -83,7 +83,7 @@ JD-TC-General Communication with Provider-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME3}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME3}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -175,7 +175,7 @@ JD-TC-General Communication with Provider-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME3}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME3}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -287,7 +287,7 @@ JD-TC-General Communication with Provider-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -377,7 +377,7 @@ JD-TC-General Communication with Provider-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -468,7 +468,7 @@ JD-TC-General Communication with Provider-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -557,7 +557,7 @@ JD-TC-General Communication with Provider-6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -647,7 +647,7 @@ JD-TC-General Communication with Provider-7
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -768,7 +768,7 @@ JD-TC-General Communication with Provider-UH4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -857,7 +857,7 @@ JD-TC-General Communication with Provider-UH5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -909,7 +909,7 @@ JD-TC-General Communication with Provider-UH6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -1013,7 +1013,7 @@ JD-TC-General Communication with Provider-8
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}

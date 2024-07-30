@@ -1449,7 +1449,7 @@ JD-TC-CreateInvoice-11
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   12
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
@@ -2006,7 +2006,7 @@ JD-TC-CreateInvoice-13
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${primaryMobileNo1}   12
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo1}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token1}  ${resp.json()['token']}
@@ -2461,7 +2461,7 @@ JD-TC-CreateInvoice-15
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   12
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
@@ -3007,7 +3007,7 @@ JD-TC-CreateInvoice-19
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${primaryMobileNo2}   12
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo2}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${tokens}  ${resp.json()['token']}
@@ -3469,7 +3469,7 @@ JD-TC-CreateInvoice-UH4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   12
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
@@ -3808,7 +3808,7 @@ JD-TC-ApplyDiscountForOrder-21
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${primaryMobileNo2}   12
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo2}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}

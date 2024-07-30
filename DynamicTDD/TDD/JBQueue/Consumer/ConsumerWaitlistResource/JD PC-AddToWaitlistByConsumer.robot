@@ -292,7 +292,7 @@ JD-TC-Add To WaitlistByConsumer-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -383,7 +383,7 @@ JD-TC-Add To WaitlistByConsumer-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -444,7 +444,7 @@ JD-TC-Add To WaitlistByConsumer-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -517,7 +517,7 @@ JD-TC-Add To WaitlistByConsumer-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -597,7 +597,7 @@ JD-TC-Add To WaitlistByConsumer-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -680,7 +680,7 @@ JD-TC-Add To WaitlistByConsumer-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -758,7 +758,7 @@ JD-TC-Add To WaitlistByConsumer-6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -814,7 +814,7 @@ JD-TC-Add To WaitlistByConsumer-7
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -887,7 +887,7 @@ JD-TC-Add To WaitlistByConsumer-8
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -964,7 +964,7 @@ JD-TC-Add To WaitlistByConsumer-9
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -1073,7 +1073,7 @@ JD-TC-Add To WaitlistByConsumer-10
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -1148,7 +1148,7 @@ JD-TC-Add To WaitlistByConsumer-11
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -1211,7 +1211,7 @@ JD-TC-Add To WaitlistByConsumer-12
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -1274,7 +1274,7 @@ JD-TC-Add To WaitlistByConsumer-13
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -1357,7 +1357,7 @@ JD-TC-Add To WaitlistByConsumer-14
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -1441,7 +1441,7 @@ JD-TC-Add To WaitlistByConsumer-15
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -1516,7 +1516,7 @@ JD-TC-Add To WaitlistByConsumer-16
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -1595,7 +1595,7 @@ JD-TC-Add To WaitlistByConsumer-17
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -1691,7 +1691,7 @@ JD-TC-Add To WaitlistByConsumer-UH1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -1818,7 +1818,7 @@ JD-TC-Add To WaitlistByConsumer-18
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME15}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME15}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -1990,7 +1990,7 @@ JD-TC-Add To WaitlistByConsumer-19
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME25}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME25}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -2141,7 +2141,7 @@ JD-TC-Add To WaitlistByConsumer-20
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME35}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME35}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -2321,7 +2321,7 @@ JD-TC-Add To WaitlistByConsumer-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -2362,7 +2362,7 @@ JD-TC-Add To WaitlistByConsumer-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -2463,7 +2463,7 @@ JD-TC-Add To WaitlistByConsumer-UH3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -2524,7 +2524,7 @@ JD-TC-Add To WaitlistByConsumer-UH4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -2591,7 +2591,7 @@ JD-TC-Add To WaitlistByConsumer-UH5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -2652,7 +2652,7 @@ JD-TC-Add To WaitlistByConsumer-UH6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -2738,7 +2738,7 @@ JD-TC-Add To WaitlistByConsumer-UH7
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -2808,7 +2808,7 @@ JD-TC-Add To WaitlistByConsumer-UH8
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -2872,7 +2872,7 @@ JD-TC-Add To WaitlistByConsumer-UH9
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -2931,7 +2931,7 @@ JD-TC-Add To WaitlistByConsumer-UH10
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -3035,7 +3035,7 @@ JD-TC-Add To WaitlistByConsumer-UH12
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -3126,7 +3126,7 @@ JD-TC-Add To WaitlistByConsumer-UH13
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -3214,7 +3214,7 @@ JD-TC-Add To WaitlistByConsumer-UH14
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -3308,7 +3308,7 @@ JD-TC-Add To WaitlistByConsumer-UH15
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME30}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME30}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -3589,7 +3589,7 @@ JD-TC-Add To WaitlistByConsumer-UH16
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -3707,7 +3707,7 @@ JD-TC-Add To WaitlistByConsumer-UH17
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -3826,7 +3826,7 @@ JD-TC-Add To WaitlistByConsumer-21
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -3932,7 +3932,7 @@ JD-TC-Add To WaitlistByConsumer-22
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -4018,7 +4018,7 @@ JD-TC-Add To WaitlistByConsumer-23
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME2}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME2}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -4062,7 +4062,7 @@ JD-TC-Add To WaitlistByConsumer-23
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME2}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME2}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -4286,7 +4286,7 @@ JD-TC-Add To WaitlistByConsumer-24
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME5}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -4484,7 +4484,7 @@ JD-TC-Add To WaitlistByConsumer-25
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -4638,7 +4638,7 @@ JD-TC-Add To WaitlistByConsumer-UH18
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -4762,7 +4762,7 @@ JD-TC-Add To WaitlistByConsumer-UH19
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -4955,7 +4955,7 @@ JD-TC-Add To WaitlistByConsumer-26
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME27}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -5070,7 +5070,7 @@ JD-TC-Add To WaitlistByConsumer-UH20
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME4}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}

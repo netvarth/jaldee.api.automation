@@ -184,7 +184,7 @@ JD-TC-SendAttachmentFromAppmtByConsumer-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -290,7 +290,7 @@ JD-TC-SendAttachmentFromAppmtByConsumer-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -321,7 +321,7 @@ JD-TC-SendAttachmentFromAppmtByConsumer-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -366,7 +366,7 @@ JD-TC-SendAttachmentFromAppmtByConsumer-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -411,7 +411,7 @@ JD-TC-SendAttachmentFromAppmtByConsumer-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -456,7 +456,7 @@ JD-TC-SendAttachmentFromAppmtByConsumer-6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -501,7 +501,7 @@ JD-TC-SendAttachmentFromAppmtByConsumer-7
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -546,7 +546,7 @@ JD-TC-SendAttachmentFromAppmtByConsumer-8
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -576,7 +576,7 @@ JD-TC-SendAttachmentFromAppmtByConsumer-9
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -606,7 +606,7 @@ JD-TC-SendAttachmentFromAppmtByConsumer-10
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -636,7 +636,7 @@ JD-TC-SendAttachmentFromAppmtByConsumer-11
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -681,7 +681,7 @@ JD-TC-SendAttachmentFromAppmtByConsumer-12
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -710,7 +710,7 @@ JD-TC-SendAttachmentFromAppmtByConsumer-13
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -755,7 +755,7 @@ JD-TC-SendAttachmentFromAppmtByConsumer-14
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -785,7 +785,7 @@ JD-TC-SendAttachmentFromAppmtByConsumer-15
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}

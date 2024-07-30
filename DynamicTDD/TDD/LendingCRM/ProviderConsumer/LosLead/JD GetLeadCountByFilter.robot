@@ -76,7 +76,7 @@ JD-TC-GetLeadCountByFilter-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${PconsumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${PconsumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable   ${token}  ${resp.json()['token']}
@@ -174,7 +174,7 @@ JD-TC-GetLeadCountByFilter-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${PconsumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${PconsumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable   ${token}  ${resp.json()['token']}
@@ -201,7 +201,7 @@ JD-TC-GetLeadCountByFilter-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${PconsumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${PconsumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable   ${token}  ${resp.json()['token']}
@@ -228,7 +228,7 @@ JD-TC-GetLeadCountByFilter-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${PconsumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${PconsumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable   ${token}  ${resp.json()['token']}
@@ -255,7 +255,7 @@ JD-TC-GetLeadCountByFilter-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${PconsumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${PconsumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable   ${token}  ${resp.json()['token']}
@@ -282,7 +282,7 @@ JD-TC-GetLeadCountByFilter-6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${PconsumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${PconsumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable   ${token}  ${resp.json()['token']}
@@ -309,7 +309,7 @@ JD-TC-GetLeadCountByFilter-7
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${PconsumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${PconsumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable   ${token}  ${resp.json()['token']}
@@ -336,7 +336,7 @@ JD-TC-GetLeadCountByFilter-8
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${PconsumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${PconsumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable   ${token}  ${resp.json()['token']}
@@ -363,7 +363,7 @@ JD-TC-GetLeadCountByFilter-9
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${PconsumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${PconsumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable   ${token}  ${resp.json()['token']}
@@ -390,7 +390,7 @@ JD-TC-GetLeadCountByFilter-10
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${PconsumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${PconsumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable   ${token}  ${resp.json()['token']}
@@ -417,7 +417,7 @@ JD-TC-GetLeadCountByFilter-11
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${PconsumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${PconsumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable   ${token}  ${resp.json()['token']}
@@ -444,7 +444,7 @@ JD-TC-GetLeadCountByFilter-12
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${PconsumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${PconsumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable   ${token}  ${resp.json()['token']}

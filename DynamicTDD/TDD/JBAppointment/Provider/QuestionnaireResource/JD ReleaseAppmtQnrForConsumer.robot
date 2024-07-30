@@ -523,7 +523,7 @@ JD-TC-ReleaseAppmtQnrForConsumer-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   12
+    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
@@ -582,7 +582,7 @@ JD-TC-ReleaseAppmtQnrForConsumer-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   12
+    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}

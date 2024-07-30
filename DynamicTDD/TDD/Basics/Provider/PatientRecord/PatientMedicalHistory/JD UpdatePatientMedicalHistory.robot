@@ -536,7 +536,7 @@ JD-TC-Update Patient Medical History-UH6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   12  
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable   ${token}  ${resp.json()['token']}

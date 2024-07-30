@@ -149,7 +149,7 @@ JD-TC-GetConsentFormByUid-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -220,7 +220,7 @@ JD-TC-ConsentFormVerifySign-UH1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -247,7 +247,7 @@ JD-TC-ConsentFormVerifySign-UH3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -272,7 +272,7 @@ JD-TC-ConsentFormVerifySign-UH4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -299,7 +299,7 @@ JD-TC-ConsentFormVerifySign-UH5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -325,7 +325,7 @@ JD-TC-ConsentFormVerifySign-UH6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -351,7 +351,7 @@ JD-TC-ConsentFormVerifySign-UH7
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -376,7 +376,7 @@ JD-TC-ConsentFormVerifySign-UH8
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -402,7 +402,7 @@ JD-TC-ConsentFormVerifySign-UH9
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}

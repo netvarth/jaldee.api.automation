@@ -43,8 +43,8 @@ PROP_KEY='inputPath'
 INPUT_PATH=`cat $PROPERTY_FILE | grep "$PROP_KEY" | cut -d'=' -f2-`
 INPUT_PATH="${INPUT_PATH:-$DEFAULT_INPUT_PATH}"
 ynwdir="$(dirname "$PWD")"
-PIN_TABLE='postal_code_tbl.sql'
-BANK_TABLE='bank_master_tbl.sql'
+PIN_TABLE='sql-files/postal_code_tbl.sql'
+BANK_TABLE='sql-files/bank_master_tbl.sql'
 BACKUP_FILE="${BACKUP_NAME}-${TODAY}.sql"
 SECONDS=0
 myversion=$(mysql -h ${MYSQL_HOST} -se "select @@version;")

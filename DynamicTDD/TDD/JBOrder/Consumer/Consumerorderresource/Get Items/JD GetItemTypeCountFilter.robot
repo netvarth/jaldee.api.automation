@@ -202,7 +202,7 @@ JD-TC-Get sp item type Count Filter-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   12
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
@@ -451,7 +451,7 @@ JD-TC-Get sp item type Count Filter-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   12
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
@@ -782,7 +782,7 @@ JD-TC-Get sp item type Count Filter-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   12
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token2}  ${resp.json()['token']}

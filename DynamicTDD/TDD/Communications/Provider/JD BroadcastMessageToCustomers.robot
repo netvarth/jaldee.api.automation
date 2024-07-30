@@ -127,7 +127,7 @@ JD-TC-BroadcastMessageToCustomers-1
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}   200
     
-        ${resp}=    Verify Otp For Login   ${CUSERPH${i}}   12  
+        ${resp}=    Verify Otp For Login   ${CUSERPH${i}}   ${OtpPurpose['Authentication']}  
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}   200
         Set Test Variable   ${token}  ${resp.json()['token']}

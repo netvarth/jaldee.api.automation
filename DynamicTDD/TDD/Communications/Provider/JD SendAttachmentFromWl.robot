@@ -447,7 +447,7 @@ JD-TC-SendAttachmentWL-18
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${cnum}   12  
+    ${resp}=    Verify Otp For Login   ${cnum}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}

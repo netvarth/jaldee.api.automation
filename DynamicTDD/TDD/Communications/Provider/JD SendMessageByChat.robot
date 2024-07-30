@@ -90,7 +90,7 @@ JD-TC-SendMessagebyChat-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${resp}=    Verify Otp For Login   ${consumerNumList[1]}   12  
+    ${resp}=    Verify Otp For Login   ${consumerNumList[1]}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}

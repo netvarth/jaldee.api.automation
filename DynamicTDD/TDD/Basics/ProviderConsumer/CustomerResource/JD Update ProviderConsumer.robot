@@ -47,7 +47,7 @@ JD-TC-UpdateProviderConsumer-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${NewCustomer}   12
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
@@ -129,7 +129,7 @@ JD-TC-UpdateProviderConsumer-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME18}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME18}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable   ${token}  ${resp.json()['token']}
@@ -212,7 +212,7 @@ JD-TC-UpdateProviderConsumer-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME_0}   12
+    ${resp}=    Verify Otp For Login   ${CUSERNAME_0}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${tokens}  ${resp.json()['token']}
@@ -374,7 +374,7 @@ JD-TC-UpdateProviderConsumer-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${PUSERNAME_N}   12
+    ${resp}=    Verify Otp For Login   ${PUSERNAME_N}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${tokenss}  ${resp.json()['token']}
@@ -410,7 +410,7 @@ JD-TC-UpdateProviderConsumer-4
    ${resp}=    Send Otp For Login    ${newNo}    ${accountId}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${resp}=    Verify Otp For Login   ${newNo}   12
+    ${resp}=    Verify Otp For Login   ${newNo}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${tokenfornew}  ${resp.json()['token']}

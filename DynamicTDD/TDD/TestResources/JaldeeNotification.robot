@@ -828,7 +828,7 @@ Billable
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
-#     ${resp}=    Verify Otp For Login   ${MobilenumHi}   12
+#     ${resp}=    Verify Otp For Login   ${MobilenumHi}   ${OtpPurpose['Authentication']}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 #     Set Suite Variable  ${token}  ${resp.json()['token']}
@@ -884,7 +884,7 @@ Billable
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
-#     ${resp}=    Verify Otp For Login   ${MobilenumHi}   12
+#     ${resp}=    Verify Otp For Login   ${MobilenumHi}   ${OtpPurpose['Authentication']}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 #     Set Suite Variable  ${token}  ${resp.json()['token']}
@@ -4108,7 +4108,7 @@ JD-TC-DonationPayment, order item by cosumer , order mass communication-1
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
     
-    ${DAY1}=  db.add_timezone_date  ${tz}  12  
+    ${DAY1}=  db.add_timezone_date  ${tz}  ${OtpPurpose['Authentication']}  
     # ${C_firstName}=   FakerLibrary.first_name 
     # ${C_lastName}=   FakerLibrary.name 
      ${C_num1}    Random Int  min=123456   max=999999
@@ -4566,7 +4566,7 @@ JD-TC-Order_MassCommunication-1
     Should Be Equal As Strings      ${resp.status_code}  200
 
     
-    ${DAY1}=  db.add_timezone_date  ${tz}  12  
+    ${DAY1}=  db.add_timezone_date  ${tz}  ${OtpPurpose['Authentication']}  
     Set Suite Variable  ${DAY1}
     ${DATE12}=  Convert Date  ${DAY1}  result_format=%a, %d %b %Y
     Set Suite Variable  ${DATE12}

@@ -200,7 +200,7 @@ JD-TC-GetBillCount-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${prov_cons_no}   12  
+    ${resp}=    Verify Otp For Login   ${prov_cons_no}   ${OtpPurpose['Authentication']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable   ${token}  ${resp.json()['token']}

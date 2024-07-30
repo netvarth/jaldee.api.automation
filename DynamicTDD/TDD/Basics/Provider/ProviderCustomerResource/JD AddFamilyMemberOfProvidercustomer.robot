@@ -1048,7 +1048,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-13
       Log   ${resp.content}
       Should Be Equal As Strings    ${resp.status_code}   200
 
-      ${resp}=    Verify Otp For Login   ${ph3}   12
+      ${resp}=    Verify Otp For Login   ${ph3}   ${OtpPurpose['Authentication']}
       Log   ${resp.content}
       Should Be Equal As Strings    ${resp.status_code}   200
       Set Suite Variable  ${token}  ${resp.json()['token']}
@@ -1307,7 +1307,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-15
       Log   ${resp.content}
       Should Be Equal As Strings    ${resp.status_code}   200
 
-      ${resp}=    Verify Otp For Login   ${ph3}   12
+      ${resp}=    Verify Otp For Login   ${ph3}   ${OtpPurpose['Authentication']}
       Log   ${resp.content}
       Should Be Equal As Strings    ${resp.status_code}   200
       Set Suite Variable  ${token}  ${resp.json()['token']}

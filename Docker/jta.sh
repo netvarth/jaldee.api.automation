@@ -552,9 +552,9 @@ dbBackup ()
     local -r logdate=`date +"%F %r"`
     local -r log_retain_days=2
     local -r logFileName='ynw-backup.log'
-    local -r SQLFileName='Queries.sql'
-    local -r PIN_TABLE='postal_code_tbl.sql'
-    local -r BANK_TABLE='bank_master_tbl.sql'
+    local -r SQLFileName='sql-files/Queries.sql'
+    local -r PIN_TABLE='sql-files/postal_code_tbl.sql'
+    local -r BANK_TABLE='sql-files/bank_master_tbl.sql'
     local -r BACKUP_FILE="${DATABASE_NAME}autobk-${TODAY}.sql"
     INPUT_PATH="${INPUT_PATH:-$defaultInputPath}"
 
