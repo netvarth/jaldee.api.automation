@@ -8,6 +8,19 @@ Resource          Keywords.robot
 
 *** Keywords ***
 
+Update ProviderConsumer 
+    [Arguments]    ${cid}    &{kwargs}
+    ${items}=  Get Dictionary items  ${kwargs}
+    ${data}=  Create Dictionary  id=${c_id}
+    FOR  ${key}  ${value}  IN  @{items}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    Log  ${data}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /spconsumer/  data=${data}  expected_status=any
+    RETURN  ${resp}
+
 
 ###### All Current Keywords above this line #############################################
 
@@ -78,24 +91,29 @@ ProviderConsumer SignUp
     ${data1}=   Create Dictionary    primaryMobileNo=${primaryMobileNo}    firstName=${firstName}   lastName=${lastName}  email=${email}  countryCode=${countryCode}
     ${data}=    Create Dictionary    userProfile=${data1}  accountId=${accountId}
     ${data}=    json.dumps    ${data}
-    ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=${token}
+    ${headers2}=     Create Dictionary    Content-Type=application/json    #Authorization=${token}
     Set To Dictionary 	${headers2} 	&{tzheaders}
+    ${has_key}=  Evaluate  'Authorization' in ${kwargs}
+    IF  ${has_key}
+        ${auth_dict}  ${kwargs}  GetFromDict  Authorization  &{kwargs}
+        Set To Dictionary 	${headers2}  &{auth_dict}
+    END
     Check And Create YNW Session
     ${resp}=    POST On Session   ynw    /consumer    data=${data}  headers=${headers2}   expected_status=any   params=${cons_params}
     RETURN  ${resp} 
 
-Update ProviderConsumer 
-    [Arguments]    ${cid}    &{kwargs}
-    ${items}=  Get Dictionary items  ${kwargs}
-    ${data}=  Create Dictionary  id=${c_id}
-    FOR  ${key}  ${value}  IN  @{items}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    Log  ${data}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /spconsumer/  data=${data}  expected_status=any
-    RETURN  ${resp}
+# Update ProviderConsumer 
+#     [Arguments]    ${cid}    &{kwargs}
+#     ${items}=  Get Dictionary items  ${kwargs}
+#     ${data}=  Create Dictionary  id=${c_id}
+#     FOR  ${key}  ${value}  IN  @{items}
+#         Set To Dictionary  ${data}   ${key}=${value}
+#     END
+#     Log  ${data}
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session
+#     ${resp}=  PUT On Session  ynw  /spconsumer/  data=${data}  expected_status=any
+#     RETURN  ${resp}
 
 Get ProviderConsumer
     Check And Create YNW Session

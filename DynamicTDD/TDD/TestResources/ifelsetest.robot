@@ -12,7 +12,7 @@ Library     DateTime
 # Library    FakerLibrary    locale=en_IN
 # Library   FakerLibrary   WITH NAME   faker
 Library     /ebs/TDD/db.py
-Library     if.py
+# Library     if.py
 # Resource    /ebs/TDD/ProviderKeywords.robot
 # Resource    /ebs/TDD/ConsumerKeywords.robot
 # Resource    /ebs/TDD/SuperAdminKeywords.robot
@@ -31,6 +31,7 @@ ${word1}        Python
 ${word2}        PYTHON
 ${word3}        python
 @{cancelReason}             noshowup  blocked  closingSoon  tooFull  self  prePaymentPending  QueueDisabled  holiday
+@{PO_Number}   ${56}  ${0586185393}
 
 *** Keywords ***
 pass var values
@@ -56,17 +57,24 @@ pass var values
 
 cheking if variable is empty
 
+    # ${PO_Number}=  random_phone_num_generator  subscriber_number_length=10  cc=2
+    # Log Many  ${PO_Number}  
+    # ${length}=    Get Length    int(${PO_Number[1]})
+    ${length}=    Evaluate    len(str(int(str(${PO_Number[1]}).lstrip('0'))))
+    ${length}=    Evaluate    len(str(int('${PO_Number[1]}'.lstrip('0'))))
+
+    
     # pass var values  ${EMPTY}  ${EMPTY}
     # pass var values  ${NONE}  ${NONE}
-    ${phoneNumbers}=  if.is_string_empty  ${EMPTY}  ${EMPTY}
-    Log  ${phoneNumbers}
-    ${phoneNumbers}=  if.is_string_empty  ${NONE}  ${NONE}
-    Log  ${phoneNumbers}
-    ${ph_nos1} =  Create Dictionary  label= Nicole Miller  resource= PhoneNo  instance= 1180668165  permission= customersOnly
-    ${ph_nos2} =  Create Dictionary  label= Lauren Gibson  resource= PhoneNo  instance= 1190668169  permission= customersOnly
-    # pass var values  ${ph_nos1}  ${ph_nos2}
-    ${phoneNumbers}=  if.is_string_empty  ${ph_nos1}  ${ph_nos2}
-    Log  ${phoneNumbers}
+    # ${phoneNumbers}=  if.is_string_empty  ${EMPTY}  ${EMPTY}
+    # Log  ${phoneNumbers}
+    # ${phoneNumbers}=  if.is_string_empty  ${NONE}  ${NONE}
+    # Log  ${phoneNumbers}
+    # ${ph_nos1} =  Create Dictionary  label= Nicole Miller  resource= PhoneNo  instance= 1180668165  permission= customersOnly
+    # ${ph_nos2} =  Create Dictionary  label= Lauren Gibson  resource= PhoneNo  instance= 1190668169  permission= customersOnly
+    # # pass var values  ${ph_nos1}  ${ph_nos2}
+    # ${phoneNumbers}=  if.is_string_empty  ${ph_nos1}  ${ph_nos2}
+    # Log  ${phoneNumbers}
 
     
 

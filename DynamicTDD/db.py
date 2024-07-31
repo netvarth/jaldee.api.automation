@@ -4336,7 +4336,8 @@ def random_phone_num_generator(subscriber_number_length=7, cc=3):
     while True:
         # country_code = str(random.randint(1, 999)).zfill(cc)
         country_code= str(random.randint(10**(cc-1),(10**cc)-1))
-        subscriber_number = ''.join(random.choices('0123456789', k=subscriber_number_length))
+        # subscriber_number = ''.join(random.choices('0123456789', k=subscriber_number_length))
+        subscriber_number = random.choice('123456789') + ''.join(random.choices('0123456789', k=subscriber_number_length - 1))
         phone_number = country_code + subscriber_number
         print("Phone number:", phone_number,"with country code: ", country_code, "and number: ", subscriber_number)
         url = f"http://localhost:8080/v1/rest/provider/validate/phonenumber/{country_code}/{subscriber_number}"
@@ -6573,3 +6574,15 @@ def bus_prof_ph(ph1, ph2):
         return  [ph2]
     else:
         return []
+
+def GetFromDict(key,**kwargs):
+    if key in kwargs:
+        print("kwargs: ",kwargs)
+        print("kwargs key: ",kwargs.get(key))
+        # Create a dictionary with just the key-value pair
+        key_value_pair = {key: kwargs[key]}
+        kwargs.pop(key)
+        return key_value_pair, kwargs
+
+
+    
