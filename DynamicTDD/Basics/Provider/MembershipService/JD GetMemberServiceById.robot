@@ -22,20 +22,19 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 
-JD-TC-Get_Member_Count-1
+JD-TC-Get_Member_Service_By_Id-1
 
-    [Documentation]  Get Member Count
+    [Documentation]  Get Member Service By Id
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME55}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${accountId}=    get_acc_id       ${PUSERNAME55}
+    Set Suite Variable      ${accountId}
 
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable  ${user_id}  ${decrypted_data['id']}
-    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    ${accountId}=    get_acc_id       ${PUSERNAME53}
-    Set Suite Variable      ${accountId}
 
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
@@ -49,102 +48,65 @@ JD-TC-Get_Member_Count-1
     ${name}=           FakerLibrary.firstName
     ${displayname}=    FakerLibrary.firstName
     ${effectiveFrom}=  db.get_date_by_timezone  ${tz}
-    ${effectiveTo}=      db.add_timezone_date  ${tz}  10  
-    ${description2}=    FakerLibrary.bs
-    ${name2}=           FakerLibrary.firstName
-    ${displayname2}=    FakerLibrary.firstName
-    ${effectiveFrom2}=  db.get_date_by_timezone  ${tz}
-    ${effectiveTo2}=    db.add_timezone_date  ${tz}  12
+    ${effectiveTo}=      db.add_timezone_date  ${tz}  10   
     Set Suite Variable    ${description}
     Set Suite Variable    ${name}
     Set Suite Variable    ${displayname}
     Set Suite Variable    ${effectiveFrom}
     Set Suite Variable    ${effectiveTo}
-    Set Suite Variable    ${description2}
-    Set Suite Variable    ${name2}
-    Set Suite Variable    ${displayname2}
-    Set Suite Variable    ${effectiveFrom2}
-    Set Suite Variable    ${effectiveTo2}
-
 
     ${resp}=    Create Membership Service     ${description}    ${name}    ${displayname}    ${effectiveFrom}    ${effectiveTo}    ${MembershipApprovalType[0]}    ${boolean[1]}    ${MembershipServiceStatus[0]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${membershipid}    ${resp.json()}
+    Set Suite Variable    ${memberid}    ${resp.json()}
 
-    
-    ${resp}=    Create Membership Service     ${description2}    ${name2}    ${displayname2}    ${effectiveFrom2}    ${effectiveTo2}    ${MembershipApprovalType[0]}    ${boolean[1]}    ${MembershipServiceStatus[0]}
+    ${resp}=    Get Membership Service by id    ${memberid}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${membershipid2}    ${resp.json()}
+    Should Be Equal As Strings    ${resp.json()['id']}    ${memberid}
+    Should Be Equal As Strings    ${resp.json()['name']}    ${name}
+    Should Be Equal As Strings    ${resp.json()['displayName']}    ${displayname}
+    Should Be Equal As Strings    ${resp.json()['description']}    ${description}
+    Should Be Equal As Strings    ${resp.json()['effectiveFrom']}    ${effectiveFrom}
+    Should Be Equal As Strings    ${resp.json()['effectiveTo']}    ${effectiveTo}
+    Should Be Equal As Strings    ${resp.json()['approvalType']}    ${MembershipApprovalType[0]}
+    Should Be Equal As Strings    ${resp.json()['allowLogin']}    ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()['serviceStatus']}    ${MembershipServiceStatus[0]}
+    Should Be Equal As Strings    ${resp.json()['provider']}    ${user_id}
 
-    ${resp}=    Get Membership Service 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+JD-TC-Get_Member_Service_By_Id-UH1
 
-    ${firstName}=  FakerLibrary.name
-    Set Suite Variable    ${firstName}
-    ${lastName}=  FakerLibrary.last_name
-    Set Suite Variable    ${lastName}
-    ${number1}    Generate random string    10    123456789
-    ${number1}    Convert To Integer  ${number1}
-    Set Suite Variable    ${number1}
-    ${email}=    FakerLibrary.Email
-    Set Suite Variable    ${email}
+    [Documentation]  Get Member Service By Id with invalid member id
 
-    ${resp}=    Send Otp For Login    ${number1}    ${accountId}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${number1}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token}  ${resp.json()['token']}
-
-    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${number1}     ${accountId}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200 
-
-    ${resp}=    Create Membership     ${firstName}    ${lastName}    ${number1}    ${membershipid}    ${countryCodes[1]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable     ${memberid1}    ${resp.json()}
-
-    ${resp}=    Create Membership     ${firstName}    ${lastName}    ${number1}    ${membershipid2}    ${countryCodes[1]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable     ${memberid2}    ${resp.json()}
-
-    ${resp}=    Customer Logout 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME55}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Member Count
+    ${invmem}=    Generate random string    4    0123456789
+
+    ${resp}=    Get Membership Service by id    ${invmem}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${MEMBER_SERVICE_ID_INVALID}
+
+JD-TC-Get_Member_Service_By_Id-UH2
+
+    [Documentation]  Get Member Service By Id with another provider login
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Get_Member_Count-UH1
-
-    [Documentation]  Get Member Count with another provider login
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME54}  ${PASSWORD}
+    ${resp}=    Get Membership Service by id    ${memberid}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    401
+    Should Be Equal As Strings    ${resp.json()}    ${NO_PERMISSION}
 
-    ${resp}=    Get Member Count
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()}    0
+JD-TC-Get_Member_Service_By_Id-UH3
 
-JD-TC-Get_Member_Count-UH2
+    [Documentation]  Get Member Service By Id with consumer login
 
-    [Documentation]  Get Member Count with another consumer login
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME55}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -193,16 +155,16 @@ JD-TC-Get_Member_Count-UH2
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['id']}
 
-    ${resp}=    Get Member Count
+    ${resp}=    Get Membership Service by id    ${memberid}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    401
     Should Be Equal As Strings    ${resp.json()}    ${NoAccess}
 
-JD-TC-Get_Member_Count-UH3
+JD-TC-Get_Member_Service_By_Id-UH4
 
-    [Documentation]  Get Member Count without login
+    [Documentation]  Get Member Service By Id without login
 
-    ${resp}=    Get Member Count
+    ${resp}=    Get Membership Service by id    ${memberid}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    419
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED}
