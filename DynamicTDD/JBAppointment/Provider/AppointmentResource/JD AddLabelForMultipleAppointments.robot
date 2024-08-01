@@ -54,10 +54,10 @@ JD-TC-AddMultipleAppointmentLabel-1
     Set Suite Variable    ${fname}
     ${lname}=  FakerLibrary.last_name
     Set Suite Variable    ${lname}
-    ${primaryMobileNo}    Generate random string    10    123456789
+    ${primaryMobileNo}    Generate random string    10    321456789
     ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
     Set Suite Variable    ${primaryMobileNo}
-    Set Suite Variable  ${email_id}  ${primaryMobileNo}.${test_mail}
+    Set Suite Variable  ${email_id}  ${lname}${CUSERNAME18}.${test_mail}
     ${email}=  Create List  ${email_id}
 
     ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
