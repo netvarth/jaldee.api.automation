@@ -17,6 +17,113 @@ Library           RequestsLibrary
 *** Keywords ***
 
 
+########## APPOINTMENT ##########
+
+Take Appointment For Consumer 
+    [Arguments]   ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${appmtFor}  &{kwargs}
+
+    ${pro_headers}=  Create Dictionary  &{headers}
+    ${pro_params}=   Create Dictionary
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    ${items}=  Get Dictionary items  ${kwargs}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_params}   &{locparam}
+    
+    ${cid}=  Create Dictionary  id=${consid}
+    ${sid}=  Create Dictionary  id=${service_id}
+    ${schedule}=  Create Dictionary  id=${schedule}
+    ${data}=    Create Dictionary   consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}
+
+    FOR  ${key}  ${value}  IN  @{items}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/appointment  params=${pro_params}    data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Appointment Schedule
+    [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}   ${consumerParallelServing}   ${loc}  ${timeduration}  ${batch}  @{vargs}
+    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
+    ${location}=  Create Dictionary  id=${loc}
+    ${data}=  Create Dictionary  name=${name}  apptSchedule=${bs}   parallelServing=${parallel}    consumerParallelServing=${consumerParallelServing}  location=${location}  timeDuration=${timeduration}  batchEnable=${batch}
+    ${len}=  Get Length  ${vargs}
+    ${services}=  Create List  
+    FOR    ${index}    IN RANGE  0  ${len}
+        Exit For Loop If  ${len}==0
+    	${service}=  Create Dictionary  id=${vargs[${index}]} 
+        Append To List  ${services}  ${service}
+    END
+    Run Keyword If  ${len}>0  Set To Dictionary  ${data}  services=${services}
+    RETURN  ${data}
+
+Create Appointment Schedule
+    [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}   ${consumerParallelServing}    ${loc}  ${timeduration}  ${batch}  @{vargs}  &{kwargs}
+    ${data}=  Appointment Schedule  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}    ${consumerParallelServing}   ${loc}  ${timeduration}  ${batch}  @{vargs}
+    
+    ${items}=  Get Dictionary items  ${kwargs}
+    FOR  ${key}  ${value}  IN  @{items}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/appointment/schedule  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Get Appoinment Service By Location   
+    [Arguments]  ${locationId}   
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw  /provider/appointment/service/${locationId}  expected_status=any     
+    RETURN  ${resp} 
+
+Get Available Slots for Month Year
+    [Arguments]  ${location}  ${service}  ${month}  ${year}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/appointment/availability/location/${location}/service/${service}/${month}/${year}  params=${param}  expected_status=any
+    RETURN  ${resp}
+
+
+Send Message With Appointment
+    [Arguments]  ${message}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  &{kwargs}  
+    #Required- uuid- list of wl ids, attachments- list of dictionaries with file details
+
+    ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
+    ${data}=  Create Dictionary  medium=${medium}  communicationMessage=${message}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/appointment/communication   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Send Attachment From Appointmnent 
+    [Arguments]  ${uid}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  @{attachments}
+
+    ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
+    # ${attachments}=  Create Dictionary  owner=${owner}  ownerName=${ownerName}  fileName=${fileName}  caption=${caption}  fileSize=${fileSize}  fileType=${fileType}  order=${order}  driveId=${driveId}  action=${action}
+    ${data}=  Create Dictionary  medium=${medium}  attachments=${attachments} 
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/appointment/share/attachments/${uid}   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+GetFollowUpDetailsofAppmt
+
+    [Arguments]     ${uid}
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /provider/appointment/followUp/${uid}   expected_status=any
+    RETURN  ${resp}
+
+Provider Get Appt Service Request Count
+    [Arguments]    &{kwargs}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/appointment/service/request/count   params=${kwargs}    expected_status=any
+    RETURN  ${resp}
+
+
 ###### All Current Keywords above this line #############################################
 
 Get BusinessDomainsConf
