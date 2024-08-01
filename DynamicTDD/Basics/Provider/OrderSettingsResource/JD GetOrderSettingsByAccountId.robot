@@ -14,6 +14,7 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 *** Variables ***
+
 ${Email}     email
 ${countryCode}   +91
 
@@ -22,7 +23,7 @@ ${countryCode}   +91
 JD-TC-GetOrderSettingsByAccountid-1
     [Documentation]   Get Order Settings after signup
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME222}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -37,7 +38,7 @@ JD-TC-GetOrderSettingsByAccountid-1
     # Set Suite Variable  ${P222_lName}  ${resp.json()['lastName']}
     # Set Suite Variable  ${Ph222}  ${resp.json()['primaryPhoneNumber']}
 
-    ${accId222}=  get_acc_id  ${PUSERNAME222}
+    ${accId222}=  get_acc_id  ${PUSERNAME50}
     Set Suite Variable  ${accId222}
 
     ${resp}=  Get Order Settings by account id
@@ -55,14 +56,14 @@ JD-TC-GetOrderSettingsByAccountid-1
 JD-TC-GetOrderSettingsByAccountid-2
     [Documentation]   Get Order Settings after Enable order settings
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME222}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${firstname2}=  FakerLibrary.first_name
     # Set Suite Variable  ${firstname2}
     # ${lastname2}=  FakerLibrary.last_name
     # Set Suite Variable  ${lastname2}
-    Set Suite Variable  ${email_id222}  ${PUSERNAME222}${C_Email}.${test_mail}
+    Set Suite Variable  ${email_id222}  ${PUSERNAME50}${C_Email}.${test_mail}
 
 
     ${resp}=  Update Email   ${pid222}   ${P222_fName}   ${P222_lName}   ${email_id222}
@@ -88,7 +89,7 @@ JD-TC-GetOrderSettingsByAccountid-2
 JD-TC-GetOrderSettingsByAccountid-3
     [Documentation]   Get Order Settings after Disable order settings
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME222}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Disable Order Settings
@@ -109,18 +110,18 @@ JD-TC-GetOrderSettingsByAccountid-3
 JD-TC-GetOrderSettingsByAccountid-4
     [Documentation]   Enable order settings through Updation, after that Get Order Settings
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME222}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${fName}=    FakerLibrary.word
     Set Suite Variable  ${fName}
     ${lName}=    FakerLibrary.word
     Set Suite Variable  ${lName}
-    ${ph1}=  Evaluate  ${PUSERNAME222}+1000000000
+    ${ph1}=  Evaluate  ${PUSERNAME50}+1000000000
     Set Suite Variable  ${ph1}
-    ${ph2}=  Evaluate  ${PUSERNAME222}+2000000000
+    ${ph2}=  Evaluate  ${PUSERNAME50}+2000000000
     Set Suite Variable  ${ph2}
-    ${whatsappNo}=  Evaluate  ${PUSERNAME222}+3000000000
+    ${whatsappNo}=  Evaluate  ${PUSERNAME50}+3000000000
     Set Suite Variable  ${whatsappNo}
     ${Email1}=   Set Variable  ${fName}${ph1}.${test_mail}
     Set Suite Variable  ${Email1}
@@ -152,7 +153,7 @@ JD-TC-GetOrderSettingsByAccountid-4
 JD-TC-GetOrderSettingsByAccountid-5
     [Documentation]   Disable order settings through Updation, after that Get Order Settings
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME222}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
@@ -160,11 +161,11 @@ JD-TC-GetOrderSettingsByAccountid-5
     Set Suite Variable  ${fName2}
     ${lName2}=    FakerLibrary.word
     Set Suite Variable  ${lName2}
-    ${ph3}=  Evaluate  ${PUSERNAME222}+1000000002
+    ${ph3}=  Evaluate  ${PUSERNAME50}+1000000002
     Set Suite Variable  ${ph3}
-    ${ph4}=  Evaluate  ${PUSERNAME222}+2000000002
+    ${ph4}=  Evaluate  ${PUSERNAME50}+2000000002
     Set Suite Variable  ${ph4}
-    ${whatsappNo2}=  Evaluate  ${PUSERNAME222}+3000000002
+    ${whatsappNo2}=  Evaluate  ${PUSERNAME50}+3000000002
     Set Suite Variable  ${whatsappNo2}
     ${Email3}=   Set Variable  ${fName}${ph3}.${test_mail}
     Set Suite Variable  ${Email3}
