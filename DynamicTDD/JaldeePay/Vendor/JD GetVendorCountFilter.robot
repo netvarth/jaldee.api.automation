@@ -33,12 +33,24 @@ JD-TC-Get Vendor List with Count filter-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
 
+
+     ${resp}=  Get User
+     Log   ${resp.json()}
+     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${userid}  ${resp.json()[0]['id']}
+
+
     ${resp}=  Populate Url For Vendor   ${account_id1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
      
     ${name}=   FakerLibrary.word
+
+    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+
     Set Suite Variable   ${name}   
     ${resp}=  CreateVendorCategory  ${name}  
     Log  ${resp.json()}
@@ -216,7 +228,7 @@ JD-TC-Get Vendor List with Count filter-8
     Should Be Equal As Strings  ${resp.json()}  1
 JD-TC-Get Vendor List with Count filter-9
 
-    [Documentation]  Create Vendor for an SP and get with filter -userId.
+    [Documentation]  Create Vendor for an SP and get with filter -account id
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
     Log  ${resp.content}
@@ -225,7 +237,7 @@ JD-TC-Get Vendor List with Count filter-9
     ${resp}=  Get Vendor List with Count filter    userId-eq=${account_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()}  1
+    Should Be Equal As Strings  ${resp.json()}  0
 JD-TC-Get Vendor List with Count filter-10
 
     [Documentation]  Try to get filter with EMPTY -userId.
@@ -238,4 +250,19 @@ JD-TC-Get Vendor List with Count filter-10
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  0
+
+JD-TC-Get Vendor List with Count filter-11
+
+    [Documentation]  Create Vendor for an SP and get with filter -userId.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Vendor List with Count filter    userId-eq=${userid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  1
+
+
 
