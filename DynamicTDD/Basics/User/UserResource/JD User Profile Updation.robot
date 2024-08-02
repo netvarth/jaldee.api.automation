@@ -8,6 +8,7 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
@@ -17,7 +18,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 ***Test Cases***
 
-JD-TC-CreateUserprofile-1
+JD-TC-UpdateUserprofile-1
 
      [Documentation]  Create a user profile with details
      ${iscorp_subdomains}=  get_iscorp_subdomains  1
@@ -34,7 +35,7 @@ JD-TC-CreateUserprofile-1
      ${highest_package}=  get_highest_license_pkg
      ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
      Log  ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
+     Should Be Equal As Strings    ${resp.status_code}    202
      ${resp}=  Account Activation  ${PUSERNAME_E}  0
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
@@ -71,12 +72,10 @@ JD-TC-CreateUserprofile-1
      Set Suite Variable  ${dob}
      ${pin}=  get_pincode
      Set Suite Variable  ${pin}
-     ${user_dis_name}=  FakerLibrary.last_name
-     Set Suite Variable  ${user_dis_name}
      ${employee_id}=  FakerLibrary.last_name
      Set Suite Variable  ${employee_id}
-    
-     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${countryCodes[0]}  ${PUSERNAME_U1}  bProfilePermitted  ${boolean[1]}  displayOrder  1  userDisplayName  ${user_dis_name}  employeeId  ${employee_id}
+
+     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${countryCodes[0]}  ${PUSERNAME_U1}   employeeId=${employee_id}  bProfilePermitted=${boolean[1]}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id}  ${resp.json()}
@@ -113,10 +112,10 @@ JD-TC-CreateUserprofile-1
     Should Be Equal As Strings    ${resp.json()['languagesSpoken']}      ${Languages}
     Should Be Equal As Strings    ${resp.json()['userSubdomain']}      ${sub_domain_id}
     Should Be Equal As Strings    ${resp.json()['profileId']}      ${u_p_id}
-    Should Be Equal As Strings    ${resp.json()['specialization']}      ${spec}
 
 
-JD-TC-CreateUserprofile-2
+
+JD-TC-UpdateUserprofile-2
 
      [Documentation]  Create a user profile without details
      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
@@ -136,7 +135,7 @@ JD-TC-CreateUserprofile-2
      ${employee_id2}=  FakerLibrary.last_name
      Set Suite Variable  ${employee_id2}
      
-     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${countryCodes[0]}  ${PUSERNAME_U1}   bProfilePermitted  ${boolean[1]}  displayOrder  1  userDisplayName  ${user_dis_name}  employeeId  ${employee_id2}
+     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${countryCodes[0]}  ${PUSERNAME_U1}   employeeId=${employee_id2}  bProfilePermitted=${boolean[1]}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id}  ${resp.json()}
@@ -150,7 +149,7 @@ JD-TC-CreateUserprofile-2
     Set Test Variable  ${u_p_id}  ${resp.json()['profileId']}
 
  
-JD-TC-CreateUserprofile-3
+JD-TC-UpdateUserprofile-3
      [Documentation]  Create a user profile with some details
      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
@@ -169,7 +168,7 @@ JD-TC-CreateUserprofile-3
      ${employee_id3}=  FakerLibrary.last_name
      Set Suite Variable  ${employee_id3}
 
-     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${countryCodes[0]}  ${PUSERNAME_U1}  bProfilePermitted  ${boolean[1]}  displayOrder  1  userDisplayName  ${user_dis_name}  employeeId  ${employee_id3}
+     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${countryCodes[0]}  ${PUSERNAME_U1}  employeeId=${employee_id3}  bProfilePermitted=${boolean[1]}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id}  ${resp.json()}
@@ -185,7 +184,7 @@ JD-TC-CreateUserprofile-3
 
 
 
-JD-TC-CreateUserprofile-UH2
+JD-TC-UpdateUserprofile-UH2
      [Documentation]  Create a user profile with invalid user id
      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
@@ -204,7 +203,7 @@ JD-TC-CreateUserprofile-UH2
      ${employee_id4}=  FakerLibrary.last_name
      Set Suite Variable  ${employee_id4}
      
-     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${countryCodes[0]}  ${PUSERNAME_U1}  bProfilePermitted  ${boolean[1]}  displayOrder  1  userDisplayName  ${user_dis_name}  employeeId  ${employee_id4}
+     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${countryCodes[0]}  ${PUSERNAME_U1}  employeeId=${employee_id4}  bProfilePermitted=${boolean[1]}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id}  ${resp.json()}
@@ -218,7 +217,7 @@ JD-TC-CreateUserprofile-UH2
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings  "${resp.json()}"  "${USER_NOT_FOUND_WITH_ID}"
 
-JD-TC-CreateUserprofile-UH3
+JD-TC-UpdateUserprofile-UH3
      [Documentation]  Create a user profile for ASSISTANT type user
      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
@@ -237,7 +236,7 @@ JD-TC-CreateUserprofile-UH3
     ${employee_id5}=  FakerLibrary.last_name
      Set Suite Variable  ${employee_id5}
      
-     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[1]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${countryCodes[0]}  ${PUSERNAME_U1}  bProfilePermitted  ${boolean[1]}  displayOrder  1  userDisplayName  ${user_dis_name}  employeeId  ${employee_id5}
+     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[1]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${countryCodes[0]}  ${PUSERNAME_U1}  employeeId=${employee_id5}  bProfilePermitted=${boolean[1]}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id}  ${resp.json()}
@@ -250,7 +249,7 @@ JD-TC-CreateUserprofile-UH3
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings  "${resp.json()}"  "${INVALID_USERTYPE}"
 
-JD-TC-CreateUserprofile-UH4
+JD-TC-UpdateUserprofile-UH4
      [Documentation]  Create a user profile for already created user
      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
@@ -269,7 +268,7 @@ JD-TC-CreateUserprofile-UH4
      ${employee_id6}=  FakerLibrary.last_name
      Set Suite Variable  ${employee_id6}
      
-     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${countryCodes[0]}  ${PUSERNAME_U1}  bProfilePermitted  ${boolean[1]}  displayOrder  1  userDisplayName  ${user_dis_name}  employeeId  ${employee_id6}
+     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${countryCodes[0]}  ${PUSERNAME_U1}  employeeId=${employee_id6}  bProfilePermitted=${boolean[1]}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id}  ${resp.json()}
@@ -283,11 +282,12 @@ JD-TC-CreateUserprofile-UH4
      Should Be Equal As Strings  "${resp.json()}"  "${PROVIDER_PROFILE_ALREADY_CREATED}"
 
 
-JD-TC-CreateUserprofile-UH5
+JD-TC-UpdateUserprofile-UH5
      [Documentation]  Create a user profile for INACTIVE user
      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
+
      ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+336855
      clear_users  ${PUSERNAME_U1}
      Set Suite Variable  ${PUSERNAME_U1}
@@ -302,7 +302,7 @@ JD-TC-CreateUserprofile-UH5
      ${employee_id7}=  FakerLibrary.last_name
      Set Suite Variable  ${employee_id7}
      
-     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${countryCodes[0]}  ${PUSERNAME_U1}  bProfilePermitted  ${boolean[1]}  displayOrder  1  userDisplayName  ${user_dis_name}  employeeId  ${employee_id7}
+     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${countryCodes[0]}  ${PUSERNAME_U1}  employeeId=${employee_id7}  bProfilePermitted=${boolean[1]}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id}  ${resp.json()}
@@ -331,19 +331,71 @@ JD-TC-CreateUserprofile -UH8
  
 JD-TC-CreateUserprofile -UH9
     [Documentation]   Consumer create a user profile
-    ${resp}=   Consumer Login  ${CUSERNAME1}  ${PASSWORD} 
+
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
+     Log  ${resp.json()}
+     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Business Profile
     Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${accountId}        ${resp.json()['id']}
+
+
+     ${PH_Number}    Random Number          digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Suite Variable    ${primaryMobileNo}  555${PH_Number}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${primaryMobileNo}${\n}
+    ${firstName}=   FakerLibrary.first_name
+    ${lastName}=    FakerLibrary.last_name
+    Set Suite Variable      ${firstName}
+    Set Suite Variable      ${lastName}  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${email}  ${C_Email}${primaryMobileNo}${firstName}.${test_mail}
+
+    ${resp}=  AddCustomer  ${primaryMobileNo}  firstName=${firstName}   lastName=${lastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${email}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${ageyrs}  ${agemonths}=  db.calculate_age_years_months     ${dob}
+
+    ${resp}=  GetCustomer  phoneNo-eq=${primaryMobileNo}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+    ${fullastName}   Set Variable    ${firstName} ${lastName}
+    Set Test Variable  ${fullastName}
+
+    ${resp}=  Provider Logout   
+    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${bs}=  FakerLibrary.bs
-    ${bs_des}=  FakerLibrary.word
+
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
   
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable   ${token}  ${resp.json()['token']}
+   
+    ${resp}=    ProviderConsumer Login with token    ${primaryMobileNo}    ${accountId}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
+
+     ${bs}=  FakerLibrary.bs
+     ${bs_des}=  FakerLibrary.word
     ${resp}=  User Profile Updation  ${bs}  ${bs_des}  ${emp_list}  ${emp_list}  ${sub_domain_id}  ${u_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}"
 
 
-JD-TC-CreateUserprofile-UH7
+JD-TC-UpdateUserprofile-UH7
      [Documentation]  Create a user profile for defaultAdminUser=true user
      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
@@ -355,10 +407,10 @@ JD-TC-CreateUserprofile-UH7
     ${resp}=  User Profile Updation  ${bs}  ${bs_des}  ${EMPTY}  ${EMPTY}  ${sub_domain_id}  ${id}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings  "${resp.json()}"  "${NOT_PROVIDER}"
+    Should Be Equal As Strings  "${resp.json()}"  "${PROVIDER_PROFILE_NOT_FOUND}"
 
 
-JD-TC-CreateUserprofile-UH1
+JD-TC-UpdateUserprofile-UH1
      [Documentation]  Create a user profile with another sub domain id
      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
@@ -377,7 +429,7 @@ JD-TC-CreateUserprofile-UH1
      ${employee_id8}=  FakerLibrary.last_name
      Set Suite Variable  ${employee_id8}
      
-     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${countryCodes[0]}  ${PUSERNAME_U1}  bProfilePermitted  ${boolean[1]}  displayOrder  1  userDisplayName  ${user_dis_name}  employeeId  ${employee_id8}
+     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${countryCodes[0]}  ${PUSERNAME_U1}  employeeId=${employee_id8}  bProfilePermitted=${boolean[1]}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id}  ${resp.json()}
@@ -392,7 +444,7 @@ JD-TC-CreateUserprofile-UH1
     Should Be Equal As Strings  "${resp.json()}"  "${PROVIDER_DIFFERENT_SUBDOMAIN}"
 
 
-JD-TC-CreateUserprofile-UH6
+JD-TC-UpdateUserprofile-UH6
      [Documentation]  Create a user profile with invalid sub domain id
      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
@@ -411,7 +463,7 @@ JD-TC-CreateUserprofile-UH6
      ${employee_id9}=  FakerLibrary.last_name
      Set Suite Variable  ${employee_id9}
      
-     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${countryCodes[0]}  ${PUSERNAME_U1}  bProfilePermitted  ${boolean[1]}  displayOrder  1  userDisplayName  ${user_dis_name}  employeeId  ${employee_id9}
+     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${countryCodes[0]}  ${PUSERNAME_U1}  employeeId=${employee_id9}  bProfilePermitted=${boolean[1]}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id}  ${resp.json()}
