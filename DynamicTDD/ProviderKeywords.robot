@@ -123,6 +123,52 @@ Provider Get Appt Service Request Count
     ${resp}=    GET On Session    ynw   /provider/appointment/service/request/count   params=${kwargs}    expected_status=any
     RETURN  ${resp}
 
+Get Appointment Slots By Date Schedule
+    [Arguments]    ${scheduleId}   ${date}   ${service}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/appointment/schedule/${scheduleId}/${date}/${service}   expected_status=any
+    RETURN  ${resp}
+
+Block Appointment For Consumer
+    [Arguments]    ${service_id}  ${schedule_id}  ${appmtDate}  ${appmtFor}
+    ${schedule}=  Create Dictionary  id=${schedule_id}
+    ${service}=  Create Dictionary  id=${service_id}
+    ${data}=    Create Dictionary   service=${service}   schedule=${schedule}   appmtDate=${appmtDate}   appmtFor=${appmtFor}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/appointment/block  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Unblock Appointment Slot
+    [Arguments]    ${appointment_id}  
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/appointment/unblock/${appointment_id}   expected_status=any
+    RETURN  ${resp}
+
+Get Appointment level Bill Details
+    [Arguments]   ${uuid}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/appointment/${uuid}/billdetails     expected_status=any
+    RETURN  ${resp}
+
+Provider Change Answer Status for Appointment
+    [Arguments]  ${apptId}  @{filedata}  
+    ${data}=  Create Dictionary  urls=${filedata}  
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw   /provider/appointment/questionnaire/upload/status/${apptId}  data=${data}  expected_status=any
+    RETURN  ${resp}  
+
+
+
+
+
+
+
+
+
+
+
 
 ###### All Current Keywords above this line #############################################
 
@@ -4083,39 +4129,28 @@ Waitlist Status
     ${resp}=  PUT On Session  ynw  /provider/account/settings/waitlist/${status}  expected_status=any
     RETURN  ${resp}
 
-Appointment Schedule
-    [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}   ${consumerParallelServing}   ${loc}  ${timeduration}  ${batch}  @{vargs}
-    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
-    ${location}=  Create Dictionary  id=${loc}
-    ${data}=  Create Dictionary  name=${name}  apptSchedule=${bs}   parallelServing=${parallel}    consumerParallelServing=${consumerParallelServing}  location=${location}  timeDuration=${timeduration}  batchEnable=${batch}
-    ${len}=  Get Length  ${vargs}
-    ${services}=  Create List  
-    FOR    ${index}    IN RANGE  0  ${len}
-        Exit For Loop If  ${len}==0
-    	${service}=  Create Dictionary  id=${vargs[${index}]} 
-        Append To List  ${services}  ${service}
-    END
-    Run Keyword If  ${len}>0  Set To Dictionary  ${data}  services=${services}
-    RETURN  ${data}
+# Appointment Schedule
+#     [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}   ${consumerParallelServing}   ${loc}  ${timeduration}  ${batch}  @{vargs}
+#     ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
+#     ${location}=  Create Dictionary  id=${loc}
+#     ${data}=  Create Dictionary  name=${name}  apptSchedule=${bs}   parallelServing=${parallel}    consumerParallelServing=${consumerParallelServing}  location=${location}  timeDuration=${timeduration}  batchEnable=${batch}
+#     ${len}=  Get Length  ${vargs}
+#     ${services}=  Create List  
+#     FOR    ${index}    IN RANGE  0  ${len}
+#         Exit For Loop If  ${len}==0
+#     	${service}=  Create Dictionary  id=${vargs[${index}]} 
+#         Append To List  ${services}  ${service}
+#     END
+#     Run Keyword If  ${len}>0  Set To Dictionary  ${data}  services=${services}
+#     RETURN  ${data}
 
-Create Appointment Schedule
-    [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}   ${consumerParallelServing}    ${loc}  ${timeduration}  ${batch}  @{vargs}
-    ${data}=  Appointment Schedule  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}    ${consumerParallelServing}   ${loc}  ${timeduration}  ${batch}  @{vargs}
-    Check And Create YNW Session
-    ${data}=  json.dumps  ${data}
-    ${resp}=  POST On Session  ynw  /provider/appointment/schedule  data=${data}  expected_status=any
-    RETURN  ${resp}
-
-Create Appointment Schedule For User
-    [Arguments]  ${userid}  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}    ${consumerParallelServing}   ${loc}  ${timeduration}  ${batch}  @{vargs}
-    ${user_id}=  Create Dictionary  id=${userid}
-    ${data}=  Appointment Schedule  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}    ${consumerParallelServing}   ${loc}  ${timeduration}  ${batch}  @{vargs}
-    Set To Dictionary  ${data}  provider=${user_id}
-    Check And Create YNW Session
-    ${data}=  json.dumps  ${data}
-    ${resp}=  POST On Session  ynw  /provider/appointment/schedule  data=${data}  expected_status=any
-    RETURN  ${resp}
-
+# Create Appointment Schedule
+#     [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}   ${consumerParallelServing}    ${loc}  ${timeduration}  ${batch}  @{vargs}
+#     ${data}=  Appointment Schedule  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}    ${consumerParallelServing}   ${loc}  ${timeduration}  ${batch}  @{vargs}
+#     Check And Create YNW Session
+#     ${data}=  json.dumps  ${data}
+#     ${resp}=  POST On Session  ynw  /provider/appointment/schedule  data=${data}  expected_status=any
+#     RETURN  ${resp}
 
 Get Appointment Schedule ById
     [Arguments]   ${schId}
@@ -4148,11 +4183,11 @@ Get Appointment Schedules
 #     ${resp}=  GET On Session  ynw  /provider/appointment/schedule/${scheduleId}/${date}  expected_status=any
 #     RETURN  ${resp}
 
-Get Appointment Slots By Date Schedule
-    [Arguments]    ${scheduleId}   ${date}   ${service}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/appointment/schedule/${scheduleId}/${date}/${service}   expected_status=any
-    RETURN  ${resp}
+# Get Appointment Slots By Date Schedule
+#     [Arguments]    ${scheduleId}   ${date}   ${service}
+#     Check And Create YNW Session
+#     ${resp}=  GET On Session  ynw  /provider/appointment/schedule/${scheduleId}/${date}/${service}   expected_status=any
+#     RETURN  ${resp}
 
 Get Next Available Appointment Slot
     [Arguments]   ${schId}
@@ -4165,12 +4200,6 @@ Get Next Available Appointment Schedule
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/appointment/schedule/nextAvailable/${schId}  expected_status=any
     RETURN  ${resp}
-
-Get Appointment Schedule by location and service
-	[Arguments]	 ${locationId}	${serviceId}
-	Check And Create YNW Session
-	${resp}=  GET On Session  ynw  /provider/appointment/schedule/location/${locationId}/service/${serviceId}  expected_status=any
-	RETURN   ${resp}
 
 Get Appointment Schedule by date
 	[Arguments]	 ${date}
@@ -4205,17 +4234,6 @@ Individual Schedule
         Set To Dictionary 	${data} 	${key}=${value}
     END 
     RETURN  ${data}
-
-Create Individual Schedule
-    [Arguments]  ${name}   ${parallel}   ${consumerParallelServing}   ${loc}   ${batch}  @{vargs}   &{kwargs}
-    ${data}=  Individual Schedule  ${name}   ${parallel}    ${consumerParallelServing}   ${loc}    ${batch}  @{vargs}     &{kwargs}
-    FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary 	${data} 	${key}=${value}
-    END 
-    Check And Create YNW Session
-    ${data}=  json.dumps  ${data}
-    ${resp}=  POST On Session  ynw  /provider/appointment/schedule  data=${data}  expected_status=any
-    RETURN  ${resp}
 
 Update Individual Schedule
     [Arguments]     ${Id}  ${name}   ${parallel}   ${consumerParallelServing}    ${loc}    ${batch}  @{vargs}   &{kwargs}
@@ -4506,116 +4524,30 @@ Get jaldeeIntegration Settings
     Check And Create YNW Session 
     ${resp}=  GET On Session  ynw   /provider/account/settings/jaldeeIntegrationSettings  expected_status=any
     RETURN  ${resp}
+
+# Take Appointment For Consumer 
+#     [Arguments]   ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${appmtFor}  &{kwargs}
     
-
-User Take Appointment For Consumer 
-    [Arguments]   ${userid}  ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${appmtFor}  &{kwargs}
+#     ${pro_headers}=  Create Dictionary  &{headers}
+#     ${pro_params}=   Create Dictionary
+#     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+#     Log  ${kwargs}
+#     ${items}=  Get Dictionary items  ${kwargs}
+#     Set To Dictionary  ${pro_headers}   &{tzheaders}
+#     Set To Dictionary  ${pro_params}   &{locparam}
     
-    ${pro_headers}=  Create Dictionary  &{headers}
-    ${pro_params}=   Create Dictionary
-    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
-    Log  ${kwargs}
-    Set To Dictionary  ${pro_headers}   &{tzheaders}
-    Set To Dictionary  ${pro_params}   &{locparam}
-
-    ${user_id}=  Create Dictionary  id=${userid}
-    ${cid}=  Create Dictionary  id=${consid}
-    ${sid}=  Create Dictionary  id=${service_id}
-    ${schedule}=  Create Dictionary  id=${schedule}
-    ${data}=    Create Dictionary   provider=${user_id}  consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}
-    # ${data}=    Create Dictionary   appointmentMode=WALK_IN_APPOINTMENT  consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}  
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/appointment  params=${pro_params}  data=${data}  expected_status=any
-    RETURN  ${resp}
-
-
-Take Appointment For Consumer 
-    [Arguments]   ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${appmtFor}  &{kwargs}
-    
-    ${pro_headers}=  Create Dictionary  &{headers}
-    ${pro_params}=   Create Dictionary
-    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
-    Log  ${kwargs}
-    ${items}=  Get Dictionary items  ${kwargs}
-    Set To Dictionary  ${pro_headers}   &{tzheaders}
-    Set To Dictionary  ${pro_params}   &{locparam}
-    
-    ${cid}=  Create Dictionary  id=${consid}
-    ${sid}=  Create Dictionary  id=${service_id}
-    ${schedule}=  Create Dictionary  id=${schedule}
-    ${data}=    Create Dictionary   consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}
-    # ${data}=    Create Dictionary   appointmentMode=WALK_IN_APPOINTMENT  consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}  
-    FOR  ${key}  ${value}  IN  @{items}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/appointment  params=${pro_params}    data=${data}  expected_status=any
-    RETURN  ${resp}
-
-
-Take Appointment with Phone no
-    [Arguments]   ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${phoneNumber}  ${country_code}  ${appmtFor}
-    ${cid}=  Create Dictionary  id=${consid}
-    ${sid}=  Create Dictionary  id=${service_id}
-    ${schedule}=  Create Dictionary  id=${schedule}
-    ${data}=    Create Dictionary   consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  phoneNumber=${phoneNumber}  countryCode=${country_code}
-    # ${data}=    Create Dictionary   appointmentMode=WALK_IN_APPOINTMENT  consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}  
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any
-    RETURN  ${resp}
-
-
-Take Virtual Service Appointment For Consumer
-    [Arguments]   ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${CallingModes}  ${CallingModes_id1}  ${appmtFor}
-    ${cid}=  Create Dictionary  id=${consid}
-    ${sid}=  Create Dictionary  id=${service_id}
-    ${schedule}=  Create Dictionary  id=${schedule}
-    ${virtualService}=  Create Dictionary   ${CallingModes}=${CallingModes_id1}
-    ${data}=    Create Dictionary   consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}   virtualService=${virtualService}
-    # ${data}=    Create Dictionary   appointmentMode=WALK_IN_APPOINTMENT  consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}  
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any
-    RETURN  ${resp}
-
-Take Virtual Service Appointment For Consumer with Mode
-    [Arguments]   ${apptMode}  ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${CallingModes}  ${CallingModes_id1}  ${appmtFor}
-    ${cid}=  Create Dictionary  id=${consid}
-    ${sid}=  Create Dictionary  id=${service_id}
-    ${schedule}=  Create Dictionary  id=${schedule}
-    ${virtualService}=  Create Dictionary   ${CallingModes}=${CallingModes_id1}
-    ${data}=    Create Dictionary   appointmentMode=${apptMode}  consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}   virtualService=${virtualService}
-    # ${data}=    Create Dictionary   appointmentMode=WALK_IN_APPOINTMENT  consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}  
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any
-    RETURN  ${resp}
-
-Take Appointment with Appointment Mode 
-    [Arguments]   ${apptMode}   ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${appmtFor}
-    ${cid}=  Create Dictionary  id=${consid}
-    ${sid}=  Create Dictionary  id=${service_id}
-    ${schedule}=  Create Dictionary  id=${schedule}
-    ${data}=    Create Dictionary  appointmentMode=${apptMode}  consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}  
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any
-    RETURN  ${resp}
-
-User Take Appointment with Appointment Mode 
-    [Arguments]   ${userid}  ${apptMode}   ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${appmtFor}
-    ${user_id}=  Create Dictionary  id=${userid}
-    ${cid}=  Create Dictionary  id=${consid}
-    ${sid}=  Create Dictionary  id=${service_id}
-    ${schedule}=  Create Dictionary  id=${schedule}
-    ${data}=    Create Dictionary  provider=${user_id}  appointmentMode=${apptMode}  consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}  
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any
-    RETURN  ${resp}
+#     ${cid}=  Create Dictionary  id=${consid}
+#     ${sid}=  Create Dictionary  id=${service_id}
+#     ${schedule}=  Create Dictionary  id=${schedule}
+#     ${data}=    Create Dictionary   consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}
+#     # ${data}=    Create Dictionary   appointmentMode=WALK_IN_APPOINTMENT  consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}  
+#     FOR  ${key}  ${value}  IN  @{items}
+#         Set To Dictionary  ${data}   ${key}=${value}
+#     END
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session
+#     ${resp}=  POST On Session  ynw  /provider/appointment  params=${pro_params}    data=${data}  expected_status=any
+#     RETURN  ${resp}
 
 Get Appointment By Id
     [Arguments]  ${appmntId}
@@ -6011,15 +5943,15 @@ Share Prescription Thirdparty
     ${resp}=  POST On Session  ynw  /provider/mr/sharePrescription/thirdParty/${mrId}  data=${data}  expected_status=any
     RETURN  ${resp}
 
-Block Appointment For Consumer
-    [Arguments]    ${service_id}  ${schedule_id}  ${appmtDate}  ${appmtFor}
-    ${schedule}=  Create Dictionary  id=${schedule_id}
-    ${service}=  Create Dictionary  id=${service_id}
-    ${data}=    Create Dictionary   service=${service}   schedule=${schedule}   appmtDate=${appmtDate}   appmtFor=${appmtFor}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/appointment/block  data=${data}  expected_status=any
-    RETURN  ${resp}
+# Block Appointment For Consumer
+#     [Arguments]    ${service_id}  ${schedule_id}  ${appmtDate}  ${appmtFor}
+#     ${schedule}=  Create Dictionary  id=${schedule_id}
+#     ${service}=  Create Dictionary  id=${service_id}
+#     ${data}=    Create Dictionary   service=${service}   schedule=${schedule}   appmtDate=${appmtDate}   appmtFor=${appmtFor}
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session
+#     ${resp}=  POST On Session  ynw  /provider/appointment/block  data=${data}  expected_status=any
+#     RETURN  ${resp}
 
 
 Confirm Blocked Appointment
@@ -6032,11 +5964,11 @@ Confirm Blocked Appointment
     RETURN  ${resp}
 
 
-Unblock Appointment Slot
-    [Arguments]    ${appointment_id}  
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/appointment/unblock/${appointment_id}   expected_status=any
-    RETURN  ${resp}
+# Unblock Appointment Slot
+#     [Arguments]    ${appointment_id}  
+#     Check And Create YNW Session
+#     ${resp}=  PUT On Session  ynw  /provider/appointment/unblock/${appointment_id}   expected_status=any
+#     RETURN  ${resp}
 
 
 # Update MR by mr id
@@ -6712,11 +6644,11 @@ Get waitlist Service By Location
     ${resp}=    GET On Session    ynw  /provider/waitlist/services/${locationId}  expected_status=any     
     RETURN  ${resp} 
 
-Get Appoinment Service By Location   
-    [Arguments]  ${locationId}   
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw  /provider/appointment/service/${locationId}  expected_status=any     
-    RETURN  ${resp} 
+# Get Appoinment Service By Location   
+#     [Arguments]  ${locationId}   
+#     Check And Create YNW Session
+#     ${resp}=    GET On Session    ynw  /provider/appointment/service/${locationId}  expected_status=any     
+#     RETURN  ${resp} 
 
 
 Get Questionnaire List By Provider      
@@ -6925,13 +6857,13 @@ Provider Change Answer Status for Waitlist
     RETURN  ${resp}    
 
 
-Provider Change Answer Status for Appointment
-    [Arguments]  ${apptId}  @{filedata}  
-    ${data}=  Create Dictionary  urls=${filedata}  
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw   /provider/appointment/questionnaire/upload/status/${apptId}  data=${data}  expected_status=any
-    RETURN  ${resp}  
+# Provider Change Answer Status for Appointment
+#     [Arguments]  ${apptId}  @{filedata}  
+#     ${data}=  Create Dictionary  urls=${filedata}  
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session
+#     ${resp}=  PUT On Session  ynw   /provider/appointment/questionnaire/upload/status/${apptId}  data=${data}  expected_status=any
+#     RETURN  ${resp}  
 
 Assign Team To Checkin
     [Arguments]  ${waitlist_id}  ${team_id}  
@@ -7099,21 +7031,6 @@ Flush Analytics Data to DB
     [Arguments]
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/analytics/db/flush  expected_status=any
-    RETURN  ${resp}
-
-
-User Take Virtual Service Appointment For Consumer
-    [Arguments]   ${userid}  ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${CallingModes}  ${CallingModes_id1}  ${appmtFor}
-    ${user_id}=  Create Dictionary  id=${userid}
-    ${cid}=  Create Dictionary  id=${consid}
-    ${sid}=  Create Dictionary  id=${service_id}
-    ${schedule}=  Create Dictionary  id=${schedule}
-    ${virtualService}=  Create Dictionary   ${CallingModes}=${CallingModes_id1}
-    ${data}=    Create Dictionary   provider=${user_id}  consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}   virtualService=${virtualService}
-    # ${data}=    Create Dictionary   appointmentMode=WALK_IN_APPOINTMENT  consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}  
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any
     RETURN  ${resp}
 
 Provider Add To WL With Virtual Service For User
@@ -7459,23 +7376,6 @@ Get Service Options By Serviceid and Channel
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  url=/provider/questionnaire/serviceoption/${serviceId}/${channel}  expected_status=any
     RETURN    ${resp}
-
-
-Add Delay on Multiple Appointments
-    [Arguments]    ${delaytime}  ${isAddToDelay}   ${delaymessage}    ${email}    ${pushNotification}   ${sms}     ${telegram}    @{vargs}
-    # ${delaytime}=    Random Int  min=20    max=60
-    # ${delaymessage}=    FakerLibrary.Sentence   nb_words=4
-    ${len}=  Get Length  ${vargs}
-    ${appmnts}=  Create List
-    FOR  ${value}  IN  @{vargs}
-        Append To List  ${appmnts}  ${value}
-    END
-    ${medium}=    Create Dictionary   email=${email}     pushNotification=${pushNotification}    sms=${sms}    telegram=${telegram}
-    ${data}=   Create Dictionary    apptDelay=${delaytime}  isAddToDelay=${isAddToDelay}  apptDelayMessag=${delaymessage}    appointments=${appmnts}      medium=${medium}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw   /provider/appointment/addDelayOnMultipleAppointment   data=${data}  expected_status=any
-    RETURN  ${resp}
 
 Get Service Options for Donation By Serviceid
     [Arguments]     ${serviceid}
@@ -9406,24 +9306,6 @@ Add General Notes
 #   Appt Request
 
 
-Provider Create Appt Service Request
-    [Arguments]      ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${countryCode}  ${phoneNumber}  ${coupons}  ${appmtFor}  &{kwargs}
-    ${sid}=  Create Dictionary  id=${service_id} 
-    ${cid}=  Create Dictionary  id=${consid}
-    ${schedule}=  Create Dictionary  id=${schedule}
-    ${data}=    Create Dictionary   appmtDate=${appmtDate}  service=${sid}  schedule=${schedule}
-    ...   appmtFor=${appmtFor}    consumerNote=${consumerNote}  phoneNumber=${phoneNumber}   coupons=${coupons}
-    ...   consumer=${cid}  countryCode=${countryCode} 
-    ${items}=  Get Dictionary items  ${kwargs}
-        FOR  ${key}  ${value}  IN  @{items}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END 
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/appointment/service/request  data=${data}  expected_status=any
-    RETURN  ${resp}
-
-
 Provider Get Appt Service Request
     [Arguments]    &{kwargs}
     Check And Create YNW Session
@@ -9431,36 +9313,11 @@ Provider Get Appt Service Request
     RETURN  ${resp}
 
 
-Provider Get Appt Service Request Count
-    [Arguments]    &{kwargs}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/appointment/service/request/count   params=${kwargs}    expected_status=any
-    RETURN  ${resp}
-
-
-Confirm Appt Service Request
-    [Arguments]    ${uid}  ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${countryCode}  ${phoneNumber}  ${coupons}  ${appmtFor}  &{kwargs}
-    ${sid}=  Create Dictionary  id=${service_id} 
-    ${cid}=  Create Dictionary  id=${consid}
-    ${schedule}=  Create Dictionary  id=${schedule}
-    ${data}=    Create Dictionary   appmtDate=${appmtDate}  service=${sid}  schedule=${schedule}
-    ...   appmtFor=${appmtFor}    consumerNote=${consumerNote}  phoneNumber=${phoneNumber}   coupons=${coupons}
-    ...   countryCode=${countryCode}   consumer=${cid}  uid=${uid}
-    ${items}=  Get Dictionary items  ${kwargs}
-        FOR  ${key}  ${value}  IN  @{items}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END 
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/appointment/service/request/changestatus/confirmed  data=${data}  expected_status=any
-    RETURN  ${resp}
-
-
-Reject Appt Service Request
-    [Arguments]    ${appmntId}  
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/appointment/service/request/reject/${appmntId}   expected_status=any
-    RETURN  ${resp}
+# Provider Get Appt Service Request Count
+#     [Arguments]    &{kwargs}
+#     Check And Create YNW Session
+#     ${resp}=    GET On Session    ynw   /provider/appointment/service/request/count   params=${kwargs}    expected_status=any
+#     RETURN  ${resp}
 
 Partner Approval Request
 
@@ -12625,12 +12482,12 @@ Remove Service Level Discount for Appointment
     RETURN  ${resp}
 
     
-Get Appointment level Bill Details
+# Get Appointment level Bill Details
 
-    [Arguments]   ${uuid}  
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/appointment/${uuid}/billdetails     expected_status=any
-    RETURN  ${resp}
+#     [Arguments]   ${uuid}  
+#     Check And Create YNW Session
+#     ${resp}=  GET On Session  ynw  /provider/appointment/${uuid}/billdetails     expected_status=any
+#     RETURN  ${resp}
 
 
 Get Category List Configuration
@@ -13112,13 +12969,13 @@ Change Provider Consumer Profile Status
     ${resp}=  PUT On Session  ynw  /provider/customers/${consumerId}/changeStatus/${status}   expected_status=any
     RETURN  ${resp}
 
-GetFollowUpDetailsofAppmt
+# GetFollowUpDetailsofAppmt
 
-    [Arguments]     ${uid}
+#     [Arguments]     ${uid}
 
-    Check And Create YNW Session  
-    ${resp}=  GET On Session  ynw  /provider/appointment/followUp/${uid}   expected_status=any
-    RETURN  ${resp}
+#     Check And Create YNW Session  
+#     ${resp}=  GET On Session  ynw  /provider/appointment/followUp/${uid}   expected_status=any
+#     RETURN  ${resp}
 
 
 GetFollowUpDetailsofwl
@@ -13143,16 +13000,16 @@ Send Attachment From Waitlist
     RETURN  ${resp}
 
 
-Send Attachment From Appointmnent 
-    [Arguments]  ${uid}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  @{attachments}
+# Send Attachment From Appointmnent 
+#     [Arguments]  ${uid}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  @{attachments}
 
-    ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
-    # ${attachments}=  Create Dictionary  owner=${owner}  ownerName=${ownerName}  fileName=${fileName}  caption=${caption}  fileSize=${fileSize}  fileType=${fileType}  order=${order}  driveId=${driveId}  action=${action}
-    ${data}=  Create Dictionary  medium=${medium}  attachments=${attachments} 
-    ${data}=    json.dumps    ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/appointment/share/attachments/${uid}   data=${data}  expected_status=any
-    RETURN  ${resp}
+#     ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
+#     # ${attachments}=  Create Dictionary  owner=${owner}  ownerName=${ownerName}  fileName=${fileName}  caption=${caption}  fileSize=${fileSize}  fileType=${fileType}  order=${order}  driveId=${driveId}  action=${action}
+#     ${data}=  Create Dictionary  medium=${medium}  attachments=${attachments} 
+#     ${data}=    json.dumps    ${data}
+#     Check And Create YNW Session
+#     ${resp}=  POST On Session  ynw  /provider/appointment/share/attachments/${uid}   data=${data}  expected_status=any
+#     RETURN  ${resp}
 
 
 Get Attachments In Waitlist
@@ -13202,19 +13059,19 @@ Send Message With Waitlist
     RETURN  ${resp}
 
 
-Send Message With Appointment
-    [Arguments]  ${message}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  &{kwargs}  
-    #Required- uuid- list of wl ids, attachments- list of dictionaries with file details
+# Send Message With Appointment
+#     [Arguments]  ${message}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  &{kwargs}  
+#     #Required- uuid- list of wl ids, attachments- list of dictionaries with file details
 
-    ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
-    ${data}=  Create Dictionary  medium=${medium}  communicationMessage=${message}
-    FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary 	${data} 	${key}=${value}
-    END
-    ${data}=    json.dumps    ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/appointment/communication   data=${data}  expected_status=any
-    RETURN  ${resp}
+#     ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
+#     ${data}=  Create Dictionary  medium=${medium}  communicationMessage=${message}
+#     FOR    ${key}    ${value}    IN    &{kwargs}
+#         Set To Dictionary 	${data} 	${key}=${value}
+#     END
+#     ${data}=    json.dumps    ${data}
+#     Check And Create YNW Session
+#     ${resp}=  POST On Session  ynw  /provider/appointment/communication   data=${data}  expected_status=any
+#     RETURN  ${resp}
 
 
 Send Message With Order
@@ -15890,11 +15747,11 @@ Get CommTargets
     ${resp}=  GET On Session  ynw  /provider/commTarget   expected_status=any
     RETURN  ${resp}
 
-Get Available Slots for Month Year
-    [Arguments]  ${location}  ${service}  ${month}  ${year}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/appointment/availability/location/${location}/service/${service}/${month}/${year}  params=${param}  expected_status=any
-    RETURN  ${resp}
+# Get Available Slots for Month Year
+#     [Arguments]  ${location}  ${service}  ${month}  ${year}
+#     Check And Create YNW Session
+#     ${resp}=  GET On Session  ynw  /provider/appointment/availability/location/${location}/service/${service}/${month}/${year}  params=${param}  expected_status=any
+#     RETURN  ${resp}
 
 
 # ...............LINKING AND UNLNKING...................
@@ -16022,4 +15879,194 @@ Get All Capabilities
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/accessscope/capabilities    expected_status=any
+    RETURN  ${resp}
+
+
+
+
+
+*** Comments ***
+
+
+Reject Appt Service Request
+    [Arguments]    ${appmntId}  
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/appointment/service/request/reject/${appmntId}   expected_status=any
+    RETURN  ${resp}
+
+
+Confirm Appt Service Request
+    [Arguments]    ${uid}  ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${countryCode}  ${phoneNumber}  ${coupons}  ${appmtFor}  &{kwargs}
+    ${sid}=  Create Dictionary  id=${service_id} 
+    ${cid}=  Create Dictionary  id=${consid}
+    ${schedule}=  Create Dictionary  id=${schedule}
+    ${data}=    Create Dictionary   appmtDate=${appmtDate}  service=${sid}  schedule=${schedule}
+    ...   appmtFor=${appmtFor}    consumerNote=${consumerNote}  phoneNumber=${phoneNumber}   coupons=${coupons}
+    ...   countryCode=${countryCode}   consumer=${cid}  uid=${uid}
+    ${items}=  Get Dictionary items  ${kwargs}
+        FOR  ${key}  ${value}  IN  @{items}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END 
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/appointment/service/request/changestatus/confirmed  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+
+Provider Create Appt Service Request
+    [Arguments]      ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${countryCode}  ${phoneNumber}  ${coupons}  ${appmtFor}  &{kwargs}
+    ${sid}=  Create Dictionary  id=${service_id} 
+    ${cid}=  Create Dictionary  id=${consid}
+    ${schedule}=  Create Dictionary  id=${schedule}
+    ${data}=    Create Dictionary   appmtDate=${appmtDate}  service=${sid}  schedule=${schedule}
+    ...   appmtFor=${appmtFor}    consumerNote=${consumerNote}  phoneNumber=${phoneNumber}   coupons=${coupons}
+    ...   consumer=${cid}  countryCode=${countryCode} 
+    ${items}=  Get Dictionary items  ${kwargs}
+        FOR  ${key}  ${value}  IN  @{items}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END 
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/appointment/service/request  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Add Delay on Multiple Appointments
+    [Arguments]    ${delaytime}  ${isAddToDelay}   ${delaymessage}    ${email}    ${pushNotification}   ${sms}     ${telegram}    @{vargs}
+    # ${delaytime}=    Random Int  min=20    max=60
+    # ${delaymessage}=    FakerLibrary.Sentence   nb_words=4
+    ${len}=  Get Length  ${vargs}
+    ${appmnts}=  Create List
+    FOR  ${value}  IN  @{vargs}
+        Append To List  ${appmnts}  ${value}
+    END
+    ${medium}=    Create Dictionary   email=${email}     pushNotification=${pushNotification}    sms=${sms}    telegram=${telegram}
+    ${data}=   Create Dictionary    apptDelay=${delaytime}  isAddToDelay=${isAddToDelay}  apptDelayMessag=${delaymessage}    appointments=${appmnts}      medium=${medium}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw   /provider/appointment/addDelayOnMultipleAppointment   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+User Take Virtual Service Appointment For Consumer
+    [Arguments]   ${userid}  ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${CallingModes}  ${CallingModes_id1}  ${appmtFor}
+    ${user_id}=  Create Dictionary  id=${userid}
+    ${cid}=  Create Dictionary  id=${consid}
+    ${sid}=  Create Dictionary  id=${service_id}
+    ${schedule}=  Create Dictionary  id=${schedule}
+    ${virtualService}=  Create Dictionary   ${CallingModes}=${CallingModes_id1}
+    ${data}=    Create Dictionary   provider=${user_id}  consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}   virtualService=${virtualService}
+    # ${data}=    Create Dictionary   appointmentMode=WALK_IN_APPOINTMENT  consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}  
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+User Take Appointment with Appointment Mode 
+    [Arguments]   ${userid}  ${apptMode}   ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${appmtFor}
+    ${user_id}=  Create Dictionary  id=${userid}
+    ${cid}=  Create Dictionary  id=${consid}
+    ${sid}=  Create Dictionary  id=${service_id}
+    ${schedule}=  Create Dictionary  id=${schedule}
+    ${data}=    Create Dictionary  provider=${user_id}  appointmentMode=${apptMode}  consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}  
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Take Appointment with Appointment Mode 
+    [Arguments]   ${apptMode}   ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${appmtFor}
+    ${cid}=  Create Dictionary  id=${consid}
+    ${sid}=  Create Dictionary  id=${service_id}
+    ${schedule}=  Create Dictionary  id=${schedule}
+    ${data}=    Create Dictionary  appointmentMode=${apptMode}  consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}  
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Take Virtual Service Appointment For Consumer with Mode
+    [Arguments]   ${apptMode}  ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${CallingModes}  ${CallingModes_id1}  ${appmtFor}
+    ${cid}=  Create Dictionary  id=${consid}
+    ${sid}=  Create Dictionary  id=${service_id}
+    ${schedule}=  Create Dictionary  id=${schedule}
+    ${virtualService}=  Create Dictionary   ${CallingModes}=${CallingModes_id1}
+    ${data}=    Create Dictionary   appointmentMode=${apptMode}  consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}   virtualService=${virtualService}
+    # ${data}=    Create Dictionary   appointmentMode=WALK_IN_APPOINTMENT  consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}  
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Take Virtual Service Appointment For Consumer
+    [Arguments]   ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${CallingModes}  ${CallingModes_id1}  ${appmtFor}
+    ${cid}=  Create Dictionary  id=${consid}
+    ${sid}=  Create Dictionary  id=${service_id}
+    ${schedule}=  Create Dictionary  id=${schedule}
+    ${virtualService}=  Create Dictionary   ${CallingModes}=${CallingModes_id1}
+    ${data}=    Create Dictionary   consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}   virtualService=${virtualService}
+    # ${data}=    Create Dictionary   appointmentMode=WALK_IN_APPOINTMENT  consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}  
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Take Appointment with Phone no
+    [Arguments]   ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${phoneNumber}  ${country_code}  ${appmtFor}
+    ${cid}=  Create Dictionary  id=${consid}
+    ${sid}=  Create Dictionary  id=${service_id}
+    ${schedule}=  Create Dictionary  id=${schedule}
+    ${data}=    Create Dictionary   consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  phoneNumber=${phoneNumber}  countryCode=${country_code}
+    # ${data}=    Create Dictionary   appointmentMode=WALK_IN_APPOINTMENT  consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}  
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+
+User Take Appointment For Consumer 
+    [Arguments]   ${userid}  ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${appmtFor}  &{kwargs}
+    
+    ${pro_headers}=  Create Dictionary  &{headers}
+    ${pro_params}=   Create Dictionary
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_params}   &{locparam}
+
+    ${user_id}=  Create Dictionary  id=${userid}
+    ${cid}=  Create Dictionary  id=${consid}
+    ${sid}=  Create Dictionary  id=${service_id}
+    ${schedule}=  Create Dictionary  id=${schedule}
+    ${data}=    Create Dictionary   provider=${user_id}  consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}
+    # ${data}=    Create Dictionary   appointmentMode=WALK_IN_APPOINTMENT  consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}  
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/appointment  params=${pro_params}  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Create Individual Schedule
+    [Arguments]  ${name}   ${parallel}   ${consumerParallelServing}   ${loc}   ${batch}  @{vargs}   &{kwargs}
+    ${data}=  Individual Schedule  ${name}   ${parallel}    ${consumerParallelServing}   ${loc}    ${batch}  @{vargs}     &{kwargs}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END 
+    Check And Create YNW Session
+    ${data}=  json.dumps  ${data}
+    ${resp}=  POST On Session  ynw  /provider/appointment/schedule  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+
+Get Appointment Schedule by location and service
+	[Arguments]	 ${locationId}	${serviceId}
+	Check And Create YNW Session
+	${resp}=  GET On Session  ynw  /provider/appointment/schedule/location/${locationId}/service/${serviceId}  expected_status=any
+	RETURN   ${resp}
+
+Create Appointment Schedule For User
+    [Arguments]  ${userid}  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}    ${consumerParallelServing}   ${loc}  ${timeduration}  ${batch}  @{vargs}
+    ${user_id}=  Create Dictionary  id=${userid}
+    ${data}=  Appointment Schedule  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}    ${consumerParallelServing}   ${loc}  ${timeduration}  ${batch}  @{vargs}
+    Set To Dictionary  ${data}  provider=${user_id}
+    Check And Create YNW Session
+    ${data}=  json.dumps  ${data}
+    ${resp}=  POST On Session  ynw  /provider/appointment/schedule  data=${data}  expected_status=any
     RETURN  ${resp}
