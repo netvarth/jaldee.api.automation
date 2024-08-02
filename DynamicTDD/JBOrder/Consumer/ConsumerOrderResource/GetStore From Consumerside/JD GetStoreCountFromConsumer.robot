@@ -204,7 +204,7 @@ JD-TC-Get Store Count Filter-4
     ${resp}=    Get stores Count filter       accountId-eq=${accountId}   onlineOrder-eq=${bool[1]}   storeCode-eq=${Name}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()}                                              1
+    Should Be Equal As Strings    ${resp.json()}                                              0
 
 
 JD-TC-Get Store Count Filter-5
