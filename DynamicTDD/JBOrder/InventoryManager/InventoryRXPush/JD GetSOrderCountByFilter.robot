@@ -437,7 +437,7 @@ JD-TC-GetOrderCountByFilter-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

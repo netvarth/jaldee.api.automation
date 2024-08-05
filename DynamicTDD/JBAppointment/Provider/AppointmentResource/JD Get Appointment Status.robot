@@ -164,7 +164,7 @@ JD-TC-GetAppointmentStatus-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Customer Logout   
+    ${resp}=  Consumer Logout   
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -374,7 +374,7 @@ JD-TC-GetAppointmentStatus-3
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Customer Logout   
+    ${resp}=  Consumer Logout   
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    

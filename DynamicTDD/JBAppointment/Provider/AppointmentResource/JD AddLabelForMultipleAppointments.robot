@@ -69,7 +69,7 @@ JD-TC-AddMultipleAppointmentLabel-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -82,7 +82,7 @@ JD-TC-AddMultipleAppointmentLabel-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid1}    ${resp.json()['providerConsumer']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -102,7 +102,7 @@ JD-TC-AddMultipleAppointmentLabel-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -115,7 +115,7 @@ JD-TC-AddMultipleAppointmentLabel-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid2}    ${resp.json()['providerConsumer']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3215,7 +3215,7 @@ JD-TC-AddMultipleAppointmentLabel-UH7
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token2}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3228,7 +3228,7 @@ JD-TC-AddMultipleAppointmentLabel-UH7
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid3}    ${resp.json()['providerConsumer']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3248,7 +3248,7 @@ JD-TC-AddMultipleAppointmentLabel-UH7
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token3}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3261,7 +3261,7 @@ JD-TC-AddMultipleAppointmentLabel-UH7
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid4}    ${resp.json()['providerConsumer']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

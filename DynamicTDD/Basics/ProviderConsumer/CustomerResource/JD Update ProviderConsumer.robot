@@ -55,7 +55,7 @@ JD-TC-UpdateProviderConsumer-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout
+    ${resp}=    Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${accountId}  ${token} 
@@ -73,7 +73,7 @@ JD-TC-UpdateProviderConsumer-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['firstName']}    ${fname}
 
-    ${resp}=    Customer Logout
+    ${resp}=    Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD}
@@ -154,7 +154,7 @@ JD-TC-UpdateProviderConsumer-2
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Customer Logout   
+    ${resp}=  Consumer Logout   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -273,7 +273,7 @@ JD-TC-UpdateProviderConsumer-3
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${tokens}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout
+    ${resp}=    Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${CUSERNAME_0}     ${accountId}  Authorization=${tokens}
@@ -439,7 +439,7 @@ JD-TC-UpdateProviderConsumer-4
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${tokenss}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout
+    ${resp}=    Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}  ${PUSERNAME_N}  ${pid4}  Authorization=${tokenss}

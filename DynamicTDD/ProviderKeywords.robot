@@ -110,6 +110,11 @@ Get Business Logo
     ${resp}=  GET On Session  ynw   /provider/businessLogo  expected_status=any
     RETURN  ${resp}
 
+Provider Logout
+    Check And Create YNW Session
+    ${resp}=  DELETE On Session  ynw  /provider/login  expected_status=any
+    RETURN  ${resp}       
+
 ######### BASICS #########
 
 Create Location
@@ -185,6 +190,7 @@ AddCustomer
 
 ########## BOOKING #############
 
+
 Queue
     [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}  ${capacity}  ${loc}  @{vargs}
     ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
@@ -228,6 +234,8 @@ Get Queue ById
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/queues/${id}  expected_status=any
     RETURN  ${resp}
+
+######### APPOINTMENT ###########
 
 Take Appointment For Consumer 
     [Arguments]   ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${appmtFor}  &{kwargs}
@@ -369,6 +377,36 @@ Provider Change Answer Status for Appointment
     ${resp}=  PUT On Session  ynw   /provider/appointment/questionnaire/upload/status/${apptId}  data=${data}  expected_status=any
     RETURN  ${resp}  
 
+
+######### MEMBERSHIP ############
+
+Create Membership Service 
+
+    [Arguments]    ${description}    ${name}    ${displayName}    ${effectiveFrom}    ${effectiveTo}    ${approvalType}    ${allowLogin}    ${serviceStatus}
+
+    ${data}=  Create Dictionary    description=${description}    name=${name}    displayName=${displayName}    effectiveFrom=${effectiveFrom}    effectiveTo=${effectiveTo}    approvalType=${approvalType}    allowLogin=${allowLogin}    serviceStatus=${serviceStatus}
+    ${data}=    json.dumps    ${data} 
+    Check And Create YNW Session
+    ${resp}=    POST On Session  ynw  /provider/membership/service    data=${data}   expected_status=any
+    RETURN  ${resp}
+
+Get Membership Service by id
+
+    [Arguments]    ${memberid}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/membership/service/${memberid}  expected_status=any
+    RETURN  ${resp}
+
+Create Membership 
+
+    [Arguments]    ${firstname}    ${lastname}    ${mob}    ${memberserviceid}    ${cc}    
+
+    ${data}=  Create Dictionary    firstName=${firstname}    lastName=${lastname}    phoneNo=${mob}    memberServiceId=${memberserviceid}    countryCode=${cc}
+    ${data}=    json.dumps    ${data} 
+    Check And Create YNW Session
+    ${resp}=    POST On Session  ynw  /consumer/membership    data=${data}   expected_status=any
+    RETURN  ${resp}
 
 
 
@@ -10829,23 +10867,23 @@ Get Available Providers In A Time Range
 # ........ Membership Service ............
 
 
-Create Membership Service 
+# Create Membership Service 
 
-    [Arguments]    ${description}    ${name}    ${displayName}    ${effectiveFrom}    ${effectiveTo}    ${approvalType}    ${allowLogin}    ${serviceStatus}
+#     [Arguments]    ${description}    ${name}    ${displayName}    ${effectiveFrom}    ${effectiveTo}    ${approvalType}    ${allowLogin}    ${serviceStatus}
 
-    ${data}=  Create Dictionary    description=${description}    name=${name}    displayName=${displayName}    effectiveFrom=${effectiveFrom}    effectiveTo=${effectiveTo}    approvalType=${approvalType}    allowLogin=${allowLogin}    serviceStatus=${serviceStatus}
-    ${data}=    json.dumps    ${data} 
-    Check And Create YNW Session
-    ${resp}=    POST On Session  ynw  /provider/membership/service    data=${data}   expected_status=any
-    RETURN  ${resp}
+#     ${data}=  Create Dictionary    description=${description}    name=${name}    displayName=${displayName}    effectiveFrom=${effectiveFrom}    effectiveTo=${effectiveTo}    approvalType=${approvalType}    allowLogin=${allowLogin}    serviceStatus=${serviceStatus}
+#     ${data}=    json.dumps    ${data} 
+#     Check And Create YNW Session
+#     ${resp}=    POST On Session  ynw  /provider/membership/service    data=${data}   expected_status=any
+#     RETURN  ${resp}
 
-Get Membership Service by id
+# Get Membership Service by id
 
-    [Arguments]    ${memberid}
+#     [Arguments]    ${memberid}
 
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/membership/service/${memberid}  expected_status=any
-    RETURN  ${resp}
+#     Check And Create YNW Session
+#     ${resp}=  GET On Session  ynw  /provider/membership/service/${memberid}  expected_status=any
+#     RETURN  ${resp}
 
 Update Membership Service 
 
@@ -10865,15 +10903,15 @@ Enable Disable Membership service
     ${resp}=  PUT On Session  ynw  /provider/account/settings/membership/${status}  expected_status=any
     RETURN  ${resp}
 
-Create Membership 
+# Create Membership 
 
-    [Arguments]    ${firstname}    ${lastname}    ${mob}    ${memberserviceid}    ${cc}    
+#     [Arguments]    ${firstname}    ${lastname}    ${mob}    ${memberserviceid}    ${cc}    
 
-    ${data}=  Create Dictionary    firstName=${firstname}    lastName=${lastname}    phoneNo=${mob}    memberServiceId=${memberserviceid}    countryCode=${cc}
-    ${data}=    json.dumps    ${data} 
-    Check And Create YNW Session
-    ${resp}=    POST On Session  ynw  /consumer/membership    data=${data}   expected_status=any
-    RETURN  ${resp}
+#     ${data}=  Create Dictionary    firstName=${firstname}    lastName=${lastname}    phoneNo=${mob}    memberServiceId=${memberserviceid}    countryCode=${cc}
+#     ${data}=    json.dumps    ${data} 
+#     Check And Create YNW Session
+#     ${resp}=    POST On Session  ynw  /consumer/membership    data=${data}   expected_status=any
+#     RETURN  ${resp}
 
 Get Membership By Id
 
@@ -16280,3 +16318,7 @@ Create Appointment Schedule For User
     ${data}=  json.dumps  ${data}
     ${resp}=  POST On Session  ynw  /provider/appointment/schedule  data=${data}  expected_status=any
     RETURN  ${resp}
+
+
+######### Moved Keywords #############
+

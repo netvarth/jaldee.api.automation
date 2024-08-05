@@ -207,7 +207,7 @@ JD-TC-UpdateItemCategory-UH2
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${tokenss}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout
+    ${resp}=    Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}  ${PUSERNAME_N}  ${accountId}  Authorization=${tokenss}

@@ -1857,7 +1857,7 @@ JD-TC-RemoveMultipleAppointmentLabel-9
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
    
-    ${resp}=    Customer Logout
+    ${resp}=    Consumer Logout
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1897,7 +1897,7 @@ JD-TC-RemoveMultipleAppointmentLabel-9
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
    
-    ${resp}=  Customer Logout
+    ${resp}=  Consumer Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
