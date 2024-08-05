@@ -34,22 +34,34 @@ ${word3}        python
 @{PO_Number}   ${56}  ${0586185393}
 
 *** Keywords ***
-pass var values
-    [Arguments]   ${ph1}  ${ph2}
 
-    ${ph1}=  Set Variable  ${ph1.strip()}
-    ${ph2}=  Set Variable  ${ph2.strip()}
-    
-    IF    '$ph1' != '${NONE}' AND '$ph2' != '${NONE}'
-        ${ph_nos}=  Create List  ${ph1}  ${ph2}
-    ELSE IF    '${ph1}' != ''
-        ${ph_nos}=  Create List  ${ph1}
-    ELSE IF    '${ph2}' != ''
-        ${ph_nos}=  Create List  ${ph2}
-    ELSE
-        ${ph_nos}=  Create List
+check kwargs
+    [Arguments]   &{kwargs}
+    ${headers2}=     Create Dictionary    Content-Type=application/json
+    ${has_key}=  Evaluate  'Authorization' in ${kwargs}
+    IF  ${has_key}
+        ${auth_dict}  ${kwargs}  GetFromDict  Authorization  &{kwargs}
+        Set To Dictionary 	${headers2}  &{auth_dict}
+    ELSE IF  $token
+        Set To Dictionary 	${headers2}  Authorization=${token}
     END
-    Log   ${ph_nos}
+
+# pass var values
+#     [Arguments]   ${ph1}  ${ph2}
+
+#     ${ph1}=  Set Variable  ${ph1.strip()}
+#     ${ph2}=  Set Variable  ${ph2.strip()}
+    
+#     IF    '$ph1' != '${NONE}' AND '$ph2' != '${NONE}'
+#         ${ph_nos}=  Create List  ${ph1}  ${ph2}
+#     ELSE IF    '${ph1}' != ''
+#         ${ph_nos}=  Create List  ${ph1}
+#     ELSE IF    '${ph2}' != ''
+#         ${ph_nos}=  Create List  ${ph2}
+#     ELSE
+#         ${ph_nos}=  Create List
+#     END
+#     Log   ${ph_nos}
 
 
 
@@ -57,11 +69,17 @@ pass var values
 
 cheking if variable is empty
 
+    Set Test Variable  ${token}   Some Token
+    Run Keyword And Continue On Failure  check kwargs   Authorization=${token}
+    Run Keyword And Continue On Failure  check kwargs
+    Set Suite Variable    ${token}   Some Token
+    Run Keyword And Continue On Failure  check kwargs
+
     # ${PO_Number}=  random_phone_num_generator  subscriber_number_length=10  cc=2
     # Log Many  ${PO_Number}  
     # ${length}=    Get Length    int(${PO_Number[1]})
-    ${length}=    Evaluate    len(str(int(str(${PO_Number[1]}).lstrip('0'))))
-    ${length}=    Evaluate    len(str(int('${PO_Number[1]}'.lstrip('0'))))
+    # ${length}=    Evaluate    len(str(int(str(${PO_Number[1]}).lstrip('0'))))
+    # ${length}=    Evaluate    len(str(int('${PO_Number[1]}'.lstrip('0'))))
 
     
     # pass var values  ${EMPTY}  ${EMPTY}

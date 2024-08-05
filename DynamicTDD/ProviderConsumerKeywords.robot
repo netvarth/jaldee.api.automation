@@ -156,6 +156,8 @@ ProviderConsumer SignUp
     IF  ${has_key}
         ${auth_dict}  ${kwargs}  GetFromDict  Authorization  &{kwargs}
         Set To Dictionary 	${headers2}  &{auth_dict}
+    ELSE IF  $token
+        Set To Dictionary 	${headers2}  Authorization=${token}
     END
     Check And Create YNW Session
     ${resp}=    POST On Session   ynw    /consumer    data=${data}  headers=${headers2}   expected_status=any   params=${cons_params}
