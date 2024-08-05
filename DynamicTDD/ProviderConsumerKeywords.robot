@@ -54,13 +54,6 @@ Verify Otp For Login
     ${resp}=    POST On Session    ynw    /consumer/oauth/otp/${key}/verify  headers=${headers2}  expected_status=any
     RETURN  ${resp}
 
-Customer Logout 
-    # [Arguments]    ${token}
-    Check And Create YNW Session
-    ${headers2}=     Create Dictionary    Content-Type=application/json    #Authorization=${token}
-    ${resp}=    DELETE On Session    ynw    /consumer/login       expected_status=any
-    RETURN  ${resp}
-
 ProviderConsumer Login with token
     [Arguments]    ${loginId}  ${accountId}  ${token}  ${countryCode}=+91  &{kwargs} 
     ${cons_headers}=  Create Dictionary  &{headers} 
@@ -80,7 +73,7 @@ ProviderConsumer Login with token
 
 
 
-    
+
 ###### All Current Keywords above this line #############################################
 
 # Send Otp For Login
