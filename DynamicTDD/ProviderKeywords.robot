@@ -190,7 +190,6 @@ AddCustomer
 
 ########## BOOKING #############
 
-
 Queue
     [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}  ${capacity}  ${loc}  @{vargs}
     ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
@@ -420,10 +419,6 @@ Create Membership
 
 ###### All Current Keywords above this line #############################################
 
-# Get BusinessDomainsConf
-#     Check And Create YNW Session
-#     ${resp}=   GET On Session  ynw  /ynwConf/businessDomains   expected_status=any
-#     RETURN  ${resp}
 
 Get Licensable Packages
     Check And Create YNW Session
@@ -436,14 +431,6 @@ User Creation
     ${data}=  Create Dictionary  userProfile=${usp}  sector=${sector}  subSector=${sub_sector}  licPkgId=${licPkgId}
     RETURN  ${data}
 
-# Account SignUp
-#     [Arguments]  ${firstname}  ${lastname}  ${yemail}  ${sector}  ${sub_sector}  ${ph}  ${licPkgId}   ${countryCode}=91
-#     ${data}=   User Creation  ${firstname}  ${lastname}  ${yemail}  ${sector}  ${sub_sector}  ${ph}  ${licPkgId}  countryCode=${countryCode}
-#     ${data}=    json.dumps    ${data}
-#     Check And Create YNW Session
-#     ${resp}=    POST On Session   ynw    /provider    data=${data}  expected_status=any  
-#     RETURN  ${resp}
-
 Claim SignUp
     [Arguments]  ${firstname}  ${lastname}  ${yemail}  ${sector}  ${sub_sector}  ${ph}  ${licPkgId}  ${acid}
     ${data}=   User Creation  ${firstname}  ${lastname}  ${yemail}  ${sector}  ${sub_sector}  ${ph}  ${licPkgId}
@@ -453,41 +440,6 @@ Claim SignUp
     ${resp}=    POST On Session   ynw    /provider    data=${data}  expected_status=any
     RETURN  ${resp}
 
-# Account Activation
-#     [Arguments]  ${email}  ${purpose}
-#     Check And Create YNW Session
-#     ${key}=   verify accnt  ${email}  ${purpose}
-#     ${resp_val}=  POST On Session   ynw  /provider/${key}/verify  expected_status=any
-#     RETURN  ${resp_val}
-# This URL Has Been Commented in rest side
-
-# Account Activation
-#     [Arguments]  ${loginid}  ${purpose}
-#     Check And Create YNW Session
-#     ${key}=   verify accnt  ${loginid}  ${purpose}
-#     ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
-#     ${resp}=    POST On Session    ynw    /provider/oauth/otp/${key}/verify  headers=${headers2}  expected_status=any
-#     RETURN  ${resp}
-
-# Account Set Credential
-#     [Arguments]  ${email}  ${password}  ${purpose}  ${loginId}  &{kwargs}
-#     ${auth}=     Create Dictionary   password=${password}  loginId=${loginId}
-#     Check And Create YNW Session
-#     FOR  ${key}  ${value}  IN  &{kwargs}
-#         IF  '${key}' == 'JSESSIONYNW'
-#             ${sessionid}=  Set Variable  ${value}
-#         END
-#     END
-#     ${session_given}=    Get Variable Value    ${sessionid}
-#     IF  '${session_given}'=='${None}'
-#         ${key}=   verify accnt  ${email}  ${purpose}
-#     ELSE
-#         ${key}=   verify accnt  ${email}  ${purpose}  ${sessionid}
-#     END
-#     ${apple}=    json.dumps    ${auth}
-#     ${resp}=    PUT On Session    ynw    /provider/${key}/activate    data=${apple}    expected_status=any
-#     RETURN  ${resp}
-
 Provider Login
     [Arguments]    ${usname}  ${passwrd}   
 
@@ -496,11 +448,6 @@ Provider Login
 
     ${resp}=    POST On Session    ynw    /provider/login    data=${log}  expected_status=any
     RETURN  ${resp}
-
-Provider Logout
-    Check And Create YNW Session
-    ${resp}=  DELETE On Session  ynw  /provider/login  expected_status=any
-    RETURN  ${resp}       
 
 DeActivate Service Provider  
     
@@ -680,56 +627,12 @@ Update Business Profile with kwargs
     ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
     RETURN  ${resp}
 
-
-# Get Business Profile
-#     Check And Create YNW Session
-#     ${resp}=    GET On Session    ynw   /provider/bProfile  expected_status=any
-#     RETURN  ${resp}
     
 Update Domain And SubDomain
     [Arguments]   ${dom}  ${subdom}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw  /provider/${dom}/${subdom}  expected_status=any
     RETURN  ${resp}    
-
-# Create Location
-#     [Arguments]  ${place}  ${longi}  ${latti}  ${g_url}  ${pin}  ${add}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  &{kwargs}
-#     ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
-#     ${bs}=  Create List  ${bs}
-#     ${bs}=  Create Dictionary  timespec=${bs}
-#     ${data}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  pinCode=${pin}  address=${add}  parkingType=${pt}  open24hours=${oh}  bSchedule=${bs}
-#     FOR    ${key}    ${value}    IN    &{kwargs}
-#         Set To Dictionary 	${data} 	${key}=${value}
-#     END
-#     ${data}=  json.dumps  ${data}
-#     Check And Create YNW Session
-#     ${resp}=  POST On Session  ynw  /provider/locations  data=${data}  expected_status=any
-#     RETURN  ${resp} 
-
-# Create Sample Location
-#     FOR   ${i}  IN RANGE   5
-#         ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-#         ${check}=  Check Location Exists  ${city}
-#         IF  '${check}' == 'True'
-#             Continue For Loop
-#         ELSE
-#             Exit For Loop
-#         END
-#     END
-#     ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-#     Set Suite Variable  ${tz}
-#     ${parking_type}    Random Element  ${parkingType}
-#     ${24hours}    Random Element  ${bool}
-#     ${list}=  Create List  1  2  3  4  5  6  7
-#     ${DAY}=  get_date_by_timezone  ${tz}
-#     ${sTime}=  add_timezone_time  ${tz}  0  30  
-#     ${eTime}=  add_timezone_time  ${tz}  0  45  
-#     ${url}=   FakerLibrary.url
-#     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking_type}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
-#     Log  ${resp.content}
-#     Should Be Equal As Strings  ${resp.status_code}  200
-#     RETURN  ${resp.json()}
-    
 
 Check Location Exists
     [Arguments]   ${city}
@@ -772,12 +675,6 @@ Create Location without schedule
     ${resp}=  POST On Session  ynw  /provider/locations  data=${data}  expected_status=any
     RETURN  ${resp} 
     
-# Get Location ById
-#     [Arguments]  ${id}
-#     Check And Create YNW Session
-#     ${resp}=    GET On Session    ynw   /provider/locations/${id}  expected_status=any
-#     RETURN  ${resp}
-
 Get Locations
     # No filters
     Check And Create YNW Session
@@ -810,12 +707,6 @@ UpdateBaseLocation
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/bProfile/baseLocation/${lid}  data=${data}  expected_status=any
     RETURN  ${resp}
-
-# Disable Location
-#    [Arguments]   ${id}
-#    Check And Create YNW Session
-#    ${resp}=    DELETE On Session    ynw  /provider/locations/${id}/disable  expected_status=any
-#    RETURN  ${resp}
     
 Enable Location
    [Arguments]   ${id}
@@ -868,39 +759,6 @@ Update Social Media Info
     Check And Create YNW Session 
     ${resp}=  PUT On Session  ynw  /provider/bProfile/socialMedia  data=${data}  expected_status=any
     RETURN  ${resp}
-
-
-# Queue
-#     [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}  ${capacity}  ${loc}  @{vargs}
-#     ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
-#     ${loctype} =    Evaluate    type($loc).__name__
-#     ${loc}=  Run Keyword If  '${loctype}' == 'bytes'   Decode Bytes To String  ${loc}  UTF-8
-#     ...  ELSE	 Set Variable    ${loc}
-#     ${location}=  Create Dictionary  id=${loc}
-#     ${len}=  Get Length  ${vargs}
-#     # ${service}=  Create Dictionary  id=${vargs[0]}
-#     # ${services}=  Create List  ${service}
-#     ${services}=  Create List  
-#     FOR    ${index}    IN RANGE  0  ${len}
-#         ${srvid}=  Set Variable    ${vargs[${index}]}
-#         ${sertype} =    Evaluate    type($srvid).__name__
-#         ${srvid}=  Run Keyword If  '${sertype}' == 'bytes'   Decode Bytes To String  ${srvid}  UTF-8
-#         ...  ELSE	 Set Variable    ${srvid}
-#     	# ${service}=  Create Dictionary  id=${vargs[${index}]} 
-#         ${service}=  Create Dictionary  id=${srvid}
-#         Append To List  ${services}  ${service}
-#     END
-#     ${data}=  Create Dictionary  name=${name}  queueSchedule=${bs}  parallelServing=${parallel}  capacity=${capacity}  location=${location}  services=${services}
-#     RETURN  ${data}
-
-
-# Create Queue
-#    [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}  ${capacity}  ${loc}  @{vargs}
-#    ${data}=  Queue  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}  ${capacity}  ${loc}  @{vargs}
-#    ${data}=  json.dumps  ${data}
-#    Check And Create YNW Session
-#    ${resp}=  POST On Session  ynw  /provider/waitlist/queues  data=${data}  expected_status=any
-#    RETURN  ${resp}
 
 
 Queue For User
@@ -1094,20 +952,6 @@ Update Queue without service
     ${resp}=  PUT On Session  ynw  /provider/waitlist/queues  data=${data}  expected_status=any
     RETURN  ${resp} 
 
-   
-# Get Queues
-#     [Arguments]  &{kwargs}
-#     # Available filters- id, account, branchId, location, state, provider, service, instantQueue
-#     Check And Create YNW Session
-#     ${resp}=  GET On Session  ynw  /provider/waitlist/queues  params=${kwargs}  expected_status=any
-#     RETURN  ${resp}
-
-# Get Queue ById
-#     [Arguments]  ${id}
-#     Check And Create YNW Session
-#     ${resp}=  GET On Session  ynw  /provider/waitlist/queues/${id}  expected_status=any
-#     RETURN  ${resp}
-    
 Get Queues Counts
     [Arguments]  &{kwargs}
     Check And Create YNW Session
@@ -1341,21 +1185,6 @@ Customer Creation after updation
     ${data}=  Create Dictionary  userProfile=${up}
     ${data}=  json.dumps  ${data}
     RETURN  ${data}
-
-
-# AddCustomer
-#     [Arguments]    ${primaryNo}  ${countryCode}=91   &{kwargs}
-#     ${items}=  Get Dictionary items  ${kwargs}
-#     ${data}=  Create Dictionary  phoneNo=${primaryNo}  countryCode=${countryCode}
-#     FOR  ${key}  ${value}  IN  @{items}
-#         Set To Dictionary  ${data}   ${key}=${value}
-#     END
-#     Log  ${data}
-#     ${data}=  json.dumps  ${data}
-#     Check And Create YNW Session
-#     # ${data}=  Create Dictionary  phoneNo=${primaryNo}  firstName=${firstname}  lastName=${lastname}  countryCode=${countryCode}
-#     ${resp}=  POST On Session  ynw  url=/provider/customers  data=${data}  expected_status=any
-#     RETURN  ${resp}
 
 AddCustomer with email
     [Arguments]  ${firstname}  ${lastname}  ${address}  ${yemail}  ${ygender}  ${ydob}  ${primaryNo}   ${jid}  ${countryCode}=91  
@@ -1823,14 +1652,6 @@ Update Virtual Service
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/services  data=${data}  expected_status=any
     RETURN  ${resp}   
-
-
-# Get Service
-#     # Filters: id, name, status, account, serviceDuration, serviceType, serviceCategory, department, provider, notificationType, labels, channelRestricted
-#     [Arguments]  &{param}
-#     Check And Create YNW Session
-#     ${resp}=  GET On Session  ynw  /provider/services  params=${param}  expected_status=any
-#     RETURN  ${resp}
     
 Get Service By Id
     [Arguments]  ${id}
@@ -10286,50 +10107,6 @@ Loan Application Branchapproval
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationUid}/branchapproval    data=${data}    expected_status=any
     RETURN  ${resp}
 
-
-
-#  Business Logo And Department Icon
-
-# Add Business Logo
-
-#     [Arguments]    ${owner}    ${fileName}    ${fileSize}    ${action}    ${caption}    ${fileType}    ${order}  &{kwargs}
-
-#     ${AttachmentsUpload}=  Create List
-#     ${Attachment}=    Create Dictionary    owner=${owner}    fileName=${fileName}    fileSize=${fileSize}    action=${action}    caption=${caption}    fileType=${fileType}    order=${order}
-#     FOR  ${key}  ${value}  IN  &{kwargs}
-#         IF  '${key}' == 'driveId'
-#             Set To Dictionary  ${Attachment}   ${key}=${value}
-#         END
-#     END
-#     Append To List  ${AttachmentsUpload}  ${Attachment}
-    
-#     ${data}=    json.dumps    ${AttachmentsUpload}
-#     Check And Create YNW Session
-#     ${resp}=  POST On Session  ynw   /provider/upload/businessLogo  data=${data}  expected_status=any
-#     RETURN  ${resp}
-
-
-# Remove Business Logo
-
-#     [Arguments]    ${owner}    ${fileName}    ${fileSize}    ${action}    ${caption}    ${fileType}    ${order}
-
-#     ${AttachmentsUpload}=  Create List
-#     ${Attachment}=    Create Dictionary    owner=${owner}    fileName=${fileName}    fileSize=${fileSize}    action=${action}    caption=${caption}    fileType=${fileType}    order=${order}
-#     Append To List  ${AttachmentsUpload}  ${Attachment}
-    
-#     ${data}=    json.dumps    ${AttachmentsUpload}
-#     Check And Create YNW Session
-#     ${resp}=  DELETE On Session  ynw   /provider/remove/businessLogo  data=${data}  expected_status=any
-#     RETURN  ${resp}
-
-
-# Get Business Logo
-
-#     Check And Create YNW Session
-#     ${resp}=  GET On Session  ynw   /provider/businessLogo  expected_status=any
-#     RETURN  ${resp}
-
-
 Add Department Icon
 
     [Arguments]    ${deptid}    ${owner}    ${fileName}    ${fileSize}    ${action}    ${caption}    ${fileType}    ${order}
@@ -11404,17 +11181,6 @@ Get Date Time by Timezone
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/location/date/${zone}/${loc}  expected_status=any
     RETURN  ${resp}
-
-
-# Encrypted Provider Login
-#     [Arguments]    ${usname}  ${passwrd}   ${countryCode}=91
-#     ${data}=  Login  ${usname}  ${passwrd}   countryCode=${countryCode}
-#     ${encrypted_data}=  db.encrypt_data  ${data}
-#     ${data}=    json.dumps    ${encrypted_data}
-#     ${resp}=    POST On Session    ynw    /provider/login/encrypt    data=${data}  expected_status=any
-#     db.decrypt_data  ${resp.content}
-#     RETURN  ${resp}
-
 
 Get Invoice With Filter
 
@@ -16322,3 +16088,226 @@ Create Appointment Schedule For User
 
 ######### Moved Keywords #############
 
+Get BusinessDomainsConf
+    Check And Create YNW Session
+    ${resp}=   GET On Session  ynw  /ynwConf/businessDomains   expected_status=any
+    RETURN  ${resp}
+
+Get Business Profile
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/bProfile  expected_status=any
+    RETURN  ${resp}
+
+Account SignUp
+    [Arguments]  ${firstname}  ${lastname}  ${yemail}  ${sector}  ${sub_sector}  ${ph}  ${licPkgId}   ${countryCode}=91
+    ${data}=   User Creation  ${firstname}  ${lastname}  ${yemail}  ${sector}  ${sub_sector}  ${ph}  ${licPkgId}  countryCode=${countryCode}
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=    POST On Session   ynw    /provider    data=${data}  expected_status=any  
+    RETURN  ${resp}
+
+Account Activation
+    [Arguments]  ${email}  ${purpose}
+    Check And Create YNW Session
+    ${key}=   verify accnt  ${email}  ${purpose}
+    ${resp_val}=  POST On Session   ynw  /provider/${key}/verify  expected_status=any
+    RETURN  ${resp_val}
+This URL Has Been Commented in rest side
+
+Account Activation
+    [Arguments]  ${loginid}  ${purpose}
+    Check And Create YNW Session
+    ${key}=   verify accnt  ${loginid}  ${purpose}
+    ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
+    ${resp}=    POST On Session    ynw    /provider/oauth/otp/${key}/verify  headers=${headers2}  expected_status=any
+    RETURN  ${resp}
+
+Account Set Credential
+    [Arguments]  ${email}  ${password}  ${purpose}  ${loginId}  &{kwargs}
+    ${auth}=     Create Dictionary   password=${password}  loginId=${loginId}
+    Check And Create YNW Session
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        IF  '${key}' == 'JSESSIONYNW'
+            ${sessionid}=  Set Variable  ${value}
+        END
+    END
+    ${session_given}=    Get Variable Value    ${sessionid}
+    IF  '${session_given}'=='${None}'
+        ${key}=   verify accnt  ${email}  ${purpose}
+    ELSE
+        ${key}=   verify accnt  ${email}  ${purpose}  ${sessionid}
+    END
+    ${apple}=    json.dumps    ${auth}
+    ${resp}=    PUT On Session    ynw    /provider/${key}/activate    data=${apple}    expected_status=any
+    RETURN  ${resp}
+
+Encrypted Provider Login
+    [Arguments]    ${usname}  ${passwrd}   ${countryCode}=91
+    ${data}=  Login  ${usname}  ${passwrd}   countryCode=${countryCode}
+    ${encrypted_data}=  db.encrypt_data  ${data}
+    ${data}=    json.dumps    ${encrypted_data}
+    ${resp}=    POST On Session    ynw    /provider/login/encrypt    data=${data}  expected_status=any
+    db.decrypt_data  ${resp.content}
+    RETURN  ${resp}
+
+
+#  Business Logo And Department Icon
+
+Add Business Logo
+
+    [Arguments]    ${owner}    ${fileName}    ${fileSize}    ${action}    ${caption}    ${fileType}    ${order}  &{kwargs}
+
+    ${AttachmentsUpload}=  Create List
+    ${Attachment}=    Create Dictionary    owner=${owner}    fileName=${fileName}    fileSize=${fileSize}    action=${action}    caption=${caption}    fileType=${fileType}    order=${order}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        IF  '${key}' == 'driveId'
+            Set To Dictionary  ${Attachment}   ${key}=${value}
+        END
+    END
+    Append To List  ${AttachmentsUpload}  ${Attachment}
+    
+    ${data}=    json.dumps    ${AttachmentsUpload}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw   /provider/upload/businessLogo  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Remove Business Logo
+
+    [Arguments]    ${owner}    ${fileName}    ${fileSize}    ${action}    ${caption}    ${fileType}    ${order}
+
+    ${AttachmentsUpload}=  Create List
+    ${Attachment}=    Create Dictionary    owner=${owner}    fileName=${fileName}    fileSize=${fileSize}    action=${action}    caption=${caption}    fileType=${fileType}    order=${order}
+    Append To List  ${AttachmentsUpload}  ${Attachment}
+    
+    ${data}=    json.dumps    ${AttachmentsUpload}
+    Check And Create YNW Session
+    ${resp}=  DELETE On Session  ynw   /provider/remove/businessLogo  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Get Business Logo
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /provider/businessLogo  expected_status=any
+    RETURN  ${resp}
+
+Provider Logout
+    Check And Create YNW Session
+    ${resp}=  DELETE On Session  ynw  /provider/login  expected_status=any
+    RETURN  ${resp}       
+
+Create Location
+    [Arguments]  ${place}  ${longi}  ${latti}  ${g_url}  ${pin}  ${add}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  &{kwargs}
+    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
+    ${bs}=  Create List  ${bs}
+    ${bs}=  Create Dictionary  timespec=${bs}
+    ${data}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  pinCode=${pin}  address=${add}  parkingType=${pt}  open24hours=${oh}  bSchedule=${bs}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/locations  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Create Sample Location
+    FOR   ${i}  IN RANGE   5
+        ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+        ${check}=  Check Location Exists  ${city}
+        IF  '${check}' == 'True'
+            Continue For Loop
+        ELSE
+            Exit For Loop
+        END
+    END
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    ${parking_type}    Random Element  ${parkingType}
+    ${24hours}    Random Element  ${bool}
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${DAY}=  get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  30  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${url}=   FakerLibrary.url
+    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking_type}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    RETURN  ${resp.json()}
+
+Get Location ById
+    [Arguments]  ${id}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/locations/${id}  expected_status=any
+    RETURN  ${resp}
+
+Disable Location
+   [Arguments]   ${id}
+   Check And Create YNW Session
+   ${resp}=    DELETE On Session    ynw  /provider/locations/${id}/disable  expected_status=any
+   RETURN  ${resp}
+
+Get Service
+    # Filters: id, name, status, account, serviceDuration, serviceType, serviceCategory, department, provider, notificationType, labels, channelRestricted
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/services  params=${param}  expected_status=any
+    RETURN  ${resp}
+
+AddCustomer
+    [Arguments]    ${primaryNo}  ${countryCode}=91   &{kwargs}
+    ${items}=  Get Dictionary items  ${kwargs}
+    ${data}=  Create Dictionary  phoneNo=${primaryNo}  countryCode=${countryCode}
+    FOR  ${key}  ${value}  IN  @{items}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    Log  ${data}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    # ${data}=  Create Dictionary  phoneNo=${primaryNo}  firstName=${firstname}  lastName=${lastname}  countryCode=${countryCode}
+    ${resp}=  POST On Session  ynw  url=/provider/customers  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Queue
+    [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}  ${capacity}  ${loc}  @{vargs}
+    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
+    ${loctype} =    Evaluate    type($loc).__name__
+    ${loc}=  Run Keyword If  '${loctype}' == 'bytes'   Decode Bytes To String  ${loc}  UTF-8
+    ...  ELSE	 Set Variable    ${loc}
+    ${location}=  Create Dictionary  id=${loc}
+    ${len}=  Get Length  ${vargs}
+    # ${service}=  Create Dictionary  id=${vargs[0]}
+    # ${services}=  Create List  ${service}
+    ${services}=  Create List  
+    FOR    ${index}    IN RANGE  0  ${len}
+        ${srvid}=  Set Variable    ${vargs[${index}]}
+        ${sertype} =    Evaluate    type($srvid).__name__
+        ${srvid}=  Run Keyword If  '${sertype}' == 'bytes'   Decode Bytes To String  ${srvid}  UTF-8
+        ...  ELSE	 Set Variable    ${srvid}
+    	# ${service}=  Create Dictionary  id=${vargs[${index}]} 
+        ${service}=  Create Dictionary  id=${srvid}
+        Append To List  ${services}  ${service}
+    END
+    ${data}=  Create Dictionary  name=${name}  queueSchedule=${bs}  parallelServing=${parallel}  capacity=${capacity}  location=${location}  services=${services}
+    RETURN  ${data}
+
+
+Create Queue
+   [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}  ${capacity}  ${loc}  @{vargs}
+   ${data}=  Queue  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}  ${capacity}  ${loc}  @{vargs}
+   ${data}=  json.dumps  ${data}
+   Check And Create YNW Session
+   ${resp}=  POST On Session  ynw  /provider/waitlist/queues  data=${data}  expected_status=any
+   RETURN  ${resp}
+   
+Get Queues
+    [Arguments]  &{kwargs}
+    # Available filters- id, account, branchId, location, state, provider, service, instantQueue
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/waitlist/queues  params=${kwargs}  expected_status=any
+    RETURN  ${resp}
+
+Get Queue ById
+    [Arguments]  ${id}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/waitlist/queues/${id}  expected_status=any
+    RETURN  ${resp}
+    
