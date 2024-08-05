@@ -15,6 +15,13 @@ Resource          Keywords.robot
 *** Keywords ***
 
 
+Consumer Logout
+    [Arguments]    #${timeZone}=Asia/Kolkata
+    ${cons_headers}=  Create Dictionary  &{headers} 
+    Check And Create YNW Session
+    ${resp}=    DELETE On Session    ynw    /consumer/login  expected_status=any   headers=${cons_headers}
+    RETURN  ${resp}
+
 ###### All Current Keywords above this line #############################################
 
 Consumer Login
@@ -31,14 +38,6 @@ Consumer Login
     RETURN  ${resp}
 
 
-Consumer Logout
-    [Arguments]    #${timeZone}=Asia/Kolkata
-    ${cons_headers}=  Create Dictionary  &{headers} 
-    Check And Create YNW Session
-    ${resp}=    DELETE On Session    ynw    /consumer/login  expected_status=any   headers=${cons_headers}
-    RETURN  ${resp}
-
-    
 
 Send Reset Email
     [arguments]  ${email}  ${countryCode}=+91  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -3650,3 +3649,19 @@ SO Payment Via Link
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /consumer/so/pay   data=${data}  expected_status=any
     RETURN  ${resp} 
+
+
+
+
+
+*** Comments ***
+
+
+Consumer Logout
+    [Arguments]    #${timeZone}=Asia/Kolkata
+    ${cons_headers}=  Create Dictionary  &{headers} 
+    Check And Create YNW Session
+    ${resp}=    DELETE On Session    ynw    /consumer/login  expected_status=any   headers=${cons_headers}
+    RETURN  ${resp}
+
+    

@@ -11,7 +11,6 @@ Library           /ebs/TDD/db.py
 Library           /ebs/TDD/excelfuncs.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Resource          /ebs/TDD/ProviderPartnerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/hl_providers.py
