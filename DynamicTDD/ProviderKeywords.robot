@@ -10680,12 +10680,6 @@ Enable Disable Member Service
     ${resp}=  PUT On Session  ynw  /provider/membership/service/${serviceId}/status/${status}  expected_status=any
     RETURN  ${resp}
 
-Get Membership Service 
-
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/membership/service  expected_status=any
-    RETURN  ${resp}
-
 Get Membership Service Count
 
     Check And Create YNW Session
@@ -10696,12 +10690,6 @@ Get Member
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/membership  expected_status=any
-    RETURN  ${resp}
-
-Get Member Count
-
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/membership/count  expected_status=any
     RETURN  ${resp}
 
 Approve Member 
@@ -15065,27 +15053,6 @@ Get Batches using Salesordercatalog
 
 #---------------------------RX Push-----------------------------------------    
 
-Create Frequency
-
-    [Arguments]  ${frequency}  ${dosage}  &{kwargs}
-
-    ${data}=   Create Dictionary    frequency=${frequency}  dosage=${dosage}
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/medicalrecord/prescription/frequency   data=${data}  expected_status=any
-    RETURN  ${resp} 
-
-Get Frequency
-
-    [Arguments]  ${id}
-
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/medicalrecord/prescription/frequency/${id}     expected_status=any
-    RETURN  ${resp}
-
 Update Frequency
 
     [Arguments]  ${id}  ${frequency}  ${dosage}  &{kwargs}
@@ -15105,14 +15072,6 @@ Update Frequency Status
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/medicalrecord/prescription/frequency/${prescriptionUid}/status/${status}     expected_status=any
-    RETURN  ${resp}
-
-Get Frequency By Account
-
-    [Arguments]  ${account}
-
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/medicalrecord/prescription/frequency/account/${account}     expected_status=any
     RETURN  ${resp}
 
 RX Create Prescription
