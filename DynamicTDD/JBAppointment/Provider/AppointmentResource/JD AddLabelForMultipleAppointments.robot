@@ -100,7 +100,7 @@ JD-TC-AddMultipleAppointmentLabel-1
     ${resp}=    Verify Otp For Login   ${CUSERNAME19}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token}  ${resp.json()['token']}
+    Set Suite Variable  ${tokens}  ${resp.json()['token']}
 
     ${resp}=    Consumer Logout 
     Log   ${resp.content}
@@ -110,7 +110,7 @@ JD-TC-AddMultipleAppointmentLabel-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200    
    
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${accountId}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${accountId}  ${tokens} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid2}    ${resp.json()['providerConsumer']}
@@ -1611,7 +1611,7 @@ JD-TC-AddMultipleAppointmentLabel-9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${accountId}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${accountId}  ${tokens} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -1843,7 +1843,7 @@ JD-TC-AddMultipleAppointmentLabel-10
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${accountId}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${accountId}  ${tokens} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -3291,7 +3291,7 @@ JD-TC-AddMultipleAppointmentLabel-UH7
     ${primaryMobileNo2}    Generate random string    10    123456789
     ${primaryMobileNo2}    Convert To Integer  ${primaryMobileNo2}
     Set Suite Variable    ${primaryMobileNo2}
-    Set Suite Variable  ${email_id}  ${primaryMobileNo2}.${test_mail}
+    Set Suite Variable  ${email_id2}  ${primaryMobileNo2}.${test_mail}
     ${email2}=  Create List  ${email_id2}
 
     ${resp}=    Send Otp For Login    ${primaryMobileNo2}    ${accountId1}
@@ -3444,7 +3444,7 @@ JD-TC-AddMultipleAppointmentLabel-UH7
 
     clear_service   ${PUSERNAME65}
     clear_location  ${PUSERNAME65}
-    clear_customer   ${PUSERNAME65} 
+
     clear_Label  ${PUSERNAME65}
 
     ${label_id}=  Create Sample Label
@@ -3751,7 +3751,7 @@ JD-TC-AddMultipleAppointmentLabel-UH11
 
     clear_service   ${PUSERNAME65}
     clear_location  ${PUSERNAME65}
-    clear_customer   ${PUSERNAME65} 
+
     clear_Label  ${PUSERNAME65}
 
     ${label_id}=  Create Sample Label
