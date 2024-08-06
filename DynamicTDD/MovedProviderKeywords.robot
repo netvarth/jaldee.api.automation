@@ -505,3 +505,23 @@ User Creation
     ${usp}=    Create Dictionary   firstName=${firstname}  lastName=${lastname}  email=${yemail}  primaryMobileNo=${ph}  countryCode=${countryCode}
     ${data}=  Create Dictionary  userProfile=${usp}  sector=${sector}  subSector=${sub_sector}  licPkgId=${licPkgId}
     RETURN  ${data}
+
+Toggle Department Enable
+	Check And Create YNW Session
+    ${resp}=  PUT On Session    ynw  /provider/settings/waitlistMgr/department/Enable   expected_status=any
+    RETURN  ${resp}   
+ 
+Toggle Department Disable
+	Check And Create YNW Session
+    ${resp}=  PUT On Session    ynw  /provider/settings/waitlistMgr/department/Disable   expected_status=any
+    RETURN  ${resp} 
+
+Get Departments
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/departments  expected_status=any
+    RETURN  ${resp}
+
+View Waitlist Settings
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/settings/waitlistMgr  expected_status=any
+    RETURN  ${resp}

@@ -127,6 +127,21 @@ Provider Logout
     ${resp}=  DELETE On Session  ynw  /provider/login  expected_status=any
     RETURN  ${resp}       
 
+Toggle Department Enable
+	Check And Create YNW Session
+    ${resp}=  PUT On Session    ynw  /provider/settings/waitlistMgr/department/Enable   expected_status=any
+    RETURN  ${resp}   
+ 
+Toggle Department Disable
+	Check And Create YNW Session
+    ${resp}=  PUT On Session    ynw  /provider/settings/waitlistMgr/department/Disable   expected_status=any
+    RETURN  ${resp} 
+
+View Waitlist Settings
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/settings/waitlistMgr  expected_status=any
+    RETURN  ${resp}
+    
 ######### BASICS #########
 
 Create Location
@@ -205,6 +220,12 @@ GetCustomer
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/customers  params=${param}  expected_status=any
     RETURN  ${resp}
+
+Get Departments
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/departments  expected_status=any
+    RETURN  ${resp}
+
 
 ########## BOOKING #############
 
@@ -1131,11 +1152,6 @@ Get Queue Location and Date
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/queues/${locationId}/location/${date}  expected_status=any
     RETURN  ${resp}    
-
-View Waitlist Settings
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/settings/waitlistMgr  expected_status=any
-    RETURN  ${resp}
 
 Update Waitlist Settings
     [Arguments]   ${calculationmode}   ${TrnArndTime}  ${futuredatewaitlist}  ${showTokenId}  ${onlineChckin}  ${notification}  ${maxPartySize}
@@ -2981,16 +2997,6 @@ Future Checkin In Queue
     ${resp}=  PATCH On Session  ynw  /provider/waitlist/queues/futureCheckIn/${status}/${queue_id}   expected_status=any
     RETURN  ${resp}
 
-Toggle Department Enable
-	Check And Create YNW Session
-    ${resp}=  PUT On Session    ynw  /provider/settings/waitlistMgr/department/Enable   expected_status=any
-    RETURN  ${resp}   
- 
-Toggle Department Disable
-	Check And Create YNW Session
-    ${resp}=  PUT On Session    ynw  /provider/settings/waitlistMgr/department/Disable   expected_status=any
-    RETURN  ${resp} 
-
 Create Department
     [Arguments]  ${dep_name}  ${dep_code}  ${dep_desc}   @{vargs}
     ${data}=  Create Dictionary  departmentName=${dep_name}  departmentCode=${dep_code}  departmentDescription=${dep_desc}  serviceIds=${vargs} 
@@ -3023,11 +3029,6 @@ Get Department ById
     [Arguments]   ${dep_id}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/departments/${dep_id}  expected_status=any
-    RETURN  ${resp}
-
-Get Departments
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/departments  expected_status=any
     RETURN  ${resp}
 
 Update Department
