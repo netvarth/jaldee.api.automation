@@ -22,6 +22,18 @@ Consumer Logout
     ${resp}=    DELETE On Session    ynw    /consumer/login  expected_status=any   headers=${cons_headers}
     RETURN  ${resp}
 
+####### MEMBERSHIP #########
+
+Create Membership 
+
+    [Arguments]    ${firstname}    ${lastname}    ${mob}    ${memberserviceid}    ${cc}    
+
+    ${data}=  Create Dictionary    firstName=${firstname}    lastName=${lastname}    phoneNo=${mob}    memberServiceId=${memberserviceid}    countryCode=${cc}
+    ${data}=    json.dumps    ${data} 
+    Check And Create YNW Session
+    ${resp}=    POST On Session  ynw  /consumer/membership    data=${data}   expected_status=any
+    RETURN  ${resp}
+
 ###### All Current Keywords above this line #############################################
 
 Consumer Login
@@ -3664,4 +3676,12 @@ Consumer Logout
     ${resp}=    DELETE On Session    ynw    /consumer/login  expected_status=any   headers=${cons_headers}
     RETURN  ${resp}
 
-    
+Create Membership 
+
+    [Arguments]    ${firstname}    ${lastname}    ${mob}    ${memberserviceid}    ${cc}    
+
+    ${data}=  Create Dictionary    firstName=${firstname}    lastName=${lastname}    phoneNo=${mob}    memberServiceId=${memberserviceid}    countryCode=${cc}
+    ${data}=    json.dumps    ${data} 
+    Check And Create YNW Session
+    ${resp}=    POST On Session  ynw  /consumer/membership    data=${data}   expected_status=any
+    RETURN  ${resp} 

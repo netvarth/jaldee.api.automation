@@ -54,84 +54,6 @@ Verify Otp For Login
     ${resp}=    POST On Session    ynw    /consumer/oauth/otp/${key}/verify  headers=${headers2}  expected_status=any
     RETURN  ${resp}
 
-ProviderConsumer Login with token
-    [Arguments]    ${loginId}  ${accountId}  ${token}  ${countryCode}=+91  &{kwargs} 
-    ${cons_headers}=  Create Dictionary  &{headers} 
-    ${cons_params}=  Create Dictionary
-    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
-    Log  ${kwargs}
-    # Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${cons_params}   &{locparam}
-    ${login}=    Create Dictionary    loginId=${loginId}  accountId=${accountId}  countryCode=${countryCode}
-    ${log}=    json.dumps    ${login}
-    ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=${token}
-    Set To Dictionary 	${headers2} 	&{tzheaders}
-    Check And Create YNW Session
-    ${resp}=    POST On Session    ynw     /consumer/login   headers=${headers2}  data=${log}   expected_status=any   params=${cons_params}
-    RETURN  ${resp}
-
-
-
-
-
-###### All Current Keywords above this line #############################################
-
-# Send Otp For Login
-#     [Arguments]    ${loginid}  ${accountId}  ${countryCode}=+91  &{kwargs}
-#     Check And Create YNW Session
-#     ${data}=    Create Dictionary    loginId=${loginid}  accountId=${accountId}  countryCode=${countryCode}
-#     FOR    ${key}    ${value}    IN    &{kwargs}
-#         Set To Dictionary 	${data} 	${key}=${value}
-#     END
-#     ${body}=    json.dumps    ${data}
-#     ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
-#     ${resp}=    POST On Session    ynw    /consumer/oauth/identify    data=${body}  headers=${headers2}  expected_status=any
-#     RETURN  ${resp}
-
-# Verify Otp For Login
-#     [Arguments]  ${loginid}  ${purpose}    &{kwargs}
-
-#     FOR  ${key}  ${value}  IN  &{kwargs}
-#         IF  '${key}' == 'JSESSIONYNW'
-#             ${sessionid}=  Set Variable  ${value}
-#         END
-#     END
-#     ${session_given}=    Get Variable Value    ${sessionid}
-#     IF  '${session_given}'=='${None}'
-#         ${key}=   verify accnt  ${loginid}  ${purpose}
-#     ELSE
-#         ${key}=   verify accnt  ${loginid}  ${purpose}  ${sessionid}
-#     END
-
-#     Check And Create YNW Session
-#     ${key}=   verify accnt  ${loginid}  ${purpose}
-#     ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
-#     ${resp}=    POST On Session    ynw    /consumer/oauth/otp/${key}/verify  headers=${headers2}  expected_status=any
-#     RETURN  ${resp}
-
-# Customer Logout 
-#     # [Arguments]    ${token}
-#     Check And Create YNW Session
-#     ${headers2}=     Create Dictionary    Content-Type=application/json    #Authorization=${token}
-#     ${resp}=    DELETE On Session    ynw    /consumer/login       expected_status=any
-#     RETURN  ${resp}
-
-# ProviderConsumer Login with token
-#     [Arguments]    ${loginId}  ${accountId}  ${token}  ${countryCode}=+91  &{kwargs} 
-#     ${cons_headers}=  Create Dictionary  &{headers} 
-#     ${cons_params}=  Create Dictionary
-#     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
-#     Log  ${kwargs}
-#     # Set To Dictionary  ${cons_headers}   &{tzheaders}
-#     Set To Dictionary  ${cons_params}   &{locparam}
-#     ${login}=    Create Dictionary    loginId=${loginId}  accountId=${accountId}  countryCode=${countryCode}
-#     ${log}=    json.dumps    ${login}
-#     ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=${token}
-#     Set To Dictionary 	${headers2} 	&{tzheaders}
-#     Check And Create YNW Session
-#     ${resp}=    POST On Session    ynw     /consumer/login   headers=${headers2}  data=${log}   expected_status=any   params=${cons_params}
-#     RETURN  ${resp}
-
 ProviderConsumer SignUp
     [Arguments]  ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}   ${accountId}   ${countryCode}=91   &{kwargs} 
     ${cons_headers}=  Create Dictionary  &{headers} 
@@ -156,18 +78,27 @@ ProviderConsumer SignUp
     ${resp}=    POST On Session   ynw    /consumer    data=${data}  headers=${headers2}   expected_status=any   params=${cons_params}
     RETURN  ${resp} 
 
-# Update ProviderConsumer 
-#     [Arguments]    ${cid}    &{kwargs}
-#     ${items}=  Get Dictionary items  ${kwargs}
-#     ${data}=  Create Dictionary  id=${c_id}
-#     FOR  ${key}  ${value}  IN  @{items}
-#         Set To Dictionary  ${data}   ${key}=${value}
-#     END
-#     Log  ${data}
-#     ${data}=  json.dumps  ${data}
-#     Check And Create YNW Session
-#     ${resp}=  PUT On Session  ynw  /spconsumer/  data=${data}  expected_status=any
-#     RETURN  ${resp}
+ProviderConsumer Login with token
+    [Arguments]    ${loginId}  ${accountId}  ${token}  ${countryCode}=+91  &{kwargs} 
+    ${cons_headers}=  Create Dictionary  &{headers} 
+    ${cons_params}=  Create Dictionary
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    # Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${cons_params}   &{locparam}
+    ${login}=    Create Dictionary    loginId=${loginId}  accountId=${accountId}  countryCode=${countryCode}
+    ${log}=    json.dumps    ${login}
+    ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=${token}
+    Set To Dictionary 	${headers2} 	&{tzheaders}
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw     /consumer/login   headers=${headers2}  data=${log}   expected_status=any   params=${cons_params}
+    RETURN  ${resp}
+
+
+
+
+
+###### All Current Keywords above this line #############################################
 
 Get ProviderConsumer
     Check And Create YNW Session
@@ -743,7 +674,103 @@ Get stores Count filter
     ${resp}=  GET On Session  ynw  /consumer/store/count   params=${param}   expected_status=any
     RETURN  ${resp} 
 
- 
+
+*** Comments ***
+
+####### Moved Keywords ###########
+
+Send Otp For Login
+    [Arguments]    ${loginid}  ${accountId}  ${countryCode}=+91  &{kwargs}
+    Check And Create YNW Session
+    ${data}=    Create Dictionary    loginId=${loginid}  accountId=${accountId}  countryCode=${countryCode}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${body}=    json.dumps    ${data}
+    ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
+    ${resp}=    POST On Session    ynw    /consumer/oauth/identify    data=${body}  headers=${headers2}  expected_status=any
+    RETURN  ${resp}
+
+Verify Otp For Login
+    [Arguments]  ${loginid}  ${purpose}    &{kwargs}
+
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        IF  '${key}' == 'JSESSIONYNW'
+            ${sessionid}=  Set Variable  ${value}
+        END
+    END
+    ${session_given}=    Get Variable Value    ${sessionid}
+    IF  '${session_given}'=='${None}'
+        ${key}=   verify accnt  ${loginid}  ${purpose}
+    ELSE
+        ${key}=   verify accnt  ${loginid}  ${purpose}  ${sessionid}
+    END
+
+    Check And Create YNW Session
+    ${key}=   verify accnt  ${loginid}  ${purpose}
+    ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
+    ${resp}=    POST On Session    ynw    /consumer/oauth/otp/${key}/verify  headers=${headers2}  expected_status=any
+    RETURN  ${resp}
+
+Customer Logout 
+    # [Arguments]    ${token}
+    Check And Create YNW Session
+    ${headers2}=     Create Dictionary    Content-Type=application/json    #Authorization=${token}
+    ${resp}=    DELETE On Session    ynw    /consumer/login       expected_status=any
+    RETURN  ${resp}
+
+ProviderConsumer Login with token
+    [Arguments]    ${loginId}  ${accountId}  ${token}  ${countryCode}=+91  &{kwargs} 
+    ${cons_headers}=  Create Dictionary  &{headers} 
+    ${cons_params}=  Create Dictionary
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    # Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${cons_params}   &{locparam}
+    ${login}=    Create Dictionary    loginId=${loginId}  accountId=${accountId}  countryCode=${countryCode}
+    ${log}=    json.dumps    ${login}
+    ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=${token}
+    Set To Dictionary 	${headers2} 	&{tzheaders}
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw     /consumer/login   headers=${headers2}  data=${log}   expected_status=any   params=${cons_params}
+    RETURN  ${resp}
+
+ProviderConsumer SignUp
+    [Arguments]  ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}   ${accountId}   ${countryCode}=91   &{kwargs} 
+    ${cons_headers}=  Create Dictionary  &{headers} 
+    ${cons_params}=  Create Dictionary
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    # Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${cons_params}   &{locparam}
+    ${data1}=   Create Dictionary    primaryMobileNo=${primaryMobileNo}    firstName=${firstName}   lastName=${lastName}  email=${email}  countryCode=${countryCode}
+    ${data}=    Create Dictionary    userProfile=${data1}  accountId=${accountId}
+    ${data}=    json.dumps    ${data}
+    ${headers2}=     Create Dictionary    Content-Type=application/json    #Authorization=${token}
+    Set To Dictionary 	${headers2} 	&{tzheaders}
+    ${has_key}=  Evaluate  'Authorization' in ${kwargs}
+    IF  ${has_key}
+        ${auth_dict}  ${kwargs}  GetFromDict  Authorization  &{kwargs}
+        Set To Dictionary 	${headers2}  &{auth_dict}
+    ELSE IF  $token
+        Set To Dictionary 	${headers2}  Authorization=${token}
+    END
+    Check And Create YNW Session
+    ${resp}=    POST On Session   ynw    /consumer    data=${data}  headers=${headers2}   expected_status=any   params=${cons_params}
+    RETURN  ${resp} 
+
+Update ProviderConsumer 
+    [Arguments]    ${cid}    &{kwargs}
+    ${items}=  Get Dictionary items  ${kwargs}
+    ${data}=  Create Dictionary  id=${c_id}
+    FOR  ${key}  ${value}  IN  @{items}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    Log  ${data}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /spconsumer/  data=${data}  expected_status=any
+    RETURN  ${resp}
 
 
 
