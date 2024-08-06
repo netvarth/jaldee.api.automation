@@ -3471,7 +3471,6 @@ JD-TC-AddMultipleAppointmentLabel-UH8
     [Documentation]  Add label with another provider's label 
 
 
-
     ${resp}=  Encrypted Provider Login  ${PUSERNAME66}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
