@@ -525,3 +525,53 @@ View Waitlist Settings
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/settings/waitlistMgr  expected_status=any
     RETURN  ${resp}
+
+Create MedicalRecordPrescription Template
+    [Arguments]    ${templateName}    @{vargs}
+    ${len}=  Get Length  ${vargs}
+    ${prescriptionDto}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${prescriptionDto}  ${vargs[${index}]}
+    END
+    ${data}=    Create Dictionary    templateName=${templateName}  prescriptionDto=${prescriptionDto} 
+    Check And Create YNW Session
+    ${data}=  json.dumps  ${data}
+    ${resp}=    POST On Session    ynw    /provider/medicalrecord/prescription/template    data=${data}    expected_status=any
+    RETURN  ${resp}
+
+Update Specialization
+    [Arguments]  ${data}    
+    ${data}=  json.dumps  ${data}
+    Log  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
+    RETURN  ${resp}
+    
+Get Section Template
+    [Arguments]    ${caseUid} 
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/section/template/case/${caseUid}    expected_status=any
+    RETURN  ${resp}
+
+Create Sections 
+    [Arguments]    ${uid}    ${id}    ${templateDetailId}       ${sectionType}    ${sectionValue}    @{vargs}  &{kwargs}
+     Check And Create YNW Session
+    ${mrCase}=    Create Dictionary  uid=${uid}
+    ${doctor}=      Create Dictionary    id=${id}
+     ${len}=  Get Length  ${vargs}
+    ${attachments}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${attachments}  ${vargs[${index}]}
+    END
+
+    ${data}=    Create Dictionary    mrCase=${mrCase}    doctor=${doctor}    templateDetailId=${templateDetailId}      sectionType=${sectionType}    sectionValue=${sectionValue}    attachments=${attachments}   
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    ${resp}=    POST On Session    ynw    /provider/medicalrecord/section    data=${data}    expected_status=any
+    RETURN  ${resp}

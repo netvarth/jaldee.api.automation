@@ -94,6 +94,12 @@ ProviderConsumer Login with token
     ${resp}=    POST On Session    ynw     /consumer/login   headers=${headers2}  data=${log}   expected_status=any   params=${cons_params}
     RETURN  ${resp}
 
+SPConsumer Deactivation
+    Check And Create YNW Session
+    ${headers2}=     Create Dictionary    Content-Type=application/json  
+    ${resp}=    DELETE On Session    ynw    /spconsumer/login/deActivate      expected_status=any
+    RETURN  ${resp}
+
 
 
 
@@ -365,12 +371,6 @@ Get Prescription By ProviderConsumer
     RETURN  ${resp}
 
 
-SPConsumer Deactivation
-    
-    Check And Create YNW Session
-    ${headers2}=     Create Dictionary    Content-Type=application/json  
-    ${resp}=    DELETE On Session    ynw    /spconsumer/login/deActivate      expected_status=any
-    RETURN  ${resp}
 
 # Customer Take Appointment
 #     [Arguments]    ${service_id}  ${schedule_id}  ${appmtDate}  ${consumerNote}  ${appmtFor}  &{kwargs}

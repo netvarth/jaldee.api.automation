@@ -79,6 +79,39 @@ Encrypted Provider Login
     db.decrypt_data  ${resp.content}
     RETURN  ${resp}
 
+Forgot Password 
+    [Arguments]   &{kwargs}  #... pasword and login id )  
+
+    ${data}=    json.dumps    ${kwargs} 
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/login/forgot/password   data=${data}   expected_status=any
+    RETURN  ${resp} 
+
+Provider Logout
+    Check And Create YNW Session
+    ${resp}=  DELETE On Session  ynw  /provider/login  expected_status=any
+    RETURN  ${resp}     
+    
+Connect with other login
+    [Arguments]  ${loginId}   &{kwargs}
+
+    ${data}=  Create Dictionary    loginId=${loginId}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/login/connections/${loginId}  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Set jaldeeIntegration Settings
+    [Arguments]  ${onlinePresence}  ${walkinCon}  ${consumerapp}
+    ${data}=  Create Dictionary  onlinePresence=${onlinePresence}  walkinConsumerBecomesJdCons=${walkinCon}   consumerApp=${consumerapp}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session   ynw  /provider/account/settings/jaldeeIntegration    data=${data}  expected_status=any 
+    RETURN  ${resp}
+
 Get jaldeeIntegration Settings
     
     Check And Create YNW Session 
@@ -122,11 +155,26 @@ Get Business Logo
     ${resp}=  GET On Session  ynw   /provider/businessLogo  expected_status=any
     RETURN  ${resp}
 
-Provider Logout
+Update Business Profile with schedule
+    # use this keyword to update specializations also
+    [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}  ${lid}  &{kwargs}
+    ${data}=  Business Profile with schedule  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}  ${lid}  &{kwargs}
     Check And Create YNW Session
-    ${resp}=  DELETE On Session  ynw  /provider/login  expected_status=any
-    RETURN  ${resp}       
+    ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
+    RETURN  ${resp}
 
+Get subDomain level Fields
+    [Arguments]  ${domain}  ${subdomain}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/ynwConf/dataModel/${domain}/${subdomain}  expected_status=any
+    RETURN  ${resp}   
+   	
+Get specializations Sub Domain
+    [Arguments]  ${domain}  ${subDomain}
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /ynwConf/specializations/${domain}/${subDomain}  expected_status=any
+    RETURN  ${resp}
+   	
 Toggle Department Enable
 	Check And Create YNW Session
     ${resp}=  PUT On Session    ynw  /provider/settings/waitlistMgr/department/Enable   expected_status=any
@@ -188,6 +236,12 @@ Get Location ById
     ${resp}=    GET On Session    ynw   /provider/locations/${id}  expected_status=any
     RETURN  ${resp}
 
+Get Locations
+    # No filters
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/locations  expected_status=any
+    RETURN  ${resp}
+
 Disable Location
    [Arguments]   ${id}
    Check And Create YNW Session
@@ -226,6 +280,99 @@ Get Departments
     ${resp}=  GET On Session  ynw  /provider/departments  expected_status=any
     RETURN  ${resp}
 
+Create User
+    [Arguments]  ${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${user_type}  ${pincode}  ${countryCode}  ${mob_no}  ${dept_id}  ${sub_domain}  ${admin}  ${whatsApp_countrycode}  ${WhatsApp_num}  ${telegram_countrycode}  ${telegram_num}   &{kwargs} 
+    ${whatsAppNum}=  Create Dictionary  countryCode=${whatsApp_countrycode}  number=${WhatsApp_num}
+    ${telegramNum}=  Create Dictionary  countryCode=${telegram_countrycode}  number=${telegram_num}
+    ${data}=  Create Dictionary  firstName=${fname}  lastName=${lname}  dob=${dob}  gender=${gender}  email=${email}  userType=${user_type}  pincode=${pincode}  countryCode=${countryCode}  mobileNo=${mob_no}  deptId=${dept_id}  subdomain=${sub_domain}  admin=${admin}  whatsAppNum=${whatsAppNum}  telegramNum=${telegramNum}
+    FOR  ${key}  ${value}  IN  &{kwargs} 
+            Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/user    data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Create Sample User
+    [Arguments]   ${admin}=${bool[0]}
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${dep_name1}=  FakerLibrary.bs
+        ${dep_code1}=   Random Int  min=100   max=999
+        ${dep_desc1}=   FakerLibrary.word  
+        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Test Variable  ${dep_id}  ${resp1.json()}
+    ELSE
+        Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    END
+    ${random_ph}=   Random Int   min=10000   max=20000
+    ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+${random_ph}
+    clear_users  ${PUSERNAME_U1}
+    # Set Test Variable  ${PUSERNAME_U1}
+    ${firstname}=  FakerLibrary.name
+    ${lastname}=  FakerLibrary.last_name
+    ${address}=  get_address
+    ${dob}=  FakerLibrary.Date
+    #  ${pin}=  get_pincode
+    #  ${resp}=  Get LocationsByPincode     ${pin}
+    # FOR    ${i}    IN RANGE    3
+    #     ${pin}=  get_pincode
+    #     ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+    #     IF    '${kwstatus}' == 'FAIL'
+    #             Continue For Loop
+    #     ELSE IF    '${kwstatus}' == 'PASS'
+    #             Exit For Loop
+    #     END
+    # END
+    #  Should Be Equal As Strings    ${resp.status_code}    200
+    #  Set Suite Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
+    #  Set Suite Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
+    #  Set Suite Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}   
+
+    ${pin}  ${city}  ${district}  ${state}=  get_pin_loc 
+
+    ${random_ph}=   Random Int   min=20000   max=30000
+    ${whpnum}=  Evaluate  ${PUSERNAME}+${random_ph}
+    ${tlgnum}=  Evaluate  ${PUSERNAME}+${random_ph}
+
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${admin}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    RETURN  ${resp.json()}
+
+Get User
+    [Arguments]  &{kwargs}
+    Check And Create YNW Session
+    ${resp}=    GET On Session     ynw   /provider/user   params=${kwargs}  expected_status=any
+    RETURN  ${resp}
+
+Get User By Id
+    [Arguments]  ${id}
+    Check And Create YNW Session
+    ${resp}=    GET On Session     ynw   /provider/user/${id}   expected_status=any
+    RETURN  ${resp}
+
+Create Service
+    [Arguments]  ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}   &{kwargs}
+    ${items}=  Get Dictionary items  ${kwargs}
+    ${data}=  Create Dictionary  name=${name}  description=${desc}  serviceDuration=${durtn}  notification=${notfcn}  notificationType=${notiTp}  minPrePaymentAmount=${minPrePaymentAmount}   totalAmount=${totalAmount}   status=${status}  bType=${btype}  isPrePayment=${isPrePayment}  taxable=${taxable}
+    FOR  ${key}  ${value}  IN  @{items}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    Log  ${data}
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session  
+    ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Get Service Count
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/services/count  params=${param}  expected_status=any
+    RETURN  ${resp}
 
 ########## BOOKING #############
 
@@ -273,9 +420,65 @@ Get Queue ById
     ${resp}=  GET On Session  ynw  /provider/waitlist/queues/${id}  expected_status=any
     RETURN  ${resp}
 
+######### FILE SHARE ############
+
+upload file to temporary location
+
+    [Arguments]    ${action}    ${owner}    ${ownerType}    ${ownerName}    ${fileName}    ${fileSize}    ${caption}    ${fileType}    ${uid}    ${order}
+
+    ${file}=  Create Dictionary  action=${action}    owner=${owner}    ownerType=${ownerType}    ownerName=${ownerName}    fileName=${fileName}    fileSize=${fileSize}    caption=${caption}    fileType=${fileType}    uid=${uid}    order=${order}
+    ${data}=  Create List  ${file}
+    ${data}=    json.dumps    ${data}
+
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/fileShare/upload   data=${data}  expected_status=any
+    Log  ${resp.content}
+    RETURN  ${resp}
+
+change status of the uploaded file
+
+    [Arguments]    ${status}    ${driveId}
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  provider/fileShare/upload/${status}/${driveId}  expected_status=any
+    Log  ${resp.content}
+    RETURN  ${resp}
+
 ######### APPOINTMENT ###########
 
+Get Appointment Settings
+    Check And Create YNW Session
+    ${resp}=    GET On Session     ynw   /provider/settings/apptMgr  expected_status=any
+    RETURN  ${resp} 
+
+Create Appointment Schedule
+    [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}   ${consumerParallelServing}    ${loc}  ${timeduration}  ${batch}  @{vargs}  &{kwargs}
+    ${data}=  Appointment Schedule  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}    ${consumerParallelServing}   ${loc}  ${timeduration}  ${batch}  @{vargs}
+    
+    ${items}=  Get Dictionary items  ${kwargs}
+    FOR  ${key}  ${value}  IN  @{items}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/appointment/schedule  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Get Appointment Schedule ById
+    [Arguments]   ${schId}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/appointment/schedule/${schId}   expected_status=any
+    RETURN  ${resp}
+
 Take Appointment For Consumer 
+    # merged the following keywords to this keyword
+    #...   User Take Appointment with Appointment Mode  ${user_id}=  Create Dictionary  id=${userid} ,appointmentMode=${apptMode}
+    #...   Take Appointment with Appointment Mode  appointmentMode=${apptMode}
+    #...   Take Virtual Service Appointment For Consumer with Mode  virtualService=${virtualService}
+    #...   Take Virtual Service Appointment For Consumer  virtualService=${virtualService}
+    #...   Take Appointment with Phone no  phoneNumber=${phoneNumber}
+    #...   User Take Appointment For Consumer    {user_id}=  Create Dictionary  id=${userid} 
     [Arguments]   ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${appmtFor}  &{kwargs}
 
     ${pro_headers}=  Create Dictionary  &{headers}
@@ -314,19 +517,6 @@ Appointment Schedule
     Run Keyword If  ${len}>0  Set To Dictionary  ${data}  services=${services}
     RETURN  ${data}
 
-Create Appointment Schedule
-    [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}   ${consumerParallelServing}    ${loc}  ${timeduration}  ${batch}  @{vargs}  &{kwargs}
-    ${data}=  Appointment Schedule  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}    ${consumerParallelServing}   ${loc}  ${timeduration}  ${batch}  @{vargs}
-    
-    ${items}=  Get Dictionary items  ${kwargs}
-    FOR  ${key}  ${value}  IN  @{items}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/appointment/schedule  data=${data}  expected_status=any
-    RETURN  ${resp}
 
 Get Appoinment Service By Location   
     [Arguments]  ${locationId}   
@@ -530,6 +720,136 @@ Get Treatment Plan List
     ${resp}=  GET On Session  ynw    /provider/medicalrecord/treatment/case/${case_uid}/toothno/${toothNo}   expected_status=any
     RETURN  ${resp}
 
+Create MedicalRecordPrescription Template
+    [Arguments]    ${templateName}    @{vargs}
+    ${len}=  Get Length  ${vargs}
+    ${prescriptionDto}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${prescriptionDto}  ${vargs[${index}]}
+    END
+    ${data}=    Create Dictionary    templateName=${templateName}  prescriptionDto=${prescriptionDto} 
+    Check And Create YNW Session
+    ${data}=  json.dumps  ${data}
+    ${resp}=    POST On Session    ynw    /provider/medicalrecord/prescription/template    data=${data}    expected_status=any
+    RETURN  ${resp}
+
+Get Section Template
+    [Arguments]    ${caseUid} 
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/section/template/case/${caseUid}    expected_status=any
+    RETURN  ${resp}
+
+Create Sections 
+    [Arguments]    ${uid}    ${id}    ${templateDetailId}       ${sectionType}    ${sectionValue}    @{vargs}  &{kwargs}
+     Check And Create YNW Session
+    ${mrCase}=    Create Dictionary  uid=${uid}
+    ${doctor}=      Create Dictionary    id=${id}
+     ${len}=  Get Length  ${vargs}
+    ${attachments}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${attachments}  ${vargs[${index}]}
+    END
+
+    ${data}=    Create Dictionary    mrCase=${mrCase}    doctor=${doctor}    templateDetailId=${templateDetailId}      sectionType=${sectionType}    sectionValue=${sectionValue}    attachments=${attachments}   
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    ${resp}=    POST On Session    ynw    /provider/medicalrecord/section    data=${data}    expected_status=any
+    RETURN  ${resp}
+
+Get MR Sections By Case
+    [Arguments]    ${uid}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/section/case/${uid}    expected_status=any
+    RETURN  ${resp}
+
+Get NonDental Treatment Plan By case Id
+    [Arguments]     ${uid}
+    Check And Create YNW Session
+    ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/nondental/case/${uid}  expected_status=any
+    RETURN  ${resp}
+
+Create Prescription 
+    [Arguments]    ${providerConsumerId}    ${userId}    ${caseId}       ${dentalRecordId}    ${html}      @{vargs}    &{kwargs}
+    ${len}=  Get Length  ${vargs}
+    ${mrPrescriptions}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${mrPrescriptions}  ${vargs[${index}]}
+    END
+    ${data}=    Create Dictionary    providerConsumerId=${providerConsumerId}    doctorId=${userId}    caseId=${caseId}      dentalRecordId=${dentalRecordId}    html=${html}    mrPrescriptions=${mrPrescriptions}    
+    Check And Create YNW Session
+     FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    ${resp}=    POST On Session    ynw    /provider/medicalrecord/prescription    data=${data}    expected_status=any
+    RETURN  ${resp}
+
+Get Prescription By UID
+    [Arguments]    ${uid}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/uid/${uid}    expected_status=any
+    RETURN  ${resp}
+
+Get Prescription Count By Filter
+    [Arguments]    &{param} 
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/count   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Get MedicalPrescription Template By Id
+    [Arguments]    ${temId} 
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/template/${temId}      expected_status=any
+    RETURN  ${resp}
+
+Update MedicalRecordPrescription Template
+    [Arguments]    ${id}  ${templateName}    @{vargs}
+    ${len}=  Get Length  ${vargs}
+    ${prescriptionDto}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${prescriptionDto}  ${vargs[${index}]}
+    END
+    ${data}=    Create Dictionary   id=${id}  templateName=${templateName}  prescriptionDto=${prescriptionDto} 
+    Check And Create YNW Session
+    ${data}=  json.dumps  ${data}
+    ${resp}=    PUT On Session    ynw    /provider/medicalrecord/prescription/template    data=${data}    expected_status=any
+    RETURN  ${resp}
+
+Get Prescription Templates By Filter
+    [Arguments]   &{param}
+    Log  ${param}
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /provider/medicalrecord/prescription/templates   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Get Treatment Plan By case Id
+    [Arguments]     ${uid}
+    Check And Create YNW Session
+    ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/case/${uid}  expected_status=any
+    RETURN  ${resp}
+
+Delete MR Sections 
+    Check And Create YNW Session
+    [Arguments]    ${uid} 
+    ${resp}=    DELETE On Session    ynw    /provider/medicalrecord/section/${uid}       expected_status=any
+    RETURN  ${resp}
+
+Remove Prescription 
+    Check And Create YNW Session
+    [Arguments]    ${prescriptionUId}
+    ${resp}=    DELETE On Session    ynw    /provider/medicalrecord/prescription/${prescriptionUId}       expected_status=any
+    RETURN  ${resp}
+
 ########## RX Push ########
 
 Get Frequency By Account
@@ -592,6 +912,43 @@ Get Frequency
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/medicalrecord/prescription/frequency/${id}     expected_status=any
     RETURN  ${resp}
+
+Create Section Template
+
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw   /provider/medicalrecord/section/createdefaulttemplates    expected_status=any
+    RETURN  ${resp}
+
+Get Sections By UID
+    [Arguments]    ${uid}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/section/${uid}    expected_status=any
+    RETURN  ${resp}
+
+Get Prescription By Provider consumer Id
+    [Arguments]    ${providerConsumerId} 
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/${providerConsumerId}      expected_status=any
+    RETURN  ${resp}
+
+Remove Prescription Template
+    Check And Create YNW Session
+    [Arguments]    ${temId} 
+    ${resp}=    DELETE On Session    ynw    /provider/medicalrecord/prescription/template/${temId}       expected_status=any
+    RETURN  ${resp}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -748,12 +1105,6 @@ Business Profile with schedule
     ${data}=  json.dumps  ${data}
     RETURN  ${data}
 
-Update Business Profile with schedule
-    [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}  ${lid}  &{kwargs}
-    ${data}=  Business Profile with schedule  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}  ${lid}  &{kwargs}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
-    RETURN  ${resp}
 
 Update Business Profile without schedule
     [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${pin}  ${adds}   ${ph1}  ${ph2}  ${email1}  ${lid}
@@ -846,11 +1197,6 @@ Create Location without schedule
     ${resp}=  POST On Session  ynw  /provider/locations  data=${data}  expected_status=any
     RETURN  ${resp} 
     
-Get Locations
-    # No filters
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/locations  expected_status=any
-    RETURN  ${resp}
 
 Update Location with schedule
     [Arguments]   ${place}  ${longi}  ${latti}  ${g_url}  ${pin}  ${add}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${lid}
@@ -1664,18 +2010,6 @@ Get Virtual Calling Mode
 #     ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
 #     RETURN  ${resp}
 
-Create Service
-    [Arguments]  ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}   &{kwargs}
-    ${items}=  Get Dictionary items  ${kwargs}
-    ${data}=  Create Dictionary  name=${name}  description=${desc}  serviceDuration=${durtn}  notification=${notfcn}  notificationType=${notiTp}  minPrePaymentAmount=${minPrePaymentAmount}   totalAmount=${totalAmount}   status=${status}  bType=${btype}  isPrePayment=${isPrePayment}  taxable=${taxable}
-    FOR  ${key}  ${value}  IN  @{items}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    Log  ${data}
-    ${data}=    json.dumps    ${data}
-    Check And Create YNW Session  
-    ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
-    RETURN  ${resp}
 
 
 Create Service with info
@@ -1811,18 +2145,6 @@ Update Virtual Service
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/services  data=${data}  expected_status=any
     RETURN  ${resp}   
-    
-Get Service By Id
-    [Arguments]  ${id}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/services/${id}  expected_status=any
-    RETURN  ${resp}  
-
-Get Service Count
-    [Arguments]  &{param}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/services/count  params=${param}  expected_status=any
-    RETURN  ${resp}
 
 
 Get ServiceImage
@@ -1853,12 +2175,7 @@ Get business Domain
      Check And Create YNW Session
      ${resp}=  GET On Session  ynw  /ynwConf/businessDomains  expected_status=any
      RETURN  ${resp}
-
-Get subDomain level Fields
-     [Arguments]  ${domain}  ${subdomain}
-     Check And Create YNW Session
-     ${resp}=  GET On Session  ynw  /provider/ynwConf/dataModel/${domain}/${subdomain}  expected_status=any
-     RETURN  ${resp}     
+ 
   
 Get Domain level Fields
      [Arguments]  ${domain}
@@ -2098,13 +2415,6 @@ Get GalleryOrlogo image
     ${resp}=  GET On Session  ynw  /provider/${target}  expected_status=any
     RETURN  ${resp}
 
-   	
-Get specializations Sub Domain
-    [Arguments]  ${domain}  ${subDomain}
-    Check And Create YNW Session  
-    ${resp}=  GET On Session  ynw  /ynwConf/specializations/${domain}/${subDomain}  expected_status=any
-    RETURN  ${resp}
-   	
 Get Terminologies
     [Arguments]  ${domain}  ${subDomain}
     Check And Create YNW Session  
@@ -3154,14 +3464,7 @@ Update Subdomain_Level
      ${resp}=  PUT On Session  ynw  /provider/bProfile/${subdomain}  data=${data}  expected_status=any
      RETURN  ${resp}
 
-Update Specialization
-    [Arguments]  ${data}    
-    ${data}=  json.dumps  ${data}
-    Log  ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
-    RETURN  ${resp}
-    
+
 
 Provider Notification Settings     
     [Arguments]  ${resourcetype}  ${eventtype}  ${sms}  ${email}  ${pushmessage}  ${providerId}
@@ -3967,18 +4270,7 @@ Change StatusBoard Status
     ${resp}=  PUT On Session  ynw  /provider/statusBoard/dimension/${id}/${status}  expected_status=any
     RETURN  ${resp}
 
-Create User
-    [Arguments]  ${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${user_type}  ${pincode}  ${countryCode}  ${mob_no}  ${dept_id}  ${sub_domain}  ${admin}  ${whatsApp_countrycode}  ${WhatsApp_num}  ${telegram_countrycode}  ${telegram_num}   &{kwargs} 
-    ${whatsAppNum}=  Create Dictionary  countryCode=${whatsApp_countrycode}  number=${WhatsApp_num}
-    ${telegramNum}=  Create Dictionary  countryCode=${telegram_countrycode}  number=${telegram_num}
-    ${data}=  Create Dictionary  firstName=${fname}  lastName=${lname}  dob=${dob}  gender=${gender}  email=${email}  userType=${user_type}  pincode=${pincode}  countryCode=${countryCode}  mobileNo=${mob_no}  deptId=${dept_id}  subdomain=${sub_domain}  admin=${admin}  whatsAppNum=${whatsAppNum}  telegramNum=${telegramNum}
-    FOR  ${key}  ${value}  IN  &{kwargs} 
-            Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/user    data=${data}  expected_status=any
-    RETURN  ${resp}
+
 
 Update User
     [Arguments]  ${id}  ${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${user_type}  ${pincode}  ${countryCode}  ${mob_no}  ${dept_id}  ${sub_domain}  ${admin}  ${whatsApp_countrycode}  ${WhatsApp_num}  ${telegram_countrycode}  ${telegram_num}    &{kwargs}
@@ -3993,17 +4285,7 @@ Update User
     ${resp}=  PUT On Session  ynw  /provider/user/${id}   data=${data}  expected_status=any
     RETURN  ${resp}        
     
-Get User
-    [Arguments]  &{kwargs}
-    Check And Create YNW Session
-    ${resp}=    GET On Session     ynw   /provider/user   params=${kwargs}  expected_status=any
-    RETURN  ${resp}
 
-Get User By Id
-    [Arguments]  ${id}
-    Check And Create YNW Session
-    ${resp}=    GET On Session     ynw   /provider/user/${id}   expected_status=any
-    RETURN  ${resp}
 
 Get User Count
     [Arguments]  &{kwargs}
@@ -4340,12 +4622,6 @@ Waitlist Status
     [Arguments]  ${status}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/waitlist/${status}  expected_status=any
-    RETURN  ${resp}
-
-Get Appointment Schedule ById
-    [Arguments]   ${schId}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/appointment/schedule/${schId}   expected_status=any
     RETURN  ${resp}
 
 Enable Appointment Schedule
@@ -4688,14 +4964,6 @@ Get Donation Count
     RETURN  ${resp}
 
 
-Set jaldeeIntegration Settings
-    [Arguments]  ${onlinePresence}  ${walkinCon}  ${consumerapp}
-    ${data}=  Create Dictionary  onlinePresence=${onlinePresence}  walkinConsumerBecomesJdCons=${walkinCon}   consumerApp=${consumerapp}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session   ynw  /provider/account/settings/jaldeeIntegration    data=${data}  expected_status=any 
-    RETURN  ${resp}
-
 Get Appointment By Id
     [Arguments]  ${appmntId}
     Check And Create YNW Session  
@@ -4772,11 +5040,6 @@ Disable Today Appointment
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/settings/apptMgr/todayAppt/Disable  expected_status=any
     RETURN  ${resp}
-
-Get Appointment Settings
-    Check And Create YNW Session
-    ${resp}=    GET On Session     ynw   /provider/settings/apptMgr  expected_status=any
-    RETURN  ${resp} 
 
 Update Appointmet Settings
     [Arguments]   ${enableToday}   ${futureAppt}
@@ -6874,57 +7137,6 @@ Create Sample Donation
     ${resp}=  Create Donation Service  ${Service_name}   ${description}   ${0}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${bool[0]}   ${bool[0]}  ${service_type[0]}  ${min_don_amt}  ${max_don_amt}  ${multiples[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
-    RETURN  ${resp.json()}
-
-
-Create Sample User
-    [Arguments]   ${admin}=${bool[0]}
-    ${resp}=  Get Departments
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${dep_name1}=  FakerLibrary.bs
-        ${dep_code1}=   Random Int  min=100   max=999
-        ${dep_desc1}=   FakerLibrary.word  
-        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-        Set Test Variable  ${dep_id}  ${resp1.json()}
-    ELSE
-        Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
-    END
-    ${random_ph}=   Random Int   min=10000   max=20000
-    ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+${random_ph}
-    clear_users  ${PUSERNAME_U1}
-    # Set Test Variable  ${PUSERNAME_U1}
-    ${firstname}=  FakerLibrary.name
-    ${lastname}=  FakerLibrary.last_name
-    ${address}=  get_address
-    ${dob}=  FakerLibrary.Date
-    #  ${pin}=  get_pincode
-    #  ${resp}=  Get LocationsByPincode     ${pin}
-    # FOR    ${i}    IN RANGE    3
-    #     ${pin}=  get_pincode
-    #     ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-    #     IF    '${kwstatus}' == 'FAIL'
-    #             Continue For Loop
-    #     ELSE IF    '${kwstatus}' == 'PASS'
-    #             Exit For Loop
-    #     END
-    # END
-    #  Should Be Equal As Strings    ${resp.status_code}    200
-    #  Set Suite Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    #  Set Suite Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    #  Set Suite Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}   
-
-    ${pin}  ${city}  ${district}  ${state}=  get_pin_loc 
-
-    ${random_ph}=   Random Int   min=20000   max=30000
-    ${whpnum}=  Evaluate  ${PUSERNAME}+${random_ph}
-    ${tlgnum}=  Evaluate  ${PUSERNAME}+${random_ph}
-
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${admin}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}  
-    Should Be Equal As Strings  ${resp.status_code}  200
     RETURN  ${resp.json()}
 
 
@@ -10252,28 +10464,6 @@ Provider Video Call ready
 #.........REST API for Uploading file to temporary location............
 
 
-upload file to temporary location
-
-    [Arguments]    ${action}    ${owner}    ${ownerType}    ${ownerName}    ${fileName}    ${fileSize}    ${caption}    ${fileType}    ${uid}    ${order}
-
-    ${file}=  Create Dictionary  action=${action}    owner=${owner}    ownerType=${ownerType}    ownerName=${ownerName}    fileName=${fileName}    fileSize=${fileSize}    caption=${caption}    fileType=${fileType}    uid=${uid}    order=${order}
-    ${data}=  Create List  ${file}
-    ${data}=    json.dumps    ${data}
-
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/fileShare/upload   data=${data}  expected_status=any
-    Log  ${resp.content}
-    RETURN  ${resp}
-
-
-change status of the uploaded file
-
-    [Arguments]    ${status}    ${driveId}
-
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  provider/fileShare/upload/${status}/${driveId}  expected_status=any
-    Log  ${resp.content}
-    RETURN  ${resp}
 
 
 # .....Jaldee Homeo....
@@ -11698,17 +11888,8 @@ Get Treatment Plan By Id
     ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/${Id}  expected_status=any
     RETURN  ${resp}
 
-Get Treatment Plan By case Id
-    [Arguments]     ${uid}
-    Check And Create YNW Session
-    ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/case/${uid}  expected_status=any
-    RETURN  ${resp}
 
-Get NonDental Treatment Plan By case Id
-    [Arguments]     ${uid}
-    Check And Create YNW Session
-    ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/nondental/case/${uid}  expected_status=any
-    RETURN  ${resp}
+
 
 Delete Treatment Plan Work By id
     [Arguments]     ${id}
@@ -11717,71 +11898,10 @@ Delete Treatment Plan Work By id
     RETURN  ${resp}
 
 
-
-Create MedicalRecordPrescription Template
-    [Arguments]    ${templateName}    @{vargs}
-    ${len}=  Get Length  ${vargs}
-    ${prescriptionDto}=  Create List  
-
-    FOR    ${index}    IN RANGE    ${len}   
-        Exit For Loop If  ${len}==0
-        Append To List  ${prescriptionDto}  ${vargs[${index}]}
-    END
-    ${data}=    Create Dictionary    templateName=${templateName}  prescriptionDto=${prescriptionDto} 
-    Check And Create YNW Session
-    ${data}=  json.dumps  ${data}
-    ${resp}=    POST On Session    ynw    /provider/medicalrecord/prescription/template    data=${data}    expected_status=any
-    RETURN  ${resp}
-
-Update MedicalRecordPrescription Template
-    [Arguments]    ${id}  ${templateName}    @{vargs}
-    ${len}=  Get Length  ${vargs}
-    ${prescriptionDto}=  Create List  
-
-    FOR    ${index}    IN RANGE    ${len}   
-        Exit For Loop If  ${len}==0
-        Append To List  ${prescriptionDto}  ${vargs[${index}]}
-    END
-    ${data}=    Create Dictionary   id=${id}  templateName=${templateName}  prescriptionDto=${prescriptionDto} 
-    Check And Create YNW Session
-    ${data}=  json.dumps  ${data}
-    ${resp}=    PUT On Session    ynw    /provider/medicalrecord/prescription/template    data=${data}    expected_status=any
-    RETURN  ${resp}
-
-Remove Prescription Template
-    Check And Create YNW Session
-    [Arguments]    ${temId} 
-    ${resp}=    DELETE On Session    ynw    /provider/medicalrecord/prescription/template/${temId}       expected_status=any
-    RETURN  ${resp}
-
 Get Prescription Template By Account Id
 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/template      expected_status=any
-    RETURN  ${resp}
-
-Get MedicalPrescription Template By Id
-    [Arguments]    ${temId} 
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/template/${temId}      expected_status=any
-    RETURN  ${resp}
-
-Create Prescription 
-    [Arguments]    ${providerConsumerId}    ${userId}    ${caseId}       ${dentalRecordId}    ${html}      @{vargs}    &{kwargs}
-    ${len}=  Get Length  ${vargs}
-    ${mrPrescriptions}=  Create List  
-
-    FOR    ${index}    IN RANGE    ${len}   
-        Exit For Loop If  ${len}==0
-        Append To List  ${mrPrescriptions}  ${vargs[${index}]}
-    END
-    ${data}=    Create Dictionary    providerConsumerId=${providerConsumerId}    doctorId=${userId}    caseId=${caseId}      dentalRecordId=${dentalRecordId}    html=${html}    mrPrescriptions=${mrPrescriptions}    
-    Check And Create YNW Session
-     FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary 	${data} 	${key}=${value}
-    END
-    ${data}=  json.dumps  ${data}
-    ${resp}=    POST On Session    ynw    /provider/medicalrecord/prescription    data=${data}    expected_status=any
     RETURN  ${resp}
 
 Update Prescription 
@@ -11802,17 +11922,6 @@ Update Prescription
     ${resp}=    PUT On Session    ynw    /provider/medicalrecord/prescription/${prescriptionUId}    data=${data}    expected_status=any
     RETURN  ${resp}
 
-Get Prescription By Provider consumer Id
-    [Arguments]    ${providerConsumerId} 
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/${providerConsumerId}      expected_status=any
-    RETURN  ${resp}
-
-Remove Prescription 
-    Check And Create YNW Session
-    [Arguments]    ${prescriptionUId}
-    ${resp}=    DELETE On Session    ynw    /provider/medicalrecord/prescription/${prescriptionUId}       expected_status=any
-    RETURN  ${resp}
 
 
 Get Prescription By Filter
@@ -11821,39 +11930,8 @@ Get Prescription By Filter
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription   params=${kwargs}   expected_status=any
     RETURN  ${resp}
 
-Get Prescription Count By Filter
-    [Arguments]    &{param} 
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/count   params=${param}   expected_status=any
-    RETURN  ${resp}
-
-Get Prescription By UID
-    [Arguments]    ${uid}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/uid/${uid}    expected_status=any
-    RETURN  ${resp}
 
 
-Create Sections 
-    [Arguments]    ${uid}    ${id}    ${templateDetailId}       ${sectionType}    ${sectionValue}    @{vargs}  &{kwargs}
-     Check And Create YNW Session
-    ${mrCase}=    Create Dictionary  uid=${uid}
-    ${doctor}=      Create Dictionary    id=${id}
-     ${len}=  Get Length  ${vargs}
-    ${attachments}=  Create List  
-
-    FOR    ${index}    IN RANGE    ${len}   
-        Exit For Loop If  ${len}==0
-        Append To List  ${attachments}  ${vargs[${index}]}
-    END
-
-    ${data}=    Create Dictionary    mrCase=${mrCase}    doctor=${doctor}    templateDetailId=${templateDetailId}      sectionType=${sectionType}    sectionValue=${sectionValue}    attachments=${attachments}   
-    FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary 	${data} 	${key}=${value}
-    END
-    ${data}=  json.dumps  ${data}
-    ${resp}=    POST On Session    ynw    /provider/medicalrecord/section    data=${data}    expected_status=any
-    RETURN  ${resp}
 
 Update MR Sections
     [Arguments]    ${uid}    ${sectionType}   ${sectionValue}   ${attachments}   @{vargs}   &{kwargs}
@@ -11873,23 +11951,8 @@ Update MR Sections
     ${resp}=    PUT On Session    ynw    /provider/medicalrecord/section/${uid}   data=${data}    expected_status=any
     RETURN  ${resp}
 
-Create Section Template
 
-    Check And Create YNW Session
-    ${resp}=    POST On Session    ynw   /provider/medicalrecord/section/createdefaulttemplates    expected_status=any
-    RETURN  ${resp}
 
-Get Section Template
-    [Arguments]    ${caseUid} 
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/medicalrecord/section/template/case/${caseUid}    expected_status=any
-    RETURN  ${resp}
-
-Get Sections By UID
-    [Arguments]    ${uid}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/medicalrecord/section/${uid}    expected_status=any
-    RETURN  ${resp}
 
 Get Sections Filter
     [Arguments]    &{kwargs}
@@ -11897,17 +11960,7 @@ Get Sections Filter
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/section    params=${kwargs}    expected_status=any
     RETURN  ${resp}
 
-Get MR Sections By Case
-    [Arguments]    ${uid}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/medicalrecord/section/case/${uid}    expected_status=any
-    RETURN  ${resp}
 
-Delete MR Sections 
-    Check And Create YNW Session
-    [Arguments]    ${uid} 
-    ${resp}=    DELETE On Session    ynw    /provider/medicalrecord/section/${uid}       expected_status=any
-    RETURN  ${resp}
 
 Share Prescription To Patient
     [Arguments]   ${prescriptionUid}   ${msg}   ${email}   ${telegram}  ${sms}    ${whatsapp}  
@@ -13059,12 +13112,7 @@ Enable Disable bill
     ${resp}=    PUT On Session    ynw  /provider/bill/settings/${status}  expected_status=any
     RETURN  ${resp}
 
-Get Prescription Templates By Filter
-    [Arguments]   &{param}
-    Log  ${param}
-    Check And Create YNW Session  
-    ${resp}=  GET On Session  ynw  /provider/medicalrecord/prescription/templates   params=${param}   expected_status=any
-    RETURN  ${resp}
+
 
 ######## Style config ############
 AddOrUpdate UserStyle
@@ -15589,19 +15637,6 @@ Get CommTargets
 
 # ...............LINKING AND UNLNKING...................
 
-Connect with other login
-
-    [Arguments]  ${loginId}   &{kwargs}
-
-    ${data}=  Create Dictionary    loginId=${loginId}
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/login/connections/${loginId}  data=${data}  expected_status=any
-    RETURN  ${resp}
-
 List all links of a loginId
 
     Check And Create YNW Session
@@ -15641,14 +15676,7 @@ Forgot LoginId
     ${resp}=  POST On Session  ynw  /provider/login/forgot/loginId   data=${data}   expected_status=any
     RETURN  ${resp}
 
-Forgot Password 
 
-    [Arguments]   &{kwargs}  #... pasword and login id )  
-
-    ${data}=    json.dumps    ${kwargs} 
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/login/forgot/password   data=${data}   expected_status=any
-    RETURN  ${resp} 
 
 Reset Password LoginId Login
 
