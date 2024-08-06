@@ -860,8 +860,122 @@ Get Frequency By Account
     ${resp}=  GET On Session  ynw  /provider/medicalrecord/prescription/frequency/account/${account}     expected_status=any
     RETURN  ${resp}
 
+####### Inventory #######
 
+Create Item Inventory
 
+    [Arguments]   ${name}  &{kwargs}
+    Check And Create YNW Session
+  
+    ${data}=   Create Dictionary    name=${name}
+    
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        IF  "${key}" == "itemCode"
+            ${jaldeeRxCode}=    Create Dictionary  	itemCode=${value}
+            Set To Dictionary 	${data} 	jaldeeRxCode=${jaldeeRxCode}
+        ELSE IF  "${key}" == "categoryCode"
+            ${itemCategory}=  Create Dictionary 	categoryCode=${value}
+            Set To Dictionary 	${data} 	itemCategory=${itemCategory}
+        ELSE IF  "${key}" == "categoryCode2"
+            ${itemSubCategory}=  Create Dictionary 	categoryCode=${value}
+            Set To Dictionary 	${data} 	itemSubCategory=${itemSubCategory}
+        ELSE IF  "${key}" == "typeCode"
+            ${itemType}=  Create Dictionary 	typeCode=${value}
+            Set To Dictionary 	${data} 	itemType=${itemType}
+        ELSE IF  "${key}" == "typeCode2"
+            ${itemSubType}=  Create Dictionary   typeCode=${value}
+            Set To Dictionary 	${data} 	itemSubType=${itemSubType} 
+        ELSE IF  "${key}" == "hsnCode"
+            ${hsnCode}=    Create Dictionary 	hsnCode=${value}
+            Set To Dictionary 	${data} 	hsnCode=${hsnCode}
+        ELSE IF  "${key}" == "manufacturerCode"
+            ${itemManufacturer}=    Create Dictionary 	manufacturerCode=${value}
+            Set To Dictionary 	${data} 	itemManufacturer=${itemManufacturer}
+        ELSE
+            Set To Dictionary 	${data}    ${key}=${value}     
+        END
+
+    END 
+    ${data}=  json.dumps  ${data}   
+    ${resp}=  POST On Session  ynw  /provider/spitem  data=${data}   expected_status=any
+    RETURN  ${resp}
+
+Create Item Category
+
+    [Arguments]  ${categoryName}  
+    ${data}=  Create Dictionary  categoryName=${categoryName}  
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/spitem/settings/category  data=${data}  expected_status=any
+    RETURN  ${resp}  
+
+Enable Disable Inventory
+    [Arguments]  ${status} 
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/account/settings/inventory/${status}  expected_status=any 
+    RETURN  ${resp}
+       
+Create Item Composition
+
+    [Arguments]  ${compositionName} 
+    ${data}=  Create Dictionary   compositionName=${compositionName} 
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/spitem/settings/composition  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Create Item group Provider
+
+    [Arguments]     ${groupName}  ${groupCode}  ${groupDesc}
+
+    ${data}=  Create Dictionary  groupName=${groupName}  groupCode=${groupCode}   groupDesc=${groupDesc}
+    ${data}=  json.dumps  ${data} 
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/spitem/group  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Create Item hns
+
+    [Arguments]  ${hsnCode} 
+    ${data}=  Create Dictionary   hsnCode=${hsnCode} 
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/spitem/settings/hsn  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Create Item Type
+
+    [Arguments]  ${typeName}  
+    ${data}=  Create Dictionary  typeName=${typeName}  
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/spitem/settings/type  data=${data}  expected_status=any
+    RETURN  ${resp}  
+
+Create Item Manufacture
+
+    [Arguments]  ${manufactureName}  
+    ${data}=  Create Dictionary  manufacturerName=${manufactureName}  
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/spitem/settings/manufacturer  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Create Item Unit
+
+    [Arguments]  ${unitName}  ${convertionQty}  
+    ${data}=  Create Dictionary   unitName=${unitName}   convertionQty=${convertionQty}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/spitem/settings/unit  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get Item Inventory
+
+    [Arguments]   ${id}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/${id}     expected_status=any
+    RETURN  ${resp}
 
 
 
@@ -936,8 +1050,6 @@ Remove Prescription Template
     [Arguments]    ${temId} 
     ${resp}=    DELETE On Session    ynw    /provider/medicalrecord/prescription/template/${temId}       expected_status=any
     RETURN  ${resp}
-
-
 
 
 
@@ -13357,14 +13469,6 @@ Provider Consent Form Get released questionnaire by uuid
     RETURN  ${resp}
 
 # Inventory
-Create Item Category
-
-    [Arguments]  ${categoryName}  
-    ${data}=  Create Dictionary  categoryName=${categoryName}  
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/spitem/settings/category  data=${data}  expected_status=any
-    RETURN  ${resp}  
 
 Get Item Category
     [Arguments]  ${id}
@@ -13406,14 +13510,6 @@ Get Item Category Count By Filter
 
 # ......... ITEM TYPE .............
 
-Create Item Type
-
-    [Arguments]  ${typeName}  
-    ${data}=  Create Dictionary  typeName=${typeName}  
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/spitem/settings/type  data=${data}  expected_status=any
-    RETURN  ${resp}  
 
 Get Item Type
     [Arguments]  ${id}
@@ -13526,14 +13622,6 @@ Get store Count
 
 #........ Item Manufacture .........
 
-Create Item Manufacture
-
-    [Arguments]  ${manufactureName}  
-    ${data}=  Create Dictionary  manufacturerName=${manufactureName}  
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/spitem/settings/manufacturer  data=${data}  expected_status=any
-    RETURN  ${resp} 
 
 Get Item Manufacture By Id
     [Arguments]  ${id}
@@ -13622,14 +13710,6 @@ Get Item Tax Count Filter
 
 #........ Item Unit .........
 
-Create Item Unit
-
-    [Arguments]  ${unitName}  ${convertionQty}  
-    ${data}=  Create Dictionary   unitName=${unitName}   convertionQty=${convertionQty}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/spitem/settings/unit  data=${data}  expected_status=any
-    RETURN  ${resp} 
 
 Get Item Unit by id
 
@@ -13671,14 +13751,7 @@ Get Item Unit Count Filter
 
 #........ Item Composition .........
 
-Create Item Composition
 
-    [Arguments]  ${compositionName} 
-    ${data}=  Create Dictionary   compositionName=${compositionName} 
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/spitem/settings/composition  data=${data}  expected_status=any
-    RETURN  ${resp} 
 
 Get Item Composition by id
 
@@ -13720,15 +13793,6 @@ Get Item Composition Count Filter
 
 #........ Item hsn .........
 
-
-Create Item hns
-
-    [Arguments]  ${hsnCode} 
-    ${data}=  Create Dictionary   hsnCode=${hsnCode} 
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/spitem/settings/hsn  data=${data}  expected_status=any
-    RETURN  ${resp} 
 
 Get Item hns by id
 
@@ -13772,16 +13836,6 @@ Get Item hns Count Filter
 
 # .......... ITEM GROUP ...........
 
-Create Item group Provider
-
-    [Arguments]     ${groupName}  ${groupCode}  ${groupDesc}
-
-    ${data}=  Create Dictionary  groupName=${groupName}  groupCode=${groupCode}   groupDesc=${groupDesc}
-    ${data}=  json.dumps  ${data} 
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/spitem/group  data=${data}  expected_status=any
-    RETURN  ${resp} 
-
 Get Item group by id Provider
 
     [Arguments]     ${id}
@@ -13824,51 +13878,7 @@ Get Item group Count Filter
 
 # ........ CREATE ITEM .............
 
-Create Item Inventory
 
-    [Arguments]   ${name}  &{kwargs}
-    Check And Create YNW Session
-  
-    ${data}=   Create Dictionary    name=${name}
-    
-    FOR    ${key}    ${value}    IN    &{kwargs}
-        IF  "${key}" == "itemCode"
-            ${jaldeeRxCode}=    Create Dictionary  	itemCode=${value}
-            Set To Dictionary 	${data} 	jaldeeRxCode=${jaldeeRxCode}
-        ELSE IF  "${key}" == "categoryCode"
-            ${itemCategory}=  Create Dictionary 	categoryCode=${value}
-            Set To Dictionary 	${data} 	itemCategory=${itemCategory}
-        ELSE IF  "${key}" == "categoryCode2"
-            ${itemSubCategory}=  Create Dictionary 	categoryCode=${value}
-            Set To Dictionary 	${data} 	itemSubCategory=${itemSubCategory}
-        ELSE IF  "${key}" == "typeCode"
-            ${itemType}=  Create Dictionary 	typeCode=${value}
-            Set To Dictionary 	${data} 	itemType=${itemType}
-        ELSE IF  "${key}" == "typeCode2"
-            ${itemSubType}=  Create Dictionary   typeCode=${value}
-            Set To Dictionary 	${data} 	itemSubType=${itemSubType} 
-        ELSE IF  "${key}" == "hsnCode"
-            ${hsnCode}=    Create Dictionary 	hsnCode=${value}
-            Set To Dictionary 	${data} 	hsnCode=${hsnCode}
-        ELSE IF  "${key}" == "manufacturerCode"
-            ${itemManufacturer}=    Create Dictionary 	manufacturerCode=${value}
-            Set To Dictionary 	${data} 	itemManufacturer=${itemManufacturer}
-        ELSE
-            Set To Dictionary 	${data}    ${key}=${value}     
-        END
-
-    END 
-    ${data}=  json.dumps  ${data}   
-    ${resp}=  POST On Session  ynw  /provider/spitem  data=${data}   expected_status=any
-    RETURN  ${resp}
-
-
-Get Item Inventory
-
-    [Arguments]   ${id}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/spitem/${id}     expected_status=any
-    RETURN  ${resp}
 
 Update Item Inventory
 
@@ -14978,12 +14988,6 @@ Get invoice count filter
     ${resp}=  GET On Session  ynw  /provider/so/invoice/count   params=${param}  expected_status=any
     RETURN  ${resp} 
 
-Enable Disable Inventory
-    [Arguments]  ${status} 
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/account/settings/inventory/${status}  expected_status=any 
-    RETURN  ${resp}
-       
 Get Stock Avaliability
 
     [Arguments]     ${InvCatalogItemEncId}
