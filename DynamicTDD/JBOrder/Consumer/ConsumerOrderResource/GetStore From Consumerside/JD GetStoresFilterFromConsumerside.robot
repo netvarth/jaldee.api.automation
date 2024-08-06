@@ -39,7 +39,7 @@ JD-TC-Get Store Filter-1
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
+    Sleep   02s
     ${TypeName}=    FakerLibrary.name
     Set Suite Variable  ${TypeName}
 # -------------------------------- Create store type -----------------------------------
@@ -176,7 +176,7 @@ JD-TC-Get Store Filter-1
     Should Be Equal As Strings    ${resp.json()[0]['storeNature']}                                              ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()[0]['status']}                                              ${InventoryCatalogStatus[0]}
     Should Be Equal As Strings    ${resp.json()[0]['storeTypeId']}                                                 ${storeTypeId}
-    Should Be Equal As Strings    ${resp.json()[0]['refNumber']}                                              1  ${refNumber}
+    Should Be Equal As Strings    ${resp.json()[0]['refNumber']}                                                ${refNumber}
     Should Be Equal As Strings    ${resp.json()[0]['uploadedDocuments']}                                           []
 
 JD-TC-Get Store Filter-2
@@ -203,7 +203,7 @@ JD-TC-Get Store Filter-2
     Should Be Equal As Strings    ${resp.json()[0]['storeNature']}                                              ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()[0]['status']}                                              ${InventoryCatalogStatus[0]}
     Should Be Equal As Strings    ${resp.json()[0]['storeTypeId']}                                                 ${storeTypeId}
-    Should Be Equal As Strings    ${resp.json()[0]['refNumber']}                                              1  ${refNumber}
+    Should Be Equal As Strings    ${resp.json()[0]['refNumber']}                                                ${refNumber}
     Should Be Equal As Strings    ${resp.json()[0]['uploadedDocuments']}                                           []
 JD-TC-Get Store Filter-3
 
@@ -229,7 +229,7 @@ JD-TC-Get Store Filter-3
     Should Be Equal As Strings    ${resp.json()[0]['storeNature']}                                              ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()[0]['status']}                                              ${InventoryCatalogStatus[0]}
     Should Be Equal As Strings    ${resp.json()[0]['storeTypeId']}                                                 ${storeTypeId}
-    Should Be Equal As Strings    ${resp.json()[0]['refNumber']}                                              1  ${refNumber}
+    Should Be Equal As Strings    ${resp.json()[0]['refNumber']}                                               ${refNumber}
     Should Be Equal As Strings    ${resp.json()[0]['uploadedDocuments']}                                           []
 
 
@@ -287,7 +287,7 @@ JD-TC-Get Store Filter-6
     Should Be Equal As Strings    ${resp.json()[0]['storeNature']}                                              ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()[0]['status']}                                              ${InventoryCatalogStatus[0]}
     Should Be Equal As Strings    ${resp.json()[0]['storeTypeId']}                                                 ${storeTypeId}
-    Should Be Equal As Strings    ${resp.json()[0]['refNumber']}                                              1  ${refNumber}
+    Should Be Equal As Strings    ${resp.json()[0]['refNumber']}                                               ${refNumber}
     Should Be Equal As Strings    ${resp.json()[0]['uploadedDocuments']}                                           []
 
 
@@ -316,7 +316,7 @@ JD-TC-Get Store Filter-7
     Should Be Equal As Strings    ${resp.json()[0]['storeNature']}                                              ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()[0]['status']}                                              ${InventoryCatalogStatus[0]}
     Should Be Equal As Strings    ${resp.json()[0]['storeTypeId']}                                                 ${storeTypeId}
-    Should Be Equal As Strings    ${resp.json()[0]['refNumber']}                                              1  ${refNumber}
+    Should Be Equal As Strings    ${resp.json()[0]['refNumber']}                                                ${refNumber}
     Should Be Equal As Strings    ${resp.json()[0]['uploadedDocuments']}                                           []
 
 JD-TC-Get Store Filter-8
@@ -343,7 +343,7 @@ JD-TC-Get Store Filter-8
     Should Be Equal As Strings    ${resp.json()[0]['storeNature']}                                              ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()[0]['status']}                                              ${InventoryCatalogStatus[0]}
     Should Be Equal As Strings    ${resp.json()[0]['storeTypeId']}                                                 ${storeTypeId}
-    Should Be Equal As Strings    ${resp.json()[0]['refNumber']}                                              1  ${refNumber}
+    Should Be Equal As Strings    ${resp.json()[0]['refNumber']}                                                ${refNumber}
     Should Be Equal As Strings    ${resp.json()[0]['uploadedDocuments']}                                           []
 
 JD-TC-Get Store Filter-9
@@ -370,7 +370,7 @@ JD-TC-Get Store Filter-9
     Should Be Equal As Strings    ${resp.json()[0]['storeNature']}                                              ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()[0]['status']}                                              ${InventoryCatalogStatus[0]}
     Should Be Equal As Strings    ${resp.json()[0]['storeTypeId']}                                                 ${storeTypeId}
-    Should Be Equal As Strings    ${resp.json()[0]['refNumber']}                                              1  ${refNumber}
+    Should Be Equal As Strings    ${resp.json()[0]['refNumber']}                                                ${refNumber}
     Should Be Equal As Strings    ${resp.json()[0]['uploadedDocuments']}                                           []
 
 
@@ -390,7 +390,7 @@ JD-TC-Get Store Filter-10
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
+    Sleep   02s
     ${TypeName}=    FakerLibrary.name
     Set Test Variable  ${TypeName}
 # -------------------------------- Create store type -----------------------------------
@@ -402,10 +402,10 @@ JD-TC-Get Store Filter-10
     ${TypeName1}=    FakerLibrary.name
     Set Test Variable  ${TypeName1}
 
-    ${resp}=  Create Store Type   ${TypeName1}    ${storeNature[1]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable    ${St_Id1}    ${resp.json()}
+    # ${resp}=  Create Store Type   ${TypeName1}    ${storeNature[1]}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Test Variable    ${St_Id1}    ${resp.json()}
     sleep  02s
     ${TypeName2}=    FakerLibrary.name
     Set Test Variable  ${TypeName2}

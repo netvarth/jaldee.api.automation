@@ -28,7 +28,7 @@ JD-TC-Get Store Count Filter-1
 
     [Documentation]  Get stores Count filter from consumer side
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -39,7 +39,7 @@ JD-TC-Get Store Count Filter-1
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
+    Sleep   02s
     ${TypeName}=    FakerLibrary.name
     Set Suite Variable  ${TypeName}
 # -------------------------------- Create store type -----------------------------------
@@ -69,10 +69,10 @@ JD-TC-Get Store Count Filter-1
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLPUSERNAME1}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME2}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -288,7 +288,7 @@ JD-TC-Get Store Count Filter-10
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
+    Sleep   02s
     ${TypeName}=    FakerLibrary.name
     Set Test Variable  ${TypeName}
 # -------------------------------- Create store type -----------------------------------

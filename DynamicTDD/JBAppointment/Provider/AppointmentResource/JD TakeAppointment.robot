@@ -95,6 +95,8 @@ JD-TC-Take Appointment-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+    sleep  02s
+
     ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
