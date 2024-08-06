@@ -854,11 +854,19 @@ JD-TC-RemoveMultipleAppointmentLabel-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    END 
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 

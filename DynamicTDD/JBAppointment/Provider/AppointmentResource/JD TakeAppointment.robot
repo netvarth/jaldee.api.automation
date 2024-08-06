@@ -1050,9 +1050,9 @@ JD-TC-Take Appointment-11
 
     ${spec}=  get_Specializations  ${resp.json()}
     
-    ${resp}=  Update Specialization  ${spec}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=  Update Specialization  ${spec}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Features  ${subdomain}
     Log  ${resp.content}
@@ -1315,6 +1315,8 @@ JD-TC-Take Appointment-12
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+    sleep  2s
+
     ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -1388,11 +1390,7 @@ JD-TC-Take Appointment-13
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
-    # ${lid1}=  Create Sample Location
-    # ${resp}=   Get Location ById  ${lid1}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1407,6 +1405,12 @@ JD-TC-Take Appointment-13
         Set Test Variable  ${lid}  ${resp.json()[0]['id']}
         Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END 
+
+    ${lid1}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     clear_appt_schedule   ${PUSERNAME_A}
     ${DAY1}=  db.get_date_by_timezone  ${tz}

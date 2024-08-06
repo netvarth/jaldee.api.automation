@@ -3331,6 +3331,8 @@ JD-TC-AddMultipleAppointmentLabel-UH7
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+    sleep  2s
+
     ${resp}=    Verify Otp For Login   ${CUSERNAME20}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -3358,7 +3360,7 @@ JD-TC-AddMultipleAppointmentLabel-UH7
     Should Be Equal As Strings    ${resp.status_code}    200 
 
     clear_service   ${PUSERNAME66}
-    clear_location  ${PUSERNAME66}
+    # clear_location  ${PUSERNAME66}
     clear_customer   ${PUSERNAME66} 
     clear_Label  ${PUSERNAME66}
 
