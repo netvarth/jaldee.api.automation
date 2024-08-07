@@ -186,13 +186,21 @@ JD-TC-Take Appointment-2
     ${resp}=  Get Appointment Slots By Date Schedule   ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    Set Test Variable   ${slot1}   ${slots[0]}
 
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment with Appointment Mode  ${appointmentMode[1]}   ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer    ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  appointmentMode=${appointmentMode[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           

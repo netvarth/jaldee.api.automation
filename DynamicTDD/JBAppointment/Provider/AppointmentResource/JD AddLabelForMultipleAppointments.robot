@@ -3361,7 +3361,7 @@ JD-TC-AddMultipleAppointmentLabel-UH7
 
     clear_service   ${PUSERNAME66}
     # clear_location  ${PUSERNAME66}
-    clear_customer   ${PUSERNAME66} 
+    # clear_customer   ${PUSERNAME66} 
     clear_Label  ${PUSERNAME66}
 
 
