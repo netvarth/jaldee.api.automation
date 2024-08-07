@@ -1,6 +1,124 @@
 
 ######### Moved Keywords #############
 
+
+Create Service
+    #...  merged the following keywords to this
+    #...  Create Service with info
+    #...  Create Service With serviceType   serviceType=${serviceType}
+    #...  Create Service Department
+    #...  Create Service For User
+    #...  Create Sample Donation For User, needs depid and user id
+    [Arguments]  ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}   &{kwargs}
+    ${items}=  Get Dictionary items  ${kwargs}
+    ${data}=  Create Dictionary  name=${name}  description=${desc}  serviceDuration=${durtn}  notification=${notfcn}  notificationType=${notiTp}  minPrePaymentAmount=${minPrePaymentAmount}   totalAmount=${totalAmount}   status=${status}  bType=${btype}  isPrePayment=${isPrePayment}  taxable=${taxable}
+    FOR  ${key}  ${value}  IN  @{items}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    Log  ${data}
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session  
+    ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Create Sample Service
+    #...  Create Sample Service with Prepayment
+    #...  Create Sample Service with Prepayment For User   
+    #...  Create Sample Service For User
+    [Arguments]  ${Service_name}    &{kwargs}
+    ${desc}=   FakerLibrary.sentence
+    ${srv_duration}=   Random Int   min=2   max=2
+    ${min_pre}=   Random Int   min=1   max=50
+    ${Total}=   Random Int   min=100   max=500
+    ${resp}=  Create Service  ${Service_name}  ${desc}   ${srv_duration}  ${status[0]}  ${btype}  ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[0]}  ${bool[0]}   &{kwargs}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    RETURN  ${resp.json()}
+
+Create Service with info
+    [Arguments]   ${name}   ${desc}   ${durtn}   ${notfcn}   ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}   ${status}   ${bType}   ${isPrePayment}   ${taxable}   ${serviceType}   ${virtualServiceType}   ${virtualCallingModes}   ${depid}   ${u_id}   ${consumerNoteMandatory}   ${consumerNoteTitle}   ${preInfoEnabled}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled}   ${postInfoTitle}   ${postInfoText}
+    ${user_id}=  Create Dictionary  id=${u_id}
+    ${data}=  Create Dictionary  name=${name}  description=${desc}  serviceDuration=${durtn}  notification=${notfcn}  notificationType=${notiTp}  minPrePaymentAmount=${minPrePaymentAmount}   totalAmount=${totalAmount}   status=${status}  bType=${btype}  isPrePayment=${isPrePayment}  taxable=${taxable}   serviceType=${serviceType}   virtualServiceType=${virtualServiceType}  virtualCallingModes=${virtualCallingModes}  department=${depid}   provider=${user_id}   consumerNoteMandatory=${consumerNoteMandatory}   consumerNoteTitle=${consumerNoteTitle}   preInfoEnabled=${preInfoEnabled}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${postInfoEnabled}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session  
+    ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Create Service With serviceType
+    [Arguments]  ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}   ${serviceType}
+    ${data}=  Create Dictionary  name=${name}  description=${desc}  serviceDuration=${durtn}  notification=${notfcn}  notificationType=${notiTp}  minPrePaymentAmount=${minPrePaymentAmount}   totalAmount=${totalAmount}   status=${status}  bType=${btype}  isPrePayment=${isPrePayment}  taxable=${taxable}   serviceType=${serviceType}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session  
+    ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+
+
+Create Sample Service with Prepayment
+    [Arguments]  ${Service_name}  ${prepayment_amt}  ${servicecharge}  &{kwargs}
+    ${desc}=   FakerLibrary.sentence
+    ${srv_duration}=   Random Int   min=2   max=2
+    ${resp}=  Create Service  ${Service_name}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${prepayment_amt}  ${servicecharge}  ${bool[1]}  ${bool[0]}  &{kwargs}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    RETURN  ${resp.json()}
+
+
+Create Sample Service with Prepayment For User
+    [Arguments]  ${Service_name}  ${prepayment_amt}  ${servicecharge}  ${u_id}  &{kwargs}
+    ${desc}=   FakerLibrary.sentence
+    ${srv_duration}=   Random Int   min=2   max=2
+    ${resp}=  Create Service For User  ${Service_name}  ${desc}   ${srv_duration}  ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}  ${prepayment_amt}  ${servicecharge}  ${bool[1]}  ${bool[0]}  ${depid}  ${u_id}  &{kwargs}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    RETURN  ${resp.json()}
+
+
+Create Sample Service For User
+    [Arguments]   ${Service_name}   ${depid}   ${u_id}
+    ${resp}=  Create Service For User  ${Service_name}  Description   2  ACTIVE  Waitlist  True  email  45  500  False  False  ${depid}   ${u_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    RETURN  ${resp.json()}
+
+Create Service Department
+    [Arguments]  ${name}  ${desc}  ${durtn}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}  ${depid}  
+    ${data}=  Create Dictionary  name=${name}  description=${desc}  serviceDuration=${durtn}  notification=${notfcn}  notificationType=${notiTp}  minPrePaymentAmount=${minPrePaymentAmount}   totalAmount=${totalAmount}  bType=${btype}  isPrePayment=${isPrePayment}  taxable=${taxable}  department=${depid} 
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session  
+    ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Create Service For User
+    [Arguments]  ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}  ${depid}   ${u_id}  &{kwargs}
+    ${user_id}=  Create Dictionary  id=${u_id}
+    ${data}=  Create Dictionary  name=${name}  description=${desc}  serviceDuration=${durtn}  notification=${notfcn}  notificationType=${notiTp}  minPrePaymentAmount=${minPrePaymentAmount}   totalAmount=${totalAmount}   status=${status}  bType=${btype}  isPrePayment=${isPrePayment}  taxable=${taxable}  department=${depid}   provider=${user_id}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session  
+    ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Create Sample Donation For User
+    [Arguments]  ${Service_name}   ${depid}   ${u_id}
+    ${resp}=  Create Service For User   ${Service_name}  Description   2  ACTIVE  Waitlist  True  email  45  500  False  False   ${depid}   ${u_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    RETURN  ${resp.json()}
+
+
+
+
+
+
+
+
+
+
+
+
 Get BusinessDomainsConf
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /ynwConf/businessDomains   expected_status=any
@@ -177,6 +295,12 @@ AddCustomer
     Check And Create YNW Session
     # ${data}=  Create Dictionary  phoneNo=${primaryNo}  firstName=${firstname}  lastName=${lastname}  countryCode=${countryCode}
     ${resp}=  POST On Session  ynw  url=/provider/customers  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Change Provider Consumer Profile Status 
+    [Arguments]    ${consumerId}   ${status}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/customers/${consumerId}/changeStatus/${status}   expected_status=any
     RETURN  ${resp}
 
 Queue
@@ -574,4 +698,34 @@ Create Sections
     END
     ${data}=  json.dumps  ${data}
     ${resp}=    POST On Session    ynw    /provider/medicalrecord/section    data=${data}    expected_status=any
+    RETURN  ${resp}
+
+Add To Waitlist
+    [Arguments]   ${consid}  ${service_id}  ${qid}  ${date}  ${consumerNote}  ${ignorePrePayment}  @{fids}  &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
+    ${pro_params}=   Create Dictionary
+    ${cid}=  Create Dictionary  id=${consid}
+    ${sid}=  Create Dictionary  id=${service_id}
+    ${qid}=  Create Dictionary  id=${qid}
+    ${fid}=  Create Dictionary  id=${fids[0]}
+    ${len}=  Get Length  ${fids}
+    ${fid}=  Create List  ${fid}
+    FOR    ${index}    IN RANGE  1  ${len}
+        ${ap}=  Create Dictionary  id=${fids[${index}]}
+        Append To List  ${fid} 	${ap}
+    END
+    
+    ${data}=    Create Dictionary    consumer=${cid}  service=${sid}  queue=${qid}  date=${date}  consumerNote=${consumerNote}  waitlistingFor=${fid}  ignorePrePayment=${ignorePrePayment}
+
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_params}   &{locparam}
+
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  provider/waitlist  params=${pro_params}  data=${data}  expected_status=any   headers=${headers}  
     RETURN  ${resp}
