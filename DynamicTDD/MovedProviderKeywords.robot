@@ -729,3 +729,201 @@ Add To Waitlist
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  provider/waitlist  params=${pro_params}  data=${data}  expected_status=any   headers=${headers}  
     RETURN  ${resp}
+
+#----------------------Account-----------------
+Get Account contact information
+    Check And Create YNW Session
+    ${resp}=    GET On Session     ynw   /provider/contact  expected_status=any
+    RETURN  ${resp} 
+
+# Create User
+#     #Create User With Roles And Scope         
+#     #userRoles=${userRoles}
+#    #   ${dob}  ${gender}    ${pincode}  ${countryCode}  ${mob_no}  ${dept_id}  ${sub_domain}  ${admin}  ${whatsApp_countrycode}  ${WhatsApp_num}  ${telegram_countrycode}  ${telegram_num}   
+    #  [Arguments]  ${fname}  ${lname}    ${email}  ${user_type}  ${pincode}  ${countryCode}  ${mob_no}  ${dept_id}  ${sub_domain}  ${admin}  ${whatsApp_countrycode}  ${WhatsApp_num}  ${telegram_countrycode}  ${telegram_num}   &{kwargs} 
+#     ${whatsAppNum}=  Create Dictionary  countryCode=${whatsApp_countrycode}  number=${WhatsApp_num}
+#     ${telegramNum}=  Create Dictionary  countryCode=${telegram_countrycode}  number=${telegram_num}
+#     ${data}=  Create Dictionary  firstName=${fname}  lastName=${lname}  dob=${dob}  gender=${gender}  email=${email}  userType=${user_type}  pincode=${pincode}  countryCode=${countryCode}  mobileNo=${mob_no}  deptId=${dept_id}  subdomain=${sub_domain}  admin=${admin}  whatsAppNum=${whatsAppNum}  telegramNum=${telegramNum}
+#     FOR  ${key}  ${value}  IN  &{kwargs} 
+#             Set To Dictionary  ${data}   ${key}=${value}
+#     END
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session
+#     ${resp}=  POST On Session  ynw  /provider/user    data=${data}  expected_status=any
+#     RETURN  ${resp}
+
+Create User
+    #Create User With Roles And Scope         
+    #userRoles=${userRoles}
+    #${dob}  ${gender}    ${pincode}  ${email}   ${dept_id}  ${sub_domain}  ${admin}  ${whatsApp_countrycode}  ${WhatsApp_num}  ${telegram_countrycode}  ${telegram_num}   
+    [Arguments]  ${fname}  ${lname}    ${countryCode}  ${mob_no}  ${user_type}   &{kwargs} 
+    ${data}=  Create Dictionary  firstName=${fname}  lastName=${lname}  countryCode=${countryCode}  mobileNo=${mob_no}  userType=${user_type}  
+    FOR  ${key}  ${value}  IN  &{kwargs} 
+            Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/user    data=${data}  expected_status=any
+    RETURN  ${resp}
+
+User Profile Updation
+    [Arguments]  ${b_name}  ${b_desc}  ${spec}  ${lan}  ${sub_domain}  ${id}
+    Check And Create YNW Session
+    ${data}=  Create Dictionary  businessName=${b_name}  businessDesc=${b_desc}  specialization=${spec}  languagesSpoken=${lan}  userSubdomain=${sub_domain}
+    ${data}=    json.dumps    ${data}
+    ${resp}=  PUT On Session  ynw  /provider/user/providerBprofile/${id}  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Get User Profile
+    [Arguments]  ${id}
+    Check And Create YNW Session
+    ${resp}=    GET On Session     ynw   /provider/user/providerBprofile/${id}   expected_status=any  
+    RETURN  ${resp}
+
+EnableDisable User
+    [Arguments]  ${id}  ${status}
+    Check And Create YNW Session
+    ${resp}=    PUT On Session     ynw   /provider/user/${status}/${id}   expected_status=any
+    RETURN  ${resp}
+
+
+Get Spoke Languages
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  ynwConf/spokenLangs  expected_status=any
+    RETURN  ${resp}    
+
+CreateVendorCategory
+
+    [Arguments]    ${name}    
+    ${data}=  Create Dictionary  name=${name}   
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw    /provider/vendor/category    data=${data}  expected_status=any    headers=${headers}
+    RETURN  ${resp}
+
+Get VendorCategory With Filter
+
+    [Arguments]   &{param}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/vendor/category    params=${param}     expected_status=any
+    RETURN  ${resp}
+
+CreateVendorStatus
+
+    [Arguments]    ${name}    
+    ${data}=  Create Dictionary  name=${name}   
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw    /provider/vendor/status    data=${data}  expected_status=any    headers=${headers}
+    RETURN  ${resp}
+
+Get Vendorstatus With Filter
+
+    [Arguments]   &{param}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/vendor/status    params=${param}     expected_status=any
+    RETURN  ${resp}
+
+Create Vendor
+
+    [Arguments]    ${vendorCategory}  ${vendorId}  ${vendorName}   ${contactPersonName}    ${address}    ${state}    ${pincode}    ${mobileNo}   ${email}    &{kwargs}
+    
+    ${contact}=  Create Dictionary   address=${address}   state=${state}  pincode=${pincode}    phoneNumbers=${mobileNo}  emails=${email}
+
+    ${data}=  Create Dictionary  categoryEncId=${vendorCategory}   vendorId=${vendorId}  vendorName=${vendorName}   contactPersonName=${contactPersonName}  contactInfo=${contact}    
+    # ...    email=${email}  address=${address}  bankAccountNumber=${bank_accno}    
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw    /provider/vendor    data=${data}  expected_status=any    headers=${headers}
+    RETURN  ${resp}
+
+Get vendor by encId
+
+    [Arguments]   ${encId}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /provider/vendor/${encId}     expected_status=any
+    RETURN  ${resp}
+
+Get Vendor List with filter
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw    /provider/vendor    params=${param}    expected_status=any    headers=${headers}
+    RETURN  ${resp}
+
+Create Category
+
+    [Arguments]    ${name}  ${categoryType}   
+    ${data}=  Create Dictionary  name=${name}   categoryType=${categoryType}   
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw    /provider/jp/finance/category    data=${data}  expected_status=any    headers=${headers}
+    RETURN  ${resp}
+
+
+Create Sample User
+    [Arguments]   ${admin}=${bool[0]}
+
+    ${random_ph}=   Random Int   min=10000   max=20000
+    ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+${random_ph}
+    clear_users  ${PUSERNAME_U1}
+    # Set Test Variable  ${PUSERNAME_U1}
+    ${firstname}=  FakerLibrary.name
+    ${lastname}=  FakerLibrary.last_name
+
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${countryCodes[1]}  ${PUSERNAME_U1}   ${userType[0]}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    RETURN  ${resp.json()}
+
+# Create Sample User
+#     [Arguments]   ${admin}=${bool[0]}
+#     ${resp}=  Get Departments
+#     Log  ${resp.content}
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     IF   '${resp.content}' == '${emptylist}'
+#         ${dep_name1}=  FakerLibrary.bs
+#         ${dep_code1}=   Random Int  min=100   max=999
+#         ${dep_desc1}=   FakerLibrary.word  
+#         ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+#         Log  ${resp1.content}
+#         Should Be Equal As Strings  ${resp1.status_code}  200
+#         Set Test Variable  ${dep_id}  ${resp1.json()}
+#     ELSE
+#         Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+#     END
+#     ${random_ph}=   Random Int   min=10000   max=20000
+#     ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+${random_ph}
+#     clear_users  ${PUSERNAME_U1}
+#     # Set Test Variable  ${PUSERNAME_U1}
+#     ${firstname}=  FakerLibrary.name
+#     ${lastname}=  FakerLibrary.last_name
+#     ${address}=  get_address
+#     ${dob}=  FakerLibrary.Date
+#     #  ${pin}=  get_pincode
+#     #  ${resp}=  Get LocationsByPincode     ${pin}
+#     # FOR    ${i}    IN RANGE    3
+#     #     ${pin}=  get_pincode
+#     #     ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+#     #     IF    '${kwstatus}' == 'FAIL'
+#     #             Continue For Loop
+#     #     ELSE IF    '${kwstatus}' == 'PASS'
+#     #             Exit For Loop
+#     #     END
+#     # END
+#     #  Should Be Equal As Strings    ${resp.status_code}    200
+#     #  Set Suite Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
+#     #  Set Suite Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
+#     #  Set Suite Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}   
+
+#     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc 
+
+#     ${random_ph}=   Random Int   min=20000   max=30000
+#     ${whpnum}=  Evaluate  ${PUSERNAME}+${random_ph}
+#     ${tlgnum}=  Evaluate  ${PUSERNAME}+${random_ph}
+
+#     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${admin}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}  
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     RETURN  ${resp.json()}
+
