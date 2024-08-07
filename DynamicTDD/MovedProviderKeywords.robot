@@ -927,3 +927,161 @@ Create Sample User
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     RETURN  ${resp.json()}
 
+
+Get Appointment By Id
+    [Arguments]  ${appmntId}
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /provider/appointment/${appmntId}  expected_status=any
+    RETURN  ${resp}
+
+Create Label
+    [Arguments]  ${l_name}  ${display_name}  ${desc}  ${values}  ${notifications}
+    ${data}=  Create Dictionary  label=${l_name}  displayName=${display_name}  description=${desc}  valueSet=${values}  notification=${notifications}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/waitlist/label   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Get Label By Id
+    [Arguments]   ${label_id}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/waitlist/label/${label_id}   expected_status=any
+    RETURN  ${resp}
+
+Add Label for Appointment
+    [Arguments]  ${appmntId}  ${labelname}  ${label_value}
+    ${data}=    Create Dictionary  ${labelname}=${label_value}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/appointment/addLabel/${appmntId}  data=${data}  expected_status=any
+    RETURN  ${resp}
+    
+Create ValueSet For Label
+    [Arguments]  @{vargs}
+    ${len}=  Get Length  ${vargs}
+    ${values}=  Create Dictionary  value=${vargs[0]}  shortValue=${vargs[1]}
+    ${values_set}=  Create List  ${values}
+    FOR    ${index}   IN RANGE   2  ${len}  2
+        ${index2}=  Evaluate  ${index}+1
+        ${values}=  Create Dictionary  value=${vargs[${index}]}  shortValue=${vargs[${index2}]}
+        Append To List  ${values_set}  ${values}
+    END
+    RETURN  ${values_set}
+
+Create NotificationSet For Label
+    [Arguments]  @{vargs}
+    ${len}=  Get Length  ${vargs}
+    ${values}=  Create Dictionary  values=${vargs[0]}  messages=${vargs[1]}
+    ${values_set}=  Create List  ${values}
+    FOR    ${index}   IN RANGE   2  ${len}  2
+        ${index2}=  Evaluate  ${index}+1
+        ${values}=  Create Dictionary  values=${vargs[${index}]}  messages=${vargs[${index2}]}
+        Append To List  ${values_set}  ${values}
+    END
+    RETURN  ${values_set}
+
+Create Sample Label
+    FOR  ${i}  IN RANGE   5
+        ${Values}=  FakerLibrary.Words  	nb=3
+        ${status}=  Run Keyword And Return Status   List Should Not Contain Duplicates   ${Values}
+        Exit For Loop If  '${status}'=='True'
+    END
+    ${ShortValues}=  FakerLibrary.Words  	nb=3
+    ${Notifmsg}=  FakerLibrary.Words  	nb=3
+    ${ValueSet}=  Create ValueSet For Label  ${Values[0]}  ${ShortValues[0]}  ${Values[1]}  ${ShortValues[1]}  ${Values[2]}  ${ShortValues[2]}
+    ${NotificationSet}=  Create NotificationSet For Label  ${Values[0]}  ${Notifmsg[0]}  ${Values[1]}  ${Notifmsg[1]}  ${Values[2]}  ${Notifmsg[2]}
+    ${labelname}=  FakerLibrary.Words  nb=2
+    ${label_desc}=  FakerLibrary.Sentence
+    ${resp}=  Create Label  ${labelname[0]}  ${labelname[1]}  ${label_desc}  ${ValueSet}  ${NotificationSet}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    RETURN  ${resp.json()} 
+
+Create Sample Schedule
+    [Arguments]   ${lid}   @{vargs}
+    # ${DAY1}=  db.get_date
+    # ${DAY2}=  db.db.add_timezone_date  ${tz}  10      
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  db.add_two   ${sTime1}  ${delta}
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${schedule_name}=  FakerLibrary.bs
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=1
+    ${consumerParallelServing}=  FakerLibrary.Random Int  min=1  max=1
+    ${maxval}=  Convert To Integer   ${delta/5}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}   ${consumerParallelServing}   ${lid}  ${duration}  ${bool[0]}  @{vargs}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    RETURN  ${resp}
+
+AddFamilyMemberByProvider
+    #AddFamilyMemberByProviderWithPhoneNo---------${PhoneNo}    ${countryCode}=91
+    [Arguments]  ${id}  ${firstname}  ${lastname}  ${dob}  ${gender}    &{kwargs}
+    Check And Create YNW Session
+    ${data}=  Create Dictionary  parent=${id}  firstName=${firstname}  lastName=${lastname}  dob=${dob}  gender=${gender} 
+    FOR  ${key}  ${value}  IN  &{kwargs} 
+            Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    ${resp}=  POST On Session   ynw   /provider/customers/familyMember   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Get Appointments Today
+    # Available Filters:- service, consumer(procon id), firstName, lastName, appointmentEncId, 
+    # account, schedule, date, apptdate, apptBy, apptTime, apptStatus, paymentStatus, location,
+    # provider(user id), apptstartTime, jaldeeConsumer, rejectReason, cancelReason, appointmentMode
+    # gender, dob, department, label, groups, phoneNo, appmtFor, accessScope, apptForId, apptForIds
+    # providerOwnConsumerId, team, deptId, businessLoc, internalStatus, countryCode, subServiceData
+    [Arguments]  &{kwargs}
+    Check And Create YNW Session
+    ${resp}=    GET On Session     ynw   /provider/appointment/today  params=${kwargs}  expected_status=any
+    RETURN  ${resp}
+
+ListFamilyMemberByProvider
+    [Arguments]   ${id}
+    Check And Create YNW Session
+    ${resp}=  GET On Session   ynw   /provider/customers/familyMember/${id}  expected_status=any
+    RETURN  ${resp}
+
+Add Label for Multiple Appointment
+    [Arguments]  ${label_dict}  @{appmntId}
+    ${len}=  Get Length  ${appmntId}
+    ${appmnts}=  Create List
+    FOR  ${value}  IN  @{appmntId}
+        Append To List  ${appmnts}  ${value}
+    END
+    ${data}=    Create Dictionary  uuid=${appmnts}  labels=${label_dict}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/appointment/labelBatch  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+# Business Profile with schedule
+#     # [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}  ${lid}   &{kwargs}
+#     [Arguments]  ${bName}  ${bDesc}    ${place}  ${longi}  ${latti}  ${g_url}    ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}  ${lid}   &{kwargs}
+#     ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
+#     ${bs}=  Create List  ${bs}
+#     ${bs}=  Create Dictionary  timespec=${bs}
+#     # ${b_loc}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  parkingType=${pt}  open24hours=${oh}   bSchedule=${bs}  pinCode=${pin}  address=${adds}  id=${lid}
+#     ${b_loc}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}    bSchedule=${bs}  pinCode=${pin}  address=${adds}  id=${lid}
+#         # ${ph_nos}=  Create List  ${ph1}  ${ph2}
+#     ${ph_nos}=  db.bus_prof_ph  ${ph1}  ${ph2}
+#     ${emails}=  Create List  ${email1}
+#     ${data}=  Create Dictionary  businessName=${bName}  businessDesc=${bDesc}  shortName=${shname}  baseLocation=${b_loc}  phoneNumbers=${ph_nos}  emails=${emails}
+#     FOR    ${key}    ${value}    IN    &{kwargs}
+#         Set To Dictionary 	${data} 	${key}=${value}
+#     END
+#     ${data}=  json.dumps  ${data}
+#     RETURN  ${data}
+
+Create Sample Service with Prepayment
+    [Arguments]  ${Service_name}  ${prepayment_amt}  ${servicecharge}  &{kwargs}
+    ${desc}=   FakerLibrary.sentence
+    ${srv_duration}=   Random Int   min=2   max=2
+    ${resp}=  Create Service  ${Service_name}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${prepayment_amt}  ${servicecharge}  ${bool[1]}  ${bool[0]}  &{kwargs}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    RETURN  ${resp.json()}

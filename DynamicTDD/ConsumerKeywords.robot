@@ -34,6 +34,20 @@ Create Membership
     ${resp}=    POST On Session  ynw  /consumer/membership    data=${data}   expected_status=any
     RETURN  ${resp}
 
+####### APPOINTMENT  #########
+
+Get consumer Appointment By Id
+    [Arguments]   ${accId}  ${appmntId}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_headers}=  Create Dictionary  &{headers} 
+    ${cons_params}=  Create Dictionary
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${cons_params}   &{locparam}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  url=/consumer/appointment/${appmntId}?account=${accId}   params=${cons_params}  expected_status=any   headers=${cons_headers}
+    RETURN  ${resp}
+
 ###### All Current Keywords above this line #############################################
 
 Consumer Login
@@ -1672,17 +1686,6 @@ Take Appointment with ApptMode For Provider
     ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     RETURN  ${resp}
 
-Get consumer Appointment By Id
-    [Arguments]   ${accId}  ${appmntId}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${cons_headers}=  Create Dictionary  &{headers} 
-    ${cons_params}=  Create Dictionary
-    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
-    Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${cons_params}   &{locparam}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  url=/consumer/appointment/${appmntId}?account=${accId}   params=${cons_params}  expected_status=any   headers=${cons_headers}
-    RETURN  ${resp}
 
 Get Consumer Waitlist By EncodedId
     [Arguments]    ${W_Enc_id}  &{kwargs}  #${timeZone}=Asia/Kolkata

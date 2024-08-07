@@ -155,13 +155,6 @@ Get Business Logo
     ${resp}=  GET On Session  ynw   /provider/businessLogo  expected_status=any
     RETURN  ${resp}
 
-Update Business Profile with schedule
-    # use this keyword to update specializations also
-    [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}  ${lid}  &{kwargs}
-    ${data}=  Business Profile with schedule  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}  ${lid}  &{kwargs}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
-    RETURN  ${resp}
 
 Get subDomain level Fields
     [Arguments]  ${domain}  ${subdomain}
@@ -406,6 +399,34 @@ Get Service By Id
     ${resp}=  GET On Session  ynw  /provider/services/${id}  expected_status=any
     RETURN  ${resp}
 
+
+AddFamilyMemberByProvider
+    #AddFamilyMemberByProviderWithPhoneNo---------${PhoneNo}    ${countryCode}=91
+    [Arguments]  ${id}  ${firstname}  ${lastname}  ${dob}  ${gender}    &{kwargs}
+    Check And Create YNW Session
+    ${data}=  Create Dictionary  parent=${id}  firstName=${firstname}  lastName=${lastname}  dob=${dob}  gender=${gender} 
+    FOR  ${key}  ${value}  IN  &{kwargs} 
+            Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    ${resp}=  POST On Session   ynw   /provider/customers/familyMember   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+ListFamilyMemberByProvider
+    [Arguments]   ${id}
+    Check And Create YNW Session
+    ${resp}=  GET On Session   ynw   /provider/customers/familyMember/${id}  expected_status=any
+    RETURN  ${resp}
+
+Create Sample Service with Prepayment
+    [Arguments]  ${Service_name}  ${prepayment_amt}  ${servicecharge}  &{kwargs}
+    ${desc}=   FakerLibrary.sentence
+    ${srv_duration}=   Random Int   min=2   max=2
+    ${resp}=  Create Service  ${Service_name}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${prepayment_amt}  ${servicecharge}  ${bool[1]}  ${bool[0]}  &{kwargs}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    RETURN  ${resp.json()}
+
 ########## BOOKING #############
 
 Queue
@@ -636,6 +657,65 @@ Provider Change Answer Status for Appointment
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/appointment/questionnaire/upload/status/${apptId}  data=${data}  expected_status=any
     RETURN  ${resp}  
+
+
+Get Appointment By Id
+    [Arguments]  ${appmntId}
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /provider/appointment/${appmntId}  expected_status=any
+    RETURN  ${resp}
+
+Add Label for Appointment
+    [Arguments]  ${appmntId}  ${labelname}  ${label_value}
+    ${data}=    Create Dictionary  ${labelname}=${label_value}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/appointment/addLabel/${appmntId}  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Create Sample Schedule
+    [Arguments]   ${lid}   @{vargs}
+    # ${DAY1}=  db.get_date
+    # ${DAY2}=  db.db.add_timezone_date  ${tz}  10      
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  db.add_two   ${sTime1}  ${delta}
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${schedule_name}=  FakerLibrary.bs
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=1
+    ${consumerParallelServing}=  FakerLibrary.Random Int  min=1  max=1
+    ${maxval}=  Convert To Integer   ${delta/5}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}   ${consumerParallelServing}   ${lid}  ${duration}  ${bool[0]}  @{vargs}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    RETURN  ${resp}
+
+Get Appointments Today
+    # Available Filters:- service, consumer(procon id), firstName, lastName, appointmentEncId, 
+    # account, schedule, date, apptdate, apptBy, apptTime, apptStatus, paymentStatus, location,
+    # provider(user id), apptstartTime, jaldeeConsumer, rejectReason, cancelReason, appointmentMode
+    # gender, dob, department, label, groups, phoneNo, appmtFor, accessScope, apptForId, apptForIds
+    # providerOwnConsumerId, team, deptId, businessLoc, internalStatus, countryCode, subServiceData
+    [Arguments]  &{kwargs}
+    Check And Create YNW Session
+    ${resp}=    GET On Session     ynw   /provider/appointment/today  params=${kwargs}  expected_status=any
+    RETURN  ${resp}
+
+Add Label for Multiple Appointment
+    [Arguments]  ${label_dict}  @{appmntId}
+    ${len}=  Get Length  ${appmntId}
+    ${appmnts}=  Create List
+    FOR  ${value}  IN  @{appmntId}
+        Append To List  ${appmnts}  ${value}
+    END
+    ${data}=    Create Dictionary  uuid=${appmnts}  labels=${label_dict}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/appointment/labelBatch  data=${data}  expected_status=any
+    RETURN  ${resp}
     
 ######### WAITLIST ###########
 
@@ -668,6 +748,62 @@ Add To Waitlist
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  provider/waitlist  params=${pro_params}  data=${data}  expected_status=any   headers=${headers}  
     RETURN  ${resp}
+
+Create ValueSet For Label
+    [Arguments]  @{vargs}
+    ${len}=  Get Length  ${vargs}
+    ${values}=  Create Dictionary  value=${vargs[0]}  shortValue=${vargs[1]}
+    ${values_set}=  Create List  ${values}
+    FOR    ${index}   IN RANGE   2  ${len}  2
+        ${index2}=  Evaluate  ${index}+1
+        ${values}=  Create Dictionary  value=${vargs[${index}]}  shortValue=${vargs[${index2}]}
+        Append To List  ${values_set}  ${values}
+    END
+    RETURN  ${values_set}
+
+Create NotificationSet For Label
+    [Arguments]  @{vargs}
+    ${len}=  Get Length  ${vargs}
+    ${values}=  Create Dictionary  values=${vargs[0]}  messages=${vargs[1]}
+    ${values_set}=  Create List  ${values}
+    FOR    ${index}   IN RANGE   2  ${len}  2
+        ${index2}=  Evaluate  ${index}+1
+        ${values}=  Create Dictionary  values=${vargs[${index}]}  messages=${vargs[${index2}]}
+        Append To List  ${values_set}  ${values}
+    END
+    RETURN  ${values_set}
+
+Create Label
+    [Arguments]  ${l_name}  ${display_name}  ${desc}  ${values}  ${notifications}
+    ${data}=  Create Dictionary  label=${l_name}  displayName=${display_name}  description=${desc}  valueSet=${values}  notification=${notifications}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/waitlist/label   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Get Label By Id
+    [Arguments]   ${label_id}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/waitlist/label/${label_id}   expected_status=any
+    RETURN  ${resp}
+
+Create Sample Label
+    FOR  ${i}  IN RANGE   5
+        ${Values}=  FakerLibrary.Words  	nb=3
+        ${status}=  Run Keyword And Return Status   List Should Not Contain Duplicates   ${Values}
+        Exit For Loop If  '${status}'=='True'
+    END
+    ${ShortValues}=  FakerLibrary.Words  	nb=3
+    ${Notifmsg}=  FakerLibrary.Words  	nb=3
+    ${ValueSet}=  Create ValueSet For Label  ${Values[0]}  ${ShortValues[0]}  ${Values[1]}  ${ShortValues[1]}  ${Values[2]}  ${ShortValues[2]}
+    ${NotificationSet}=  Create NotificationSet For Label  ${Values[0]}  ${Notifmsg[0]}  ${Values[1]}  ${Notifmsg[1]}  ${Values[2]}  ${Notifmsg[2]}
+    ${labelname}=  FakerLibrary.Words  nb=2
+    ${label_desc}=  FakerLibrary.Sentence
+    ${resp}=  Create Label  ${labelname[0]}  ${labelname[1]}  ${label_desc}  ${ValueSet}  ${NotificationSet}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    RETURN  ${resp.json()} 
+    
 
 ######### MEMBERSHIP ############
 
@@ -1105,6 +1241,13 @@ Get Vendor List with filter
     ${resp}=    GET On Session    ynw    /provider/vendor    params=${param}    expected_status=any    headers=${headers}
     RETURN  ${resp}
 
+
+Get Vendor List with Count filter
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw    /provider/vendor/count    params=${param}    expected_status=any    headers=${headers}
+    RETURN  ${resp}
+
 ######### FINANCE  ############
 
 Create Category
@@ -1386,6 +1529,14 @@ Update Business Profile with kwargs
         Set To Dictionary  ${data}   ${key}=${value}
     END
     ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Update Business Profile with schedule
+    # use this keyword to update specializations also
+    [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}  ${lid}  &{kwargs}
+    ${data}=  Business Profile with schedule  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}  ${lid}  &{kwargs}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
     RETURN  ${resp}
@@ -1819,28 +1970,6 @@ Verify OTP
     RETURN  ${resp}
 
 
-AddFamilyMemberByProvider
-    [Arguments]  ${id}  ${firstname}  ${lastname}  ${dob}  ${gender}
-    Check And Create YNW Session
-    ${data}=  Create Dictionary  parent=${id}  firstName=${firstname}  lastName=${lastname}  dob=${dob}  gender=${gender} 
-    ${data}=    json.dumps    ${data}
-    ${resp}=  POST On Session   ynw   /provider/customers/familyMember   data=${data}  expected_status=any
-    RETURN  ${resp}
-
-AddFamilyMemberByProviderWithPhoneNo
-    [Arguments]  ${id}  ${firstname}  ${lastname}  ${dob}  ${gender}  ${PhoneNo}    ${countryCode}=91
-    Check And Create YNW Session
-    ${data}=  Create Dictionary  parent=${id}  firstName=${firstname}  lastName=${lastname}  dob=${dob}  gender=${gender}  phoneNo=${PhoneNo}  countryCode=${countryCode}
-    ${data}=    json.dumps    ${data}
-    ${resp}=  POST On Session   ynw   /provider/customers/familyMember   data=${data}  expected_status=any
-    RETURN  ${resp}
-
-ListFamilyMemberByProvider
-    [Arguments]   ${id}
-    Check And Create YNW Session
-    ${resp}=  GET On Session   ynw   /provider/customers/familyMember/${id}  expected_status=any
-    RETURN  ${resp}
-
 Add addon 
     [Arguments]    ${addonId}
     Check And Create YNW Session
@@ -2272,15 +2401,6 @@ Create Service With serviceType
     ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
     RETURN  ${resp}
 
-
-Create Sample Service with Prepayment
-    [Arguments]  ${Service_name}  ${prepayment_amt}  ${servicecharge}  &{kwargs}
-    ${desc}=   FakerLibrary.sentence
-    ${srv_duration}=   Random Int   min=2   max=2
-    ${resp}=  Create Service  ${Service_name}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${prepayment_amt}  ${servicecharge}  ${bool[1]}  ${bool[0]}  &{kwargs}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}   200
-    RETURN  ${resp.json()}
 
 
 Create Sample Service with Prepayment For User
@@ -3720,48 +3840,16 @@ Update HS Settings
     ${resp}=  PUT On Session  ynw  /provider/settings/homeservice   data=${data}  expected_status=any
     RETURN  ${resp}
 
-Create ValueSet For Label
-    [Arguments]  @{vargs}
-    ${len}=  Get Length  ${vargs}
-    ${values}=  Create Dictionary  value=${vargs[0]}  shortValue=${vargs[1]}
-    ${values_set}=  Create List  ${values}
-    FOR    ${index}   IN RANGE   2  ${len}  2
-        ${index2}=  Evaluate  ${index}+1
-        ${values}=  Create Dictionary  value=${vargs[${index}]}  shortValue=${vargs[${index2}]}
-        Append To List  ${values_set}  ${values}
-    END
-    RETURN  ${values_set}
 
-Create NotificationSet For Label
-    [Arguments]  @{vargs}
-    ${len}=  Get Length  ${vargs}
-    ${values}=  Create Dictionary  values=${vargs[0]}  messages=${vargs[1]}
-    ${values_set}=  Create List  ${values}
-    FOR    ${index}   IN RANGE   2  ${len}  2
-        ${index2}=  Evaluate  ${index}+1
-        ${values}=  Create Dictionary  values=${vargs[${index}]}  messages=${vargs[${index2}]}
-        Append To List  ${values_set}  ${values}
-    END
-    RETURN  ${values_set}
 
-Create Label
-    [Arguments]  ${l_name}  ${display_name}  ${desc}  ${values}  ${notifications}
-    ${data}=  Create Dictionary  label=${l_name}  displayName=${display_name}  description=${desc}  valueSet=${values}  notification=${notifications}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/waitlist/label   data=${data}  expected_status=any
-    RETURN  ${resp}
+
 
 Get Labels
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/label  expected_status=any
     RETURN  ${resp}
 
-Get Label By Id
-    [Arguments]   ${label_id}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/waitlist/label/${label_id}   expected_status=any
-    RETURN  ${resp}
+
 
 Update Label
     [Arguments]  ${label_id}  ${l_name}  ${display_name}  ${desc}  ${values}  ${notifications}
@@ -5135,12 +5223,6 @@ Get Donation Count
     ${resp}=  GET On Session  ynw  /provider/donation/count  params=${kwargs}  expected_status=any
     RETURN  ${resp}
 
-
-Get Appointment By Id
-    [Arguments]  ${appmntId}
-    Check And Create YNW Session  
-    ${resp}=  GET On Session  ynw  /provider/appointment/${appmntId}  expected_status=any
-    RETURN  ${resp}
     
 Get Waitlist EncodedId
     [Arguments]    ${W_Enc_id}
@@ -5255,13 +5337,7 @@ Appointment Action for Batch
     ${resp}=  PUT On Session   ynw  /provider/appointment/statusChangeByBatch/${scheduleId}/${status}/${batch}  expected_status=any
     RETURN  ${resp}
 
-Add Label for Appointment
-    [Arguments]  ${appmntId}  ${labelname}  ${label_value}
-    ${data}=    Create Dictionary  ${labelname}=${label_value}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/appointment/addLabel/${appmntId}  data=${data}  expected_status=any
-    RETURN  ${resp}
+
 
 Create Label Dictionary
     [Arguments]  @{kwargs}
@@ -5274,18 +5350,6 @@ Create Label Dictionary
     RETURN  ${data}
 
 
-Add Label for Multiple Appointment
-    [Arguments]  ${label_dict}  @{appmntId}
-    ${len}=  Get Length  ${appmntId}
-    ${appmnts}=  Create List
-    FOR  ${value}  IN  @{appmntId}
-        Append To List  ${appmnts}  ${value}
-    END
-    ${data}=    Create Dictionary  uuid=${appmnts}  labels=${label_dict}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/appointment/labelBatch  data=${data}  expected_status=any
-    RETURN  ${resp}
 
 Remove Appointment Label
     [Arguments]   ${apptId}  ${label}
@@ -5376,16 +5440,7 @@ Get Future Appointment Count
     ${resp}=    GET On Session     ynw   /provider/appointment/future/count  params=${kwargs}   expected_status=any
     RETURN  ${resp}
 
-Get Appointments Today
-    # Available Filters:- service, consumer(procon id), firstName, lastName, appointmentEncId, 
-    # account, schedule, date, apptdate, apptBy, apptTime, apptStatus, paymentStatus, location,
-    # provider(user id), apptstartTime, jaldeeConsumer, rejectReason, cancelReason, appointmentMode
-    # gender, dob, department, label, groups, phoneNo, appmtFor, accessScope, apptForId, apptForIds
-    # providerOwnConsumerId, team, deptId, businessLoc, internalStatus, countryCode, subServiceData
-    [Arguments]  &{kwargs}
-    Check And Create YNW Session
-    ${resp}=    GET On Session     ynw   /provider/appointment/today  params=${kwargs}  expected_status=any
-    RETURN  ${resp}
+
 
 Get Today Appointment Count
     [Arguments]  &{kwargs}
@@ -5642,26 +5697,6 @@ Update Account contact information
     ${resp}=  PUT On Session  ynw  /provider/contact  data=${data}  expected_status=any
     RETURN  ${resp}
     
-
-Create Sample Schedule
-    [Arguments]   ${lid}   @{vargs}
-    # ${DAY1}=  db.get_date
-    # ${DAY2}=  db.db.add_timezone_date  ${tz}  10      
-    # ${sTime1}=  db.get_time_by_timezone   ${tz}
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10  
-    ${sTime1}=  db.get_time_by_timezone  ${tz}
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  db.add_two   ${sTime1}  ${delta}
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=1
-    ${consumerParallelServing}=  FakerLibrary.Random Int  min=1  max=1
-    ${maxval}=  Convert To Integer   ${delta/5}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}   ${consumerParallelServing}   ${lid}  ${duration}  ${bool[0]}  @{vargs}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    RETURN  ${resp}
 
 
 # Availability Of Queue By Provider
@@ -6725,23 +6760,6 @@ Remove Label for Order
     ${resp}=  DELETE On Session  ynw  /provider/orders/label/${OrderId}/${label}   expected_status=any
     RETURN  ${resp} 
 
-
-Create Sample Label
-    FOR  ${i}  IN RANGE   5
-        ${Values}=  FakerLibrary.Words  	nb=3
-        ${status}=  Run Keyword And Return Status   List Should Not Contain Duplicates   ${Values}
-        Exit For Loop If  '${status}'=='True'
-    END
-    ${ShortValues}=  FakerLibrary.Words  	nb=3
-    ${Notifmsg}=  FakerLibrary.Words  	nb=3
-    ${ValueSet}=  Create ValueSet For Label  ${Values[0]}  ${ShortValues[0]}  ${Values[1]}  ${ShortValues[1]}  ${Values[2]}  ${ShortValues[2]}
-    ${NotificationSet}=  Create NotificationSet For Label  ${Values[0]}  ${Notifmsg[0]}  ${Values[1]}  ${Notifmsg[1]}  ${Values[2]}  ${Notifmsg[2]}
-    ${labelname}=  FakerLibrary.Words  nb=2
-    ${label_desc}=  FakerLibrary.Sentence
-    ${resp}=  Create Label  ${labelname[0]}  ${labelname[1]}  ${label_desc}  ${ValueSet}  ${NotificationSet}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    RETURN  ${resp.json()} 
 
 
 Add Label for Multiple Order
@@ -14122,11 +14140,6 @@ Update vendor user defined status
 
 
 
-Get Vendor List with Count filter
-    [Arguments]   &{param}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw    /provider/vendor/count    params=${param}    expected_status=any    headers=${headers}
-    RETURN  ${resp}
 
 
 
@@ -16050,4 +16063,12 @@ Create User With Roles And Scope
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/user    data=${data}  expected_status=any
+    RETURN  ${resp}
+
+AddFamilyMemberByProviderWithPhoneNo
+    [Arguments]  ${id}  ${firstname}  ${lastname}  ${dob}  ${gender}  ${PhoneNo}    ${countryCode}=91
+    Check And Create YNW Session
+    ${data}=  Create Dictionary  parent=${id}  firstName=${firstname}  lastName=${lastname}  dob=${dob}  gender=${gender}  phoneNo=${PhoneNo}  countryCode=${countryCode}
+    ${data}=    json.dumps    ${data}
+    ${resp}=  POST On Session   ynw   /provider/customers/familyMember   data=${data}  expected_status=any
     RETURN  ${resp}
