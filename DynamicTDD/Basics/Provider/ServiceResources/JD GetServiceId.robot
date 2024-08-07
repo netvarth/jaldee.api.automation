@@ -34,6 +34,7 @@ ${SERVICE13}    P3SERVICE13
 @{serviceType}      virtualService     physicalService 
 ${ZOOM_url}    https://zoom.us/j/{}?pwd=THVLcTBZa2lESFZQbU9DQTQrWUxWZz09
 
+
 *** Test Cases ***
 
 JD-TC-GetServiceId-1
