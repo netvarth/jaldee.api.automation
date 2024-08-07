@@ -93,10 +93,14 @@ JD-TC-CreateBooking_Waitlist-1
     Set Suite Variable  ${Capa_name6}  ${resp.json()[5]['displayName']}
     Set Suite Variable  ${Capa_id7}    ${resp.json()[6]['id']}
     Set Suite Variable  ${Capa_name7}  ${resp.json()[6]['displayName']}
+    Set Suite Variable  ${Capa_id21}    ${resp.json()[21]['id']}
+    Set Suite Variable  ${Capa_name21}  ${resp.json()[21]['displayName']}
+    Set Suite Variable  ${Capa_id24}    ${resp.json()[24]['id']}
+    Set Suite Variable  ${Capa_name24}  ${resp.json()[24]['displayName']}
 
     ${description}=    Fakerlibrary.Sentence    
     ${New_role_name1}=    Fakerlibrary.Sentence    
-    ${Capabilities}=    Create List    ${Capa_id1}    
+    ${Capabilities}=    Create List    ${Capa_id1}   ${Capa_id24}  ${Capa_id21}
     
     ${resp}=  Create Role      ${New_role_name1}    ${description}    ${rbac_feature[1]}    ${Capabilities}
     Log   ${resp.json()}
@@ -209,7 +213,7 @@ JD-TC-CreateBooking_Waitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    clear_location   ${HLPUSERNAME1}
+    # clear_location   ${HLPUSERNAME1}
 
     # ${resp}=    Provider Logout
     # Log   ${resp.content}
@@ -252,9 +256,9 @@ JD-TC-CreateBooking_Waitlist-1
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${Total}=  Convert To Number  ${Total}  1
 
-    ${resp}=  Create Service  ${SERVICE1}  ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[0]}   department=${dep_id}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${s_id}  ${resp.json()}
+    # ${resp}=  Create Service  ${SERVICE1}  ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[0]}   department=${dep_id}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${s_id}  ${resp.json()}
 
     ${sTime1}=  add_timezone_time  ${tz}  2  15  
     Set Suite Variable  ${sTime1}
@@ -262,10 +266,11 @@ JD-TC-CreateBooking_Waitlist-1
     Set Suite Variable  ${eTime1}
     ${queue_name1}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name1}
-    ${resp}=  Create Queue  ${queue_name1}  Weekly  ${list1}  ${DAY}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  1  ${lid}  ${s_id}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${q_id}  ${resp.json()}
 
+    # ${resp}=  Create Queue  ${queue_name1}  Weekly  ${list1}  ${DAY}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  1  ${lid}  ${s_id}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${q_id}  ${resp.json()}
+# ---------------------------------- create provider consumer ------------------------------------------
     ${PH_Number}    Random Number          digits=5 
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
@@ -310,7 +315,7 @@ JD-TC-CreateBooking_Waitlist-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}            ${resp.json()['providerConsumer']}
-
+# ---------------------------------------------------------------------------------------------
     ${resp}=  Encrypted Provider Login    ${HLPUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
@@ -334,32 +339,52 @@ JD-TC-CreateBooking_Waitlist-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    #... linking user to the provider 1 and get linked lists
+    # #... linking user to the provider 1 and get linked lists
 
 
 
-    ${resp}=    Connect with other login  ${PUSERNAME_U1}  password=${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    202
+    # ${resp}=    Connect with other login  ${PUSERNAME_U1}  password=${PASSWORD}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    202
 
-    ${resp}=    Account Activation      ${PUSERNAME_U1}  ${OtpPurpose['LinkLogin']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=    Account Activation      ${PUSERNAME_U1}  ${OtpPurpose['LinkLogin']}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${key2} =   db.Verify Accnt   ${PUSERNAME_U1}    ${OtpPurpose['LinkLogin']}
-    Set Suite Variable   ${key2}
+    # ${key2} =   db.Verify Accnt   ${PUSERNAME_U1}    ${OtpPurpose['LinkLogin']}
+    # Set Suite Variable   ${key2}
 
-    ${resp}=    Connect with other login  ${PUSERNAME_U1}   otp=${key2}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=    Connect with other login  ${PUSERNAME_U1}   otp=${key2}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Provider Logout
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=    Provider Logout
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}   200
+
+    # ${resp}=  Get User By Id  ${u_id1}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${desc}=   FakerLibrary.word
+    # ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${wid}=  Get Dictionary Values  ${resp.json()}
+    # Set Test Variable  ${wid1}  ${wid[0]}
+
+    ${resp}=  Create Service  ${SERVICE1}  ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[0]}   department=${dep_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${s_id}  ${resp.json()}
+    
+
+    ${resp}=  Create Queue  ${queue_name1}  Weekly  ${list1}  ${DAY}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  1  ${lid}  ${s_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${q_id}  ${resp.json()}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
@@ -368,7 +393,3 @@ JD-TC-CreateBooking_Waitlist-1
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
-    ${resp}=  Create Service  ${SERVICE2}  ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[0]}   department=${dep_id}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${s_id}  ${resp.json()}
-    
