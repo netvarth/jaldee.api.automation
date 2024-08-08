@@ -18,11 +18,11 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 
 *** Test Cases ***
 
-JD-TC-Create_Product-1
+JD-TC-Get_Lead_Product_Count_By_Filter-1
 
-    [Documentation]   Create Product 
+    [Documentation]   Get Lead Product Count By Filter
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME66}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -45,6 +45,12 @@ JD-TC-Create_Product-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable      ${lpid}     ${resp.json()} 
 
-    ${resp}=    Get Lead Product By Uid  ${lpid}
+    ${resp}=    Get Lead Product By Filter
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}             200
+    ${length}=  Get Length  ${resp.json()}
+
+    ${resp}=    Get Lead Product Count By Filter
+    Log  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()}          ${length} 

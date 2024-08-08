@@ -18,13 +18,20 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 
 *** Test Cases ***
 
-JD-TC-Create_Product-1
+JD-TC-Get_Lead_Product_By_Filter-1
 
-    [Documentation]   Create Product 
+    [Documentation]   Get Lead Product By Filter
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    ${resp}=    Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${accountId}        ${resp.json()['id']}
 
     ${resp}=  Get Account Settings
     Log  ${resp.content}
@@ -48,3 +55,12 @@ JD-TC-Create_Product-1
     ${resp}=    Get Lead Product By Uid  ${lpid}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}             200
+
+    ${resp}=    Get Lead Product By Filter
+    Log  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()[0]['account']}       ${accountId}
+    Should Be Equal As Strings      ${resp.json()[0]['typeName']}      ${typeName}
+    Should Be Equal As Strings      ${resp.json()[0]['productEnum']}   ${productEnum[0]}
+    Should Be Equal As Strings      ${resp.json()[0]['uid']}           ${lpid}
+    Should Be Equal As Strings      ${resp.json()[0]['crmStatus']}     ${status[0]}

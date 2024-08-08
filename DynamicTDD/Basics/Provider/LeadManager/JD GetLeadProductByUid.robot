@@ -18,13 +18,20 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 
 *** Test Cases ***
 
-JD-TC-Create_Product-1
+JD-TC-Get_Lead_Product_By_Uid-1
 
-    [Documentation]   Create Product 
+    [Documentation]   Get Lead Product By Uid
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    ${resp}=    Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${accountId}        ${resp.json()['id']}
 
     ${resp}=  Get Account Settings
     Log  ${resp.content}
@@ -48,3 +55,8 @@ JD-TC-Create_Product-1
     ${resp}=    Get Lead Product By Uid  ${lpid}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()['account']}       ${accountId}
+    Should Be Equal As Strings      ${resp.json()['typeName']}      ${typeName}
+    Should Be Equal As Strings      ${resp.json()['productEnum']}   ${productEnum[0]}
+    Should Be Equal As Strings      ${resp.json()['uid']}           ${lpid}
+    Should Be Equal As Strings      ${resp.json()['crmStatus']}     ${status[0]}
