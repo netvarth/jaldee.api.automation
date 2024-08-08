@@ -1370,6 +1370,25 @@ Get Item Unit Count Filter
     ${resp}=    GET On Session    ynw   /provider/spitem/settings/unit/count   params=${param}   expected_status=any
     RETURN  ${resp}
 
+Get Item Category Count By Filter
+
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/category/count   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Get Default Catalog Status
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/catalog/statuses   expected_status=any
+    RETURN  ${resp}
+
+Get Catalog By Criteria
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/catalog  params=${param}  expected_status=any
+    RETURN  ${resp}
+
+
 
 ######### LOGIN ###########
 
@@ -6569,11 +6588,6 @@ Get Order Catalog
     RETURN  ${resp}
 
 
-Get Catalog By Criteria
-    [Arguments]   &{param}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/catalog  params=${param}  expected_status=any
-    RETURN  ${resp}
 
 
 Change Catalog Status
@@ -6632,10 +6646,6 @@ Remove Single Item From Catalog
     RETURN  ${resp}
 
 
-Get Default Catalog Status
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/catalog/statuses   expected_status=any
-    RETURN  ${resp}
 
 
 Create MR 
@@ -13638,12 +13648,6 @@ Update Item Category Status
     ${resp}=  PATCH On Session  ynw  /provider/spitem/settings/category/${categoryCode}/status/${status}   expected_status=any
     RETURN  ${resp}  
 
-Get Item Category Count By Filter
-
-    [Arguments]   &{param}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/spitem/settings/category/count   params=${param}   expected_status=any
-    RETURN  ${resp}
 
 
 # ......... ITEM TYPE .............
