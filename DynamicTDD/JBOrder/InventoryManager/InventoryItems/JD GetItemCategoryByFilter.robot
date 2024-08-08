@@ -10,6 +10,7 @@ Library           requests
 Library           FakerLibrary
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
@@ -161,7 +162,7 @@ JD-TC-GetItemCategoryByFilter-UH2
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    
+
     ${resp}=  Get Item Category By Filter   categoryName-eq=${categoryName1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    401
