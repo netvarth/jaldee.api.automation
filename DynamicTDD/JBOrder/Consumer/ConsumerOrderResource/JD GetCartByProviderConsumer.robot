@@ -76,7 +76,7 @@ JD-TC-Get Cart By ProviderConsumer-1
     ${accountId}=  get_acc_id  ${HLPUSERNAME43}
     Set Suite Variable    ${accountId} 
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -301,7 +301,7 @@ JD-TC-Get Cart By ProviderConsumer-2
     ${accountId}=  get_acc_id  ${PUSERNAME208}
     Set Test Variable    ${accountId} 
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
