@@ -428,6 +428,17 @@ Create Sample User
     Should Be Equal As Strings  ${resp.status_code}  200
     RETURN  ${resp.json()}
 
+Update User
+    [Arguments]  ${id}   &{kwargs}
+    ${data}=  Create Dictionary  
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/user/${id}   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
 ########## BOOKING #############
 
 Queue
@@ -717,6 +728,49 @@ Add Label for Multiple Appointment
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment/labelBatch  data=${data}  expected_status=any
     RETURN  ${resp}
+
+Get Appointment Schedules
+    [Arguments]  &{kwargs}
+    # Available filters- id, location, state, provider, batch, name, service, account
+    Check And Create YNW Session
+    ${resp}=    GET On Session     ynw   /provider/appointment/schedule  params=${kwargs}  expected_status=any
+    RETURN  ${resp}
+
+Get Appointment Status
+    [Arguments]   ${uuid}
+    Check And Create YNW Session
+    ${resp}=    GET On Session     ynw   /provider/appointment/state/${uuid}  expected_status=any
+    RETURN  ${resp}
+
+Appointment Action 
+    [Arguments]   ${status}   ${appmntId}   &{kwargs}
+    ${data}=  Create Dictionary
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session   ynw  /provider/appointment/statuschange/${status}/${appmntId}  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Get Appointment Note
+    [Arguments]   ${uuid}
+    Check And Create YNW Session
+    ${resp}=    GET On Session     ynw   /provider/appointment/note/${uuid}   expected_status=any
+    RETURN  ${resp}
+
+Remove Label from Multiple Appointments
+    [Arguments]  ${labelname_list}  @{appmntId}
+    ${len}=  Get Length  ${appmntId}
+    ${appmnts}=  Create List
+    FOR  ${value}  IN  @{appmntId}
+        Append To List  ${appmnts}  ${value}
+    END
+    ${data}=    Create Dictionary  uuid=${appmnts}  labelNames=${labelname_list}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  DELETE On Session  ynw  /provider/appointment/masslabel  data=${data}  expected_status=any
+    RETURN  ${resp}
     
 ######### WAITLIST ###########
 
@@ -804,6 +858,66 @@ Create Sample Label
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     RETURN  ${resp.json()} 
+
+
+MultiLocation Domain Providers
+    [Arguments]  ${min}=0   ${max}=324
+    ${multilocdoms}=  get_mutilocation_domains
+    Log  ${multilocdoms}
+    ${domlen}=  Get Length   ${multilocdoms}
+    ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
+    ${len}=   Split to lines  ${resp}
+    ${length}=  Get Length   ${len}
+    @{dom_list}=  Create List
+    @{multiloc_providers}=  Create List
+
+    FOR   ${i}  IN RANGE   ${domlen}
+        ${dom}=  Convert To String   ${multilocdoms[${i}]['domain']}
+        Append To List   ${dom_list}  ${dom}
+    END
+    Log   ${dom_list}
+   
+    FOR   ${a}  IN RANGE   ${min}   ${max}    
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}    200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        ${domain}=   Set Variable    ${decrypted_data['sector']}
+        ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+        # ${domain}=   Set Variable    ${resp.json()['sector']}
+        # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+        Log  ${dom_list}
+        ${status} 	${value} = 	Run Keyword And Ignore Error  List Should Contain Value  ${dom_list}  ${domain}
+        Log Many  ${status} 	${value}
+        Run Keyword If  '${status}' == 'PASS'   Append To List   ${multiloc_providers}  ${PUSERNAME${a}}
+        ${resp}=  View Waitlist Settings
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}    200
+	    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=  Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    END
+    RETURN  ${multiloc_providers}
+
+Get Waitlist By Id
+    [Arguments]  ${wid}  &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
+    ${pro_params}=   Create Dictionary
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_params}   &{locparam}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/waitlist/${wid}  params=${pro_params}  expected_status=any
+    RETURN  ${resp}
+
     
 
 ######### MEMBERSHIP ############
@@ -1251,6 +1365,12 @@ Get Vendor List with Count filter
 
 ######### FINANCE  ############
 
+Get jp finance settings
+ 
+   Check And Create YNW Session
+   ${resp}=  GET On Session  ynw  /provider/jp/finance/settings  expected_status=any
+   RETURN  ${resp}
+
 Create Category
 
     [Arguments]    ${name}  ${categoryType}   
@@ -1259,6 +1379,7 @@ Create Category
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /provider/jp/finance/category    data=${data}  expected_status=any    headers=${headers}
     RETURN  ${resp}
+
 
 ###### All Current Keywords above this line #############################################
 
@@ -2987,19 +3108,6 @@ Provider Add To WL With Virtual Service
     ${resp}=  POST On Session  ynw  provider/waitlist  params=${pro_params}  data=${data}  expected_status=any
     RETURN  ${resp}
 
-
-Get Waitlist By Id
-    [Arguments]  ${wid}  &{kwargs}
-    ${pro_headers}=  Create Dictionary  &{headers}
-    ${pro_params}=   Create Dictionary
-    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
-    Log  ${kwargs}
-    Set To Dictionary  ${pro_headers}   &{tzheaders}
-    Set To Dictionary  ${pro_params}   &{locparam}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/waitlist/${wid}  params=${pro_params}  expected_status=any
-    RETURN  ${resp}
-
 	     
 Get Waitlist Today
     [Arguments]    &{kwargs}
@@ -4546,22 +4654,7 @@ Change StatusBoard Status
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/statusBoard/dimension/${id}/${status}  expected_status=any
     RETURN  ${resp}
-
-
-
-Update User
-    [Arguments]  ${id}  ${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${user_type}  ${pincode}  ${countryCode}  ${mob_no}  ${dept_id}  ${sub_domain}  ${admin}  ${whatsApp_countrycode}  ${WhatsApp_num}  ${telegram_countrycode}  ${telegram_num}    &{kwargs}
-    ${whatsAppNum}=   Create Dictionary  countryCode=${whatsApp_countrycode}  number=${WhatsApp_num}
-    ${telegramNum}=  Create Dictionary  countryCode=${telegram_countrycode}  number=${telegram_num}
-    ${data}=  Create Dictionary  firstName=${fname}  lastName=${lname}  dob=${dob}  gender=${gender}  email=${email}  userType=${user_type}  pincode=${pincode}  countryCode=${countryCode}  mobileNo=${mob_no}  deptId=${dept_id}  subdomain=${sub_domain}  admin=${admin}  whatsAppNum=${whatsAppNum}  telegramNum=${telegramNum}
-    FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary 	${data} 	${key}=${value}
-    END
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/user/${id}   data=${data}  expected_status=any
-    RETURN  ${resp}        
-    
+   
 
 
 Get User Count
@@ -4897,12 +4990,7 @@ Disable Appointment Schedule
     ${resp}=  PUT On Session  ynw  /provider/appointment/schedule/${schId}/DISABLED   expected_status=any
     RETURN  ${resp}
     
-Get Appointment Schedules
-    [Arguments]  &{kwargs}
-    # Available filters- id, location, state, provider, batch, name, service, account
-    Check And Create YNW Session
-    ${resp}=    GET On Session     ynw   /provider/appointment/schedule  params=${kwargs}  expected_status=any
-    RETURN  ${resp}
+
 
 Get Next Available Appointment Slot
     [Arguments]   ${schId}
@@ -5265,16 +5353,6 @@ Reject Appointment
     ${resp}=  PUT On Session   ynw  /provider/appointment/statuschange/Rejected/${appmntId}    data=${data}  expected_status=any 
     RETURN  ${resp}
     
-Appointment Action 
-    [Arguments]   ${status}   ${appmntId}   &{kwargs}
-    ${data}=  Create Dictionary
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session   ynw  /provider/appointment/statuschange/${status}/${appmntId}  data=${data}  expected_status=any
-    RETURN  ${resp}
     
 Enable Future Appointment
     Check And Create YNW Session
@@ -5314,11 +5392,6 @@ Disable Appointment
     ${resp}=  PUT On Session  ynw  /provider/account/settings/appointment/Disable   expected_status=any
     RETURN  ${resp}
 
-Get Appointment Status
-    [Arguments]   ${uuid}
-    Check And Create YNW Session
-    ${resp}=    GET On Session     ynw   /provider/appointment/state/${uuid}  expected_status=any
-    RETURN  ${resp}
     
 Enable Calling Status
     [Arguments]   ${uid}   
@@ -5358,18 +5431,7 @@ Remove Appointment Label
     ${resp}=    DELETE On Session    ynw  /provider/appointment/removeLabel/${apptId}/${label}  expected_status=any
     RETURN  ${resp}
 
-Remove Label from Multiple Appointments
-    [Arguments]  ${labelname_list}  @{appmntId}
-    ${len}=  Get Length  ${appmntId}
-    ${appmnts}=  Create List
-    FOR  ${value}  IN  @{appmntId}
-        Append To List  ${appmnts}  ${value}
-    END
-    ${data}=    Create Dictionary  uuid=${appmnts}  labelNames=${labelname_list}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  DELETE On Session  ynw  /provider/appointment/masslabel  data=${data}  expected_status=any
-    RETURN  ${resp}
+
 
 
 Add Label for Waitlist
@@ -5423,11 +5485,6 @@ Add Note to Appointment
     ${resp}=  POST On Session  ynw  /provider/appointment/note/${appmntId}  data=${note}  expected_status=any
     RETURN  ${resp}
 
-Get Appointment Note
-    [Arguments]   ${uuid}
-    Check And Create YNW Session
-    ${resp}=    GET On Session     ynw   /provider/appointment/note/${uuid}   expected_status=any
-    RETURN  ${resp}
 
 Get Future Appointments
     [Arguments]  &{kwargs}
@@ -6777,51 +6834,6 @@ Add Label for Multiple Order
     RETURN  ${resp}
 
 
-MultiLocation Domain Providers
-    [Arguments]  ${min}=0   ${max}=324
-    ${multilocdoms}=  get_mutilocation_domains
-    Log  ${multilocdoms}
-    ${domlen}=  Get Length   ${multilocdoms}
-    ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
-    ${len}=   Split to lines  ${resp}
-    ${length}=  Get Length   ${len}
-    @{dom_list}=  Create List
-    @{multiloc_providers}=  Create List
-
-    FOR   ${i}  IN RANGE   ${domlen}
-        ${dom}=  Convert To String   ${multilocdoms[${i}]['domain']}
-        Append To List   ${dom_list}  ${dom}
-    END
-    Log   ${dom_list}
-   
-    FOR   ${a}  IN RANGE   ${min}   ${max}    
-        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
-        Log  ${resp.content}
-        Should Be Equal As Strings    ${resp.status_code}    200
-        ${decrypted_data}=  db.decrypt_data  ${resp.content}
-        Log  ${decrypted_data}
-        ${domain}=   Set Variable    ${decrypted_data['sector']}
-        ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
-        # ${domain}=   Set Variable    ${resp.json()['sector']}
-        # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
-        Log  ${dom_list}
-        ${status} 	${value} = 	Run Keyword And Ignore Error  List Should Contain Value  ${dom_list}  ${domain}
-        Log Many  ${status} 	${value}
-        Run Keyword If  '${status}' == 'PASS'   Append To List   ${multiloc_providers}  ${PUSERNAME${a}}
-        ${resp}=  View Waitlist Settings
-        Log  ${resp.content}
-        Should Be Equal As Strings    ${resp.status_code}    200
-	    ${resp}=  View Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[1]}
-        ${resp}=  Toggle Department Disable
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-
-    END
-    END
-    RETURN  ${multiloc_providers}
 
 Update Delivery Address
     [Arguments]  ${proConsumerId}   @{vargs}
@@ -11305,11 +11317,7 @@ Update Finance Status
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/status/${status_id}   data=${data}  expected_status=any    headers=${headers}
     RETURN  ${resp}
 
-Get jp finance settings
- 
-   Check And Create YNW Session
-   ${resp}=  GET On Session  ynw  /provider/jp/finance/settings  expected_status=any
-   RETURN  ${resp}
+
 
 Enable Disable Jaldee Finance Status
 
@@ -16073,3 +16081,17 @@ AddFamilyMemberByProviderWithPhoneNo
     ${data}=    json.dumps    ${data}
     ${resp}=  POST On Session   ynw   /provider/customers/familyMember   data=${data}  expected_status=any
     RETURN  ${resp}
+
+
+Update User
+    [Arguments]  ${id}  ${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${user_type}  ${pincode}  ${countryCode}  ${mob_no}  ${dept_id}  ${sub_domain}  ${admin}  ${whatsApp_countrycode}  ${WhatsApp_num}  ${telegram_countrycode}  ${telegram_num}    &{kwargs}
+    ${whatsAppNum}=   Create Dictionary  countryCode=${whatsApp_countrycode}  number=${WhatsApp_num}
+    ${telegramNum}=  Create Dictionary  countryCode=${telegram_countrycode}  number=${telegram_num}
+    ${data}=  Create Dictionary  firstName=${fname}  lastName=${lname}  dob=${dob}  gender=${gender}  email=${email}  userType=${user_type}  pincode=${pincode}  countryCode=${countryCode}  mobileNo=${mob_no}  deptId=${dept_id}  subdomain=${sub_domain}  admin=${admin}  whatsAppNum=${whatsAppNum}  telegramNum=${telegramNum}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/user/${id}   data=${data}  expected_status=any
+    RETURN  ${resp}     

@@ -48,6 +48,52 @@ Get consumer Appointment By Id
     ${resp}=  GET On Session  ynw  url=/consumer/appointment/${appmntId}?account=${accId}   params=${cons_params}  expected_status=any   headers=${cons_headers}
     RETURN  ${resp}
 
+
+####### PAYMENTS  #########
+
+Make Payment Consumer Mock
+    [Arguments]  ${accid}  ${amount}   ${purpose}  ${uuid}    ${serviceId}   ${international}   ${response}  ${c_id}  &{kwargs}  
+    
+    ${data}=  Create Dictionary  accountId=${accid}  amount=${amount}  paymentMode=Mock  purpose=${purpose}  uuid=${uuid}  
+    ...    serviceId=${serviceId}   isInternational=${international}   mockResponse=${response}  custId=${c_id}
+    
+    ${cons_headers}=  Create Dictionary  &{headers} 
+    ${cons_params}=  Create Dictionary
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${cons_params}   &{locparam}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session    ynw  /consumer/payment  data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
+    RETURN  ${resp}
+
+Get Payment Details
+    [Arguments]   &{cons_params}
+    ${cons_headers}=  Create Dictionary  &{headers}
+    ${headers}  ${cons_params}  ${locparam}=  db.Set_TZ_Header  &{cons_params}
+    Log  ${cons_params}
+    ${cons_headers}=  Create Dictionary  &{headers} 
+    Set To Dictionary  ${cons_params}   &{locparam}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /consumer/payment     params=${cons_params}   expected_status=any   headers=${cons_headers}
+    RETURN  ${resp}
+
+Get Payment Details By UUId
+    [Arguments]  ${uuid}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_headers}=  Create Dictionary  &{headers} 
+    ${cons_params}=  Create Dictionary
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${cons_params}   &{locparam}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /consumer/payment/details/${uuid}  params=${cons_params}  expected_status=any   headers=${cons_headers} 
+    RETURN  ${resp}
+
 ###### All Current Keywords above this line #############################################
 
 Consumer Login
@@ -1024,26 +1070,6 @@ Make Payment Consumer
 #     RETURN  ${resp}
 
 
-Make Payment Consumer Mock
-    [Arguments]  ${accid}  ${amount}   ${purpose}  ${uuid}    ${serviceId}   ${international}   ${response}  ${c_id}  &{kwargs}  
-    
-    ${data}=  Create Dictionary  accountId=${accid}  amount=${amount}  paymentMode=Mock  purpose=${purpose}  uuid=${uuid}  
-    ...    serviceId=${serviceId}   isInternational=${international}   mockResponse=${response}  custId=${c_id}
-    
-    ${cons_headers}=  Create Dictionary  &{headers} 
-    ${cons_params}=  Create Dictionary
-    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
-    Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${cons_params}   &{locparam}
-    FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary 	${data} 	${key}=${value}
-    END
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session    ynw  /consumer/payment  data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    RETURN  ${resp}
-
 
 Get Payment Consumer
     [Arguments]  ${uuid}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1501,28 +1527,7 @@ Get Donation Service By Consumer
     ${resp}=  GET On Session  ynw  /consumer/donation/services    params=${cons_params}   expected_status=any   headers=${cons_headers}
     RETURN  ${resp}
 
-Get Payment Details
-    [Arguments]   &{cons_params}
-    ${cons_headers}=  Create Dictionary  &{headers}
-    ${headers}  ${cons_params}  ${locparam}=  db.Set_TZ_Header  &{cons_params}
-    Log  ${cons_params}
-    ${cons_headers}=  Create Dictionary  &{headers} 
-    Set To Dictionary  ${cons_params}   &{locparam}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   /consumer/payment     params=${cons_params}   expected_status=any   headers=${cons_headers}
-    RETURN  ${resp}
 
-Get Payment Details By UUId
-    [Arguments]  ${uuid}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${cons_headers}=  Create Dictionary  &{headers} 
-    ${cons_params}=  Create Dictionary
-    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
-    Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${cons_params}   &{locparam}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   /consumer/payment/details/${uuid}  params=${cons_params}  expected_status=any   headers=${cons_headers} 
-    RETURN  ${resp}
 
 Get Individual Payment Records
     [Arguments]  ${id}  &{kwargs}  #${timeZone}=Asia/Kolkata
