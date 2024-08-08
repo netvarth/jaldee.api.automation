@@ -132,8 +132,6 @@ JD-TC-GetItemHsnFilter-4
         END
     END
 
-
-
 JD-TC-GetItemHsnFilter-UH1
 
     [Documentation]  Get Item hns Filter - without login
@@ -142,7 +140,6 @@ JD-TC-GetItemHsnFilter-UH1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}        419
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED}
-
 
 JD-TC-GetItemHsnFilter-5
 
