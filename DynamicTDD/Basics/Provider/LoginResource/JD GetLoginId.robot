@@ -132,7 +132,7 @@ JD-TC-Get_LoginId-3
     ${resp}=    Get LoginId  ${inv}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings      ${resp.content}      ${INV_USER_ID}
+    Should Be Equal As Strings      ${resp.json()}      ${INV_USER_ID}
 
 JD-TC-Get_LoginId-4
 

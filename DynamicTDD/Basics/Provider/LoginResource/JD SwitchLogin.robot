@@ -7,7 +7,6 @@ Library           json
 Library           /ebs/TDD/db.py
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
-Resource          /ebs/TDD/ApiKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
@@ -518,21 +517,21 @@ JD-TC-Switch_Login-7
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  View Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  View Waitlist Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # IF  ${resp.json()['filterByDept']}==${bool[0]}
+    #     ${resp}=  Toggle Department Enable
+    #     Log  ${resp.content}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
 
-    END
+    # END
 
-     sleep  2s
-     ${resp}=  Get Departments
-     Log   ${resp.json()}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    #  sleep  2s
+    #  ${resp}=  Get Departments
+    #  Log   ${resp.json()}
+    #  Should Be Equal As Strings  ${resp.status_code}  200
+    #  Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      ${resp2}=   Get Business Profile
      Log  ${resp2.json()}
      Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
@@ -560,7 +559,7 @@ JD-TC-Switch_Login-7
     ${us1}=  Evaluate  ${PUSERNAME}+5665471
     Set Suite Variable  ${us1}
 
-    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${loginId}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[0]}  ${us1}  ${dep_id}   ${sub_domain_id}  ${bool[0]}   ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname3}  ${lastname3}   ${countryCodes[0]}  ${us1}  ${userType[0]}    
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
@@ -808,7 +807,7 @@ JD-TC-Switch_Login-11
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -822,7 +821,7 @@ JD-TC-Switch_Login-11
     Set Suite Variable    ${cid}            ${resp.json()['providerConsumer']}
     Set Suite Variable    ${jconid}         ${resp.json()['id']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1018,7 +1017,7 @@ JD-TC-Switch_Login-14
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1032,7 +1031,7 @@ JD-TC-Switch_Login-14
     Set Suite Variable    ${cid}            ${resp.json()['providerConsumer']}
     Set Suite Variable    ${jconid2}         ${resp.json()['id']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1348,7 +1347,7 @@ JD-TC-Switch_Login-15
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1365,7 +1364,7 @@ JD-TC-Switch_Login-15
     Set Suite Variable    ${proconlname}    ${resp.json()['lastName']} 
     Set Suite Variable    ${fullname}       ${proconfname}${space}${proconlname}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1702,7 +1701,7 @@ JD-TC-Switch_Login-16
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout
+    ${resp}=    Consumer Logout
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1710,7 +1709,7 @@ JD-TC-Switch_Login-16
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
  
-    ${resp}=    Customer Logout
+    ${resp}=    Consumer Logout
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1973,7 +1972,7 @@ JD-TC-Switch_Login-17
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1986,7 +1985,7 @@ JD-TC-Switch_Login-17
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

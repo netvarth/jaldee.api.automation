@@ -410,7 +410,8 @@ JD-TC-Get Store Count Filter-10
     ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-  
+    
+    sleep  2s
     ${resp}=    Verify Otp For Login   ${primaryMobileNo}   12  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
