@@ -1298,3 +1298,37 @@ Provider Get Store Type By EncId
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/store/type/id/${storeTypeId}      expected_status=any
     RETURN  ${resp}
+
+Get Item Manufacture Filter
+
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/manufacturer   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Get Item Tax Filter
+
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/tax   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Get Item Type By Filter
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/type   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Get Item Type Count By Filter
+
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/type/count   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Get Item Unit Filter
+
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/unit   params=${param}   expected_status=any
+    RETURN  ${resp}

@@ -1315,6 +1315,32 @@ Get Item Inventory
     ${resp}=    GET On Session    ynw   /provider/spitem/${id}     expected_status=any
     RETURN  ${resp}
 
+Get Item Manufacture Filter
+
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/manufacturer   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Get Item Tax Filter
+
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/tax   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Get Item Type By Filter
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/type   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Get Item Type Count By Filter
+
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/type/count   params=${param}   expected_status=any
+    RETURN  ${resp}
 
 
 ######### LOGIN ###########
@@ -13661,11 +13687,6 @@ Update Item Type
     ${resp}=  PATCH On Session  ynw  /provider/spitem/settings/type  data=${data}  expected_status=any
     RETURN  ${resp}  
 
-Get Item Type By Filter
-    [Arguments]   &{param}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/spitem/settings/type   params=${param}   expected_status=any
-    RETURN  ${resp}
 
 Update Item Type Status
 
@@ -13674,12 +13695,7 @@ Update Item Type Status
     ${resp}=  PATCH On Session  ynw  /provider/spitem/settings/type/${typeCode}/status/${status}   expected_status=any
     RETURN  ${resp}  
 
-Get Item Type Count By Filter
 
-    [Arguments]   &{param}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/spitem/settings/type/count   params=${param}   expected_status=any
-    RETURN  ${resp}
 
 # ............ Store .............
 
@@ -13763,12 +13779,6 @@ Update Item Manufacture
     ${resp}=  PATCH On Session  ynw  /provider/spitem/settings/manufacturer  data=${data}  expected_status=any
     RETURN  ${resp} 
 
-Get Item Manufacture Filter
-
-    [Arguments]    &{param}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/spitem/settings/manufacturer   params=${param}   expected_status=any
-    RETURN  ${resp}
 
 Update Item Manufacture Status
 
@@ -13812,12 +13822,6 @@ Update Item Tax
     ${resp}=  PATCH On Session  ynw  /provider/spitem/settings/tax  data=${data}  expected_status=any
     RETURN  ${resp} 
 
-Get Item Tax Filter
-
-    [Arguments]    &{param}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/spitem/settings/tax   params=${param}   expected_status=any
-    RETURN  ${resp}
 
 Update Item Tax Status
 
