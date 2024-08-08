@@ -15754,8 +15754,10 @@ Create Lead Product
 
     [Arguments]  ${typeName}  ${productEnum}
 
+    ${data}=  Create Dictionary  typeName=${typeName}  productEnum=${productEnum}  
+    ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/crm/lead/product  expected_status=any
+    ${resp}=  POST On Session  ynw  /provider/crm/lead/product  data=${data}  expected_status=any
     RETURN  ${resp}
 
 
