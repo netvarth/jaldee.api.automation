@@ -1342,6 +1342,13 @@ Get Item Type Count By Filter
     ${resp}=    GET On Session    ynw   /provider/spitem/settings/type/count   params=${param}   expected_status=any
     RETURN  ${resp}
 
+Get Item Unit Filter
+
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/unit   params=${param}   expected_status=any
+    RETURN  ${resp}
+
 
 ######### LOGIN ###########
 
@@ -13857,12 +13864,6 @@ Update Item Unit
     ${resp}=  PATCH On Session  ynw  /provider/spitem/settings/unit  data=${data}  expected_status=any
     RETURN  ${resp} 
 
-Get Item Unit Filter
-
-    [Arguments]    &{param}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/spitem/settings/unit   params=${param}   expected_status=any
-    RETURN  ${resp}
 
 Update Item Unit Status
 
