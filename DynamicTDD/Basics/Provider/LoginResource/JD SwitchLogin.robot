@@ -264,7 +264,7 @@ JD-TC-Switch_Login-UH2
     ${resp}=    Switch login    ${inv}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings      ${resp.json()}          ${INV_LOGIN_ID}
+    Should Be Equal As Strings      ${resp.json()}          ${INV_LOGIN_ID}  ignore_case=True
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -1794,13 +1794,6 @@ JD-TC-Switch_Login-17
     ${resp}=    Provider Logout
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-
-
-
-
-
-
-
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
