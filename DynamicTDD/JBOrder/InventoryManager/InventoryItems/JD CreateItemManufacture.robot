@@ -10,6 +10,7 @@ Library           requests
 Library           FakerLibrary
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
@@ -101,10 +102,38 @@ JD-TC-CreateItemManufacture-UH3
 
     [Documentation]  Provider Create a Item Manufacture with Consumer Login.
 
-    ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME174}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${account_id}=    get_acc_id       ${PUSERNAME174}
 
+    #............provider consumer creation..........
+
+    ${fname}=  FakerLibrary.first_name
+    ${lname}=  FakerLibrary.last_name
+  
+    ${resp}=    Send Otp For Login    ${CUSERNAME3}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME3}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+    
+    Set Test Variable  ${email}  ${fname}${CUSERNAME3}.${test_mail}
+
+    ${resp}=    ProviderConsumer SignUp    ${fname}  ${lname}  ${email}    ${CUSERNAME3}     ${account_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Consumer Logout 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME3}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     ${ManufactureName}=    FakerLibrary.Random Number
 
     ${resp}=  Create Item Manufacture   ${ManufactureName}
