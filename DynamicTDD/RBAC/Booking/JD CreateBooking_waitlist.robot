@@ -113,76 +113,79 @@ JD-TC-CreateBooking_Waitlist-1
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
-    ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  View Waitlist Settings
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # IF  ${resp.json()['filterByDept']}==${bool[0]}
+    #     ${resp}=  Toggle Department Enable
+    #     Log  ${resp.json()}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
 
-    END
+    # END
 
-    ${resp}=  Get Departments
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${dep_name1}=  FakerLibrary.bs
-        ${dep_code1}=   Random Int  min=100   max=999
-        ${dep_desc1}=   FakerLibrary.word  
-        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-        Set Suite Variable  ${dep_id}  ${resp1.json()}
-    ELSE
-        Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
-    END
+    # ${resp}=  Get Departments
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF   '${resp.content}' == '${emptylist}'
+    #     ${dep_name1}=  FakerLibrary.bs
+    #     ${dep_code1}=   Random Int  min=100   max=999
+    #     ${dep_desc1}=   FakerLibrary.word  
+    #     ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+    #     Log  ${resp1.content}
+    #     Should Be Equal As Strings  ${resp1.status_code}  200
+    #     Set Suite Variable  ${dep_id}  ${resp1.json()}
+    # ELSE
+    #     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    # END
 
-    ${resp}=  Get User
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF   not '${resp.content}' == '${emptylist}'
-        ${len}=  Get Length  ${resp.json()}
-        FOR   ${i}  IN RANGE   0   ${len}
-            Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLPUSERNAME1}'
-                clear_users  ${user_phone}
-            END
-        END
-    END
+    # ${resp}=  Get User
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # IF   not '${resp.content}' == '${emptylist}'
+    #     ${len}=  Get Length  ${resp.json()}
+    #     FOR   ${i}  IN RANGE   0   ${len}
+    #         Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
+    #         IF   not '${user_phone}' == '${HLPUSERNAME1}'
+    #             clear_users  ${user_phone}
+    #         END
+    #     END
+    # END
+
+
+    # FOR    ${i}    IN RANGE    3
+    #     ${pin}=  get_pincode
+    #     ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+    #     IF    '${kwstatus}' == 'FAIL'
+    #             Continue For Loop
+    #     ELSE IF    '${kwstatus}' == 'PASS'
+    #             Exit For Loop
+    #     END
+    # END
+
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200 
+    # Set Suite Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
+    # Set Suite Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
+    # Set Suite Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}  
 
     ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+300145
     clear_users  ${PUSERNAME_U1}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
-
-    FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200 
-    Set Suite Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Suite Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Suite Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}  
-
     ${role1}=  Create Dictionary   id=${NewRole_id_1}  roleName=${New_role_name1}  feature=${rbac_feature[1]}
     ${user_roles}=  Create List   ${role1}
 
-    ${whpnum}=  Evaluate  ${PUSERNAME}+336245
-    ${tlgnum}=  Evaluate  ${PUSERNAME}+336345
+    # ${whpnum}=  Evaluate  ${PUSERNAME}+336245
+    # ${tlgnum}=  Evaluate  ${PUSERNAME}+336345
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}   bookingRoles=${user_roles}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${countryCodes[1]}  ${PUSERNAME_U1}    ${userType[0]}    bookingRoles=${user_roles}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id1}  ${resp.json()}
+
+    ${u_id}=  Create Sample User 
+    Set suite Variable                    ${u_id}
 
     ${resp}=  Get User By Id  ${u_id1}
     Log   ${resp.json()}
@@ -377,7 +380,7 @@ JD-TC-CreateBooking_Waitlist-1
     # ${wid}=  Get Dictionary Values  ${resp.json()}
     # Set Test Variable  ${wid1}  ${wid[0]}
 
-    ${resp}=  Create Service  ${SERVICE1}  ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[0]}   department=${dep_id}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[0]}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id}  ${resp.json()}
     
