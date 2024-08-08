@@ -18,11 +18,11 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 
 *** Test Cases ***
 
-JD-TC-Create_Product-1
+JD-TC-Update_Product-1
 
-    [Documentation]   Create Product 
+    [Documentation]   Update Product 
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -48,3 +48,15 @@ JD-TC-Create_Product-1
     ${resp}=    Get Lead Product By Uid  ${lpid}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()['typeName']}      ${typeName}
+
+    ${typeName2}=    FakerLibrary.Name
+
+    ${resp}=    Update Lead Product  ${lpid}  ${typeName2}
+    Log  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+    ${resp}=    Get Lead Product By Uid  ${lpid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()['typeName']}      ${typeName2}

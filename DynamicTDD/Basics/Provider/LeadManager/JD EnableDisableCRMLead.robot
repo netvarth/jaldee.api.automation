@@ -18,11 +18,11 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 
 *** Test Cases ***
 
-JD-TC-Create_Product-1
+JD-TC-Enable_Disable_CRM_Lead-1
 
-    [Documentation]   Create Product 
+    [Documentation]   Enable Disable CRM Lead
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME63}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -37,14 +37,3 @@ JD-TC-Create_Product-1
         Should Be Equal As Strings    ${resp.status_code}    200
 
     END
-
-    ${typeName}=    FakerLibrary.Name
-
-    ${resp}=    Create Lead Product  ${typeName}  ${productEnum[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable      ${lpid}     ${resp.json()} 
-
-    ${resp}=    Get Lead Product By Uid  ${lpid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}             200
