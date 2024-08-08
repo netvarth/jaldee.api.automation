@@ -15752,6 +15752,13 @@ Get All Capabilities
 
 #...............  LEAD MANAGER ( APPOINTMENT, CHECKIN, ORDER, IVR ) ...............
 
+Enable Disable CRM Lead
+
+    [Arguments]  ${status} 
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/account/settings/crm/lead/${status}  expected_status=any 
+    RETURN  ${resp}
+
 Create Lead Product
 
     [Arguments]  ${typeName}  ${productEnum}
@@ -15760,6 +15767,49 @@ Create Lead Product
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/crm/lead/product  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Get Lead Product By Uid     
+
+    [Arguments]  ${uid}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/crm/lead/product/${uid}  expected_status=any
+    RETURN  ${resp}
+
+Get Lead Product By Filter    
+
+    [Arguments]  &{param} 
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/crm/lead/product   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Get Lead Product Count By Filter    
+
+    [Arguments]  &{param} 
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/crm/lead/product/count   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Lead Product Status Change
+
+    [Arguments]  ${uid}  ${status}
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/crm/lead/product/${uid}/status/${status}  expected_status=any
+    RETURN  ${resp}
+
+Update Lead Product
+
+    #... We can update status using this url ...
+
+    [Arguments]     ${uid}  ${typeName}  &{kwargs}
+
+    ${data}=  Create Dictionary  typeName=${typeName}
+    
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/crm/lead/product/${uid}  data=${data}  expected_status=any
     RETURN  ${resp}
 
 

@@ -288,6 +288,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{CommTarget}                    	SPConsumer  SPUser  SPAdminUser
 @{toothConditions}                    ABRASION_TOOTH   ATTRITION_TOOTH   FRACTURE_TOOTH    IMPACTED_TOOTH       MISSING_TOOTH     MOBILE_TOOTH    ROOT_STUMP_TOOTH
 @{toothRestorations}                BRIDGE_TOOTH     CROWN_TOOTH     EXTRACTED_TOOTH
+@{productEnum}                      APPOINTMENT     CHECKIN     ORDER    IVR
 
 *** Keywords ***
 
