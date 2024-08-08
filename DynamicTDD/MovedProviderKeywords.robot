@@ -1373,3 +1373,31 @@ Get Catalog By Criteria
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/catalog  params=${param}  expected_status=any
     RETURN  ${resp}
+
+Get Item hns Filter
+
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/hsn   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+
+Get Item Composition Count Filter 
+
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/composition/count   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Get Item Composition Filter
+
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/composition   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Get Item Category By Filter
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/category   params=${param}   expected_status=any
+    RETURN  ${resp}

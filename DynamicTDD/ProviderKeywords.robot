@@ -1388,6 +1388,33 @@ Get Catalog By Criteria
     ${resp}=  GET On Session  ynw  /provider/catalog  params=${param}  expected_status=any
     RETURN  ${resp}
 
+Get Item hns Filter
+
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/hsn   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+
+Get Item Composition Count Filter 
+
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/composition/count   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Get Item Composition Filter
+
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/composition   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Get Item Category By Filter
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/category   params=${param}   expected_status=any
+    RETURN  ${resp}
 
 
 ######### LOGIN ###########
@@ -13633,11 +13660,6 @@ Update Item Category
     ${resp}=  PATCH On Session  ynw  /provider/spitem/settings/category  data=${data}  expected_status=any
     RETURN  ${resp}  
 
-Get Item Category By Filter
-    [Arguments]   &{param}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/spitem/settings/category   params=${param}   expected_status=any
-    RETURN  ${resp}
 
 Update Item Category Status
 
@@ -13869,12 +13891,7 @@ Update Item Composition
     ${resp}=  PATCH On Session  ynw  /provider/spitem/settings/composition  data=${data}  expected_status=any
     RETURN  ${resp} 
 
-Get Item Composition Filter
 
-    [Arguments]    &{param}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/spitem/settings/composition   params=${param}   expected_status=any
-    RETURN  ${resp}
 
 Update Item Composition Status
 
@@ -13883,12 +13900,6 @@ Update Item Composition Status
     ${resp}=    PATCH On Session    ynw   /provider/spitem/settings/composition/${compositionCode}/status/${status}   expected_status=any
     RETURN  ${resp}
 
-Get Item Composition Count Filter 
-
-    [Arguments]    &{param}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/spitem/settings/composition/count   params=${param}   expected_status=any
-    RETURN  ${resp}
 
 #........ Item hsn .........
 
@@ -13910,12 +13921,7 @@ Update Item hns
     ${resp}=  PATCH On Session  ynw  /provider/spitem/settings/hsn  data=${data}  expected_status=any
     RETURN  ${resp} 
 
-Get Item hns Filter
 
-    [Arguments]    &{param}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/spitem/settings/hsn   params=${param}   expected_status=any
-    RETURN  ${resp}
 
 Update Item hns Status
 
