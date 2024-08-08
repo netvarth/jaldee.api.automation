@@ -430,6 +430,7 @@ Create Sample User
 
 Update User
     [Arguments]  ${id}   &{kwargs}
+    #${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${user_type}  ${pincode}  ${countryCode}  ${mob_no}  ${dept_id}  ${sub_domain}  ${admin}  ${whatsApp_countrycode}  ${WhatsApp_num}  ${telegram_countrycode}  ${telegram_num} 
     ${data}=  Create Dictionary  
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
@@ -770,6 +771,16 @@ Remove Label from Multiple Appointments
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw  /provider/appointment/masslabel  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+
+Update Appointment Schedule
+    [Arguments]  ${Id}  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}    ${consumerParallelServing}   ${loc}  ${timeduration}  ${batch}  @{vargs}
+    ${data}=  Appointment Schedule  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}    ${consumerParallelServing}   ${loc}  ${timeduration}  ${batch}  @{vargs}
+    Set To Dictionary  ${data}  id=${Id}
+    Check And Create YNW Session
+    ${data}=  json.dumps  ${data}
+    ${resp}=  PUT On Session  ynw  /provider/appointment/schedule  data=${data}  expected_status=any
     RETURN  ${resp}
     
 ######### WAITLIST ###########
@@ -1291,7 +1302,67 @@ Get Item Inventory
     ${resp}=    GET On Session    ynw   /provider/spitem/${id}     expected_status=any
     RETURN  ${resp}
 
+######### LOGIN ###########
 
+Forgot LoginId
+
+    [Arguments]   &{kwargs}  #... countryCode, phoneNo, email ( countryCode is mandatory with phoneNo )
+
+    ${data}=    json.dumps    ${kwargs}   
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/login/forgot/loginId   data=${data}   expected_status=any
+    RETURN  ${resp}
+
+
+Get LoginId
+
+    [Arguments]     ${userid}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/login/suggestion/loginId/${userid}   expected_status=any
+    RETURN  ${resp}
+
+# ...............LINKING AND UNLNKING...................
+
+List all links of a loginId
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/login/connections   expected_status=any
+    RETURN  ${resp}
+
+Switch login
+
+    [Arguments]  ${loginId} 
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/login/switch/${loginId}   expected_status=any
+    RETURN  ${resp}
+
+Unlink one login
+
+    [Arguments]  ${loginId} 
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/login/connections/${loginId}   expected_status=any
+    RETURN  ${resp} 
+
+Reset LoginId
+
+    [Arguments]  ${userid}    ${loginId} 
+
+    ${data}=  Create Dictionary  userId=${userId}  loginId=${loginId}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/login/reset/loginId   data=${data}   expected_status=any
+    RETURN  ${resp}
+    
+Reset Password LoginId Login
+
+    [Arguments]     ${oldpassword}  ${password}
+
+    ${data}=    Create Dictionary   oldpassword=${oldpassword}  password=${password}
+    ${data}=    json.dumps    ${data} 
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/login/reset/password   data=${data}   expected_status=any
+    RETURN  ${resp}
 
 ####### VENDOR #######
 
@@ -5010,15 +5081,6 @@ Get Appointment Schedule by date
 	${resp}=  GET On Session  ynw  /provider/appointment/schedule/date/${date}  expected_status=any
 	RETURN   ${resp}
 
-
-Update Appointment Schedule
-    [Arguments]  ${Id}  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}    ${consumerParallelServing}   ${loc}  ${timeduration}  ${batch}  @{vargs}
-    ${data}=  Appointment Schedule  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}    ${consumerParallelServing}   ${loc}  ${timeduration}  ${batch}  @{vargs}
-    Set To Dictionary  ${data}  id=${Id}
-    Check And Create YNW Session
-    ${data}=  json.dumps  ${data}
-    ${resp}=  PUT On Session  ynw  /provider/appointment/schedule  data=${data}  expected_status=any
-    RETURN  ${resp}
 
 Individual Schedule
     [Arguments]  ${name}   ${parallel}   ${consumerParallelServing}   ${loc}   ${batch}  @{vargs}   &{kwargs}
@@ -15638,67 +15700,6 @@ Get CommTargets
     ${resp}=  GET On Session  ynw  /provider/commTarget   expected_status=any
     RETURN  ${resp}
 
-
-# ...............LINKING AND UNLNKING...................
-
-List all links of a loginId
-
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/login/connections   expected_status=any
-    RETURN  ${resp}
-
-Unlink one login
-
-    [Arguments]  ${loginId} 
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/login/connections/${loginId}   expected_status=any
-    RETURN  ${resp} 
-
-Switch login
-
-    [Arguments]  ${loginId} 
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/login/switch/${loginId}   expected_status=any
-    RETURN  ${resp}
-
-Reset LoginId
-
-    [Arguments]  ${userid}    ${loginId} 
-
-    ${data}=  Create Dictionary  userId=${userId}  loginId=${loginId}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/login/reset/loginId   data=${data}   expected_status=any
-    RETURN  ${resp}
-
-Forgot LoginId
-
-    [Arguments]   &{kwargs}  #... countryCode, phoneNo, email ( countryCode is mandatory with phoneNo )
-
-    ${data}=    json.dumps    ${kwargs}   
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/login/forgot/loginId   data=${data}   expected_status=any
-    RETURN  ${resp}
-
-
-
-Reset Password LoginId Login
-
-    [Arguments]     ${oldpassword}  ${password}
-
-    ${data}=    Create Dictionary   oldpassword=${oldpassword}  password=${password}
-    ${data}=    json.dumps    ${data} 
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/login/reset/password   data=${data}   expected_status=any
-    RETURN  ${resp}
-
-Get LoginId
-
-    [Arguments]     ${userid}
-
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/login/suggestion/loginId/${userid}   expected_status=any
-    RETURN  ${resp}
 
 #................Store Settings...............
 

@@ -125,32 +125,32 @@ JD-TC-Provider_Login-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${acc_id}   ${resp.json()['id']}
-    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+    # Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
-    ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  View Waitlist Settings
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # IF  ${resp.json()['filterByDept']}==${bool[0]}
+    #     ${resp}=  Toggle Department Enable
+    #     Log  ${resp.json()}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
 
-    END
+    # END
 
-    ${resp}=  Get Departments
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}' 
-        ${dep_name1}=  FakerLibrary.bs
-        ${dep_code1}=   Random Int  min=100   max=999
-        ${dep_desc1}=   FakerLibrary.word  
-        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-        Set Suite Variable  ${dep_id}  ${resp1.json()}
-    ELSE
-        Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
-    END
+    # ${resp}=  Get Departments
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF   '${resp.content}' == '${emptylist}' 
+    #     ${dep_name1}=  FakerLibrary.bs
+    #     ${dep_code1}=   Random Int  min=100   max=999
+    #     ${dep_desc1}=   FakerLibrary.word  
+    #     ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+    #     Log  ${resp1.content}
+    #     Should Be Equal As Strings  ${resp1.status_code}  200
+    #     Set Suite Variable  ${dep_id}  ${resp1.json()}
+    # ELSE
+    #     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    # END
 
     ${user1}=  Create Sample User 
     Set suite Variable                    ${user1}
@@ -250,7 +250,7 @@ JD-TC-Provider_Login-5
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -285,24 +285,24 @@ JD-TC-Provider_Login-6
 
     ${firstname_u}=  FakerLibrary.name
     ${lastname_u}=  FakerLibrary.last_name
-    ${address}=  get_address
-    ${dob}=  FakerLibrary.Date
-    FOR    ${i}    IN RANGE    3
-    ${pin}=  get_pincode
-    ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-    IF    '${kwstatus}' == 'FAIL'
-            Continue For Loop
-    ELSE IF    '${kwstatus}' == 'PASS'
-            Exit For Loop
-    END
-    END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
+    # ${address}=  get_address
+    # ${dob}=  FakerLibrary.Date
+    # FOR    ${i}    IN RANGE    3
+    # ${pin}=  get_pincode
+    # ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+    # IF    '${kwstatus}' == 'FAIL'
+    #         Continue For Loop
+    # ELSE IF    '${kwstatus}' == 'PASS'
+    #         Exit For Loop
+    # END
+    # END
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Test Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
+    # Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
+    # Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
 
-    ${resp}=  Create User  ${firstname_u}  ${lastname_u}  ${dob}  ${Genderlist[0]}  ${lastname_u}${user1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${user1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL} 
+    ${resp}=  Create User  ${firstname_u}  ${lastname_u}   ${countryCodes[0]}  ${user1}   ${userType[0]} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}     200
 
@@ -312,7 +312,7 @@ JD-TC-Provider_Login-6
     ${lastname_u2}=  FakerLibrary.last_name
     ${dob2}=  FakerLibrary.Date   
 
-    ${resp}=  Create User  ${firstname_u2}  ${lastname_u2}  ${dob2}  ${Genderlist[0]}  ${lastname_u2}${user1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${user1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL} 
+    ${resp}=  Create User  ${firstname_u2}  ${lastname_u2}  ${countryCodes[0]}  ${user1}  ${userType[0]}    
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}     422
     Should Be Equal As Strings  ${resp.json()}          ${MOBILE_NO_USED}
@@ -336,24 +336,24 @@ JD-TC-Provider_Login-7
 
     ${firstname_u}=  FakerLibrary.name
     ${lastname_u}=  FakerLibrary.last_name
-    ${address}=  get_address
-    ${dob}=  FakerLibrary.Date
-    FOR    ${i}    IN RANGE    3
-    ${pin}=  get_pincode
-    ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-    IF    '${kwstatus}' == 'FAIL'
-            Continue For Loop
-    ELSE IF    '${kwstatus}' == 'PASS'
-            Exit For Loop
-    END
-    END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
+    # ${address}=  get_address
+    # ${dob}=  FakerLibrary.Date
+    # FOR    ${i}    IN RANGE    3
+    # ${pin}=  get_pincode
+    # ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+    # IF    '${kwstatus}' == 'FAIL'
+    #         Continue For Loop
+    # ELSE IF    '${kwstatus}' == 'PASS'
+    #         Exit For Loop
+    # END
+    # END
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Test Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
+    # Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
+    # Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
 
-    ${resp}=  Create User  ${firstname_u}  ${lastname_u}  ${dob}  ${Genderlist[0]}  ${lastname_u}${user1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${user1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL} 
+    ${resp}=  Create User  ${firstname_u}  ${lastname_u}   ${countryCodes[0]}  ${user1}   ${userType[0]}  email=${lastname_u}${user1}.${test_mail}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}     200
 
@@ -363,9 +363,9 @@ JD-TC-Provider_Login-7
 
     ${firstname_u2}=  FakerLibrary.name
     ${lastname_u2}=  FakerLibrary.last_name
-    ${dob2}=  FakerLibrary.Date   
+    # ${dob2}=  FakerLibrary.Date   
 
-    ${resp}=  Create User  ${firstname_u2}  ${lastname_u2}  ${dob2}  ${Genderlist[0]}  ${lastname_u}${user1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${user2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL} 
+    ${resp}=  Create User  ${firstname_u2}  ${lastname_u2}  ${countryCodes[0]}  ${user2}  ${userType[0]}  email=${lastname_u}${user1}.${test_mail}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}     422
     Should Be Equal As Strings  ${resp.json()}          ${EMAIL_EXISTS}
