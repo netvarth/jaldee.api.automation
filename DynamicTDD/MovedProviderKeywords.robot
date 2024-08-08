@@ -1332,3 +1332,18 @@ Get Item Unit Filter
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/spitem/settings/unit   params=${param}   expected_status=any
     RETURN  ${resp}
+
+Update Business Profile with kwargs
+	#Update Business Profile with schedule  Business Profile with schedule  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}  ${lid}  &{kwargs}
+	#Update Business Profile without phone and email   businessName=${bName}  businessDesc=${bDesc}  shortName=${shname}  baseLocation=${None}  phoneNumbers=${None}  emails=${None}
+	#Update Business Profile without details    businessName=${bName}  businessDesc=${bDesc}  shortName=${shname}  baseLocation=${None}  phoneNumbers=${ph1}  emails=${email1}
+	#Update Business Profile without schedule  ${bName}  ${bDesc}  ${shortname}  ${place}  ${longi}  ${latti}  ${g_url}  ${parkingType}  ${open24hours}  ${pin}  ${adds}   ${ph1}  ${ph2}  ${email1}  ${lid}
+    [Arguments]  &{kwargs}
+    ${data}=  Create Dictionary
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
+    RETURN  ${resp}

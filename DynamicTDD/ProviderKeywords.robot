@@ -194,6 +194,20 @@ Get Spoke Languages
     ${resp}=  GET On Session  ynw  ynwConf/spokenLangs  expected_status=any
     RETURN  ${resp}    
 
+Update Business Profile with kwargs
+	#Update Business Profile with schedule  Business Profile with schedule  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}  ${lid}  &{kwargs}
+	#Update Business Profile without phone and email   businessName=${bName}  businessDesc=${bDesc}  shortName=${shname}  baseLocation=${None}  phoneNumbers=${None}  emails=${None}
+	#Update Business Profile without details    businessName=${bName}  businessDesc=${bDesc}  shortName=${shname}  baseLocation=${None}  phoneNumbers=${ph1}  emails=${email1}
+	#Update Business Profile without schedule  ${bName}  ${bDesc}  ${shortname}  ${place}  ${longi}  ${latti}  ${g_url}  ${parkingType}  ${open24hours}  ${pin}  ${adds}   ${ph1}  ${ph2}  ${email1}  ${lid}
+    [Arguments]  &{kwargs}
+    ${data}=  Create Dictionary
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
+    RETURN  ${resp}
 
     
 ######### BASICS #########
@@ -1730,57 +1744,6 @@ Business Profile with schedule
     ${data}=  json.dumps  ${data}
     RETURN  ${data}
 
-
-Update Business Profile without schedule
-    [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${pin}  ${adds}   ${ph1}  ${ph2}  ${email1}  ${lid}
-    # ${ph_nos}=  Create List  ${ph1}  ${ph2}
-    ${ph_nos}=  db.bus_prof_ph  ${ph1}  ${ph2}
-    ${emails}=  Create List  ${email1}
-    ${b_loc}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  parkingType=${pt}  open24hours=${oh}   bSchedule=${None}  pinCode=${pin}  address=${adds}   id=${lid}
-    ${data}=  Create Dictionary  businessName=${bName}  businessDesc=${bDesc}  shortName=${shname}  baseLocation=${b_loc}  phoneNumbers=${ph_nos}  emails=${emails}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
-    RETURN  ${resp}
-
-Update Business Profile without details
-    [Arguments]  ${bName}  ${bDesc}  ${shname}   ${ph1}   ${email1}
-    # ${ph_nos}=  Create List  ${ph1}  ${ph2}
-    # ${emails}=  Create List  ${email1}
-    ${data}=  Create Dictionary  businessName=${bName}  businessDesc=${bDesc}  shortName=${shname}  baseLocation=${None}  phoneNumbers=${ph1}  emails=${email1}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
-    RETURN  ${resp}
-
-    
-Update Business Profile without phone and email
-    [Arguments]  ${bName}  ${bDesc}  ${shname}
-    ${data}=  Create Dictionary  businessName=${bName}  businessDesc=${bDesc}  shortName=${shname}  baseLocation=${None}  phoneNumbers=${None}  emails=${None}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
-    RETURN  ${resp}
-
-
-Update Business Profile with kwargs
-    [Arguments]  &{kwargs}
-    ${data}=  Create Dictionary
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
-    RETURN  ${resp}
-
-Update Business Profile with schedule
-    # use this keyword to update specializations also
-    [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}  ${lid}  &{kwargs}
-    ${data}=  Business Profile with schedule  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}  ${lid}  &{kwargs}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
-    RETURN  ${resp}
 
     
 Update Domain And SubDomain
@@ -16164,3 +16127,54 @@ Update User
     ${resp}=  PUT On Session  ynw  /provider/user/${id}   data=${data}  expected_status=any
     RETURN  ${resp}     
 
+
+Update Business Profile without schedule
+    [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${pin}  ${adds}   ${ph1}  ${ph2}  ${email1}  ${lid}
+    # ${ph_nos}=  Create List  ${ph1}  ${ph2}
+    ${ph_nos}=  db.bus_prof_ph  ${ph1}  ${ph2}
+    ${emails}=  Create List  ${email1}
+    ${b_loc}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  parkingType=${pt}  open24hours=${oh}   bSchedule=${None}  pinCode=${pin}  address=${adds}   id=${lid}
+    ${data}=  Create Dictionary  businessName=${bName}  businessDesc=${bDesc}  shortName=${shname}  baseLocation=${b_loc}  phoneNumbers=${ph_nos}  emails=${emails}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Update Business Profile without details
+    [Arguments]  ${bName}  ${bDesc}  ${shname}   ${ph1}   ${email1}
+    # ${ph_nos}=  Create List  ${ph1}  ${ph2}
+    # ${emails}=  Create List  ${email1}
+    ${data}=  Create Dictionary  businessName=${bName}  businessDesc=${bDesc}  shortName=${shname}  baseLocation=${None}  phoneNumbers=${ph1}  emails=${email1}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+    
+Update Business Profile without phone and email
+    [Arguments]  ${bName}  ${bDesc}  ${shname}
+    ${data}=  Create Dictionary  businessName=${bName}  businessDesc=${bDesc}  shortName=${shname}  baseLocation=${None}  phoneNumbers=${None}  emails=${None}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+
+Update Business Profile with kwargs
+    [Arguments]  &{kwargs}
+    ${data}=  Create Dictionary
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Update Business Profile with schedule
+    # use this keyword to update specializations also
+    [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}  ${lid}  &{kwargs}
+    ${data}=  Business Profile with schedule  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}  ${lid}  &{kwargs}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
+    RETURN  ${resp}
