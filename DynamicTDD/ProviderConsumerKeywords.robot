@@ -100,6 +100,11 @@ SPConsumer Deactivation
     ${resp}=    DELETE On Session    ynw    /spconsumer/login/deActivate      expected_status=any
     RETURN  ${resp}
 
+Get sp item category Filter
+    [Arguments]  ${accountId}   &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/spitem/settings/${accountId}/category   params=${param}   expected_status=any
+    RETURN  ${resp} 
 
 
 
@@ -614,11 +619,6 @@ Make Prepayment From Consumerside
     ${resp}=  POST On Session  ynw   /consumer/so/pay  data=${data}  expected_status=any
     RETURN  ${resp}
 
-Get sp item category Filter
-    [Arguments]  ${accountId}   &{param}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/spitem/settings/${accountId}/category   params=${param}   expected_status=any
-    RETURN  ${resp} 
 
 Get sp item category Count Filter
     [Arguments]  ${accountId}   &{param}
