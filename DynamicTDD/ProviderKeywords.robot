@@ -15747,10 +15747,15 @@ Get All Capabilities
     RETURN  ${resp}
 
 
+#...............  LEAD MANAGER ( APPOINTMENT, CHECKIN, ORDER, IVR ) ...............
 
+Create Lead Product
 
+    [Arguments]  ${typeName}  ${productEnum}
 
-
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/crm/lead/product  expected_status=any
+    RETURN  ${resp}
 
 
 
@@ -16095,3 +16100,4 @@ Update User
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/user/${id}   data=${data}  expected_status=any
     RETURN  ${resp}     
+
