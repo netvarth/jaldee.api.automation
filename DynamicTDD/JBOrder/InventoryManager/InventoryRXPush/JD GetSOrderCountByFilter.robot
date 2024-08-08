@@ -74,15 +74,6 @@ JD-TC-GetOrderCountByFilter-1
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
 
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    sleep  2s
-    ${resp}=  Get Departments
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
-
     ${doc1}=  Create Sample User 
     Set Suite Variable      ${doc1}
 
