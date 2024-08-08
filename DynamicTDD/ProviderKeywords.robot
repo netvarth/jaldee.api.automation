@@ -440,6 +440,13 @@ Update User
     ${resp}=  PUT On Session  ynw  /provider/user/${id}   data=${data}  expected_status=any
     RETURN  ${resp} 
 
+
+Get Store Type By Filter
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/store/type   params=${param}   expected_status=any
+    RETURN  ${resp}
+
 ########## BOOKING #############
 
 Queue
@@ -1353,7 +1360,7 @@ Reset LoginId
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/login/reset/loginId   data=${data}   expected_status=any
     RETURN  ${resp}
-    
+
 Reset Password LoginId Login
 
     [Arguments]     ${oldpassword}  ${password}
@@ -13674,11 +13681,6 @@ Provide Get Store Type ByEncId
     ${resp}=    GET On Session    ynw   /provider/store/type/id/${storeTypeId}      expected_status=any
     RETURN  ${resp}
 
-Get Store Type By Filter
-    [Arguments]   &{param}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/store/type   params=${param}   expected_status=any
-    RETURN  ${resp}
 
 Get Store Type By Filter Count
     [Arguments]   &{param}

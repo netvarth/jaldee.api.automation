@@ -1285,3 +1285,10 @@ Reset Password LoginId Login
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/login/reset/password   data=${data}   expected_status=any
     RETURN  ${resp}
+
+
+Get Store Type By Filter
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/store/type   params=${param}   expected_status=any
+    RETURN  ${resp}
