@@ -286,19 +286,6 @@ Get Departments
     RETURN  ${resp}
 
 
-Create Sample User
-    [Arguments]   ${admin}=${bool[0]}
-
-    ${random_ph}=   Random Int   min=10000   max=20000
-    ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+${random_ph}
-    clear_users  ${PUSERNAME_U1}
-    # Set Test Variable  ${PUSERNAME_U1}
-    ${firstname}=  FakerLibrary.name
-    ${lastname}=  FakerLibrary.last_name
-
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${countryCodes[1]}  ${PUSERNAME_U1}   ${userType[0]}  
-    Should Be Equal As Strings  ${resp.status_code}  200
-    RETURN  ${resp.json()}
 
 Get User
     [Arguments]  &{kwargs}
@@ -425,6 +412,20 @@ Create Sample Service with Prepayment
     ${resp}=  Create Service  ${Service_name}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${prepayment_amt}  ${servicecharge}  ${bool[1]}  ${bool[0]}  &{kwargs}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
+    RETURN  ${resp.json()}
+
+Create Sample User
+    [Arguments]   ${admin}=${bool[0]}
+
+    ${random_ph}=   Random Int   min=10000   max=20000
+    ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+${random_ph}
+    clear_users  ${PUSERNAME_U1}
+    # Set Test Variable  ${PUSERNAME_U1}
+    ${firstname}=  FakerLibrary.name
+    ${lastname}=  FakerLibrary.last_name
+
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${countryCodes[1]}  ${PUSERNAME_U1}   ${userType[0]}  
+    Should Be Equal As Strings  ${resp.status_code}  200
     RETURN  ${resp.json()}
 
 ########## BOOKING #############
