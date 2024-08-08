@@ -1292,3 +1292,9 @@ Get Store Type By Filter
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/store/type   params=${param}   expected_status=any
     RETURN  ${resp}
+
+Provider Get Store Type By EncId
+    [Arguments]   ${storeTypeId}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/store/type/id/${storeTypeId}      expected_status=any
+    RETURN  ${resp}

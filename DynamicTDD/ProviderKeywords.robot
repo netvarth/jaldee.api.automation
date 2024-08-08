@@ -447,6 +447,12 @@ Get Store Type By Filter
     ${resp}=    GET On Session    ynw   /provider/store/type   params=${param}   expected_status=any
     RETURN  ${resp}
 
+Provider Get Store Type By EncId
+    [Arguments]   ${storeTypeId}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/store/type/id/${storeTypeId}      expected_status=any
+    RETURN  ${resp}
+
 ########## BOOKING #############
 
 Queue
@@ -1308,6 +1314,8 @@ Get Item Inventory
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/spitem/${id}     expected_status=any
     RETURN  ${resp}
+
+
 
 ######### LOGIN ###########
 
@@ -13675,11 +13683,6 @@ Get Item Type Count By Filter
 
 # ............ Store .............
 
-Provide Get Store Type ByEncId
-    [Arguments]   ${storeTypeId}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/store/type/id/${storeTypeId}      expected_status=any
-    RETURN  ${resp}
 
 
 Get Store Type By Filter Count
