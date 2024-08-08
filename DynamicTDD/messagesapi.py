@@ -2507,3 +2507,9 @@ ITEM_REQ_QTY_NOTAVALIABLE_WITHOUT_QTY = "Required quantity is not avalable for t
 QTY_MUST_GREATER_THAN_ZERO = "Quantity must be greater than zero"
 
 INVALID_FEATURE = "Invalid RBAC feature name"
+
+# ......  LEAD MANAGER ...........
+
+PRODUCT_NAME_ALREADY_EXIST= "Product name already exist"
+CHANNEL_NAME_SIZE = "Channel name charater should be between 3 and 100"
+CRM_LEAD_DISABLED="Crm lead is disabled"
