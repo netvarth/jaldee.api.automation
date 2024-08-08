@@ -1363,6 +1363,13 @@ Get Item Unit Filter
     ${resp}=    GET On Session    ynw   /provider/spitem/settings/unit   params=${param}   expected_status=any
     RETURN  ${resp}
 
+Get Item Unit Count Filter
+
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/unit/count   params=${param}   expected_status=any
+    RETURN  ${resp}
+
 
 ######### LOGIN ###########
 
@@ -13835,12 +13842,7 @@ Update Item Unit Status
     ${resp}=    PATCH On Session    ynw   /provider/spitem/settings/unit/${unitCode}/status/${status}   expected_status=any
     RETURN  ${resp}
 
-Get Item Unit Count Filter
 
-    [Arguments]    &{param}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/spitem/settings/unit/count   params=${param}   expected_status=any
-    RETURN  ${resp}
 
 #........ Item Composition .........
 

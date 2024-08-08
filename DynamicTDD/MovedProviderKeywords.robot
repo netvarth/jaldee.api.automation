@@ -1347,3 +1347,10 @@ Update Business Profile with kwargs
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
     RETURN  ${resp}
+
+Get Item Unit Count Filter
+
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/unit/count   params=${param}   expected_status=any
+    RETURN  ${resp}
