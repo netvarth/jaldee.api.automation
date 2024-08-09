@@ -60,3 +60,39 @@ JD-TC-Get_Lead_Product_By_Uid-1
     Should Be Equal As Strings      ${resp.json()['productEnum']}   ${productEnum[0]}
     Should Be Equal As Strings      ${resp.json()['uid']}           ${lpid}
     Should Be Equal As Strings      ${resp.json()['crmStatus']}     ${status[0]}
+
+JD-TC-Get_Lead_Product_By_Uid-2
+
+    [Documentation]   Get Lead Product By Uid - where uid is empty
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Lead Product By Uid  ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}             200
+
+JD-TC-Get_Lead_Product_By_Uid-UH1
+
+    [Documentation]   Get Lead Product By Uid - where uid is invalid
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=1  max=999
+
+    ${resp}=    Get Lead Product By Uid  ${inv}
+    Log  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings    ${resp.json()}            ${INVALID_PRODUCT_ID}
+
+JD-TC-Get_Lead_Product_By_Uid-UH2
+
+    [Documentation]   Get Lead Product By Uid - without login
+
+    ${resp}=    Get Lead Product By Uid  ${lpid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}     419
+    Should Be Equal As Strings    ${resp.json()}        ${SESSION_EXPIRED}

@@ -282,7 +282,6 @@ JD-TC-Create_Product-UH7
         ${resp}=    Enable Disable CRM Lead  ${toggle[1]}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
-
     END
 
     ${typeName}=    FakerLibrary.Name
