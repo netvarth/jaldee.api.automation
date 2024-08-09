@@ -151,10 +151,14 @@ JD-TC-Get invoice filter-1
 
 # --------------------------- Create SalesOrder Inventory Catalog-InvMgr False ------------------------------------
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}  walkinOrder=${boolean[1]}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}  walkInOrder=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_Cata_Encid}  ${resp.json()}
+
+    ${resp}=  Get SalesOrder Catalog By Encid   ${SO_Cata_Encid}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 # --------------------------------------------------------------------------------------------------------------
 # ----------------------------------------  Create Item ---------------------------------------------------
 
