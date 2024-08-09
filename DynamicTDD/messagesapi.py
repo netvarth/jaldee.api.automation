@@ -2378,6 +2378,8 @@ INVALID_DOSAGE_VALUE="Invalid Dosage Value"
 INVALID_FREEQUENCY_VALUE="Invalid Frequency Value"
 RECORD_STATUS_SAME= "Record status is already {}"
 RX_ITEMS_ARE_NOT_AVAILABLE_FOR_ORDER_CREATION="Rx items are not available for order creation"
+FIELD_ALREADY_EXISTS = "{} exists with given {}"
+NO_PERMISSION_TO_CHANGE_STORE_LOCATION="No permission to change store location"
 
 # Vendor
 INVALID_NAME="Invalid Name"
@@ -2393,6 +2395,7 @@ VENDOR_ALREADY_ENABLED="Vendor already enabled"
 VENDOR_ALREADY_DISABLED="Vendor already disabled" 
 VENDOR_IS_ALREADY_IN_GIVEN_STATUS="Vendor is already in given status"
 ENTER_VALID_CONVERTION_QTY="Enter a valid conversion quantity"
+Phone_Number_empty="Phone number can not be empty"
 
 X_REQUIRED  = "{} required."
 ITEM_NOT_FOUND = "Item not found with id {}"
