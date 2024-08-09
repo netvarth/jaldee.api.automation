@@ -145,7 +145,7 @@ JD-TC-GetItemHsnFilter-5
 
     [Documentation]  Get Item hns Filter - with another provider login
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME24}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

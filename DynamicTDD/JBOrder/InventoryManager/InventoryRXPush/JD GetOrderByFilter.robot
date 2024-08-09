@@ -417,8 +417,13 @@ JD-TC-GetOrderByFilter-1
     ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-  
-    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   12  
+    
+    Log    Request Headers: ${resp.request.headers}
+    Log    Request Cookies: ${resp.request.headers['Cookie']}
+    ${cookie_parts}    ${jsessionynw_value}    Split String    ${resp.request.headers['Cookie']}    =
+    Log   ${jsessionynw_value}
+    
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable   ${token}  ${resp.json()['token']}

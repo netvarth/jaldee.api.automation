@@ -140,18 +140,23 @@ JD-TC-GetItemCategoryByFilter-UH2
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
   
-    ${resp}=    Send Otp For Login    ${CUSERNAME19}    ${account_id}
+    ${resp}=    Send Otp For Login    ${CUSERNAME20}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME19}   ${OtpPurpose['Authentication']}
+    Log    Request Headers: ${resp.request.headers}
+    Log    Request Cookies: ${resp.request.headers['Cookie']}
+    ${cookie_parts}    ${jsessionynw_value}    Split String    ${resp.request.headers['Cookie']}    =
+    Log   ${jsessionynw_value}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME20}   ${OtpPurpose['Authentication']}   JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
     
-    Set Test Variable  ${email}  ${fname}${CUSERNAME19}.${test_mail}
+    Set Test Variable  ${email}  ${fname}${CUSERNAME20}.${test_mail}
 
-    ${resp}=    ProviderConsumer SignUp    ${fname}  ${lname}  ${email}    ${CUSERNAME19}     ${account_id}
+    ${resp}=    ProviderConsumer SignUp    ${fname}  ${lname}  ${email}    ${CUSERNAME20}     ${account_id}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -159,7 +164,7 @@ JD-TC-GetItemCategoryByFilter-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
