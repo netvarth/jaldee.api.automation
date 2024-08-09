@@ -338,11 +338,7 @@ JD-TC-Get SalesOrder Catalog By Encid-6
     Set Test Variable  ${firstname1}
     ${lastname1}=  FakerLibrary.last_name
     Set Test Variable  ${lastname1}
-    # ${dob1}=  FakerLibrary.Date
-    # Set Test Variable  ${dob1}
-    # ${pin1}=  get_pincode
-    # Set Test Variable  ${pin1}
-
+ 
     ${resp}=  Create User  ${firstname1}  ${lastname1}  ${countryCodes[0]}  ${PUSERNAME_U1}    ${userType[0]}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -353,16 +349,32 @@ JD-TC-Get SalesOrder Catalog By Encid-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${loginId_n}=     Random Int  min=111111  max=999999
 
-    @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
+    ${resp}=    Reset LoginId  ${u_id1}  ${loginId_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${Password_n}=    Random Int  min=11111111  max=99999999
+   
+    ${resp}=    Forgot Password   loginId=${loginId_n}  password=${Password_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${PUSERNAME_U1}  ${OtpPurpose['ProviderResetPassword']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key} =   db.Verify Accnt   ${PUSERNAME_U1}    ${OtpPurpose['ProviderResetPassword']}
+    Set Suite Variable   ${key}
+
+    ${resp}=    Forgot Password     otp=${key}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login     ${loginId_n}  ${Password_n}
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings             ${resp.status_code}   200
 
     ${resp}=  Get SalesOrder Catalog By Encid   ${sa_catlog_id3}  
     Log   ${resp.content}
