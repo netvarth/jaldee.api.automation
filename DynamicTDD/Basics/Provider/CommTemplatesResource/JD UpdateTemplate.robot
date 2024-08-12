@@ -965,7 +965,7 @@ JD-TC-UpdateTemplate-15
     ${comm_target}=  Create List   ${CommTarget[0]}  
     ${sendcomm_list}=  Create List   ${sendcomm_id1}
     
-    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[0]}  ${comm_target}    ${comm_chanl} 
+    ${resp}=  Create Template   ${temp_name}  ${content}  ${templateFormat[0]}  ${VariableContext[3]}  ${comm_target}    ${comm_chanl} 
     ...   sendComm=${sendcomm_list}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -976,7 +976,7 @@ JD-TC-UpdateTemplate-15
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['accountId']}                             ${account_id} 
     Should Be Equal As Strings  ${resp.json()['templateName']}                          ${temp_name}
-    Should Be Equal As Strings  ${resp.json()['context']}                               ${VariableContext[0]} 
+    Should Be Equal As Strings  ${resp.json()['context']}                               ${VariableContext[3]} 
     Should Be Equal As Strings  ${resp.json()['commChannel']}                           ${comm_chanl} 
     Should Be Equal As Strings  ${resp.json()['templateFormat']}                        ${templateFormat[0]}
     Should Be Equal As Strings  ${resp.json()['content']['intro']}                      ${EMPTY}
@@ -1013,7 +1013,7 @@ JD-TC-UpdateTemplate-15
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['accountId']}                   ${account_id} 
     Should Be Equal As Strings  ${resp.json()['templateName']}                ${temp_name}
-    Should Be Equal As Strings  ${resp.json()['context']}                     ${VariableContext[0]} 
+    Should Be Equal As Strings  ${resp.json()['context']}                     ${VariableContext[3]} 
     Should Be Equal As Strings  ${resp.json()['commChannel']}                 ${comm_chanl} 
     Should Be Equal As Strings  ${resp.json()['templateFormat']}              ${templateFormat[0]}
     Should Be Equal As Strings  ${resp.json()['content']['intro']}            ${content_msg}

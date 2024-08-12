@@ -21,10 +21,13 @@ JD-TC-UpdateTemplateSettingStatus-1
 
     [Documentation]  create a template without trigger point(send comm) for signup, SMS, SPConsumer, then add that using template settings and set it status as disabled.
 
+    comment   deprecated from rest side
+
     ${resp}=  Encrypted Provider Login  ${PUSERNAME285}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+*** Comments ***
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
