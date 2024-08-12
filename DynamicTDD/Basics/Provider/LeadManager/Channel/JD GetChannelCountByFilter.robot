@@ -23,7 +23,7 @@ JD-TC-Get_Channel_Count_By_Filter-1
 
     [Documentation]   Get Channel Count By Filter - Valid Credentials
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

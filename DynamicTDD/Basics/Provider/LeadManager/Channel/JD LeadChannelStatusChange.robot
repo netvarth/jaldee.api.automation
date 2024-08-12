@@ -23,7 +23,7 @@ JD-TC-Lead_Channel_Status_change-1
 
     [Documentation]   Lead Channel status Chnage
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME104}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -79,4 +79,11 @@ JD-TC-Lead_Channel_Status_change-1
     Should Be Equal As Strings      ${resp.json()['crmLeadProductTypeName']}                ${typeName1}
     Should Be Equal As Strings      ${resp.json()['channelType']}                           ${leadchannel[0]}
 
- 
+    ${resp}=    Lead Channel Status Change  ${clid}  ${status[1]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}   200
+
+    ${resp}=    Get Lead Channel By Uid  ${clid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()['crmStatus']}    ${status[0]}

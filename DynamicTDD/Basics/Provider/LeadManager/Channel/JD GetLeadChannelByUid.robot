@@ -23,7 +23,7 @@ JD-TC-Get_Channel-1
 
     [Documentation]   Get Channel 
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

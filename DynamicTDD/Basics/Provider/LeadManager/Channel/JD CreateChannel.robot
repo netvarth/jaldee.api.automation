@@ -19,7 +19,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 
 *** Test Cases ***
 
-JD-TC-Create_Channel-1
+JD-TC-Create_Channel-1 
 
     [Documentation]   Create Channel - Valid Credentials
 
