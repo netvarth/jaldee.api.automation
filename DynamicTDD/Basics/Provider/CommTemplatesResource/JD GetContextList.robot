@@ -29,8 +29,8 @@ JD-TC-GetContexts-1
     ${resp}=  Get Context List 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Contain   ${resp.json()}    ${VariableContext[3]}
-    Should Contain   ${resp.json()[0]['context']}    ${VariableContext[7]}
+    Should Contain   ${resp.json()[0]['context']}     ${VariableContext[3]}
+    Should Contain   ${resp.json()[1]['context']}    ${VariableContext[7]}
 
 JD-TC-GetContexts-2
 
@@ -52,8 +52,31 @@ JD-TC-GetContexts-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Contain   ${resp.json()[0]['context']}    ${VariableContext[3]}
-    Should Contain   ${resp.json()[0]['context']}    ${VariableContext[7]}
-    Should Not Contain   ${resp.json()[0]['context']}    ${VariableContext[1]}
+    Should Contain   ${resp.json()[1]['context']}    ${VariableContext[7]}
+    Should Not Contain   ${resp.json()}    ${VariableContext[1]}
+
+JD-TC-GetContexts-3
+
+    [Documentation]  get context list with disable waitlist.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   View Waitlist Settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enabledWaitlist']}==${bool[1]}   
+        ${resp}=   Disable Waitlist
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=  Get Context List 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Contain   ${resp.json()[0]['context']}    ${VariableContext[3]}
+    Should Contain   ${resp.json()[1]['context']}    ${VariableContext[7]}
+    Should Not Contain   ${resp.json()}    ${VariableContext[0]}
 
 JD-TC-GetContexts-UH1
 
