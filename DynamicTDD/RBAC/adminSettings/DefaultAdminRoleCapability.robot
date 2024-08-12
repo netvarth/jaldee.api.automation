@@ -247,6 +247,7 @@ JD-TC-Default Admin Role Capability-7
 
     ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+300145
     clear_users  ${PUSERNAME_U1}
+    Set Suite Variable  ${PUSERNAME_U1}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -257,3 +258,58 @@ JD-TC-Default Admin Role Capability-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id1}  ${resp.json()}
+
+
+JD-TC-Default Admin Role Capability-8
+
+    [Documentation]   provider checking 'Update User' capability.
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${firstname1}=  FakerLibrary.name
+    ${lastname1}=  FakerLibrary.last_name
+
+    ${resp}=  Update User  ${u_id1}    ${countryCodes[1]}  ${PUSERNAME_U1}    ${userType[0]}   firstName=${firstname1}  lastName=${lastname1}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  EnableDisable User  ${u_id1}    ${toggle[1]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Default Admin Role Capability-9
+
+    [Documentation]   provider checking 'Get User' capability.
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get User By Id  ${u_id1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get User
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Default Admin Role Capability-10
+
+    [Documentation]   provider checking 'Create Customer Details' capability.
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${PO_Number}    Generate random string    7    0123456789
+    ${cons_num}    Convert To Integer  ${PO_Number}
+    ${CUSERPH}=  Evaluate  ${CUSERNAME}+${cons_num}
+    ${firstname}=  FakerLibrary.first_name    
+    ${lastname}=  FakerLibrary.last_name
+    Set Test Variable  ${CUSERPH}  
+    ${resp}=  AddCustomer  ${CUSERPH}   firstName=${firstname}   lastName=${lastname}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${cid}  ${resp.json()}
