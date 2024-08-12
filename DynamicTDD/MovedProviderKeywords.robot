@@ -1196,9 +1196,9 @@ Get Waitlist By Id
     RETURN  ${resp}
 
 Update User
-    [Arguments]  ${id}   ${countryCode}  ${mob_no}  &{kwargs}
-    #${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${user_type}  ${pincode}  ${countryCode}    ${dept_id}  ${sub_domain}  ${admin}  ${whatsApp_countrycode}  ${WhatsApp_num}  ${telegram_countrycode}  ${telegram_num} 
-    ${data}=  Create Dictionary  countryCode=${countryCode}  mobileNo=${mob_no}
+    [Arguments]  ${id}   ${countryCode}  ${mob_no}  ${user_type}  &{kwargs}
+    #${fname}  ${lname}  ${dob}  ${gender}  ${email}    ${pincode}    ${dept_id}  ${sub_domain}  ${admin}  ${whatsApp_countrycode}  ${WhatsApp_num}  ${telegram_countrycode}  ${telegram_num} 
+    ${data}=  Create Dictionary  countryCode=${countryCode}  mobileNo=${mob_no}  userType=${user_type}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
     END
@@ -1206,6 +1206,7 @@ Update User
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/user/${id}   data=${data}  expected_status=any
     RETURN  ${resp} 
+
 
 
 # Update User

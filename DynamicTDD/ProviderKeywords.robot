@@ -448,9 +448,9 @@ Create Sample User
     RETURN  ${resp.json()}
 
 Update User
-    [Arguments]  ${id}   ${countryCode}  ${mob_no}  &{kwargs}
-    #${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${user_type}  ${pincode}    ${dept_id}  ${sub_domain}  ${admin}  ${whatsApp_countrycode}  ${WhatsApp_num}  ${telegram_countrycode}  ${telegram_num} 
-    ${data}=  Create Dictionary  countryCode=${countryCode}  mobileNo=${mob_no}
+    [Arguments]  ${id}   ${countryCode}  ${mob_no}  ${user_type}  &{kwargs}
+    #${fname}  ${lname}  ${dob}  ${gender}  ${email}    ${pincode}    ${dept_id}  ${sub_domain}  ${admin}  ${whatsApp_countrycode}  ${WhatsApp_num}  ${telegram_countrycode}  ${telegram_num} 
+    ${data}=  Create Dictionary  countryCode=${countryCode}  mobileNo=${mob_no}  userType=${user_type}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
     END
