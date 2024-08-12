@@ -15795,11 +15795,72 @@ Update Lead Product
     [Arguments]     ${uid}  ${typeName}  &{kwargs}
 
     ${data}=  Create Dictionary  typeName=${typeName}
-    
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END 
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/crm/lead/product/${uid}  data=${data}  expected_status=any
     RETURN  ${resp}
+
+Create Lead Channel
+
+    [Arguments]  ${name}  ${channelType}  ${crmLeadProductTypeDto}  &{kwargs}
+
+    ${data}=  Create Dictionary  name=${name}  channelType=${channelType}  crmLeadProductTypeDto=${crmLeadProductTypeDto}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END 
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/crm/lead/channel  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Get Lead Channel By Uid     
+
+    [Arguments]  ${uid}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/crm/lead/channel/${uid}  expected_status=any
+    RETURN  ${resp}
+
+Update Lead Channel
+
+    #... We can update sortOrder,crmLeadProductTypeName and attachments using this url ...
+
+    [Arguments]     ${uid}  ${name}  &{kwargs}
+
+    ${data}=  Create Dictionary  uid=${uid}  name=${name}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END 
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/crm/lead/channel/${uid}  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Lead Channel Status Change
+
+    [Arguments]  ${uid}  ${status}
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/crm/lead/channel/${uid}/status/${status}  expected_status=any
+    RETURN  ${resp}
+
+Get Lead Channel By Filter    
+
+    [Arguments]  &{param} 
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/crm/lead/channel   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Get Lead Channel Count By Filter    
+
+    [Arguments]  &{param} 
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/crm/lead/channel/count   params=${param}   expected_status=any
+    RETURN  ${resp}
+
 
 
 
