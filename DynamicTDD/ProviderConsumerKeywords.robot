@@ -113,6 +113,52 @@ Get stores filter
     RETURN  ${resp} 
 
 
+Get stores Count filter
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/store/count   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+#----------- CONSUMER ORDER ---------
+
+Get Provider Catalog Item Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/so/catalog/item   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+
+Get Provider Catalog Item Count Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/so/catalog/item/count   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get catalog item by item encId
+    [Arguments]     ${accountId}   ${catItemEncId}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /consumer/so/catalog/${accountId}/item/${catItemEncId}  expected_status=any
+    RETURN  ${resp}
+
+Get invoice Using order uid
+    [Arguments]     ${accountId}  ${orderUid} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /consumer/so/invoice/${accountId}/order/${orderUid}/invoice  expected_status=any
+    RETURN  ${resp}
+
+Get invoice Using Invoice uid
+    [Arguments]     ${accountId}  ${invoiceUid} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /consumer/so/invoice/${accountId}/${invoiceUid}  expected_status=any
+    RETURN  ${resp}
+
+GetOrder using uid
+    [Arguments]     ${orderUid} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /consumer/sorder/${orderUid}  expected_status=any
+    RETURN  ${resp}
+
+
 ###### All Current Keywords above this line #############################################
 
 Get ProviderConsumer
@@ -418,17 +464,6 @@ Get Provider Catalog Count Filter
     RETURN  ${resp} 
 
 
-Get Provider Catalog Item Filter
-    [Arguments]  &{param}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/so/catalog/item   params=${param}   expected_status=any
-    RETURN  ${resp} 
-
-Get Provider Catalog Item Count Filter
-    [Arguments]  &{param}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/so/catalog/item/count   params=${param}   expected_status=any
-    RETURN  ${resp} 
 
 Create Cart From Consumerside
 
@@ -563,17 +598,6 @@ CheckOut Cart Items
     ${resp}=  POST On Session  ynw  /consumer/cart/${cartUid}/checkout    data=${data}   expected_status=any
     RETURN  ${resp}
 
-Get catalog item by item encId
-    [Arguments]     ${accountId}   ${catItemEncId}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   /consumer/so/catalog/${accountId}/item/${catItemEncId}  expected_status=any
-    RETURN  ${resp}
-
-GetOrder using uid
-    [Arguments]     ${orderUid} 
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   /consumer/sorder/${orderUid}  expected_status=any
-    RETURN  ${resp}
 
 Get Order- Filter
     [Arguments]  &{param}
@@ -587,17 +611,6 @@ Get Order Count- Filter
     ${resp}=  GET On Session  ynw  /consumer/sorder/count   params=${param}   expected_status=any
     RETURN  ${resp}
 
-Get invoice Using order uid
-    [Arguments]     ${accountId}  ${orderUid} 
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   /consumer/so/invoice/${accountId}/order/${orderUid}/invoice  expected_status=any
-    RETURN  ${resp}
-
-Get invoice Using Invoice uid
-    [Arguments]     ${accountId}  ${invoiceUid} 
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   /consumer/so/invoice/${accountId}/${invoiceUid}  expected_status=any
-    RETURN  ${resp}
 
 Get invoice- Filter
     [Arguments]  &{param}
@@ -666,13 +679,6 @@ Get sp item manufacturer Count Filter
     ${resp}=  GET On Session  ynw  /consumer/spitem/settings/${accountId}/manufacturer/count   params=${param}   expected_status=any
     RETURN  ${resp} 
 
-
-
-Get stores Count filter
-    [Arguments]    &{param}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/store/count   params=${param}   expected_status=any
-    RETURN  ${resp} 
 
 
 *** Comments ***
@@ -777,6 +783,51 @@ Get stores filter
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/store   params=${param}   expected_status=any
     RETURN  ${resp} 
+
+
+Get stores Count filter
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/store/count   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get Provider Catalog Item Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/so/catalog/item   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+
+Get Provider Catalog Item Count Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/so/catalog/item/count   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get catalog item by item encId
+    [Arguments]     ${accountId}   ${catItemEncId}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /consumer/so/catalog/${accountId}/item/${catItemEncId}  expected_status=any
+    RETURN  ${resp}
+
+Get invoice Using order uid
+    [Arguments]     ${accountId}  ${orderUid} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /consumer/so/invoice/${accountId}/order/${orderUid}/invoice  expected_status=any
+    RETURN  ${resp}
+
+Get invoice Using Invoice uid
+    [Arguments]     ${accountId}  ${invoiceUid} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /consumer/so/invoice/${accountId}/${invoiceUid}  expected_status=any
+    RETURN  ${resp}
+
+GetOrder using uid
+    [Arguments]     ${orderUid} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /consumer/sorder/${orderUid}  expected_status=any
+    RETURN  ${resp}
+
 
 
 

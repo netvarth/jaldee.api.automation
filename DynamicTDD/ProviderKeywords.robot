@@ -448,9 +448,9 @@ Create Sample User
     RETURN  ${resp.json()}
 
 Update User
-    [Arguments]  ${id}   ${countryCode}  ${mob_no}  &{kwargs}
-    #${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${user_type}  ${pincode}    ${dept_id}  ${sub_domain}  ${admin}  ${whatsApp_countrycode}  ${WhatsApp_num}  ${telegram_countrycode}  ${telegram_num} 
-    ${data}=  Create Dictionary  countryCode=${countryCode}  mobileNo=${mob_no}
+    [Arguments]  ${id}   ${countryCode}  ${mob_no}  ${user_type}  &{kwargs}
+    #${fname}  ${lname}  ${dob}  ${gender}  ${email}    ${pincode}    ${dept_id}  ${sub_domain}  ${admin}  ${whatsApp_countrycode}  ${WhatsApp_num}  ${telegram_countrycode}  ${telegram_num} 
+    ${data}=  Create Dictionary  countryCode=${countryCode}  mobileNo=${mob_no}  userType=${user_type}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
     END
@@ -1856,6 +1856,76 @@ Get Sales Order
     ${resp}=  GET On Session  ynw  /provider/sorder/${orderEncId}    expected_status=any
     RETURN  ${resp} 
 
+Get SalesOrder Catalog List
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog  params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+
+Get SalesOrder Catalog Count
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/count  params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get SalesOrder Catalog Item List
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/item    params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get SalesOrder Catalog Item Count
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/count  params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get list by item encId
+    [Arguments]  ${socitemEncId}     
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/${socitemEncId}/batch/list    expected_status=any
+    RETURN  ${resp} 
+
+Get Batches using Salesordercatalog
+
+    [Arguments]  ${OrderCatEncId}   
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/${OrderCatEncId}/forcreateorder   expected_status=any
+    RETURN  ${resp} 
+
+
+Get SalesOrder Catalog By Encid
+    [Arguments]  ${catEncId}      
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/${catEncId}    expected_status=any
+    RETURN  ${resp} 
+
+Get invoice filter
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/invoice   params=${param}  expected_status=any
+    RETURN  ${resp} 
+
+Get invoice count filter
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/invoice/count   params=${param}  expected_status=any
+    RETURN  ${resp} 
+
+Get Invoice By Order Uid
+
+    [Arguments]  ${orderUid}   
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/invoice/order/${orderUid}   expected_status=any
+    RETURN  ${resp} 
+
+Get Sales Order Invoice By Id
+
+    [Arguments]  ${invoiceuid}   
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/invoice/${invoiceuid}   expected_status=any
+    RETURN  ${resp} 
 
 ###### All Current Keywords above this line #############################################
 
@@ -14559,24 +14629,6 @@ Update SalesOrder Catalog Status
     ${resp}=  PUT On Session  ynw  /provider/so/catalog/${catEncId}/${status}    expected_status=any
     RETURN  ${resp} 
 
-Get SalesOrder Catalog By Encid
-    [Arguments]  ${catEncId}      
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/so/catalog/${catEncId}    expected_status=any
-    RETURN  ${resp} 
-
-Get SalesOrder Catalog List
-    [Arguments]  &{param}    
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/so/catalog  params=${param}   expected_status=any
-    RETURN  ${resp} 
-
-Get SalesOrder Catalog Count
-    [Arguments]  &{param}    
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/so/catalog/count  params=${param}   expected_status=any
-    RETURN  ${resp} 
-
 
 
 Get SalesOrder Catalog Item By Encid
@@ -14585,11 +14637,6 @@ Get SalesOrder Catalog Item By Encid
     ${resp}=  GET On Session  ynw  /provider/so/catalog/item/${cat_item_EncId}    expected_status=any
     RETURN  ${resp} 
 
-Get SalesOrder Catalog Item List
-    [Arguments]  &{param}    
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/so/catalog/item    params=${param}   expected_status=any
-    RETURN  ${resp} 
 
 Update SalesOrder Catalog Item
 
@@ -14610,11 +14657,6 @@ Update Sales Order Catalog Item Status
     ${resp}=  PUT On Session  ynw  /provider/so/catalog/item/${cat_item_EncId}/${status}    expected_status=any
     RETURN  ${resp} 
 
-Get SalesOrder Catalog Item Count
-    [Arguments]  &{param}    
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/count  params=${param}   expected_status=any
-    RETURN  ${resp} 
 
 Get Item List By Catalog EncId
     [Arguments]  ${SO_Catalog_Encid}    
@@ -14719,11 +14761,7 @@ Get Catalog Item Batch Count
     ${resp}=  GET On Session  ynw  /provider/so/catalog/item/batch/count  params=${param}   expected_status=any
     RETURN  ${resp} 
 
-Get list by item encId
-    [Arguments]  ${socitemEncId}     
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/${socitemEncId}/batch/list    expected_status=any
-    RETURN  ${resp} 
+
 
 # ...... INVENTORY PURCHASE ........
 
@@ -15004,19 +15042,6 @@ Create Sales Order Invoice
     ${resp}=  POST On Session  ynw  /provider/sorder/${orderuid}/invoice   expected_status=any
     RETURN  ${resp} 
 
-Get Sales Order Invoice By Id
-
-    [Arguments]  ${invoiceuid}   
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/so/invoice/${invoiceuid}   expected_status=any
-    RETURN  ${resp} 
-
-Get Invoice By Order Uid
-
-    [Arguments]  ${orderUid}   
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/so/invoice/order/${orderUid}   expected_status=any
-    RETURN  ${resp} 
 
 Make Cash Payment For SalesOrder
 
@@ -15072,18 +15097,6 @@ Share SO Invoice
     ${resp}=  PUT On Session  ynw  /provider/so/invoice/${invoiceUid}/share   data=${data}  expected_status=any
     RETURN  ${resp} 
 
-
-Get invoice filter
-    [Arguments]  &{param}    
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/so/invoice   params=${param}  expected_status=any
-    RETURN  ${resp} 
-
-Get invoice count filter
-    [Arguments]  &{param}    
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/so/invoice/count   params=${param}  expected_status=any
-    RETURN  ${resp} 
 
 
 Update Sales Order
@@ -15173,12 +15186,7 @@ Get Item Transaction Count Filter
     ${resp}=  GET On Session  ynw   /provider/inventory/transaction/count  params=${param}  expected_status=any
     RETURN  ${resp}
 
-Get Batches using Salesordercatalog
 
-    [Arguments]  ${OrderCatEncId}   
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/${OrderCatEncId}/forcreateorder   expected_status=any
-    RETURN  ${resp} 
 
 #---------------------------RX Push-----------------------------------------    
 
