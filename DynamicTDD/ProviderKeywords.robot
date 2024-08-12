@@ -15716,12 +15716,12 @@ Get Contexts
     ${resp}=  GET On Session  ynw  /provider/context   expected_status=any
     RETURN  ${resp}
 
-Get Context List
+Get Context List 
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/comm/template/context   expected_status=any
-    RETURN  ${resp}
-    
+    RETURN  ${resp} 
+
 Get CommTargets
 
     Check And Create YNW Session

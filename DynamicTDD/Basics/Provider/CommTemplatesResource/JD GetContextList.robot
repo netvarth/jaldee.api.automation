@@ -15,11 +15,6 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
-Get Context List
-
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/comm/template/context   expected_status=any
-    RETURN  ${resp}
 
 *** Test Cases ***
 
