@@ -1692,3 +1692,41 @@ Update store status
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw   /provider/store/${store_id}/${status}      expected_status=any
     RETURN  ${resp}
+
+Get SalesOrder Catalog List
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog  params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+
+Get SalesOrder Catalog Count
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/count  params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get SalesOrder Catalog Item List
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/item    params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get SalesOrder Catalog Item Count
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/count  params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get list by item encId
+    [Arguments]  ${socitemEncId}     
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/${socitemEncId}/batch/list    expected_status=any
+    RETURN  ${resp} 
+
+Get Batches using Salesordercatalog
+
+    [Arguments]  ${OrderCatEncId}   
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/${OrderCatEncId}/forcreateorder   expected_status=any
+    RETURN  ${resp} 

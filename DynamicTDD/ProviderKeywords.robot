@@ -1856,6 +1856,43 @@ Get Sales Order
     ${resp}=  GET On Session  ynw  /provider/sorder/${orderEncId}    expected_status=any
     RETURN  ${resp} 
 
+Get SalesOrder Catalog List
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog  params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+
+Get SalesOrder Catalog Count
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/count  params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get SalesOrder Catalog Item List
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/item    params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get SalesOrder Catalog Item Count
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/count  params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get list by item encId
+    [Arguments]  ${socitemEncId}     
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/${socitemEncId}/batch/list    expected_status=any
+    RETURN  ${resp} 
+
+Get Batches using Salesordercatalog
+
+    [Arguments]  ${OrderCatEncId}   
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/${OrderCatEncId}/forcreateorder   expected_status=any
+    RETURN  ${resp} 
 
 ###### All Current Keywords above this line #############################################
 
@@ -14565,19 +14602,6 @@ Get SalesOrder Catalog By Encid
     ${resp}=  GET On Session  ynw  /provider/so/catalog/${catEncId}    expected_status=any
     RETURN  ${resp} 
 
-Get SalesOrder Catalog List
-    [Arguments]  &{param}    
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/so/catalog  params=${param}   expected_status=any
-    RETURN  ${resp} 
-
-Get SalesOrder Catalog Count
-    [Arguments]  &{param}    
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/so/catalog/count  params=${param}   expected_status=any
-    RETURN  ${resp} 
-
-
 
 Get SalesOrder Catalog Item By Encid
     [Arguments]  ${cat_item_EncId}      
@@ -14585,11 +14609,6 @@ Get SalesOrder Catalog Item By Encid
     ${resp}=  GET On Session  ynw  /provider/so/catalog/item/${cat_item_EncId}    expected_status=any
     RETURN  ${resp} 
 
-Get SalesOrder Catalog Item List
-    [Arguments]  &{param}    
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/so/catalog/item    params=${param}   expected_status=any
-    RETURN  ${resp} 
 
 Update SalesOrder Catalog Item
 
@@ -14610,11 +14629,6 @@ Update Sales Order Catalog Item Status
     ${resp}=  PUT On Session  ynw  /provider/so/catalog/item/${cat_item_EncId}/${status}    expected_status=any
     RETURN  ${resp} 
 
-Get SalesOrder Catalog Item Count
-    [Arguments]  &{param}    
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/count  params=${param}   expected_status=any
-    RETURN  ${resp} 
 
 Get Item List By Catalog EncId
     [Arguments]  ${SO_Catalog_Encid}    
@@ -14719,11 +14733,7 @@ Get Catalog Item Batch Count
     ${resp}=  GET On Session  ynw  /provider/so/catalog/item/batch/count  params=${param}   expected_status=any
     RETURN  ${resp} 
 
-Get list by item encId
-    [Arguments]  ${socitemEncId}     
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/${socitemEncId}/batch/list    expected_status=any
-    RETURN  ${resp} 
+
 
 # ...... INVENTORY PURCHASE ........
 
@@ -15173,12 +15183,7 @@ Get Item Transaction Count Filter
     ${resp}=  GET On Session  ynw   /provider/inventory/transaction/count  params=${param}  expected_status=any
     RETURN  ${resp}
 
-Get Batches using Salesordercatalog
 
-    [Arguments]  ${OrderCatEncId}   
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/${OrderCatEncId}/forcreateorder   expected_status=any
-    RETURN  ${resp} 
 
 #---------------------------RX Push-----------------------------------------    
 
