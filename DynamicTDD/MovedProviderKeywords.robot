@@ -1730,3 +1730,36 @@ Get Batches using Salesordercatalog
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/so/catalog/item/${OrderCatEncId}/forcreateorder   expected_status=any
     RETURN  ${resp} 
+
+
+Get SalesOrder Catalog By Encid
+    [Arguments]  ${catEncId}      
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/${catEncId}    expected_status=any
+    RETURN  ${resp} 
+Get invoice filter
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/invoice   params=${param}  expected_status=any
+    RETURN  ${resp} 
+
+Get invoice count filter
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/invoice/count   params=${param}  expected_status=any
+    RETURN  ${resp} 
+
+Get Invoice By Order Uid
+
+    [Arguments]  ${orderUid}   
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/invoice/order/${orderUid}   expected_status=any
+    RETURN  ${resp} 
+
+Get Sales Order Invoice By Id
+
+    [Arguments]  ${invoiceuid}   
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/invoice/${invoiceuid}   expected_status=any
+    RETURN  ${resp} 
+
