@@ -209,6 +209,11 @@ Update Business Profile with kwargs
     ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
     RETURN  ${resp}
 
+Get Accountsettings
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/account/settings  expected_status=any
+    RETURN  ${resp}
+
     
 ######### BASICS #########
 
@@ -466,6 +471,35 @@ Provider Get Store Type By EncId
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/store/type/id/${storeTypeId}      expected_status=any
     RETURN  ${resp}
+
+
+Get Store Type By Filter Count
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/store/type/count   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Get Store ByEncId
+    [Arguments]   ${Encid}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/store/${Encid}      expected_status=any
+    RETURN  ${resp}
+
+
+
+Create Store
+
+    [Arguments]  ${name}   ${storeTypeEncId}  ${locationId}  ${emails}  ${number}  ${countryCode}  &{kwargs}
+    ${phoneNumber}=  Create Dictionary  number=${number}    countryCode=${countryCode} 
+    ${phoneNumbers}=  Create List  ${phoneNumber}
+    ${data}=  Create Dictionary  name=${name}   storeTypeEncId=${storeTypeEncId}    locationId=${locationId}    emails=${emails}    phoneNumbers=${phoneNumbers} 
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END   
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/store   data=${data}  expected_status=any
+    RETURN  ${resp} 
 
 ########## BOOKING #############
 
@@ -5091,10 +5125,6 @@ Update Accountsettings
     ${response}=  PUT On Session  ynw  /provider/account/settings  data=${jdata}  expected_status=any
     RETURN  ${response}
 
-Get Accountsettings
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/account/settings  expected_status=any
-    RETURN  ${resp}
 
 Sms Status
     [Arguments]  ${status}
@@ -13704,26 +13734,6 @@ Update Item Type Status
 
 
 
-Get Store Type By Filter Count
-    [Arguments]   &{param}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/store/type/count   params=${param}   expected_status=any
-    RETURN  ${resp}
-
-Create Store
-
-    [Arguments]  ${name}   ${storeTypeEncId}  ${locationId}  ${emails}  ${number}  ${countryCode}  &{kwargs}
-    ${phoneNumber}=  Create Dictionary  number=${number}    countryCode=${countryCode} 
-    ${phoneNumbers}=  Create List  ${phoneNumber}
-    ${data}=  Create Dictionary  name=${name}   storeTypeEncId=${storeTypeEncId}    locationId=${locationId}    emails=${emails}    phoneNumbers=${phoneNumbers} 
-    FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary 	${data} 	${key}=${value}
-    END   
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/store   data=${data}  expected_status=any
-    RETURN  ${resp} 
-
 Update Store
 
     [Arguments]     ${store_id}   ${name}   ${storeTypeEncId}  ${locationId}  ${emails}  ${number}  ${countryCode}    &{kwargs}
@@ -13745,11 +13755,7 @@ Get store list
     ${resp}=    GET On Session    ynw   /provider/store   params=${param}   expected_status=any
     RETURN  ${resp}
 
-Get Store ByEncId
-    [Arguments]   ${Encid}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/store/${Encid}      expected_status=any
-    RETURN  ${resp}
+
 
 Update store status
     [Arguments]     ${store_id}  ${status}

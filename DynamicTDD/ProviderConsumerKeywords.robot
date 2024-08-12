@@ -106,7 +106,11 @@ Get sp item category Filter
     ${resp}=  GET On Session  ynw  /consumer/spitem/settings/${accountId}/category   params=${param}   expected_status=any
     RETURN  ${resp} 
 
-
+Get stores filter
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/store   params=${param}   expected_status=any
+    RETURN  ${resp} 
 
 
 ###### All Current Keywords above this line #############################################
@@ -662,11 +666,7 @@ Get sp item manufacturer Count Filter
     ${resp}=  GET On Session  ynw  /consumer/spitem/settings/${accountId}/manufacturer/count   params=${param}   expected_status=any
     RETURN  ${resp} 
 
-Get stores filter
-    [Arguments]    &{param}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/store   params=${param}   expected_status=any
-    RETURN  ${resp} 
+
 
 Get stores Count filter
     [Arguments]    &{param}
@@ -771,6 +771,12 @@ Update ProviderConsumer
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /spconsumer/  data=${data}  expected_status=any
     RETURN  ${resp}
+
+Get stores filter
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/store   params=${param}   expected_status=any
+    RETURN  ${resp} 
 
 
 
