@@ -96,3 +96,28 @@ JD-TC-Get_Lead_Product_By_Uid-UH2
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     419
     Should Be Equal As Strings    ${resp.json()}        ${SESSION_EXPIRED}
+
+JD-TC-Get_Lead_Product_By_Uid-UH3
+
+    [Documentation]   Get Lead Product By Uid - with another provider login
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  '${resp.json()['enableCrmLead']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable CRM Lead  ${toggle[0]}
+        Log  ${resp.json()}
+        Should Be Equal As Strings    ${resp.status_code}    200
+
+    END
+
+    ${resp}=    Get Lead Product By Uid  ${lpid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}     401
+    Should Be Equal As Strings    ${resp.json()}        ${NO_PERMISSION}
