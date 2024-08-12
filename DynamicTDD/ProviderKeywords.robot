@@ -448,9 +448,9 @@ Create Sample User
     RETURN  ${resp.json()}
 
 Update User
-    [Arguments]  ${id}   &{kwargs}
-    #${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${user_type}  ${pincode}  ${countryCode}  ${mob_no}  ${dept_id}  ${sub_domain}  ${admin}  ${whatsApp_countrycode}  ${WhatsApp_num}  ${telegram_countrycode}  ${telegram_num} 
-    ${data}=  Create Dictionary  
+    [Arguments]  ${id} ${mob_no}  &{kwargs}
+    #${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${user_type}  ${pincode}  ${countryCode}    ${dept_id}  ${sub_domain}  ${admin}  ${whatsApp_countrycode}  ${WhatsApp_num}  ${telegram_countrycode}  ${telegram_num} 
+    ${data}=  Create Dictionary  mobileNo=${mob_no}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
     END
@@ -1450,6 +1450,50 @@ Get Item Category By Filter
     ${resp}=    GET On Session    ynw   /provider/spitem/settings/category   params=${param}   expected_status=any
     RETURN  ${resp}
 
+Create Inventory Catalog
+
+    [Arguments]  ${catalogName}   ${storeEncId}    
+    ${data}=  Create Dictionary  catalogName=${catalogName}    storeEncId=${storeEncId}   
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/inventory/inventorycatalog   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get Inventory Catalog By EncId
+    [Arguments]    ${encId}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/inventorycatalog/${encId}    expected_status=any
+    RETURN  ${resp} 
+
+Create Inventory Catalog Item
+
+    [Arguments]  ${icEncId}   @{vargs}
+    Check And Create YNW Session
+
+    ${len}=  Get Length  ${vargs}
+    ${data}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        ${values}=  Create Dictionary   spCode=${vargs[${index}]}
+        ${item}=  Create Dictionary   item=${values}
+        Append To List  ${data}  ${item}
+
+    END
+    ${data}=    json.dumps    ${data}  
+    ${resp}=  POST On Session  ynw  /provider/inventory/inventorycatalog/${icEncId}/items   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get Item Details Inventory
+
+    [Arguments]  ${storeEncId}  ${vendorEncId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}  ${amount}  ${fixedDiscount}  ${discountPercentage}
+
+    ${data}=  Create Dictionary  storeEncId=${storeEncId}    vendorEncId=${vendorEncId}  inventoryCatalogItem=${inventoryCatalogItem}       quantity=${quantity}  freeQuantity=${freeQuantity}  amount=${amount}  fixedDiscount=${fixedDiscount}   discountPercentage=${discountPercentage}  
+    ${data}=  json.dumps     ${data}
+    
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/inventory/purchase/item/details   data=${data}  expected_status=any
+    RETURN  ${resp} 
 
 ######### LOGIN ###########
 
@@ -1599,6 +1643,74 @@ Create Category
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /provider/jp/finance/category    data=${data}  expected_status=any    headers=${headers}
     RETURN  ${resp}
+
+########## SALES ORDER #########
+Create SalesOrder Inventory Catalog-InvMgr True
+
+    [Arguments]  ${store_id}   ${name}   ${invMgmt}   ${inventoryCatalog}   &{kwargs}
+    ${encid}=  Create Dictionary   encId=${store_id}   
+    ${invcatid}=  Create Dictionary   invCatEncIdList=${inventoryCatalog} 
+    ${data}=  Create Dictionary   store=${encid}    name=${name}    invMgmt=${invMgmt}   inventoryCatalog=${invcatid}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/so/catalog   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Create SalesOrder Catalog Item-invMgmt True
+
+    [Arguments]   ${catEncId}    ${invMgmt}     ${Inv_Cata_Item_Encid}     ${price}    ${batchPricing}    @{vargs}    &{kwargs}
+
+    ${invCatItem}=     Create Dictionary       encId=${Inv_Cata_Item_Encid}
+    ${catalog_details}=  Create Dictionary   invMgmt=${invMgmt}       invCatItem=${invCatItem}    price=${price}     batchPricing=${batchPricing} 
+    ${items}=    Create List   ${catalog_details}  
+    ${len}=  Get Length  ${vargs}
+    FOR    ${index}    IN RANGE    ${len}  
+        Append To List  ${items}  ${vargs[${index}]}
+    END 
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${catalog_details}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${items}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/so/catalog/${catEncId}/items  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Create SalesOrder Inventory Catalog-InvMgr False
+
+    [Arguments]  ${store_id}   ${name}   ${invMgmt}   &{kwargs}
+    ${encid}=  Create Dictionary   encId=${store_id}   
+    ${data}=  Create Dictionary   store=${encid}    name=${name}    invMgmt=${invMgmt}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/so/catalog   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+
+Create SalesOrder Catalog Item-invMgmt False
+
+    [Arguments]   ${catEncId}     ${Inv_Cata_Item_Encid}     ${price}      @{vargs}    &{kwargs}
+
+    ${invCatItem}=     Create Dictionary       encId=${Inv_Cata_Item_Encid}
+    ${catalog_details}=  Create Dictionary        spItem=${invCatItem}    price=${price}     
+    ${items}=    Create List   ${catalog_details}  
+    ${len}=  Get Length  ${vargs}
+    FOR    ${index}    IN RANGE    ${len}  
+        Append To List  ${items}  ${vargs[${index}]}
+    END 
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${catalog_details}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${items}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/so/catalog/${catEncId}/items   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
 
 
 ###### All Current Keywords above this line #############################################
@@ -14231,14 +14343,7 @@ Upload Vendor Attachment
 
 #------------Inventory catalog--------------------------
 
-Create Inventory Catalog
 
-    [Arguments]  ${catalogName}   ${storeEncId}    
-    ${data}=  Create Dictionary  catalogName=${catalogName}    storeEncId=${storeEncId}   
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/inventory/inventorycatalog   data=${data}  expected_status=any
-    RETURN  ${resp} 
 
 Update Inventory Catalog
 
@@ -14255,11 +14360,6 @@ Update Inventory Catalog status
     ${resp}=  PUT On Session  ynw  /provider/inventory/inventorycatalog/${encId}/${status}   expected_status=any
     RETURN  ${resp} 
 
-Get Inventory Catalog By EncId
-    [Arguments]    ${encId}  
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/inventory/inventorycatalog/${encId}    expected_status=any
-    RETURN  ${resp} 
 
 Get Inventory Catalog By account id
     Check And Create YNW Session
@@ -14279,24 +14379,7 @@ Get Inventory catalog Filter Count
     RETURN  ${resp}
 
 #------------Inventory catalog(Items add )--------------------------
-Create Inventory Catalog Item
 
-    [Arguments]  ${icEncId}   @{vargs}
-    Check And Create YNW Session
-
-    ${len}=  Get Length  ${vargs}
-    ${data}=  Create List  
-
-    FOR    ${index}    IN RANGE    ${len}   
-        Exit For Loop If  ${len}==0
-        ${values}=  Create Dictionary   spCode=${vargs[${index}]}
-        ${item}=  Create Dictionary   item=${values}
-        Append To List  ${data}  ${item}
-
-    END
-    ${data}=    json.dumps    ${data}  
-    ${resp}=  POST On Session  ynw  /provider/inventory/inventorycatalog/${icEncId}/items   data=${data}  expected_status=any
-    RETURN  ${resp} 
 
 Update Inventory Catalog Item
 
@@ -14339,32 +14422,8 @@ Get inventory catalog item by inventory catalog encoded id
     RETURN  ${resp} 
 
 #------------Sales order catalog--------------------------
-Create SalesOrder Inventory Catalog-InvMgr False
 
-    [Arguments]  ${store_id}   ${name}   ${invMgmt}   &{kwargs}
-    ${encid}=  Create Dictionary   encId=${store_id}   
-    ${data}=  Create Dictionary   store=${encid}    name=${name}    invMgmt=${invMgmt}   
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/so/catalog   data=${data}  expected_status=any
-    RETURN  ${resp} 
 
-Create SalesOrder Inventory Catalog-InvMgr True
-
-    [Arguments]  ${store_id}   ${name}   ${invMgmt}   ${inventoryCatalog}   &{kwargs}
-    ${encid}=  Create Dictionary   encId=${store_id}   
-    ${invcatid}=  Create Dictionary   invCatEncIdList=${inventoryCatalog} 
-    ${data}=  Create Dictionary   store=${encid}    name=${name}    invMgmt=${invMgmt}   inventoryCatalog=${invcatid}
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/so/catalog   data=${data}  expected_status=any
-    RETURN  ${resp} 
 
 Update SalesOrder Catalog
 
@@ -14404,43 +14463,7 @@ Get SalesOrder Catalog Count
     ${resp}=  GET On Session  ynw  /provider/so/catalog/count  params=${param}   expected_status=any
     RETURN  ${resp} 
 
-Create SalesOrder Catalog Item-invMgmt True
 
-    [Arguments]   ${catEncId}    ${invMgmt}     ${Inv_Cata_Item_Encid}     ${price}    ${batchPricing}    @{vargs}    &{kwargs}
-
-    ${invCatItem}=     Create Dictionary       encId=${Inv_Cata_Item_Encid}
-    ${catalog_details}=  Create Dictionary   invMgmt=${invMgmt}       invCatItem=${invCatItem}    price=${price}     batchPricing=${batchPricing} 
-    ${items}=    Create List   ${catalog_details}  
-    ${len}=  Get Length  ${vargs}
-    FOR    ${index}    IN RANGE    ${len}  
-        Append To List  ${items}  ${vargs[${index}]}
-    END 
-    FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary   ${catalog_details}   ${key}=${value}
-    END
-    ${data}=  json.dumps  ${items}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/so/catalog/${catEncId}/items  data=${data}  expected_status=any
-    RETURN  ${resp} 
-
-Create SalesOrder Catalog Item-invMgmt False
-
-    [Arguments]   ${catEncId}     ${Inv_Cata_Item_Encid}     ${price}      @{vargs}    &{kwargs}
-
-    ${invCatItem}=     Create Dictionary       encId=${Inv_Cata_Item_Encid}
-    ${catalog_details}=  Create Dictionary        spItem=${invCatItem}    price=${price}     
-    ${items}=    Create List   ${catalog_details}  
-    ${len}=  Get Length  ${vargs}
-    FOR    ${index}    IN RANGE    ${len}  
-        Append To List  ${items}  ${vargs[${index}]}
-    END 
-    FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary   ${catalog_details}   ${key}=${value}
-    END
-    ${data}=  json.dumps  ${items}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/so/catalog/${catEncId}/items   data=${data}  expected_status=any
-    RETURN  ${resp} 
 
 Get SalesOrder Catalog Item By Encid
     [Arguments]  ${cat_item_EncId}      
@@ -14590,16 +14613,7 @@ Get list by item encId
 
 # ...... INVENTORY PURCHASE ........
 
-Get Item Details Inventory
 
-    [Arguments]  ${storeEncId}  ${vendorEncId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}  ${amount}  ${fixedDiscount}  ${discountPercentage}
-
-    ${data}=  Create Dictionary  storeEncId=${storeEncId}    vendorEncId=${vendorEncId}  inventoryCatalogItem=${inventoryCatalogItem}       quantity=${quantity}  freeQuantity=${freeQuantity}  amount=${amount}  fixedDiscount=${fixedDiscount}   discountPercentage=${discountPercentage}  
-    ${data}=  json.dumps     ${data}
-    
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/inventory/purchase/item/details   data=${data}  expected_status=any
-    RETURN  ${resp} 
 
 Create purchaseItemDtoList
 
