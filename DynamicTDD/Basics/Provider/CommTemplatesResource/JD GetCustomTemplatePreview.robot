@@ -178,6 +178,7 @@ JD-TC-GetCustomTemplatePreview-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    sleep  1s
     ${resp}=  Get Template By Id   ${temp_id1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200

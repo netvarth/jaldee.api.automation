@@ -66,6 +66,7 @@ JD-TC-GetSendCommList-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+    sleep  1s
     ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200

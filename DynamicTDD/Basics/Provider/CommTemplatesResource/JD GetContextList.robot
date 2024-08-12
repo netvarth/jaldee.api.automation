@@ -15,58 +15,65 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
+Get Context List
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/comm/template/context   expected_status=any
+    RETURN  ${resp}
+
 *** Test Cases ***
 
-JD-TC-GetDefaultTemplateListBySendComm-1
+JD-TC-GetContexts-1
 
-    [Documentation]  Get Default Template List By Send Comm.
+    [Documentation]  get context list.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Send Comm List
+    ${resp}=  Get Context List 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable   ${sendcomm_id1}   ${resp.json()[0]['id']}
+    Should Contain   ${resp.json()}    ${VariableContext[3]}
+    Should Contain   ${resp.json()[0]['context']}    ${VariableContext[7]}
 
-    ${resp}=  Get Default Template List by sendComm   ${sendcomm_id1}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+JD-TC-GetContexts-2
 
-JD-TC-GetDefaultTemplateListBySendComm-2
+    [Documentation]  get context list with disable appointment.
 
-    [Documentation]  Get Default Template List By Send Comm(trigger) and edit the channel and create a new template for the same send comm(trigger point).
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME121}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Send Comm List
+    ${resp}=   Get Appointment Settings
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enableAppt']}==${bool[1]}   
+        ${resp}=   Disable Appointment
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=  Get Context List 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable   ${sendcomm_id1}   ${resp.json()[0]['id']}
+    Should Contain   ${resp.json()[0]['context']}    ${VariableContext[3]}
+    Should Contain   ${resp.json()[0]['context']}    ${VariableContext[7]}
+    Should Not Contain   ${resp.json()[0]['context']}    ${VariableContext[1]}
 
-    ${resp}=  Get Default Template List by sendComm   ${sendcomm_id1}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+JD-TC-GetContexts-UH1
 
-    
+    [Documentation]  get contexts without login.
 
-JD-TC-GetDefaultTemplateListBySendComm-UH1
-
-    [Documentation]  Get Default Template List By Send Comm without login.
-
-    ${resp}=   Get Default Template List by sendComm   ${sendcomm_id1}
+    ${resp}=  Get Context List  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-GetDefaultTemplateListBySendComm-UH2
+JD-TC-GetContexts-UH2
 
-    [Documentation]  Get Default Template List By Send Comm with provider consumer login.
+    [Documentation]  get contexts with provider consumer login.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME121}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -74,11 +81,6 @@ JD-TC-GetDefaultTemplateListBySendComm-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id}  ${resp.json()['id']}
-
-    ${resp}=  Get Send Comm List
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${sendcomm_id1}  ${resp.json()[0]['id']}
 
     #............provider consumer creation..........
 
@@ -109,7 +111,8 @@ JD-TC-GetDefaultTemplateListBySendComm-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=   Get Default Template List by sendComm   ${sendcomm_id1}
+    ${resp}=  Get Context List
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings  ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
+
