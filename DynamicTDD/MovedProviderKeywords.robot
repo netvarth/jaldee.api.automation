@@ -1670,3 +1670,25 @@ Get Sales Order
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/sorder/${orderEncId}    expected_status=any
     RETURN  ${resp} 
+
+
+Update Store
+
+    [Arguments]     ${store_id}   ${name}   ${storeTypeEncId}  ${locationId}  ${emails}  ${number}  ${countryCode}    &{kwargs}
+    ${phoneNumber}=  Create Dictionary  number=${number}    countryCode=${countryCode} 
+    ${phoneNumbers}=  Create List  ${phoneNumber}
+    ${data}=  Create Dictionary  name=${name}   storeTypeEncId=${storeTypeEncId}    locationId=${locationId}    emails=${emails}    phoneNumbers=${phoneNumbers}   
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END 
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/store/${store_id}    data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+
+Update store status
+    [Arguments]     ${store_id}  ${status}
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw   /provider/store/${store_id}/${status}      expected_status=any
+    RETURN  ${resp}
