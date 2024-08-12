@@ -501,6 +501,13 @@ Create Store
     ${resp}=  POST On Session  ynw  /provider/store   data=${data}  expected_status=any
     RETURN  ${resp} 
 
+Get store list
+
+    [Arguments]     &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/store   params=${param}   expected_status=any
+    RETURN  ${resp}
+
 ########## BOOKING #############
 
 Queue
@@ -1495,6 +1502,79 @@ Get Item Details Inventory
     ${resp}=  POST On Session  ynw  /provider/inventory/purchase/item/details   data=${data}  expected_status=any
     RETURN  ${resp} 
 
+Get Inventory Item Count
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/inventoryitem/store/inventorycatalog/summary/count   params=${param}  expected_status=any
+    RETURN  ${resp} 
+
+Get Inventory Item Summary
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/inventoryitem/store/inventorycatalog/summary   params=${param}  expected_status=any
+    RETURN  ${resp} 
+
+Get Item Transaction By Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /provider/inventory/transaction  params=${param}  expected_status=any
+    RETURN  ${resp}
+
+Create purchaseItemDtoList
+
+    # .....   discountPercentage or fixedDiscount as kwargs
+
+    [Arguments]  ${inv_cat_encid}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${expiryDate}  ${mrp}  ${batchNo}  ${unitCode}    &{kwargs}
+    
+    ${inventoryCatalogItem}=    Create Dictionary  encId=${inv_cat_encid} 
+    ${data}=                    Create Dictionary  inventoryCatalogItem=${inventoryCatalogItem}  quantity=${quantity}  freeQuantity=${freeQuantity}  amount=${amount}  discountAmount=${discountAmount}  discountPercentage=${discountPercentage}  fixedDiscount=${fixedDiscount}  expiryDate=${expiryDate}  mrp=${mrp}  batchNo=${batchNo}  unitCode=${unitCode}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    RETURN  ${data}
+
+Create Purchase
+
+    [Arguments]  ${store_encid}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendor_encid}  ${ic_encid}  ${purchaseNote}  ${roundOff}  @{vargs}
+
+    ${purchaseItemDtoList}=     Create List
+    ${store}=                   Create Dictionary  encId=${store_encid}
+    ${vendor}=                  Create Dictionary  encId=${vendor_encid}  
+    ${inventoryCatalog}=        Create Dictionary  encId=${ic_encid} 
+    ${data}=                    Create Dictionary  store=${store}  invoiceReferenceNo=${invoiceReferenceNo}  invoiceDate=${invoiceDate}  vendor=${vendor}  inventoryCatalog=${inventoryCatalog}  purchaseNote=${purchaseNote}  roundOff=${roundOff}
+    ${len}=     Get Length      ${vargs}
+    FOR     ${index}    IN RANGE    ${len}  
+        Append To List  ${purchaseItemDtoList}  ${vargs[${index}]}
+    END 
+    Set To Dictionary   ${data}   purchaseItemDtoList=${purchaseItemDtoList}
+    ${data}=  json.dumps     ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/inventory/purchase   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Get Purchase By Uid
+
+    [Arguments]  ${uid}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/purchase/${uid}    expected_status=any
+    RETURN  ${resp} 
+
+Update Purchase Status
+
+    [Arguments]  ${Status}  ${Uid}
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/inventory/purchase/${uid}/status/${status}   expected_status=any
+    RETURN  ${resp} 
+
+
+Get Inventoryitem
+    [Arguments]   ${id}     
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /provider/inventory/inventoryitem/invcatalogitem/${id}   expected_status=any
+    RETURN  ${resp} 
+
 ######### LOGIN ###########
 
 Forgot LoginId
@@ -1711,6 +1791,48 @@ Create SalesOrder Catalog Item-invMgmt False
     ${resp}=  POST On Session  ynw  /provider/so/catalog/${catEncId}/items   data=${data}  expected_status=any
     RETURN  ${resp} 
 
+Get Stock Avaliability
+
+    [Arguments]     ${InvCatalogItemEncId}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/inventoryitem/invcatalogitem/${InvCatalogItemEncId}  expected_status=any 
+    RETURN  ${resp}
+
+
+Create Sales Order
+
+    [Arguments]  ${SO_Catalog_Id}   ${Pro_Con}   ${OrderFor}   ${originFrom}    ${items}    @{vargs}    &{kwargs}
+    # ${Cg_encid}=  Create Dictionary   encId=${SO_Catalog_Id}   
+    ${PC}=  Create Dictionary   id=${Pro_Con}   
+    ${OrderFor}=  Create Dictionary   id=${OrderFor}   
+
+    ${items}=   Create List    ${items} 
+    ${len}=  Get Length  ${vargs}
+    FOR    ${index}    IN RANGE    ${len}  
+        Append To List  ${items}  ${vargs[${index}]}
+    END 
+    ${data}=  Create Dictionary   catalog=${SO_Catalog_Id}    providerConsumer=${PC}    orderFor=${OrderFor}   originFrom=${originFrom}      items=${items}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END 
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/sorder   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Update SalesOrder Status
+
+    [Arguments]  ${orderEncId}   ${status}   
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/sorder/${orderEncId}/${status}   expected_status=any
+    RETURN  ${resp} 
+
+Get Sales Order
+    [Arguments]  ${orderEncId}      
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/sorder/${orderEncId}    expected_status=any
+    RETURN  ${resp} 
 
 
 ###### All Current Keywords above this line #############################################
@@ -13860,14 +13982,6 @@ Update Store
     ${resp}=  PUT On Session  ynw  /provider/store/${store_id}    data=${data}  expected_status=any
     RETURN  ${resp} 
 
-Get store list
-
-    [Arguments]     &{param}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/store   params=${param}   expected_status=any
-    RETURN  ${resp}
-
-
 
 Update store status
     [Arguments]     ${store_id}  ${status}
@@ -14615,38 +14729,6 @@ Get list by item encId
 
 
 
-Create purchaseItemDtoList
-
-    # .....   discountPercentage or fixedDiscount as kwargs
-
-    [Arguments]  ${inv_cat_encid}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${expiryDate}  ${mrp}  ${batchNo}  ${unitCode}    &{kwargs}
-    
-    ${inventoryCatalogItem}=    Create Dictionary  encId=${inv_cat_encid} 
-    ${data}=                    Create Dictionary  inventoryCatalogItem=${inventoryCatalogItem}  quantity=${quantity}  freeQuantity=${freeQuantity}  amount=${amount}  discountAmount=${discountAmount}  discountPercentage=${discountPercentage}  fixedDiscount=${fixedDiscount}  expiryDate=${expiryDate}  mrp=${mrp}  batchNo=${batchNo}  unitCode=${unitCode}
-    FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary   ${data}   ${key}=${value}
-    END
-    RETURN  ${data}
-
-Create Purchase
-
-    [Arguments]  ${store_encid}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendor_encid}  ${ic_encid}  ${purchaseNote}  ${roundOff}  @{vargs}
-
-    ${purchaseItemDtoList}=     Create List
-    ${store}=                   Create Dictionary  encId=${store_encid}
-    ${vendor}=                  Create Dictionary  encId=${vendor_encid}  
-    ${inventoryCatalog}=        Create Dictionary  encId=${ic_encid} 
-    ${data}=                    Create Dictionary  store=${store}  invoiceReferenceNo=${invoiceReferenceNo}  invoiceDate=${invoiceDate}  vendor=${vendor}  inventoryCatalog=${inventoryCatalog}  purchaseNote=${purchaseNote}  roundOff=${roundOff}
-    ${len}=     Get Length      ${vargs}
-    FOR     ${index}    IN RANGE    ${len}  
-        Append To List  ${purchaseItemDtoList}  ${vargs[${index}]}
-    END 
-    Set To Dictionary   ${data}   purchaseItemDtoList=${purchaseItemDtoList}
-    ${data}=  json.dumps     ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/inventory/purchase   data=${data}  expected_status=any
-    RETURN  ${resp}
-
 Update Purchase
 
     [Arguments]  ${uid}  ${invoiceReferenceNo}  ${invoiceDate}  ${purchaseNote}  ${roundOff}  @{vargs}
@@ -14663,13 +14745,6 @@ Update Purchase
     ${resp}=  PUT On Session  ynw  /provider/inventory/purchase/${uid}   data=${data}  expected_status=any
     RETURN  ${resp}
 
-Get Purchase By Uid
-
-    [Arguments]  ${uid}
-
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/inventory/purchase/${uid}    expected_status=any
-    RETURN  ${resp} 
 
 Get Purchase Filter
 
@@ -14699,13 +14774,6 @@ Get Purchase Item Filter Count
     ${resp}=  GET On Session  ynw  /provider/inventory/purchase/items/count  params=${param}   expected_status=any
     RETURN  ${resp}
 
-Update Purchase Status
-
-    [Arguments]  ${Status}  ${Uid}
-
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/inventory/purchase/${uid}/status/${status}   expected_status=any
-    RETURN  ${resp} 
 
 Add Purchase Attachment
 
@@ -14766,33 +14834,7 @@ Get Item Remark Count Filter
     ${resp}=  GET On Session  ynw   /provider/inventory/remark/count  params=${param}  expected_status=any
     RETURN  ${resp}
 
-Get Inventoryitem
-    [Arguments]   ${id}     
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   /provider/inventory/inventoryitem/invcatalogitem/${id}   expected_status=any
-    RETURN  ${resp} 
 
-
-Create Sales Order
-
-    [Arguments]  ${SO_Catalog_Id}   ${Pro_Con}   ${OrderFor}   ${originFrom}    ${items}    @{vargs}    &{kwargs}
-    # ${Cg_encid}=  Create Dictionary   encId=${SO_Catalog_Id}   
-    ${PC}=  Create Dictionary   id=${Pro_Con}   
-    ${OrderFor}=  Create Dictionary   id=${OrderFor}   
-
-    ${items}=   Create List    ${items} 
-    ${len}=  Get Length  ${vargs}
-    FOR    ${index}    IN RANGE    ${len}  
-        Append To List  ${items}  ${vargs[${index}]}
-    END 
-    ${data}=  Create Dictionary   catalog=${SO_Catalog_Id}    providerConsumer=${PC}    orderFor=${OrderFor}   originFrom=${originFrom}      items=${items}
-    FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary   ${data}   ${key}=${value}
-    END 
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/sorder   data=${data}  expected_status=any
-    RETURN  ${resp} 
 
 Update Order Items
 
@@ -14806,18 +14848,6 @@ Update Order Items
     ${resp}=  PUT On Session  ynw  /provider/sorder/${orderEncId}/changeitems   data=${data}  expected_status=any
     RETURN  ${resp} 
 
-Get Sales Order
-    [Arguments]  ${orderEncId}      
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/sorder/${orderEncId}    expected_status=any
-    RETURN  ${resp} 
-
-Update SalesOrder Status
-
-    [Arguments]  ${orderEncId}   ${status}   
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/sorder/${orderEncId}/${status}   expected_status=any
-    RETURN  ${resp} 
 
 Get SalesOrder List
     [Arguments]  &{param}    
@@ -15055,13 +15085,6 @@ Get invoice count filter
     ${resp}=  GET On Session  ynw  /provider/so/invoice/count   params=${param}  expected_status=any
     RETURN  ${resp} 
 
-Get Stock Avaliability
-
-    [Arguments]     ${InvCatalogItemEncId}
-
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/inventory/inventoryitem/invcatalogitem/${InvCatalogItemEncId}  expected_status=any 
-    RETURN  ${resp}
 
 Update Sales Order
 
@@ -15125,17 +15148,7 @@ Create Batch
     ${resp}=  POST On Session  ynw  /provider/inventory/inventoryitembatch   data=${data}  expected_status=any
     RETURN  ${resp} 
 
-Get Inventory Item Count
-    [Arguments]  &{param}    
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/inventory/inventoryitem/store/inventorycatalog/summary/count   params=${param}  expected_status=any
-    RETURN  ${resp} 
 
-Get Inventory Item Summary
-    [Arguments]  &{param}    
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/inventory/inventoryitem/store/inventorycatalog/summary   params=${param}  expected_status=any
-    RETURN  ${resp} 
 
 Get NonExpired Inventory Item 
     [Arguments]  &{param}    
@@ -15152,11 +15165,7 @@ Get Item Batch By InvCatItem
     ${resp}=  GET On Session  ynw  /provider/inventory/inventoryitem/batch/invcatalogitem/${invCatItemEncId}  expected_status=any 
     RETURN  ${resp}
 
-Get Item Transaction By Filter
-    [Arguments]  &{param}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   /provider/inventory/transaction  params=${param}  expected_status=any
-    RETURN  ${resp}
+
 
 Get Item Transaction Count Filter
     [Arguments]  &{param}
