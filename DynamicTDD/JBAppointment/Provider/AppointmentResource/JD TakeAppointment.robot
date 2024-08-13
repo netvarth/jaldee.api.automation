@@ -1032,8 +1032,17 @@ JD-TC-Take Appointment-11
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${Time}=  db.get_time_by_timezone  ${tz}
     ${sTime}=  db.add_timezone_time  ${tz}  0  15  
-    ${eTime}=  db.add_timezone_time  ${tz}  0  45  
-    ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
+    ${eTime}=  db.add_timezone_time  ${tz}  0  45 
+    ${slot}=  Create Dictionary    sTime=${sTime}               eTime=${eTime}
+    ${timeSlots}=  Create List   ${slot}
+    ${timespec_dict}=  Create Dictionary    recurringType=${recurringtype[1]}  repeatIntervals=${list}   lattitude=${latti}
+    ${timespec}=  Create List    ${timespec_dict}
+    ${bSchedule}=   Create Dictionary     timespec=${timespec}  timeSlots=${timeSlots}  parkingType=${parking}  open24hours=${24hours} 
+
+    ${baselocation}=  Create Dictionary   place=${city}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${url}  pinCode=${postcode}  address=${address}  parkingType=${parking}  open24hours=${24hours}  bSchedule=${bSchedule}
+
+    ${resp}=      Update Business Profile with kwargs   businessName=${bs}  businessDesc=${desc}  shortName=${companySuffix}  baselocation=${baselocation}  
+    # ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}    phoneNumbers=${ph_nos2}  emails=${emails1}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
