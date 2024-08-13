@@ -43,11 +43,52 @@ JD-TC-Create_Consumer-1
     ${firstName}=   FakerLibrary.firstName
     ${lastName}=    FakerLibrary.lastName
 
-    ${resp}=    Create Consumer  ${firstName}  ${lastName}
+    ${resp}=    Create Lead Consumer  ${firstName}  ${lastName}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test variable   ${con_id}   ${resp.json()}
 
     ${resp}=    Get Lead Consumer  ${con_id}
     Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}             200
+    Should Be Equal As Strings  ${resp.json()['uid']}           ${con_id}
+    Should Be Equal As Strings  ${resp.json()['firstName']}     ${firstName}
+    Should Be Equal As Strings  ${resp.json()['lastName']}      ${lastName}
+    Should Be Equal As Strings  ${resp.json()['crmStatus']}     ${status[0]}
+
+    ${resp}=    Get Lead Consumer By Filter
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}             200
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}        ${con_id}
+    Should Be Equal As Strings  ${resp.json()[0]['firstName']}  ${firstName}
+    Should Be Equal As Strings  ${resp.json()[0]['lastName']}   ${lastName}
+    Should Be Equal As Strings  ${resp.json()[0]['crmStatus']}  ${status[0]}
+    ${length}=  Get Length  ${resp.json()}
+
+    ${resp}=    Get Lead Consumer Count By Filter
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}     200
+    Should Be Equal As Strings  ${resp.json()}          ${length}
+
+    ${resp}=    Consumer Lead Status Change  ${con_id}  ${status[1]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}     200
+
+    ${resp}=    Get Lead Consumer  ${con_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}             200
+    Should Be Equal As Strings  ${resp.json()['uid']}           ${con_id}
+    Should Be Equal As Strings  ${resp.json()['firstName']}     ${firstName}
+    Should Be Equal As Strings  ${resp.json()['lastName']}      ${lastName}
+    Should Be Equal As Strings  ${resp.json()['crmStatus']}     ${status[1]}
+
+    ${lastName2}=    FakerLibrary.lastName
+
+    ${resp}=    Update Lead Consumer  lastName=${lastName2}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Lead Consumer  ${con_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}             200
+    Should Be Equal As Strings  ${resp.json()['lastName']}      ${lastName2}

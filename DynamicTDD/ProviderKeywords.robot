@@ -15939,12 +15939,8 @@ Update Lead Consumer
 
     [Arguments]  &{kwargs}
 
-    FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary 	${data} 	${key}=${value}
-    END 
-    ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/crm/lead/consumer  data=${data}  expected_status=any
+    ${resp}=  PUT On Session  ynw  /provider/crm/lead/consumer  params=${kwargs}  expected_status=any
     RETURN  ${resp}
 
 Consumer Lead Status Change
