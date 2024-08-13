@@ -86,13 +86,31 @@ JD-TC-Link_With_Other_Login-1
     Set Suite Variable  ${acc_id}   ${resp.json()['id']}
     Set Test Variable  ${createdDAY}  ${resp.json()['createdDate']}
 
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${number}
+
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
+    ${parking}   Random Element   ${parkingType}
+    ${24hours}    Random Element    ['True','False']
+    ${desc}=   FakerLibrary.sentence
+    ${url}=   FakerLibrary.url
+    ${name3}=  FakerLibrary.word
+    ${emails1}=  Emails  ${name3}  Email  ${number}${P_Email}.${test_mail}  ${views}
     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    ${emails1}=  Set Variable  ${P_Email}${bs}.${test_mail}  
-     
-    ${resp}=  Update Business Profile without details  ${bs}  ${bs}Desc   ${companySuffix}  ${ph}   ${emails1}
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Test Variable  ${tz}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+
+    ${b_loc}=  Create Dictionary  place=${city}   longitude=${longi}   lattitude=${latti}    googleMapUrl=${url}   pinCode=${postcode}  address=${address}
+    ${emails}=  Create List  ${emails1}
+    ${resp}=  Update Business Profile with kwargs   businessName=${bs}   shortName=${bs}   businessDesc=Description baseLocation=${b_loc}   emails=${emails}  
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+
+
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
