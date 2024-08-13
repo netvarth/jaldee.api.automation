@@ -507,7 +507,7 @@ JD-TC-AppointmentAdvancePaymentdetails-3
     
 JD-TC-AppointmentAdvancePaymentdetails-4
 
-    [Documentation]    Get appointment payment details when appoointment needs Advance amount (Advance amount same as service total price).
+    [Documentation]    Get appointment payment details when appointment needs Advance amount (Advance amount same as service total price).
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200

@@ -16,6 +16,7 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 *** Variables ***
 
 ${DisplayName1}   item1_DisplayName
+${pdffile}      /ebs/TDD/sample.pdf
 
 *** Test Cases ***
 
@@ -73,10 +74,12 @@ JD-TC-Switch_Login-1
     Set Suite Variable      ${userName}  ${decrypted_data['userName']}
     
     ${resp}=  Get Provider Details    ${pro_id}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['basicInfo']['id']}          ${pro_id}
     Should Be Equal As Strings  ${resp.json()['basicInfo']['mobile']}      ${ph}
+
+
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -117,10 +120,65 @@ JD-TC-Switch_Login-1
     Set Suite Variable    ${pdrlname2}  ${decrypted_data['lastName']}
     
     ${resp}=  Get Provider Details    ${pro_id2}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['basicInfo']['id']}          ${pro_id2}
     Should Be Equal As Strings  ${resp.json()['basicInfo']['mobile']}      ${ph2}
+
+    Set Test Variable  ${email_id}  ${P_Email}${ph2}.${test_mail}
+
+    ${resp}=  Update Email   ${pid}   ${firstname2}   ${lastname2}   ${email_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${bs}=  FakerLibrary.bs
+    ${companySuffix}=  FakerLibrary.companySuffix
+    ${parking}   Random Element   ${parkingType}
+    ${24hours}    Random Element    ['True','False']
+    ${desc}=   FakerLibrary.sentence
+    ${url}=   FakerLibrary.url
+    ${name3}=  FakerLibrary.word
+    ${emails1}=  Emails  ${name3}  Email  ${email_id}  ${views}
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Test Variable  ${tz}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+
+    ${b_loc}=  Create Dictionary  place=${city}   longitude=${longi}   lattitude=${latti}    googleMapUrl=${url}   pinCode=${postcode}  address=${address}
+    ${emails}=  Create List  ${emails1}
+    ${resp}=  Update Business Profile with kwargs   businessName=${bs}   shortName=${bs}   businessDesc=Description baseLocation=${b_loc}   emails=${emails}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${fields}=   Get subDomain level Fields  ${domain_list[0]}  ${subdomain_list[0]}
+    Log  ${fields.content}
+    Should Be Equal As Strings    ${fields.status_code}   200
+
+    ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+
+    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${subdomain_list[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get specializations Sub Domain  ${domain_list[0]}  ${subdomain_list[0]}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${spec1}     ${resp.json()[0]['displayName']}   
+    Set Test Variable    ${spec2}     ${resp.json()[1]['displayName']}   
+
+    ${spec}=  Create List    ${spec1}   ${spec2}
+
+    ${resp}=  Update Business Profile with kwargs  specialization=${spec}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get jaldeeIntegration Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['onlinePresence']}==${bool[1]}
+        ${resp}=  Set jaldeeIntegration Settings    ${bool[1]}  ${EMPTY}  ${EMPTY}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -150,7 +208,7 @@ JD-TC-Switch_Login-1
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Get Provider Details    ${pro_id2}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['basicInfo']['id']}          ${pro_id2}
     Should Be Equal As Strings  ${resp.json()['basicInfo']['mobile']}      ${ph2}
@@ -172,7 +230,7 @@ JD-TC-Switch_Login-2
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Provider Details    ${pro_id}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['basicInfo']['id']}          ${pro_id}
     Should Be Equal As Strings  ${resp.json()['basicInfo']['mobile']}      ${ph}
@@ -323,7 +381,7 @@ JD-TC-Switch_Login-UH4
     Set Suite Variable      ${pro_id3}  ${decrypted_data['id']}
     
     ${resp}=  Get Provider Details    ${pro_id3}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['basicInfo']['id']}          ${pro_id3}
     Should Be Equal As Strings  ${resp.json()['basicInfo']['mobile']}      ${ph3}
@@ -406,7 +464,7 @@ JD-TC-Switch_Login-5
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Provider Details    ${pro_id2}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['basicInfo']['id']}          ${pro_id2}
     Should Be Equal As Strings  ${resp.json()['basicInfo']['mobile']}      ${ph2}
@@ -416,7 +474,7 @@ JD-TC-Switch_Login-5
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Provider Details    ${pro_id3}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['basicInfo']['id']}          ${pro_id3}
     Should Be Equal As Strings  ${resp.json()['basicInfo']['mobile']}      ${ph3}
@@ -500,7 +558,7 @@ JD-TC-Switch_Login-6
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id3}  ${DAY1}  ${sid3}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
@@ -532,9 +590,11 @@ JD-TC-Switch_Login-7
     #  Log   ${resp.json()}
     #  Should Be Equal As Strings  ${resp.status_code}  200
     #  Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
-     ${resp2}=   Get Business Profile
-     Log  ${resp2.json()}
-     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
+
+    ${resp2}=   Get Business Profile
+    Log  ${resp2.json()}
+    Should Be Equal As Strings    ${resp2.status_code}    200
+    Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
      
 
     FOR    ${i}    IN RANGE    3
@@ -546,7 +606,7 @@ JD-TC-Switch_Login-7
                 Exit For Loop
         END
     END
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${city3}   ${resp.json()[0]['PostOffice'][0]['District']}   
     Set Test Variable  ${state3}  ${resp.json()[0]['PostOffice'][0]['State']}      
@@ -585,7 +645,8 @@ JD-TC-Switch_Login-7
     ${firstname1}=  FakerLibrary.name
     ${lastname1}=  FakerLibrary.last_name
 
-    ${resp}=  Update User  ${u_id}  ${firstname1}  ${lastname1}  ${dob3}  ${Genderlist[0]}  ${P_Email}${loginId}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[0]}  ${us1}  ${dep_id}   ${sub_domain_id}  ${bool[0]}   ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    # ${resp}=  Update User  ${u_id}  ${firstname1}  ${lastname1}  ${dob3}  ${Genderlist[0]}  ${P_Email}${loginId}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[0]}  ${us1}  ${dep_id}   ${sub_domain_id}  ${bool[0]}   ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Update User  ${u_id}    ${countryCodes[0]}  ${us1}    ${userType[0]}   firstName=${firstname1}  lastName=${lastname1}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -605,8 +666,34 @@ JD-TC-Switch_Login-8
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${addon_resp}=   Get Addons Metadata
+    Log  ${addon_resp.content}
+    Should Be Equal As Strings    ${addon_resp.status_code}   200
+    # Set Test Variable  ${aId}  ${resp.json()[0]['addons'][0]['addonId']}
+    Set Suite Variable    ${addon_id}      ${addon_resp.json()[6]['addons'][0]['addonId']}
+	Set Suite Variable    ${addon_name}      ${addon_resp.json()[6]['addons'][0]['addonName']}
+
+    # ${resp}=  Add addon  ${addon_id}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}
+    # ${resp}=    Get Locations
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF   '${resp.content}' == '${emptylist}'
+    #     ${loc_id1}=  Create Sample Location
+    # ELSE
+    #     Set Suite Variable  ${loc_id1}  ${resp.json()[0]['id']}
+    # END
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -785,8 +872,17 @@ JD-TC-Switch_Login-11
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${accountId}=    get_acc_id       ${ph}
-    Set Suite Variable    ${accountId}
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${accountId}  ${resp.json()['id']}
+
+    # ${accountId}=    get_acc_id       ${ph}
+    # Set Suite Variable    ${accountId}
 
     ${firstName}=  FakerLibrary.name
     Set Suite Variable    ${firstName}
@@ -812,7 +908,7 @@ JD-TC-Switch_Login-11
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${accountId}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
@@ -845,7 +941,7 @@ JD-TC-Switch_Login-11
     ${eTime1}=  add_timezone_time  ${tz1}  3  15  
     ${msg}=  FakerLibrary.word
 
-    ${resp}=  Create Reminder    ${pro_id}  ${jconid}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
+    ${resp}=  Create Reminder    ${pro_id}  ${cid}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${rem_id}  ${resp.content}
@@ -869,6 +965,56 @@ JD-TC-Switch_Login-12
     ${resp}=    Switch login    ${loginId2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${ph_no}  ${resp.json()['primaryPhoneNumber']}
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${firstname}  ${resp.json()['firstName']}
+    Set Suite Variable  ${lastname}  ${resp.json()['lastName']}
+
+    
+
+    # ${resp}=  Get Bill Settings 
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF  ${resp.json()['enablepos']}==${bool[0]}
+    #     ${resp}=  Enable Disable bill  ${bool[1]}
+    #     Log   ${resp.content}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END
+
+    # ${resp}=  Get Bill Settings 
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['enablepos']}    ${bool[1]}
+
+    # ${businessStatus}    Random Element   ${businessStatus}  
+    # ${accounttype}  Random Element   ${accounttype} 
+    # ${fname}=   FakerLibrary.name
+    # ${panCardNumber}=  Generate_pan_number
+    # ${bankAccountNumber}=  Generate_random_value  size=16  chars=string.digits
+    # ${bankName}=  FakerLibrary.company
+    # ${ifsc}=  Generate_ifsc_code
+    # ${panname}=  FakerLibrary.name
+    # ${city}=   get_place
+    # ${resp}=   Update Account Payment Settings   ${bool[0]}  ${bool[0]}  ${bool[1]}  ${ph_no}   ${panCardNumber}  ${bankAccountNumber}  ${bankName}  ${ifsc}  ${pan_name}  ${fname}  ${city}  ${businessStatus}  ${accounttype}  
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    
+    # ${resp}=  payuVerify  ${pid}
+    # ${resp}=   Update Account Payment Settings   ${bool[1]}  ${bool[0]}  ${bool[1]}  ${ph_no}   ${panCardNumber}  ${bankAccountNumber}  ${bankName}  ${ifsc}  ${pan_name}  ${fname}  ${city}  ${businessStatus}  ${accounttype}   
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=  SetMerchantId  ${pid}  ${merchantid}
+
+    # ${resp}=  Get Account Payment Settings
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+    #     ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END
+
+    # ${resp}=  Get Account Payment Settings
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -876,7 +1022,7 @@ JD-TC-Switch_Login-12
     ${ser_amount1}=   Convert To Number   ${ser_amount}
     ${SERVICE1}=    FakerLibrary.word
     ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[0]}   ${bool[0]} 
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid1}  ${resp.json()}
 
@@ -886,7 +1032,7 @@ JD-TC-Switch_Login-12
     ${ser_amount2}=   Convert To Number   ${ser_amount}
     ${SERVICE2}=    FakerLibrary.word
     ${resp}=  Create Service  ${SERVICE2}   ${description1}   ${ser_durtn1}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount2}  ${bool[0]}   ${bool[0]} 
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid2}  ${resp.json()}
     
@@ -912,7 +1058,7 @@ JD-TC-Switch_Login-12
     ${tc}=  FakerLibrary.sentence
     ${services}=   Create list   ${sid1}   ${sid2}
     ${resp}=  Create Provider Coupon   ${coupon}  ${desc}  ${amount}  ${calctype[1]}  ${cupn_code}  ${recurringtype[1]}  ${list}  ${sTime}  ${eTime}  ${ST_DAY}  ${EN_DAY}  ${EMPTY}  ${bool[1]}  ${min_bill_amount}  ${max_disc_val}  ${bool[1]}  ${max_prov_use}  ${book_channel}  ${coupn_based}  ${tc}  services=${services}  
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${coupon_id1}  ${resp.json()}
 
@@ -925,7 +1071,7 @@ JD-TC-Switch_Login-12
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Coupon By Id  ${coupon_id1} 
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
 
     ${resp}=    Provider Logout
@@ -980,11 +1126,10 @@ JD-TC-Switch_Login-13
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-
-
     ${resp}=    Provider Logout
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
 
 JD-TC-Switch_Login-14
 
@@ -997,6 +1142,11 @@ JD-TC-Switch_Login-14
     ${resp}=  Encrypted Provider Login  ${loginId2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${accountId}  ${resp.json()['id']}
 
     ${firstName}=  FakerLibrary.name
     Set Suite Variable    ${firstName}
@@ -1022,7 +1172,7 @@ JD-TC-Switch_Login-14
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${accountId}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
@@ -1053,10 +1203,9 @@ JD-TC-Switch_Login-14
     Set Suite Variable  ${account_id2}  ${resp.json()['id']}
 
     ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    
     IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
         ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
         Log  ${resp1.content}
@@ -1064,7 +1213,7 @@ JD-TC-Switch_Login-14
     END
 
     ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
@@ -1077,31 +1226,31 @@ JD-TC-Switch_Login-14
     Set Suite Variable   ${name}
 
     ${resp}=  CreateVendorCategory  ${name}  
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id}   ${resp.json()}
 
     ${resp}=  Get by encId  ${category_id}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
     
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[1]} 
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id1}   ${resp.json()}
 
     ${name1}=   FakerLibrary.word
     Set Suite Variable   ${name1}
     ${resp}=  Create Category   ${name1}  ${categoryType[3]} 
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id2}   ${resp.json()}
 
     ${resp}=  Get Category By Id   ${category_id1}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
     Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
@@ -1163,13 +1312,13 @@ JD-TC-Switch_Login-14
     ${bankInfo}=    Create List         ${bankInfo}
     
     ${resp}=  Create Vendor  ${category_id}  ${vendorId}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${vendor_uid1}   ${resp.json()['encId']}
     Set Suite Variable   ${vendor_id1}   ${resp.json()['id']}
 
     ${resp}=  Get vendor by encId   ${vendor_uid1}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}  ${vendor_id1}
     Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id2}
@@ -1184,7 +1333,7 @@ JD-TC-Switch_Login-14
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
     ${resp}=   Get next invoice Id   ${lid2}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoiceId}   ${resp.json()}
 
@@ -1194,7 +1343,7 @@ JD-TC-Switch_Login-14
     ${price}=  Convert To Number  ${price1}  1
     Set Suite Variable  ${price} 
     ${resp}=  Create Sample Item   ${DisplayName1}   ${item1}  ${itemCode1}  ${price}  ${bool[1]} 
-    Log  ${resp.json()}  
+    Log   ${resp.content}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${itemId}  ${resp.json()}
 
@@ -1208,7 +1357,7 @@ JD-TC-Switch_Login-14
     # ${itemList}=    Create List    ${itemList}
 
     ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[3]} 
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id1}   ${resp.json()}
 
@@ -1220,7 +1369,7 @@ JD-TC-Switch_Login-14
     ${serviceprice}=  Convert To Number  ${serviceprice}  1
 
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid1}  ${resp.json()}
 
@@ -1235,7 +1384,7 @@ JD-TC-Switch_Login-14
     ${adhocItemList}=    Create List    ${adhocItemList}
 
     ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}    serviceList=${serviceList}   adhocItemList=${adhocItemList}   locationId=${lid}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_id}   ${resp.json()['idList'][0]}
     Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}    
@@ -1283,6 +1432,11 @@ JD-TC-Switch_Login-15
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${accountId}  ${resp.json()['id']}
+
     ${resp}=  Toggle Department Enable
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1293,7 +1447,7 @@ JD-TC-Switch_Login-15
     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get jaldeeIntegration Settings
@@ -1352,7 +1506,7 @@ JD-TC-Switch_Login-15
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${accountId}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200    
    
     ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
@@ -1375,6 +1529,9 @@ JD-TC-Switch_Login-15
     ${resp}=    Switch login    ${loginId2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${pdrfname}  ${resp.json()['firstName']}
+    Set Suite Variable  ${pdrlname}  ${resp.json()['lastName']}
 
     ${consumer}=  Create Dictionary  id=${cid} 
     Set Suite Variable    ${consumer} 
@@ -1539,7 +1696,7 @@ JD-TC-Switch_Login-16
     Set Suite Variable      ${userName}  ${decrypted_data['userName']}
     
     ${resp}=  Get Provider Details    ${pro_id3}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['basicInfo']['id']}          ${pro_id3}
     Should Be Equal As Strings  ${resp.json()['basicInfo']['mobile']}      ${phn3}
@@ -1691,6 +1848,7 @@ JD-TC-Switch_Login-16
     ${resp}=  AddCustomer  ${NewCustomer}    firstName=${custf_name}   lastName=${custl_name}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${cid1}  ${resp.json()}
     
     ${resp}=    Send Otp For Login    ${NewCustomer}    ${account_id33}
     Log   ${resp.content}
@@ -1724,7 +1882,8 @@ JD-TC-Switch_Login-16
     ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${cid}  ${resp.json()[0]['jaldeeId']}
+    Set Test Variable  ${cid}  ${resp.json()[0]['id']}
+    # Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
 
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -1801,7 +1960,7 @@ JD-TC-Switch_Login-17
 
     sleep  02s
     ${resp}=  Get Account Settings
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     IF  ${resp.json()['enableInventory']}==${bool[0]}
@@ -1810,7 +1969,7 @@ JD-TC-Switch_Login-17
         Should Be Equal As Strings  ${resp1.status_code}  200
 
         ${resp}=  Get Account Settings
-        Log  ${resp.json()}
+        Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         Should Be Equal As Strings  ${resp.json()['enableInventory']}  ${bool[1]}
     END
@@ -1820,7 +1979,7 @@ JD-TC-Switch_Login-17
         Should Be Equal As Strings  ${resp1.status_code}  200
 
         ${resp}=  Get Account Settings
-        Log  ${resp.json()}
+        Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         Should Be Equal As Strings  ${resp.json()['enableSalesOrder']}  ${bool[1]}
     END
@@ -1970,7 +2129,7 @@ JD-TC-Switch_Login-17
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email_id}    ${primaryMobileNo}     ${accountId}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200    
    
     ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 

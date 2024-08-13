@@ -208,6 +208,7 @@ def get_aid(number):
 
 def get_acc_id(email):
     print("In function: ", inspect.stack()[0].function)
+    print("Phone number/email : ", email)
     uid= get_id(email)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:

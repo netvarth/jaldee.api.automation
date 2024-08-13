@@ -137,13 +137,13 @@ Account SignUp
     ${resp}=    POST On Session   ynw    /provider    data=${data}  expected_status=any  
     RETURN  ${resp}
 
-Account Activation
-    [Arguments]  ${email}  ${purpose}
-    Check And Create YNW Session
-    ${key}=   verify accnt  ${email}  ${purpose}
-    ${resp_val}=  POST On Session   ynw  /provider/${key}/verify  expected_status=any
-    RETURN  ${resp_val}
-This URL Has Been Commented in rest side
+# Account Activation
+#     [Arguments]  ${email}  ${purpose}
+#     Check And Create YNW Session
+#     ${key}=   verify accnt  ${email}  ${purpose}
+#     ${resp_val}=  POST On Session   ynw  /provider/${key}/verify  expected_status=any
+#     RETURN  ${resp_val}
+# This URL Has Been Commented in rest side
 
 Account Activation
     [Arguments]  ${loginid}  ${purpose}

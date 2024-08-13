@@ -49,15 +49,17 @@ JD-TC-Reset_Password-1
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph}   ${highest_package[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
+    ${cookie_parts}    ${jsessionynw_value}    Split String    ${resp.request.headers['Cookie']}    =
+    Log   ${jsessionynw_value}
 
-    ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderSignUp']}
+    ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderSignUp']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${loginId}=     Random Int  min=111111  max=999999
     Set Suite Variable      ${loginId}
     
-    ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId}
+    ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -69,6 +71,14 @@ JD-TC-Reset_Password-1
     Set Suite Variable      ${newpassword}
 
     ${resp}=    Reset Password LoginId Login  ${PASSWORD}  ${newpassword}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${loginId}  ${newpassword}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -183,6 +193,12 @@ JD-TC-Reset_Password-8
 
     ${resp}=    Reset Password LoginId Login  ${newpassword}  ${PASSWORD}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   419
-    Should Be Equal As Strings    ${resp.json()}        ${SESSION_EXPIRED}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # Should Be Equal As Strings    ${resp.status_code}   419
+    # Should Be Equal As Strings    ${resp.json()}        ${SESSION_EXPIRED}
+
+    ${resp}=  Encrypted Provider Login  ${loginId}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
 

@@ -376,7 +376,7 @@ JD-TC-Provider_Login-7
 
 JD-TC-Provider_Login-8
 
-    [Documentation]    login id is les than 4 digit
+    [Documentation]    login id is less than 4 digit
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -403,19 +403,21 @@ JD-TC-Provider_Login-8
 
 JD-TC-Provider_Login-9
 
-    [Documentation]    login id is grater than 40 digit
+    [Documentation]    login id is greater than 40 digit
 
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph}   ${highest_package[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
+    ${cookie_parts}    ${jsessionynw_value}    Split String    ${resp.request.headers['Cookie']}    =
+    Log   ${jsessionynw_value}
 
-    ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderSignUp']}
+    ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderSignUp']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${random_number}=    Random Number 	       digits=41
     
-    ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${random_number}
+    ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${random_number}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  ${resp.json()}          ${LOGIN_ID_LIMIT}

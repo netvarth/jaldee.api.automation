@@ -54,15 +54,14 @@ JD-TC-Forget_LoginId-1
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph}   ${highest_package[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
-
-    ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderSignUp']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
     Log    Request Headers: ${resp.request.headers}
     Log    Request Cookies: ${resp.request.headers['Cookie']}
     ${cookie_parts}    ${jsessionynw_value}    Split String    ${resp.request.headers['Cookie']}    =
     Log   ${jsessionynw_value}
+
+    ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderSignUp']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${loginId}=     Random Int  min=1111  max=9999
     Set Suite Variable      ${loginId}
