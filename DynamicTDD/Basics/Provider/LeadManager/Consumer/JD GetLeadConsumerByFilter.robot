@@ -24,7 +24,7 @@ JD-TC-Get_Lead_Consumer_By_Filter-1
 
     [Documentation]   Get Consumer Lead By Filter
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

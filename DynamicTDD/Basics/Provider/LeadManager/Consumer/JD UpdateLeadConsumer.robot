@@ -24,7 +24,7 @@ JD-TC-Update_Lead_Consumer-1
 
     [Documentation]   Update Lead Consumer 
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME45}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -54,7 +54,7 @@ JD-TC-Update_Lead_Consumer-1
     Should Be Equal As Strings  ${resp.json()['uid']}           ${con_id}
     Should Be Equal As Strings  ${resp.json()['firstName']}     ${firstName}
     Should Be Equal As Strings  ${resp.json()['lastName']}      ${lastName}
-    Should Be Equal As Strings  ${resp.json()['crmStatus']}     ${status[1]}
+    Should Be Equal As Strings  ${resp.json()['crmStatus']}     ${status[0]}
 
     ${lastName2}=    FakerLibrary.lastName
 

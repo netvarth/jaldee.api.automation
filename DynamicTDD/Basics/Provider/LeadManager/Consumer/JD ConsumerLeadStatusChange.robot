@@ -24,7 +24,7 @@ JD-TC-Consumer_Lead_Status_Change-1
 
     [Documentation]   Consumer Lead Status Change - Active to inactive
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

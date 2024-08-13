@@ -24,7 +24,7 @@ JD-TC-Create_Lead_Consumer-1
 
     [Documentation]   Create Lead Consumer - only with firstName and lastName
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME41}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

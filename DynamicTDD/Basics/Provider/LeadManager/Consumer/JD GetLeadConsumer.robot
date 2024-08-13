@@ -24,7 +24,7 @@ JD-TC-CGet_Lead_Consumer-1
 
     [Documentation]   Get Lead Consumer
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
