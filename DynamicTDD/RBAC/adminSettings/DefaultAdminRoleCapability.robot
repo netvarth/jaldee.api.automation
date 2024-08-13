@@ -306,10 +306,124 @@ JD-TC-Default Admin Role Capability-10
     ${PO_Number}    Generate random string    7    0123456789
     ${cons_num}    Convert To Integer  ${PO_Number}
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${cons_num}
+    Set Suite Variable  ${CUSERPH} 
     ${firstname}=  FakerLibrary.first_name    
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${CUSERPH}  
+     
     ${resp}=  AddCustomer  ${CUSERPH}   firstName=${firstname}   lastName=${lastname}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}  ${resp.json()}
+    Set Suite Variable  ${cid}  ${resp.json()}
+
+JD-TC-Default Admin Role Capability-11
+
+    [Documentation]   provider checking 'Update Customer Details' capability.
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${firstname1}=  FakerLibrary.name
+    ${lastname1}=  FakerLibrary.last_name
+    ${dob}=  FakerLibrary.Date
+    ${resp}=  Update Customer Details  ${cid}  phoneNo=${CUSERPH}  countryCode=91  firstName=${firstname1}  lastName=${lastname1}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Change Provider Consumer Profile Status    ${cid}    ${status[1]}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Default Admin Role Capability-12
+
+    [Documentation]   provider checking 'Get Customer Details' capability.
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    GetCustomer
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Suite Variable  ${Pcid}  ${resp.json()[0]['id']}
+
+    ${resp}=  GetCustomer ById  ${cid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Default Admin Role Capability-13
+
+    [Documentation]   provider checking 'Create Consumer Group' capability.
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${groupName}=   FakerLibrary.word
+    ${desc}=   FakerLibrary.sentence
+    ${resp}=  Create Customer Group   ${groupName}  ${desc}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${groupid}  ${resp.json()}
+
+JD-TC-Default Admin Role Capability-14
+
+    [Documentation]   provider checking 'Update Consumer Group' capability.
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${groupName1}=   FakerLibrary.word
+    Set Suite Variable  ${groupName1}
+    ${desc}=   FakerLibrary.sentence
+
+    ${resp}=  Update Customer Group   ${groupid}  ${groupName1}  ${desc}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Default Admin Role Capability-15
+
+    [Documentation]   provider checking 'Get Consumer Group' capability.
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Customer Groups 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Customer Group by id  ${groupid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Default Admin Role Capability-16
+
+    [Documentation]   provider checking 'Add orr Remove Consumer Group' capability.
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    # ${cust ids}=  Create List  ${Pcid}
+
+    ${resp}=  Add Customers to Group   ${groupName1}   ${Pcid}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Customer Group by id  ${groupid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Remove Customer from Group   ${groupName1}  ${Pcid}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Customer Group by id  ${groupid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
