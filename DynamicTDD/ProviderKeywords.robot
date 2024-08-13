@@ -44,9 +44,20 @@ Account SignUp
     RETURN  ${resp}
 
 Account Activation
-    [Arguments]  ${loginid}  ${purpose}
+    [Arguments]  ${loginid}  ${purpose}  &{kwargs}
     Check And Create YNW Session
-    ${key}=   verify accnt  ${loginid}  ${purpose}
+    # ${key}=   verify accnt  ${loginid}  ${purpose}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        IF  '${key}' == 'JSESSIONYNW'
+            ${sessionid}=  Set Variable  ${value}
+        END
+    END
+    ${session_given}=    Get Variable Value    ${sessionid}
+    IF  '${session_given}'=='${None}'
+        ${key}=   verify accnt  ${loginid}  ${purpose}
+    ELSE
+        ${key}=   verify accnt  ${loginid}  ${purpose}  ${sessionid}
+    END
     ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
     ${resp}=    POST On Session    ynw    /provider/oauth/otp/${key}/verify  headers=${headers2}  expected_status=any
     RETURN  ${resp}
