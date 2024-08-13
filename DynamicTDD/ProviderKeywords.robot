@@ -15937,10 +15937,16 @@ Get Lead Consumer Count By Filter
 
 Update Lead Consumer
 
-    [Arguments]  &{kwargs}
+    [Arguments]  ${uid}  &{kwargs}
+
+    ${data}=  Create Dictionary
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
 
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/crm/lead/consumer  params=${kwargs}  expected_status=any
+    ${resp}=  PUT On Session  ynw  /provider/crm/lead/consumer/${uid}  data=${data}  expected_status=any
     RETURN  ${resp}
 
 Consumer Lead Status Change

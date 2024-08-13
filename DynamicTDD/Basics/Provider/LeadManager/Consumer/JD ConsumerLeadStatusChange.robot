@@ -20,9 +20,9 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 
 *** Test Cases ***
 
-JD-TC-Create_Lead_Consumer-1
+JD-TC-Consumer_Lead_Status_Change-1
 
-    [Documentation]   Create Lead Consumer - only with firstName and lastName
+    [Documentation]   Consumer Lead Status Change - Active to inactive
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
     Log  ${resp.json()}
@@ -51,4 +51,13 @@ JD-TC-Create_Lead_Consumer-1
     ${resp}=    Get Lead Consumer  ${con_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}             200
-    
+    Should Be Equal As Strings  ${resp.json()['crmStatus']}     ${status[0]}
+
+    ${resp}=    Consumer Lead Status Change  ${con_id}  ${status[1]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}     200
+
+    ${resp}=    Get Lead Consumer  ${con_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}             200
+    Should Be Equal As Strings  ${resp.json()['crmStatus']}     ${status[1]}

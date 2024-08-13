@@ -20,9 +20,9 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 
 *** Test Cases ***
 
-JD-TC-Create_Lead_Consumer-1
+JD-TC-Get_Lead_Consumer_By_Filter-1
 
-    [Documentation]   Create Lead Consumer - only with firstName and lastName
+    [Documentation]   Get Consumer Lead By Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
     Log  ${resp.json()}
@@ -51,4 +51,11 @@ JD-TC-Create_Lead_Consumer-1
     ${resp}=    Get Lead Consumer  ${con_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}             200
-    
+
+    ${resp}=    Get Lead Consumer By Filter
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}             200
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}        ${con_id}
+    Should Be Equal As Strings  ${resp.json()[0]['firstName']}  ${firstName}
+    Should Be Equal As Strings  ${resp.json()[0]['lastName']}   ${lastName}
+    Should Be Equal As Strings  ${resp.json()[0]['crmStatus']}  ${status[0]}
