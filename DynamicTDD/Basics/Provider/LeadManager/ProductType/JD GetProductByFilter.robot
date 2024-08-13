@@ -210,9 +210,9 @@ JD-TC-Get_Lead_Product_By_Filter-8
     Set Suite Variable  ${tz}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
 
-    ${new_date}=  Evaluate  datetime.datetime.strptime('${DAY1}', '%Y-%m-%d').strftime('%d-%m-%Y')  datetime
+    # ${new_date}=  Evaluate  datetime.datetime.strptime('${DAY1}', '%Y-%m-%d').strftime('%d-%m-%Y')  datetime
 
-    ${resp}=    Get Lead Product By Filter  createdDate-eq=${new_date}
+    ${resp}=    Get Lead Product By Filter  createdDate-eq=${DAY1}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}             200
     Should Be Equal As Strings      ${resp.json()[0]['account']}       ${accountId}

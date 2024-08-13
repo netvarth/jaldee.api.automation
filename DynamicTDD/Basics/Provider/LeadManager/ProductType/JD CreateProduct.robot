@@ -199,7 +199,7 @@ JD-TC-Create_Product-UH2
     ${resp}=    Create Lead Product  ${empty}  ${productEnum[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${CHANNEL_NAME_SIZE}
+    Should Be Equal As Strings    ${resp.json()}    ${PRODUCT_NAME_SIZE}
 
 JD-TC-Create_Product-UH3
 
@@ -214,7 +214,7 @@ JD-TC-Create_Product-UH3
     ${resp}=    Create Lead Product  ${name}  ${productEnum[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${CHANNEL_NAME_SIZE}
+    Should Be Equal As Strings    ${resp.json()}    ${PRODUCT_NAME_SIZE}
 
 JD-TC-Create_Product-UH4
 
@@ -229,7 +229,7 @@ JD-TC-Create_Product-UH4
     ${resp}=    Create Lead Product  ${name}  ${productEnum[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${CHANNEL_NAME_SIZE}
+    Should Be Equal As Strings    ${resp.json()}    ${PRODUCT_NAME_SIZE}
 
 JD-TC-Create_Product-UH5
 
