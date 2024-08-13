@@ -15898,23 +15898,62 @@ Get Lead Channel Count By Filter
     ${resp}=    GET On Session    ynw   /provider/crm/lead/channel/count   params=${param}   expected_status=any
     RETURN  ${resp}
 
+Create Lead Consumer
 
+    [Arguments]  ${firstName}  ${lastName}  &{kwargs}
 
+    ${data}=  Create Dictionary  firstName=${firstName}  lastName=${lastName}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END 
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/crm/lead/consumer  data=${data}  expected_status=any
+    RETURN  ${resp}
 
+Get Lead Consumer
 
+    [Arguments]  ${uid}
 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/crm/lead/consumer/${uid}  expected_status=any
+    RETURN  ${resp}
 
+Get Lead Consumer By Filter
 
+    [Arguments]  &{param} 
 
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/crm/lead/consumer   params=${param}   expected_status=any
+    RETURN  ${resp}
 
+Get Lead Consumer Count By Filter
 
+    [Arguments]  &{param} 
 
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/crm/lead/consumer/count   params=${param}   expected_status=any
+    RETURN  ${resp}
 
+Update Lead Consumer
 
+    [Arguments]  &{kwargs}
 
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END 
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/crm/lead/consumer  data=${data}  expected_status=any
+    RETURN  ${resp}
 
+Consumer Lead Status Change
 
+    [Arguments]  ${uid}  ${status}
 
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/crm/lead/consumer/${uid}/status/${status}  expected_status=any
+    RETURN  ${resp}
 
 
 
