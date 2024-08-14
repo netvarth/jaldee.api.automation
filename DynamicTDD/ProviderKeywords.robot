@@ -554,6 +554,21 @@ Update store status
     ${resp}=    PUT On Session    ynw   /provider/store/${store_id}/${status}      expected_status=any
     RETURN  ${resp}
 
+Create Provider Reminder
+
+    [Arguments]   ${rem_name}  ${prov}  ${rt}  ${ri}  ${sDate}  ${eDate}   ${stime}  ${etime}  ${msg}  ${remindersource}   @{vargs}  &{kwargs}
+    ${schedule}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}  @{vargs}
+    ${data}=  Create Dictionary  schedule=${schedule}  provider=${prov}   reminderName=${rem_name}
+    ...    message=${msg}  reminderSource=${remindersource}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    Check And Create YNW Session
+    ${data}=  json.dumps  ${data}
+    ${resp}=  POST On Session  ynw  /provider/reminder  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+
 ########## BOOKING #############
 
 Queue
