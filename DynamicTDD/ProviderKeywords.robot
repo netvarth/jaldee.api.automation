@@ -568,6 +568,40 @@ Create Provider Reminder
     ${resp}=  POST On Session  ynw  /provider/reminder  data=${data}  expected_status=any
     RETURN  ${resp}
 
+Update Provider Reminder
+    [Arguments]   ${rem_id}  &{kwargs}
+    ${data}=  Create Dictionary
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/reminder/${rem_id}   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Delete Provider Reminder
+   [Arguments]   ${reminder_id}
+   Check And Create YNW Session
+   ${resp}=    DELETE On Session    ynw  /provider/reminder/${reminder_id}  expected_status=any
+   RETURN  ${resp}
+
+Get Provider Reminders With Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/reminders  params=${param}  expected_status=any
+    RETURN  ${resp}
+
+Get Provider Reminders Count With Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/reminders/count  params=${param}  expected_status=any
+    RETURN  ${resp}
+
+Get Provider Reminder By Id
+   [Arguments]   ${reminder_id}
+   Check And Create YNW Session
+   ${resp}=    GET On Session    ynw  /provider/reminder/${reminder_id}  expected_status=any
+   RETURN  ${resp}
 
 ########## BOOKING #############
 
