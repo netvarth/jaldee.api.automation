@@ -218,7 +218,7 @@ JD-TC-Create_Product-UH3
 
 JD-TC-Create_Product-UH4
 
-    [Documentation]   Create Product - where type name is above 50 digit  
+    [Documentation]   Create Product - where type name is above 100 digit  
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
     Log  ${resp.json()}

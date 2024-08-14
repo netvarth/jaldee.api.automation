@@ -91,6 +91,34 @@ JD-TC-Get_Channel-2
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}             200
 
+JD-TC-Get_Channel-3
+
+    [Documentation]   Get Channel By Uid - after updating product which added in crm crmLeadProductTypeDto
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${typeName_z}=    FakerLibrary.Name
+
+    ${resp}=    Update Lead Product  ${lpid}  ${typeName_z}
+    Log  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+    ${resp}=    Get Lead Channel By Uid  ${clid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()['uid']}                                   ${clid}
+    Should Be Equal As Strings      ${resp.json()['name']}                                  ${ChannelName1}
+    Should Be Equal As Strings      ${resp.json()['crmLeadProductTypeDto']['account']}      ${accountId}
+    Should Be Equal As Strings      ${resp.json()['crmLeadProductTypeDto']['typeName']}     ${typeName_z}
+    Should Be Equal As Strings      ${resp.json()['crmLeadProductTypeDto']['productEnum']}  ${productEnum[0]}
+    Should Be Equal As Strings      ${resp.json()['crmLeadProductTypeDto']['uid']}          ${lpid}
+    Should Be Equal As Strings      ${resp.json()['crmLeadProductTypeDto']['crmStatus']}    ${status[0]}
+    Should Be Equal As Strings      ${resp.json()['crmLeadProductTypeName']}                ${typeName_z}
+    Should Be Equal As Strings      ${resp.json()['channelType']}                           ${leadchannel[0]}
+
+
 JD-TC-Get_Channel-UH1
 
     [Documentation]   Get Channel By Uid - where uid is invalid
