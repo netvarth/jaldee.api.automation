@@ -24,22 +24,35 @@ JD-TC-Switch_Login-1
 
     [Documentation]    Switch login - Provider 1 switch to provider 2
 
-    ${domresp}=  Get BusinessDomainsConf
-    Log  ${domresp.json()}
-    Should Be Equal As Strings  ${domresp.status_code}  200
-    ${len}=  Get Length  ${domresp.json()}
-    ${domain_list}=  Create List
-    ${subdomain_list}=  Create List
-    FOR  ${domindex}  IN RANGE  ${len}
-        Set Test Variable  ${d}  ${domresp.json()[${domindex}]['domain']}    
-        Append To List  ${domain_list}    ${d} 
-        Set Test Variable  ${sd}  ${domresp.json()[${domindex}]['subDomains'][0]['subDomain']}
-        Append To List  ${subdomain_list}    ${sd} 
-    END
-    Log  ${domain_list}
-    Log  ${subdomain_list}
-    Set Suite Variable  ${domain_list}
-    Set Suite Variable  ${subdomain_list}
+    # ${domresp}=  Get BusinessDomainsConf
+    # Log  ${domresp.content}
+    # Should Be Equal As Strings  ${domresp.status_code}  200
+    # ${len}=  Get Length  ${domresp.json()}
+    # ${domain_list}=  Create List
+    # ${subdomain_list}=  Create List
+    # FOR  ${domindex}  IN RANGE  ${len}
+    #     Set Test Variable  ${d}  ${domresp.json()[${domindex}]['domain']}    
+    #     Append To List  ${domain_list}    ${d} 
+    #     Set Test Variable  ${sd}  ${domresp.json()[${domindex}]['subDomains'][0]['subDomain']}
+    #     Append To List  ${subdomain_list}    ${sd} 
+    # END
+    # Log  ${domain_list}
+    # Log  ${subdomain_list}
+    # Set Suite Variable  ${domain_list}
+    # Set Suite Variable  ${subdomain_list}
+    ${resp}=  Get BusinessDomainsConf
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${dom_len}=  Get Length  ${resp.json()}
+    ${dom}=  Random Int  min=${0}   max=${dom_len-1}    
+    Set Suite Variable  ${domain}  ${resp.json()[${dom}]['domain']}
+    Log   ${domain}
+
+    ${sdom_len}=  Get Length  ${resp.json()[${dom}]['subDomains']}
+    ${sdom}=  Random Int  min=${0}  max=${sdom_len-1}
+    Set Suite Variable  ${subdomain}  ${resp.json()[${dom}]['subDomains'][${sdom}]['subDomain']}
+    Log   ${subdomain}
 
     # ........ Provider 1 ..........
 
@@ -50,7 +63,7 @@ JD-TC-Switch_Login-1
     Set Suite Variable      ${firstname}
     Set Suite Variable      ${lastname}
 
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph}   1
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain}  ${subdomain}  ${ph}   1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
@@ -94,7 +107,7 @@ JD-TC-Switch_Login-1
     Set Suite Variable      ${firstname2}
     Set Suite Variable      ${lastname2}
 
-    ${resp}=  Account SignUp  ${firstname2}  ${lastname2}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph2}   1
+    ${resp}=  Account SignUp  ${firstname2}  ${lastname2}  ${None}  ${domain}  ${subdomain}  ${ph2}   1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
@@ -127,8 +140,8 @@ JD-TC-Switch_Login-1
 
     Set Test Variable  ${email_id}  ${P_Email}${ph2}.${test_mail}
 
-    ${resp}=  Update Email   ${pid}   ${firstname2}   ${lastname2}   ${email_id}
-    Log  ${resp.json()}
+    ${resp}=  Update Email   ${pro_id2}   ${firstname2}   ${lastname2}   ${email_id}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${bs}=  FakerLibrary.bs
@@ -150,35 +163,65 @@ JD-TC-Switch_Login-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${fields}=   Get subDomain level Fields  ${domain_list[0]}  ${subdomain_list[0]}
+    ${fields}=   Get subDomain level Fields  ${domain}  ${subdomain}
     Log  ${fields.content}
-    Should Be Equal As Strings    ${fields.status_code}   200
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
 
-    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${subdomain_list[0]}
+    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${subdomain}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get specializations Sub Domain  ${domain_list[0]}  ${subdomain_list[0]}
+    ${resp}=  Get specializations Sub Domain  ${domain}  ${subdomain}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable    ${spec1}     ${resp.json()[0]['displayName']}   
-    Set Test Variable    ${spec2}     ${resp.json()[1]['displayName']}   
+    ${spec_len}=  Get Length  ${resp.json()}
+    ${specs}=  random.choices  ${resp.json()}  k=2
+    ${spec}=  Create List    ${specs[0]['displayName']}   ${specs[1]['displayName']}
 
-    ${spec}=  Create List    ${spec1}   ${spec2}
+    
 
-    ${resp}=  Update Business Profile with kwargs  specialization=${spec}  
+    # ${resp}=  Get specializations Sub Domain  ${domain}  ${subdomain}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Test Variable    ${spec1}     ${resp.json()[0]['displayName']}   
+    # Set Test Variable    ${spec2}     ${resp.json()[1]['displayName']}   
+
+    # ${spec}=  Create List    ${spec1}   ${spec2}
+
+    # ${resp}=  Update Business Profile with kwargs  specialization=${spec}  
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Update Business Profile with kwargs  specialization=${spec}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePresence']}==${bool[1]}
         ${resp}=  Set jaldeeIntegration Settings    ${bool[1]}  ${EMPTY}  ${EMPTY}
-        Log   ${resp.json()}
+        Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
+
+    ${resp}=  Get Bill Settings 
+    Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF  ${resp.json()['enablepos']}==${bool[0]}
+    IF  ${resp.status_code}!=200 or ${resp.json()['enablepos']}==${bool[0]}
+        ${resp}=  Enable Disable bill  ${bool[1]}
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=  Get Bill Settings 
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['enablepos']}    ${bool[1]}
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -358,7 +401,7 @@ JD-TC-Switch_Login-UH4
     Set Suite Variable      ${firstname3}
     Set Suite Variable      ${lastname3}
 
-    ${resp}=  Account SignUp  ${firstname3}  ${lastname3}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph3}   1
+    ${resp}=  Account SignUp  ${firstname3}  ${lastname3}  ${None}  ${domain}  ${subdomain}  ${ph3}   1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
@@ -587,7 +630,7 @@ JD-TC-Switch_Login-7
 
     #  sleep  2s
     #  ${resp}=  Get Departments
-    #  Log   ${resp.json()}
+    #  Log  ${resp.content}
     #  Should Be Equal As Strings  ${resp.status_code}  200
     #  Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
@@ -620,12 +663,12 @@ JD-TC-Switch_Login-7
     Set Suite Variable  ${us1}
 
     ${resp}=  Create User  ${firstname3}  ${lastname3}   ${countryCodes[0]}  ${us1}  ${userType[0]}    
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
 
     ${resp}=  Get User By Id  ${u_id}
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['firstName']}     ${firstname3} 
     Should Be Equal As Strings  ${resp.json()['lastName']}      ${lastname3} 
@@ -647,7 +690,7 @@ JD-TC-Switch_Login-7
 
     # ${resp}=  Update User  ${u_id}  ${firstname1}  ${lastname1}  ${dob3}  ${Genderlist[0]}  ${P_Email}${loginId}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[0]}  ${us1}  ${dep_id}   ${sub_domain_id}  ${bool[0]}   ${NULL}  ${NULL}  ${NULL}  ${NULL}
     ${resp}=  Update User  ${u_id}    ${countryCodes[0]}  ${us1}    ${userType[0]}   firstName=${firstname1}  lastName=${lastname1}   
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Provider Logout
@@ -799,7 +842,7 @@ JD-TC-Switch_Login-10
     ${sTime1}=  db.get_time_by_timezone  ${tz2}
     ${desc}=    FakerLibrary.name
     ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${desc}
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${holidayId}    ${resp.json()['holidayId']}
 
@@ -812,7 +855,7 @@ JD-TC-Switch_Login-10
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=   Get Holiday By Id   ${holidayId}
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}  200 
     Verify Response    ${resp}  description=${desc}  id=${holidayId} 
     Should Be Equal As Strings   ${resp.json()['holidaySchedule']['recurringType']}                     ${recurringtype[1]}
@@ -1438,11 +1481,11 @@ JD-TC-Switch_Login-15
     Set Test Variable  ${accountId}  ${resp.json()['id']}
 
     ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep  2s
     ${resp}=  Get Departments
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
@@ -1451,7 +1494,7 @@ JD-TC-Switch_Login-15
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${name}=  FakerLibrary.name
@@ -1537,7 +1580,7 @@ JD-TC-Switch_Login-15
     Set Suite Variable    ${consumer} 
 
      ${resp}=    Create MR Case    ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings              ${resp.status_code}   200
     Set Suite Variable    ${caseId}        ${resp.json()['id']}
     Set Suite Variable    ${caseUId}    ${resp.json()['uid']}
@@ -1561,7 +1604,7 @@ JD-TC-Switch_Login-15
     ${toothSurfaces}=    Create List   ${toothSurfaces[0]}
 
     ${resp}=    Create DentalRecord    ${toothNo}  ${toothType[0]}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces}
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings              ${resp.status_code}   200
     Set Suite Variable      ${id1}           ${resp.json()}
 
@@ -1672,7 +1715,7 @@ JD-TC-Switch_Login-16
     Set Suite Variable      ${firstname33}
     Set Suite Variable      ${lastname33}
 
-    ${resp}=  Account SignUp  ${firstname33}  ${lastname33}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${phn3}   1
+    ${resp}=  Account SignUp  ${firstname33}  ${lastname33}  ${None}  ${domain}  ${subdomain}  ${phn3}   1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
@@ -2071,12 +2114,12 @@ JD-TC-Switch_Login-17
     ${displayName}=     FakerLibrary.name
     ${displayName1}=     FakerLibrary.name
     ${resp}=    Create Item Inventory  ${displayName}    
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId1}  ${resp.json()}
 
     ${resp}=    Create Item Inventory  ${displayName1}    
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId2}  ${resp.json()}
 

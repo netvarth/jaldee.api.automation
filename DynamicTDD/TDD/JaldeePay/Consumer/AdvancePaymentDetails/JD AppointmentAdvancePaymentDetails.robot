@@ -75,7 +75,7 @@ JD-TC- AppointmentAdvancePaymentdetails-1
     ${gender}    Random Element    ${Genderlist}
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd1}  ${PUSERNAME_B}  ${licid}
     Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    202
     
     ${resp}=  Account Activation  ${PUSERNAME_B}  0
     Log   ${resp.json()}

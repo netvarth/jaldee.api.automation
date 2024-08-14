@@ -6586,4 +6586,9 @@ def GetFromDict(key,**kwargs):
         return key_value_pair, kwargs
 
 
+def func_name(): 
+    return inspect.currentframe().f_back.f_back.f_code.co_name
+    
+
+
     

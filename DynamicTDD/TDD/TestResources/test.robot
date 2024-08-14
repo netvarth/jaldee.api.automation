@@ -17,50 +17,72 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
-# *** Keywords ***
+*** Keywords ***
+Deprecated Keyword 1
+    [Documentation]  *DEPRECATED in rest.*
+    Log  This is a deprecated keyword.
+
+
+Deprecated Keyword 2
+    Log  This is a deprecated keyword.
+    [Documentation]  *DEPRECATED in rest.*
+
+Deprecated Keyword 3
+    Log  This is a deprecated keyword.
+    comment  *DEPRECATED in rest.*
+
+Deprecated Keyword 4
+    Log  This is a deprecated keyword.
+    Log  Some other action here
+    IF  'Deprecated-Url'=='Deprecated-Url'
+        # Log  *DEPRECATED in rest.*  level=WARN  repr=DEPRECATED 
+        Log  *DEPRECATED in rest.*  level=WARN  
+    END
+
+Get BusinessDomainsConf
+    Check And Create YNW Session
+    ${resp}=   GET On Session  ynw  /ynwConf/businessDomains   expected_status=any
+    IF  'Deprecated-Url' in &{resp.headers}
+        Log  ${resp.headers['Deprecated-Url']}
+        ${fn_name}=  func_name
+        Log  *${fn_name} DEPRECATED in REST.*  level=WARN
+    END
+    RETURN  ${resp}
 
 
 
 
 *** Test Cases ***
+Testing Deprecation
+    # Deprecated Keyword 1
+    # Deprecated Keyword 2
+    # Deprecated Keyword 3
+    Deprecated Keyword 4
+    # example_keyword
+    ${resp}=  Get BusinessDomainsConf
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Log  ${resp.headers}
+    # Log  ${resp.headers['Deprecated-Url']}
+    # IF  'Deprecated-Url' in &{resp.headers}
+    #     Log  ${resp.headers['Deprecated-Url']}
+    # END
 
-JD-TC-paymentcheck-1
-    ${quantity}=                    Random Int  min=0  max=999
-    ${quantity}=                    Convert To Number  ${quantity}  1
-    ${freeQuantity}=                Random Int  min=0  max=10
-    ${freeQuantity}=                Convert To Number  ${freeQuantity}  1
-    ${amount}=                      Random Int  min=1  max=999
-    ${amount}=                      Convert To Number  ${amount}  1
-    ${discountPercentage}=          Random Int  min=0  max=100
-    ${discountPercentage}=          Convert To Number  ${discountPercentage}  1
-    ${fixedDiscount}=               Random Int  min=0  max=200
-    ${fixedDiscount}=               Convert To Number  ${fixedDiscount}  1
-    ${taxPercentage}=     Random Int  min=0  max=200
-    ${taxPercentage}=           Convert To Number  ${taxPercentage}  1
-    ${cgst}=     Evaluate   ${taxPercentage} / 2
-    ${sgst}=     Evaluate   ${taxPercentage} / 2
+*** COMMENTS ***
+JD-TC-55num-1
+    ${PUSERPH0}=    Generate Random 555 Number
+    Log To Console  ${PUSERPH0}
 
-    ${totalQuantity}=   Evaluate    ${quantity} + ${freeQuantity}
-    ${netTotal}=        Evaluate    ${quantity} * ${amount}
-    ${discountAmount}=  Evaluate    ${netTotal} * ${discountPercentage} / 100
-    ${taxableAmount}=   Evaluate    ${netTotal} - ${discountAmount}
-    ${cgstamount}=      Evaluate    ${taxableAmount} * ${cgst} / 100
-    ${sgstamount}=      Evaluate    ${taxableAmount} * ${sgst} / 100
-    ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
-    ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
+    ${resp}=  Get BusinessDomainsConf
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${cgstamount}=  roundoff  ${cgstamount}
-    ${sgstamount}=  roundoff  ${sgstamount}
-    ${taxAmount}=  roundoff  ${taxAmount}
-    ${netRate}=  roundoff  ${netRate}
+    ${dom_len}=  Get Length  ${resp.json()}
+    ${dom}=  Random Int  min=${0}   max=${dom_len-1}    
+    Set Suite Variable  ${domain}  ${resp.json()[${dom}]['domain']}
+    Log   ${domain}
 
-    ${netRate}=  roundoff  ${5.45}
-    ${netRate}=  roundoff  5.45
-    ${netRate}=  roundoff  ${545}
-
-    ${netRate}=  roundoff  ${5.45}  1
-    ${netRate}=  roundoff  5.45  1
-    ${netRate}=  roundoff  ${545}  1
-
-    ${netRate}=  roundoff  108224.1888
-    ${netRate}=  roundoff  ${108224.1888}
+    ${sdom_len}=  Get Length  ${resp.json()[${dom}]['subDomains']}
+    ${sdom}=  Random Int  min=${0}  max=${sdom_len-1}
+    Set Suite Variable  ${subdomain}  ${resp.json()[${dom}]['subDomains'][${sdom}]['subDomain']}
+    Log   ${subdomain}
