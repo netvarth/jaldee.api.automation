@@ -404,7 +404,7 @@ JD-TC-Default Admin Role Capability-15
 
 JD-TC-Default Admin Role Capability-16
 
-    [Documentation]   provider checking 'Add orr Remove Consumer Group' capability.
+    [Documentation]   provider checking 'Add or Remove Consumer Group' capability.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
@@ -426,4 +426,87 @@ JD-TC-Default Admin Role Capability-16
 
     ${resp}=  Get Customer Group by id  ${groupid}
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Default Admin Role Capability-17
+
+    [Documentation]   provider checking 'Create Consumer Label' capability.
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    FOR  ${i}  IN RANGE   5
+        ${Values}=  FakerLibrary.Words  	nb=3
+        ${status}=  Run Keyword And Return Status   List Should Not Contain Duplicates   ${Values}
+        Exit For Loop If  '${status}'=='True'
+    END
+
+    ${ShortValues}=  FakerLibrary.Words  	nb=3
+    ${Notifmsg}=  FakerLibrary.Words  	nb=3
+    ${ValueSet}=  Create ValueSet For Label  ${Values[0]}  ${ShortValues[0]}  ${Values[1]}  ${ShortValues[1]}  ${Values[2]}  ${ShortValues[2]}
+    ${NotificationSet}=  Create NotificationSet For Label  ${Values[0]}  ${Notifmsg[0]}  ${Values[1]}  ${Notifmsg[1]}  ${Values[2]}  ${Notifmsg[2]}
+    ${labelname}=  FakerLibrary.Words  nb=2
+    ${label_desc}=  FakerLibrary.Sentence
+    ${resp}=  Create Label  ${labelname[0]}  ${labelname[1]}  ${label_desc}  ${ValueSet}  ${NotificationSet}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${label_id}  ${resp.json()}
+
+JD-TC-Default Admin Role Capability-18
+
+    [Documentation]   provider checking 'View Consumer Label' capability.
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Label By Id  ${label_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Labels
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Default Admin Role Capability-18
+
+    [Documentation]   provider checking 'Update Consumer Label' capability.
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${Values2}=  FakerLibrary.Words  	nb=6
+    Set Suite Variable  ${Values2}
+    ${ValueSet}=  Create ValueSet For Label  ${Values2[0]}  ${Values2[1]}  ${Values2[2]}  ${Values2[3]}
+    Set Suite Variable  ${ValueSet}
+    ${NotificationSet}=  Create NotificationSet For Label  ${Values2[0]}  ${Values2[4]}  ${Values2[2]}  ${Values2[5]}
+    Set Suite Variable  ${NotificationSet}
+    ${l_desc2}=  FakerLibrary.Sentence
+    Set Suite Variable  ${l_desc2}
+    ${l_name2}=  FakerLibrary.Words  nb=2
+    Set Suite Variable  ${l_name2}
+    ${resp}=  Update Label  ${label_id}  ${l_name2[0]}  ${l_name2[1]}  ${l_desc2}  ${ValueSet}  ${NotificationSet}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  EnableDisable Label   ${label_id}   ${Qstate[1]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Default Admin Role Capability-19
+
+    [Documentation]   provider checking 'Apply Consumer Label' capability.
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${len}=  Get Length  ${ValueSet}
+    ${i}=   Random Int   min=0   max=${len-1}
+    ${label_value}=   Set Variable   ${ValueSet[${i}]['value']}
+    ${label_dict}=  Create Label Dictionary  ${l_name2[0]}  ${label_value}
+
+    ${resp}=  Add Labels for Customers   ${label_dict}   ${cid}
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
