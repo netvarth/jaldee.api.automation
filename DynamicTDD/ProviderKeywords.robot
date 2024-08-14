@@ -228,6 +228,19 @@ Get Accountsettings
     
 ######### BASICS #########
 
+TimeSpec
+    #.... noOfOccurance=${noocc}
+    [Arguments]  ${rectype}  ${rint}  ${startDate}  ${endDate}  ${sTime}  ${eTime}  @{vargs}
+    ${terminator}=  Create Dictionary  endDate=${endDate}  
+    ${len}=  Get Length  ${vargs}
+    ${time}=  Create Dictionary  sTime=${sTime}  eTime=${eTime}
+    ${timeslot}=  Create List  ${time}
+    FOR    ${index}    IN RANGE  0  ${len}
+        Append To List  ${timeslot}  ${vargs[${index}]}
+    END
+    ${ts}=  Create Dictionary  recurringType=${rectype}  repeatIntervals=${rint}  startDate=${startDate}  terminator=${terminator}  timeSlots=${timeslot}
+    RETURN  ${ts}
+
 Create Location
     [Arguments]  ${place}  ${longi}  ${latti}  ${g_url}  ${pin}  ${add}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  &{kwargs}
     ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
@@ -2082,14 +2095,6 @@ Create Business Profile
     Check And Create YNW Session
     ${resp}=  PATCH On Session  ynw  provider/bProfile  data=${data}  expected_status=any
     RETURN  ${resp}
-
-TimeSpec
-    [Arguments]  ${rectype}  ${rint}  ${startDate}  ${endDate}  ${noocc}  ${sTime}  ${eTime} 
-    ${terminator}=  Create Dictionary  endDate=${endDate}  noOfOccurance=${noocc}
-    ${time}=  Create Dictionary  sTime=${sTime}  eTime=${eTime}
-    ${timeslot}=  Create List  ${time}
-    ${ts}=  Create Dictionary  recurringType=${rectype}  repeatIntervals=${rint}  startDate=${startDate}  terminator=${terminator}  timeSlots=${timeslot}
-    RETURN  ${ts}
 
 Create Business Profile without details
     [Arguments]  ${bName}  ${bDesc}  ${shname}   ${ph1}   ${email1}
