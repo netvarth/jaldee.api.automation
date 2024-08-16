@@ -9,6 +9,8 @@ Library           FakerLibrary
 #Library           ExcellentLibrary
 Library           OperatingSystem
 Library           /ebs/TDD/excelfuncs.py
+Library           /ebs/TDD/CustomKeywords.py
+Library           /ebs/TDD/KeywordNameLogger.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
@@ -44,8 +46,7 @@ Get BusinessDomainsConf
     ${resp}=   GET On Session  ynw  /ynwConf/businessDomains   expected_status=any
     IF  'Deprecated-Url' in &{resp.headers}
         Log  ${resp.headers['Deprecated-Url']}
-        ${fn_name}=  func_name
-        Log  *${fn_name} DEPRECATED in REST.*  level=WARN
+        Log  *Get BusinessDomainsConf DEPRECATED in REST.*  level=WARN
     END
     RETURN  ${resp}
 

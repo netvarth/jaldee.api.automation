@@ -19,7 +19,7 @@ ${alph_digits}  D3r52A
 
 *** Test Cases ***
 
-JD-TC-Forget_LoginId-1
+JD-TC-Forgot_LoginId-1
 
     [Documentation]    Forget login Id - with all Credentials
 
@@ -106,7 +106,8 @@ JD-TC-Forget_LoginId-1
     ${loginId_str}=  Convert To String  ${loginId}
     Dictionary Should Contain Key    ${resp.json()}      ${loginId_str}
 
-JD-TC-Forget_LoginId-2
+
+JD-TC-Forgot_LoginId-2
 
     [Documentation]    Forget login Id - after getting login id calling the same again
 
@@ -115,7 +116,7 @@ JD-TC-Forget_LoginId-2
     Should Be Equal As Strings    ${resp.status_code}    404
     Should Be Equal As Strings      ${resp.json()}  ${ENTER_VALID_OTP}
 
-JD-TC-Forget_LoginId-3
+JD-TC-Forgot_LoginId-3
 
     [Documentation]    Forget login Id - with email id
 
@@ -135,7 +136,7 @@ JD-TC-Forget_LoginId-3
     ${loginId_str}=  Convert To String  ${loginId}
     Dictionary Should Contain Key    ${resp.json()}      ${loginId_str}
 
-JD-TC-Forget_LoginId-4
+JD-TC-Forgot_LoginId-4
 
     [Documentation]    Forget login Id - with phone and countrycode
 
@@ -155,7 +156,7 @@ JD-TC-Forget_LoginId-4
     ${loginId_str}=  Convert To String  ${loginId}
     Dictionary Should Contain Key    ${resp.json()}      ${loginId_str}
 
-JD-TC-Forget_LoginId-UH1
+JD-TC-Forgot_LoginId-UH1
 
     [Documentation]    Forget login Id - where country code is not provided
 
@@ -164,7 +165,7 @@ JD-TC-Forget_LoginId-UH1
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings      ${resp.json()}      ${COUNTRY_CODEREQUIRED}
 
-JD-TC-Forget_LoginId-UH2
+JD-TC-Forgot_LoginId-UH2
 
     [Documentation]    Forget login Id - with out phone 
 
@@ -173,7 +174,7 @@ JD-TC-Forget_LoginId-UH2
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings      ${resp.json()}      ${EMAIL_OR_PHONE_REQ}
 
-JD-TC-Forget_LoginId-UH3
+JD-TC-Forgot_LoginId-UH3
 
     [Documentation]    Forget login Id - otp purpose is empty
 
@@ -186,7 +187,7 @@ JD-TC-Forget_LoginId-UH3
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings      ${resp.json()}      ${OTP_VALIDATION_FAILED}
 
-JD-TC-Forget_LoginId-UH4
+JD-TC-Forgot_LoginId-UH4
 
     [Documentation]    Forget login Id - otp purpose is invalid
 
@@ -199,7 +200,7 @@ JD-TC-Forget_LoginId-UH4
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings      ${resp.json()}      ${OTP_VALIDATION_FAILED}
 
-JD-TC-Forget_LoginId-UH5
+JD-TC-Forgot_LoginId-UH5
 
     [Documentation]    Forget login Id - login id is empty
 
@@ -212,7 +213,7 @@ JD-TC-Forget_LoginId-UH5
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings      ${resp.json()}      ${OTP_VALIDATION_FAILED}
 
-JD-TC-Forget_LoginId-UH6
+JD-TC-Forgot_LoginId-UH6
 
     [Documentation]    Forget login Id - login id is invalid
 
@@ -227,7 +228,7 @@ JD-TC-Forget_LoginId-UH6
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings      ${resp.json()}      ${OTP_VALIDATION_FAILED}
 
-JD-TC-Forget_LoginId-UH7
+JD-TC-Forgot_LoginId-UH7
 
     [Documentation]    Forget login Id - otp is invalid
 
@@ -246,7 +247,7 @@ JD-TC-Forget_LoginId-UH7
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings      ${resp.json()}      ${ENTER_VALID_OTP}
 
-JD-TC-Forget_LoginId-UH8
+JD-TC-Forgot_LoginId-UH8
 
     [Documentation]    Forget login Id - phone number is invalid
 
@@ -257,7 +258,7 @@ JD-TC-Forget_LoginId-UH8
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings      ${resp.json()}      ${PHONE_NOT_REGISTERED}
 
-JD-TC-Forget_LoginId-UH9
+JD-TC-Forgot_LoginId-UH9
 
     [Documentation]    Forget login Id - with invalid email id
 
@@ -269,7 +270,7 @@ JD-TC-Forget_LoginId-UH9
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings      ${resp.json()}      ${EMAIL_NOT_REGISTERED}
 
-JD-TC-Forget_LoginId-UH10
+JD-TC-Forgot_LoginId-UH10
 
     [Documentation]    Forget login Id - phone number is invalid less than 10 digits
 
@@ -280,7 +281,7 @@ JD-TC-Forget_LoginId-UH10
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings      ${resp.json()}      ${PHONE_NOT_REGISTERED}
 
-JD-TC-Forget_LoginId-5
+JD-TC-Forgot_LoginId-5
 
     [Documentation]    Forget login Id - creating a sample user, reset login id for that user after that calling forgot login id
 
@@ -382,7 +383,7 @@ JD-TC-Forget_LoginId-5
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-JD-TC-Forget_LoginId-6
+JD-TC-Forgot_LoginId-6
 
     [Documentation]    Forget login Id - create user for another provider with same number as provider 1 and call forgot login id (in same account provider and user cant have same number)
 
@@ -422,7 +423,7 @@ JD-TC-Forget_LoginId-6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Forget_LoginId-7
+JD-TC-Forgot_LoginId-7
 
     [Documentation]    Forget login Id - where number is 555 number
 
@@ -482,7 +483,7 @@ JD-TC-Forget_LoginId-7
     ${loginId_555}=  Convert To String  ${loginId555}
     Dictionary Should Contain Key    ${resp.json()}      ${loginId_555}
 
-JD-TC-Forget_LoginId-8
+JD-TC-Forgot_LoginId-8
 
     [Documentation]    Forget login Id - using Existing provider and login after forgot login id
 

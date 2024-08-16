@@ -270,7 +270,7 @@ TimeSpec
 
 Create Location
     [Arguments]  ${place}  ${longi}  ${latti}  ${g_url}  ${pin}  ${add}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  &{kwargs}
-    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}    ${stime}  ${etime}
+    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
     ${bs}=  Create List  ${bs}
     ${bs}=  Create Dictionary  timespec=${bs}
     ${data}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  pinCode=${pin}  address=${add}  parkingType=${pt}  open24hours=${oh}  bSchedule=${bs}
@@ -668,7 +668,7 @@ Get Provider Reminder By Id
 
 Queue
     [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}  ${capacity}  ${loc}  @{vargs}
-    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
+    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
     ${loctype} =    Evaluate    type($loc).__name__
     ${loc}=  Run Keyword If  '${loctype}' == 'bytes'   Decode Bytes To String  ${loc}  UTF-8
     ...  ELSE	 Set Variable    ${loc}
@@ -801,7 +801,7 @@ Take Appointment For Consumer
 
 Appointment Schedule
     [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}   ${consumerParallelServing}   ${loc}  ${timeduration}  ${batch}  @{vargs}
-    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
+    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
     ${location}=  Create Dictionary  id=${loc}
     ${data}=  Create Dictionary  name=${name}  apptSchedule=${bs}   parallelServing=${parallel}    consumerParallelServing=${consumerParallelServing}  location=${location}  timeDuration=${timeduration}  batchEnable=${batch}
     ${len}=  Get Length  ${vargs}
@@ -2319,7 +2319,7 @@ Timeslot
     
 Business Profile
     [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}
-    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
+    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
     ${bs}=  Create List  ${bs}
     ${bs}=  Create Dictionary  timespec=${bs}
     ${b_loc}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  parkingType=${pt}  open24hours=${oh}   bSchedule=${bs}  pinCode=${pin}  address=${adds}
@@ -2365,7 +2365,7 @@ Create Business Profile without schedule
     
 Business Profile with schedule only
     [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${lid}
-    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
+    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
     ${bs}=  Create List  ${bs}
     ${bs}=  Create Dictionary  timespec=${bs}
     ${b_loc}=  Create Dictionary  id=${lid}  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  bSchedule=${bs}  pinCode=${pin}  address=${adds}
@@ -2406,7 +2406,7 @@ Update Business Profile with location only
 
 Business Profile with schedule
     [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}  ${lid}   &{kwargs}
-    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
+    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
     ${bs}=  Create List  ${bs}
     ${bs}=  Create Dictionary  timespec=${bs}
     ${b_loc}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  parkingType=${pt}  open24hours=${oh}   bSchedule=${bs}  pinCode=${pin}  address=${adds}  id=${lid}
@@ -2476,7 +2476,7 @@ Create Location without schedule
 
 Update Location with schedule
     [Arguments]   ${place}  ${longi}  ${latti}  ${g_url}  ${pin}  ${add}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${lid}
-    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
+    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
     ${bs}=  Create List  ${bs}
     ${bs}=  Create Dictionary  timespec=${bs}
     ${data}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  pinCode=${pin}  address=${add}  parkingType=${pt}  open24hours=${oh}  bSchedule=${bs}  id=${lid}
@@ -2566,18 +2566,19 @@ Update Social Media Info
 
 Queue For User
    [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}  ${capacity}  ${loc}  ${u_id}  @{vargs}
-   ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
-   ${user_id}=  Create Dictionary  id=${u_id}
-   ${location}=  Create Dictionary  id=${loc}
-   ${len}=  Get Length  ${vargs}
-   ${service}=  Create Dictionary  id=${vargs[0]}
-   ${services}=  Create List  ${service}
-   FOR    ${index}    IN RANGE  1  ${len}
-    	${service}=  Create Dictionary  id=${vargs[${index}]} 
-        Append To List  ${services}  ${service}
-    END
-   ${data}=  Create Dictionary  name=${name}  queueSchedule=${bs}  parallelServing=${parallel}  capacity=${capacity}  location=${location}  provider=${user_id}  services=${services}
-   RETURN  ${data}
+#    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
+    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
+    ${user_id}=  Create Dictionary  id=${u_id}
+    ${location}=  Create Dictionary  id=${loc}
+    ${len}=  Get Length  ${vargs}
+    ${service}=  Create Dictionary  id=${vargs[0]}
+    ${services}=  Create List  ${service}
+    FOR    ${index}    IN RANGE  1  ${len}
+            ${service}=  Create Dictionary  id=${vargs[${index}]} 
+            Append To List  ${services}  ${service}
+        END
+    ${data}=  Create Dictionary  name=${name}  queueSchedule=${bs}  parallelServing=${parallel}  capacity=${capacity}  location=${location}  provider=${user_id}  services=${services}
+    RETURN  ${data}
 
 
 Create Queue For User
@@ -2670,7 +2671,7 @@ Sample Queue
     
 Queue With TokenStart
    [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}  ${capacity}  ${loc}  ${token_start}  @{vargs}
-   ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
+   ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
    ${location}=  Create Dictionary  id=${loc}
    ${len}=  Get Length  ${vargs}
    ${service}=  Create Dictionary  id=${vargs[0]}
@@ -2695,7 +2696,7 @@ Create Queue With TokenStart
 
 Queue without Service
    [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}  ${capacity}  ${loc}
-   ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
+   ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
    ${location}=  Create Dictionary  id=${loc}
    ${data}=  Create Dictionary  name=${name}  queueSchedule=${bs}  parallelServing=${parallel}  capacity=${capacity}  location=${location} 
    RETURN  ${data}
@@ -2713,7 +2714,7 @@ Create Queue without Service
 
 Queue without Service For User
    [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}  ${capacity}  ${loc}  ${u_id}
-   ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
+   ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
    ${location}=  Create Dictionary  id=${loc}
    ${user_id}=  Create Dictionary  id=${u_id}
    ${data}=  Create Dictionary  name=${name}  queueSchedule=${bs}  parallelServing=${parallel}  capacity=${capacity}  location=${location}  provider=${user_id}  services=${None}
@@ -4626,7 +4627,7 @@ Is Available Queue Now
 
 Instant Queue
     [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}     ${eDate}    ${stime}    ${etime}    ${parallel}  ${capacity}  ${loc}  @{vargs}
-    ${bs}=  TimeSpec   ${rt}   ${ri}   ${sDate}  ${eDate}  ${EMPTY}  ${stime}  ${etime}
+    ${bs}=  TimeSpec   ${rt}   ${ri}   ${sDate}  ${eDate}  ${stime}  ${etime}
     ${location}=  Create Dictionary  id=${loc}
     ${len}=  Get Length  ${vargs}
     ${service}=  Create Dictionary  id=${vargs[0]}
@@ -4650,7 +4651,7 @@ Create Instant Queue
 
 Instant Queue without Service
    [Arguments]  ${name}   ${rt}   ${ri}   ${sDate}     ${eDate}    ${stime}    ${etime}    ${parallel}  ${capacity}  ${loc}
-   ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${EMPTY}  ${stime}  ${etime}
+   ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
    ${location}=  Create Dictionary  id=${loc}
    ${data}=  Create Dictionary  name=${name}  queueSchedule=${bs}  parallelServing=${parallel}  capacity=${capacity}  location=${location}  services=${None}
    RETURN  ${data}
@@ -4809,7 +4810,7 @@ Branch Signup
 
 Branch_Profile
     [Arguments]  ${bName}  ${bDesc}  ${shname}   ${place}  ${longi}  ${latti}  ${g_url}  ${pin}  ${adds}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${ph1}  ${ph2}  ${email1}
-    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
+    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
     ${bs}=  Create List  ${bs}
     ${bs}=  Create Dictionary  timespec=${bs}
     ${b_loc}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  pinCode=${pin}  address=${adds}  parkingType=${pt}  open24hours=${oh}   bSchedule=${bs}
@@ -5662,7 +5663,7 @@ Disable calling status Checkin
 
 Queue TimeInterval 
    [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}  ${capacity}  ${loc}  ${timeinterval}  ${appointment}  @{vargs}
-   ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
+   ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
    ${location}=  Create Dictionary  id=${loc}
    ${len}=  Get Length  ${vargs}
    ${service}=  Create Dictionary  id=${vargs[0]}
@@ -8426,7 +8427,7 @@ Get Vacation Next Availability
     
 Create Provider Coupon 
     [Arguments]  ${name}   ${description}   ${amount}   ${calculationType}  ${couponCode}  ${rt}  ${ri}  ${sTime}  ${eTime}  ${sDate}  ${eDate}   ${noo}  ${firstCheckinOnly}  ${minBillAmount}  ${maxDiscountValue}  ${isproviderAcceptCoupon}  ${maxProviderUseLimit}  ${bookingChannel}  ${couponBasedOn}  ${tc}  &{kwargs}
-    ${validTimeRange}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime} 
+    ${validTimeRange}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime} 
     ${policies}=  Create Dictionary  
     ${policie}=  Get Dictionary items  ${kwargs}
     FOR  ${key}  ${value}  IN  @{policie}
@@ -8445,7 +8446,7 @@ Create Provider Coupon
 
 Update Provider Coupon 
     [Arguments]  ${id}  ${name}   ${description}   ${amount}   ${calculationType}  ${couponCode}  ${rt}  ${ri}  ${sTime}  ${eTime}  ${sDate}  ${eDate}   ${noo}  ${firstCheckinOnly}  ${minBillAmount}  ${maxDiscountValue}  ${isproviderAcceptCoupon}  ${maxProviderUseLimit}  ${bookingChannel}  ${couponBasedOn}  ${tc}  &{kwargs}
-    ${validTimeRange}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime} 
+    ${validTimeRange}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime} 
     ${policies}=  Create Dictionary    
     ${policie}=  Get Dictionary items  ${kwargs}
     FOR  ${key}  ${value}  IN  @{policie}
@@ -8608,7 +8609,7 @@ Un Assign provider waitlist
 
 Make Available
    [Arguments]  ${name}   ${rt}   ${ri}   ${sDate}   ${eDate}   ${stime}   ${etime}  ${loc}  ${id}
-   ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${EMPTY}  ${stime}  ${etime}
+   ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
    ${provider}=  Create Dictionary  id=${id}
    ${data}=  Create Dictionary  name=${name}  queueSchedule=${bs}  location=${loc}  provider=${provider}
    ${data}=  json.dumps  ${data}
@@ -11257,7 +11258,7 @@ Get User Available
 Create Reminder
     [Arguments]   ${prov_id}  ${provcons_id}  ${msg}  ${sms}  ${email}  ${pushnotification}
     ...   ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
-    ${schedule}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
+    ${schedule}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
     ${remindersource}=  Create Dictionary    Sms=${sms}   Email=${email}  PushNotification=${pushnotification} 
     ${data}=  Create Dictionary  schedule=${schedule}  provider=${prov_id}  
     ...   providerConsumer=${provcons_id}  message=${msg}  reminderSource=${remindersource}
@@ -11271,7 +11272,7 @@ Create Reminder
 Update Reminder
     [Arguments]   ${reminder_id}  ${prov_id}  ${provcons_id}  ${msg}  ${sms}  ${email}  ${pushnotification}
     ...   ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
-    ${schedule}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
+    ${schedule}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
     ${remindersource}=  Create Dictionary    Sms=${sms}   Email=${email}  PushNotification=${pushnotification} 
     ${data}=  Create Dictionary    schedule=${schedule}  provider=${prov_id}  
     ...   providerConsumer=${provcons_id}  message=${msg}  reminderSource=${remindersource}
@@ -12600,7 +12601,7 @@ Resubmit IVR Qnr
 
 Provider Schedule
     [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${scheduleState}  ${providerId}
-    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
+    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
     ${data}=  Create Dictionary  name=${name}  scheduleTime=${bs}  scheduleState=${scheduleState}  providerId=${providerId}
     RETURN  ${data}
 

@@ -428,6 +428,13 @@ Generate Random Test Phone Number
     Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${Phone}${\n}
     RETURN  ${Phone}
 
+Check Deprication
+    [Arguments]    ${response}  ${keyword_name}
+    IF  'Deprecated-Url' in &{resp.headers}
+        Log  ${response.headers['Deprecated-Url']}
+        Log  *${keyword_name} DEPRECATED in REST.*  level=WARN
+    END
+
 
 # Set TZ Header
 #     [Arguments]  &{kwargs}
