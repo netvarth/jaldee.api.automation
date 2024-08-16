@@ -270,7 +270,7 @@ TimeSpec
 
 Create Location
     [Arguments]  ${place}  ${longi}  ${latti}  ${g_url}  ${pin}  ${add}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  &{kwargs}
-    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
+    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}    ${stime}  ${etime}
     ${bs}=  Create List  ${bs}
     ${bs}=  Create Dictionary  timespec=${bs}
     ${data}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  pinCode=${pin}  address=${add}  parkingType=${pt}  open24hours=${oh}  bSchedule=${bs}
