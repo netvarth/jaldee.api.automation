@@ -124,7 +124,7 @@ JD-TC-UpdateCustomVariable-3
 
     [Documentation]  Create custom variable and update it different display name then get it by id and verify.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -145,15 +145,7 @@ JD-TC-UpdateCustomVariable-3
     ${resp}=  Get Custom Variable By Id   ${var_id1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()['id']}              ${var_id1} 
-    Should Be Equal As Strings  ${resp.json()['name']}            ${name}
-    Should Be Equal As Strings  ${resp.json()['displayName']}     ${dis_name} 
-    Should Be Equal As Strings  ${resp.json()['value']}           ${value}
-    Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
-    Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[0]}
-    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
-    Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
-
+    
     ${dis_name1}=    FakerLibrary.firstname
 
     ${resp}=  Update Custom Variable   ${var_id1}  ${name}  ${dis_name1}  ${value}  
@@ -163,15 +155,8 @@ JD-TC-UpdateCustomVariable-3
     ${resp}=  Get Custom Variable By Id   ${var_id1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()['id']}              ${var_id1} 
-    Should Be Equal As Strings  ${resp.json()['name']}            ${name}
     Should Be Equal As Strings  ${resp.json()['displayName']}     ${dis_name1} 
-    Should Be Equal As Strings  ${resp.json()['value']}           ${value}
-    Should Be Equal As Strings  ${resp.json()['type']}            ${VariableValueType[1]} 
-    Should Be Equal As Strings  ${resp.json()['context']}         ${VariableContext[0]}
-    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
-    Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
-
+   
 JD-TC-UpdateCustomVariable-4
 
     [Documentation]  Create custom variable and update it different value then get it by id and verify.

@@ -26,7 +26,7 @@ JD-TC-CreateProviderReminder-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-
++
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable      ${pro_id}  ${decrypted_data['id']}

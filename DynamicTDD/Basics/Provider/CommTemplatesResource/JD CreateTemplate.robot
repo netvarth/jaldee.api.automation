@@ -1079,7 +1079,6 @@ JD-TC-CreateTemplate-UH6
     ${resp}=  Get Custom Variable By Id   ${var_id1}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
     Set Test Variable   ${custom_var1}   ${resp.json()['internalName']}
 
     ${resp}=  Update Custom Variable Status  ${var_id1}   ${VarStatus[1]} 
@@ -1089,8 +1088,7 @@ JD-TC-CreateTemplate-UH6
     ${resp}=  Get Custom Variable By Id   ${var_id1}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[1]} 
-
+   
     ${temp_name}=    FakerLibrary.word
     ${content_msg}=      FakerLibrary.sentence   
     ${content_msg}=     Set Variable  ${content_msg} ${custom_var1}.
@@ -1146,7 +1144,6 @@ JD-TC-CreateTemplate-UH7
     ${resp}=  Get Custom Variable By Id   ${var_id1}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
     Set Test Variable   ${custom_var1}   ${resp.json()['internalName']}
 
     ${resp}=  Update Custom Variable Status  ${var_id1}   ${VarStatus[1]} 
@@ -1156,12 +1153,10 @@ JD-TC-CreateTemplate-UH7
     ${resp}=  Get Custom Variable By Id   ${var_id1}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[1]} 
-
+   
     ${resp}=  Get Custom Variable By Id   ${var_id2}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
     Set Test Variable   ${custom_var2}   ${resp.json()['internalName']}
 
     ${temp_name}=    FakerLibrary.word

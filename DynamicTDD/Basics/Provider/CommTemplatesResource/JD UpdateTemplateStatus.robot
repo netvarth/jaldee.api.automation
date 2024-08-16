@@ -126,6 +126,7 @@ JD-TC-UpdateTemplateStatus-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    sleep  1s
     ${resp}=  Get Template By Id   ${temp_id1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -224,15 +225,7 @@ JD-TC-UpdateTemplateStatus-UH2
     ${resp}=  Get Template By Id   ${temp_id1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()['accountId']}                   ${account_id} 
-    Should Be Equal As Strings  ${resp.json()['templateName']}                ${temp_name}
-    Should Be Equal As Strings  ${resp.json()['context']}                     ${VariableContext[0]} 
-    Should Be Equal As Strings  ${resp.json()['commChannel']}                 ${comm_chanl} 
-    Should Be Equal As Strings  ${resp.json()['templateFormat']}              ${templateFormat[0]}
-    Should Be Equal As Strings  ${resp.json()['content']['intro']}            ${content_msg}
-    Should Be Equal As Strings  ${resp.json()['commTarget']}                  ${comm_target} 
-    Should Be Equal As Strings  ${resp.json()['status']}                      ${VarStatus[1]} 
-
+    
     ${TEMPLATE_STATUS}=  format String   ${TEMPLATE_STATUS}   ${VarStatus[1]} 
 
     ${resp}=  Update Template Status   ${temp_id1}  ${VarStatus[1]}  

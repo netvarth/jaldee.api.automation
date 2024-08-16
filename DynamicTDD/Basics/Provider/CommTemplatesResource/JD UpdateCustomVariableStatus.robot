@@ -212,6 +212,7 @@ JD-TC-UpdateCustomVariableStatus-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
+    sleep  1s
     ${resp}=  Get Custom Variable By Id   ${var_id1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
