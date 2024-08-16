@@ -73,7 +73,7 @@ JD-TC-Update_Product-2
     ${resp}=    Update Lead Product  ${lpid}  ${empty}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings    ${resp.json()}            ${PRODUCT_NAME_SIZE}
+    Should Be Equal As Strings    ${resp.json()}            ${PRODUCT_NAME_EMPTY}
 
 JD-TC-Update_Product-3
 

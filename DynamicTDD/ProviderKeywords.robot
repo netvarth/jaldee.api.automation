@@ -16022,6 +16022,32 @@ Consumer Lead Status Change
     ${resp}=  PUT On Session  ynw  /provider/crm/lead/consumer/${uid}/status/${status}  expected_status=any
     RETURN  ${resp}
 
+Create Crm Lead
+
+    [Arguments]  ${channel_uid}  ${consumerFirstName}  ${consumerUid}  ${consumerLastName}  ${ownerId}  &{kwargs}
+
+    ${channel}=  Create Dictionary  uid=${channel_uid}
+    ${data}=     Create Dictionary  consumerFirstName=${consumerFirstName}  consumerUid=${consumerUid}  consumerLastName=${consumerLastName}  ownerId=${ownerId}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END     
+
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/crm/lead  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 *** Comments ***
