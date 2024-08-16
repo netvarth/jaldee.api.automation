@@ -26,7 +26,7 @@ JD-TC-CreateProviderReminder-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-+
+
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable      ${pro_id}  ${decrypted_data['id']}
@@ -85,3 +85,238 @@ JD-TC-CreateProviderReminder-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${rem_id}  ${resp.content}
+
+JD-TC-CreateProviderReminder-3
+
+    [Documentation]  Create a provider reminder for email only.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME252}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable      ${pro_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  add_timezone_time  ${tz}  3  15  
+    ${msg}=  FakerLibrary.word
+    ${rem_name}=  FakerLibrary.first_name
+    ${prov_details}=  Create Dictionary   id=${pro_id}
+    ${remindersource}=  Create Dictionary     Email=${bool[1]} 
+
+    ${resp}=  Create Provider Reminder    ${rem_name}  ${prov_details}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}   ${sTime1}  ${eTime1}  ${msg}   ${remindersource}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${rem_id}  ${resp.content}
+
+JD-TC-CreateProviderReminder-4
+
+    [Documentation]  Create a provider reminder for PushNotification only.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME253}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable      ${pro_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  add_timezone_time  ${tz}  3  15  
+    ${msg}=  FakerLibrary.word
+    ${rem_name}=  FakerLibrary.first_name
+    ${prov_details}=  Create Dictionary   id=${pro_id}
+    ${remindersource}=  Create Dictionary    PushNotification=${bool[1]}  
+    
+    ${resp}=  Create Provider Reminder    ${rem_name}  ${prov_details}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}   ${sTime1}  ${eTime1}  ${msg}   ${remindersource}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${rem_id}  ${resp.content}
+
+JD-TC-CreateProviderReminder-5
+
+    [Documentation]  Create a provider reminder for Whatsapp only.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME254}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable      ${pro_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  add_timezone_time  ${tz}  3  15  
+    ${msg}=  FakerLibrary.word
+    ${rem_name}=  FakerLibrary.first_name
+    ${prov_details}=  Create Dictionary   id=${pro_id}
+    ${remindersource}=  Create Dictionary     Whatsapp=${bool[1]}
+    
+    ${resp}=  Create Provider Reminder    ${rem_name}  ${prov_details}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}   ${sTime1}  ${eTime1}  ${msg}   ${remindersource}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${rem_id}  ${resp.content}
+
+JD-TC-CreateProviderReminder-6
+
+    [Documentation]  Create a provider reminder with same start date and end date.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME255}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable      ${pro_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=   db.get_date_by_timezone  ${tz}
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  add_timezone_time  ${tz}  3  15  
+    ${msg}=  FakerLibrary.word
+    ${rem_name}=  FakerLibrary.first_name
+    ${prov_details}=  Create Dictionary   id=${pro_id}
+    ${remindersource}=  Create Dictionary    Sms=${bool[1]}   Email=${bool[1]}  PushNotification=${bool[1]}  Whatsapp=${bool[1]}
+
+    ${resp}=  Create Provider Reminder    ${rem_name}  ${prov_details}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}   ${sTime1}  ${eTime1}  ${msg}   ${remindersource}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${rem_id}  ${resp.content}
+
+JD-TC-CreateProviderReminder-7
+
+    [Documentation]  Create two provider reminders with same name.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME258}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable      ${pro_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  add_timezone_time  ${tz}  3  15  
+    ${msg}=  FakerLibrary.word
+    ${rem_name}=  FakerLibrary.first_name
+    ${prov_details}=  Create Dictionary   id=${pro_id}
+    ${remindersource}=  Create Dictionary    Sms=${bool[1]}   Email=${bool[1]}  PushNotification=${bool[1]}  Whatsapp=${bool[1]}
+
+    ${resp}=  Create Provider Reminder    ${rem_name}  ${prov_details}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}   ${sTime1}  ${eTime1}  ${msg}   ${remindersource}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${rem_id}  ${resp.content}
+
+    ${DAY3}=  db.add_timezone_date  ${tz}  1   
+    ${DAY4}=  db.add_timezone_date  ${tz}  2     
+    ${msg1}=  FakerLibrary.word
+    
+    ${resp}=  Create Provider Reminder    ${rem_name}  ${prov_details}  ${recurringtype[1]}  ${list}  ${DAY3}  ${DAY4}   ${sTime1}  ${eTime1}  ${msg1}   ${remindersource}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${rem_id1}  ${resp.content}
+
+JD-TC-CreateProviderReminder-UH1
+
+    [Documentation]  Create a provider reminder without reminder name.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME256}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable      ${pro_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=   db.add_timezone_date  ${tz}  10  
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  add_timezone_time  ${tz}  3  15  
+    ${msg}=  FakerLibrary.word
+    ${prov_details}=  Create Dictionary   id=${pro_id}
+    ${remindersource}=  Create Dictionary    Sms=${bool[1]}   Email=${bool[1]}  PushNotification=${bool[1]}  Whatsapp=${bool[1]}
+
+    ${resp}=  Create Provider Reminder    ${EMPTY}  ${prov_details}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}   ${sTime1}  ${eTime1}  ${msg}   ${remindersource}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${rem_id}  ${resp.content}
+
+    ${resp}=   Get Provider Reminder By Id  ${rem_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+
+JD-TC-CreateProviderReminder-UH2
+
+    [Documentation]   Create a provider reminder without reminder description.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME257}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable      ${pro_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  add_timezone_time  ${tz}  3  15  
+    ${rem_name}=  FakerLibrary.first_name
+    ${prov_details}=  Create Dictionary   id=${pro_id}
+    ${remindersource}=  Create Dictionary    Sms=${bool[1]}   Email=${bool[1]}  PushNotification=${bool[1]}  Whatsapp=${bool[1]}
+
+    ${resp}=  Create Provider Reminder    ${rem_name}  ${prov_details}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}   ${sTime1}  ${eTime1}  ${EMPTY}   ${remindersource}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_MESSAGE}
