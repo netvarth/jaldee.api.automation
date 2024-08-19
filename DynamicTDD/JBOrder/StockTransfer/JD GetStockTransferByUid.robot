@@ -23,10 +23,11 @@ ${order}        0
       
 
 
+
 *** Test Cases ***
 
-JD-TC-Update Stock Transfer-1
-    [Documentation]    update stock transfer-(Batch not enabled,Item is not in destination)
+JD-TC-Get Stock Transfer By Uid-1
+    [Documentation]    Get Stock Transfer using uid.
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
     Log  ${iscorp_subdomains}
     Set Suite Variable  ${iscorp_subdomains}
@@ -37,7 +38,7 @@ JD-TC-Update Stock Transfer-1
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+40085121
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+45085121
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
@@ -154,9 +155,7 @@ JD-TC-Update Stock Transfer-1
     ${resp}=  Get Store Type By EncId   ${St_Id}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
 # --------------------- ---------------------------------------------------------------
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
@@ -169,9 +168,7 @@ JD-TC-Update Stock Transfer-1
     ${resp}=  Provider Get Store Type ByEncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -182,9 +179,11 @@ JD-TC-Update Stock Transfer-1
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${place}  ${resp.json()['place']}
     ELSE
         Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${place}  ${resp.json()[0]['place']}
     END
 
     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
@@ -218,6 +217,12 @@ JD-TC-Update Stock Transfer-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${item1}  ${resp.json()}
+
+    ${resp}=    Get Item Inventory  ${item1}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Suite Variable  ${itemSourceEnum1}  ${resp.json()['itemSourceEnum']}
+    Set Suite Variable  ${itemPropertyType}  ${resp.json()['itemPropertyType']}
 
 # ------------------------------------------------------------------------------------------------------
 
@@ -254,9 +259,7 @@ JD-TC-Update Stock Transfer-1
     ${resp}=  Get by encId  ${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+
 
     ${vender_name}=   FakerLibrary.firstname
     ${contactPersonName}=   FakerLibrary.lastname
@@ -402,28 +405,6 @@ JD-TC-Update Stock Transfer-1
     Should Be Equal As Strings      ${resp.status_code}                 200
     Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[2]}
 
-    ${resp}=  Get Inventoryitem      ${ic_Item_id}         
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    # Should Be Equal As Strings      ${resp.json()[0]['uid']}          ${purchaseId}
-    Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
-    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
-    Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
-    Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          0.0
-    Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
-    Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Store_Name1}
-
-    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
-    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
-    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
-    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
-    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
-    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
-    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
 
 
 # ------------------------------------------- Check Stock ---------------------------------------------------
@@ -481,12 +462,59 @@ JD-TC-Update Stock Transfer-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${Stock_transfer_uid}  ${resp.json()['uid']}
 
-    ${list1}=  Create Dictionary  sourceInvCatalogItem=${sourceInvCatalogItem}    transferQuantity=55  uid=${Stock_transfer_uid}
-    ${items1}=  Create List  ${list1}
-
-    ${resp}=  Update Stock Transfer   ${Stock_transfer_uid}   ${DAY1}  ${store_id}    ${store_id2}  ${Catalog_EncIds}     ${Catalog_EncIds2}  items=${items1}
+    ${resp}=  Get Stock Transfer By Uid   ${Stock_transfer_uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable              ${Stock_transferItem_uid}                                   ${resp.json()['items'][0]['uid']}
+    Set Suite Variable              ${Stock_transferIdestinationInvCatalogItemtem_uid}                                   ${resp.json()['items'][0]['destinationInvCatalogItem']['encId']}
+    Should Be Equal As Strings      ${resp.json()['accountId']}                                 ${accountId}
+    Should Be Equal As Strings      ${resp.json()['uid']}                                       ${Stock_transfer_uid}
+    Should Be Equal As Strings      ${resp.json()['transferDate']}                              ${DAY1}
+    Should Be Equal As Strings      ${resp.json()['createdDate']}                               ${DAY1}
+    Should Be Equal As Strings      ${resp.json()['createdById']}                               ${pid}
+    Should Be Equal As Strings      ${resp.json()['createdByName']}                             ${pdrname}
+    Should Be Equal As Strings      ${resp.json()['status']}                                    ${stockTransfer[0]}
+    Should Be Equal As Strings      ${resp.json()['sourceStore']['name']}                       ${Store_Name1}
+    Should Be Equal As Strings      ${resp.json()['sourceStore']['encId']}                      ${store_id}
+    Should Be Equal As Strings      ${resp.json()['destinationStore']['name']}                  ${Store_Name2}
+    Should Be Equal As Strings      ${resp.json()['destinationStore']['encId']}                 ${store_id2}
+    Should Be Equal As Strings      ${resp.json()['sourceInvCatalog']['catalogName']}           ${INV_Cat_Name}
+    Should Be Equal As Strings      ${resp.json()['sourceInvCatalog']['encId']}                 ${Catalog_EncIds}
+    Should Be Equal As Strings      ${resp.json()['destinationInvCatalog']['catalogName']}      ${INV_Cat_Name2}
+    Should Be Equal As Strings      ${resp.json()['destinationInvCatalog']['encId']}            ${Catalog_EncIds2}
+    Should Be Equal As Strings      ${resp.json()['sourceLocationId']}                          ${lid}
+    Should Be Equal As Strings      ${resp.json()['sourceLocationName']}                        ${place}
+    Should Be Equal As Strings      ${resp.json()['destinationLocationId']}                     ${lid}
+    Should Be Equal As Strings      ${resp.json()['destinationLocationName']}                   ${place}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['accountId']}                     ${accountId}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['createdById']}                   ${pid}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['createdByName']}                 ${pdrname}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['sourceStore']['name']}           ${Store_Name1}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['sourceStore']['onlineOrder']}    ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['sourceStore']['walkinOrder']}    ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['sourceStore']['partnerOrder']}   ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['sourceStore']['encId']}          ${store_id}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['destinationStore']['name']}           ${Store_Name2}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['destinationStore']['onlineOrder']}    ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['destinationStore']['walkinOrder']}    ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['destinationStore']['partnerOrder']}   ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['destinationStore']['encId']}          ${store_id2}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['sourceInvCatalog']['catalogName']}                   ${INV_Cat_Name}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['sourceInvCatalog']['encId']}                   ${Catalog_EncIds}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['destinationInvCatalog']['catalogName']}                   ${INV_Cat_Name2}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['destinationInvCatalog']['encId']}                   ${Catalog_EncIds2}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['sourceInvCatalogItem']['encId']}                   ${ic_Item_id}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['spItem']['itemSourceEnum']}                   ${itemSourceEnum1}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['spItem']['spCode']}                   ${item1}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['spItem']['name']}                   ${displayName1}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['spItem']['itemPropertyType']}                   ${itemPropertyType}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['transferQuantity']}                   50.0
+    Should Be Equal As Strings      ${resp.json()['items'][0]['status']}                   ${donation_status[0]}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['sourceLocationId']}                   ${lid}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['sourceLocationName']}                   ${place}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['destinationLocationId']}                   ${lid}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['destinationLocationName']}                   ${place}
+
 
 
 
