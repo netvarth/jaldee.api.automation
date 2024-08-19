@@ -17615,7 +17615,7 @@ Create Crm Lead
     [Arguments]  ${channel_uid}  ${consumerFirstName}  ${consumerUid}  ${consumerLastName}  ${ownerId}  &{kwargs}
 
     ${channel}=  Create Dictionary  uid=${channel_uid}
-    ${data}=     Create Dictionary  consumerFirstName=${consumerFirstName}  consumerUid=${consumerUid}  consumerLastName=${consumerLastName}  ownerId=${ownerId}
+    ${data}=     Create Dictionary  channel=${channel}  consumerFirstName=${consumerFirstName}  consumerUid=${consumerUid}  consumerLastName=${consumerLastName}  ownerId=${ownerId}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
     END     
@@ -17626,15 +17626,55 @@ Create Crm Lead
     Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
 
+Get Crm Lead 
 
+    [Arguments]  ${uid}
 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/crm/lead/${uid}  expected_status=any
+    Check Deprication  ${resp}  Get Business Profile
+    RETURN  ${resp}
 
+Get Crm Lead By Filter  
 
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/crm/lead   params=${param}   expected_status=any
+    Check Deprication  ${resp}  Get Business Profile
+    RETURN  ${resp}
 
+Get Crm Lead Count By Filter  
 
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/crm/lead/count   params=${param}   expected_status=any
+    Check Deprication  ${resp}  Get Business Profile
+    RETURN  ${resp}
 
+Crm Lead Status Change To Active
 
+    [Arguments]  ${uid}
 
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/crm/lead/${uid}/status/active  expected_status=any
+    Check Deprication  ${resp}  Get Business Profile
+    RETURN  ${resp}
+
+Crm Lead Status Change To Complete
+
+    [Arguments]  ${uid}
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/crm/lead/${uid}/status/complete  expected_status=any
+    Check Deprication  ${resp}  Get Business Profile
+    RETURN  ${resp}
+
+Crm Lead Status Change To Reject
+
+    [Arguments]  ${uid}
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/crm/lead/${uid}/status/reject  expected_status=any
+    Check Deprication  ${resp}  Get Business Profile
+    RETURN  ${resp}
 
 
 
