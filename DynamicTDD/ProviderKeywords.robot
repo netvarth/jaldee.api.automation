@@ -613,7 +613,7 @@ Create Provider Reminder
 
     [Arguments]   ${rem_name}  ${prov}  ${rt}  ${ri}  ${sDate}  ${eDate}   ${stime}  ${etime}  ${msg}  ${remindersource}   @{vargs}  &{kwargs}
     ${schedule}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}  @{vargs}
-    ${data}=  Create Dictionary  schedule=${schedule}  provider=${prov}   reminderName=${rem_name}
+    ${data}=  Create Dictionary  schedule=${schedule}  users=${prov}   reminderName=${rem_name}
     ...    message=${msg}  reminderSource=${remindersource}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
