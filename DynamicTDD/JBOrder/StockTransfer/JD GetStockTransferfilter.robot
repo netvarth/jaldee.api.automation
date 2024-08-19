@@ -25,7 +25,7 @@ ${order}        0
 *** Test Cases ***
 
 JD-TC-Get Stock TransferFilter-1
-    [Documentation]    Get Stock Transfer using uid.
+    [Documentation]    Get Stock TransferFilter.
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
     Log  ${iscorp_subdomains}
     Set Suite Variable  ${iscorp_subdomains}
@@ -36,7 +36,7 @@ JD-TC-Get Stock TransferFilter-1
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+45085121
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+47799665
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
