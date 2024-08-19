@@ -2192,6 +2192,71 @@ Get Sales Order Invoice By Id
     Check Deprication  ${resp}  Get Sales Order Invoice By Id
     RETURN  ${resp} 
 
+########## STOCK TRANSFER #########
+
+Create Stock Transfer
+
+    [Arguments]  ${transferDate}   ${sourceStore}   ${destinationStore}   ${sourceInvCatalog}   ${destinationInvCatalog}    &{kwargs}
+    ${sourceStore}=  Create Dictionary  encId=${sourceStore}  
+    ${destinationStore}=  Create Dictionary  encId=${destinationStore}  
+    ${sourceInvCatalog}=  Create Dictionary  encId=${sourceInvCatalog}  
+    ${destinationInvCatalog}=  Create Dictionary  encId=${destinationInvCatalog}    
+    ${data}=  Create Dictionary  transferDate=${transferDate}    sourceStore=${sourceStore}   destinationStore=${destinationStore}   sourceInvCatalog=${sourceInvCatalog}   destinationInvCatalog=${destinationInvCatalog}  
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/inventory/stocktransfer  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Create Stock Transfer
+    RETURN  ${resp} 
+
+Update Stock Transfer
+
+    [Arguments]  ${uid}  ${transferDate}   ${sourceStore}   ${destinationStore}   ${sourceInvCatalog}   ${destinationInvCatalog}    &{kwargs}
+    ${sourceStore}=  Create Dictionary  encId=${sourceStore}  
+    ${destinationStore}=  Create Dictionary  encId=${destinationStore}  
+    ${sourceInvCatalog}=  Create Dictionary  encId=${sourceInvCatalog}  
+    ${destinationInvCatalog}=  Create Dictionary  encId=${destinationInvCatalog}    
+    ${data}=  Create Dictionary  transferDate=${transferDate}    sourceStore=${sourceStore}   destinationStore=${destinationStore}   sourceInvCatalog=${sourceInvCatalog}   destinationInvCatalog=${destinationInvCatalog}  
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/inventory/stocktransfer/${uid}  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Update Stock Transfer
+    RETURN  ${resp} 
+
+Get Stock Transfer By Uid
+    [Arguments]  ${uid}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/inventory/stocktransfer/${uid}  expected_status=any
+    Check Deprication  ${resp}  Get Stock Transfer By Uid
+    RETURN  ${resp}
+
+Get Stock TransferFilter
+    [Arguments]  &{param} 
+    Check And Create YNW Session
+    ${resp}=   GET On Session  ynw    /provider/inventory/stocktransfer  params=${param}  expected_status=any
+    Check Deprication  ${resp}  Get Stock TransferFilter
+    RETURN  ${resp}
+
+Get Stock Transfer Count Filter
+    [Arguments]  &{param} 
+    Check And Create YNW Session
+    ${resp}=   GET On Session  ynw  /provider/inventory/stocktransfer/count  params=${param}  expected_status=any
+    Check Deprication  ${resp}  Get Stock Transfer Count Filter
+    RETURN  ${resp}
+
+Update Stock Transfer Status
+    [Arguments]  ${uid}  ${status}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/inventory/stocktransfer/${uid}/${status}  expected_status=any
+    Check Deprication  ${resp}  Update Stock Transfer Status
+    RETURN  ${resp}
+
+
 ###### All Current Keywords above this line #############################################
 
 ######## KEYWORDS TO CHECK ###########
