@@ -18,11 +18,11 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Test Cases ***
 
-JD-TC-DeleteProviderReminder-1
+JD-TC-GetProviderRemindersWithFilter-1
 
-    [Documentation]  Create a provider reminder with all details.
+    [Documentation]  Create a provider reminder with all details and verify the details with filter.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -38,26 +38,32 @@ JD-TC-DeleteProviderReminder-1
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${sTime1}=  add_timezone_time  ${tz}  3  15  
     ${eTime1}=  add_timezone_time  ${tz}  3  15  
     ${msg}=  FakerLibrary.word
     ${rem_name}=  FakerLibrary.first_name
-    ${prov_details}=  Create Dictionary   id=${pro_id}
+    ${prov_detail}=  Create Dictionary   id=${pro_id}
+    ${prov_details}=  Create List  ${prov_detail}
     ${remindersource}=  Create Dictionary    Sms=${bool[1]}   Email=${bool[1]}  PushNotification=${bool[1]}  Whatsapp=${bool[1]}
 
     ${resp}=  Create Provider Reminder    ${rem_name}  ${prov_details}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}   ${sTime1}  ${eTime1}  ${msg}   ${remindersource}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${rem_id}  ${resp.content}
+    Set Test Variable  ${rem_id1}  ${resp.content}
 
-    ${resp}=   Get Provider Reminder  ${rem_id}
+    ${resp}=   Get Provider Reminders With Filter
+
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['id']}                                   ${rem_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['schedule']['startDate']}                ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['schedule']['terminator']['endDate']}    ${DAY2}
+    Should Be Equal As Strings  ${resp.json()[0]['schedule']['timeSlots'][0]['sTime']}    ${sTime1}
+    Should Be Equal As Strings  ${resp.json()[0]['schedule']['timeSlots'][0]['eTime']}    ${eTime1}
+    Should Be Equal As Strings  ${resp.json()[0]['provider']['id']}                       ${prov_id}
+    Should Be Equal As Strings  ${resp.json()[0]['message']}                              ${msg}
+    Should Be Equal As Strings  ${resp.json()[0]['reminderSource']['Email']}              ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['reminderSource']['Sms']}                ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['reminderSource']['Whatsapp']}           ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['reminderSource']['PushNotification']}   ${bool[1]}
 
-    ${resp}=   Delete Provider Reminder  ${rem_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=   Get Provider Reminder  ${rem_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200

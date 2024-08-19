@@ -646,14 +646,14 @@ Delete Provider Reminder
 Get Provider Reminders With Filter
     [Arguments]  &{param}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/reminders  params=${param}  expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/reminder  params=${param}  expected_status=any
     Check Deprication  ${resp}  Get Provider Reminders With Filter
     RETURN  ${resp}
 
 Get Provider Reminders Count With Filter
     [Arguments]  &{param}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/reminders/count  params=${param}  expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/reminder/count  params=${param}  expected_status=any
     Check Deprication  ${resp}  Get Provider Reminders Count With Filter
     RETURN  ${resp}
 

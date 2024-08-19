@@ -26,6 +26,10 @@ JD-TC-DeleteProviderReminder-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME258}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable      ${pro_id}  ${decrypted_data['id']}
@@ -38,11 +42,12 @@ JD-TC-DeleteProviderReminder-1
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${sTime1}=  add_timezone_time  ${tz}  3  15  
     ${eTime1}=  add_timezone_time  ${tz}  3  15  
     ${msg}=  FakerLibrary.word
     ${rem_name}=  FakerLibrary.first_name
-    ${prov_details}=  Create Dictionary   id=${pro_id}
+    ${prov_detail}=  Create Dictionary   id=${pro_id}
+    ${prov_details}=  Create List  ${prov_detail}
     ${remindersource}=  Create Dictionary    Sms=${bool[1]}   Email=${bool[1]}  PushNotification=${bool[1]}  Whatsapp=${bool[1]}
 
     ${resp}=  Create Provider Reminder    ${rem_name}  ${prov_details}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}   ${sTime1}  ${eTime1}  ${msg}   ${remindersource}
