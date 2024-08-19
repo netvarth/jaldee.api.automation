@@ -20,34 +20,21 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Keywords ***
-Deprecated Keyword 1
-    [Documentation]  *DEPRECATED in rest.*
-    Log  This is a deprecated keyword.
-
-
-Deprecated Keyword 2
-    Log  This is a deprecated keyword.
-    [Documentation]  *DEPRECATED in rest.*
-
-Deprecated Keyword 3
-    Log  This is a deprecated keyword.
-    comment  *DEPRECATED in rest.*
-
-Deprecated Keyword 4
-    Log  This is a deprecated keyword.
-    Log  Some other action here
-    IF  'Deprecated-Url'=='Deprecated-Url'
-        # Log  *DEPRECATED in rest.*  level=WARN  repr=DEPRECATED 
-        Log  *DEPRECATED in rest.*  level=WARN  
+Check Deprication
+    [Arguments]    ${response}  ${keyword_name}
+    IF  'Deprecated-Url' in &{response.headers}
+        Log  ${response.headers['Deprecated-Url']}
+        Log  *${keyword_name} DEPRECATED in REST.*  level=WARN
     END
 
 Get BusinessDomainsConf
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /ynwConf/businessDomains   expected_status=any
-    IF  'Deprecated-Url' in &{resp.headers}
-        Log  ${resp.headers['Deprecated-Url']}
-        Log  *Get BusinessDomainsConf DEPRECATED in REST.*  level=WARN
-    END
+    # IF  'Deprecated-Url' in &{resp.headers}
+    #     Log  ${resp.headers['Deprecated-Url']}
+    #     Log  *Get BusinessDomainsConf DEPRECATED in REST.*  level=WARN
+    # END
+    Check Deprication  ${resp}  Get BusinessDomainsConf
     RETURN  ${resp}
 
 
@@ -55,10 +42,7 @@ Get BusinessDomainsConf
 
 *** Test Cases ***
 Testing Deprecation
-    # Deprecated Keyword 1
-    # Deprecated Keyword 2
-    # Deprecated Keyword 3
-    Deprecated Keyword 4
+    
     # example_keyword
     ${resp}=  Get BusinessDomainsConf
     Log   ${resp.content}

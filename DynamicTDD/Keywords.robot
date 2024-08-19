@@ -430,7 +430,7 @@ Generate Random Test Phone Number
 
 Check Deprication
     [Arguments]    ${response}  ${keyword_name}
-    IF  'Deprecated-Url' in &{resp.headers}
+    IF  'Deprecated-Url' in &{response.headers}
         Log  ${response.headers['Deprecated-Url']}
         Log  *${keyword_name} DEPRECATED in REST.*  level=WARN
     END
