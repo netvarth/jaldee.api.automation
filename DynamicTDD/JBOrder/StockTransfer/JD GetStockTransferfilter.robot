@@ -480,7 +480,7 @@ JD-TC-Get Stock TransferFilter-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${Stock_transfer_uid}  ${resp.json()['uid']}
 
-    ${resp}=  Get Stock Transfer By Uid   ${Stock_transfer_uid}   
+    ${resp}=  Get Stock TransferFilter    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

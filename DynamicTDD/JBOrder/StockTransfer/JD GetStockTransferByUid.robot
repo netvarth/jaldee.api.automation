@@ -179,9 +179,11 @@ JD-TC-Get Stock Transfer By Uid-1
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${place}  ${resp.json()['place']}
     ELSE
         Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${place}  ${resp.json()[0]['place']}
     END
 
     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
@@ -215,6 +217,12 @@ JD-TC-Get Stock Transfer By Uid-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${item1}  ${resp.json()}
+
+    ${resp}=    Get Item Inventory  ${item1}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Suite Variable  ${itemSourceEnum1}  ${resp.json()['itemSourceEnum']}
+    Set Suite Variable  ${itemPropertyType}  ${resp.json()['itemPropertyType']}
 
 # ------------------------------------------------------------------------------------------------------
 
@@ -457,6 +465,8 @@ JD-TC-Get Stock Transfer By Uid-1
     ${resp}=  Get Stock Transfer By Uid   ${Stock_transfer_uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable              ${Stock_transferItem_uid}                                   ${resp.json()['items'][0]['uid']}
+    Set Suite Variable              ${Stock_transferIdestinationInvCatalogItemtem_uid}                                   ${resp.json()['items'][0]['destinationInvCatalogItem']['encId']}
     Should Be Equal As Strings      ${resp.json()['accountId']}                                 ${accountId}
     Should Be Equal As Strings      ${resp.json()['uid']}                                       ${Stock_transfer_uid}
     Should Be Equal As Strings      ${resp.json()['transferDate']}                              ${DAY1}
@@ -464,11 +474,47 @@ JD-TC-Get Stock Transfer By Uid-1
     Should Be Equal As Strings      ${resp.json()['createdById']}                               ${pid}
     Should Be Equal As Strings      ${resp.json()['createdByName']}                             ${pdrname}
     Should Be Equal As Strings      ${resp.json()['status']}                                    ${stockTransfer[0]}
-    Should Be Equal As Strings      ${resp.json()['isInventoryItem']}                           ${bool[0]}
-    Should Be Equal As Strings      ${resp.json()['itemCategory']['categoryCode']}              ${categoryCode}
-    Should Be Equal As Strings      ${resp.json()['itemCategory']['categoryName']}              ${categoryName}
-    Should Be Equal As Strings      ${resp.json()['itemCategory']['status']}                    ${toggle[0]}
-    Should Be Equal As Strings      ${resp.json()['itemSubCategory']['categoryCode']}           ${categoryCode}
+    Should Be Equal As Strings      ${resp.json()['sourceStore']['name']}                       ${Store_Name1}
+    Should Be Equal As Strings      ${resp.json()['sourceStore']['encId']}                      ${store_id}
+    Should Be Equal As Strings      ${resp.json()['destinationStore']['name']}                  ${Store_Name2}
+    Should Be Equal As Strings      ${resp.json()['destinationStore']['encId']}                 ${store_id2}
+    Should Be Equal As Strings      ${resp.json()['sourceInvCatalog']['catalogName']}           ${INV_Cat_Name}
+    Should Be Equal As Strings      ${resp.json()['sourceInvCatalog']['encId']}                 ${Catalog_EncIds}
+    Should Be Equal As Strings      ${resp.json()['destinationInvCatalog']['catalogName']}      ${INV_Cat_Name2}
+    Should Be Equal As Strings      ${resp.json()['destinationInvCatalog']['encId']}            ${Catalog_EncIds2}
+    Should Be Equal As Strings      ${resp.json()['sourceLocationId']}                          ${lid}
+    Should Be Equal As Strings      ${resp.json()['sourceLocationName']}                        ${place}
+    Should Be Equal As Strings      ${resp.json()['destinationLocationId']}                     ${lid}
+    Should Be Equal As Strings      ${resp.json()['destinationLocationName']}                   ${place}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['accountId']}                     ${accountId}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['createdById']}                   ${pid}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['createdByName']}                 ${pdrname}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['sourceStore']['name']}           ${Store_Name1}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['sourceStore']['onlineOrder']}    ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['sourceStore']['walkinOrder']}    ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['sourceStore']['partnerOrder']}   ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['sourceStore']['encId']}          ${store_id}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['destinationStore']['name']}           ${Store_Name2}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['destinationStore']['onlineOrder']}    ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['destinationStore']['walkinOrder']}    ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['destinationStore']['partnerOrder']}   ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['destinationStore']['encId']}          ${store_id2}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['sourceInvCatalog']['catalogName']}                   ${INV_Cat_Name}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['sourceInvCatalog']['encId']}                   ${Catalog_EncIds}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['destinationInvCatalog']['catalogName']}                   ${INV_Cat_Name2}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['destinationInvCatalog']['encId']}                   ${Catalog_EncIds2}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['sourceInvCatalogItem']['encId']}                   ${ic_Item_id}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['spItem']['itemSourceEnum']}                   ${itemSourceEnum1}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['spItem']['spCode']}                   ${item1}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['spItem']['name']}                   ${displayName1}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['spItem']['itemPropertyType']}                   ${itemPropertyType}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['transferQuantity']}                   50.0
+    Should Be Equal As Strings      ${resp.json()['items'][0]['status']}                   ${donation_status[0]}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['sourceLocationId']}                   ${lid}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['sourceLocationName']}                   ${place}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['destinationLocationId']}                   ${lid}
+    Should Be Equal As Strings      ${resp.json()['items'][0]['destinationLocationName']}                   ${place}
+
 
 
 
