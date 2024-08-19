@@ -2533,3 +2533,10 @@ PRODUCT_NAME_SIZE = "Product name charater should be between 3 and 100"
 INVALID_CONSUMER_ID= "Invalid Consumer id"
 CONSUMER_STATUS_ACTIVE= "Consumer status is already ACTIVE"
 CONSUMER_STATUS_INACTIVE= "Consumer status is already INACTIVE"
+
+# ......  STOCK TRANSFER...........
+CANT_ST_TRNFR_BTW_SAME_INV = "You cannot transfer stock within the same inventory catalog"
+INVALID_X = "Invalid {}"
+CANT_ST_TRNFR_BTW_SAME_STORE = "You cannot transfer stock within the same store. Stock transfers require that the source and destination stores be different."
+GIVEN_INV_CAT_ITEM_NOT_IN_INV_CAT = "The item {} is not in the inventory catalog {}"
+ITEM_X_OUT_OF_STOCK_CURRENT_STOCK_IS_X = "{} is currently out of stock. Current stock is {}"
