@@ -17691,7 +17691,7 @@ Create Crm Lead
     #Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
 
-Get Crm Lead 
+Get Crm Lead
 
     [Arguments]  ${uid}
 
