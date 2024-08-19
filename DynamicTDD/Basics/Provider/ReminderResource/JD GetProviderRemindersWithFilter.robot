@@ -29,10 +29,13 @@ JD-TC-GetProviderRemindersWithFilter-1
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable      ${pro_id}  ${decrypted_data['id']}
+    Set Test Variable      ${fname}   ${decrypted_data['firstName']}
+    Set Test Variable      ${lname}   ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
     Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -52,18 +55,22 @@ JD-TC-GetProviderRemindersWithFilter-1
     Set Test Variable  ${rem_id1}  ${resp.content}
 
     ${resp}=   Get Provider Reminders With Filter
-
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['id']}                                   ${rem_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}                            ${account_id}
+    Should Be Equal As Strings  ${resp.json()[0]['reminderName']}                         ${rem_name}
     Should Be Equal As Strings  ${resp.json()[0]['schedule']['startDate']}                ${DAY1}
     Should Be Equal As Strings  ${resp.json()[0]['schedule']['terminator']['endDate']}    ${DAY2}
     Should Be Equal As Strings  ${resp.json()[0]['schedule']['timeSlots'][0]['sTime']}    ${sTime1}
-    Should Be Equal As Strings  ${resp.json()[0]['schedule']['timeSlots'][0]['eTime']}    ${eTime1}
-    Should Be Equal As Strings  ${resp.json()[0]['provider']['id']}                       ${prov_id}
+    Should Be Equal As Strings  ${resp.json()[0]['schedule']['timeSlots'][0]['eTime']}    ${eTime1}  
     Should Be Equal As Strings  ${resp.json()[0]['message']}                              ${msg}
-    Should Be Equal As Strings  ${resp.json()[0]['reminderSource']['Email']}              ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()[0]['reminderSource']['Sms']}                ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()[0]['reminderSource']['Whatsapp']}           ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()[0]['reminderSource']['PushNotification']}   ${bool[1]}
-
+    Should Be Equal As Strings  ${resp.json()[0]['reminderSource']['Email']}              1
+    Should Be Equal As Strings  ${resp.json()[0]['reminderSource']['Sms']}                1
+    Should Be Equal As Strings  ${resp.json()[0]['reminderSource']['Whatsapp']}           1
+    Should Be Equal As Strings  ${resp.json()[0]['reminderSource']['PushNotification']}   1
+    Should Be Equal As Strings  ${resp.json()[0]['completed']}                            ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['reminderForProvider']}                  ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['users'][0]['id']}                       ${pro_id}
+    Should Be Equal As Strings  ${resp.json()[0]['users'][0]['firstName']}                ${fname}
+    Should Be Equal As Strings  ${resp.json()[0]['users'][0]['lastName']}                 ${lname}

@@ -20,7 +20,7 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 JD-TC-DeleteProviderReminder-1
 
-    [Documentation]  Create a provider reminder with all details.
+    [Documentation]  Create a provider reminder with all details then delete it.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
     Log   ${resp.content}
@@ -55,7 +55,7 @@ JD-TC-DeleteProviderReminder-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${rem_id}  ${resp.content}
 
-    ${resp}=   Get Provider Reminder  ${rem_id}
+    ${resp}=   Get Provider Reminder By Id  ${rem_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -63,6 +63,6 @@ JD-TC-DeleteProviderReminder-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Get Provider Reminder  ${rem_id}
+    ${resp}=   Get Provider Reminder By Id   ${rem_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200

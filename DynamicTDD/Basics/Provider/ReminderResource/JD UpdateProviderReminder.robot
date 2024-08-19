@@ -20,9 +20,9 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 JD-TC-GetProviderReminderById-1
 
-    [Documentation]  Create a provider reminder with all details and verify the details by id..
+    [Documentation]  Create a provider reminder with all details then update the reminder name.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -55,6 +55,12 @@ JD-TC-GetProviderReminderById-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Update Provider Reminder    ${rem_id} 
+    ${rem_name1}=  FakerLibrary.last_name
+    ${resp}=  Update Provider Reminder    ${rem_id1}   reminderName=${rem_name1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Provider Reminder By Id   ${rem_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['reminderName']}      ${rem_name1}

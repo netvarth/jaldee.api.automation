@@ -22,7 +22,7 @@ JD-TC-GetProviderRemindersWithFilter-1
 
     [Documentation]  Create a provider reminder with all details and verify the details with filter.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -54,4 +54,5 @@ JD-TC-GetProviderRemindersWithFilter-1
     ${resp}=   Get Provider Reminders Count With Filter
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}              1
    
