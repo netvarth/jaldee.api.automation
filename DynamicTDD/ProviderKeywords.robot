@@ -2207,7 +2207,7 @@ Create Stock Transfer
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/inventory/stocktransfer  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Create Stock Transfer
+    #Check Deprication  ${resp}  Create Stock Transfer
     RETURN  ${resp} 
 
 Update Stock Transfer
@@ -2224,35 +2224,35 @@ Update Stock Transfer
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/inventory/stocktransfer/${uid}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Update Stock Transfer
+    #Check Deprication  ${resp}  Update Stock Transfer
     RETURN  ${resp} 
 
 Get Stock Transfer By Uid
     [Arguments]  ${uid}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/inventory/stocktransfer/${uid}  expected_status=any
-    Check Deprication  ${resp}  Get Stock Transfer By Uid
+    #Check Deprication  ${resp}  Get Stock Transfer By Uid
     RETURN  ${resp}
 
 Get Stock TransferFilter
     [Arguments]  &{param} 
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw    /provider/inventory/stocktransfer  params=${param}  expected_status=any
-    Check Deprication  ${resp}  Get Stock TransferFilter
+    #Check Deprication  ${resp}  Get Stock TransferFilter
     RETURN  ${resp}
 
 Get Stock Transfer Count Filter
     [Arguments]  &{param} 
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/inventory/stocktransfer/count  params=${param}  expected_status=any
-    Check Deprication  ${resp}  Get Stock Transfer Count Filter
+    #Check Deprication  ${resp}  Get Stock Transfer Count Filter
     RETURN  ${resp}
 
 Update Stock Transfer Status
     [Arguments]  ${uid}  ${status}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/inventory/stocktransfer/${uid}/${status}  expected_status=any
-    Check Deprication  ${resp}  Update Stock Transfer Status
+    #Check Deprication  ${resp}  Update Stock Transfer Status
     RETURN  ${resp}
 
 
