@@ -1916,6 +1916,7 @@ REM_END_DATE_REQUIRED = "Reminder Schedule end date is mandatory "
 INVALID_REMINDER_ID = "Invalid reminder id"
 OTP_REQUIRED = "OTP required"
 Invalid_Date_reminders= "Invalid Date"
+INVALID_REMINDER_NAME = "Please Enter a valid name for Reminder.";
 
 # Appt Service Request
 
