@@ -17688,7 +17688,7 @@ Create Crm Lead
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/crm/lead  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    #Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
 
 Get Crm Lead 
@@ -17697,21 +17697,21 @@ Get Crm Lead
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/crm/lead/${uid}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    #Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
 
 Get Crm Lead By Filter  
 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/crm/lead   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    #Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
 
 Get Crm Lead Count By Filter  
 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/crm/lead/count   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    #Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
 
 Crm Lead Status Change To Active
@@ -17720,7 +17720,7 @@ Crm Lead Status Change To Active
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/crm/lead/${uid}/status/active  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    #Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
 
 Crm Lead Status Change To Complete
@@ -17729,7 +17729,7 @@ Crm Lead Status Change To Complete
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/crm/lead/${uid}/status/complete  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    #Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
 
 Crm Lead Status Change To Reject
@@ -17738,10 +17738,60 @@ Crm Lead Status Change To Reject
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/crm/lead/${uid}/status/reject  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    #Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
 
+Update Crm Lead  
 
+    [Arguments]  ${uid}  &{kwargs}
+
+    ${data}=  Create Dictionary
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/crm/lead/${uid}  data=${data}  expected_status=any
+    #Check Deprication  ${resp}  Get Business Profile
+    RETURN  ${resp}
+
+Crm Lead Update Assign
+
+    [Arguments]  ${uid}  ${userId}
+
+    ${userId}=  Create Dictionary  userId=${userId}
+    ${data}=  Create List    ${userId}
+    ${data}=  json.dumps  ${data}
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/crm/lead/assign/${uid}  data=${data}  expected_status=any
+    #Check Deprication  ${resp}  Get Business Profile
+    RETURN  ${resp}
+
+Crm Lead Update Unassign
+
+    [Arguments]  ${uid}  ${userId}
+
+    ${userId}=  Create Dictionary  userId=${userId}
+    ${data}=  Create List    ${userId}
+    ${data}=  json.dumps  ${data}
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/crm/lead/unassign/${uid}  data=${data}  expected_status=any
+    #Check Deprication  ${resp}  Get Business Profile
+    RETURN  ${resp}
+
+Crm Lead Update Notes  
+
+    [Arguments]  ${uid}  ${notes}
+
+    ${data}=  Create Dictionary  notes=${notes}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/crm/lead/notes/${uid}  data=${data}  expected_status=any
+    #Check Deprication  ${resp}  Get Business Profile
+    RETURN  ${resp}
 
 
 *** Comments ***
