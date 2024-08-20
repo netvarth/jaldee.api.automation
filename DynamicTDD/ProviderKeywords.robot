@@ -211,10 +211,10 @@ Toggle Department Disable
     Check Deprication  ${resp}  Toggle Department Disable
     RETURN  ${resp} 
 
-View Waitlist Settings
+Get Waitlist Settings
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/settings/waitlistMgr  expected_status=any
-    Check Deprication  ${resp}  View Waitlist Settings
+    Check Deprication  ${resp}  Get Waitlist Settings
     RETURN  ${resp}
 
 Get Account contact information
