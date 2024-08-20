@@ -2894,16 +2894,6 @@ Provider Change Password
     Check Deprication  ${resp}  Provider Change Password
     RETURN  ${resp}
 
-SendProviderResetMail
-    [Arguments]    ${email}  ${countryCode}=91
-    Create Session    ynw    ${BASE_URL}  verify=true
-    #    ${body}=     Create Dictionary   countryCode=${countryCode}
-    ${data}=    json.dumps    ${countryCode}
-    ${resp}=  POST On Session  ynw     /provider/login/reset/${email}   data=${data}  expected_status=any
-    Check Deprication  ${resp}  SendProviderResetMail
-    RETURN  ${resp}  
-
-
 ResetProviderPassword
     [Arguments]    ${email}  ${pswd}  ${purpose}  ${countryCode}=91
     ${key}=  verify accnt  ${email}   ${purpose}
