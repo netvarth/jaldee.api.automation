@@ -63,7 +63,7 @@ JD-TC-Innode_IVR-1
     ${acc_id}=  get_acc_id  ${PUSERNAME169}
     Set Suite Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
@@ -192,7 +192,7 @@ JD-TC-Innode_IVR-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -245,7 +245,7 @@ JD-TC-Innode_IVR-UH1
     ${acc_id}=  get_acc_id  ${PUSERNAME15}
     Set Test Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
@@ -331,7 +331,7 @@ JD-TC-Innode_IVR-UH3
     ${acc_id}=  get_acc_id  ${PUSERNAME15}
     Set Test Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
@@ -380,7 +380,7 @@ JD-TC-Innode_IVR-UH4
     ${acc_id}=  get_acc_id  ${PUSERNAME169}
     Set Test Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
@@ -428,7 +428,7 @@ JD-TC-Innode_IVR-UH5
     ${acc_id}=  get_acc_id  ${PUSERNAME169}
     Set Test Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
@@ -577,7 +577,7 @@ JD-TC-Innode_IVR-UH8
     ${acc_id}=  get_acc_id  ${PUSERNAME15}
     Set Test Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 

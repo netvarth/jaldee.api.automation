@@ -311,7 +311,7 @@ JD-TC-ActivateVacation-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[0]}   appointment=${bool[1]}   
@@ -436,7 +436,7 @@ JD-TC-ActivateVacation-3
     ${pid_B15}=  get_acc_id  ${PUSERNAME_E1}
     Set Suite variable  ${pid_B15}
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[0]}   appointment=${bool[1]}   
@@ -593,7 +593,7 @@ JD-TC-ActivateVacation-UH1
     ${resp}=  Waitlist Status    ${toggle[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Verify Response   ${resp}    waitlist=${bool[0]}   appointment=${bool[1]}
@@ -612,7 +612,7 @@ JD-TC-ActivateVacation-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id01}  ${resp.json()}
   
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Verify Response   ${resp}    appointment=${bool[1]}   waitlist=${bool[0]}

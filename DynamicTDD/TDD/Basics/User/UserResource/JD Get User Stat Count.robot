@@ -131,7 +131,7 @@ JD-TC-UserStatCount-1
     Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
     Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   

@@ -61,7 +61,7 @@ JD-TC-Create_IVR_Settings-1
     ${acc_id}=  get_acc_id  ${PUSERNAME154}
     Set Suite Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 

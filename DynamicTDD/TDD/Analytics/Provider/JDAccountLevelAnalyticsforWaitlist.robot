@@ -196,7 +196,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-1
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -204,7 +204,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

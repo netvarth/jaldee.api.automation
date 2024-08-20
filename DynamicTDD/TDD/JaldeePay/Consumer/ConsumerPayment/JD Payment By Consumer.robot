@@ -175,7 +175,7 @@ JD-TC-Payment By Consumer-1
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -470,7 +470,7 @@ JD-TC-Payment By Consumer-2
     ${pid1}=  get_acc_id  ${PUSERPH1}
     Set Suite Variable  ${pid1}
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -478,7 +478,7 @@ JD-TC-Payment By Consumer-2
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -1158,7 +1158,7 @@ JD-TC-Payment By Consumer-6
     Set Test Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -1166,7 +1166,7 @@ JD-TC-Payment By Consumer-6
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -1364,7 +1364,7 @@ JD-TC-Payment By Consumer-UH1
     ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -1372,7 +1372,7 @@ JD-TC-Payment By Consumer-UH1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -1491,7 +1491,7 @@ JD-TC-Payment By Consumer-UH2
     ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
    
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -1499,7 +1499,7 @@ JD-TC-Payment By Consumer-UH2
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -1954,7 +1954,7 @@ JD-TC-Payment By Consumer-UH11
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
    
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -1962,7 +1962,7 @@ JD-TC-Payment By Consumer-UH11
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -2107,7 +2107,7 @@ JD-TC-Payment By Consumer-UH12
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
    
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -2115,7 +2115,7 @@ JD-TC-Payment By Consumer-UH12
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -2412,7 +2412,7 @@ JD-TC-Payment By Consumer-13
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -2791,7 +2791,7 @@ JD-TC-Payment By Consumer-1
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -2799,7 +2799,7 @@ JD-TC-Payment By Consumer-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -3105,7 +3105,7 @@ JD-TC-Payment By Consumer-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]} 
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -3113,7 +3113,7 @@ JD-TC-Payment By Consumer-2
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     

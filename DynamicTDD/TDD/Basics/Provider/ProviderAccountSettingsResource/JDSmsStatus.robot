@@ -25,7 +25,7 @@ JD-TC-EnableDisableSmsStatus-1
     ${resp}=  Sms Status    ${toggle[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    enableSms=${bool[1]}
@@ -55,7 +55,7 @@ JD-TC-EnableDisableSmsStatus-2
     ${resp}=  Sms Status    ${toggle[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    enableSms=${bool[0]}

@@ -18,7 +18,7 @@ JD-TC-GetAccountSettings-1
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Verify Response   ${resp}    enableSms=${bool[1]}  jaldeeIntegration=${bool[1]}  customerSeriesEnum=PATTERN
@@ -34,7 +34,7 @@ JD-TC-GetAccountSettings-1
 JD-TC-GetAccountSettings-UH1
     [Documentation]   Get Customers without provider login
 
-    ${resp}=  Get Accountsettings 
+    ${resp}=  Get Account Settings 
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings   "${resp.json()}"   "${SESSION_EXPIRED}"
 
@@ -42,7 +42,7 @@ JD-TC-GetAccountSettings-UH2
     [Documentation]   Get Customers using consumer login
     ${resp}=   Consumer Login  ${CUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}"  
@@ -75,7 +75,7 @@ JD-TC-GetorderAccountSettings-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Run Keyword If  ${resp.json()['enableOrder']}==${bool[0]}   Enable Order Settings
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableSms']}  ${bool[1]}
@@ -101,7 +101,7 @@ JD-TC-GetorderAccountSettings-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableSms']}  ${bool[1]}

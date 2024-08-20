@@ -72,7 +72,7 @@ JD-TC-ProviderCouponBill-1
  
     ${list}=  Create List  1  2  3  4  5  6  7
    
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -80,7 +80,7 @@ JD-TC-ProviderCouponBill-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -1674,7 +1674,7 @@ JD-TC-ProviderCouponBill-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
@@ -1932,7 +1932,7 @@ JD-TC-ProviderCouponBill-8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
@@ -2234,7 +2234,7 @@ JD-TC-ProviderCouponBill-9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
@@ -2909,7 +2909,7 @@ JD-TC-ProviderCouponBill-13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
@@ -3086,7 +3086,7 @@ JD-TC-ProviderCouponBill-14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    

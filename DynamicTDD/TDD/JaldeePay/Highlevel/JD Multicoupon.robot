@@ -66,7 +66,7 @@ JD-TC-Multicoupon-1
     ${sub_domains}=  Jaldee Coupon Target SubDomains   ${domain}_${subDomain}  
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -74,7 +74,7 @@ JD-TC-Multicoupon-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
  

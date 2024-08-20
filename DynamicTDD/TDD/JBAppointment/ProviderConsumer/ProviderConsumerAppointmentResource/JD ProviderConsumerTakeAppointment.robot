@@ -1816,7 +1816,7 @@ JD-TC-providerConsumerAppointment-14
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -1824,7 +1824,7 @@ JD-TC-providerConsumerAppointment-14
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=   Get Account Payment Settings 
+    ${resp}=   Get Account Settings 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -4383,7 +4383,7 @@ JD-TC-providerConsumerAppointment-18
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -4391,7 +4391,7 @@ JD-TC-providerConsumerAppointment-18
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=   Get Account Payment Settings 
+    ${resp}=   Get Account Settings 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

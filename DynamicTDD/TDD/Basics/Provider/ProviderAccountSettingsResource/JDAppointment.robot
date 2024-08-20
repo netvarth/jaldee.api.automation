@@ -25,7 +25,7 @@ JD-TC-EnableDisableAppointmentStatus-1
     ${resp}=  Appointment Status   ${toggle[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    appointment=${bool[1]}
@@ -55,7 +55,7 @@ JD-TC-EnableDisableAppointmentStatus-2
     ${resp}=  Appointment Status   ${toggle[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    appointment=${bool[0]}

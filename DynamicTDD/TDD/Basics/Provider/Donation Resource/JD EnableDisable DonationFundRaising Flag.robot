@@ -51,7 +51,7 @@ JD-TC-EnableDisableDonationFundraisingFlag-1
      Should Be Equal As Strings  ${resp.status_code}  200  
      Set Suite Variable  ${sid1}  ${resp.json()}
 
-     ${resp}=  Get Accountsettings
+     ${resp}=  Get Account Settings
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Verify Response  ${resp}  donationFundRaising=${bool[0]}
@@ -59,7 +59,7 @@ JD-TC-EnableDisableDonationFundraisingFlag-1
      ${resp}=  DonationFundRaising flag  ${toggle[0]}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
-     ${resp}=  Get Accountsettings
+     ${resp}=  Get Account Settings
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Verify Response  ${resp}  donationFundRaising=${bool[1]}
@@ -67,7 +67,7 @@ JD-TC-EnableDisableDonationFundraisingFlag-1
      ${resp}=  DonationFundRaising flag  ${toggle[1]}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
-     ${resp}=  Get Accountsettings
+     ${resp}=  Get Account Settings
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Verify Response  ${resp}  donationFundRaising=${bool[0]}
@@ -123,7 +123,7 @@ JD-TC-EnableDisableDonationFundraisingFlag-UH5
      
      delete_donation_service  ${PUSERNAME35}
      
-     ${resp}=  Get Accountsettings
+     ${resp}=  Get Account Settings
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Verify Response  ${resp}  donationFundRaising=${bool[0]}

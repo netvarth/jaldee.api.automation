@@ -200,7 +200,7 @@ JD-TC-MONTHLY_PHONE_TOKEN-1
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -208,7 +208,7 @@ JD-TC-MONTHLY_PHONE_TOKEN-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -555,7 +555,7 @@ JD-TC-MONTHLY_WALK_IN_TOKEN and ARRIVED_TOKEN-2
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -563,7 +563,7 @@ JD-TC-MONTHLY_WALK_IN_TOKEN and ARRIVED_TOKEN-2
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -954,7 +954,7 @@ JD-TC-MONTHLY_ONLINE_TOKEN and CHECKED_IN_TOKEN-3
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -962,7 +962,7 @@ JD-TC-MONTHLY_ONLINE_TOKEN and CHECKED_IN_TOKEN-3
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1293,7 +1293,7 @@ JD-TC-MONTHLY_TELE_SERVICE_TOKEN-4
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -1301,7 +1301,7 @@ JD-TC-MONTHLY_TELE_SERVICE_TOKEN-4
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -1706,7 +1706,7 @@ JD-TC-MONTHLY_TELEGRAM_TOKEN and WEB_TOKENS-5
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -1714,7 +1714,7 @@ JD-TC-MONTHLY_TELEGRAM_TOKEN and WEB_TOKENS-5
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2055,7 +2055,7 @@ JD-TC-MONTHLY STARTED_TOKEN-6
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -2063,7 +2063,7 @@ JD-TC-MONTHLY STARTED_TOKEN-6
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2474,7 +2474,7 @@ JD-TC-MONTHLY CANCELLED_TOKEN-7
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -2482,7 +2482,7 @@ JD-TC-MONTHLY CANCELLED_TOKEN-7
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2869,7 +2869,7 @@ JD-TC-MONTHLY DONE_TOKEN-8
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -2877,7 +2877,7 @@ JD-TC-MONTHLY DONE_TOKEN-8
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3245,7 +3245,7 @@ JD-TC-MONTHLY RESCHEDULED_TOKEN-9
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -3253,7 +3253,7 @@ JD-TC-MONTHLY RESCHEDULED_TOKEN-9
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

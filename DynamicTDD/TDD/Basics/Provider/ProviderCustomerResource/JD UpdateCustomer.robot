@@ -1519,7 +1519,7 @@ JD-TC-Update CustomerDetails-14
     Log  ${decrypted_data}
     Set Test Variable  ${p_id}  ${decrypted_data['id']}
     
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  '${resp.json()['jaldeeIdFormat']['customerSeriesEnum']}'=='${customerseries[0]}'
@@ -1528,7 +1528,7 @@ JD-TC-Update CustomerDetails-14
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['jaldeeIdFormat']['customerSeriesEnum']}  ${customerseries[1]}

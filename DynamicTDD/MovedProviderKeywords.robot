@@ -1405,7 +1405,7 @@ Get Item Category By Filter
     ${resp}=    GET On Session    ynw   /provider/spitem/settings/category   params=${param}   expected_status=any
     RETURN  ${resp}
 
-Get Accountsettings
+Get Account Settings
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/account/settings  expected_status=any
     RETURN  ${resp}

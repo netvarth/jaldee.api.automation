@@ -113,7 +113,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-1
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
     Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
-    ${resp}=   Get Account Payment Settings 
+    ${resp}=   Get Account Settings 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -363,7 +363,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-2
     ${resp}=  Enable Tax
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=   Get Account Payment Settings 
+    ${resp}=   Get Account Settings 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -675,7 +675,7 @@ JD-TC-ServiceOptionPaymentForWaitlist-3
     ${resp}=  Enable Tax
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=   Get Account Payment Settings 
+    ${resp}=   Get Account Settings 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -1262,7 +1262,7 @@ JD-TC-ServiceOptionPaymentForWaitlist-5
     # ${resp}=  Enable Tax
     # Should Be Equal As Strings    ${resp.status_code}   200
 
-    # ${resp}=   Get Account Payment Settings 
+    # ${resp}=   Get Account Settings 
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}   200
     # ${resp1}=   Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}

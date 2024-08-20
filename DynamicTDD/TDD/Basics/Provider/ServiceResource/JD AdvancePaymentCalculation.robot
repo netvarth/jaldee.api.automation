@@ -1647,7 +1647,7 @@ JD-TC-AdvancePaymentcalculation-20
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
     Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
-    ${resp}=   Get Account Payment Settings 
+    ${resp}=   Get Account Settings 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1939,7 +1939,7 @@ JD-TC-AdvancePaymentcalculation-21
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
     Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
-    ${resp}=   Get Account Payment Settings 
+    ${resp}=   Get Account Settings 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2232,7 +2232,7 @@ JD-TC-AdvancePaymentcalculation-22
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
     Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
-    ${resp}=   Get Account Payment Settings 
+    ${resp}=   Get Account Settings 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2557,7 +2557,7 @@ JD-TC-AdvancePaymentcalculation-23
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
     Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
-    ${resp}=   Get Account Payment Settings 
+    ${resp}=   Get Account Settings 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 

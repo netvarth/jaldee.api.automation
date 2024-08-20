@@ -1359,57 +1359,6 @@ check start status
     ${resp}=    GET On Session   ynw  /consumer/waitlist/status/mytracking/${waitlist_id}   params=${cons_params}  expected_status=any   headers=${cons_headers}  
     RETURN  ${resp}
 
-Get Appointment Schedules Consumer
-    [Arguments]  ${acct_id}   &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${cons_headers}=  Create Dictionary  &{headers} 
-    ${cons_params}=  Create Dictionary  account=${acct_id} 
-    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
-    Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${cons_params}   &{locparam}  
-    Check And Create YNW Session
-    # Set To Dictionary  ${cons_headers}   timeZone=${timeZone}
-    ${resp}=  GET On Session  ynw  /consumer/appointment/schedule    params=${cons_params}   expected_status=any   headers=${cons_headers}
-    RETURN  ${resp}
-
-Get Appointment Schedule ById Consumer
-    [Arguments]  ${scheduleId}  ${acct_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${cons_headers}=  Create Dictionary  &{headers} 
-    ${cons_params}=  Create Dictionary  account=${acct_id}
-    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
-    Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${cons_params}   &{locparam}
-    Check And Create YNW Session
-    # Set To Dictionary  ${cons_headers}   timeZone=${timeZone}
-    ${resp}=  GET On Session  ynw  /consumer/appointment/schedule/${scheduleId}    params=${cons_params}   expected_status=any   headers=${cons_headers}
-    RETURN  ${resp}
-
-Get Appointment Slots By Schedule and Date
-    [Arguments]  ${scheduleId}  ${date}  ${acct_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${cons_headers}=  Create Dictionary  &{headers} 
-    ${cons_params}=  Create Dictionary  account=${acct_id}
-    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
-    Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${cons_params}   &{locparam}
-    Check And Create YNW Session
-    # Set To Dictionary  ${cons_headers}   timeZone=${timeZone}
-    ${resp}=  GET On Session  ynw  /consumer/appointment/schedule/${scheduleId}/${date}    params=${cons_params}   expected_status=any   headers=${cons_headers}
-    RETURN  ${resp}
-
-Get All Schedule Slots Today By Location and Service
-    [Arguments]  ${acct_id}  ${locationId}  ${serviceId}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${cons_headers}=  Create Dictionary  &{headers} 
-    ${cons_params}=  Create Dictionary  account=${acct_id}
-    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
-    Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${cons_params}   &{locparam}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/appointment/schedule/today/location/${locationId}/service/${serviceId}    params=${cons_params}   expected_status=any   headers=${cons_headers}
-    RETURN  ${resp}
-
 Get All Schedule Slots By Date Location and Service
     [Arguments]  ${acct_id}  ${date}  ${locationId}  ${serviceId}  &{kwargs}  #${timeZone}=Asia/Kolkata
     ${cons_headers}=  Create Dictionary  &{headers} 
@@ -1421,20 +1370,6 @@ Get All Schedule Slots By Date Location and Service
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/appointment/schedule/date/${date}/location/${locationId}/service/${serviceId}    params=${cons_params}   expected_status=any   headers=${cons_headers}
     RETURN  ${resp}
-
-
-Get Next Available Appointment Slots By ScheduleId
-    [Arguments]  ${scheduleId}  ${acct_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${cons_headers}=  Create Dictionary  &{headers} 
-    ${cons_params}=  Create Dictionary  account=${acct_id}
-    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
-    Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${cons_params}   &{locparam}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/appointment/schedule/nextAvailable/${scheduleId}    params=${cons_params}   expected_status=any   headers=${cons_headers}
-    RETURN  ${resp}
-
 
 Get Next Available Appointment Time
     [Arguments]  ${acct_id}  &{kwargs}  #${timeZone}=Asia/Kolkata

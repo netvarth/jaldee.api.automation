@@ -82,7 +82,7 @@ JD-TC-Token_Report-1
     clear_queue     ${PUSERNAME20}
     clear_service   ${PUSERNAME20}
     
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -90,7 +90,7 @@ JD-TC-Token_Report-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -3467,7 +3467,7 @@ JD-TC-Token_Report-13
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -3475,7 +3475,7 @@ JD-TC-Token_Report-13
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -3881,7 +3881,7 @@ JD-TC-Token_Report-14
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}   200
        
-        ${resp}=  Get Account Payment Settings
+        ${resp}=  Get Account Settings
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -3889,7 +3889,7 @@ JD-TC-Token_Report-14
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-        ${resp}=  Get Account Payment Settings
+        ${resp}=  Get Account Settings
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         
@@ -4237,7 +4237,7 @@ JD-TC-Token_Report-15
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}   200
 
-        ${resp}=  Get Account Payment Settings
+        ${resp}=  Get Account Settings
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -4245,7 +4245,7 @@ JD-TC-Token_Report-15
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-        ${resp}=  Get Account Payment Settings
+        ${resp}=  Get Account Settings
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         

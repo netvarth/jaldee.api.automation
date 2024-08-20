@@ -62,7 +62,7 @@ JD-TC-Get_IVR_Graph_Details-1
     ${acc_id}=  get_acc_id  ${PUSERNAME171}
     Set Suite Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
@@ -190,7 +190,7 @@ JD-TC-Get_IVR_Graph_Details-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -445,7 +445,7 @@ JD-TC-Get_IVR_Graph_Details-2
     ${acc_id}=  get_acc_id  ${PUSERNAME171}
     Set Suite Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
@@ -507,7 +507,7 @@ JD-TC-Get_IVR_Graph_Details-UH2
     ${acc_id}=  get_acc_id  ${PUSERNAME14}
     Set Suite Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
@@ -551,7 +551,7 @@ JD-TC-Get_IVR_Graph_Details-UH3
     ${acc_id}=  get_acc_id  ${PUSERNAME171}
     Set Suite Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
@@ -595,7 +595,7 @@ JD-TC-Get_IVR_Graph_Details-UH4
     ${acc_id}=  get_acc_id  ${PUSERNAME171}
     Set Suite Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
@@ -635,7 +635,7 @@ JD-TC-Get_IVR_Graph_Details-UH5
     ${acc_id}=  get_acc_id  ${PUSERNAME171}
     Set Suite Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
@@ -675,7 +675,7 @@ JD-TC-Get_IVR_Graph_Details-UH6
     ${acc_id}=  get_acc_id  ${PUSERNAME171}
     Set Suite Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
@@ -715,7 +715,7 @@ JD-TC-Get_IVR_Graph_Details-UH7
     ${acc_id}=  get_acc_id  ${PUSERNAME171}
     Set Suite Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
@@ -755,7 +755,7 @@ JD-TC-Get_IVR_Graph_Details-UH8
     ${acc_id}=  get_acc_id  ${PUSERNAME171}
     Set Suite Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 

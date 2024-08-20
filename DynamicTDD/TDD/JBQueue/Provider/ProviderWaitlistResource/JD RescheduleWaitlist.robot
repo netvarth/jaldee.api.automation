@@ -668,7 +668,7 @@ JD-TC-Reschedule Waitlist-4
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-   ${resp}=   Get Account Payment Settings
+   ${resp}=   Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp1}=  Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment    ${toggle[0]}
@@ -909,7 +909,7 @@ JD-TC-Reschedule Waitlist-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Get Account Payment Settings 
+    ${resp}=   Get Account Settings 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -4958,7 +4958,7 @@ JD-TC-Reschedule Waitlist-UH22
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -4966,7 +4966,7 @@ JD-TC-Reschedule Waitlist-UH22
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[0]}
@@ -4995,7 +4995,7 @@ JD-TC-Reschedule Waitlist-UH23
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -5003,7 +5003,7 @@ JD-TC-Reschedule Waitlist-UH23
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}

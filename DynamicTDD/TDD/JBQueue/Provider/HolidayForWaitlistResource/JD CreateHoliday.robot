@@ -1102,7 +1102,7 @@ JD-TC-CreateHoliday-11
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

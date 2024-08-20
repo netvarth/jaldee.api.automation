@@ -634,13 +634,13 @@ JD-TC-ServiceOptionPaymentForAppointment-3
     ${resp}=  Enable Tax
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=   Get Account Payment Settings 
+    ${resp}=   Get Account Settings 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
         ${resp}=   Enable Disable Online Payment   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END# ${resp}=   Get Account Payment Settings 
+    END# ${resp}=   Get Account Settings 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1029,7 +1029,7 @@ JD-TC-ServiceOptionPaymentForAppointment-4
     ${resp}=  Enable Tax
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=   Get Account Payment Settings 
+    ${resp}=   Get Account Settings 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   

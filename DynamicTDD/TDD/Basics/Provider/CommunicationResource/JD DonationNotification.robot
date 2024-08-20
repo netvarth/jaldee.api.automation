@@ -238,7 +238,7 @@ JD-TC-DonationNotification-1
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Suite Variable  ${don_sid1}  ${resp.json()}
 
-    ${resp}=   Get Accountsettings
+    ${resp}=   Get Account Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['donationFundRaising']}==${bool[0]}
@@ -247,7 +247,7 @@ JD-TC-DonationNotification-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Accountsettings
+    ${resp}=  Get Account Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  donationFundRaising=${bool[1]}

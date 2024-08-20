@@ -99,7 +99,7 @@ JD-TC-SuperadminGetAccount-2
         Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
         Set Suite Variable  ${busName}  ${resp.json()['businessName']}
 
-        ${resp}=   Get Accountsettings
+        ${resp}=   Get Account Settings
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
 

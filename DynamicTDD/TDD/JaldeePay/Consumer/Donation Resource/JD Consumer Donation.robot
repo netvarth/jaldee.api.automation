@@ -32,7 +32,7 @@ JD-TC-ConsumerDonation-1
         clear_queue      ${PUSERNAME206}
         clear_location   ${PUSERNAME206}
         
-        ${resp}=  Get Account Payment Settings
+        ${resp}=  Get Account Settings
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -40,7 +40,7 @@ JD-TC-ConsumerDonation-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-        ${resp}=  Get Account Payment Settings
+        ${resp}=  Get Account Settings
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         
@@ -335,7 +335,7 @@ JD-TC-ConsumerDonation-UH6
 
         ${acc_id}=  get_acc_id  ${PUSERNAME122}
 
-        ${resp}=  Get Account Payment Settings
+        ${resp}=  Get Account Settings
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         IF  ${resp.json()['onlinePayment']}==${bool[0]}   

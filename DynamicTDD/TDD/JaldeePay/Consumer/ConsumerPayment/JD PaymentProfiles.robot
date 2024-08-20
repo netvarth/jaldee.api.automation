@@ -1048,7 +1048,7 @@ JD-TC-paymentprofiles-2.1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -1056,7 +1056,7 @@ JD-TC-paymentprofiles-2.1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=   Get Account Payment Settings 
+    ${resp}=   Get Account Settings 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1295,7 +1295,7 @@ JD-TC-paymentprofiles-2.2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -1303,7 +1303,7 @@ JD-TC-paymentprofiles-2.2
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=   Get Account Payment Settings 
+    ${resp}=   Get Account Settings 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1544,7 +1544,7 @@ JD-TC-paymentprofiles-2.3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -1552,7 +1552,7 @@ JD-TC-paymentprofiles-2.3
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=   Get Account Payment Settings 
+    ${resp}=   Get Account Settings 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2298,7 +2298,7 @@ JD-TC-paymentprofiles-4.1
     ${pid}=  get_acc_id  ${PUSERNAME190}
     Set Suite Variable  ${pid}
         
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -2306,7 +2306,7 @@ JD-TC-paymentprofiles-4.1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2679,7 +2679,7 @@ JD-TC-paymentprofiles-P2.1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -2687,7 +2687,7 @@ JD-TC-paymentprofiles-P2.1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=   Get Account Payment Settings 
+    ${resp}=   Get Account Settings 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3212,7 +3212,7 @@ JD-TC-paymentprofiles-P3.2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -3220,7 +3220,7 @@ JD-TC-paymentprofiles-P3.2
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=   Get Account Payment Settings 
+    ${resp}=   Get Account Settings 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -4062,7 +4062,7 @@ JD-TC-paymentprofiles-8
     ${pid}=  get_acc_id  ${PUSERNAME186}
     Set Suite Variable  ${pid}
         
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -4070,7 +4070,7 @@ JD-TC-paymentprofiles-8
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -4434,7 +4434,7 @@ JD-TC-paymentprofiles-2.4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -4442,7 +4442,7 @@ JD-TC-paymentprofiles-2.4
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=   Get Account Payment Settings 
+    ${resp}=   Get Account Settings 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

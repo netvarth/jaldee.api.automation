@@ -2388,7 +2388,7 @@ JD-TC-GetSlots By Date and service -11
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -3122,7 +3122,7 @@ JD-TC-GetSlots By Date and service -14
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-   ${resp}=   Get Account Payment Settings
+   ${resp}=   Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp1}=  Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment    ${toggle[0]}
@@ -3186,7 +3186,7 @@ JD-TC-GetSlots By Date and service -14
     # Should Be Equal As Strings    ${resp.status_code}   200
     # ${resp}=  SetMerchantId  ${pid}  ${merchantid}
 
-  #  ${resp}=  Get Account Payment Settings
+  #  ${resp}=  Get Account Settings
    # Log  ${resp.json()}
     #Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -3469,7 +3469,7 @@ JD-TC-GetSlots By Date and service -15
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=   Get Account Payment Settings
+     ${resp}=   Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp1}=  Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment    ${toggle[0]}
@@ -3516,7 +3516,7 @@ JD-TC-GetSlots By Date and service -15
     # Should Be Equal As Strings    ${resp.status_code}   200
     # ${resp}=  SetMerchantId  ${pid}  ${merchantid}
 
-  #  ${resp}=  Get Account Payment Settings
+  #  ${resp}=  Get Account Settings
    # Log  ${resp.json()}
     #Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -3797,7 +3797,7 @@ JD-TC-GetSlots By Date and service -16
     Set Test Variable  ${pid}  ${resp.json()['id']} 
 
 
-     ${resp}=   Get Account Payment Settings
+     ${resp}=   Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp1}=  Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment    ${toggle[0]}
@@ -4126,7 +4126,7 @@ JD-TC-GetSlots By Date and service -17
     # Should Be Equal As Strings    ${resp.status_code}   200
     # ${resp}=  SetMerchantId  ${pid}  ${merchantid}
 
-    ${resp}=   Get Account Payment Settings
+    ${resp}=   Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp1}=  Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment    ${toggle[0]}
@@ -4405,7 +4405,7 @@ JD-TC-GetSlots By Date and service -18
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']} 
 
-    ${resp}=   Get Account Payment Settings
+    ${resp}=   Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp1}=  Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment    ${toggle[0]}
@@ -4616,7 +4616,7 @@ JD-TC-GetSlots By Date and service -19
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']} 
 
-     ${resp}=   Get Account Payment Settings
+     ${resp}=   Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp1}=  Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment    ${toggle[0]}
@@ -4631,7 +4631,7 @@ JD-TC-GetSlots By Date and service -19
 
     clear_appt_schedule   ${PUSERNAME180}
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -5140,14 +5140,14 @@ JD-TC-GetSlots By Date and service -21
 
     clear_appt_schedule   ${PUSERNAME180}
 
-    ${resp}=   Get Account Payment Settings
+    ${resp}=   Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp1}=  Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment    ${toggle[0]}
     Run Keyword If  '${resp1}' != '${None}'   Log  ${resp1.content}
     Run Keyword If  '${resp1}' != '${None}'   Should Be Equal As Strings  ${resp1.status_code}  200
    
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -5427,7 +5427,7 @@ JD-TC-GetSlots By Date and service -22
 
     clear_appt_schedule   ${PUSERNAME180}
 
-    ${resp}=   Get Account Payment Settings
+    ${resp}=   Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp1}=  Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment    ${toggle[0]}
@@ -5704,7 +5704,7 @@ JD-TC-GetSlots By Date and service -UH8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']} 
 
-     ${resp}=   Get Account Payment Settings
+     ${resp}=   Get Account Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp1}=  Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment    ${toggle[0]}

@@ -1060,7 +1060,7 @@ Update Account Payment Settings
     ${resp}=   PUT On Session  ynw  /provider/payment/settings   data=${data}  expected_status=any
     RETURN  ${resp}
     
-Get Account Payment Settings
+Get Account Settings
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/payment/settings   expected_status=any
     RETURN  ${resp}
@@ -3951,7 +3951,7 @@ Update Accountsettings
     ${response}=  PUT On Session  ynw  /provider/account/settings  data=${jdata}  expected_status=any
     RETURN  ${response}
 
-Get Accountsettings
+Get Account Settings
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/account/settings  expected_status=any
     RETURN  ${resp}
