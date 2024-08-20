@@ -1617,7 +1617,7 @@ Get Item Type By Filter
     [Arguments]   &{param}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/spitem/settings/type   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Item Type By Filter
     RETURN  ${resp}
 
 Get Item Type Count By Filter
@@ -3305,7 +3305,7 @@ Get Coupon By Id
     [Arguments]  ${couponId}   
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/bill/coupons/${couponId}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Coupon By Id
     RETURN  ${resp}
 
 Enable Tax
@@ -3463,8 +3463,8 @@ Update Service For User
 #     ${data}=  json.dumps  ${data}
 #     Check And Create YNW Session
 #     ${resp}=  PUT On Session  ynw  /provider/services  data=${data}  expected_status=any
-#     Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
+#     Check Deprication  ${resp}  Update Service
+#     RETURN  ${resp}
 
 Update Service
     [Arguments]  ${id}   ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}  &{kwargs}
@@ -5895,14 +5895,14 @@ Update Report Criteria
     ${jdata}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/report/ops    data=${jdata}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Report Criteria
     RETURN  ${resp}
 
 
 Get Report Criteria
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/report/criteria   expected_status=any  
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Report Criteria
     RETURN  ${resp}
 
 
@@ -5912,7 +5912,7 @@ Delete Report Criteria
     ${jdata}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=    DELETE On Session    ynw  /provider/report/ops    data=${jdata}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Delete Report Criteria
     RETURN  ${resp}
 
 
@@ -5920,7 +5920,7 @@ Appointment Status
     [Arguments]  ${status}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/appointment/${status}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Appointment Status
     RETURN  ${resp}
 
 JaldeeId Format  
@@ -5929,7 +5929,7 @@ JaldeeId Format
     ${jdata}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/jaldeeIdFormat/${customerseries}   data=${jdata}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  JaldeeId Format
     RETURN  ${resp}
 
 Account Settings
@@ -5938,8 +5938,9 @@ Account Settings
     ${data}=  create Dictionary  enableSms=${enasms}   jaldeeIntegration=${jinten}  customerSeriesEnum=${custserenum}   patternSettings=${patsetting}
     ${jdata}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${response}=  POST On Session  ynw  /provider/account/settings  data=${jdata}  expected_status=any
-    RETURN  ${response}
+    ${resp}=  POST On Session  ynw  /provider/account/settings  data=${jdata}  expected_status=any
+    Check Deprication  ${resp}  Account Settings
+    RETURN  ${resp}
 
 Update Accountsettings 
     [Arguments]  ${enasms}  ${jinten}  ${custserenum}  ${prefi}  ${sufi}
@@ -5947,42 +5948,43 @@ Update Accountsettings
     ${data}=  create Dictionary  enableSms=${enasms}   jaldeeIntegration=${jinten}  customerSeriesEnum=${custserenum}   patternSettings=${patsetting}
     ${jdata}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${response}=  PUT On Session  ynw  /provider/account/settings  data=${jdata}  expected_status=any
-    RETURN  ${response}
+    ${resp}=  PUT On Session  ynw  /provider/account/settings  data=${jdata}  expected_status=any
+    Check Deprication  ${resp}  Update Accountsettings
+    RETURN  ${resp}
 
 
 Sms Status
     [Arguments]  ${status}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/sms/${status}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Sms Status
     RETURN  ${resp}
 
 Get Sms Count
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/account/settings/smsCount  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Sms Count
     RETURN  ${resp}
 
 Waitlist Status
     [Arguments]  ${status}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/waitlist/${status}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Waitlist Status
     RETURN  ${resp}
 
 Enable Appointment Schedule
     [Arguments]   ${schId}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/appointment/schedule/${schId}/ENABLED   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Enable Appointment Schedule
     RETURN  ${resp}
 
 Disable Appointment Schedule
     [Arguments]   ${schId}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/appointment/schedule/${schId}/DISABLED   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Disable Appointment Schedule
     RETURN  ${resp}
     
 
@@ -5991,20 +5993,21 @@ Get Next Available Appointment Slot
     [Arguments]   ${schId}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/appointment/schedule/nextAvailableTime  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Next Available Appointment Slot
     RETURN  ${resp}
 
 Get Next Available Appointment Schedule
     [Arguments]   ${schId}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/appointment/schedule/nextAvailable/${schId}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Next Available Appointment Schedule
     RETURN  ${resp}
 
 Get Appointment Schedule by date
 	[Arguments]	 ${date}
 	Check And Create YNW Session
 	${resp}=  GET On Session  ynw  /provider/appointment/schedule/date/${date}  expected_status=any
+    Check Deprication  ${resp}  Get Appointment Schedule by date
 	RETURN   ${resp}
 
 
@@ -6036,7 +6039,7 @@ Update Individual Schedule
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
     ${resp}=  PUT On Session  ynw  /provider/appointment/schedule  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Individual Schedule
     RETURN  ${resp}
     
 Create StatusBoardnew
@@ -6048,7 +6051,7 @@ Create StatusBoardnew
     ${data}=  json.dumps  ${dic}
     Check And Create YNW Session
     ${resp}=  POST On Session   ynw   /provider/statusBoard/dimension   data=${data}  expected_status=any 
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create StatusBoardnew
     RETURN  ${resp}
 
 
@@ -6056,7 +6059,7 @@ DonationFundRaising flag
     [Arguments]  ${status}
     Check And Create YNW Session
     ${resp}=  PUT On Session   ynw   /provider/account/settings/donationFundRaising/${status}   expected_status=any 
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  DonationFundRaising flag
     RETURN  ${resp}
 
 
@@ -6072,7 +6075,7 @@ Create Donation Service
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session  
     ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create Donation Service
     RETURN  ${resp}
 
 
@@ -6080,7 +6083,7 @@ Get Donation By Id
     [Arguments]  ${d_id}
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /provider/donation/${d_id}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Donation By Id
     RETURN  ${resp}
 
 
@@ -6088,7 +6091,7 @@ Get Donations
     [Arguments]    &{kwargs}
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /provider/donation   params=${kwargs}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Donations
     RETURN  ${resp}
 
 
@@ -6096,7 +6099,7 @@ Get Donation Count
     [Arguments]    &{kwargs}
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /provider/donation/count  params=${kwargs}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Donation Count
     RETURN  ${resp}
 
     
@@ -6104,28 +6107,28 @@ Get Waitlist EncodedId
     [Arguments]    ${W_Enc_id}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/waitlist/encId/${W_Enc_id}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Waitlist EncodedId
     RETURN  ${resp}
     
 Get Waitlist By EncodedID
     [Arguments]    ${Enc_id}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/waitlist/enc/${Enc_id}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Waitlist By EncodedID
     RETURN  ${resp}
     
 Get Appointment EncodedID
     [Arguments]    ${uuid}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/appointment/encId/${uuid}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Appointment EncodedID
     RETURN  ${resp}
 
 Get Appointment By EncodedId
     [Arguments]    ${encId}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/appointment/enc/${encId}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Appointment By EncodedId
     RETURN  ${resp}    
 
 Provider Cancel Appointment
@@ -6134,7 +6137,7 @@ Provider Cancel Appointment
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session   ynw  /provider/appointment/statuschange/Cancelled/${appmntId}    data=${data}  expected_status=any 
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Provider Cancel Appointment
     RETURN  ${resp}
 
 Reject Appointment
@@ -6143,32 +6146,32 @@ Reject Appointment
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session   ynw  /provider/appointment/statuschange/Rejected/${appmntId}    data=${data}  expected_status=any 
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Reject Appointment
     RETURN  ${resp}
     
     
 Enable Future Appointment
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/settings/apptMgr/futureAppt/Enable  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Enable Future Appointment
     RETURN  ${resp}
 
 Disable Future Appointment
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/settings/apptMgr/futureAppt/Disable   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Disable Future Appointment
     RETURN  ${resp}
 
 Enable Today Appointment
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/settings/apptMgr/todayAppt/Enable  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Enable Today Appointment
     RETURN  ${resp}
 
 Disable Today Appointment
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/settings/apptMgr/todayAppt/Disable  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Disable Today Appointment
     RETURN  ${resp}
 
 Update Appointmet Settings
@@ -6177,19 +6180,19 @@ Update Appointmet Settings
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=    PUT On Session     ynw   /provider/settings/apptMgr   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Appointmet Settings
     RETURN  ${resp}
 
 Enable Appointment
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/appointment/Enable   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Enable Appointment
     RETURN  ${resp}
 
 Disable Appointment
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/appointment/Disable   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Disable Appointment
     RETURN  ${resp}
 
     
@@ -6197,21 +6200,21 @@ Enable Calling Status
     [Arguments]   ${uid}   
     Check And Create YNW Session
     ${resp}=  PUT On Session   ynw  /provider/appointment/callingStatus/${uid}/Enable  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Enable Calling Status
     RETURN  ${resp}
 
 Disable Calling Status
     [Arguments]   ${uid}   
     Check And Create YNW Session
     ${resp}=  PUT On Session   ynw  /provider/appointment/callingStatus/${uid}/Disable  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Disable Calling Status
     RETURN  ${resp}
 
 Appointment Action for Batch
     [Arguments]   ${scheduleId}   ${status}   ${batch}   
     Check And Create YNW Session
     ${resp}=  PUT On Session   ynw  /provider/appointment/statusChangeByBatch/${scheduleId}/${status}/${batch}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Appointment Action for Batch
     RETURN  ${resp}
 
 
@@ -6232,7 +6235,7 @@ Remove Appointment Label
     [Arguments]   ${apptId}  ${label}
     Check And Create YNW Session
     ${resp}=    DELETE On Session    ynw  /provider/appointment/removeLabel/${apptId}/${label}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Remove Appointment Label
     RETURN  ${resp}
 
 
@@ -6247,7 +6250,7 @@ Add Label for Multiple Waitlist
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/waitlist/labelBatch  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Add Label for Multiple Waitlist
     RETURN  ${resp}
 
 Remove Label from Multiple Waitlist
@@ -6261,7 +6264,7 @@ Remove Label from Multiple Waitlist
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw  /provider/waitlist/masslabel  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Remove Label from Multiple Waitlist
     RETURN  ${resp}
 
 
@@ -6271,7 +6274,7 @@ Add Note to Appointment
     ${note}=    json.dumps    ${note}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment/note/${appmntId}  data=${note}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Add Note to Appointment
     RETURN  ${resp}
 
 
@@ -6279,14 +6282,14 @@ Get Future Appointments
     [Arguments]  &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/appointment/future  params=${kwargs}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Future Appointments
     RETURN  ${resp}
 
 Get Future Appointment Count
     [Arguments]  &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/appointment/future/count  params=${kwargs}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Future Appointment Count
     RETURN  ${resp}
 
 
@@ -6295,21 +6298,21 @@ Get Today Appointment Count
     [Arguments]  &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/appointment/today/count  params=${kwargs}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Today Appointment Count
     RETURN  ${resp}
 
 Get Appointments History
     [Arguments]  &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/appointment/history  params=${kwargs}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Appointments History
     RETURN  ${resp}
 
 Get Appointment History Count
     [Arguments]  &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/appointment/history/count  params=${kwargs}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Appointment History Count
     RETURN  ${resp}
 
 Create Waitlist Meeting Request
@@ -6319,14 +6322,14 @@ Create Waitlist Meeting Request
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/waitlist/${uuid}/createmeetingrequest   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create Waitlist Meeting Request
     RETURN  ${resp}
 
 Get Waitlist Meeting Request
     [Arguments]  ${uid}   ${mode}
     Check And Create YNW Session
-    ${resp}=    GET On Session     ynw   /provider/waitlist/${uid}/meetingDetails/${mode}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    ${resp}=    GET On Session  ynw   /provider/waitlist/${uid}/meetingDetails/${mode}  expected_status=any
+    Check Deprication  ${resp}  Get Waitlist Meeting Request
     RETURN  ${resp}
 
 
@@ -6337,7 +6340,7 @@ Create Appointment Meeting Request
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment/${uid}/createmeetingrequest   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create Appointment Meeting Request
     RETURN  ${resp}
 
 
@@ -6345,7 +6348,7 @@ Get Appointment Meeting Request
     [Arguments]   ${uid}   ${mode}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/appointment/${uid}/meetingDetails/${mode}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Appointment Meeting Request
     RETURN  ${resp}
 
 Get Billable Subdomain
@@ -6365,7 +6368,7 @@ Rate Appointment
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=    POST On Session   ynw  /provider/appointment/rating    data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Rate Appointment
     RETURN  ${resp}
 
 Provider Update Appointment Rating
@@ -6374,21 +6377,21 @@ Provider Update Appointment Rating
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=    PUT On Session   ynw  /provider/appointment/rating    data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Provider Update Appointment Rating
     RETURN  ${resp}
 
 Enable Batch For Appointment
     [Arguments]   ${ScheduleId} 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw   /provider/appointment/schedule/batch/${ScheduleId}/True  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Enable Batch For Appointment
     RETURN  ${resp}
 
 Disable Batch For Appointment
     [Arguments]   ${ScheduleId}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw   /provider/appointment/schedule/batch/${ScheduleId}/False  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Disable Batch For Appointment
     RETURN  ${resp}
 
 Add Appmt Batch Name
@@ -6397,7 +6400,7 @@ Add Appmt Batch Name
     ${data}=   Create Dictionary   prefix=${prefix}   suffix=${suffix}
     ${data}=    json.dumps    ${data}
     ${resp}=    PUT On Session    ynw  /provider/appointment/schedule/batch/pattern/${ScheduleId}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Add Appmt Batch Name
     RETURN  ${resp}
 
 Change multiple Appmt Status
@@ -6406,7 +6409,7 @@ Change multiple Appmt Status
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw   /provider/appointment/multiStatusChange/${statuschange}   data=${data}  expected_status=any
     Log  ${resp}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Change multiple Appmt Status
     RETURN  ${resp}
 
 Waitlist Action multiple account
@@ -6415,49 +6418,49 @@ Waitlist Action multiple account
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw   /provider/waitlist/multiStatusChange/${waitlist_actions[4]}   data=${data}  expected_status=any
     Log  ${resp}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Waitlist Action multiple account
     RETURN  ${resp}
 
 
 Get Appmt Schedule AvailableNow
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/appointment/schedule/availableNow  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Appmt Schedule AvailableNow
     RETURN  ${resp}    
     
 Get Appointment Schedule Count
     [Arguments]  &{kwargs}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/appointment/schedule/count   params=${kwargs}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Appointment Schedule Count
     RETURN  ${resp}    
 
 Enable Future Appointment By Schedule Id
     [Arguments]   ${schedule_id}
     Check And Create YNW Session
     ${resp}=  PATCH On Session  ynw  /provider/appointment/schedule/futureAppt/true/${schedule_id}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Enable Future Appointment By Schedule Id
     RETURN  ${resp}
 
 Disable Future Appointment By Schedule Ids
     [Arguments]   ${schedule_id}
     Check And Create YNW Session
     ${resp}=  PATCH On Session  ynw  /provider/appointment/schedule/futureAppt/false/${schedule_id}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Disable Future Appointment By Schedule Ids
     RETURN  ${resp}
 
 Enable Today Appointment By Schedule Id
     [Arguments]   ${schedule_id}
     Check And Create YNW Session
     ${resp}=  PATCH On Session  ynw  /provider/appointment/schedule/todayAppt/true/${schedule_id}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Enable Today Appointment By Schedule Id
     RETURN  ${resp}
 
 Disable Today Appointment By Schedule Id
     [Arguments]   ${schedule_id}
     Check And Create YNW Session
     ${resp}=  PATCH On Session  ynw  /provider/appointment/schedule/todayAppt/false/${schedule_id}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Disable Today Appointment By Schedule Id
     RETURN  ${resp}
 
 Consumer Mass Communication for Appt
@@ -6465,35 +6468,35 @@ Consumer Mass Communication for Appt
     ${input}=  Create Dictionary  email=${email}  sms=${sms}  pushNotification=${push_notf}     telegram=${telegram}
     ${data}=  Create Dictionary  medium=${input}  communicationMessage=${msg}  uuid=${vargs}
     ${resp}=     Imageupload.PAppMassCommMultiFile   ${cookie}     ${data}    @{fileswithcaption}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Consumer Mass Communication for Appt
     RETURN  ${resp}
                      
 Get Appmt Schedule AvailableNow By ProviderId   
     [Arguments]     ${providerId}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/appointment/schedule/availableNow/${providerId}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Appmt Schedule AvailableNow By ProviderId
     RETURN  ${resp}          
 
 Get AppmtSchedule NextAvailableTime By ScheduleId
     [Arguments]  ${scheduleId}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/appointment/schedule/nextAvailableTime/${scheduleId}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get AppmtSchedule NextAvailableTime By ScheduleId
     RETURN  ${resp}
     
 Get NextAvailableSchedule By Provider Location
     [Arguments]  ${P_accountId}   ${locationId}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/appointment/schedule/nextAvailableSchedule/${P_accountId}-${locationId}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get NextAvailableSchedule By Provider Location
     RETURN  ${resp}
 
 Get NextAvailableSchedule By Provider Location and User
     [Arguments]  ${B_accountId}   ${locationId}  ${userId}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/appointment/schedule/nextAvailableSchedule/${B_accountId}-${locationId}-${userId}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get NextAvailableSchedule By Provider Location and User
     RETURN  ${resp}
 
 Get NextAvailableSchedule By multi Provider Location and User
@@ -6502,7 +6505,7 @@ Get NextAvailableSchedule By multi Provider Location and User
     ${len}=   Get Length  ${kwargs}
     ${data}=  Catenate  SEPARATOR=,  @{kwargs}
     ${resp}=    GET On Session    ynw   /provider/appointment/schedule/nextAvailableSchedule/${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get NextAvailableSchedule By multi Provider Location and User
     RETURN  ${resp}
     
 
@@ -6512,7 +6515,7 @@ Update FamilymemberByprovidercustomer
     ${data}=  Create Dictionary  parent=${id}  id=${memid}   firstName=${firstname}  lastName=${lastname}  dob=${dob}  gender=${gender}  
     ${data}=    json.dumps    ${data}
     ${resp}=  PUT On Session   ynw   /provider/customers/familyMember   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update FamilymemberByprovidercustomer
     RETURN  ${resp}
 
 
@@ -17099,7 +17102,7 @@ Create Crm Lead
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/crm/lead  data=${data}  expected_status=any
-    #Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
 
 Get Crm Lead
@@ -17108,21 +17111,21 @@ Get Crm Lead
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/crm/lead/${uid}  expected_status=any
-    #Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
 
 Get Crm Lead By Filter  
 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/crm/lead   params=${param}   expected_status=any
-    #Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
 
 Get Crm Lead Count By Filter  
 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/crm/lead/count   params=${param}   expected_status=any
-    #Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
 
 Crm Lead Status Change To Active
@@ -17131,7 +17134,7 @@ Crm Lead Status Change To Active
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/crm/lead/${uid}/status/active  expected_status=any
-    #Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
 
 Crm Lead Status Change To Complete
@@ -17140,7 +17143,7 @@ Crm Lead Status Change To Complete
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/crm/lead/${uid}/status/complete  expected_status=any
-    #Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
 
 Crm Lead Status Change To Reject
@@ -17149,7 +17152,7 @@ Crm Lead Status Change To Reject
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/crm/lead/${uid}/status/reject  expected_status=any
-    #Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
 
 Update Crm Lead  
@@ -17164,7 +17167,7 @@ Update Crm Lead
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/crm/lead/${uid}  data=${data}  expected_status=any
-    #Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
 
 Crm Lead Update Assign
@@ -17177,7 +17180,7 @@ Crm Lead Update Assign
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/crm/lead/assign/${uid}  data=${data}  expected_status=any
-    #Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
 
 Crm Lead Update Unassign
@@ -17190,7 +17193,7 @@ Crm Lead Update Unassign
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/crm/lead/unassign/${uid}  data=${data}  expected_status=any
-    #Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
 
 Crm Lead Update Notes  
@@ -17201,7 +17204,7 @@ Crm Lead Update Notes
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/crm/lead/notes/${uid}  data=${data}  expected_status=any
-    #Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Crm Lead Update Notes 
     RETURN  ${resp}
 
 
@@ -17212,7 +17215,7 @@ Reject Appt Service Request
     [Arguments]    ${appmntId}  
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/appointment/service/request/reject/${appmntId}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Reject Appt Service Request
     RETURN  ${resp}
 
 
@@ -17231,7 +17234,7 @@ Confirm Appt Service Request
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/appointment/service/request/changestatus/confirmed  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Confirm Appt Service Request
     RETURN  ${resp}
 
 User Take Virtual Service Appointment For Consumer
@@ -17246,7 +17249,7 @@ User Take Virtual Service Appointment For Consumer
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  User Take Virtual Service Appointment For Consumer
     RETURN  ${resp}
 
 User Take Appointment with Appointment Mode 
@@ -17259,7 +17262,7 @@ User Take Appointment with Appointment Mode
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  User Take Appointment with Appointment Mode
     RETURN  ${resp}
 
 Take Appointment with Appointment Mode 
@@ -17271,7 +17274,7 @@ Take Appointment with Appointment Mode
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Take Appointment with Appointment Mode
     RETURN  ${resp}
 
 Take Virtual Service Appointment For Consumer with Mode
@@ -17285,7 +17288,7 @@ Take Virtual Service Appointment For Consumer with Mode
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Take Virtual Service Appointment For Consumer with Mode
     RETURN  ${resp}
 
 Take Virtual Service Appointment For Consumer
@@ -17299,7 +17302,7 @@ Take Virtual Service Appointment For Consumer
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Take Virtual Service Appointment For Consumer
     RETURN  ${resp}
 
 Take Appointment with Phone no
@@ -17312,7 +17315,7 @@ Take Appointment with Phone no
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Take Appointment with Phone no
     RETURN  ${resp}
 
 
@@ -17335,7 +17338,7 @@ User Take Appointment For Consumer
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment  params=${pro_params}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  User Take Appointment For Consumer 
     RETURN  ${resp}
 
 Create Individual Schedule
@@ -17347,7 +17350,7 @@ Create Individual Schedule
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
     ${resp}=  POST On Session  ynw  /provider/appointment/schedule  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create Individual Schedule
     RETURN  ${resp}
 
 Create Appointment Schedule For User
@@ -17358,7 +17361,7 @@ Create Appointment Schedule For User
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
     ${resp}=  POST On Session  ynw  /provider/appointment/schedule  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create Appointment Schedule For User
     RETURN  ${resp}
 
 Create Service
@@ -17378,7 +17381,7 @@ Create Service
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session  
     ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create Service
     RETURN  ${resp}
 
 Create Sample Service
@@ -17402,7 +17405,7 @@ Create Service with info
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session  
     ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create Service with info
     RETURN  ${resp}
 
 Create Service With serviceType
@@ -17411,7 +17414,7 @@ Create Service With serviceType
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session  
     ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create Service With serviceType
     RETURN  ${resp}
 
 Create Sample Service with Prepayment
@@ -17446,7 +17449,7 @@ Create Service Department
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session  
     ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create Service Department
     RETURN  ${resp}
 
 Create Service For User
@@ -17459,7 +17462,7 @@ Create Service For User
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session  
     ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create Service For User
     RETURN  ${resp}
 
 Create Sample Donation For User
@@ -17481,7 +17484,7 @@ Create User With Roles And Scope
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/user    data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create User With Roles And Scope
     RETURN  ${resp}
 
 AddFamilyMemberByProviderWithPhoneNo
@@ -17490,7 +17493,7 @@ AddFamilyMemberByProviderWithPhoneNo
     ${data}=  Create Dictionary  parent=${id}  firstName=${firstname}  lastName=${lastname}  dob=${dob}  gender=${gender}  phoneNo=${PhoneNo}  countryCode=${countryCode}
     ${data}=    json.dumps    ${data}
     ${resp}=  POST On Session   ynw   /provider/customers/familyMember   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  AddFamilyMemberByProviderWithPhoneNo
     RETURN  ${resp}
 
 
@@ -17505,7 +17508,7 @@ Update User
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/user/${id}   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update User
     RETURN  ${resp}     
 
 
@@ -17519,7 +17522,7 @@ Update Business Profile without schedule
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Business Profile without schedule
     RETURN  ${resp}
 
 Update Business Profile without details
@@ -17530,7 +17533,7 @@ Update Business Profile without details
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Business Profile without details
     RETURN  ${resp}
 
     
@@ -17540,7 +17543,7 @@ Update Business Profile without phone and email
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Business Profile without phone and email
     RETURN  ${resp}
 
 
@@ -17553,7 +17556,7 @@ Update Business Profile with kwargs
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Business Profile with kwargs
     RETURN  ${resp}
 
 Update Business Profile with schedule
@@ -17562,5 +17565,5 @@ Update Business Profile with schedule
     ${data}=  Business Profile with schedule  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}  ${lid}  &{kwargs}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Business Profile with schedule
     RETURN  ${resp}
