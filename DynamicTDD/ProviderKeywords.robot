@@ -6523,7 +6523,7 @@ DeleteFamilymemberByprovidercustomer
 	[Arguments]    ${memberId}   ${consumerId}
 	Check And Create YNW Session
     ${resp}=   DELETE On Session  ynw  /provider/customers/familyMember/${memberId}/${consumerId}   expected_status=any 
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  DeleteFamilymemberByprovidercustomer
     RETURN  ${resp}
 
 
@@ -6533,14 +6533,14 @@ Add Appointment Schedule Delay
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment/schedule/${schedulId}/delay  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Add Appointment Schedule Delay
     RETURN  ${resp}
 
 Get Appointment Schedule Delay
     [Arguments]  ${schedulId}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/appointment/schedule/${schedulId}/delay  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Appointment Schedule Delay
     RETURN  ${resp}
 
 
@@ -6552,7 +6552,7 @@ Update Account contact information
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/contact  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Account contact information
     RETURN  ${resp}
     
 
@@ -6561,14 +6561,14 @@ Update Account contact information
 #     [Arguments]  ${locationId}   ${serviceId}  
 #     Check And Create YNW Session
 #     ${resp}=  GET On Session  ynw    /consumer/waitlist/queues/available/${locationId}/${serviceId}   expected_status=any
-#     Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
+#     Check Deprication  ${resp}  Availability Of Queue By Provider
+#     RETURN  ${resp}
 
 
 Get License UsageInfo
-   Check And Create YNW Session
-   ${resp}=    GET On Session    ynw  /provider/license/usageInfo  expected_status=any
-   Check Deprication  ${resp}  Get Business Profile
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw  /provider/license/usageInfo  expected_status=any
+    Check Deprication  ${resp}  Get License UsageInfo
     RETURN  ${resp}
 
 
@@ -6576,14 +6576,14 @@ Get Monthly Schedule Availability by Location and Service
     [Arguments]  ${Location_id}   ${Service_id}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/appointment/availability/location/${Location_id}/service/${Service_id}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Monthly Schedule Availability by Location and Service
     RETURN  ${resp}
 
 
 # Create MR With uuid
 #     [Arguments]  ${uuid}  ${bookingType}  ${consultationMode}  ${complaints}  ${symptoms}  ${allergies}  ${vaccinationHistory}  ${observations}  ${diagnosis}  ${misc_notes}   ${notes}  ${mrConsultationDate}  ${state}   @{vargs}
 #     ${clinicalNotes}=  Create Dictionary  complaints=${complaints}  symptoms=${symptoms}  allergies=${allergies}  vaccinationHistory=${vaccinationHistory}  observations=${observations}  diagnosis=${diagnosis}  misc_notes=${misc_notes} 
-    
+
 #     ${len}=  Get Length  ${vargs}
 #     ${prescriptionsList}=  Create List  
 
@@ -6594,24 +6594,24 @@ Get Monthly Schedule Availability by Location and Service
 
 #     ${prescriptions}=  Create Dictionary  prescriptionsList=${prescriptionsList}  notes=${notes}  
 
-#    ${data}=  Create Dictionary    bookingType=${bookingType}  consultationMode=${consultationMode}  clinicalNotes=${clinicalNotes}  prescriptions=${prescriptions}   mrConsultationDate=${mrConsultationDate}  state=${state}
-#    ${data}=  json.dumps  ${data}
-#    Check And Create YNW Session
-#    ${resp}=  POST On Session  ynw  /provider/mr/${uuid}  data=${data}  expected_status=any
-#    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
+#     ${data}=  Create Dictionary    bookingType=${bookingType}  consultationMode=${consultationMode}  clinicalNotes=${clinicalNotes}  prescriptions=${prescriptions}   mrConsultationDate=${mrConsultationDate}  state=${state}
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session
+#     ${resp}=  POST On Session  ynw  /provider/mr/${uuid}  data=${data}  expected_status=any
+#     Check Deprication  ${resp}  Create MR With uuid
+#     RETURN  ${resp}
 
 Create MR With uuid
     [Arguments]  ${uuid}  ${bookingType}  ${consultationMode}   ${mrConsultationDate}  ${state}    &{kwargs}
 
-   ${data}=  Create Dictionary    bookingType=${bookingType}  consultationMode=${consultationMode}    mrConsultationDate=${mrConsultationDate}  state=${state}     
-   FOR  ${key}  ${value}  IN  &{kwargs}
-            Set To Dictionary  ${data}   ${key}=${value}
-   END
-   ${data}=  json.dumps  ${data}
-   Check And Create YNW Session
-   ${resp}=  POST On Session  ynw  /provider/mr/${uuid}  data=${data}  expected_status=any
-   Check Deprication  ${resp}  Get Business Profile
+    ${data}=  Create Dictionary    bookingType=${bookingType}  consultationMode=${consultationMode}    mrConsultationDate=${mrConsultationDate}  state=${state}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+                Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/mr/${uuid}  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Create MR With uuid
     RETURN  ${resp}
 
 clinical Notes Attachments
@@ -6633,20 +6633,20 @@ Get MR By Id
     [Arguments]  ${mrid}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/mr/${mrid}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get MR By Id
     RETURN  ${resp}
 
 Get MedicalRecords
     [Arguments]    &{kwargs}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/mr   params=${kwargs}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get MedicalRecords
     RETURN  ${resp}
 
 Get Appointment Messages
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/ynwConf/appointment/messages  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Appointment Messages
     RETURN  ${resp}
 
 Reschedule Consumer Appointment
@@ -6655,30 +6655,30 @@ Reschedule Consumer Appointment
     ${data}=  Create Dictionary  uid=${appt_id}   time=${time_slot}  date=${date}   schedule=${sch_id}  
     ${data}=    json.dumps    ${data}
     ${resp}=  PUT On Session   ynw   /provider/appointment/reschedule   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Reschedule Consumer Appointment
     RETURN  ${resp}
 
 # Create MR prescription by mr id
-#    [Arguments]  ${mrId}   @{vargs}
+#     [Arguments]  ${mrId}   @{vargs}
 
-#    ${len}=  Get Length  ${vargs}
-#    ${prescription}=  Create Dictionary  medicine_name=${vargs[0]}  frequency=${vargs[1]}  duration=${vargs[2]}  instructions=${vargs[3]}
-#    ${loan}=  Create List  ${prescription}
-   
+#     ${len}=  Get Length  ${vargs}
+#     ${prescription}=  Create Dictionary  medicine_name=${vargs[0]}  frequency=${vargs[1]}  duration=${vargs[2]}  instructions=${vargs[3]}
+#     ${loan}=  Create List  ${prescription}
+
 #     FOR    ${index}    IN RANGE  4  ${len}   4
 #         Exit For Loop If  ${len}==0
 #         ${index2}=  Evaluate  ${index}+1
 #         ${index3}=  Evaluate  ${index}+2
 #         ${index4}=  Evaluate  ${index}+3      
-#     	${prescription}=  Create Dictionary  medicine_name=${vargs[${index}]}  frequency=${vargs[${index2}]}  duration=${vargs[${index3}]}  instructions=${vargs[${index4}]}
+#         ${prescription}=  Create Dictionary  medicine_name=${vargs[${index}]}  frequency=${vargs[${index2}]}  duration=${vargs[${index3}]}  instructions=${vargs[${index4}]}
 #         Append To List  ${loan}  ${prescription}
 #     END
 
-#    ${loan}=  json.dumps  ${loan}
-#    Check And Create YNW Session
-#    ${resp}=  POST On Session  ynw  /provider/mr/prescription/${mrId}  data=${loan}  expected_status=any
-#    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
+#     ${loan}=  json.dumps  ${loan}
+#     Check And Create YNW Session
+#     ${resp}=  POST On Session  ynw  /provider/mr/prescription/${mrId}  data=${loan}  expected_status=any
+#     Check Deprication  ${resp}  Create MR prescription by mr id
+#     RETURN  ${resp}
 
    
 Create MR prescription by mr id
@@ -6697,7 +6697,7 @@ Create MR prescription by mr id
     ${prescriptions}=  json.dumps  ${prescriptions}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/mr/prescription/${mrId}  data=${prescriptions}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create MR prescription by mr id
     RETURN  ${resp}
 
 
@@ -6705,7 +6705,7 @@ Get MR prescription
     [Arguments]  ${mrId}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/mr/prescription/${mrId}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get MR prescription
     RETURN  ${resp}
 
 
@@ -6728,8 +6728,8 @@ Get MR prescription
 #     ${loan}=  json.dumps  ${loan}
 #     Check And Create YNW Session
 #     ${resp}=  PUT On Session  ynw  /provider/mr/prescription/${mrId}  data=${loan}  expected_status=any
-#     Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
+#     Check Deprication  ${resp}  Update MR prescription
+#     RETURN  ${resp}
 
 Update MR prescription
     [Arguments]  ${mrId}   ${notes}  @{vargs}
@@ -6747,14 +6747,14 @@ Update MR prescription
     ${prescriptions}=  json.dumps  ${prescriptions}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/mr/prescription/${mrId}  data=${prescriptions}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update MR prescription
     RETURN  ${resp}
 
 Get PC Case By ToothNo
     [Arguments]  ${consumerID}        ${toothNo}
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw    /provider/dental/providerconsumer/${consumerID}/toothno/${toothNo}/case   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get PC Case By ToothNo
     RETURN  ${resp}
 
 
@@ -6764,14 +6764,14 @@ Reschedule Consumer Checkin
     ${data}=  Create Dictionary  ynwUuid=${wl_id}  date=${date}   queue=${q_id}  
     ${data}=  json.dumps  ${data}
     ${resp}=  PUT On Session   ynw   /provider/waitlist/reschedule   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Reschedule Consumer Checkin
     RETURN  ${resp}
 
 
 Get bsconf Messages
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/ynwConf/messages  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get bsconf Messages
     RETURN  ${resp}
 
 Enable Disable Token Id
@@ -6780,7 +6780,7 @@ Enable Disable Token Id
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/settings/waitlistMgr   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Enable Disable Token Id
     RETURN  ${resp}
 
 # Create MR clinical notes by mr id
@@ -6789,8 +6789,8 @@ Enable Disable Token Id
 #     ${data}=  Create Dictionary  symptoms=${symptoms}  allergies=${allergies}   diagnosis=${diagnosis}   complaints=${complaints}   misc_notes=${misc_notes}  observations=${observations}   vaccinationHistory=${vaccinationHistory}  
 #     ${data}=    json.dumps    ${data}
 #     ${resp}=  POST On Session  ynw  /provider/mr/clinicalNotes/${mrId}  data=${data}  expected_status=any
-#     Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
+#     Check Deprication  ${resp}  Create MR clinical notes by mr id
+#     RETURN  ${resp}
 
 Create MR clinical notes by mr id
     [Arguments]  ${mrId}     ${type}  ${clinicalNote}   @{vargs}
@@ -6808,14 +6808,14 @@ Create MR clinical notes by mr id
     ${data}=  Create List    ${data}
     ${data}=    json.dumps    ${data}
     ${resp}=  POST On Session  ynw  /provider/mr/clinicalNotes/${mrId}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create MR clinical notes by mr id
     RETURN  ${resp}
 
 Get MR clinical notes
     [Arguments]  ${mrId}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/mr/clinicalNotes/${mrId}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get MR clinical notes
     RETURN  ${resp}
 
 # Update MR clinical notes
@@ -6824,8 +6824,8 @@ Get MR clinical notes
 #     ${data}=  Create Dictionary  symptoms=${symptoms}  allergies=${allergies}   diagnosis=${diagnosis}   complaints=${complaints}   misc_notes=${misc_notes}  observations=${observations}   vaccinationHistory=${vaccinationHistory}  
 #     ${data}=    json.dumps    ${data}
 #     ${resp}=  PUT On Session  ynw  /provider/mr/clinicalNotes/${mrId}  data=${data}  expected_status=any
-#     Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
+#     Check Deprication  ${resp}  Update MR clinical notes
+#     RETURN  ${resp}
 
 Update MR clinical notes
     [Arguments]  ${mrId}     ${type}  ${clinicalNote}   @{vargs}
@@ -6843,7 +6843,7 @@ Update MR clinical notes
     ${data}=  Create List    ${data}
     ${data}=    json.dumps    ${data}
     ${resp}=  PUT On Session  ynw  /provider/mr/clinicalNotes/${mrId}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update MR clinical notes
     RETURN  ${resp}
 
 Share Prescription
@@ -6853,7 +6853,7 @@ Share Prescription
     ${data}=  Create Dictionary  message=${msg}   html=${html}   medium=${medium}  expirableLink=${expirableLink}   expireTimeInMinuts=${expireTimeInMinuts}
     ${data}=    json.dumps    ${data}
     ${resp}=  POST On Session  ynw  /provider/mr/sharePrescription/${mrId}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Share Prescription
     RETURN  ${resp}
 
 uploadDigitalSign
@@ -6862,14 +6862,14 @@ uploadDigitalSign
     ${prop}=  json.dumps  ${prop}
     Create File  TDD/sign.json  ${prop}  
     ${resp}=  digitalSignUpload  ${id}  ${cookie}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  uploadDigitalSign
     RETURN  ${resp}       
 
 Get digital sign
     [Arguments]  ${providerId}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/user/digitalSign/${providerId}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get digital sign
     RETURN  ${resp}
 
 uploadPrescriptionImage
@@ -6880,7 +6880,7 @@ uploadPrescriptionImage
     ${prop}=  json.dumps  ${prop}
     Create File  TDD/prescription.json  ${prop}
     ${resp}=  prescriptionImgUpload  ${mrid}  ${cookie}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  uploadPrescriptionImage
     RETURN  ${resp}
 
 uploadClinicalnotesImage
@@ -6891,33 +6891,33 @@ uploadClinicalnotesImage
     ${prop}=  json.dumps  ${prop}
     Create File  TDD/clinicalnotes.json  ${prop}
     ${resp}=  clinicalnotesImgUpload  ${mrid}  ${cookie}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  uploadClinicalnotesImage
     RETURN  ${resp}
 
 # Create MR with patientId
-#    [Arguments]  ${patientId}  ${bookingType}  ${consultationMode}  ${complaints}  ${symptoms}  ${allergies}  ${vaccinationHistory}  ${observations}  ${diagnosis}  ${misc_notes}   ${mrConsultationDate}  ${state}   @{vargs}
-# #    ${providerConsumer}=  Create Dictionary  id=${id}
-#    ${clinicalNotes}=  Create Dictionary  complaints=${complaints}  symptoms=${symptoms}  allergies=${allergies}  vaccinationHistory=${vaccinationHistory}  observations=${observations}  diagnosis=${diagnosis}  misc_notes=${misc_notes}
-   
-#    ${len}=  Get Length  ${vargs}
-#    ${prescription}=  Create Dictionary  medicine_name=${vargs[0]}  frequency=${vargs[1]}  duration=${vargs[2]}  instructions=${vargs[3]}
-#    ${loan}=  Create List  ${prescription}
-   
-#     FOR    ${index}    IN RANGE  4  ${len}   4
-#         Exit For Loop If  ${len}==0
-#         ${index2}=  Evaluate  ${index}+1
-#         ${index3}=  Evaluate  ${index}+2
-#         ${index4}=  Evaluate  ${index}+3      
-#     	${prescription}=  Create Dictionary  medicine_name=${vargs[${index}]}  frequency=${vargs[${index2}]}  duration=${vargs[${index3}]}  instructions=${vargs[${index4}]}
-#         Append To List  ${loan}  ${prescription}
-#     END
-#     # Run Keyword If  ${len}>0  Set To Dictionary  ${loan}  loan=${loan}
-#    ${data}=  Create Dictionary    bookingType=${bookingType}  consultationMode=${consultationMode}  clinicalNotes=${clinicalNotes}  loan=${loan}   mrConsultationDate=${mrConsultationDate}  state=${state}
-#    ${data}=  json.dumps  ${data}
-#    Check And Create YNW Session
-#    ${resp}=  POST On Session  ynw  /provider/mr/patient/${patientId}  data=${data}  expected_status=any
-#    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
+#     [Arguments]  ${patientId}  ${bookingType}  ${consultationMode}  ${complaints}  ${symptoms}  ${allergies}  ${vaccinationHistory}  ${observations}  ${diagnosis}  ${misc_notes}   ${mrConsultationDate}  ${state}   @{vargs}
+#     #    ${providerConsumer}=  Create Dictionary  id=${id}
+#     ${clinicalNotes}=  Create Dictionary  complaints=${complaints}  symptoms=${symptoms}  allergies=${allergies}  vaccinationHistory=${vaccinationHistory}  observations=${observations}  diagnosis=${diagnosis}  misc_notes=${misc_notes}
+    
+#     ${len}=  Get Length  ${vargs}
+#     ${prescription}=  Create Dictionary  medicine_name=${vargs[0]}  frequency=${vargs[1]}  duration=${vargs[2]}  instructions=${vargs[3]}
+#     ${loan}=  Create List  ${prescription}
+    
+#         FOR    ${index}    IN RANGE  4  ${len}   4
+#             Exit For Loop If  ${len}==0
+#             ${index2}=  Evaluate  ${index}+1
+#             ${index3}=  Evaluate  ${index}+2
+#             ${index4}=  Evaluate  ${index}+3      
+#             ${prescription}=  Create Dictionary  medicine_name=${vargs[${index}]}  frequency=${vargs[${index2}]}  duration=${vargs[${index3}]}  instructions=${vargs[${index4}]}
+#             Append To List  ${loan}  ${prescription}
+#         END
+#         # Run Keyword If  ${len}>0  Set To Dictionary  ${loan}  loan=${loan}
+#     ${data}=  Create Dictionary    bookingType=${bookingType}  consultationMode=${consultationMode}  clinicalNotes=${clinicalNotes}  loan=${loan}   mrConsultationDate=${mrConsultationDate}  state=${state}
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session
+#     ${resp}=  POST On Session  ynw  /provider/mr/patient/${patientId}  data=${data}  expected_status=any
+#     Check Deprication  ${resp}  Create MR with patientId
+#     RETURN  ${resp}
 
 
 Create MR with patientId
@@ -7449,28 +7449,28 @@ Confirm Blocked Appointment
 
 
 # Update MR by mr id
-#    [Arguments]  ${mrid}  ${bookingType}  ${consultationMode}  ${complaints}  ${symptoms}  ${allergies}  ${vaccinationHistory}  ${observations}  ${diagnosis}  ${misc_notes}   ${mrConsultationDate}  ${state}   @{vargs}
-# #    ${providerConsumer}=  Create Dictionary  id=${id}
-#    ${clinicalNotes}=  Create Dictionary  complaints=${complaints}  symptoms=${symptoms}  allergies=${allergies}  vaccinationHistory=${vaccinationHistory}  observations=${observations}  diagnosis=${diagnosis}  misc_notes=${misc_notes}
-   
-#    ${len}=  Get Length  ${vargs}
-#    ${prescription}=  Create Dictionary  medicine_name=${vargs[0]}  frequency=${vargs[1]}  duration=${vargs[2]}  instructions=${vargs[3]}
-#    ${loan}=  Create List  ${prescription}
-   
-#     FOR    ${index}    IN RANGE  4  ${len}   4
-#         Exit For Loop If  ${len}==0
-#         ${index2}=  Evaluate  ${index}+1
-#         ${index3}=  Evaluate  ${index}+2
-#         ${index4}=  Evaluate  ${index}+3      
-#     	${prescription}=  Create Dictionary  medicine_name=${vargs[${index}]}  frequency=${vargs[${index2}]}  duration=${vargs[${index3}]}  instructions=${vargs[${index4}]}
-#         Append To List  ${loan}  ${prescription}
-#     END
-#    ${data}=  Create Dictionary    bookingType=${bookingType}  consultationMode=${consultationMode}  clinicalNotes=${clinicalNotes}  loan=${loan}   mrConsultationDate=${mrConsultationDate}  state=${state}
-#    ${data}=  json.dumps  ${data}
-#    Check And Create YNW Session
-#    ${resp}=  PUT On Session  ynw  /provider/mr/${mrid}  data=${data}  expected_status=any
-#    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
+#     [Arguments]  ${mrid}  ${bookingType}  ${consultationMode}  ${complaints}  ${symptoms}  ${allergies}  ${vaccinationHistory}  ${observations}  ${diagnosis}  ${misc_notes}   ${mrConsultationDate}  ${state}   @{vargs}
+#     # ${providerConsumer}=  Create Dictionary  id=${id}
+#     ${clinicalNotes}=  Create Dictionary  complaints=${complaints}  symptoms=${symptoms}  allergies=${allergies}  vaccinationHistory=${vaccinationHistory}  observations=${observations}  diagnosis=${diagnosis}  misc_notes=${misc_notes}
+    
+#     ${len}=  Get Length  ${vargs}
+#     ${prescription}=  Create Dictionary  medicine_name=${vargs[0]}  frequency=${vargs[1]}  duration=${vargs[2]}  instructions=${vargs[3]}
+#     ${loan}=  Create List  ${prescription}
+    
+#         FOR    ${index}    IN RANGE  4  ${len}   4
+#             Exit For Loop If  ${len}==0
+#             ${index2}=  Evaluate  ${index}+1
+#             ${index3}=  Evaluate  ${index}+2
+#             ${index4}=  Evaluate  ${index}+3      
+#             ${prescription}=  Create Dictionary  medicine_name=${vargs[${index}]}  frequency=${vargs[${index2}]}  duration=${vargs[${index3}]}  instructions=${vargs[${index4}]}
+#             Append To List  ${loan}  ${prescription}
+#         END
+#     ${data}=  Create Dictionary    bookingType=${bookingType}  consultationMode=${consultationMode}  clinicalNotes=${clinicalNotes}  loan=${loan}   mrConsultationDate=${mrConsultationDate}  state=${state}
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session
+#     ${resp}=  PUT On Session  ynw  /provider/mr/${mrid}  data=${data}  expected_status=any
+#     Check Deprication  ${resp}  Update MR by mr id
+#     RETURN  ${resp}
 
 
 # Update MR by mr id
@@ -7487,12 +7487,12 @@ Confirm Blocked Appointment
 
 #     ${prescriptions}=  Create Dictionary  prescriptionsList=${prescriptionsList}  notes=${notes}  
 
-#    ${data}=  Create Dictionary    bookingType=${bookingType}  consultationMode=${consultationMode}  clinicalNotes=${clinicalNotes}  prescriptions=${prescriptions}   mrConsultationDate=${mrConsultationDate}  state=${state}
-#    ${data}=  json.dumps  ${data}
-#    Check And Create YNW Session
-#    ${resp}=  PUT On Session  ynw  /provider/mr/${mrid}  data=${data}  expected_status=any
-#    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
+#     ${data}=  Create Dictionary    bookingType=${bookingType}  consultationMode=${consultationMode}  clinicalNotes=${clinicalNotes}  prescriptions=${prescriptions}   mrConsultationDate=${mrConsultationDate}  state=${state}
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session
+#     ${resp}=  PUT On Session  ynw  /provider/mr/${mrid}  data=${data}  expected_status=any
+#     Check Deprication  ${resp}  Update MR by mr id
+#     RETURN  ${resp}
 
 Update MR by mr id
     [Arguments]  ${mrid}  ${bookingType}  ${consultationMode}    ${mrConsultationDate}  ${state}    &{kwargs}
@@ -7515,8 +7515,8 @@ Update MR by mr id
 #     ${data}=    json.dumps    ${data}
 #     Check And Create YNW Session
 #     ${resp}=  POST On Session  ynw  /provider/customers/label  data=${data}  expected_status=any
-#     Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
+#     Check Deprication  ${resp}  Add Label for Customer
+#     RETURN  ${resp}
 
 Add Labels for Customers
     [Arguments]  ${label_dict}  @{pc_id}
@@ -8816,13 +8816,13 @@ Get Service Options By Serviceid and Channel
     [Arguments]     ${serviceid}   ${channel}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  url=/provider/questionnaire/serviceoption/${serviceId}/${channel}  expected_status=any
-    RETURN    ${resp}
+    RETURN  ${resp}
 
 Get Service Options for Donation By Serviceid
     [Arguments]     ${serviceid}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  url=/provider/questionnaire/serviceoptions/donation/${serviceId}  expected_status=any
-    RETURN    ${resp}
+    RETURN  ${resp}
 
 Provider Upload Status for Appnt
     [Arguments]  ${apptId}
@@ -8835,7 +8835,7 @@ Get Service Options For Order By Catalogueid and Channel
     [Arguments]     ${catalogueid}   ${channel}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  url=/provider/questionnaire/serviceoption/order/${catalogueId}/${channel}  expected_status=any
-    RETURN    ${resp}
+    RETURN  ${resp}
 
 
 Get Report Status By Token Id
@@ -9042,7 +9042,7 @@ Change User Task Status
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=    PUT On Session  YNW  provider/task/${task_uid}/status/closed   data=${data}   expected_status=any
-    RETURN    ${resp}
+    RETURN  ${resp}
 
 Change User Task Closing Details
     [Arguments]     ${task_uid}     ${actualResult}     ${actualPotential}      ${closingNote}
@@ -9050,19 +9050,19 @@ Change User Task Closing Details
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=    PUT On Session  YNW  provider/task/${task_uid}/closingdetails  data=${data}   expected_status=any
-    RETURN    ${resp}
+    RETURN  ${resp}
 
 Change User Task Status Closed
     [Arguments]     ${task_uid}
     Check And Create YNW Session
     ${resp}=    PUT On Session  YNW  provider/task/${task_uid}/status/closed   expected_status=any
-    RETURN    ${resp}
+    RETURN  ${resp}
 
 Get Task Audit Logs
     [Arguments]     ${task_uid}   &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    provider/task/activity/${task_uid}    params=${kwargs}  expected_status=any
-    RETURN    ${resp}
+    RETURN  ${resp}
 
 
 Enable Disable Task
@@ -9461,7 +9461,7 @@ Get Provider service options for an item
     [Arguments]  ${item}     ${channel}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   url=/provider/questionnaire/serviceoption/order/item/${item}/${channel}   expected_status=any
-    RETURN    ${resp}
+    RETURN  ${resp}
 
 Change Provider Status Of Service Option Item
     [Arguments]  ${uuid}  @{filedata}
@@ -9469,7 +9469,7 @@ Change Provider Status Of Service Option Item
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=   PUT On Session  ynw  url=/provider/orders/item/serviceoption/upload/status/${uuid}   data=${data}   expected_status=any
-    RETURN    ${resp} 
+    RETURN  ${resp} 
 
 Change Provider Status Of Service Option Waitlist
     [Arguments]  ${uuid}  @{filedata}
@@ -9477,7 +9477,7 @@ Change Provider Status Of Service Option Waitlist
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=   PUT On Session  ynw  url=/provider/waitlist/serviceoption/upload/status/${uuid}   data=${data}   expected_status=any
-    RETURN    ${resp} 
+    RETURN  ${resp} 
 
 Change Provider Status Of Service Option Appointment
     [Arguments]  ${uuid}  @{filedata}
@@ -9485,7 +9485,7 @@ Change Provider Status Of Service Option Appointment
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=   PUT On Session  ynw  url=/provider/appointment/serviceoption/upload/status/${uuid}   data=${data}   expected_status=any
-    RETURN    ${resp} 
+    RETURN  ${resp} 
 
 Change Provider Status Of Service Option Order
     [Arguments]  ${uuid}  @{filedata}
@@ -9493,7 +9493,7 @@ Change Provider Status Of Service Option Order
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=   PUT On Session  ynw  url=/provider/orders/serviceoption/upload/status/${uuid}   data=${data}   expected_status=any
-    RETURN    ${resp} 
+    RETURN  ${resp} 
 
 
 # ..............ENQUIRY..............................
@@ -9501,32 +9501,32 @@ Change Provider Status Of Service Option Order
 Get Provider Enquiry Category
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   url=/provider/enquire/category   expected_status=any
-    RETURN    ${resp}
+    RETURN  ${resp}
 
 
 Get Provider Enquiry Type
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   url=/provider/enquire/type   expected_status=any
-    RETURN    ${resp}
+    RETURN  ${resp}
 
 
 Get Provider Enquiry Status
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   url=/provider/enquire/status   expected_status=any
-    RETURN    ${resp}
+    RETURN  ${resp}
 
 
 Get Provider Enquiry Priority
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   url=/provider/enquire/priority   expected_status=any
-    RETURN    ${resp}
+    RETURN  ${resp}
 
 
 Get Enquiry Template
     [Arguments]  &{filters}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   url=/provider/enquire/master   params=${filters}  expected_status=any
-    RETURN    ${resp}
+    RETURN  ${resp}
 
 
 Enquiry
@@ -9563,21 +9563,21 @@ Get Enquiry with filter
     [Arguments]  &{filters}
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  url=/provider/enquire  params=${filters}  expected_status=any
-    RETURN    ${resp}
+    RETURN  ${resp}
 
 
 Get Enquiry count with filter
     [Arguments]  &{filters}
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  url=/provider/enquire/count  params=${filters}  expected_status=any
-    RETURN    ${resp}
+    RETURN  ${resp}
 
 
 Get Enquiry by Uuid
     [Arguments]  ${enquireUid}
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  url=/provider/enquire/${enquireUid}  expected_status=any
-    RETURN    ${resp}
+    RETURN  ${resp}
 
 
 Update Enquiry
@@ -9601,14 +9601,14 @@ Change Enquiry Status
     [Arguments]  ${enquireUid}  ${statusId}
     Check And Create YNW Session
     ${resp}=    PUT On Session  ynw  url=/provider/enquire/${enquireUid}/status/${statusId}  expected_status=any
-    RETURN    ${resp}
+    RETURN  ${resp}
 
 
 Get Service Options By Catalogueid and Channel
     [Arguments]     ${catalogueid}   ${channel}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  url=/provider/questionnaire/serviceoption/order/catalog/item/${catalogueId}/${channel}  expected_status=any
-    RETURN    ${resp}
+    RETURN  ${resp}
 
 
 Get Lead Templates
@@ -9940,8 +9940,8 @@ Create Order By Provider For AuthorDemy
 #     [Arguments]    ${uid}  ${user_id}  ${json_names}
 #     Check And Create YNW Session
 #     ${resp}=  GET On Session  ynw  /provider/account/settings/config/${uid}/${user_id}/${json_names}   expected_status=any
-#     Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
+#     Check Deprication  ${resp}  Get Account Settings from Cache
+#     RETURN  ${resp}
 
 
 Get Account Settings from Cache
@@ -11136,11 +11136,11 @@ Replace Team Scope
     RETURN  ${resp}
 
 # Enable Disable RBAC
-#    [Arguments]  ${status}  
-#    Check And Create YNW Session
-#    ${resp}=  PUT On Session  ynw  provider/account/settings/rbac/${status}  expected_status=any
-#    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
+#     [Arguments]  ${status}  
+#     Check And Create YNW Session
+#     ${resp}=  PUT On Session  ynw  provider/account/settings/rbac/${status}  expected_status=any
+#     Check Deprication  ${resp}  Get Business Profile
+#     RETURN  ${resp}
 
 Create Role
     [Arguments]     ${roleName}    ${description}    ${featureName}    ${capabilityList}    &{kwargs}
@@ -11152,13 +11152,13 @@ Create Role
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  provider/accessscope/role    data=${data}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create Role
     RETURN  ${resp}
 
 Get roles
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/accessscope/roles  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get roles
     RETURN  ${resp}
 
 Get roles by id
@@ -11166,7 +11166,7 @@ Get roles by id
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/accessscope/role/${id}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get roles by id
     RETURN  ${resp}
 
 Update Role
@@ -11179,7 +11179,7 @@ Update Role
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/accessscope/role/${id}    data=${data}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Role
     RETURN  ${resp}
 
 Update role status
@@ -11187,13 +11187,13 @@ Update role status
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/accessscope/role/${id}/${status}    expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update role status
     RETURN  ${resp}
 
 Restore roles
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/accessscope/roles/restoreDefaults    expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Restore roles
     RETURN  ${resp}
 
 Restore role by id
@@ -11201,21 +11201,21 @@ Restore role by id
     
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/accessscope/roles/restoreDefaults/${roleId}    expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Restore role by id
     RETURN  ${resp}
 
 Enable Disable CDL RBAC
     [Arguments]  ${status}  
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  provider/account/settings/cdlrbac/${status}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Enable Disable CDL RBAC
     RETURN  ${resp}
 
 Enable Disable Main RBAC
     [Arguments]  ${status}  
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  provider/account/settings/accountrbac/${status}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Enable Disable Main RBAC
     RETURN  ${resp}
 
 #    CDL Setings
@@ -11234,14 +11234,14 @@ Create and Update Account level cdl setting
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw     /provider/cdlsetting/account   data=${data}   expected_status=any 
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create and Update Account level cdl setting
     RETURN  ${resp}
 
 Get account level cdl setting
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/cdlsetting/account   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get account level cdl setting
     RETURN  ${resp}
 
 Get List of CDL Settings by filter
@@ -11249,7 +11249,7 @@ Get List of CDL Settings by filter
     [Arguments]    &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/cdlsetting  params=${param}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get List of CDL Settings by filter
     RETURN  ${resp}
 
 Get Count of CDL Settings by filter
@@ -11257,7 +11257,7 @@ Get Count of CDL Settings by filter
     [Arguments]    &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/cdlsetting/count  params=${param}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Count of CDL Settings by filter
     RETURN  ${resp}
 
 Create BranchMaster
@@ -11270,7 +11270,7 @@ Create BranchMaster
 
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw     /provider/branchmaster   data=${data}   expected_status=any 
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create BranchMaster
     RETURN  ${resp}
 
 Update BranchMaster
@@ -11283,7 +11283,7 @@ Update BranchMaster
 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw     /provider/branchmaster/${branchId}   data=${data}   expected_status=any 
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update BranchMaster
     RETURN  ${resp}
 
 Get BranchMaster
@@ -11291,7 +11291,7 @@ Get BranchMaster
     [Arguments]    &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/branchmaster  params=${param}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get BranchMaster
     RETURN  ${resp}
 
 Get BranchMaster Count
@@ -11299,7 +11299,7 @@ Get BranchMaster Count
     [Arguments]    &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/branchmaster/count  params=${param}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get BranchMaster Count
     RETURN  ${resp}
 
 Get Branch By Id
@@ -11307,7 +11307,7 @@ Get Branch By Id
     [Arguments]    ${branchId}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/branchmaster/${branchId}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Branch By Id
     RETURN  ${resp}
 
 Change Branch Status
@@ -11315,7 +11315,7 @@ Change Branch Status
     [Arguments]    ${branchid}    ${activeStatus}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/branchmaster/${branchId}/status/${activeStatus}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Change Branch Status
     RETURN  ${resp}
 
 Enable Disable Branch
@@ -11323,7 +11323,7 @@ Enable Disable Branch
     [Arguments]    ${status}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/account/settings/branchMaster/${status}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Enable Disable Branch
     RETURN  ${resp}
         
 Enable Disable CDL
@@ -11331,14 +11331,14 @@ Enable Disable CDL
     [Arguments]    ${status}   
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/cdl/${status}    expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Enable Disable CDL
     RETURN  ${resp}
 
 Get Draft LoanApplication
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanapplication/draft  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Draft LoanApplication
     RETURN  ${resp}
 
 sales officer verification
@@ -11346,7 +11346,7 @@ sales officer verification
     [Arguments]    ${partnerUid}   ${required}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/partner/${partnerUid}/salesofficerverification/${required}    expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  sales officer verification
     RETURN  ${resp}
 
 
@@ -11356,14 +11356,14 @@ Partner Loan Application Action Required
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationUid}/actionrequired/spinternalstatus/${spinternalstatus}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Partner Loan Application Action Required
     RETURN  ${resp}
 
 Get Loan Application ProductCategory
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanproduct/category  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Loan Application ProductCategory
     RETURN  ${resp}
 
 Get Loan Application ProductSubCategory
@@ -11372,7 +11372,7 @@ Get Loan Application ProductSubCategory
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanproduct/category/${loanProductCategoryId}/subcategory  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Loan Application ProductSubCategory
     RETURN  ${resp}
 
 
@@ -11384,7 +11384,7 @@ Loan Application Operational Approval
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationUid}/operationalapproval  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Loan Application Operational Approval
     RETURN  ${resp}
 
 Generate Otp for Guarantor Phone
@@ -11395,7 +11395,7 @@ Generate Otp for Guarantor Phone
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /provider/loanapplication/generate/guarantor/phone  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Generate Otp for Guarantor Phone
     RETURN  ${resp}
 
 Verify Otp for Guarantor Phone
@@ -11410,7 +11410,7 @@ Verify Otp for Guarantor Phone
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /provider/loanapplication/verify/${otp}/guarantor/phone  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Verify Otp for Guarantor Phone
     RETURN  ${resp}
 
 salesofficer Approval
@@ -11426,7 +11426,7 @@ salesofficer Approval
 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw     /provider/loanapplication/${uid}/approval   data=${data}   expected_status=any 
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  salesofficer Approval
     RETURN  ${resp}
 
 Partner Accepted
@@ -11441,7 +11441,7 @@ Partner Accepted
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/partner/acceptance  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Partner Accepted
     RETURN  ${resp}
 
 
@@ -11451,7 +11451,7 @@ Get Avaliable Tenures
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loan/scheme/${lid}/availabletenures  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Avaliable Tenures
     RETURN  ${resp}
 
 Get Avaliable Scheme
@@ -11460,7 +11460,7 @@ Get Avaliable Scheme
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanapplication/${uid}/availableschemes  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Avaliable Scheme
     RETURN  ${resp}
 
 Assigning Branches to Users
@@ -11472,7 +11472,7 @@ Assigning Branches to Users
 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw     /provider/user/updateBranchMaster   data=${data}   expected_status=any 
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Assigning Branches to Users
     RETURN  ${resp}
 
 Get Loan EMI Details
@@ -11481,14 +11481,14 @@ Get Loan EMI Details
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanapplication/${loanApplicationUid}/loanemi  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Loan EMI Details
     RETURN  ${resp}
 
 Get Address Relation Type
     
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanapplication/addressrelationtype  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Address Relation Type
     RETURN  ${resp}
 
 Account Aggregation
@@ -11497,7 +11497,7 @@ Account Aggregation
 
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /provider/loanapplication/accountaggregate/${loanApplicationUid}/${kycId}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Account Aggregation
     RETURN  ${resp}
 
 Get Account Aggregation
@@ -11506,14 +11506,14 @@ Get Account Aggregation
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanapplication/accountaggregatestatus/${loanApplicationUid}/${kycId}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Account Aggregation
     RETURN  ${resp}
 
 Generate CDL Dropdowns
     
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanapplication/csms/settings  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Generate CDL Dropdowns
     RETURN  ${resp}
 
 Cancel Loan Application
@@ -11522,7 +11522,7 @@ Cancel Loan Application
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationUid}/cancel    expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Cancel Loan Application
     RETURN  ${resp}
 
 
@@ -11534,7 +11534,7 @@ Generate Credit Score-MAFIL Score
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/csms/generatescore    data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Generate Credit Score-MAFIL Score
     RETURN  ${resp}
 
 Add General Notes/Remarks
@@ -11546,7 +11546,7 @@ Add General Notes/Remarks
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationUid}/note    data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Add General Notes/Remarks
     RETURN  ${resp}
 
 
@@ -11562,7 +11562,7 @@ Send Message
 
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw     /${user}/communicate/communicationDetail   data=${data}   expected_status=any 
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Send Message
     RETURN  ${resp}
 
 
@@ -11572,7 +11572,7 @@ Get Communication Between Two UserTypes
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   ${user}/communicate/${userId1}/communicationDetail/${userId2}/${userType}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Communication Between Two UserTypes
     RETURN  ${resp}
 
 
@@ -11582,7 +11582,7 @@ Get Full Communication Of User
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   ${user}/communicate/${userId}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Full Communication Of User
     RETURN  ${resp}
 
 Change Read Status
@@ -11595,7 +11595,7 @@ Change Read Status
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw     /${user}/communicate/communicationDetailToRead   data=${data}   params=${pro_params}  expected_status=any 
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Change Read Status
     RETURN  ${resp}
 
 
@@ -11606,7 +11606,7 @@ Enable Disable Item Group
    [Arguments]   ${status}
    Check And Create YNW Session
    ${resp}=    PUT On Session    ynw  /provider/account/settings/itemGroup/${status}  expected_status=any 
-   Check Deprication  ${resp}  Get Business Profile
+   Check Deprication  ${resp}  Enable Disable Item Group
     RETURN  ${resp}  
 
 Create Item Group
@@ -11616,7 +11616,7 @@ Create Item Group
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /provider/items/itemGroup   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create Item Group
     RETURN  ${resp}
 
 Update Item Group
@@ -11626,14 +11626,14 @@ Update Item Group
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/items/itemGroup/${ItemGroupId}   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Item Group
     RETURN  ${resp}
 
 Get Item Group
     
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/items/itemGroup   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Item Group
     RETURN  ${resp}
 
 Get Item Group By Id
@@ -11641,7 +11641,7 @@ Get Item Group By Id
     [Arguments]    ${ItemGroupId}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/items/itemGroup/${ItemGroupId}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Item Group By Id
     RETURN  ${resp}
 
 
@@ -11650,7 +11650,7 @@ Delete Item Group By Id
     [Arguments]    ${ItemGroupId}
     Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw   /provider/items/itemGroup/${ItemGroupId}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Delete Item Group By Id
     RETURN  ${resp}
 
 
@@ -11659,7 +11659,7 @@ Delete Item Group Image
     [Arguments]    ${ItemGroupId}  ${imgname}
     Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw   /provider/items/itemGroup/${ItemGroupId}/image/${imgname}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Delete Item Group Image
     RETURN  ${resp}
 
 
@@ -11669,7 +11669,7 @@ Add Items To Item Group
     ${Items}=  json.dumps  ${Items}
     Check And Create YNW Session 
     ${resp}=  PUT On Session  ynw  /provider/items/group/${ItemGroupId}  data=${Items}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Add Items To Item Group
     RETURN  ${resp}
 
 
@@ -11679,7 +11679,7 @@ Delete Items From Item Group
     ${Items}=  json.dumps  ${Items}
 	Check And Create YNW Session
     ${resp}=   DELETE On Session  ynw  /provider/items/group/${ItemGroupId}  data=${Items}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Delete Items From Item Group
     RETURN  ${resp}
 
 
@@ -11689,7 +11689,7 @@ Add Items To Multiple Item Group
     ${ItemGroups}=  json.dumps  ${ItemGroupIds}
     Check And Create YNW Session 
     ${resp}=  PUT On Session  ynw  /provider/items/group/item/${itemId}  data=${ItemGroups}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Add Items To Multiple Item Group
     RETURN  ${resp}
 
 
@@ -11699,7 +11699,7 @@ Delete Items From Multiple Item Group
     ${ItemGroups}=  json.dumps  ${ItemGroupIds}
 	Check And Create YNW Session
     ${resp}=   DELETE On Session  ynw  /provider/items/group/item/${itemId}  data=${ItemGroups}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Delete Items From Multiple Item Group
     RETURN  ${resp}
 
 
@@ -11713,7 +11713,7 @@ Loan Application Branchapproval
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationUid}/branchapproval    data=${data}    expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Loan Application Branchapproval
     RETURN  ${resp}
 
 Add Department Icon
@@ -11727,7 +11727,7 @@ Add Department Icon
     ${data}=    json.dumps    ${AttachmentsUpload}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /provider/departments/upload/icon/${deptid}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Add Department Icon
     RETURN  ${resp}
 
 
@@ -11742,7 +11742,7 @@ Remove Department Icon
     ${data}=    json.dumps    ${AttachmentsUpload}
     Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw   /provider/departments/remove/icon/${deptid}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Remove Department Icon
     RETURN  ${resp}
 
 
@@ -11753,7 +11753,7 @@ Get Department Icon
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   url=/provider/departments/${deptid}    expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Department Icon
     RETURN  ${resp}
 
 
@@ -11763,7 +11763,7 @@ Upload Cover Picture
     ${prop}=  json.dumps  ${prop}
     Create File  TDD/cover.json  ${prop}  
     ${resp}=  uploadCoverPhoto   ${cookie}  img=${file}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Upload Cover Picture
     RETURN  ${resp}
 
 
@@ -11771,7 +11771,7 @@ Get Cover Picture
     # [Arguments]    ${cookie}  ${caption}   ${file}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   url=/provider/cover    expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Cover Picture
     RETURN  ${resp}
 
 
@@ -11783,7 +11783,7 @@ Multi Factor Authentication
 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw     /provider/account/settings/mfa/${toggle}       expected_status=any 
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Multi Factor Authentication
     RETURN  ${resp}
 
 
@@ -11799,7 +11799,7 @@ Multi Factor Authentication ProviderLogin
     ${data}=  json.dumps  ${data}
     
     ${resp}=    POST On Session    ynw    /provider/login    data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Multi Factor Authentication ProviderLogin
     RETURN  ${resp}
 
 # ....Jaldee Video call...
@@ -11809,7 +11809,7 @@ Get Video Call Minutes
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/account/settings/videoCallMinutes  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Video Call Minutes
     RETURN  ${resp}
 
 
@@ -11819,7 +11819,7 @@ Create video Call Meeting Link
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/video/adhoc/start/consumer/${prov_cons_id}     expected_status=any
     Log  ${resp.content}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create video Call Meeting Link
     RETURN  ${resp}
 
 
@@ -11829,7 +11829,7 @@ Get video Link Status
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/video/adhoc/${meeting_id}/link/status     expected_status=any
     Log  ${resp.content}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get video Link Status
     RETURN  ${resp}
 
 
@@ -11839,7 +11839,7 @@ Get video Status
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/video/adhoc/${meeting_id}/status     expected_status=any
     Log  ${resp.content}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get video Status
     RETURN  ${resp}
 
 Update Virtual Calling Modes
@@ -11851,7 +11851,7 @@ Update Virtual Calling Modes
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/virtualCallingModes   data=${data}  expected_status=any
     Log  ${resp.content}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Virtual Calling Modes
     RETURN  ${resp}
 
 Provider Video Call ready
@@ -11863,7 +11863,7 @@ Provider Video Call ready
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/waitlist/videocall/ready   data=${data}  expected_status=any
     Log  ${resp.content}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Provider Video Call ready
     RETURN  ${resp}
 
 
@@ -11883,18 +11883,18 @@ Apply Labels To Service
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/services/applyLabel/${service_id}    data=${data}  expected_status=any
     Log  ${resp.content}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Apply Labels To Service
     RETURN  ${resp}
 
 # .....Employee login....
 
 EmployeeLogin
-    [Arguments]    ${accountId}  ${loginIdType}       ${loginId}  ${password}  
+    [Arguments]    ${accountId}  ${loginIdType}  ${loginId}  ${password}  
     ${log}=  Create Dictionary  accountId=${accountId}   loginIdType=${loginIdType}    loginId=${loginId}    password=${password}
     ${log}=    json.dumps    ${log}   
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /provider/login    data=${log}  expected_status=any    headers=${headers}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  EmployeeLogin
     RETURN  ${resp}
 
 
@@ -11915,7 +11915,7 @@ Create_IVR_Settings
     ${data}=    json.dumps    ${data} 
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    url=/provider/ivr/settings    data=${data}  expected_status=any    headers=${headers}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create_IVR_Settings
     RETURN  ${resp}
 
 enable and disable IVR
@@ -11923,7 +11923,8 @@ enable and disable IVR
     [Arguments]    ${status}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw     /provider/account/settings/ivr/${status}    expected_status=any    headers=${headers}
-    RETURN    ${resp}
+    Check Deprication  ${resp}  enable and disable IVR
+    RETURN  ${resp}
 
 Incall IVR
 
@@ -11932,7 +11933,7 @@ Incall IVR
     ${data}=    json.dumps    ${data} 
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    url=/provider/ivr/incall?account=${account}    data=${data}  expected_status=any    headers=${headers}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Incall IVR
     RETURN  ${resp}
 
 innode IVR 
@@ -11942,7 +11943,7 @@ innode IVR
     ${data}=    json.dumps    ${data} 
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    url=/provider/ivr/innode?account=${account}    data=${data}  expected_status=any    headers=${headers}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  innode IVR
     RETURN  ${resp}
 
 Aftercall IVR
@@ -11952,14 +11953,14 @@ Aftercall IVR
     ${data}=    json.dumps    ${data} 
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    url=/provider/ivr?account=${account}    data=${data}  expected_status=any    headers=${headers}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Aftercall IVR
     RETURN  ${resp}
 
 Get Ivr Details By Filter
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/ivr  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Ivr Details By Filter
     RETURN  ${resp}
 
 create a call back
@@ -11967,7 +11968,7 @@ create a call back
     [Arguments]    ${uid}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/ivr/callback/${uid}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  create a call back
     RETURN  ${resp}
 
 Get Ivr By Uid
@@ -11975,14 +11976,14 @@ Get Ivr By Uid
     [Arguments]    ${uid}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/ivr/${uid}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Ivr By Uid
     RETURN  ${resp}
 
 Get IVR Count
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/ivr/count  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get IVR Count
     RETURN  ${resp}
 
 Assign IVR User
@@ -11992,7 +11993,7 @@ Assign IVR User
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/ivr/assign    data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Assign IVR User
     RETURN  ${resp}
 
 Get Ivr By reference id
@@ -12000,7 +12001,8 @@ Get Ivr By reference id
     [Arguments]    ${Refr_id}
     Check And Create YNW Session
     ${resp}=    Get On Session    ynw   /provider/ivr/reference/${Refr_id}     expected_status=any
-    RETURN    ${resp}
+    Check Deprication  ${resp}  Get Ivr By reference id
+    RETURN  ${resp}
 
 Unassign IVR User
 
@@ -12009,7 +12011,7 @@ Unassign IVR User
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/ivr/unassign    data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Unassign IVR User
     RETURN  ${resp}
 
 Update User Availability
@@ -12017,14 +12019,14 @@ Update User Availability
     [Arguments]    ${userId}    ${available}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/ivr/users/${userId}/${available}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update User Availability
     RETURN  ${resp}
 
 Get IVR Setting
     
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/ivr/settings  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get IVR Setting
     RETURN  ${resp}
 
 Update IVR Settings
@@ -12035,7 +12037,7 @@ Update IVR Settings
     ${data}=    json.dumps    ${data} 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    url=/provider/ivr/settings?account=${account}    data=${data}  expected_status=any    headers=${headers}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update IVR Settings
     RETURN  ${resp}
 
 IVR Request Call Back Token
@@ -12043,7 +12045,7 @@ IVR Request Call Back Token
     [Arguments]    ${uid}
     Check And Create YNW Session
     ${resp}=    PUT On Session  ynw  /provider/ivr/request/callback/${uid}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  IVR Request Call Back Token
     RETURN  ${resp}
 
 IVR Remove Call Back Request
@@ -12051,7 +12053,7 @@ IVR Remove Call Back Request
     [Arguments]    ${uid}
     Check And Create YNW Session
     ${resp}=    PUT On Session  ynw  /provider/ivr/remove/callback/${uid}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  IVR Remove Call Back Request
     RETURN  ${resp}
 
 Update IVR Call Status
@@ -12059,7 +12061,7 @@ Update IVR Call Status
     [Arguments]    ${uid}    ${status}
     Check And Create YNW Session
     ${resp}=    PUT On Session  ynw  /provider/ivr/status/${uid}/${status}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update IVR Call Status
     RETURN  ${resp}
 
 Get IVR Graph Details
@@ -12069,21 +12071,21 @@ Get IVR Graph Details
     ${data}=    json.dumps    ${data} 
     Check And Create YNW Session
     ${resp}=    PUT On Session  ynw  /provider/ivr/graph  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get IVR Graph Details
     RETURN  ${resp}
 
 Delete All IVR Records
 
     Check And Create YNW Session
     ${resp}=    DELETE On Session  ynw  /provider/ivr/users  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Delete All IVR Records
     RETURN  ${resp}
 
 Get IVR Users
 
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  /provider/ivr/users  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get IVR Users
     RETURN  ${resp}
 
 Get IVR Before The Questionnaire
@@ -12091,7 +12093,7 @@ Get IVR Before The Questionnaire
     [Arguments]    ${channel}
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  /provider/questionnaire/ivr/call/${channel}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get IVR Before The Questionnaire
     RETURN  ${resp}
 
 Add Notes To IVR
@@ -12103,7 +12105,7 @@ Add Notes To IVR
     ${data}=    json.dumps    ${data} 
     Check And Create YNW Session
     ${resp}=    POST On Session  ynw  /provider/ivr/notes/${uuid}    data=${data}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Add Notes To IVR
     RETURN  ${resp}
 
 Upload QNR File to Temp Location
@@ -12121,7 +12123,7 @@ Upload QNR File to Temp Location
     ${files}    Create Dictionary  requests  ${file1}  files  ${file2}
     Check And Create YNW Session
     ${resp}=    POST On Session  ynw  /provider/questionnaire/upload/file     files=${files}   expected_status=any    headers=${headers2}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Upload QNR File to Temp Location
     RETURN  ${resp}
 
 Get IVR User Details
@@ -12130,7 +12132,7 @@ Get IVR User Details
 
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  /provider/ivr/user/settings/${userType}/${userId}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get IVR User Details
     RETURN  ${resp}
 
 Delete User Details
@@ -12139,21 +12141,21 @@ Delete User Details
 
     Check And Create YNW Session
     ${resp}=    DELETE On Session  ynw  /provider/ivr/users/${userId}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Delete User Details
     RETURN  ${resp}
 
 Get All IVR User Details
 
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  /provider/ivr/user/settings   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get All IVR User Details
     RETURN  ${resp}
 
 Get IVR User Avaliability
 
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  /provider/ivr/user/availability   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get IVR User Avaliability
     RETURN  ${resp}
 
 Submit IVR Qnr
@@ -12162,7 +12164,7 @@ Submit IVR Qnr
 
     Check And Create YNW Session
     ${resp}=    POST On Session  ynw  /provider/ivr/questionnaire/submit/${uuid}    data=${data}       expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Submit IVR Qnr
     RETURN  ${resp}
 
 Get All IVR Qnr
@@ -12171,7 +12173,7 @@ Get All IVR Qnr
 
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  /provider/ivr/questionnaire/${uuid}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get All IVR Qnr
     RETURN  ${resp}
 
 IVR Change Release Status Of Questionnaire
@@ -12180,7 +12182,7 @@ IVR Change Release Status Of Questionnaire
 
     Check And Create YNW Session
     ${resp}=    PUT On Session  ynw  provider/ivr/questionnaire/change/${releaseStatus}/${uuid}/${id}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  IVR Change Release Status Of Questionnaire
     RETURN  ${resp}
 
 Resubmit IVR Qnr
@@ -12189,7 +12191,7 @@ Resubmit IVR Qnr
 
     Check And Create YNW Session
     ${resp}=    POST On Session  ynw  /provider/ivr/questionnaire/resubmit/${uuid}    data=${data}       expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Resubmit IVR Qnr
     RETURN  ${resp}
 
 Provider Schedule
@@ -12206,14 +12208,14 @@ Create Provider Schedule
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
     ${resp}=  POST On Session  ynw  /provider/schedule  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create Provider Schedule
     RETURN  ${resp}
 
 Get all schedules of an account 
 
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  /provider/schedule   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get all schedules of an account
     RETURN  ${resp}
 
 Update Provider Schedule
@@ -12227,7 +12229,7 @@ Update Provider Schedule
     END 
     ${data}=  json.dumps  ${data}
     ${resp}=  PUT On Session  ynw  /provider/schedule  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Provider Schedule
     RETURN  ${resp}
 
 Get Scheduled Using Id
@@ -12236,7 +12238,7 @@ Get Scheduled Using Id
 
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  /provider/schedule/${schid}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Scheduled Using Id
     RETURN  ${resp}
 
 Enable And Disable A Schedule
@@ -12245,7 +12247,7 @@ Enable And Disable A Schedule
 
     Check And Create YNW Session
     ${resp}=    PUT On Session  ynw  /provider/schedule/${scheduleState}/${id}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Enable And Disable A Schedule
     RETURN  ${resp}
 
 Get User-Specific Schedules 
@@ -12254,7 +12256,7 @@ Get User-Specific Schedules
 
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  /provider/schedule/user/${userid}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get User-Specific Schedules
     RETURN  ${resp}
 
 IVR Update User Language
@@ -12266,7 +12268,7 @@ IVR Update User Language
     ${data}=    json.dumps    ${data} 
     Check And Create YNW Session
     ${resp}=    PUT On Session  ynw  /provider/ivr/users/${userId}    data=${data}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  IVR Update User Language
     RETURN  ${resp}
 
 Get Available Providers In A Time Range
@@ -12277,7 +12279,7 @@ Get Available Providers In A Time Range
     ${data}=    json.dumps    ${data} 
     Check And Create YNW Session
     ${resp}=    PUT On Session  ynw  /provider/schedule/availableUser    data=${data}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Available Providers In A Time Range
     RETURN  ${resp}
 
 
@@ -12290,7 +12292,7 @@ Update Membership Service
     ${data}=    json.dumps    ${data} 
     Check And Create YNW Session
     ${resp}=    PUT On Session  ynw  /provider/membership/service/${memberServiceId}    data=${data}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Membership Service
     RETURN  ${resp}
 
 Enable Disable Membership service 
@@ -12299,7 +12301,7 @@ Enable Disable Membership service
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/membership/${status}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Enable Disable Membership service
     RETURN  ${resp}
 
 
@@ -12309,7 +12311,7 @@ Get Membership By Id
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/membership/${member_id}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Membership By Id
     RETURN  ${resp}
 
 Enable Disable Member Service 
@@ -12318,21 +12320,21 @@ Enable Disable Member Service
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/membership/service/${serviceId}/status/${status}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Enable Disable Member Service
     RETURN  ${resp}
 
 Get Membership Service Count
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/membership/service/count  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Membership Service Count
     RETURN  ${resp}
 
 Get Member
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/membership  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Member
     RETURN  ${resp}
 
 Approve Member 
@@ -12343,7 +12345,7 @@ Approve Member
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/membership/status/${memberId}    data=${data}    expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Approve Member
     RETURN  ${resp}
 
 Get Before Questionnaire Membership
@@ -12351,7 +12353,7 @@ Get Before Questionnaire Membership
     [Arguments]    ${account}    ${serviceId}    ${channel}
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  url=/consumer/questionnaire/memberservice/${serviceId}/${channel}?account=${account}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Before Questionnaire Membership
     RETURN  ${resp}
 
 Submit Member Qnr
@@ -12360,16 +12362,16 @@ Submit Member Qnr
 
     Check And Create YNW Session
     ${resp}=    POST On Session  ynw  url=/consumer/membership/questionnaire/submit/${uuid}?account=${account}    data=${data}       expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Submit Member Qnr
     RETURN  ${resp}
 
-get all Member questionnaire
+Get All Member Questionnaire
 
     [Arguments]    ${account}     ${uid}
 
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  url=/consumer/membership/questionnaire/${uid}?account=${account}      expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get All Member Questionnaire
     RETURN  ${resp}
 
 Change Release Status Of Member Questionnaire
@@ -12378,7 +12380,7 @@ Change Release Status Of Member Questionnaire
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /consumer/membership/questionnaire/change/${releaseStatus}/${uuid}/${id}    expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Change Release Status Of Member Questionnaire
     RETURN  ${resp}
 
 Resubmit Member Questionnaire
@@ -12387,7 +12389,7 @@ Resubmit Member Questionnaire
 
     Check And Create YNW Session
     ${resp}=    POST On Session  ynw  url=/consumer/membership/questionnaire/resubmit/${uuid}?account=${account}    data=${data}       expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Resubmit Member Questionnaire
     RETURN  ${resp}
 
 Update Membership 
@@ -12398,7 +12400,7 @@ Update Membership
     ${data}=    json.dumps    ${data} 
     Check And Create YNW Session
     ${resp}=    PUT On Session  ynw  /provider/membership/${memberId}    data=${data}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Membership
     RETURN  ${resp}
 
 Get MemberService by Consumer
@@ -12407,7 +12409,7 @@ Get MemberService by Consumer
 
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  url=/consumer/membership/services?account=${accountId}       expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get MemberService by Consumer
     RETURN  ${resp}
 
 Member Creation From Provider Dashboard
@@ -12419,7 +12421,7 @@ Member Creation From Provider Dashboard
 
     Check And Create YNW Session
     ${resp}=    POST On Session  ynw  /provider/membership/member   data=${data}    expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Member Creation From Provider Dashboard
     RETURN  ${resp}
 
 Submit Provider Member Qnr
@@ -12428,7 +12430,7 @@ Submit Provider Member Qnr
 
     Check And Create YNW Session
     ${resp}=    POST On Session  ynw  /provider/membership/questionnaire/submit/${memberId}    data=${data}       expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Submit Provider Member Qnr
     RETURN  ${resp}
 
 Resubmit Provider Member Qnr
@@ -12437,7 +12439,7 @@ Resubmit Provider Member Qnr
 
     Check And Create YNW Session
     ${resp}=    POST On Session  ynw  /provider/membership/questionnaire/resubmit/${memberId}    data=${data}       expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Resubmit Provider Member Qnr
     RETURN  ${resp}
 
 Get Provider Member Qnr
@@ -12446,7 +12448,7 @@ Get Provider Member Qnr
 
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  /provider/membership/questionnaire/${memberId}        expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Provider Member Qnr
     RETURN  ${resp}
 
 
@@ -12455,10 +12457,10 @@ Get Provider Member Qnr
 
 Enable Disable Jaldee Finance 
 
-   [Arguments]  ${status}  
-   Check And Create YNW Session
-   ${resp}=  PUT On Session  ynw  /provider/jp/finance/settings/jaldeeFinance/${status}  expected_status=any
-   Check Deprication  ${resp}  Get Business Profile
+    [Arguments]  ${status}  
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/jp/finance/settings/jaldeeFinance/${status}  expected_status=any
+    Check Deprication  ${resp}  Enable Disable Jaldee Finance
     RETURN  ${resp}
 
 
@@ -12470,7 +12472,7 @@ Update Category
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/category/${category_id}    data=${data}  expected_status=any    headers=${headers}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Category
     RETURN  ${resp}
 
 
@@ -12481,7 +12483,7 @@ Update Category Status
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/category/${category_id}/${status}    data=${data}  expected_status=any    headers=${headers}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Category Status
     RETURN  ${resp}
 
 
@@ -12490,7 +12492,7 @@ Get Category By Id
     [Arguments]   ${category_id}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/category/${category_id}     expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Category By Id
     RETURN  ${resp}
 
 Get Category With Filter
@@ -12498,7 +12500,7 @@ Get Category With Filter
     [Arguments]   &{param}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/category/list    params=${param}     expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Category With Filter
     RETURN  ${resp}
 
 Get Default Category By Type
@@ -12506,7 +12508,7 @@ Get Default Category By Type
     [Arguments]   ${typeEnum}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/category/default/${typeEnum}     expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Default Category By Type
     RETURN  ${resp}
 
 Update default category by type
@@ -12514,7 +12516,7 @@ Update default category by type
     [Arguments]   ${categoryid}   ${categoryTypeEnum}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/jp/finance/category/${categoryid}/${categoryTypeEnum}/default    expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update default category by type
     RETURN  ${resp}
     
 Get Category By CategoryType
@@ -12522,7 +12524,7 @@ Get Category By CategoryType
     [Arguments]   ${categoryType}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/category/type/${categoryType}     expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Category By CategoryType
     RETURN  ${resp}
 
 Upload Finance Attachment
@@ -12541,7 +12543,7 @@ Upload Finance Attachment
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  /provider/jp/finance/category/${categoryId}/${categoryType}/attachments  data=${data}  expected_status=any
-   Check Deprication  ${resp}  Get Business Profile
+   Check Deprication  ${resp}  Upload Finance Attachment
     RETURN  ${resp}
 
 Create Finance Status
@@ -12551,7 +12553,7 @@ Create Finance Status
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /provider/jp/finance/status    data=${data}  expected_status=any    headers=${headers}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create Finance Status
     RETURN  ${resp}
 
 Update Finance Status
@@ -12561,17 +12563,17 @@ Update Finance Status
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/status/${status_id}   data=${data}  expected_status=any    headers=${headers}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Finance Status
     RETURN  ${resp}
 
 
 
 Enable Disable Jaldee Finance Status
 
-   [Arguments]  ${Status_id}    ${status}  
-   Check And Create YNW Session
-   ${resp}=  PUT On Session  ynw  /provider/jp/finance/status/${Status_id}/${status}  expected_status=any
-   Check Deprication  ${resp}  Get Business Profile
+    [Arguments]  ${Status_id}    ${status}  
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/jp/finance/status/${Status_id}/${status}  expected_status=any
+    Check Deprication  ${resp}  Enable Disable Jaldee Finance Status
     RETURN  ${resp}
 
 Get Finance Status By Id
@@ -12579,23 +12581,23 @@ Get Finance Status By Id
     [Arguments]   ${Status_id}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/status/${Status_id}    expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Finance Status By Id
     RETURN  ${resp}
 
-Get default status
+Get Default Status
 
     [Arguments]   ${categoryType}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/status/default/${categoryType}     expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Default Status
     RETURN  ${resp}
 
 Set default status
 
-   [Arguments]   ${Status_id}    ${Category_type}  
-   Check And Create YNW Session
-   ${resp}=  PUT On Session  ynw  /provider/jp/finance/status/${Status_id}/${Category_type}/default   expected_status=any
-   Check Deprication  ${resp}  Get Business Profile
+    [Arguments]   ${Status_id}    ${Category_type}  
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/jp/finance/status/${Status_id}/${Category_type}/default   expected_status=any
+    Check Deprication  ${resp}  Set default status
     RETURN  ${resp}
 
 Create Expense
@@ -12608,7 +12610,7 @@ Create Expense
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /provider/jp/finance/expense    data=${data}  expected_status=any    headers=${headers}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create Expense
     RETURN  ${resp}
 
 Update Expense
@@ -12621,7 +12623,7 @@ Update Expense
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/expense/${uid}    data=${data}  expected_status=any    headers=${headers}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Expense
     RETURN  ${resp}
 
 Get Expense By Id
@@ -12629,7 +12631,7 @@ Get Expense By Id
     [Arguments]   ${uid}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  provider/jp/finance/expense/${uid}     expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Expense By Id
     RETURN  ${resp}
 
 Get Expense With Filter
@@ -12637,7 +12639,7 @@ Get Expense With Filter
     [Arguments]   &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/expense    params=${param}     expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Expense With Filter
     RETURN  ${resp}
 
 Update Expense Status
@@ -12646,7 +12648,7 @@ Update Expense Status
      
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/expense/${uid}/${expenseStatus}     expected_status=any    headers=${headers}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Expense Status
     RETURN  ${resp}
 
 Get Expense Count With Filter
@@ -12654,13 +12656,13 @@ Get Expense Count With Filter
     [Arguments]   &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/expense/count    params=${param}     expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Expense Count With Filter
     RETURN  ${resp}
 
 Get Expense Without Filter 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/expense        expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Expense Without Filter
     RETURN  ${resp}
 
 Upload Finance Expense Attachment
@@ -12676,10 +12678,10 @@ Upload Finance Expense Attachment
     
     ${data}=  Create Dictionary      attachments=${attachments}
 
-   ${data}=  json.dumps  ${data}
-   Check And Create YNW Session
-   ${resp}=  PUT On Session  ynw  /provider/jp/finance/expense/${expenseUid}/attachments  data=${data}  expected_status=any
-   Check Deprication  ${resp}  Get Business Profile
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/jp/finance/expense/${expenseUid}/attachments  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Upload Finance Expense Attachment
     RETURN  ${resp}
 
 Create Invoice
@@ -12702,7 +12704,7 @@ Create Invoice
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /provider/jp/finance/invoice    data=${data}  expected_status=any    headers=${headers}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create Invoice
     RETURN  ${resp}
 
 Update Invoice
@@ -12715,7 +12717,7 @@ Update Invoice
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uid}    data=${data}  expected_status=any    headers=${headers}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Invoice
     RETURN  ${resp}
 
 Get Invoice By Id
@@ -12723,7 +12725,7 @@ Get Invoice By Id
     [Arguments]   ${uid}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/invoice/${uid}    expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Invoice By Id
     RETURN  ${resp}
     
 
@@ -12733,7 +12735,7 @@ Get Date Time by Timezone
     ${loc}=  Random Element    ${loc}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/location/date/${zone}/${loc}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Date Time by Timezone
     RETURN  ${resp}
 
 Get Invoice With Filter
@@ -12741,7 +12743,7 @@ Get Invoice With Filter
     [Arguments]   &{param}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/invoice/    params=${param}    expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Invoice With Filter
     RETURN  ${resp}
 
 Get Invoice Count With Filter
@@ -12749,7 +12751,7 @@ Get Invoice Count With Filter
     [Arguments]   &{param}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/invoice/count    params=${param}    expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Invoice Count With Filter
     RETURN  ${resp}
 
 Assign User
@@ -12757,7 +12759,7 @@ Assign User
     [Arguments]    ${InvoiceUid}     ${userId}     
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${InvoiceUid}/user/assign/${userId}      expected_status=any    headers=${headers}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Assign User
     RETURN  ${resp}
 
 UnAssign User
@@ -12765,7 +12767,7 @@ UnAssign User
     [Arguments]    ${invocieUid}      
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${invocieUid}/user/unassign      expected_status=any    headers=${headers}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  UnAssign User
     RETURN  ${resp}
 
 Upload Finance Invoice Attachment
@@ -12784,7 +12786,7 @@ Upload Finance Invoice Attachment
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  /provider/jp/finance/invoice/${invoiceUid}/attachments  data=${data}  expected_status=any
-   Check Deprication  ${resp}  Get Business Profile
+   Check Deprication  ${resp}  Upload Finance Invoice Attachment
     RETURN  ${resp}
 
 
@@ -12807,7 +12809,7 @@ Create PaymentsOut
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /provider/jp/finance/paymentsOut    data=${data}  expected_status=any    headers=${headers}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create PaymentsOut
     RETURN  ${resp}
 
 
@@ -12830,7 +12832,7 @@ Create PaymentsOut With Expense
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /provider/jp/finance/paymentsOut    data=${data}  expected_status=any    headers=${headers}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create PaymentsOut With Expense
     RETURN  ${resp}
 
 Update PaymentsOut
@@ -12845,7 +12847,7 @@ Update PaymentsOut
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/paymentsOut/${payable_uid}     data=${data}  expected_status=any    headers=${headers}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update PaymentsOut
     RETURN  ${resp}
 
 Get PaymentsOut By Id
@@ -12853,7 +12855,7 @@ Get PaymentsOut By Id
     [Arguments]   ${uid}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsOut/${uid}     expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get PaymentsOut By Id
     RETURN  ${resp}
 
 Get PaymentsOut With Filter
@@ -12861,7 +12863,7 @@ Get PaymentsOut With Filter
     [Arguments]   &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsOut    params=${param}     expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get PaymentsOut With Filter
     RETURN  ${resp}
 
 Get PaymentsOut Count With Filter
@@ -12869,7 +12871,7 @@ Get PaymentsOut Count With Filter
     [Arguments]   &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsOut/count    params=${param}     expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get PaymentsOut Count With Filter
     RETURN  ${resp}
 
 Upload Finance PaymentsOut Attachment
@@ -12888,7 +12890,7 @@ Upload Finance PaymentsOut Attachment
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  /provider/jp/finance/paymentsOut/${payable_uid}/attachments  data=${data}  expected_status=any
-   Check Deprication  ${resp}  Get Business Profile
+   Check Deprication  ${resp}  Upload Finance PaymentsOut Attachment
     RETURN  ${resp}
 
 Update PaymentsOut Status
@@ -12896,7 +12898,7 @@ Update PaymentsOut Status
     [Arguments]    ${payableUid}     ${status} 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/paymentsOut/${payableUid}/${status}     expected_status=any    headers=${headers}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update PaymentsOut Status
     RETURN  ${resp}
 
 
@@ -12910,7 +12912,7 @@ Create CDL Enquiry
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /provider/enquire  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create CDL Enquiry
     RETURN  ${resp}
 
 Draft Loan Application
@@ -12923,7 +12925,7 @@ Draft Loan Application
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanuid}   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Draft Loan Application
     RETURN  ${resp}
 
     
@@ -12938,7 +12940,7 @@ Save Customer Details
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanuid}   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Save Customer Details
     RETURN  ${resp}  
 
 Equifax Report 
@@ -12949,7 +12951,7 @@ Equifax Report
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /provider/loanapplication/equifaxreport   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Equifax Report
     RETURN  ${resp}  
 
 MAFIL Score
@@ -12960,7 +12962,7 @@ MAFIL Score
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/csms/generatescore   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  MAFIL Score
     RETURN  ${resp}
 
 Cibil Score
@@ -12972,10 +12974,10 @@ Cibil Score
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/cibilscore   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Cibil Score
     RETURN  ${resp}
 
-Retainrejected Loan Application
+Retain Rejected Loan Application
 
     [Arguments]    ${loanApplicationUid}  ${note}
 
@@ -12984,7 +12986,7 @@ Retainrejected Loan Application
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationUid}/retainrejected  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Retain Rejected Loan Application
     RETURN  ${resp}
 
 
@@ -12996,7 +12998,7 @@ Perfios Score
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /provider/provider/loanapplication/perfios   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Perfios Score
     RETURN  ${resp} 
 
 Account with Multiple Users in NBFC
@@ -13040,7 +13042,7 @@ Get default status by type
     [Arguments]  ${typeName}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/status/default/${typeName}/     expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get default status by type
     RETURN  ${resp}
 
 
@@ -13049,7 +13051,7 @@ Get status count
     [Arguments]   &{param} 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/status/list/count   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get status count
     RETURN  ${resp}
 
 Get status list filter
@@ -13057,7 +13059,7 @@ Get status list filter
     [Arguments]   &{param} 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/status/list   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get status list filter
     RETURN  ${resp}
 
 
@@ -13066,7 +13068,7 @@ Update default status
     [Arguments]    ${id}  ${typeName}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/jp/finance/status/${id}/${typeName}/default     expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update default status
     RETURN  ${resp}
 # -------------- Patient Records-----------
 
@@ -13084,7 +13086,7 @@ Add Patient Medical History
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
     ${resp}=    POST On Session    ynw    provider/medicalrecord/medicalHistory    data=${data}    expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Add Patient Medical History
     RETURN  ${resp}
 
 Update Patient Medical History
@@ -13101,21 +13103,21 @@ Update Patient Medical History
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
     ${resp}=    PUT On Session    ynw    provider/medicalrecord/medicalHistory/${id}    data=${data}     expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Patient Medical History
     RETURN  ${resp}
 
 Delete Patient Medical History
     Check And Create YNW Session
     [Arguments]    ${medicalHistoryId}  
     ${resp}=    DELETE On Session    ynw   /provider/medicalrecord/medicalHistory/${medicalHistoryId}        expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Delete Patient Medical History
     RETURN  ${resp}
 
 Get Patient Medical History
     Check And Create YNW Session
     [Arguments]    ${providerConsumerId}  
     ${resp}=    GET On Session    ynw    /provider/medicalrecord/medicalHistory/${providerConsumerId}        expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Patient Medical History
     RETURN  ${resp}
 
 Provider Consumer Add Notes
@@ -13124,7 +13126,7 @@ Provider Consumer Add Notes
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
     ${resp}=    POST On Session    ynw    /provider/customers/notes    data=${data}    expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Provider Consumer Add Notes
     RETURN  ${resp}
 
 Update Provider Consumer Notes
@@ -13133,21 +13135,21 @@ Update Provider Consumer Notes
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
     ${resp}=    PUT On Session    ynw    /provider/customers/notes    data=${data}    expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Provider Consumer Notes
     RETURN  ${resp}
 
 Delete Provider Consumer Notes
     [Arguments]    ${notesId}  
     Check And Create YNW Session
     ${resp}=    DELETE On Session    ynw    /provider/customers/notes/${notesId}        expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Delete Provider Consumer Notes
     RETURN  ${resp}
 
 Get Provider Consumer Notes
     [Arguments]    ${providerConsumerId}  
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /provider/customers/notes/${providerConsumerId}        expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Provider Consumer Notes
     RETURN  ${resp}  
 
 
@@ -13165,14 +13167,14 @@ Update DentalRecord
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/dental  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update DentalRecord
     RETURN  ${resp}
 
 Update DentalRecord Status
     Check And Create YNW Session
     [Arguments]      ${dentalid}   ${healthRecordSectionEnum} 
     ${resp}=    PUT On Session    ynw   /provider/dental/${dentalid}/status/${healthRecordSectionEnum}       expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update DentalRecord Status
     RETURN  ${resp}
 
 
@@ -13180,14 +13182,14 @@ Get DentalRecord ByProviderConsumerId
     Check And Create YNW Session
     [Arguments]     ${Id}  
     ${resp}=    GET On Session    ynw    /provider/dental/providerconsumer/${Id}        expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get DentalRecord ByProviderConsumerId
     RETURN  ${resp}
 
 Get DentalRecord ByCaseId
     Check And Create YNW Session
     [Arguments]     ${Id}  
     ${resp}=    GET On Session    ynw   /provider/dental/mr/${Id}    expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get DentalRecord ByCaseId
     RETURN  ${resp}
 
 
@@ -13201,7 +13203,7 @@ Create Case Category
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/medicalrecord/case/category  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create Case Category
     RETURN  ${resp}
 
 Get Case Category
@@ -13209,7 +13211,7 @@ Get Case Category
     [Arguments]     ${Id}  
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /provider/medicalrecord/case/category/${id}        expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Case Category
     RETURN  ${resp}
 
 Update Case Category
@@ -13222,13 +13224,13 @@ Update Case Category
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/medicalrecord/case/category/${id}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Case Category
     RETURN  ${resp}
 
 Get Case Category Filter
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/case/category      expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Case Category Filter
     RETURN  ${resp}
 
 Create Case Type
@@ -13241,7 +13243,7 @@ Create Case Type
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/medicalrecord/case/type  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create Case Type
     RETURN  ${resp}
 
 Get Case Type
@@ -13249,7 +13251,7 @@ Get Case Type
     [Arguments]     ${Id}  
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /provider/medicalrecord/case/type/${id}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Case Type
     RETURN  ${resp}
 
 Update Case Type
@@ -13261,13 +13263,13 @@ Update Case Type
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/medicalrecord/case/type/${id}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Case Type
     RETURN  ${resp}
 
 Get Case Type Filter
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/case/type      expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Case Type Filter
     RETURN  ${resp}
 
 Update MR Case
@@ -13279,14 +13281,14 @@ Update MR Case
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/medicalrecord/case/${uid}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update MR Case
     RETURN  ${resp}
 
 Get Case Filter
     [Arguments]    &{kwargs} 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/case   params=${kwargs}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Case Filter
     RETURN  ${resp}
 
 Change Case Status
@@ -13295,14 +13297,14 @@ Change Case Status
     ${data}=    json.dumps  ${Notes}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/medicalrecord/case/${uid}/status/${statusName}  data=${data}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Change Case Status
     RETURN  ${resp}
 
 Get Case Count Filter
     [Arguments]    &{kwargs} 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/case     params=${kwargs}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Case Count Filter
     RETURN  ${resp}
 
 
@@ -13317,14 +13319,14 @@ Update Treatment Plan
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/medicalrecord/treatment  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Treatment Plan
     RETURN  ${resp}
 
 Update Treatment Plan Work status
     [Arguments]     ${treatmentId}  ${workId}  ${status}  
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/medicalrecord/treatment/${treatmentId}/${workId}/${status}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Treatment Plan Work status
     RETURN  ${resp}
 
 Update Work list in Treatment Plan
@@ -13332,14 +13334,14 @@ Update Work list in Treatment Plan
     ${data}=  json.dumps  ${works}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/medicalrecord/treatment/work/${treatmentId}    data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Work list in Treatment Plan
     RETURN  ${resp}
 
 Get Treatment Plan By Id
     [Arguments]     ${id}
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/${Id}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Treatment Plan By Id
     RETURN  ${resp}
 
 
@@ -13349,7 +13351,7 @@ Delete Treatment Plan Work By id
     [Arguments]     ${id}
     Check And Create YNW Session
     ${resp}=   DELETE On Session  ynw  /provider/medicalrecord/treatment/work/${id}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Delete Treatment Plan Work By id
     RETURN  ${resp}
 
 
@@ -13357,7 +13359,7 @@ Get Prescription Template By Account Id
 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/template      expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Prescription Template By Account Id
     RETURN  ${resp}
 
 Update Prescription 
@@ -13376,7 +13378,7 @@ Update Prescription
     END
     ${data}=  json.dumps  ${data}
     ${resp}=    PUT On Session    ynw    /provider/medicalrecord/prescription/${prescriptionUId}    data=${data}    expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Prescription 
     RETURN  ${resp}
 
 
@@ -13385,7 +13387,7 @@ Get Prescription By Filter
     [Arguments]    &{kwargs} 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription   params=${kwargs}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Prescription By Filter
     RETURN  ${resp}
 
 
@@ -13407,7 +13409,7 @@ Update MR Sections
     END
     ${data}=  json.dumps  ${data}
     ${resp}=    PUT On Session    ynw    /provider/medicalrecord/section/${uid}   data=${data}    expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update MR Sections
     RETURN  ${resp}
 
 
@@ -13417,7 +13419,7 @@ Get Sections Filter
     [Arguments]    &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/section    params=${kwargs}    expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Sections Filter
     RETURN  ${resp}
 
 
@@ -13429,7 +13431,7 @@ Share Prescription To Patient
     ${data}=  Create Dictionary  message=${msg}   medium=${medium}  
     ${data}=    json.dumps    ${data}
     ${resp}=  POST On Session  ynw  /provider/medicalrecord/prescription/sharePrescription/${prescriptionUid}   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Share Prescription To Patient
     RETURN  ${resp}
 
 Share Prescription To ThirdParty
@@ -13438,38 +13440,38 @@ Share Prescription To ThirdParty
     ${data}=  Create Dictionary  message=${msg}   email=${email}    sms=${sms}   whatsapp=${whatsapp}   telegram=${telegram} 
     ${data}=    json.dumps    ${data}
     ${resp}=  POST On Session  ynw  /provider/medicalrecord/prescription/sharePrescription/thirdParty/${prescriptionUid}   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Share Prescription To ThirdParty
     RETURN  ${resp}
     
 Get Treatment Plan By ProviderConsumer Id
     [Arguments]     ${id}
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/consumer/${id}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Treatment Plan By ProviderConsumer Id
     RETURN  ${resp}
 
 Get Treatment Plan By Dental Id
     [Arguments]     ${id}
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/dental/${id}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Treatment Plan By Dental Id
     RETURN  ${resp}
 
 # --------- Finance ----------
 Auto Invoice Generation For Catalog
 
-   [Arguments]  ${catalogId}      ${toggle} 
-   Check And Create YNW Session
-   ${resp}=  PUT On Session  ynw  /provider/catalog/${catalogId}/invoicegeneration/${toggle}   expected_status=any
-   Check Deprication  ${resp}  Get Business Profile
+    [Arguments]  ${catalogId}      ${toggle} 
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/catalog/${catalogId}/invoicegeneration/${toggle}   expected_status=any
+    Check Deprication  ${resp}  Auto Invoice Generation For Catalog
     RETURN  ${resp}
 
 Auto Invoice Generation For Service
 
-   [Arguments]  ${serviceId}      ${toggle} 
-   Check And Create YNW Session
-   ${resp}=  PUT On Session  ynw  /provider/services/${serviceId}/invoicegeneration/${toggle}   expected_status=any
-   Check Deprication  ${resp}  Get Business Profile
+    [Arguments]  ${serviceId}      ${toggle} 
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/services/${serviceId}/invoicegeneration/${toggle}   expected_status=any
+    Check Deprication  ${resp}  Auto Invoice Generation For Service
     RETURN  ${resp}
 
 Create PaymentsIn
@@ -13486,7 +13488,7 @@ Create PaymentsIn
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /provider/jp/finance/paymentsIn    data=${data}  expected_status=any    headers=${headers}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create PaymentsIn
     RETURN  ${resp}
 
 Update PaymentsIn
@@ -13500,7 +13502,7 @@ Update PaymentsIn
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/paymentsIn/${payable_uid}     data=${data}  expected_status=any    headers=${headers}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update PaymentsIn
     RETURN  ${resp}
 
 Get PaymentsIn By Id
@@ -13508,7 +13510,7 @@ Get PaymentsIn By Id
     [Arguments]   ${uid}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsIn/${uid}     expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get PaymentsIn By Id
     RETURN  ${resp}
 
 
@@ -13517,7 +13519,7 @@ Get PaymentsIn With Filter
     [Arguments]   &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsIn   params=${param}     expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get PaymentsIn With Filter
     RETURN  ${resp}
 
 Get PaymentsIn Count With Filter
@@ -13525,7 +13527,7 @@ Get PaymentsIn Count With Filter
     [Arguments]   &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsIn/count    params=${param}     expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get PaymentsIn Count With Filter
     RETURN  ${resp}
 
 Update PaymentsIn Status
@@ -13533,7 +13535,7 @@ Update PaymentsIn Status
     [Arguments]    ${payableUid}     ${status} 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/paymentsIn/${payableUid}/${status}     expected_status=any    headers=${headers}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update PaymentsIn Status
     RETURN  ${resp}
 
 Get PaymentsOut Log List UId
@@ -13541,7 +13543,7 @@ Get PaymentsOut Log List UId
     [Arguments]   ${uid}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsOut/${uid}/statelist     expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get PaymentsOut Log List UId
     RETURN  ${resp}
 
 Get PaymentsIn Log List UId
@@ -13549,7 +13551,7 @@ Get PaymentsIn Log List UId
     [Arguments]   ${uid}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsIn/${uid}/statelist     expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get PaymentsIn Log List UId
     RETURN  ${resp}
 
 Upload Finance PaymentsIn Attachment
@@ -13568,7 +13570,7 @@ Upload Finance PaymentsIn Attachment
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  /provider/jp/finance/paymentsIn/${payable_uid}/attachments  data=${data}  expected_status=any
-   Check Deprication  ${resp}  Get Business Profile
+   Check Deprication  ${resp}  Upload Finance PaymentsIn Attachment
     RETURN  ${resp}
 
 Generate Link For Invoice
@@ -13579,7 +13581,7 @@ Generate Link For Invoice
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
     ${resp}=    POST On Session    ynw    /provider/jp/finance/pay/createLink    data=${data}    expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Generate Link For Invoice
     RETURN  ${resp}
 
 
@@ -13593,7 +13595,7 @@ Apply Discount
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/apply/discount    data=${data}  expected_status=any    headers=${headers}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Apply Discount
     RETURN  ${resp}
 
 Apply Provider Coupon
@@ -13606,7 +13608,7 @@ Apply Provider Coupon
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/apply/providercoupon    data=${data}  expected_status=any    headers=${headers}
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Apply Provider Coupon
     RETURN  ${resp}
 
 Apply Service Level Discount
@@ -14267,8 +14269,8 @@ Get Lead Credit Status LOS
 #     ${data}=  Create Dictionary  losProduct=${losProduct}  status=${status}  progress=${progress}  requestedAmount=${requestedAmount}  description=${description}  consumerKyc=${consumerKyc}
 #     ${data}=    json.dumps    ${data}
 #     ${resp}=  POST On Session  ynw  /provider/los/lead/channel/${channel}   data=${data}  expected_status=any
-#     Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
+#     Check Deprication  ${resp}  Create Lead LOS
+#     RETURN  ${resp}
 
 Create Lead LOS     
     [Arguments]  ${channel}  ${description}  ${losProduct}  ${requestedAmount}  &{kwargs}
@@ -16633,8 +16635,8 @@ Create Template
 #     ${data}=  json.dumps  ${data}
 #     Check And Create YNW Session
 #     ${resp}=  PUT On Session  ynw  /provider/comm/template/${temp_id}  data=${data}  expected_status=any
-#     Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp} 
+#     Check Deprication  ${resp}  Update Template 
+#     RETURN  ${resp} 
 
 Update Template  
 
@@ -16646,7 +16648,7 @@ Update Template
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/comm/template/${temp_id}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Template
     RETURN  ${resp} 
 
 Update Template Status
@@ -16654,7 +16656,7 @@ Update Template Status
     [Arguments]  ${temp_id}  ${status} 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/comm/template/${temp_id}/status/${status}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Template Status
     RETURN  ${resp} 
 
 Get Template By Id
@@ -16662,7 +16664,7 @@ Get Template By Id
     [Arguments]  ${temp_id} 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/comm/template/${temp_id}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Template By Id
     RETURN  ${resp}
 
 Get Template By Filter
@@ -16670,7 +16672,7 @@ Get Template By Filter
     [Arguments]  &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/comm/template  params=${param}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Template By Filter
     RETURN  ${resp}
 
 Get Template Count By Filter
@@ -16678,7 +16680,7 @@ Get Template Count By Filter
     [Arguments]  &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/comm/template/count  params=${param}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Template Count By Filter
     RETURN  ${resp}
 
 Get Dynamic Variable List By Context
@@ -16686,14 +16688,14 @@ Get Dynamic Variable List By Context
     [Arguments]  ${context_id} 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/comm/template/dynamic/variable/context/${context_id}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Dynamic Variable List By Context
     RETURN  ${resp}
 
 Get Dynamic Variable List
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/comm/template/dynamic/variable   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Dynamic Variable List
     RETURN  ${resp}
 
 Get Dynamic Variable List By SendComm
@@ -16701,7 +16703,7 @@ Get Dynamic Variable List By SendComm
     [Arguments]  ${sendcomm_id} 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/comm/template/dynamic/variable/sendComm/${sendcomm_id}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Dynamic Variable List By SendComm
     RETURN  ${resp}
 
 Create Template Settings
@@ -16715,14 +16717,14 @@ Create Template Settings
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/comm/template/settings  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create Template Settings
     RETURN  ${resp} 
 
 Get Send Comm List
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/comm/template/sendComms   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Send Comm List
     RETURN  ${resp}
 
 Get Send Comm List By Context
@@ -16730,7 +16732,7 @@ Get Send Comm List By Context
     [Arguments]  ${context_id} 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/comm/template/sendComms/context/${context_id}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Send Comm List By Context
     RETURN  ${resp}
 
 Update Template Settings
@@ -16743,14 +16745,14 @@ Update Template Settings
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/comm/template/settings/${setttings_id}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Template Settings
     RETURN  ${resp} 
 
 Get Global Variable List
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/comm/template/dynamic/variable/global   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Global Variable List
     RETURN  ${resp}
 
 Get Default Template List by sendComm
@@ -16758,7 +16760,7 @@ Get Default Template List by sendComm
     [Arguments]  ${sendcomm_id}
     Check And Create YNW Session
     ${resp}=  GET On Session   ynw  /provider/comm/template/default/sendComm/${sendcomm_id}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Default Template List by sendComm
     RETURN  ${resp}
 
 Get Template Settings By Id
@@ -16766,7 +16768,7 @@ Get Template Settings By Id
     [Arguments]  ${settings_id} 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/comm/template/settings/${settings_id}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Template Settings By Id
     RETURN  ${resp}
 
 Update Template Settings Status
@@ -16774,7 +16776,7 @@ Update Template Settings Status
     [Arguments]  ${setting_id}  ${status} 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/comm/template/settings/${setting_id}/status/${status}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Template Settings Status
     RETURN  ${resp} 
 
 Get All Settings By Filter
@@ -16782,7 +16784,7 @@ Get All Settings By Filter
     [Arguments]  &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/comm/template/settings  params=${param}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get All Settings By Filter
     RETURN  ${resp}
 
 Create Template Preview
@@ -16795,7 +16797,7 @@ Create Template Preview
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/comm/template/preview  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create Template Preview
     RETURN  ${resp} 
 
 Get Custom Template Preview By Id
@@ -16803,7 +16805,7 @@ Get Custom Template Preview By Id
     [Arguments]  ${temp_id} 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/comm/template/preview/${temp_id}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Custom Template Preview By Id
     RETURN  ${resp}
 
 Get Default Template Preview 
@@ -16811,28 +16813,28 @@ Get Default Template Preview
     [Arguments]  ${sendcomm_id}  ${temp_id} 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/comm/template/default/preview/${sendcomm_id}/${temp_id}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Default Template Preview
     RETURN  ${resp}
 
 Get Contexts
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/context   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Contexts
     RETURN  ${resp}
 
 Get Context List 
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/comm/template/context   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Context List
     RETURN  ${resp} 
 
 Get CommTargets
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/commTarget   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get CommTargets
     RETURN  ${resp}
 
 
@@ -16842,7 +16844,7 @@ Get Store Settings For OnlineOrder
     [Arguments]   ${store_id}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/store/${store_id}/settings      expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Store Settings For OnlineOrder
     RETURN  ${resp}
 
 Update Store Settings For OnlineOrder
@@ -16856,7 +16858,7 @@ Update Store Settings For OnlineOrder
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/store/${store_id}/settings    data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Store Settings For OnlineOrder
     RETURN  ${resp} 
 
 #................RBAC...............
@@ -16864,28 +16866,29 @@ Enable Disable Booking RBAC
     [Arguments]  ${status}  
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/bookingrbac/${status}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Enable Disable Booking RBAC
     RETURN  ${resp}
 
 Enable Disable Medical Record RBAC
     [Arguments]  ${status}  
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/medicalrecordrbac/${status}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Enable Disable Medical Record RBAC
     RETURN  ${resp}
+
 Get Capabilities By Feature 
 
     [Arguments]  ${feature} 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/accessscope/capabilities/${feature}    expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Capabilities By Feature 
     RETURN  ${resp}
 
 Get All Capabilities 
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/accessscope/capabilities    expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get All Capabilities 
     RETURN  ${resp}
 
 
@@ -16896,7 +16899,7 @@ Enable Disable CRM Lead
     [Arguments]  ${status} 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/crm/lead/${status}  expected_status=any 
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Enable Disable CRM Lead
     RETURN  ${resp}
 
 Create Lead Product
@@ -16907,7 +16910,7 @@ Create Lead Product
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/crm/lead/product  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create Lead Product
     RETURN  ${resp}
 
 Get Lead Product By Uid     
@@ -16916,7 +16919,7 @@ Get Lead Product By Uid
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/crm/lead/product/${uid}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Lead Product By Uid
     RETURN  ${resp}
 
 Get Lead Product By Filter    
@@ -16924,7 +16927,7 @@ Get Lead Product By Filter
     [Arguments]  &{param} 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/crm/lead/product   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Lead Product By Filter
     RETURN  ${resp}
 
 Get Lead Product Count By Filter    
@@ -16932,7 +16935,7 @@ Get Lead Product Count By Filter
     [Arguments]  &{param} 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/crm/lead/product/count   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Lead Product Count By Filter
     RETURN  ${resp}
 
 Lead Product Status Change
@@ -16941,7 +16944,7 @@ Lead Product Status Change
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/crm/lead/product/${uid}/status/${status}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Lead Product Status Change
     RETURN  ${resp}
 
 Update Lead Product
@@ -16957,7 +16960,7 @@ Update Lead Product
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/crm/lead/product/${uid}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Lead Product
     RETURN  ${resp}
 
 Create Lead Channel
@@ -16971,7 +16974,7 @@ Create Lead Channel
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/crm/lead/channel  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create Lead Channel
     RETURN  ${resp}
 
 Get Lead Channel By Uid     
@@ -16980,7 +16983,7 @@ Get Lead Channel By Uid
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/crm/lead/channel/${uid}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Lead Channel By Uid
     RETURN  ${resp}
 
 Update Lead Channel
@@ -16996,7 +16999,7 @@ Update Lead Channel
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/crm/lead/channel/${uid}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Lead Channel
     RETURN  ${resp}
 
 Lead Channel Status Change
@@ -17005,7 +17008,7 @@ Lead Channel Status Change
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/crm/lead/channel/${uid}/status/${status}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Lead Channel Status Change
     RETURN  ${resp}
 
 Get Lead Channel By Filter    
@@ -17013,7 +17016,7 @@ Get Lead Channel By Filter
     [Arguments]  &{param} 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/crm/lead/channel   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Lead Channel By Filter
     RETURN  ${resp}
 
 Get Lead Channel Count By Filter    
@@ -17021,7 +17024,7 @@ Get Lead Channel Count By Filter
     [Arguments]  &{param} 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/crm/lead/channel/count   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Lead Channel Count By Filter
     RETURN  ${resp}
 
 Create Lead Consumer
@@ -17035,7 +17038,7 @@ Create Lead Consumer
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/crm/lead/consumer  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create Lead Consumer
     RETURN  ${resp}
 
 Get Lead Consumer
@@ -17044,7 +17047,7 @@ Get Lead Consumer
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/crm/lead/consumer/${uid}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Lead Consumer
     RETURN  ${resp}
 
 Get Lead Consumer By Filter
@@ -17053,7 +17056,7 @@ Get Lead Consumer By Filter
 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/crm/lead/consumer   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Lead Consumer By Filter
     RETURN  ${resp}
 
 Get Lead Consumer Count By Filter
@@ -17062,7 +17065,7 @@ Get Lead Consumer Count By Filter
 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/crm/lead/consumer/count   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Lead Consumer Count By Filter
     RETURN  ${resp}
 
 Update Lead Consumer
@@ -17077,7 +17080,7 @@ Update Lead Consumer
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/crm/lead/consumer/${uid}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Lead Consumer
     RETURN  ${resp}
 
 Consumer Lead Status Change
@@ -17086,7 +17089,7 @@ Consumer Lead Status Change
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/crm/lead/consumer/${uid}/status/${status}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Consumer Lead Status Change
     RETURN  ${resp}
 
 Create Crm Lead
@@ -17102,7 +17105,7 @@ Create Crm Lead
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/crm/lead  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Create Crm Lead
     RETURN  ${resp}
 
 Get Crm Lead
@@ -17111,21 +17114,21 @@ Get Crm Lead
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/crm/lead/${uid}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Crm Lead
     RETURN  ${resp}
 
 Get Crm Lead By Filter  
 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/crm/lead   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Crm Lead By Filter
     RETURN  ${resp}
 
 Get Crm Lead Count By Filter  
 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/crm/lead/count   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Get Crm Lead Count By Filter
     RETURN  ${resp}
 
 Crm Lead Status Change To Active
@@ -17134,7 +17137,7 @@ Crm Lead Status Change To Active
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/crm/lead/${uid}/status/active  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Crm Lead Status Change To Active
     RETURN  ${resp}
 
 Crm Lead Status Change To Complete
@@ -17143,7 +17146,7 @@ Crm Lead Status Change To Complete
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/crm/lead/${uid}/status/complete  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Crm Lead Status Change To Complete
     RETURN  ${resp}
 
 Crm Lead Status Change To Reject
@@ -17152,7 +17155,7 @@ Crm Lead Status Change To Reject
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/crm/lead/${uid}/status/reject  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Crm Lead Status Change To Reject
     RETURN  ${resp}
 
 Update Crm Lead  
@@ -17167,7 +17170,7 @@ Update Crm Lead
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/crm/lead/${uid}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Update Crm Lead
     RETURN  ${resp}
 
 Crm Lead Update Assign
@@ -17180,7 +17183,7 @@ Crm Lead Update Assign
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/crm/lead/assign/${uid}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Crm Lead Update Assign
     RETURN  ${resp}
 
 Crm Lead Update Unassign
@@ -17193,7 +17196,7 @@ Crm Lead Update Unassign
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/crm/lead/unassign/${uid}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
+    Check Deprication  ${resp}  Crm Lead Update Unassign
     RETURN  ${resp}
 
 Crm Lead Update Notes  
