@@ -469,7 +469,7 @@ JD-TC-Default Admin Role Capability-18
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-Default Admin Role Capability-18
+JD-TC-Default Admin Role Capability-19
 
     [Documentation]   provider checking 'Update Consumer Label' capability.
 
@@ -494,7 +494,7 @@ JD-TC-Default Admin Role Capability-18
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-Default Admin Role Capability-19
+JD-TC-Default Admin Role Capability-20
 
     [Documentation]   provider checking 'Apply Consumer Label' capability.
 
@@ -502,11 +502,121 @@ JD-TC-Default Admin Role Capability-19
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  EnableDisable Label   ${label_id}   ${Qstate[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${len}=  Get Length  ${ValueSet}
     ${i}=   Random Int   min=0   max=${len-1}
     ${label_value}=   Set Variable   ${ValueSet[${i}]['value']}
     ${label_dict}=  Create Label Dictionary  ${l_name2[0]}  ${label_value}
 
     ${resp}=  Add Labels for Customers   ${label_dict}   ${cid}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+# ---------------------------------- Waitlist Label ---------------------------------
+    ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ${s_id1}=  Create Sample Service  ${SERVICE1}
+    Set Suite Variable    ${s_id1}
+    ${s_id2}=   Create Sample Service  ${SERVICE2}
+    Set Suite Variable    ${s_id2}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10 
+    ${q_name}=    FakerLibrary.name
+    Set Suite Variable    ${q_name}
+    ${list}=  Create List   1  2  3  4  5  6  7
+    Set Suite Variable    ${list}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
+    Set Suite Variable    ${strt_time}
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00 
+    Set Suite Variable    ${end_time}   
+    ${parallel}=   Random Int  min=1   max=1
+    Set Suite Variable   ${parallel}
+    ${capacity}=  Random Int   min=10   max=20
+    Set Suite Variable   ${capacity}
+    ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${lid}  ${s_id1}  ${s_id2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${que_id1}   ${resp.json()}
+
+    ${resp}=  AddCustomer  ${CUSERNAME18}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${cid}  ${resp.json()}
+
+
+    ${desc}=   FakerLibrary.word
+    Set Suite Variable  ${desc}
+    ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Test Variable  ${wid}  ${wid[0]}
+
+    ${resp}=  Add Label for Waitlist   ${wid}  ${l_name2[0]}  ${label_value}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+# ---------------------------------- Multiple Waitlist Label ---------------------------------
+
+    ${resp}=  AddCustomer  ${CUSERNAME19}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${cid1}  ${resp.json()}
+
+    ${desc}=   FakerLibrary.word
+    ${resp}=  Add To Waitlist  ${cid1}  ${s_id1}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Test Variable  ${wid1}  ${wid[0]}
+
+    ${label_dict}=  Create Label Dictionary  ${l_name2[0]}  ${label_value}
+    ${resp}=  Add Label for Multiple Waitlist   ${label_dict}  ${wid}  ${wid1}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+# ---------------------------------- Multiple Appointment Label ---------------------------------
+
+    ${resp}=  Create Sample Schedule   ${lid}   ${s_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${sch_id}  ${resp.json()}
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  scheduleId=${sch_id}
+    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+    Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
+    Set Test Variable   ${slot3}   ${resp.json()['availableSlots'][2]['time']}
+    Set Test Variable   ${slot4}   ${resp.json()['availableSlots'][3]['time']}
+
+    ${resp}=  AddCustomer  ${CUSERNAME20}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${cid2}  ${resp.json()}
+
+    ${apptfor1}=  Create Dictionary  id=${cid2}   apptTime=${slot1}
+    ${apptfor2}=  Create Dictionary  id=${cid2}   apptTime=${slot2}
+    ${apptfor}=   Create List  ${apptfor1}  ${apptfor2}
+    
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Take Appointment For Consumer  ${cid2}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${label_dict}=  Create Label Dictionary  ${lbl_name}  ${lbl_value}
+
+    ${resp}=  Add Label for Multiple Appointment   ${label_dict}  ${apptid1}  ${apptid2} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
