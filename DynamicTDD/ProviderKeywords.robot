@@ -3603,22 +3603,6 @@ Disable Future Checkin
     Check Deprication  ${resp}  Disable Future Checkin
     RETURN  ${resp}
 
-Add Delay
-    [Arguments]  ${qid}  ${time}  ${msg}  ${sndmsg}
-    ${data}=  Create Dictionary  delayDuration=${time}  message=${msg}  sendMsg=${sndmsg}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/waitlist/queues/${qid}/delay  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Add Delay
-    RETURN  ${resp}
-
-Get Delay
-    [Arguments]  ${qid}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/waitlist/queues/${qid}/delay  expected_status=any
-    Check Deprication  ${resp}  Get Delay
-    RETURN  ${resp}
-
 Get Queue Waiting Time
     [Arguments]  ${qid}  ${date}
     Check And Create YNW Session
@@ -4655,65 +4639,12 @@ Is Available Queue Now
     Check Deprication  ${resp}  Is Available Queue Now
     RETURN  ${resp}
 
-Instant Queue
-    [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}     ${eDate}    ${stime}    ${etime}    ${parallel}  ${capacity}  ${loc}  @{vargs}
-    ${bs}=  TimeSpec   ${rt}   ${ri}   ${sDate}  ${eDate}  ${stime}  ${etime}
-    ${location}=  Create Dictionary  id=${loc}
-    ${len}=  Get Length  ${vargs}
-    ${service}=  Create Dictionary  id=${vargs[0]}
-    ${services}=  Create List  ${service}
-    FOR    ${index}    IN RANGE  1  ${len}
-        	${service}=  Create Dictionary  id=${vargs[${index}]} 
-            Append To List  ${services}  ${service}
-    END
-    ${data}=  Create Dictionary  name=${name}  queueSchedule=${bs}  parallelServing=${parallel}  capacity=${capacity}  location=${location}  services=${services}
-    RETURN  ${data}
-
-Create Instant Queue
-    [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}     ${eDate}    ${stime}    ${etime}    ${parallel}  ${capacity}  ${loc}  @{vargs}
-    ${data}=  Instant Queue  ${name}  ${rt}   ${ri}   ${sDate}     ${eDate}    ${stime}    ${etime}    ${parallel}  ${capacity}  ${loc}  @{vargs}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/waitlist/queues/instant  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Create Instant Queue
-    RETURN  ${resp}
-
-
 Instant Queue without Service
    [Arguments]  ${name}   ${rt}   ${ri}   ${sDate}     ${eDate}    ${stime}    ${etime}    ${parallel}  ${capacity}  ${loc}
    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
    ${location}=  Create Dictionary  id=${loc}
    ${data}=  Create Dictionary  name=${name}  queueSchedule=${bs}  parallelServing=${parallel}  capacity=${capacity}  location=${location}  services=${None}
    RETURN  ${data}
-
-Create Instant Queue without Service
-    [Arguments]  ${name}  ${rt}   ${ri}   ${sDate}     ${eDate}    ${stime}    ${etime}    ${parallel}  ${capacity}  ${loc}
-    ${data}=  Instant Queue without Service   ${name}  ${rt}   ${ri}   ${sDate}     ${eDate}    ${stime}    ${etime}    ${parallel}  ${capacity}  ${loc}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/waitlist/queues/instant  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Create Instant Queue without Service
-    RETURN  ${resp}
-
-Update Instant Queue
-    [Arguments]  ${qid}  ${name}   ${rt}   ${ri}   ${sDate}     ${eDate}    ${stime}    ${etime}    ${parallel}  ${capacity}  ${loc}  @{vargs}
-    ${data}=  Instant Queue  ${name}  ${rt}  ${ri}  ${sDate}     ${eDate}    ${stime}    ${etime}    ${parallel}  ${capacity}  ${loc}  @{vargs}
-    Set To Dictionary  ${data}  id=${qid}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/waitlist/queues/instant  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Update Instant Queue
-    RETURN  ${resp}
-
-Update Instant Queue without service
-    [Arguments]  ${qid}  ${name}  ${rt}   ${ri}  ${sDate}     ${eDate}    ${stime}    ${etime}    ${parallel}  ${capacity}  ${loc}
-    ${data}=  Instant Queue without Service  ${name}  ${rt}  ${ri}   ${sDate}     ${eDate}    ${stime}    ${etime}    ${parallel}  ${capacity}  ${loc}
-    Set To Dictionary  ${data}  id=${qid}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/waitlist/queues/instant  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Update Instant Queue without service
-    RETURN  ${resp}
 
 Get Queue by Filter
     [Arguments]   ${filterArg}
@@ -5524,13 +5455,6 @@ Get SalesChannelByID
     Check Deprication  ${resp}  Get SalesChannelByID
     RETURN  ${resp}
 
-Locate consumer
-    [Arguments]  ${waitlist_id}
-    Check And Create YNW Session  
-    ${resp}=    POST On Session    ynw  /provider/waitlist/live/locate/distance/time/${waitlist_id}   expected_status=any
-    Check Deprication  ${resp}  Locate consumer
-    RETURN  ${resp}
-
 Get Address using lat & long
     [Arguments]  ${lattitude}  ${longitude}
     ${data}=   Create Dictionary       latitude=${lattitude}   longitude=${longitude}
@@ -6124,30 +6048,6 @@ Update Individual Schedule
     ${resp}=  PUT On Session  ynw  /provider/appointment/schedule  data=${data}  expected_status=any
     Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
-
-Enable Waitlist Batch
-    [Arguments]   ${queueId} 
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw  /provider/waitlist/queues/batch/${queueId}/true  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
-
-
-Disable Waitlist Batch
-    [Arguments]   ${queueId}
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw  /provider/waitlist/queues/batch/${queueId}/false  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
-
-Add Batch Name
-    [Arguments]   ${queueId}  ${prefix}  ${suffix}
-    Check And Create YNW Session
-    ${data}=   Create Dictionary   prefix=${prefix}   suffix=${suffix}
-    ${data}=    json.dumps    ${data}
-    ${resp}=    PUT On Session    ynw  /provider/waitlist/queues/batch/pattern/${queueId}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
     
 Create StatusBoardnew
     [Arguments]  ${name}  ${displayname}  ${layout}  ${serviceRoom}  ${status}  ${container}  ${metric_list}  ${intervel}  ${title1}  ${title2}  ${title3}  ${title11}
@@ -6346,17 +6246,6 @@ Remove Appointment Label
     RETURN  ${resp}
 
 
-
-
-Add Label for Waitlist
-    [Arguments]  ${WaitlistId}  ${labelname}  ${label_value}
-    ${data}=    Create Dictionary  ${labelname}=${label_value}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/waitlist/label/${WaitlistId}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
-
 Add Label for Multiple Waitlist
     [Arguments]  ${label_dict}  @{WaitlistId}
     ${len}=  Get Length  ${WaitlistId}
@@ -6370,15 +6259,6 @@ Add Label for Multiple Waitlist
     ${resp}=  POST On Session  ynw  /provider/waitlist/labelBatch  data=${data}  expected_status=any
     Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
-
-
-Remove Waitlist Label
-    [Arguments]   ${WaitlistId}  ${label}
-    Check And Create YNW Session
-    ${resp}=    DELETE On Session    ynw  /provider/waitlist/label/${WaitlistId}/${label}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp} 
-
 
 Remove Label from Multiple Waitlist
     [Arguments]  ${labelname_list}  @{WaitlistId}
@@ -8293,13 +8173,6 @@ Get LocationsByPincode
     [Arguments]  ${pincode}  
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/account/settings/locations/${pincode}   expected_status=any     
-    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
-
-Is Available Queue Now ByProviderId
-    [Arguments]  ${uid}  
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   /provider/waitlist/queues/isAvailableNow/today/${uid}  expected_status=any
     Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
 
@@ -12659,49 +12532,6 @@ Get Category By CategoryType
     Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
 
-
-# Create Vendor
-
-#     [Arguments]    ${vendorCategory}  ${vendorId}  ${vendorName}   ${contactPersonName}    ${address}    ${state}    ${pincode}    ${mobileNo}   ${email}    &{kwargs}
-    
-#     ${contact}=  Create Dictionary   address=${address}   state=${state}  pincode=${pincode}    phoneNumbers=${mobileNo}  emails=${email}
-
-#     ${data}=  Create Dictionary  vendorCategory=${vendorCategory}   vendorId=${vendorId}  vendorName=${vendorName}   contactPersonName=${contactPersonName}  contactInfo=${contact}    
-#     # ...    email=${email}  address=${address}  bankAccountNumber=${bank_accno}    
-#     FOR  ${key}  ${value}  IN  &{kwargs}
-#         Set To Dictionary  ${data}   ${key}=${value}
-#     END
-#     ${data}=    json.dumps    ${data}   
-#     Check And Create YNW Session
-#     ${resp}=    POST On Session    ynw    /provider/jp/finance/vendor    data=${data}  expected_status=any    headers=${headers}
-#     Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
-
-
-# Update Vendor
-
-#     [Arguments]    ${vendor_uid}    ${vendorCategory}       ${vendorId}  ${vendorName}   ${contactPersonName}    ${address}    ${state}    ${pincode}    ${mobileNo}   ${email}  &{kwargs}
-#     ${contact}=  Create Dictionary   address=${address}   state=${state}  pincode=${pincode}    phoneNumbers=${mobileNo}  emails=${email}
-
-#     ${data}=  Create Dictionary  vendorCategory=${vendorCategory}   vendorId=${vendorId}  vendorName=${vendorName}   contactPersonName=${contactPersonName}  contactInfo=${contact}      
-#     FOR  ${key}  ${value}  IN  &{kwargs}
-#         Set To Dictionary  ${data}   ${key}=${value}
-#     END
-#     ${data}=    json.dumps    ${data}  
-#     Check And Create YNW Session
-#     ${resp}=    PUT On Session    ynw    /provider/jp/finance/vendor/${vendor_uid}     data=${data}  expected_status=any    headers=${headers}
-#     Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
-
-
-# Get Vendor By Id
-
-#     [Arguments]   ${vendor_id}  
-#     Check And Create YNW Session
-#     ${resp}=  GET On Session  ynw  /provider/jp/finance/vendor/${vendor_id}     expected_status=any
-#     Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
-
 Upload Finance Attachment
     [Arguments]    ${categoryId}      ${categoryType}      @{vargs}
 
@@ -12773,48 +12603,6 @@ Set default status
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  /provider/jp/finance/status/${Status_id}/${Category_type}/default   expected_status=any
    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
-
-# Get Vendor List with Count filter
-#     [Arguments]   &{param}
-#     Check And Create YNW Session
-#     ${resp}=    GET On Session    ynw    /provider/jp/finance/vendor/count    params=${param}    expected_status=any    headers=${headers}
-#     Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
-
-# Get Vendor List with filter
-#     [Arguments]   &{param}
-#     Check And Create YNW Session
-#     ${resp}=    GET On Session    ynw    /provider/jp/finance/vendor    params=${param}    expected_status=any    headers=${headers}
-#     Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
-
-# Update Vendor Status
-
-#     [Arguments]    ${vendorUId}  ${vendorStatus}  
-     
-#     Check And Create YNW Session
-#     ${resp}=    PUT On Session    ynw    /provider/jp/finance/vendor/${vendorUId}/${vendorStatus}     expected_status=any    headers=${headers}
-#     Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
-
-# Upload Finance Vendor Attachment
-#     [Arguments]    ${vendorUid}      @{vargs}
-
-#     ${len}=  Get Length  ${vargs}
-#     ${attachments}=  Create List  
-
-#     FOR    ${index}    IN RANGE    ${len}   
-#         Exit For Loop If  ${len}==0
-#         Append To List  ${attachments}  ${vargs[${index}]}
-#     END
-    
-#     ${data}=  Create Dictionary      attachments=${attachments}
-
-#    ${data}=  json.dumps  ${data}
-#    Check And Create YNW Session
-#    ${resp}=  PUT On Session  ynw  /provider/jp/finance/vendor/${vendorUid}/attachments  data=${data}  expected_status=any
-#    Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
 
 Create Expense
@@ -13815,20 +13603,6 @@ Apply Discount
     Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
 
-Apply Jaldee Coupon
-
-    [Arguments]    ${uuid}     ${jaldeeCouponCode}         &{kwargs}
-    ${data}=  Create Dictionary  jaldeeCouponCode=${jaldeeCouponCode}   
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${data}   
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/apply/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
-    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
-
-
 Apply Provider Coupon
 
     [Arguments]    ${uuid}     ${couponCode}         &{kwargs}
@@ -13868,21 +13642,6 @@ Remove Discount
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/remove/discount    data=${data}  expected_status=any    headers=${headers}
     Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
-
-
-Remove Jaldee Coupon
-
-    [Arguments]    ${uuid}     ${jaldeeCouponCode}         &{kwargs}
-    ${data}=  Create Dictionary  jaldeeCouponCode=${jaldeeCouponCode}   
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${data}   
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/remove/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
-    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
-
 
 Remove Provider Coupon
 
@@ -17485,42 +17244,6 @@ Confirm Appt Service Request
     Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
 
-
-Provider Create Appt Service Request
-    [Arguments]      ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${countryCode}  ${phoneNumber}  ${coupons}  ${appmtFor}  &{kwargs}
-    ${sid}=  Create Dictionary  id=${service_id} 
-    ${cid}=  Create Dictionary  id=${consid}
-    ${schedule}=  Create Dictionary  id=${schedule}
-    ${data}=    Create Dictionary   appmtDate=${appmtDate}  service=${sid}  schedule=${schedule}
-    ...   appmtFor=${appmtFor}    consumerNote=${consumerNote}  phoneNumber=${phoneNumber}   coupons=${coupons}
-    ...   consumer=${cid}  countryCode=${countryCode} 
-    ${items}=  Get Dictionary items  ${kwargs}
-        FOR  ${key}  ${value}  IN  @{items}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END 
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/appointment/service/request  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
-
-Add Delay on Multiple Appointments
-    [Arguments]    ${delaytime}  ${isAddToDelay}   ${delaymessage}    ${email}    ${pushNotification}   ${sms}     ${telegram}    @{vargs}
-    # ${delaytime}=    Random Int  min=20    max=60
-    # ${delaymessage}=    FakerLibrary.Sentence   nb_words=4
-    ${len}=  Get Length  ${vargs}
-    ${appmnts}=  Create List
-    FOR  ${value}  IN  @{vargs}
-        Append To List  ${appmnts}  ${value}
-    END
-    ${medium}=    Create Dictionary   email=${email}     pushNotification=${pushNotification}    sms=${sms}    telegram=${telegram}
-    ${data}=   Create Dictionary    apptDelay=${delaytime}  isAddToDelay=${isAddToDelay}  apptDelayMessag=${delaymessage}    appointments=${appmnts}      medium=${medium}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw   /provider/appointment/addDelayOnMultipleAppointment   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
-
 User Take Virtual Service Appointment For Consumer
     [Arguments]   ${userid}  ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${CallingModes}  ${CallingModes_id1}  ${appmtFor}
     ${user_id}=  Create Dictionary  id=${userid}
@@ -17636,13 +17359,6 @@ Create Individual Schedule
     ${resp}=  POST On Session  ynw  /provider/appointment/schedule  data=${data}  expected_status=any
     Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
-
-
-Get Appointment Schedule by location and service
-	[Arguments]	 ${locationId}	${serviceId}
-	Check And Create YNW Session
-	${resp}=  GET On Session  ynw  /provider/appointment/schedule/location/${locationId}/service/${serviceId}  expected_status=any
-	RETURN   ${resp}
 
 Create Appointment Schedule For User
     [Arguments]  ${userid}  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}    ${consumerParallelServing}   ${loc}  ${timeduration}  ${batch}  @{vargs}
