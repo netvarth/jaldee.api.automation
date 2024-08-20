@@ -521,7 +521,7 @@ JD-TC-GetProviderReminderById-8
 
 JD-TC-GetProviderReminderById-9
 
-    [Documentation]  Create a provider reminder for two other users and a provider consumer..
+    [Documentation]  Create a provider reminder for two other users and a provider consumer.then verify it by id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
@@ -625,13 +625,57 @@ JD-TC-GetProviderReminderById-9
     Should Be Equal As Strings  ${resp.json()['reminderSource']['PushNotification']}   1
     Should Be Equal As Strings  ${resp.json()['completed']}                            ${bool[0]}
     Should Be Equal As Strings  ${resp.json()['reminderForProvider']}                  ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['users'][0]['id']}                       ${pro_id}
-    Should Be Equal As Strings  ${resp.json()['users'][0]['firstName']}                ${fname}
-    Should Be Equal As Strings  ${resp.json()['users'][0]['lastName']}                 ${lname}
-    Should Be Equal As Strings  ${resp.json()['users'][1]['id']}                       ${u_id1}
-    Should Be Equal As Strings  ${resp.json()['users'][1]['firstName']}                ${ufname1}
-    Should Be Equal As Strings  ${resp.json()['users'][1]['lastName']}                 ${ulname1}
-    Should Be Equal As Strings  ${resp.json()['users'][2]['id']}                       ${u_id2}
-    Should Be Equal As Strings  ${resp.json()['users'][2]['firstName']}                ${ufname2}
-    Should Be Equal As Strings  ${resp.json()['users'][2]['lastName']}                 ${ulname2}
-    
+    Should Be Equal As Strings  ${resp.json()['users'][0]['id']}                       ${u_id1}
+    Should Be Equal As Strings  ${resp.json()['users'][0]['firstName']}                ${ufname1}
+    Should Be Equal As Strings  ${resp.json()['users'][0]['lastName']}                 ${ulname1}
+    Should Be Equal As Strings  ${resp.json()['users'][1]['id']}                       ${u_id2}
+    Should Be Equal As Strings  ${resp.json()['users'][1]['firstName']}                ${ufname2}
+    Should Be Equal As Strings  ${resp.json()['users'][1]['lastName']}                 ${ulname2}
+    Should Be Equal As Strings  ${resp.json()['providerConsumers'][0]['id']}           ${cons_id}
+    Should Be Equal As Strings  ${resp.json()['providerConsumers'][0]['firstName']}    ${custf_name}
+    Should Be Equal As Strings  ${resp.json()['providerConsumers'][0]['lastName']}     ${custl_name}
+
+JD-TC-GetProviderReminderById-UH1
+
+    [Documentation]  get provider reminder by id without login.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable      ${pro_id}  ${decrypted_data['id']}
+    Set Test Variable      ${fname}   ${decrypted_data['firstName']}
+    Set Test Variable      ${lname}   ${decrypted_data['lastName']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  add_timezone_time  ${tz}  3  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  15  
+    ${msg}=  FakerLibrary.word
+    ${rem_name}=  FakerLibrary.first_name
+    ${prov_detail}=  Create Dictionary   id=${pro_id}
+    ${prov_details}=  Create List  ${prov_detail}
+    ${remindersource}=  Create Dictionary    Sms=${bool[1]}   Email=${bool[1]}  PushNotification=${bool[1]}  Whatsapp=${bool[1]}
+
+    ${resp}=  Create Provider Reminder    ${rem_name}  ${prov_details}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}   ${sTime1}  ${eTime1}  ${msg}   ${remindersource}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${rem_id1}  ${resp.content}
+
+    ${resp}=   ProviderLogout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Get Provider Reminder By Id   ${rem_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}

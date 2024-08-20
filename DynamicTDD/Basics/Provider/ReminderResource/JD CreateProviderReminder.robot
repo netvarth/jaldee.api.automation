@@ -295,6 +295,89 @@ JD-TC-CreateProviderReminder-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${rem_id1}  ${resp.content}
 
+JD-TC-CreateProviderReminder-9
+
+    [Documentation]  Create a provider reminder for two other users and a provider consumer..
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+
+    ${ufname1}=  FakerLibrary.name
+    ${ulname1}=  FakerLibrary.last_name
+    ${PO_Number}    Generate random string    7    0123456789
+    ${p_num}    Convert To Integer  ${PO_Number}
+    ${PUSERNAME}=  Evaluate  ${PUSERNAME}+${p_num}
+    Set Test Variable  ${USERNAME1}  ${PUSERNAME}
+
+    ${resp}=  Create User  ${ufname1}  ${ulname1}   ${countryCodes[0]}  ${USERNAME1}  ${userType[0]}    
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${u_id1}  ${resp.json()}
+
+    ${ufname2}=  FakerLibrary.name
+    ${ulname2}=  FakerLibrary.last_name
+    ${PO_Number}    Generate random string    7    0123456789
+    ${p_num}    Convert To Integer  ${PO_Number}
+    ${PUSERNAME}=  Evaluate  ${PUSERNAME}+${p_num}
+    Set Test Variable  ${USERNAME2}  ${PUSERNAME}
+
+    ${resp}=  Create User  ${ufname2}  ${ulname2}   ${countryCodes[0]}  ${USERNAME2}  ${userType[0]}    
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${u_id2}  ${resp.json()}
+
+    #............provider consumer creation..........
+
+    ${NewCustomer}    Generate random string    10    123456789
+    ${NewCustomer}    Convert To Integer  ${NewCustomer}
+
+    ${custf_name}=  FakerLibrary.name    
+    ${custl_name}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${NewCustomer}    firstName=${custf_name}   lastName=${custl_name}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${cons_id}  ${resp.json()[0]['id']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  add_timezone_time  ${tz}  3  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  15  
+    ${msg}=  FakerLibrary.word
+    ${rem_name}=  FakerLibrary.first_name
+    ${prov_detail}=  Create Dictionary   id=${u_id1}
+    ${prov_detail1}=  Create Dictionary   id=${u_id2}
+    ${provcons_detail}=  Create Dictionary   id=${cons_id}
+    ${provcons_details}=  Create List  ${provcons_detail}
+    ${prov_details}=  Create List  ${prov_detail}  ${prov_detail1}  
+    ${remindersource}=  Create Dictionary    Sms=${bool[1]}   Email=${bool[1]}  PushNotification=${bool[1]}  Whatsapp=${bool[1]}
+
+    ${resp}=  Create Provider Reminder    ${rem_name}  ${prov_details}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}   ${sTime1}  ${eTime1}  ${msg}   ${remindersource}
+    ...   providerConsumers=${provcons_details}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${rem_id1}  ${resp.content}
+
 JD-TC-CreateProviderReminder-UH1
 
     [Documentation]  Create a provider reminder without reminder name.
