@@ -35,7 +35,7 @@ JD-TC-GetDonations-1
         ${pid}=  get_acc_id  ${PUSERNAME57}
         Set Suite Variable  ${pid}
         
-        ${resp}=  Get Account Payment Settings
+        ${resp}=  Get Account Settings
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -43,7 +43,7 @@ JD-TC-GetDonations-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-        ${resp}=  Get Account Payment Settings
+        ${resp}=  Get Account Settings
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         

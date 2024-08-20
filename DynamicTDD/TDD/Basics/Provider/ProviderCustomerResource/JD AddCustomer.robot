@@ -36,7 +36,7 @@ JD-TC-AddCustomer-1
      Log  ${decrypted_data}
      Set Suite Variable  ${p_id}  ${decrypted_data['id']}
      # Set Test Variable  ${p_id}  ${resp.json()['id']}
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get jaldeeIntegration Settings
@@ -93,7 +93,7 @@ JD-TC-AddCustomer-2
      ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
      # Set Test Variable  ${p_id}  ${resp.json()['id']}
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get jaldeeIntegration Settings
@@ -176,7 +176,7 @@ JD-TC-AddCustomer-4
      [Documentation]  Provider signup for already added customer with email  
      ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get jaldeeIntegration Settings
@@ -234,7 +234,7 @@ JD-TC-AddCustomer-5
      [Documentation]  Add a customer using already logined provider's phone number then add a family to that customer then add another customer using that family member's ph no
      ${resp}=  Encrypted Provider Login  ${PUSERNAME231}   ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get jaldeeIntegration Settings
@@ -355,7 +355,7 @@ JD-TC-AddCustomer-6
      [Documentation]  Add a customer which is added by another provider
      ${resp}=  Encrypted Provider Login  ${PUSERNAME232}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get jaldeeIntegration Settings
@@ -396,7 +396,7 @@ JD-TC-AddCustomer-6
      ${resp}=  Encrypted Provider Login  ${PUSERNAME233}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get jaldeeIntegration Settings
@@ -452,7 +452,7 @@ JD-TC-AddCustomer-7
      [Documentation]  Add an already existing consumer name
      ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get jaldeeIntegration Settings
@@ -490,7 +490,7 @@ JD-TC-AddCustomer-8
      [Documentation]  Add a customer using already existing Provider's phone nember
      ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get jaldeeIntegration Settings
@@ -537,7 +537,7 @@ JD-TC-AddCustomer-9
      Log  ${decrypted_data}
      Set Test Variable  ${p_id}  ${decrypted_data['id']}
      # Set Test Variable  ${p_id}  ${resp.json()['id']}
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get jaldeeIntegration Settings
@@ -684,7 +684,7 @@ JD-TC-AddCustomer-10
      Set Test Variable  ${p_id}  ${decrypted_data['id']}
      # Set Test Variable  ${p_id}  ${resp.json()['id']}
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get jaldeeIntegration Settings
@@ -846,7 +846,7 @@ JD-TC-AddCustomer-11
      Set Test Variable  ${p_id}  ${decrypted_data['id']}
      # Set Test Variable  ${p_id}  ${resp.json()['id']}
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get jaldeeIntegration Settings
@@ -1007,7 +1007,7 @@ JD-TC-AddCustomer-12
      Set Test Variable  ${p_id}  ${decrypted_data['id']}
      # Set Test Variable  ${p_id}  ${resp.json()['id']}
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get jaldeeIntegration Settings
@@ -1132,7 +1132,7 @@ JD-TC-AddCustomer-13
      Set Test Variable  ${p_id}  ${decrypted_data['id']}
      # Set Test Variable  ${p_id}  ${resp.json()['id']}
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get jaldeeIntegration Settings
@@ -1261,7 +1261,7 @@ JD-TC-AddCustomer-14
      ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get jaldeeIntegration Settings
@@ -1313,7 +1313,7 @@ JD-TC-AddCustomer-15
      Set Test Variable  ${p_id}  ${decrypted_data['id']}
      # Set Test Variable  ${p_id}  ${resp.json()['id']}
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get jaldeeIntegration Settings
@@ -1397,7 +1397,7 @@ JD-TC-AddCustomer-UH1
      ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get jaldeeIntegration Settings
@@ -1535,7 +1535,7 @@ JD-TC-AddCustomer-16
      Log  ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1618,7 +1618,7 @@ JD-TC-AddCustomer-16
      Log  ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1701,7 +1701,7 @@ JD-TC-AddCustomer-16
      Log  ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1853,7 +1853,7 @@ JD-TC-AddCustomer-17
      Log  ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1986,7 +1986,7 @@ JD-TC-AddCustomer-17
      Log  ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2127,7 +2127,7 @@ JD-TC-AddCustomer-17
      Log  ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2564,7 +2564,7 @@ JD-TC-AddCustomer-19
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2723,7 +2723,7 @@ JD-TC-AddCustomer-20
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}   200
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2844,7 +2844,7 @@ JD-TC-AddCustomer-21
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}   200
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3123,7 +3123,7 @@ JD-TC-AddCustomer-23
      Log  ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}   200
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get jaldeeIntegration Settings
@@ -3364,7 +3364,7 @@ JD-TC-AddCustomer-UH5
      Should Be Equal As Strings    ${resp.status_code}    200
      clear_customer   ${PUSERNAME_C}
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get jaldeeIntegration Settings
@@ -3405,7 +3405,7 @@ JD-TC-AddCustomer-UH6
      ${pid0}=  get_acc_id  ${PUSERNAME162}
      Set Suite Variable  ${pid0}  
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get jaldeeIntegration Settings
@@ -3476,7 +3476,7 @@ JD-TC-AddCustomer-UH7
      ${pid0}=  get_acc_id  ${PUSERNAME162}
      Set Suite Variable  ${pid0}  
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get jaldeeIntegration Settings
@@ -3548,7 +3548,7 @@ JD-TC-AddCustomer-UH8
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3649,7 +3649,7 @@ JD-TC-AddCustomer-25
      Log  ${decrypted_data}
      Set Test Variable  ${p_id}  ${decrypted_data['id']}
      
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      IF  '${resp.json()['jaldeeIdFormat']['customerSeriesEnum']}' == '${customerseries[0]}'
@@ -3658,7 +3658,7 @@ JD-TC-AddCustomer-25
           Should Be Equal As Strings  ${resp.status_code}  200
      END
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      Should Be Equal As Strings  ${resp.json()['jaldeeIdFormat']['customerSeriesEnum']}  ${customerseries[1]}
@@ -3716,7 +3716,7 @@ JD-TC-AddCustomer-26
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${acc_id1}  ${resp.json()['id']}
      
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      IF  '${resp.json()['jaldeeIdFormat']['customerSeriesEnum']}' == '${customerseries[0]}'
@@ -3725,7 +3725,7 @@ JD-TC-AddCustomer-26
           Should Be Equal As Strings  ${resp.status_code}  200
      END
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      Should Be Equal As Strings  ${resp.json()['jaldeeIdFormat']['customerSeriesEnum']}  ${customerseries[1]}
@@ -3806,7 +3806,7 @@ JD-TC-AddCustomer-UH10
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${acc_id1}  ${resp.json()['id']}
      
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      IF  '${resp.json()['jaldeeIdFormat']['customerSeriesEnum']}' == '${customerseries[0]}'
@@ -3815,7 +3815,7 @@ JD-TC-AddCustomer-UH10
           Should Be Equal As Strings  ${resp.status_code}  200
      END
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      Should Be Equal As Strings  ${resp.json()['jaldeeIdFormat']['customerSeriesEnum']}  ${customerseries[1]}
@@ -3853,7 +3853,7 @@ JD-TC-AddCustomer-UH11
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${acc_id1}  ${resp.json()['id']}
      
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      IF  '${resp.json()['jaldeeIdFormat']['customerSeriesEnum']}' == '${customerseries[0]}'
@@ -3862,7 +3862,7 @@ JD-TC-AddCustomer-UH11
           Should Be Equal As Strings  ${resp.status_code}  200
      END
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      Should Be Equal As Strings  ${resp.json()['jaldeeIdFormat']['customerSeriesEnum']}  ${customerseries[1]}
@@ -3901,7 +3901,7 @@ JD-TC-AddCustomer-UH12
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${acc_id1}  ${resp.json()['id']}
      
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      IF  '${resp.json()['jaldeeIdFormat']['customerSeriesEnum']}' == '${customerseries[0]}'
@@ -3910,7 +3910,7 @@ JD-TC-AddCustomer-UH12
           Should Be Equal As Strings  ${resp.status_code}  200
      END
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      Should Be Equal As Strings  ${resp.json()['jaldeeIdFormat']['customerSeriesEnum']}  ${customerseries[1]}
@@ -3951,7 +3951,7 @@ JD-TC-AddCustomer-UH13
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${acc_id1}  ${resp.json()['id']}
      
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      IF  '${resp.json()['jaldeeIdFormat']['customerSeriesEnum']}' == '${customerseries[0]}'
@@ -3960,7 +3960,7 @@ JD-TC-AddCustomer-UH13
           Should Be Equal As Strings  ${resp.status_code}  200
      END
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      Should Be Equal As Strings  ${resp.json()['jaldeeIdFormat']['customerSeriesEnum']}  ${customerseries[1]}
@@ -3991,7 +3991,7 @@ JD-TC-AddCustomer-27
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -4073,7 +4073,7 @@ JD-TC-AddCustomer-28
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -4186,7 +4186,7 @@ JD-TC-AddCustomer-29
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -4293,7 +4293,7 @@ JD-TC-AddCustomer-30
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -5284,7 +5284,7 @@ JD-TC-AddCustomer-18
      ${decrypted_data}=  db.decrypt_data  ${resp.content}
      Log  ${decrypted_data}
      Set Suite Variable  ${p_id}  ${decrypted_data['id']}
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get jaldeeIntegration Settings
@@ -5342,7 +5342,7 @@ JD-TC-AddCustomer-19
      ${decrypted_data}=  db.decrypt_data  ${resp.content}
      Log  ${decrypted_data}
      Set Suite Variable  ${p_id}  ${decrypted_data['id']}
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get jaldeeIntegration Settings
@@ -5374,7 +5374,7 @@ JD-TC-AddCustomer-20
      ${decrypted_data}=  db.decrypt_data  ${resp.content}
      Log  ${decrypted_data}
      Set Suite Variable  ${p_id}  ${decrypted_data['id']}
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get jaldeeIntegration Settings
@@ -5407,7 +5407,7 @@ JD-TC-AddCustomer-21
      ${decrypted_data}=  db.decrypt_data  ${resp.content}
      Log  ${decrypted_data}
      Set Suite Variable  ${p_id}  ${decrypted_data['id']}
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get jaldeeIntegration Settings
@@ -5441,7 +5441,7 @@ JD-TC-AddCustomer-22
      ${decrypted_data}=  db.decrypt_data  ${resp.content}
      Log  ${decrypted_data}
      Set Suite Variable  ${p_id}  ${decrypted_data['id']}
-     ${resp}=  Get Accountsettings  
+     ${resp}=  Get Account Settings  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get jaldeeIntegration Settings

@@ -64,7 +64,7 @@ JD-TC-Get_IVR_By_UID-1
     ${acc_id}=  get_acc_id  ${PUSERNAME163}
     Set Suite Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
@@ -192,7 +192,7 @@ JD-TC-Get_IVR_By_UID-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -342,7 +342,7 @@ JD-TC-Get_IVR_By_UID-2
     ${acc_id}=  get_acc_id  ${PUSERNAME163}
     Set Suite Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
@@ -608,7 +608,7 @@ JD-TC-Get_IVR_By_UID-3
     ${acc_id}=  get_acc_id  ${PUSERNAME163}
     Set Suite Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
@@ -873,7 +873,7 @@ JD-TC-Get_IVR_By_UID-4
     ${acc_id}=  get_acc_id  ${PUSERNAME163}
     Set Suite Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
@@ -1139,7 +1139,7 @@ JD-TC-Get_IVR_By_UID-5
     ${acc_id}=  get_acc_id  ${PUSERNAME163}
     Set Suite Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 

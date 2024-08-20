@@ -207,7 +207,7 @@ JD-TC-DeleteVacation-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}    appointment=${bool[1]}
@@ -296,7 +296,7 @@ JD-TC-DeleteVacation-3
     # ${resp}=  Appointment Status   ${toggle[0]}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    appointment=${bool[1]}    waitlist=${bool[1]}
@@ -399,7 +399,7 @@ JD-TC-DeleteVacation-5
     ${resp}=  Waitlist Status    ${toggle[1]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # ${resp}=  Get Accountsettings  
+    # ${resp}=  Get Account Settings  
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Verify Response   ${resp}    appointment=${bool[1]}   waitlist=${bool[0]}
@@ -420,7 +420,7 @@ JD-TC-DeleteVacation-5
     # ${resp}=  Appointment Status   ${toggle[0]}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    appointment=${bool[1]}    waitlist=${bool[0]}
@@ -475,7 +475,7 @@ JD-TC-DeleteVacation-5
     #${resp}=  Appointment Status   ${toggle[0]}
     #Log  ${resp.content}
     #Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    appointment=${bool[1]}    waitlist=${bool[0]}

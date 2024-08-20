@@ -62,7 +62,7 @@ JD-TC-Get_IVR_USER_DETAILS-1
     ${acc_id}=  get_acc_id  ${PUSERNAME167}
     Set Suite Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
@@ -190,7 +190,7 @@ JD-TC-Get_IVR_USER_DETAILS-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -618,7 +618,7 @@ JD-TC-Get_IVR_USER_DETAILS-UH7
     Set Suite Variable  ${name}  ${resp.json()['firstName']}
     
  
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 

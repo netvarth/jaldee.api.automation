@@ -4256,7 +4256,7 @@ JD-TC-Take Individual Schedule Appointment-37
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -4264,7 +4264,7 @@ JD-TC-Take Individual Schedule Appointment-37
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -4298,7 +4298,7 @@ JD-TC-Take Individual Schedule Appointment-37
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Get Account Payment Settings 
+    ${resp}=   Get Account Settings 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -4577,7 +4577,7 @@ JD-TC-Take Individual Schedule Appointment-38
     
     ${resp}=  SetMerchantId  ${pid}  ${merchantid}
 
-    ${resp}=   Get Account Payment Settings 
+    ${resp}=   Get Account Settings 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 

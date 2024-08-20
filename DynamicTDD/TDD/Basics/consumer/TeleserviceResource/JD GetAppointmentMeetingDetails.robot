@@ -117,7 +117,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-1
     ${result}=  Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
     Log   ${result.json()}
     Should Be Equal As Strings  ${result.status_code}  200
-    ${resp}=   Get Accountsettings
+    ${resp}=   Get Account Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['appointment']}   ${bool[1]}
@@ -1221,7 +1221,7 @@ JD-TC-GetAppointmentMeetingDetails-(Non billable Subdomain)-7
     ${result}=  Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
     Log   ${result.json()}
     Should Be Equal As Strings  ${result.status_code}  200
-    ${resp}=   Get Accountsettings
+    ${resp}=   Get Account Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['appointment']}   ${bool[1]}

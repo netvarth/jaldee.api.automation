@@ -1047,7 +1047,7 @@ JD-TC-Switch_Login-12
     # Should Be Equal As Strings    ${resp.status_code}   200
     # ${resp}=  SetMerchantId  ${pid}  ${merchantid}
 
-    # ${resp}=  Get Account Payment Settings
+    # ${resp}=  Get Account Settings
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -1055,7 +1055,7 @@ JD-TC-Switch_Login-12
     #     Should Be Equal As Strings  ${resp.status_code}  200
     # END
 
-    # ${resp}=  Get Account Payment Settings
+    # ${resp}=  Get Account Settings
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 

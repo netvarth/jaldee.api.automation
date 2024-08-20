@@ -30,7 +30,7 @@ JD-TC-GetDonationById-1
         clear_queue      ${PUSERNAME64}
         clear_location   ${PUSERNAME64}
 
-        ${resp}=  Get Account Payment Settings
+        ${resp}=  Get Account Settings
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -38,7 +38,7 @@ JD-TC-GetDonationById-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-        ${resp}=  Get Account Payment Settings
+        ${resp}=  Get Account Settings
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         

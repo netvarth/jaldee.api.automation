@@ -225,7 +225,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${que_id}  ${resp.json()}
   
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[0]}

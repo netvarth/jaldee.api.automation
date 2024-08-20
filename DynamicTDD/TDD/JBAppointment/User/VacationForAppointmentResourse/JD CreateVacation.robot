@@ -213,7 +213,7 @@ JD-TC-CreateVacation-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]}
@@ -294,7 +294,7 @@ JD-TC-CreateVacation-2
     ${resp}=  Waitlist Status    ${toggle[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[0]}   appointment=${bool[1]}
@@ -318,7 +318,7 @@ JD-TC-CreateVacation-2
     # ${resp}=  Appointment Status   ${toggle[0]}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    appointment=${bool[1]}   waitlist=${bool[0]}
@@ -372,7 +372,7 @@ JD-TC-CreateVacation-3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
      
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    appointment=${bool[1]}   waitlist=${bool[0]}
@@ -461,7 +461,7 @@ JD-TC-CreateVacation-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id2}  ${resp.json()}
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[0]}   appointment=${bool[1]}
@@ -651,7 +651,7 @@ JD-TC-CreateVacation-UH5
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    appointment=${bool[1]}   waitlist=${bool[0]}
@@ -677,7 +677,7 @@ JD-TC-CreateVacation-UH6
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    appointment=${bool[1]}   waitlist=${bool[0]}
@@ -698,7 +698,7 @@ JD-TC-CreateVacation-UH7
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    appointment=${bool[1]}   waitlist=${bool[0]}

@@ -187,7 +187,7 @@ JD-TC-Provider_Signup-1
     #     Should Be Equal As Strings  ${resp.status_code}  200
     #     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    #     # ${resp}=  Get Account Payment Settings
+    #     # ${resp}=  Get Account Settings
     #     # Log  ${resp.content}
     #     # Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -197,7 +197,7 @@ JD-TC-Provider_Signup-1
     #     #     Should Be Equal As Strings  ${resp1.status_code}  200
     #     # END
 
-    #     # ${resp}=  Get Account Payment Settings
+    #     # ${resp}=  Get Account Settings
     #     # Log  ${resp.content}
     #     # Should Be Equal As Strings  ${resp.status_code}  200
 

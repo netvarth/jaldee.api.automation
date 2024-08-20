@@ -1205,7 +1205,7 @@ JD-TC-Add To WaitlistByConsumer-18
     clear waitlist   ${PUSERPH0}
     clear_customer   ${PUSERPH0}
     
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -1213,7 +1213,7 @@ JD-TC-Add To WaitlistByConsumer-18
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -2416,7 +2416,7 @@ JD-TC-Add To WaitlistByConsumer-UH16
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]} 
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -2495,7 +2495,7 @@ JD-TC-Add To WaitlistByConsumer-UH16
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=   Get Account Payment Settings 
+    ${resp}=   Get Account Settings 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3130,12 +3130,12 @@ JD-TC-Add To WaitlistByConsumer-25
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}   200
 
-    # ${resp}=   Get Account Payment Settings 
+    # ${resp}=   Get Account Settings 
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}   200
     # ${resp}=  SetMerchantId  ${pid0}  ${merchantid}
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -3143,7 +3143,7 @@ JD-TC-Add To WaitlistByConsumer-25
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     

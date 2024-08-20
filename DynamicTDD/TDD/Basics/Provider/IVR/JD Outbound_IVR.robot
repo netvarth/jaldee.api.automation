@@ -62,7 +62,7 @@ JD-TC-Outbound_IVR-1
     ${acc_id}=  get_acc_id  ${PUSERNAME175}
     Set Suite Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
@@ -190,7 +190,7 @@ JD-TC-Outbound_IVR-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -392,7 +392,7 @@ JD-TC-Outbound_IVR-2
     ${acc_id}=  get_acc_id  ${PUSERNAME175}
     Set Suite Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
@@ -710,7 +710,7 @@ JD-TC-Outbound_IVR-3
     ${acc_id}=  get_acc_id  ${PUSERNAME175}
     Set Suite Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
@@ -1031,7 +1031,7 @@ JD-TC-Outbound_IVR-UH1
     ${acc_id_consumer}=  get_acc_id  ${CUSERNAME6}
     Set Suite Variable   ${acc_id_consumer} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings    ${resp.json()}    ${NoAccess}
@@ -1058,7 +1058,7 @@ JD-TC-Outbound_IVR-UH2
     ${acc_id}=  get_acc_id  ${PUSERNAME175}
     Set Suite Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
@@ -1384,7 +1384,7 @@ JD-TC-Outbound_IVR-UH3
     ${acc_id}=  get_acc_id  ${PUSERNAME175}
     Set Suite Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
@@ -1716,7 +1716,7 @@ JD-TC-Outbound_IVR-UH5
     ${acc_id}=  get_acc_id  ${PUSERNAME175}
     Set Suite Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 

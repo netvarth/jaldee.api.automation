@@ -149,7 +149,7 @@ JD-TC-Consumer-Payment-TransactionBy UUId-1
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -173,7 +173,7 @@ JD-TC-Consumer-Payment-TransactionBy UUId-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     

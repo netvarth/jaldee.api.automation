@@ -450,7 +450,7 @@ JD-TC-WaitlistByUserLoginAndBillGenarate-4
      Should Be Equal As Strings    ${resp.status_code}    200
     clear Customer  ${PUSERNAME_E}
     
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -463,7 +463,7 @@ JD-TC-WaitlistByUserLoginAndBillGenarate-4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

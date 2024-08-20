@@ -277,7 +277,7 @@ JD-TC-GetAppointmentToday-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -285,7 +285,7 @@ JD-TC-GetAppointmentToday-2
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=  Get Account Payment Settings
+    ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3275,7 +3275,7 @@ JD-TC-GetAppointmentToday-17
 
     ${resp}=  SetMerchantId  ${pid}  ${merchantid}
 
-    ${resp}=   Get Account Payment Settings 
+    ${resp}=   Get Account Settings 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3585,7 +3585,7 @@ JD-TC-GetAppointmentToday-18
 
     ${resp}=  SetMerchantId  ${pid}  ${merchantid}
 
-    ${resp}=   Get Account Payment Settings 
+    ${resp}=   Get Account Settings 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -4130,7 +4130,7 @@ JD-TC-GetAppointmentToday-20
 
     ${resp}=  SetMerchantId  ${pid}  ${merchantid}
 
-    ${resp}=   Get Account Payment Settings 
+    ${resp}=   Get Account Settings 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 

@@ -772,7 +772,7 @@ Update Account Payment Settings
     ${resp}=   PUT On Session  ynw  /provider/payment/settings   data=${data}  expected_status=any
     RETURN  ${resp}
     
-Get Account Payment Settings
+Get Account Settings
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/payment/settings   
     RETURN  ${resp}

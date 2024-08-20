@@ -187,7 +187,7 @@ JD-TC-GetSlots By Date-3
     # ${resp}=  Appointment Status  Enable
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Get Accountsettings  
+    ${resp}=  Get Account Settings  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['appointment']}   ${bool[1]}

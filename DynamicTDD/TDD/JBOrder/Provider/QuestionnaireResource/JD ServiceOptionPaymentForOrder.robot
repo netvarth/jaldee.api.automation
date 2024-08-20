@@ -365,7 +365,7 @@ JD-TC-ServiceOptionPaymentForOrder-2
     ${resp}=  Enable Tax
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=   Get Account Payment Settings 
+    ${resp}=   Get Account Settings 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -660,7 +660,7 @@ JD-TC-ServiceOptionPaymentForOrder-3
     ${resp}=  Enable Tax
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=   Get Account Payment Settings 
+    ${resp}=   Get Account Settings 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   

@@ -211,10 +211,10 @@ Toggle Department Disable
     Check Deprication  ${resp}  Toggle Department Disable
     RETURN  ${resp} 
 
-View Waitlist Settings
+Get Waitlist Settings
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/settings/waitlistMgr  expected_status=any
-    Check Deprication  ${resp}  View Waitlist Settings
+    Check Deprication  ${resp}  Get Waitlist Settings
     RETURN  ${resp}
 
 Get Account contact information
@@ -246,10 +246,10 @@ Update Business Profile with kwargs
     Check Deprication  ${resp}  Update Business Profile with kwargs
     RETURN  ${resp}
 
-Get Accountsettings
+Get Account Settings
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/account/settings  expected_status=any
-    Check Deprication  ${resp}  Get Accountsettings
+    Check Deprication  ${resp}  Get Account Settings
     RETURN  ${resp}
 
     
@@ -3140,12 +3140,6 @@ Update Account Payment Settings
     Check Deprication  ${resp}  Update Account Payment Settings
     RETURN  ${resp}
     
-Get Account Payment Settings
-    Check And Create YNW Session
-    ${resp}=   GET On Session  ynw  /provider/payment/settings   expected_status=any
-    Check Deprication  ${resp}  Get Account Payment Settings
-    RETURN  ${resp}
-    
 Create Item
    [Arguments]   ${dsplyName}   ${shrtDes}   ${dsplyDes}   ${price}  ${taxable}
    ${auth}=  Create Dictionary   displayName=${dsplyName}    shortDesc=${shrtDes}   displayDesc=${dsplyDes}    price=${price}    taxable=${taxable}
@@ -5587,12 +5581,6 @@ Disable OnlinePresence
     Check Deprication  ${resp}  Disable OnlinePresence
     RETURN  ${resp}
 
-Get OnlinePresence
-    Check And Create YNW Session  
-    ${resp}=   GET On Session   ynw   /provider/account/settings  expected_status=any
-    Check Deprication  ${resp}  Get OnlinePresence
-    RETURN  ${resp}
-
 Post CustomID
     [Arguments]  ${customId}
     Check And Create YNW Session  
@@ -6183,18 +6171,12 @@ Update Appointmet Settings
     Check Deprication  ${resp}  Update Appointmet Settings
     RETURN  ${resp}
 
-Enable Appointment
+Update Appointment Status
+    [Arguments]   ${status}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/account/settings/appointment/Enable   expected_status=any
-    Check Deprication  ${resp}  Enable Appointment
+    ${resp}=  PUT On Session  ynw  /provider/account/settings/appointment/${status}   expected_status=any
+    Check Deprication  ${resp}  Update Appointment Status
     RETURN  ${resp}
-
-Disable Appointment
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/account/settings/appointment/Disable   expected_status=any
-    Check Deprication  ${resp}  Disable Appointment
-    RETURN  ${resp}
-
     
 Enable Calling Status
     [Arguments]   ${uid}   

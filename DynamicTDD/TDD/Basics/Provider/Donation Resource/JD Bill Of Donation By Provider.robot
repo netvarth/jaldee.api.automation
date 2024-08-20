@@ -33,7 +33,7 @@ JD-TC-DonationBill-1
         clear_queue      ${PUSERNAME28}
         clear_location   ${PUSERNAME28}
 
-        ${resp}=  Get Account Payment Settings
+        ${resp}=  Get Account Settings
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -41,7 +41,7 @@ JD-TC-DonationBill-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-        ${resp}=  Get Account Payment Settings
+        ${resp}=  Get Account Settings
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -150,7 +150,7 @@ JD-TC-DonationBill-2
         clear_queue      ${PUSERNAME25}
         clear_location   ${PUSERNAME25}
 
-        ${resp}=  Get Account Payment Settings
+        ${resp}=  Get Account Settings
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -158,7 +158,7 @@ JD-TC-DonationBill-2
                 Should Be Equal As Strings  ${resp.status_code}  200
         END
 
-        ${resp}=  Get Account Payment Settings
+        ${resp}=  Get Account Settings
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -385,7 +385,7 @@ JD-TC-DonationBill-UH7
         clear_queue      ${PUSERNAME29}
         clear_location   ${PUSERNAME29}
 
-        ${resp}=  Get Account Payment Settings
+        ${resp}=  Get Account Settings
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         IF  ${resp.json()['onlinePayment']}==${bool[0]}   
@@ -393,7 +393,7 @@ JD-TC-DonationBill-UH7
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-        ${resp}=  Get Account Payment Settings
+        ${resp}=  Get Account Settings
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         
