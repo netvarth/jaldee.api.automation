@@ -1884,16 +1884,7 @@ Reset LoginId
     Check Deprication  ${resp}  Reset LoginId
     RETURN  ${resp}
 
-Reset Password LoginId Login
 
-    [Arguments]     ${oldpassword}  ${password}
-
-    ${data}=    Create Dictionary   oldpassword=${oldpassword}  password=${password}
-    ${data}=    json.dumps    ${data} 
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/login/reset/password   data=${data}   expected_status=any
-    Check Deprication  ${resp}  Reset Password LoginId Login
-    RETURN  ${resp}
 
 ####### VENDOR #######
 
@@ -2872,25 +2863,6 @@ Update Waitlist Settings
     Check Deprication  ${resp}  Update Waitlist Settings
     RETURN  ${resp}
 
-Send Verify Login
-    [Arguments]  ${loginid}  ${countryCode}=91
-    Check And Create YNW Session
-    ${body}=     Create Dictionary   countryCode=${countryCode}
-    ${data}=    json.dumps    ${body}
-    ${resp}=  POST On Session    ynw  /provider/login/verifyLogin/${loginid}   params=${data}  expected_status=any
-    Check Deprication  ${resp}  Send Verify Login
-    RETURN  ${resp}
-
-Verify Login
-    [Arguments]  ${loginid}  ${purpose}  ${countryCode}=91
-    Check And Create YNW Session
-    ${auth}=     Create Dictionary   loginId=${loginid}  countryCode=${countryCode}
-    ${key}=   verify accnt  ${loginid}  ${purpose}
-    ${data}=    json.dumps    ${auth}
-    ${resp}=    PUT On Session    ynw    /provider/login/${key}/verifyLogin    data=${data}  expected_status=any
-    Check Deprication  ${resp}  Verify Login
-    RETURN  ${resp}
-
 Get Provider By Id
     [Arguments]  ${email}
     Check And Create YNW Session
@@ -3687,13 +3659,6 @@ Get Last Computed waitingTime
     Check Deprication  ${resp}  Get Last Computed waitingTime
     RETURN  ${resp}
 
-Get Features
-    [Arguments]  ${subdomain}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/ynwConf/features/${subdomain}  expected_status=any
-    Check Deprication  ${resp}  Get Features
-    RETURN  ${resp}
-    
 Get Business schedules
 	Check and Create YNW Session
 	${resp}=  GET On Session   ynw  /provider/ynwConf/bSchedule  expected_status=any
@@ -5428,70 +5393,7 @@ Update Status Board Waitlist
     Check Deprication  ${resp}  Update Status Board Waitlist
     RETURN  ${resp} 
 
-    
-Enable JDN for Label
-    [Arguments]    ${label}   ${displayNote}   
-    ${data}=   Create Dictionary   label=${label}   displayNote=${displayNote}   
-    ${data}=    json.dumps    ${data}
-    Check And Create YNW Session
-    ${resp}=    POST On Session   ynw    /provider/settings/jdn/enable    data=${data}  expected_status=any
-    Check Deprication  ${resp}  Enable JDN for Label
-    RETURN  ${resp}
 
-Enable JDN for Percent
-    [Arguments]    ${displayNote}   ${discPercentage}   ${discMax}   
-    ${data}=   Create Dictionary   displayNote=${displayNote}   discPercentage=${discPercentage}   discMax=${discMax} 
-    ${data}=    json.dumps    ${data}
-    Check And Create YNW Session
-    ${resp}=    POST On Session   ynw    /provider/settings/jdn/enable    data=${data}  expected_status=any
-    Check Deprication  ${resp}  Enable JDN for Percent
-    RETURN  ${resp}
-
-Get JDN 
-    Check and Create YNW Session
-	${resp}=  GET On Session   ynw  /provider/settings/jdn  expected_status=any
-	Check Deprication  ${resp}  Get JDN 
-    RETURN  ${resp}
-
-Disable JDN
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/settings/jdn/disable  expected_status=any
-    Check Deprication  ${resp}  Disable JDN
-    RETURN  ${resp}
-
-Update JDN with Label
-    [Arguments]    ${label}   ${displayNote}   
-    ${data}=   Create Dictionary   label=${label}   displayNote=${displayNote}   
-    ${data}=    json.dumps    ${data}
-    Check And Create YNW Session
-    ${resp}=    PUT On Session   ynw    /provider/settings/jdn    data=${data}  expected_status=any
-    Check Deprication  ${resp}  Update JDN with Label
-    RETURN  ${resp}
-
-Update JDN with Percentage
-    [Arguments]    ${displayNote}   ${discPercentage}   ${discMax}   
-    ${data}=   Create Dictionary   displayNote=${displayNote}   discPercentage=${discPercentage}   discMax=${discMax} 
-    ${data}=    json.dumps    ${data}
-    Check And Create YNW Session
-    ${resp}=    PUT On Session   ynw   /provider/settings/jdn    data=${data}  expected_status=any
-    Check Deprication  ${resp}  Update JDN with Percentage
-    RETURN  ${resp}
-
-Join to Corporate
-    [Arguments]  ${corpUid}  
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/corp/joinCorp/${corpUid}  expected_status=any
-    Check Deprication  ${resp}  Join to Corporate
-    RETURN  ${resp}
-
-Switch To Corporate
-    [Arguments]  ${corporateName}   ${corporateCode}    ${multilevel}  
-    ${data}=  Create Dictionary   corporateName=${corporateName}    corporateCode=${corporateCode}   multilevel=${multilevel}  
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/corp/switchToCorp   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Switch To Corporate
-    RETURN  ${resp}
 
 Branch User Creation
     [Arguments]  ${firstname}  ${lastname}   ${primaryMobileNo}   ${email}  ${subSector}   ${commonPassword}  ${departmentCode}   ${countryCode}=91
@@ -5615,13 +5517,6 @@ Create HowDoYouHearUs
     Check Deprication  ${resp}  Create HowDoYouHearUs
     RETURN  ${resp}
 
-Get SalesChannel
-
-    Check and Create YNW Session
-	${resp}=  GET On Session   ynw   /provider/salesChannel  expected_status=any
-	Check Deprication  ${resp}  Get SalesChannel
-    RETURN  ${resp}
-
 Get SalesChannelByID
     [Arguments]  ${scid}
     Check And Create YNW Session
@@ -5663,15 +5558,6 @@ Get Address from city
     ${resp}=    POST On Session    ynw  /provider/signup/location/address   data=${data}  expected_status=any
     Check Deprication  ${resp}  Get Address from city
     RETURN  ${resp}
-
-
-Add SalesChannel
-    [Arguments]  ${sc_code}
-    Check And Create YNW Session
-    ${resp}=    POST On Session   ynw   /provider/salesChannel/${sc_code}   expected_status=any
-    Check Deprication  ${resp}  Add SalesChannel
-    RETURN  ${resp}
-
 
 Create StatusBoard Container
     [Arguments]  ${name}  ${dis_name}   ${layout}   ${interval}  @{sbid}
@@ -6239,186 +6125,6 @@ Update Individual Schedule
     Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
 
-
-Create CustomeView
-	[Arguments]    ${name}  ${merged}  ${departmentId}  ${serviceId}  ${queuesId}  ${usersId}  ${type}
-	${len}=  Get Length  ${departmentId}
-	${department_L}=  Create List
-	FOR    ${index}   IN RANGE   0  ${len}
-        ${A}=  Create Dictionary  departmentId=${departmentId[${index}]}
-        Append To List  ${department_L}  ${A}
-    END
-   	
-	${len}=  Get Length  ${serviceId}
-	${services_L}=  Create List
-	FOR    ${index}   IN RANGE   0  ${len}
-        ${B}=  Create Dictionary  id=${serviceId[${index}]}
-        Append To List  ${services_L}  ${B}
-    END
-       
-    ${len}=  Get Length  ${queuesId}
-	${queues_L}=  Create List
-	FOR    ${index}   IN RANGE   0  ${len}
-        ${C}=  Create Dictionary  id=${queuesId[${index}]}
-        Append To List  ${queues_L}  ${C}
-    END
-       
-    ${len}=  Get Length  ${usersId}
-	${users_L}=  Create List
-	FOR    ${index}   IN RANGE   0  ${len}
-        ${D}=  Create Dictionary  id=${usersId[${index}]}
-        Append To List  ${users_L}  ${D}
-    END
-	${cv}=  Create Dictionary  departments=${department_L}  services=${services_L}  queues=${queues_L}  users=${users_L}  
-	${data}=  Create Dictionary   name=${name}  merged=${merged}  customViewConditions=${cv}  type=${type}
-	${data}=  json.dumps  ${data}	
-	Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/customView   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
-   
-
-Create CustomeView Appointment
-	[Arguments]    ${name}  ${merged}  ${departmentId}  ${serviceId}   ${usersId}   ${Scheduleid}   ${type}
-	${len}=  Get Length  ${departmentId}
-	${department_L}=  Create List
-	FOR    ${index}   IN RANGE   0  ${len}
-        ${A}=  Create Dictionary  departmentId=${departmentId[${index}]}
-        Append To List  ${department_L}  ${A}
-    END
-   	
-	${len}=  Get Length  ${serviceId}
-	${services_L}=  Create List
-	FOR    ${index}   IN RANGE   0  ${len}
-        ${B}=  Create Dictionary  id=${serviceId[${index}]}
-        Append To List  ${services_L}  ${B}
-    END
-       
-    ${len}=  Get Length  ${usersId}
-	${users_L}=  Create List
-	FOR    ${index}   IN RANGE   0  ${len}
-        ${D}=  Create Dictionary  id=${usersId[${index}]}
-        Append To List  ${users_L}  ${D}
-    END
-
-    ${len}=  Get Length  ${Scheduleid}
-	${sched_L}=  Create List
-	FOR    ${index}   IN RANGE   0  ${len}
-        ${C}=  Create Dictionary  id=${Scheduleid[${index}]}
-        Append To List  ${sched_L}  ${C}
-    END
-       
-	${cv}=  Create Dictionary  departments=${department_L}  services=${services_L}   users=${users_L}  schedules=${sched_L}  
-	${data}=  Create Dictionary   name=${name}  merged=${merged}  customViewConditions=${cv}  type=${type}
-	${data}=  json.dumps  ${data}	
-	Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/customView   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
-
-Update CustomeView Appointment
-	[Arguments]   ${id}   ${name}  ${merged}  ${departmentId}  ${serviceId}   ${usersId}   ${Scheduleid}   ${type}
-	${len}=  Get Length  ${departmentId}
-	${department_L}=  Create List
-	FOR    ${index}   IN RANGE   0  ${len}
-        ${A}=  Create Dictionary  departmentId=${departmentId[${index}]}
-        Append To List  ${department_L}  ${A}
-    END
-   	
-	${len}=  Get Length  ${serviceId}
-	${services_L}=  Create List
-	FOR    ${index}   IN RANGE   0  ${len}
-        ${B}=  Create Dictionary  id=${serviceId[${index}]}
-        Append To List  ${services_L}  ${B}
-    END
-       
-    ${len}=  Get Length  ${usersId}
-	${users_L}=  Create List
-	FOR    ${index}   IN RANGE   0  ${len}
-        ${D}=  Create Dictionary  id=${usersId[${index}]}
-        Append To List  ${users_L}  ${D}
-    END
-
-    ${len}=  Get Length  ${Scheduleid}
-	${sched_L}=  Create List
-	FOR    ${index}   IN RANGE   0  ${len}
-        ${C}=  Create Dictionary  id=${Scheduleid[${index}]}
-        Append To List  ${sched_L}  ${C}
-    END
-       
-    
-	${cv}=  Create Dictionary  departments=${department_L}  services=${services_L}   users=${users_L}  schedules=${sched_L}  
-	${data}=  Create Dictionary   name=${name}  merged=${merged}  customViewConditions=${cv}  type=${type}
-	${data}=  json.dumps  ${data}	
-	Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/customView/${id}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
-
-
-Update CustomeView
-	[Arguments]    ${id}  ${name}  ${merged}  ${departmentId}  ${serviceId}  ${queuesId}  ${usersId}  ${type}
-	${len}=  Get Length  ${departmentId}
-	${department_L}=  Create List
-	FOR    ${index}   IN RANGE   0  ${len}
-        ${A}=  Create Dictionary  departmentId=${departmentId[${index}]}
-        Append To List  ${department_L}  ${A}
-    END
-   	
-	${len}=  Get Length  ${serviceId}
-	${services_L}=  Create List
-	FOR    ${index}   IN RANGE   0  ${len}
-        ${B}=  Create Dictionary  id=${serviceId[${index}]}
-        Append To List  ${services_L}  ${B}
-    END
-       
-    ${len}=  Get Length  ${queuesId}
-	${queues_L}=  Create List
-	FOR    ${index}   IN RANGE   0  ${len}
-        ${C}=  Create Dictionary  id=${queuesId[${index}]}
-        Append To List  ${queues_L}  ${C}
-    END
-       
-    ${len}=  Get Length  ${usersId}
-	${users_L}=  Create List
-	FOR    ${index}   IN RANGE   0  ${len}
-        ${D}=  Create Dictionary  id=${usersId[${index}]}
-        Append To List  ${users_L}  ${D}
-    END
-	${cv}=  Create Dictionary  departments=${department_L}  services=${services_L}  queues=${queues_L}  users=${users_L}  
-	
-	${data}=  Create Dictionary   id=${id}  name=${name}  merged=${merged}  customViewConditions=${cv}  type=${type}
-	${data}=  json.dumps  ${data}	
-	Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/customView/${id}   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
-
-
-Get CustomeView By Id
-    [Arguments]  ${id}
-    Check And Create YNW Session
-    ${resp}=    GET On Session     ynw   /provider/customView/${id}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
-
-
-Get CustomeView
-	[Arguments]    &{kwargs}	
-	Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/customView   params=${kwargs}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
-
-
-Delete CustomeView
-    [Arguments]  ${id}
-    Check And Create YNW Session
-    ${resp}=    DELETE On Session     ynw   /provider/customView/${id}   expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
-
-
 Enable Waitlist Batch
     [Arguments]   ${queueId} 
     Check And Create YNW Session
@@ -6440,22 +6146,6 @@ Add Batch Name
     ${data}=   Create Dictionary   prefix=${prefix}   suffix=${suffix}
     ${data}=    json.dumps    ${data}
     ${resp}=    PUT On Session    ynw  /provider/waitlist/queues/batch/pattern/${queueId}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
-
-
-Enable Disbale Global Livetrack
-    [Arguments]   ${status}  
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw  /provider/account/settings/livetrack/${status}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
-
-
-Enable Disbale Service Livetrack
-    [Arguments]   ${serviceId}   ${status}  
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw  /provider/services/livetrack/${status}/${serviceId}  expected_status=any
     Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
     
@@ -6839,34 +6529,6 @@ Add Appmt Batch Name
     ${resp}=    PUT On Session    ynw  /provider/appointment/schedule/batch/pattern/${ScheduleId}  data=${data}  expected_status=any
     Check Deprication  ${resp}  Get Business Profile
     RETURN  ${resp}
-
-Change Appmt Status by BatchId
-    [Arguments]   ${batchId}  ${status}  ${Date}
-    Check And Create YNW Session
-    ${data}=   Create Dictionary   date=${Date}
-    ${data}=    json.dumps    ${data}
-    ${resp}=    PUT On Session    ynw  /provider/appointment/statusChangeByBatch/${batchId}/${status}   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
-
-Cancel Appointment by Batch
-    [Arguments]   ${batchId}  ${status}   ${Date}   ${cancelReason}
-    Check And Create YNW Session
-    ${data}=   Create Dictionary      date=${Date}   cancelReason=${cancelReason}
-    ${data}=    json.dumps    ${data}
-    ${resp}=    PUT On Session    ynw  /provider/appointment/statusChangeByBatch/${batchId}/${status}   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
-
-Reject Appointment by Batch
-    [Arguments]   ${batchId}  ${status}  ${Date}   ${rejectReason}
-    Check And Create YNW Session
-    ${data}=   Create Dictionary   date=${Date}   rejectReason=${rejectReason}
-    ${data}=    json.dumps    ${data}
-    ${resp}=    PUT On Session    ynw  /provider/appointment/statusChangeByBatch/${batchId}/${status}   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get Business Profile
-    RETURN  ${resp}
-
 
 Change multiple Appmt Status
     [Arguments]  ${statuschange}     @{vargs}
