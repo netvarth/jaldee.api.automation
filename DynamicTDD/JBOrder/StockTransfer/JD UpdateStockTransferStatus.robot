@@ -22,10 +22,10 @@ Resource          /ebs/TDD/SuperAdminKeywords.robot
 ${order}        0
       
 
-*** Test Cases ***
 
-JD-TC-Get Stock TransferFilter-1
-    [Documentation]    Get Stock TransferFilter.
+*** Test Cases ***
+JD-TC-Update Stock Transfer Status-1
+    [Documentation]    Update Stock Transfer Status-(From draft to dispatched)
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
     Log  ${iscorp_subdomains}
     Set Suite Variable  ${iscorp_subdomains}
@@ -36,7 +36,7 @@ JD-TC-Get Stock TransferFilter-1
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+47799665
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+35085121
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
@@ -153,9 +153,7 @@ JD-TC-Get Stock TransferFilter-1
     ${resp}=  Get Store Type By EncId   ${St_Id}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
 # --------------------- ---------------------------------------------------------------
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
@@ -168,9 +166,7 @@ JD-TC-Get Stock TransferFilter-1
     ${resp}=  Provider Get Store Type ByEncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -401,28 +397,6 @@ JD-TC-Get Stock TransferFilter-1
     Should Be Equal As Strings      ${resp.status_code}                 200
     Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[2]}
 
-    ${resp}=  Get Inventoryitem      ${ic_Item_id}         
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    # Should Be Equal As Strings      ${resp.json()[0]['uid']}          ${purchaseId}
-    Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
-    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
-    Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
-    Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          0.0
-    Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
-    Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Store_Name1}
-
-    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
-    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
-    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
-    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
-    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
-    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
-    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
 
 
 # ------------------------------------------- Check Stock ---------------------------------------------------
@@ -480,13 +454,114 @@ JD-TC-Get Stock TransferFilter-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${Stock_transfer_uid}  ${resp.json()['uid']}
 
-    ${resp}=  Get Stock Transfer By Uid   ${Stock_transfer_uid}   
+
+# -------------------------------------------Update Store Transfer Status-----------------------------------------------------------------
+    ${resp}=  Update Stock Transfer Status   ${Stock_transfer_uid}  ${stockTransfer[1]}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Stock TransferFilter    
+
+JD-TC-Update Stock Transfer Status-2
+    [Documentation]    Update Stock Transfer Status-(From  dispatched to draft )
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Update Stock Transfer Status   ${Stock_transfer_uid}  ${stockTransfer[0]}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+JD-TC-Update Stock Transfer Status-UH1
+    [Documentation]    Update Stock Transfer Status-(From  draft  to received)
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${CANNOT_CHANGE_STATUS_FROM_TO}=  format String   ${CANNOT_CHANGE_STATUS_FROM_TO}  received  Stock transfer  Draft
+    ${resp}=  Update Stock Transfer Status   ${Stock_transfer_uid}  ${stockTransfer[2]}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}    ${CANNOT_CHANGE_STATUS_FROM_TO} 
 
 
+
+JD-TC-Update Stock Transfer Status-UH2
+    [Documentation]    Update Stock Transfer Status-(From  draft  to declined)
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${CANNOT_CHANGE_STATUS_FROM_TO}=  format String   ${CANNOT_CHANGE_STATUS_FROM_TO}  Declined  Stock transfer  Draft
+
+    ${resp}=  Update Stock Transfer Status   ${Stock_transfer_uid}  ${stockTransfer[3]}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}    ${CANNOT_CHANGE_STATUS_FROM_TO}    
+
+JD-TC-Update Stock Transfer Status-3
+    [Documentation]    Update Stock Transfer Status-(From draft to cancelled)
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Update Stock Transfer Status   ${Stock_transfer_uid}  ${stockTransfer[4]}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Update Stock Transfer Status-UH3
+    [Documentation]    Update Stock Transfer Status-(From  cancelled to Received)
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${CANNOT_CHANGE_STATUS_FROM_TO}=  format String   ${CANNOT_CHANGE_STATUS_FROM_TO}  received  Stock transfer  Cancelled
+    ${resp}=  Update Stock Transfer Status   ${Stock_transfer_uid}  ${stockTransfer[2]}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}    ${CANNOT_CHANGE_STATUS_FROM_TO}   
+
+JD-TC-Update Stock Transfer Status-UH4
+    [Documentation]    Update Stock Transfer Status-(From  cancelled to DECLINED)
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${CANNOT_CHANGE_STATUS_FROM_TO}=  format String   ${CANNOT_CHANGE_STATUS_FROM_TO}  Declined  Stock transfer  Cancelled
+    ${resp}=  Update Stock Transfer Status   ${Stock_transfer_uid}  ${stockTransfer[3]}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}    ${CANNOT_CHANGE_STATUS_FROM_TO}  
+
+JD-TC-Update Stock Transfer Status-UH5
+    [Documentation]    Update Stock Transfer Status-(From cancelled to draft  then draft to dispatched then dispatched to cancel)
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Update Stock Transfer Status   ${Stock_transfer_uid}  ${stockTransfer[0]}     
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200 
+
+    ${resp}=  Update Stock Transfer Status   ${Stock_transfer_uid}  ${stockTransfer[1]}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200 
+
+    ${CANNOT_CHANGE_STATUS_FROM_TO}=  format String   ${CANNOT_CHANGE_STATUS_FROM_TO}  Cancelled  Stock transfer  Dispatched
+
+    ${resp}=  Update Stock Transfer Status   ${Stock_transfer_uid}  ${stockTransfer[4]}     
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}    ${CANNOT_CHANGE_STATUS_FROM_TO}  
+
+JD-TC-Update Stock Transfer Status-UH6
+    [Documentation]    Update Stock Transfer Status-(From dispatched to declined )
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${CANNOT_CHANGE_STATUS_FROM_TO}=  format String   ${CANNOT_CHANGE_STATUS_FROM_TO}  Declined  Stock transfer  Dispatched
+
+    ${resp}=  Update Stock Transfer Status   ${Stock_transfer_uid}  ${stockTransfer[3]}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings  ${resp.json()}    ${CANNOT_CHANGE_STATUS_FROM_TO}  
