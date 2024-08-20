@@ -12544,13 +12544,13 @@ Get Status List Configuration
     ${resp}=  GET On Session  ynw  /provider/jp/finance/status/config/${categoryType}       expected_status=any
     RETURN  ${resp}
 
-Get finance Confiq
+Get finance Config
  
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/jp/finance/config/Invoice     expected_status=any
     RETURN  ${resp}
 
-Get default finance category Confiq
+Get default finance category Config
  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/category/default/Invoice     expected_status=any
@@ -12694,7 +12694,7 @@ Validate phone number
     ${resp}=   GET On Session  ynw  /provider/validate/phonenumber/${countryCode}/${phoneNumber}  expected_status=any
     RETURN  ${resp}    
 
-createInvoice for booking
+Create Invoice for Booking
 
     [Arguments]    ${booking}     ${uid}     
     Check And Create YNW Session

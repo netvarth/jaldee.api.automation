@@ -3953,7 +3953,7 @@ JD-TC-UserPerformanceReport-12
     ${subser_qnty}=   Random Int   min=1   max=5
     ${ser_list}=  Create Dictionary  serviceId=${subser_id1}    price=${subser_price}  quantity=${subser_qnty}
    
-    ${resp}=  createInvoice for booking  ${invoicebooking[0]}   ${apptid1}  
+    ${resp}=  Create Invoice for Booking  ${invoicebooking[0]}   ${apptid1}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

@@ -58,11 +58,11 @@ JD-TC-Get Log-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
-       ${resp}=    Get finance Confiq
+       ${resp}=    Get finance Config
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get default finance category Confiq
+    ${resp}=    Get default finance category Config
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

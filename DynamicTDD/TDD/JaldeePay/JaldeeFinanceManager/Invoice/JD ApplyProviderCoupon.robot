@@ -412,7 +412,7 @@ JD-TC-ProviderCouponBill-2
     ${serviceList}=    Create List    ${serviceList}
 
 
-    ${resp}=  createInvoice for booking   ${invoicebooking[1]}   ${wid}
+    ${resp}=  Create Invoice for Booking   ${invoicebooking[1]}   ${wid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -648,7 +648,7 @@ JD-TC-ProviderCouponBill-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  createInvoice for booking   ${invoicebooking[0]}   ${apptid1}
+    ${resp}=  Create Invoice for Booking   ${invoicebooking[0]}   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

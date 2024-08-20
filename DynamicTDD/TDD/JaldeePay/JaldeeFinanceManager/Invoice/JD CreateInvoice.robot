@@ -992,7 +992,7 @@ JD-TC-CreateInvoice-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid1}
 
-    ${resp}=  createInvoice for booking   ${invoicebooking[0]}   ${apptid1}
+    ${resp}=  Create Invoice for Booking   ${invoicebooking[0]}   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
