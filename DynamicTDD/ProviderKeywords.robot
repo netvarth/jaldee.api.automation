@@ -246,10 +246,10 @@ Update Business Profile with kwargs
     Check Deprication  ${resp}  Update Business Profile with kwargs
     RETURN  ${resp}
 
-Get Accountsettings
+Get Account Settings
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/account/settings  expected_status=any
-    Check Deprication  ${resp}  Get Accountsettings
+    Check Deprication  ${resp}  Get Account Settings
     RETURN  ${resp}
 
     
@@ -3140,12 +3140,6 @@ Update Account Payment Settings
     Check Deprication  ${resp}  Update Account Payment Settings
     RETURN  ${resp}
     
-Get Account Payment Settings
-    Check And Create YNW Session
-    ${resp}=   GET On Session  ynw  /provider/payment/settings   expected_status=any
-    Check Deprication  ${resp}  Get Account Payment Settings
-    RETURN  ${resp}
-    
 Create Item
    [Arguments]   ${dsplyName}   ${shrtDes}   ${dsplyDes}   ${price}  ${taxable}
    ${auth}=  Create Dictionary   displayName=${dsplyName}    shortDesc=${shrtDes}   displayDesc=${dsplyDes}    price=${price}    taxable=${taxable}
@@ -5585,12 +5579,6 @@ Disable OnlinePresence
     Check And Create YNW Session  
     ${resp}=   PUT On Session   ynw   /provider/onlinePresence/Disable  expected_status=any
     Check Deprication  ${resp}  Disable OnlinePresence
-    RETURN  ${resp}
-
-Get OnlinePresence
-    Check And Create YNW Session  
-    ${resp}=   GET On Session   ynw   /provider/account/settings  expected_status=any
-    Check Deprication  ${resp}  Get OnlinePresence
     RETURN  ${resp}
 
 Post CustomID
