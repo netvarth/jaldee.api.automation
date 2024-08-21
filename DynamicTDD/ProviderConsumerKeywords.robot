@@ -23,13 +23,14 @@ Update ProviderConsumer
 
 Send Otp For Login
     [Arguments]    ${loginid}  ${accountId}  ${countryCode}=+91  &{kwargs}
-    Check And Create YNW Session
+    # Check And Create YNW Session
     ${data}=    Create Dictionary    loginId=${loginid}  accountId=${accountId}  countryCode=${countryCode}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
     END
     ${body}=    json.dumps    ${data}
     ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
+    Create Session    ynw    ${BASE_URL}  headers=${headers}  verify=true
     ${resp}=    POST On Session    ynw    /consumer/oauth/identify    data=${body}  headers=${headers2}  expected_status=any
     RETURN  ${resp}
 
