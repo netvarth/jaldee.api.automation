@@ -67,24 +67,30 @@ JD-TC-Get Stock Transfer Count Filter-1
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
 
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    sleep  2s
-    ${resp}=  Get Departments
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
-     
-    ${resp}=  Get Waitlist Settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lid}=  Create Sample Location
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${place}  ${resp.json()[0]['place']}
+    ELSE
+        Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${place}  ${resp.json()[0]['place']}
+    END
+
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    Set Suite Variable  ${address}
+    Set Suite Variable  ${postcode}
+    Set Suite Variable  ${city}
+
 
     ${resp}=    Get Business Profile
     Log  ${resp.json()}
@@ -172,24 +178,6 @@ JD-TC-Get Stock Transfer Count Filter-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${locId1}=  Create Sample Location
-        ${resp}=   Get Location ById  ${locId1}
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
-    ELSE
-        Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
-    END
-
-    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    Set Suite Variable  ${address}
-    Set Suite Variable  ${postcode}
-    Set Suite Variable  ${city}
 
 # ------------------------ Create Source Store ----------------------------------------------------------
 
@@ -198,14 +186,19 @@ JD-TC-Get Stock Transfer Count Filter-1
 
     ${Store_Name1}=    FakerLibrary.first name
     Set Suite Variable  ${Store_Name1}
-    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
+    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+108107784
     Set Suite Variable  ${email_id}  ${Store_Name1}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
-    ${resp}=  Create Store   ${Store_Name1}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
+    ${resp}=  Create Store   ${Store_Name1}  ${St_Id}    ${lid}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id}  ${resp.json()}
+
+    ${resp}=    Get Store ByEncId   ${store_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable    ${Stidd1}    ${resp.json()['id']}
 
 # ---------------------------------------------------------------------------------------------------
 
@@ -222,6 +215,7 @@ JD-TC-Get Stock Transfer Count Filter-1
 
 # ----------------------------------------- create Source Inv Catalog -------------------------------------------------------
     ${INV_Cat_Name}=     FakerLibrary.name
+    Set Suite Variable  ${INV_Cat_Name}
 
     ${resp}=  Create Inventory Catalog   ${INV_Cat_Name}  ${store_id}   
     Log   ${resp.content}
@@ -260,7 +254,7 @@ JD-TC-Get Stock Transfer Count Filter-1
     ${vender_name}=   FakerLibrary.firstname
     ${contactPersonName}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
-    ${PO_Number}    Generate random string    5    123456789
+    ${PO_Number}    Generate random string    5    123456798
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
     ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
     Set Test Variable  ${email}  ${vender_name}.${test_mail}
@@ -406,7 +400,7 @@ JD-TC-Get Stock Transfer Count Filter-1
     Should Be Equal As Strings    ${resp.status_code}    200
     # Should Be Equal As Strings      ${resp.json()[0]['uid']}          ${purchaseId}
     Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
-    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
+    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${lid}
     Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
     Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
     Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          0.0
@@ -431,7 +425,7 @@ JD-TC-Get Stock Transfer Count Filter-1
     Should Be Equal As Strings    ${resp.status_code}    200
     # Should Be Equal As Strings      ${resp.json()[0]['uid']}          ${purchaseId}
     Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
-    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
+    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${lid}
     Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
     Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
     Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          0.0
@@ -453,16 +447,22 @@ JD-TC-Get Stock Transfer Count Filter-1
     Set Suite Variable  ${email_id}  ${Store_Name2}${PhoneNumber2}.${test_mail}
     ${email1}=  Create List  ${email_id}
 
-    ${resp}=  Create Store   ${Store_Name2}  ${St_Id}    ${locId1}  ${email1}     ${PhoneNumber2}  ${countryCodes[0]}
+    ${resp}=  Create Store   ${Store_Name2}  ${St_Id}    ${lid}  ${email1}     ${PhoneNumber2}  ${countryCodes[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id2}  ${resp.json()}
+
+    ${resp}=    Get Store ByEncId   ${store_id2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable    ${Stidd}    ${resp.json()['id']}
 
 
 # ------------------------------------------------------------------------------------------------------
 
 # ----------------------------------------- create Destination Inv Catalog -------------------------------------------------------
     ${INV_Cat_Name2}=     FakerLibrary.name
+    Set Suite Variable  ${INV_Cat_Name2}
 
     ${resp}=  Create Inventory Catalog   ${INV_Cat_Name2}  ${store_id2}   
     Log   ${resp.content}
@@ -473,16 +473,398 @@ JD-TC-Get Stock Transfer Count Filter-1
 
 # -------------------------------------------Create Store Transfer-----------------------------------------------------------------
     ${sourceInvCatalogItem}=  Create Dictionary  encId=${ic_Item_id}  
-    ${list}=  Create Dictionary  sourceInvCatalogItem=${sourceInvCatalogItem}    transferQuantity=50
+    ${transferQuantity}=   Evaluate    ${totalQuantity} - 30
+    Set Suite Variable  ${transferQuantity}
+    ${list}=  Create Dictionary  sourceInvCatalogItem=${sourceInvCatalogItem}    transferQuantity=${transferQuantity}
     ${items}=  Create List  ${list}
     ${resp}=  Create Stock Transfer   ${DAY1}  ${store_id}    ${store_id2}  ${Catalog_EncIds}     ${Catalog_EncIds2}  items=${items}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${Stock_transfer_uid}  ${resp.json()['uid']}
 
-    ${resp}=  Get Stock Transfer Count Filter    
+    ${resp}=  Get Stock Transfer By Uid   ${Stock_transfer_uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    Set Suite Variable              ${destinationInvCatalogItem_uid}         ${resp.json()['items'][0]['destinationInvCatalogItem']['encId']}
 
 
+    ${resp}=  Get Stock Transfer Count Filter   uid-eq=${Stock_transfer_uid} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()}                                1
+
+JD-TC-Get Stock Transfer Count Filter-2
+    [Documentation]    status changed to received and stock transfer from destination to source then filter using stock transfer count filter.
+
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Update Stock Transfer Status   ${Stock_transfer_uid}  ${stockTransfer[1]}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update Stock Transfer Status   ${Stock_transfer_uid}  ${stockTransfer[2]}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${sourceInvCatalogItem}=  Create Dictionary  encId=${destinationInvCatalogItem_uid}  
+    Set Suite Variable  ${sourceInvCatalogItem}
+    ${transferQuantity2}=   Evaluate    ${transferQuantity} - 20
+    Set Suite Variable  ${transferQuantity2}
+    ${list}=  Create Dictionary  sourceInvCatalogItem=${sourceInvCatalogItem}    transferQuantity=${transferQuantity2}
+    ${items}=  Create List  ${list}
+    ${resp}=  Create Stock Transfer   ${DAY1}  ${store_id2}    ${store_id}  ${Catalog_EncIds2}     ${Catalog_EncIds}  items=${items}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${Stock_transfer_uid1}  ${resp.json()['uid']}
+
+    ${resp}=  Get Stock Transfer By Uid   ${Stock_transfer_uid1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable              ${refNo}                                   ${resp.json()['refNo']}
+    Set Suite Variable              ${Stock_transferItem_uid}                                   ${resp.json()['items'][0]['uid']}
+    Set Suite Variable              ${sourceInvCatalogId}                                   ${resp.json()['sourceInvCatalog']['id']}  
+    Set Suite Variable              ${destinationInvCatalogId}                               ${resp.json()['destinationInvCatalog']['id']}   
+
+    ${resp}=  Get Stock Transfer Count Filter   sourceLocationId-eq=${lid} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()}                                1
+
+
+JD-TC-Get Stock Transfer Count Filter-3
+    [Documentation]    Get Stock Transfer Count Filter using refno.
+
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Get Stock Transfer Count Filter   refNo-eq=${refNo} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()}                                1
+
+JD-TC-Get Stock Transfer Count Filter-4
+    [Documentation]    update stock transfer then Get Stock Transfer Count Filter using sourceStoreId.
+
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${list1}=  Create Dictionary  sourceInvCatalogItem=${sourceInvCatalogItem}    transferQuantity=2  uid=${Stock_transfer_uid1}
+    ${items1}=  Create List  ${list1}
+
+    ${resp}=  Update Stock Transfer   ${Stock_transfer_uid1}   ${DAY1}  ${store_id2}    ${store_id}  ${Catalog_EncIds2}     ${Catalog_EncIds}  items=${items1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Stock Transfer Count Filter   sourceStoreId-eq=${Stidd} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()}                                1
+
+
+JD-TC-Get Stock Transfer Count Filter-5
+    [Documentation]     Get Stock Transfer Count Filter using sourceLocationName.
+
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+
+    ${resp}=  Get Stock Transfer Count Filter   sourceLocationName-eq=${place} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+     Should Be Equal As Strings      ${resp.json()}                                1
+
+JD-TC-Get Stock Transfer Count Filter-6
+    [Documentation]     Get Stock Transfer Count Filter using destinationLocationId.
+
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+
+    ${resp}=  Get Stock Transfer Count Filter   destinationLocationId-eq=${lid} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()}                                1
+
+JD-TC-Get Stock Transfer Count Filter-7
+    [Documentation]     Get Stock Transfer Count Filter using destinationLocationName.
+
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Get Stock Transfer Count Filter   destinationLocationName-eq=${place} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()}                                1
+
+JD-TC-Get Stock Transfer Count Filter-8
+    [Documentation]     Get Stock Transfer Count Filter using transferDate.
+
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Get Stock Transfer Count Filter   transferDate-eq=${DAY1} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()}                                1
+
+JD-TC-Get Stock Transfer Count Filter-9
+    [Documentation]    Get Stock Transfer Count Filter using sourceStoreEncId.
+
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Get Stock Transfer Count Filter   sourceStoreEncId-eq=${store_id2} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()}                                1
+
+JD-TC-Get Stock Transfer Count Filter-10
+    [Documentation]    Get Stock Transfer Count Filter using sourceStoreName.
+
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Get Stock Transfer Count Filter   sourceStoreName-eq=${Store_Name2} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()}                                1
+
+JD-TC-Get Stock Transfer Count Filter-11
+    [Documentation]    Get Stock Transfer Count Filter using destinationStoreId.
+
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Get Stock Transfer Count Filter   destinationStoreId-eq=${Stidd1} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()}                                1
+
+JD-TC-Get Stock Transfer Count Filter-12
+    [Documentation]    Get Stock Transfer Count Filter using destinationStoreId.
+
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Get Stock Transfer Count Filter   destinationStoreEncId-eq=${store_id} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()}                                1
+
+JD-TC-Get Stock Transfer Count Filter-13
+    [Documentation]    Get Stock Transfer Count Filter using destinationStoreId.
+
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Get Stock Transfer Count Filter   destinationStoreName-eq=${Store_Name1} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()}                                1
+
+JD-TC-Get Stock Transfer Count Filter-14
+    [Documentation]    Get Stock Transfer Count Filter using sourceInvCatalogId.
+
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Get Stock Transfer Count Filter   sourceInvCatalogId-eq=${sourceInvCatalogId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()}                                1
+
+JD-TC-Get Stock Transfer Count Filter-15
+    [Documentation]    Get Stock Transfer Count Filter using sourceInvCatalogEncId.
+
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Get Stock Transfer Count Filter   sourceInvCatalogEncId-eq=${Catalog_EncIds2} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()}                                1
+
+JD-TC-Get Stock Transfer Count Filter-16
+    [Documentation]    Get Stock Transfer Count Filter using sourceInvCatalogName.
+
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Get Stock Transfer Count Filter   sourceInvCatalogName-eq=${INV_Cat_Name2} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()}                                1
+
+JD-TC-Get Stock Transfer Count Filter-17
+    [Documentation]    Get Stock Transfer Count Filter using destinationInvCatalogId.
+
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Get Stock Transfer Count Filter   destinationInvCatalogId-eq=${destinationInvCatalogId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()}                                1
+
+JD-TC-Get Stock Transfer Count Filter-18
+    [Documentation]    Get Stock Transfer Count Filter using destinationInvCatalogEncId.
+
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Get Stock Transfer Count Filter   destinationInvCatalogEncId-eq=${Catalog_EncIds} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()}                                1
+
+JD-TC-Get Stock Transfer Count Filter-19
+    [Documentation]    Get Stock Transfer Count Filter using destinationInvCatalogName.
+
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Get Stock Transfer Count Filter   destinationInvCatalogName-eq=${INV_Cat_Name} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()}                                1
+JD-TC-Get Stock Transfer Count Filter-20
+    [Documentation]    Get Stock Transfer Count Filter using transferDate and createdDate.
+
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Get Stock Transfer Count Filter   transferDate-eq=${DAY1}  createdDate-eq==${DAY1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()}                                1
+
+JD-TC-Get Stock Transfer Count Filter-21
+    [Documentation]    Get Stock Transfer Count Filter using createdById and createdByName.
+
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Get Stock Transfer Count Filter   createdById-eq=${pid}   createdByName-eq=${pdrname} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()}                                1
+
+JD-TC-Get Stock Transfer Count Filter-22
+    [Documentation]    Get Stock Transfer Count Filter using updatedById and updatedByName.
+
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Get Stock Transfer Count Filter   updatedById-eq=${pid}   updatedByName-eq=${pdrname} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()}                                1
+
+JD-TC-Get Stock Transfer Count Filter-23
+    [Documentation]    Get Stock Transfer Count Filter using updatedDate .
+
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Get Stock Transfer Count Filter   updatedDate-eq=${DAY1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()}                                1
+
+JD-TC-Get Stock Transfer Count Filter-24
+    [Documentation]    Get Stock Transfer Count Filter using verifiedByName .
+
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Get Stock Transfer Count Filter   verifiedByName-eq=${pdrname}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()}                                1
+
+JD-TC-Get Stock Transfer Count Filter-25
+    [Documentation]    Get Stock Transfer Count Filter using verifiedDate .
+
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Get Stock Transfer Count Filter   verifiedDate-eq=${DAY1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()}                                1
+
+JD-TC-Get Stock Transfer Count Filter-26
+    [Documentation]    Get Stock Transfer Count Filter using transferType as new.
+
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Get Stock Transfer Count Filter   transferType-eq=${status1[0]}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()}                                1
+
+JD-TC-Get Stock Transfer Count Filter-27
+    [Documentation]    Get Stock Transfer Count Filter using transferStatus .
+
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Get Stock Transfer Count Filter   transferStatus-eq=${stockTransfer[0]} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()}                                1
