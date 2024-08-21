@@ -466,7 +466,7 @@ JD-TC-Get Stock Transfer By Uid-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable              ${Stock_transferItem_uid}                                   ${resp.json()['items'][0]['uid']}
-    Set Suite Variable              ${Stock_transferIdestinationInvCatalogItemtem_uid}                                   ${resp.json()['items'][0]['destinationInvCatalogItem']['encId']}
+    Set Suite Variable              ${destinationInvCatalogItem_uid}                                   ${resp.json()['items'][0]['destinationInvCatalogItem']['encId']}
     Should Be Equal As Strings      ${resp.json()['accountId']}                                 ${accountId}
     Should Be Equal As Strings      ${resp.json()['uid']}                                       ${Stock_transfer_uid}
     Should Be Equal As Strings      ${resp.json()['transferDate']}                              ${DAY1}

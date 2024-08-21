@@ -447,7 +447,8 @@ JD-TC-Create Stock Transfer-1
 
 # -------------------------------------------Create Store Transfer-----------------------------------------------------------------
     ${sourceInvCatalogItem}=  Create Dictionary  encId=${ic_Item_id}  
-    ${list}=  Create Dictionary  sourceInvCatalogItem=${sourceInvCatalogItem}    transferQuantity=50
+    ${transferQuantity}=   Evaluate    ${totalQuantity} - 10
+    ${list}=  Create Dictionary  sourceInvCatalogItem=${sourceInvCatalogItem}    transferQuantity=${transferQuantity}
     ${items}=  Create List  ${list}
     ${resp}=  Create Stock Transfer   ${DAY1}  ${store_id}    ${store_id2}  ${Catalog_EncIds}     ${Catalog_EncIds2}  items=${items}
     Log   ${resp.content}
@@ -509,7 +510,7 @@ JD-TC-Create Stock Transfer-2
     Set Test Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Test Variable  ${lastname_A}
-    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+40085121
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+40085122
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}

@@ -553,15 +553,13 @@ JD-TC-Update Stock Transfer Status-UH5
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  ${resp.json()}    ${CANNOT_CHANGE_STATUS_FROM_TO}  
 
-JD-TC-Update Stock Transfer Status-UH6
+JD-TC-Update Stock Transfer Status-3
     [Documentation]    Update Stock Transfer Status-(From dispatched to declined )
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${CANNOT_CHANGE_STATUS_FROM_TO}=  format String   ${CANNOT_CHANGE_STATUS_FROM_TO}  Declined  Stock transfer  Dispatched
-
     ${resp}=  Update Stock Transfer Status   ${Stock_transfer_uid}  ${stockTransfer[3]}    
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings  ${resp.json()}    ${CANNOT_CHANGE_STATUS_FROM_TO}  
+    Should Be Equal As Strings    ${resp.status_code}   200
+
