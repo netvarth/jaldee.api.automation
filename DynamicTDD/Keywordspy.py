@@ -11,6 +11,7 @@ import traceback
 import logging
 import mimetypes
 from robot.api import logger
+import logging
 
 # HOST='54.215.5.201:8181'
 HOST = __import__(os.environ['VARFILE']).HOSTED_IP
@@ -178,3 +179,12 @@ def validatePhoneNumber(countryCode,phoneNumber):
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
+
+
+def check_deprecation(response, keyword_name):
+    """
+    Checks if 'Deprecated-Url' is in the response headers and logs a warning if it is.
+    """
+    if 'Deprecated-Url' in response.headers:
+        logging.info(f"Deprecated-Url: {response.headers['Deprecated-Url']}")
+        logging.warning(f'{keyword_name} DEPRECATED in REST.')

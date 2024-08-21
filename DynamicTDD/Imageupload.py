@@ -9,10 +9,11 @@ import requests
 import mimetypes
 import traceback
 import logging
+import inspect
 from RequestsLibrary.utils import is_file_descriptor
 from robot.api import logger
 from faker import Faker
-from Keywordspy import second_password, log_response, log_request
+from Keywordspy import second_password, log_response, log_request, check_deprecation
 from db import encrypt_data, decrypt_data, Set_TZ_Header
 BASE_URL = __import__(os.environ['VARFILE']).BASE_URL
 HOST = __import__(os.environ['VARFILE']).HOSTED_IP
@@ -88,7 +89,7 @@ clinicalnotespty='/ebs/TDD/clinicalnotes.json'
 
 # Service Provider Login
 def spLogin(phno,pswd,countrycode=91):
-    s = requests.Session()
+    session = requests.Session()
     # url = BASE_URL+'/provider/login'
     url = BASE_URL+'/provider/login/encrypt'
     try:
@@ -99,14 +100,15 @@ def spLogin(phno,pswd,countrycode=91):
         jsondata = json.dumps({"loginId": str(phno), "password":str(pswd), "countryCode":str(countrycode)})
         encrypted_data=  encrypt_data(jsondata)
         data= json.dumps(encrypted_data)
-        r = s.post(url, data=data, headers=headers)
+        response = session.post(url, data=data, headers=headers)
         # print s.cookies
         # print "--------------"
-        # print s.cookies.get_dict()
-        log_request(r)
-        log_response(r)
-        cookie_dict = s.cookies.get_dict()
-        return cookie_dict,r
+        # print session.cookies.get_dict()
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        cookie_dict = session.cookies.get_dict()
+        return cookie_dict, response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -114,7 +116,7 @@ def spLogin(phno,pswd,countrycode=91):
 
 # Android Service Provider Login
 def AndroidspLogin(phno,pswd,countrycode=91):
-    s = requests.Session()
+    session = requests.Session()
     url = BASE_URL+'/provider/login'
     try:
         headers = {
@@ -124,14 +126,15 @@ def AndroidspLogin(phno,pswd,countrycode=91):
                 'sec-ch-ua-platform':"Android"
             }
         data = json.dumps({"loginId": str(phno), "password":str(pswd), "countryCode":str(countrycode)})
-        r = s.post(url, data=data, headers=headers)
+        response = session.post(url, data=data, headers=headers)
         # print s.cookies
         # print "--------------"
-        # print s.cookies.get_dict()
-        log_request(r)
-        log_response(r)
-        cookie_dict = s.cookies.get_dict()
-        return cookie_dict,r
+        # print session.cookies.get_dict()
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        cookie_dict = session.cookies.get_dict()
+        return cookie_dict, response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -139,7 +142,7 @@ def AndroidspLogin(phno,pswd,countrycode=91):
 
 # Consumer Login
 def conLogin(phno,pswd,countrycode=91):
-    s = requests.Session()
+    session = requests.Session()
     url = BASE_URL+'/consumer/login'
     try:
         headers = {
@@ -147,14 +150,15 @@ def conLogin(phno,pswd,countrycode=91):
                 'Accept': "application/json",
             }
         data = json.dumps({"loginId": str(phno), "password":str(pswd), "countryCode":str(countrycode)})
-        r = s.post(url, data=data, headers=headers)
+        response = session.post(url, data=data, headers=headers)
         # print s.cookies
         # print "--------------"
-        # print s.cookies.get_dict()
-        log_request(r)
-        log_response(r)
-        cookie_dict = s.cookies.get_dict()
-        return cookie_dict,r
+        # print session.cookies.get_dict()
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        cookie_dict = session.cookies.get_dict()
+        return cookie_dict, response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -162,7 +166,7 @@ def conLogin(phno,pswd,countrycode=91):
 
 # Android Consumer Login
 def AndroidconLogin(phno,pswd,countrycode=91):
-    s = requests.Session()
+    session = requests.Session()
     url = BASE_URL+'/consumer/login'
     try:
         headers = {
@@ -173,14 +177,15 @@ def AndroidconLogin(phno,pswd,countrycode=91):
                 'sec-ch-ua-platform':"Android"
             }
         data = json.dumps({"loginId": str(phno), "password":str(pswd), "countryCode":str(countrycode)})
-        r = s.post(url, data=data, headers=headers)
+        response = session.post(url, data=data, headers=headers)
         # print s.cookies
         # print "--------------"
-        # print s.cookies.get_dict()
-        log_request(r)
-        log_response(r)
-        cookie_dict = s.cookies.get_dict()
-        return cookie_dict,r
+        # print session.cookies.get_dict()
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        cookie_dict = session.cookies.get_dict()
+        return cookie_dict, response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -190,8 +195,8 @@ def AndroidconLogin(phno,pswd,countrycode=91):
 #Upload Service Image
 def serviceImgUpload(serviceId,cookie_dict,img=pic1,ppty=servicepty):
     url = BASE_URL + '/provider/services/serviceGallery/'+str(serviceId)
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         # headers = {
         #     'Content-Type': "multipart/form-data",
@@ -204,10 +209,11 @@ def serviceImgUpload(serviceId,cookie_dict,img=pic1,ppty=servicepty):
         }
     
         # print (data)
-        resp = s.post(url, files=data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -216,8 +222,8 @@ def serviceImgUpload(serviceId,cookie_dict,img=pic1,ppty=servicepty):
 # Item image upload
 def itemImgUpload(itemId,cookie_dict,img=pic1,ppty=itempty):
     url = BASE_URL + '/provider/items/' + str(itemId) + '/image'
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         # headers = {
         #     'Content-Type': "multipart/form-data",
@@ -230,10 +236,11 @@ def itemImgUpload(itemId,cookie_dict,img=pic1,ppty=itempty):
         }
     
         # print (data)
-        resp = s.post(url, files=data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -241,8 +248,8 @@ def itemImgUpload(itemId,cookie_dict,img=pic1,ppty=itempty):
 
 def ItemGroupImgUpload(itemgroupId,img,cookie_dict,ppty=itempty):
     url = BASE_URL + '/provider/items/itemGroup/' + str(itemgroupId) + '/image'
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         
         mimetype, encoding = mimetypes.guess_type(img)
@@ -252,10 +259,11 @@ def ItemGroupImgUpload(itemgroupId,img,cookie_dict,ppty=itempty):
         'properties': (None, open(ppty, 'rb'), 'application/json')
         }
     
-        resp = s.post(url, files=data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -265,8 +273,8 @@ def ItemGroupImgUpload(itemgroupId,img,cookie_dict,ppty=itempty):
 # Catalog image upload
 def CatalogImgUpload(catalogId,cookie_dict,img=pic1,ppty=itempty):
     url = BASE_URL + '/provider/catalog/' + str(catalogId) + '/image'
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         # headers = {
         #     'Content-Type': "multipart/form-data",
@@ -279,10 +287,11 @@ def CatalogImgUpload(catalogId,cookie_dict,img=pic1,ppty=itempty):
         }
     
         # print (data)
-        resp = s.post(url, files=data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -292,8 +301,8 @@ def CatalogImgUpload(catalogId,cookie_dict,img=pic1,ppty=itempty):
 #UPLOAD PROVIDER GALLERY IMAGE
 def galleryImgUpload(cookie_dict,img=pic2,img1=pic3,img2=pic4,ppty=gallerypty,flag=1):
     url = BASE_URL + '/provider/gallery'
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         # headers = {
         #     'Content-Type': "multipart/form-data",
@@ -314,10 +323,11 @@ def galleryImgUpload(cookie_dict,img=pic2,img1=pic3,img2=pic4,ppty=gallerypty,fl
             }
     
         # print (data)
-        resp = s.post(url, files=data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -326,8 +336,8 @@ def galleryImgUpload(cookie_dict,img=pic2,img1=pic3,img2=pic4,ppty=gallerypty,fl
 #UPLOAD PROVIDER LOGO IMAGE
 def uploadProviderLogo(cookie_dict,img,ppty=logopty,):
     url = BASE_URL + '/provider/logo'
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         # headers = {
         #     'Content-Type': "multipart/form-data",
@@ -340,10 +350,11 @@ def uploadProviderLogo(cookie_dict,img,ppty=logopty,):
         }
     
         # print (data)
-        resp = s.post(url, files=data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -351,8 +362,8 @@ def uploadProviderLogo(cookie_dict,img,ppty=logopty,):
 #UPLOAD USER LOGO IMAGE
 def uploadUserLogo(cookie_dict,providerId,img,ppty=logopty,):
     url = BASE_URL + '/provider/user/logo/'+str(providerId)
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         # headers = {
         #     'Content-Type': "multipart/form-data",
@@ -365,10 +376,11 @@ def uploadUserLogo(cookie_dict,providerId,img,ppty=logopty,):
         }
     
         # print (data)
-        resp = s.post(url, files=data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -376,13 +388,14 @@ def uploadUserLogo(cookie_dict,providerId,img,ppty=logopty,):
 # Delete Service Image
 def DeleteServiceImg(serviceId,name,cookie_dict):
     url = BASE_URL + '/provider/services/serviceGallery/'+str(serviceId)+'/'+str(name)
-    s = requests.Session()
-    s.cookies.update(cookie_dict)
+    session = requests.Session()
+    session.cookies.update(cookie_dict)
     try:
-        resp = s.delete(url)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.delete(url)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -390,13 +403,14 @@ def DeleteServiceImg(serviceId,name,cookie_dict):
 # Delete Item Image
 def DeleteItemImg(itemId,cookie_dict):
     url = BASE_URL + '/provider/items/' + str(itemId) + '/image'
-    s = requests.Session()
-    s.cookies.update(cookie_dict)
+    session = requests.Session()
+    session.cookies.update(cookie_dict)
     try:
-        resp = s.delete(url)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.delete(url)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -404,13 +418,14 @@ def DeleteItemImg(itemId,cookie_dict):
 
 def DeleteItemImages(itemId,ImgName,cookie_dict):
     url = BASE_URL + '/provider/items/' + str(itemId) + '/image/' + str(ImgName)
-    s = requests.Session()
-    s.cookies.update(cookie_dict)
+    session = requests.Session()
+    session.cookies.update(cookie_dict)
     try:
-        resp = s.delete(url)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.delete(url)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -418,13 +433,14 @@ def DeleteItemImages(itemId,ImgName,cookie_dict):
 # Delete Catalog Image
 def DeleteCatalogImages(catalogId,ImgName,cookie_dict):
     url = BASE_URL + '/provider/catalog/' + str(catalogId) + '/image/' + str(ImgName)
-    s = requests.Session()
-    s.cookies.update(cookie_dict)
+    session = requests.Session()
+    session.cookies.update(cookie_dict)
     try:
-        resp = s.delete(url)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.delete(url)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -433,13 +449,14 @@ def DeleteCatalogImages(catalogId,ImgName,cookie_dict):
 # Delete Gallery Image
 def deleteGalleryImg(name,cookie_dict):
     url = BASE_URL + '/provider/gallery/'+str(name)
-    s = requests.Session()
-    s.cookies.update(cookie_dict)
+    session = requests.Session()
+    session.cookies.update(cookie_dict)
     try:
-        resp = s.delete(url)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.delete(url)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -447,13 +464,14 @@ def deleteGalleryImg(name,cookie_dict):
 # Delete Provider Logo
 def deleteProviderLogo(name,cookie_dict):
     url = BASE_URL + '/provider/logo/'+str(name)
-    s = requests.Session()
-    s.cookies.update(cookie_dict)
+    session = requests.Session()
+    session.cookies.update(cookie_dict)
     try:
-        resp = s.delete(url)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.delete(url)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -461,13 +479,14 @@ def deleteProviderLogo(name,cookie_dict):
 # Delete User Logo
 def deleteUserLogo(providerId,name,cookie_dict):
     url = BASE_URL + '/provider/user/logo/'+str(providerId)+'/'+str(name)
-    s = requests.Session()
-    s.cookies.update(cookie_dict)
+    session = requests.Session()
+    session.cookies.update(cookie_dict)
     try:
-        resp = s.delete(url)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.delete(url)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -475,13 +494,14 @@ def deleteUserLogo(providerId,name,cookie_dict):
 # Get Provider Image
 def getImg(name,cookie_dict):
     url = BASE_URL + '/provider/' +str(name)
-    s = requests.Session()
-    s.cookies.update(cookie_dict)
+    session = requests.Session()
+    session.cookies.update(cookie_dict)
     try:
-        resp = s.get(url)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.get(url)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -489,8 +509,8 @@ def getImg(name,cookie_dict):
 #Upload provider business profile image
 def BprofileWithDP(method,cookie_dict,img=profpic,ppty=bprofpty,info=bprofdata):
     url = BASE_URL + '/provider/bProfile'
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         # headers = {
         #     'Content-Type': "multipart/form-data",
@@ -502,32 +522,35 @@ def BprofileWithDP(method,cookie_dict,img=profpic,ppty=bprofpty,info=bprofdata):
             }
         # print (data)
         if method == 'PUT' :
-            resp = s.put(url, files=data)
+            response = session.put(url, files=data)
         else:
-            resp = s.post(url, files=data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+            response = session.post(url, files=data)
+        # log_request(response)
+        # log_response(response)
+        # check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
 
 def createBProfile (cookie_dict):
-    resp = BprofileWithDP('POST',cookie_dict)
-    log_request(resp)
-    log_response(resp)
-    return resp
+    response = BprofileWithDP('POST',cookie_dict)
+    log_request(response)
+    log_response(response)
+    check_deprecation(response, inspect.stack()[0].function)
+    return response
 
 def updateBProfile (cookie_dict):
-    resp=BprofileWithDP('PUT',cookie_dict)
-    log_request(resp)
-    log_response(resp)
-    return resp
+    response=BprofileWithDP('PUT',cookie_dict)
+    log_request(response)
+    log_response(response)
+    check_deprecation(response, inspect.stack()[0].function)
+    return response
 
 def itemWithImage(method,cookie_dict,img=profpic,ppty=itempty,info=itemdata):
     url = BASE_URL + '/provider/items'
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         # headers = {
         #     'Content-Type': "multipart/form-data",
@@ -541,22 +564,24 @@ def itemWithImage(method,cookie_dict,img=profpic,ppty=itempty,info=itemdata):
             }
         # print (data)
         if method == 'PUT' :
-            resp = s.put(url, files=data)
+            response = session.put(url, files=data)
         else:
-            resp = s.post(url, files=data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+            response = session.post(url, files=data)
+        # log_request(response)
+        # log_response(response)
+        # check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
 
 
 def ItemCreation (cookie_dict):
-    resp = itemWithImage('POST',cookie_dict)
-    log_request(resp)
-    log_response(resp)
-    return resp
+    response = itemWithImage('POST',cookie_dict)
+    log_request(response)
+    log_response(response)
+    check_deprecation(response, inspect.stack()[0].function)
+    return response
 
 
 comfile='/ebs/TDD/image.jpg'
@@ -564,8 +589,8 @@ comfile='/ebs/TDD/image.jpg'
 def providerWLCom(cookie_dict, uuid, msg, type, caption, msgid=None, file=None):
     
     url = BASE_URL + '/provider/waitlist/communicate/' + str(uuid)
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -590,10 +615,11 @@ def providerWLCom(cookie_dict, uuid, msg, type, caption, msgid=None, file=None):
             'captions': (None, json.dumps(cap_dict), 'application/json')
             }
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -603,8 +629,8 @@ comfile='/ebs/TDD/image.jpg'
 def OrderImageUpload(cookie_dict, accId, caption, order, custHeaders, file=comfile, **kwargs):
     # url = BASE_URL + '/consumer/orders?account=' + str(accId)
     url = BASE_URL + '/consumer/orders'
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         # headers = {
         #     'Content-Type': "multipart/form-data",
@@ -630,10 +656,11 @@ def OrderImageUpload(cookie_dict, accId, caption, order, custHeaders, file=comfi
                 'order': (None, json.dumps(order), 'application/json')
                 }
         print (files_data) 
-        resp = s.post(url, params=parameters, files=files_data, headers=custHeaders)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, params=parameters, files=files_data, headers=custHeaders)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -641,8 +668,8 @@ def OrderImageUpload(cookie_dict, accId, caption, order, custHeaders, file=comfi
 
 def OrderImageUploadByProvider(cookie_dict,  caption, order, file=comfile):
     url = BASE_URL + '/provider/orders'
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -661,10 +688,11 @@ def OrderImageUploadByProvider(cookie_dict,  caption, order, file=comfile):
                 'order': (None, json.dumps(order), 'application/json')
                 }
         print (files_data) 
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -673,8 +701,8 @@ def OrderImageUploadByProvider(cookie_dict,  caption, order, file=comfile):
 def ShoppingCartUpload(cookie_dict,  accId, order, custHeaders, **kwargs):
     # url = BASE_URL + '/consumer/orders?account=' + str(accId)
     url = BASE_URL + '/consumer/orders'
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         
         parameters = {'account': str(accId)}
@@ -686,10 +714,11 @@ def ShoppingCartUpload(cookie_dict,  accId, order, custHeaders, **kwargs):
         custHeaders.update(tzheaders)
         parameters.update(locparam)
         print(custHeaders,parameters)
-        resp = s.post(url, params=parameters, files=files_data, headers=custHeaders)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, params=parameters, files=files_data, headers=custHeaders)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -697,8 +726,8 @@ def ShoppingCartUpload(cookie_dict,  accId, order, custHeaders, **kwargs):
 
 def AndroidShoppingCartUpload(cookie_dict,  accId, order):
     url = BASE_URL + '/consumer/orders?account=' + str(accId)
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             # 'Content-Type': "multipart/form-data", 
@@ -711,10 +740,11 @@ def AndroidShoppingCartUpload(cookie_dict,  accId, order):
             'order': (None, json.dumps(order), 'application/json')
             }
         print (files_data) 
-        resp = s.post(url, files=files_data, headers=headers)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data, headers=headers)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -722,8 +752,8 @@ def AndroidShoppingCartUpload(cookie_dict,  accId, order):
 
 def AndroidSPShoppingCartUpload(cookie_dict,  accId, order):
     url = BASE_URL + '/consumer/orders?account=' + str(accId)
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             # 'Content-Type': "multipart/form-data", 
@@ -736,10 +766,11 @@ def AndroidSPShoppingCartUpload(cookie_dict,  accId, order):
             'order': (None, json.dumps(order), 'application/json')
             }
         print (files_data) 
-        resp = s.post(url, files=files_data, headers=headers)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data, headers=headers)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -748,8 +779,8 @@ def AndroidSPShoppingCartUpload(cookie_dict,  accId, order):
 def OrderItemByProvider(cookie_dict,  order):
     
     url = BASE_URL + '/provider/orders'
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -758,10 +789,11 @@ def OrderItemByProvider(cookie_dict,  order):
             'order': (None, json.dumps(order), 'application/json')
             }
         print (files_data) 
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -771,8 +803,8 @@ def providerOrderCommunication(cookie_dict, uuid, msg, type, msgid=None, *filesw
   
     url = BASE_URL + '/provider/orders/communicate/' + str(uuid)
     cap_dict={}
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -802,10 +834,11 @@ def providerOrderCommunication(cookie_dict, uuid, msg, type, msgid=None, *filesw
             files_data.append(tuple(('captions', capdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -815,8 +848,8 @@ def consumerOrderCommunication(cookie_dict, accId, uuid, msg, type, msgid=None, 
   
     url = BASE_URL + '/consumer/orders/communicate/' + str(uuid) + '?account=' + str(accId)
     cap_dict={}
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -846,10 +879,11 @@ def consumerOrderCommunication(cookie_dict, accId, uuid, msg, type, msgid=None, 
             files_data.append(tuple(('captions', capdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -858,8 +892,8 @@ def consumerOrderCommunication(cookie_dict, accId, uuid, msg, type, msgid=None, 
 # digital sign
 def digitalSignUpload(providerId,cookie_dict,img=pic1,ppty=signpty):
     url = BASE_URL + '/provider/user/digitalSign/'+ str(providerId) 
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
 
         mimetype, encoding = mimetypes.guess_type(img)
@@ -869,10 +903,11 @@ def digitalSignUpload(providerId,cookie_dict,img=pic1,ppty=signpty):
         }
     
         # print (data)
-        resp = s.post(url, files=data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -881,8 +916,8 @@ def digitalSignUpload(providerId,cookie_dict,img=pic1,ppty=signpty):
 # prescription image
 def prescriptionImgUpload(mrId,cookie_dict,img=pic1,ppty=prescriptionpty):
     url = BASE_URL + '/provider/mr/uploadPrescription/'+ str(mrId) 
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         
         mimetype, encoding = mimetypes.guess_type(img)
@@ -892,10 +927,11 @@ def prescriptionImgUpload(mrId,cookie_dict,img=pic1,ppty=prescriptionpty):
         }
     
         # print (data)
-        resp = s.post(url, files=data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -904,8 +940,8 @@ def prescriptionImgUpload(mrId,cookie_dict,img=pic1,ppty=prescriptionpty):
 # clinicalnotes image
 def clinicalnotesImgUpload(mrId,cookie_dict,img=pic1,ppty=clinicalnotespty):
     url = BASE_URL + '/provider/mr/uploadClinicalNotes/'+ str(mrId) 
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
 
         mimetype, encoding = mimetypes.guess_type(img)
@@ -915,10 +951,11 @@ def clinicalnotesImgUpload(mrId,cookie_dict,img=pic1,ppty=clinicalnotespty):
         }
     
         # print (data)
-        resp = s.post(url, files=data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -927,13 +964,14 @@ def clinicalnotesImgUpload(mrId,cookie_dict,img=pic1,ppty=clinicalnotespty):
 # Delete prescription Image
 def DeletePrescriptionImg(mrId,name,cookie_dict):
     url = BASE_URL + '/provider/mr/prescription/'+str(mrId)+'/'+str(name)
-    s = requests.Session()
-    s.cookies.update(cookie_dict)
+    session = requests.Session()
+    session.cookies.update(cookie_dict)
     try:
-        resp = s.delete(url)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.delete(url)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -941,8 +979,8 @@ def DeletePrescriptionImg(mrId,name,cookie_dict):
 
 def WaitlistNote(cookie_dict,  uuid, message, caption, file=comfile):
     url = BASE_URL + '/provider/waitlist/notes/'+ str(uuid) 
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
 
         headers = {
@@ -962,10 +1000,11 @@ def WaitlistNote(cookie_dict,  uuid, message, caption, file=comfile):
             'message': (None, json.dumps(message), 'application/json')
             }
         print (data)
-        resp = s.post(url, files=data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -973,8 +1012,8 @@ def WaitlistNote(cookie_dict,  uuid, message, caption, file=comfile):
 
 def AppointmentNote(cookie_dict,  uuid, message, caption, file=comfile):
     url = BASE_URL + '/provider/appointment/note/'+ str(uuid) 
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
 
         headers = {
@@ -994,10 +1033,11 @@ def AppointmentNote(cookie_dict,  uuid, message, caption, file=comfile):
             'message': (None, json.dumps(message), 'application/json')
             }
         print (data)
-        resp = s.post(url, files=data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -1005,8 +1045,8 @@ def AppointmentNote(cookie_dict,  uuid, message, caption, file=comfile):
 
 def PWLAttachment(cookie_dict,  uuid, caption, file=comfile):
     url = BASE_URL + '/provider/waitlist/'+ str(uuid) +'/attachment' 
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
 
         headers = {
@@ -1021,10 +1061,11 @@ def PWLAttachment(cookie_dict,  uuid, caption, file=comfile):
         # 'message': (None, json.dumps(message), 'application/json')
         }
         print (data)
-        resp = s.post(url, files=data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -1032,8 +1073,8 @@ def PWLAttachment(cookie_dict,  uuid, caption, file=comfile):
 
 def CWLAttachment(cookie_dict, acc_id, uuid, caption, file=comfile):
     url = BASE_URL + '/consumer/waitlist/'+ str(uuid) + '/attachment?account=' + str(acc_id)
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
 
         headers = {
@@ -1048,10 +1089,11 @@ def CWLAttachment(cookie_dict, acc_id, uuid, caption, file=comfile):
         # 'message': (None, json.dumps(message), 'application/json')
         }
         print (data)
-        resp = s.post(url, files=data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -1059,8 +1101,8 @@ def CWLAttachment(cookie_dict, acc_id, uuid, caption, file=comfile):
 
 def PApptAttachment(cookie_dict,  uuid, caption, file=comfile):
     url = BASE_URL + '/provider/appointment/'+ str(uuid) +'/attachment'
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
 
         headers = {
@@ -1075,10 +1117,11 @@ def PApptAttachment(cookie_dict,  uuid, caption, file=comfile):
         # 'message': (None, json.dumps(message), 'application/json')
         }
         print (data)
-        resp = s.post(url, files=data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -1086,8 +1129,8 @@ def PApptAttachment(cookie_dict,  uuid, caption, file=comfile):
 
 def CApptAttachment(cookie_dict, acc_id, uuid, message, caption, file=comfile):
     url = BASE_URL + '/consumer/appointment/'+ str(uuid) +'/attachment?account=' + str(acc_id)
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
 
         headers = {
@@ -1107,10 +1150,11 @@ def CApptAttachment(cookie_dict, acc_id, uuid, message, caption, file=comfile):
             'message': (None, json.dumps(message), 'application/json')
             }
         print (data)
-        resp = s.post(url, files=data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -1118,8 +1162,8 @@ def CApptAttachment(cookie_dict, acc_id, uuid, message, caption, file=comfile):
 
 def GeneralCommunicationWithProvider(cookie_dict, accId, msg, type, caption, msgid=None, file=None):
     url = BASE_URL + '/consumer/communications?account=' + str(accId)
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
 
         headers = {
@@ -1144,10 +1188,11 @@ def GeneralCommunicationWithProvider(cookie_dict, accId, msg, type, caption, msg
             'captions': (None, json.dumps(cap_dict), 'application/json')
             }
         print (data)
-        resp = s.post(url, files=data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -1155,8 +1200,8 @@ def GeneralCommunicationWithProvider(cookie_dict, accId, msg, type, caption, msg
 
 def GeneralCommunicationWithConsumer(cookie_dict, consumerId, msg, type, caption, msgid=None, file=None):
     url = BASE_URL + '/provider/communications/' + str(consumerId)
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
 
         headers = {
@@ -1187,10 +1232,11 @@ def GeneralCommunicationWithConsumer(cookie_dict, consumerId, msg, type, caption
         # 'message': (None, json.dumps(message), 'application/json')
         # }
         # print (data)
-        resp = s.post(url, files=data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -1198,8 +1244,8 @@ def GeneralCommunicationWithConsumer(cookie_dict, consumerId, msg, type, caption
 
 def GeneralUserCommunicationWithConsumer(cookie_dict, UserId, consumerId, msg, type, caption, msgid=None, file=None):
     url = BASE_URL + '/provider/communications/' + str(consumerId) + '?provider=' + str(UserId)
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
 
         headers = {
@@ -1225,10 +1271,11 @@ def GeneralUserCommunicationWithConsumer(cookie_dict, UserId, consumerId, msg, t
             'captions': (None, json.dumps(cap_dict), 'application/json')
             }
         print (data)
-        resp = s.post(url, files=data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -1236,8 +1283,8 @@ def GeneralUserCommunicationWithConsumer(cookie_dict, UserId, consumerId, msg, t
 
 def GeneralUserCommunicationWithProvider(cookie_dict, accId, UserId, msg, type, caption, msgid=None, file=None):
     url = BASE_URL + '/consumer/communications?account=' + str(accId) + '&provider=' + str(UserId)
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
 
         headers = {
@@ -1263,17 +1310,18 @@ def GeneralUserCommunicationWithProvider(cookie_dict, accId, UserId, msg, type, 
             'captions': (None, json.dumps(cap_dict), 'application/json')
             }
         print (data)
-        resp = s.post(url, files=data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
 
 # Service Provider Login
 def  SALogin(usname,pswd):
-    s = requests.Session()
+    session = requests.Session()
     url = SA_BASE_URL+'/login'
     print (url)
     pass2 = second_password()
@@ -1284,11 +1332,12 @@ def  SALogin(usname,pswd):
                 'Accept': "application/json",
             }
         data = json.dumps({"loginId": str(usname), "password":str(pswd), "secondPassword":str(pass2)})
-        r = s.post(url, data=data, headers=headers)
-        log_request(r)
-        log_response(r)
-        cookie_dict = s.cookies.get_dict()
-        return cookie_dict,r
+        response = session.post(url, data=data, headers=headers)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        cookie_dict = session.cookies.get_dict()
+        return cookie_dict, response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -1297,8 +1346,8 @@ def  SALogin(usname,pswd):
 # qnrfile = '/ebs/TDD/sampleqnr.xlsx'
 def UploadQuestionnaire(cookie_dict, accId, file):
     url = SA_BASE_URL + '/b2b/' + str(accId) + '/questionnaire/upload'
-    s = requests.Session()
-    s.cookies.update(cookie_dict)
+    session = requests.Session()
+    session.cookies.update(cookie_dict)
     print (file)      
     try:
         # headers = {
@@ -1317,10 +1366,11 @@ def UploadQuestionnaire(cookie_dict, accId, file):
         'files': (file, open(file, 'rb'), mimetype), 
         }
         print (data)
-        resp = s.post(url, files=data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -1328,8 +1378,8 @@ def UploadQuestionnaire(cookie_dict, accId, file):
 def POrderCommunication(cookie_dict,  uuid, msg, type, caption, msgid=None, file=None):
     
     url = BASE_URL + '/provider/orders/communicate/' + str(uuid)
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -1355,10 +1405,11 @@ def POrderCommunication(cookie_dict,  uuid, msg, type, caption, msgid=None, file
             'captions': (None, json.dumps(cap_dict), 'application/json')
             }
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -1367,8 +1418,8 @@ def POrderCommunication(cookie_dict,  uuid, msg, type, caption, msgid=None, file
 # def COrderCommunication(cookie_dict, uuid, accId, msg, type, caption, msgid=None, file=None):
     
 #     url = BASE_URL + '/consumer/orders/communicate/' + str(uuid) + '?account=' + str(accId)
-#     s = requests.Session()
-#     s.cookies.update(cookie_dict)      
+#     session = requests.Session()
+#     session.cookies.update(cookie_dict)      
 #     try:
 #         headers = {
 #             'Content-Type': "multipart/form-data",
@@ -1394,8 +1445,8 @@ def POrderCommunication(cookie_dict,  uuid, msg, type, caption, msgid=None, file
 #             'captions': (None, json.dumps(cap_dict), 'application/json')
 #             }
 #         print (files_data)
-#         resp = s.post(url, files=files_data)
-#         return resp
+#         response = session.post(url, files=files_data)
+#         return response
 #     except Exception as e:
 #         print ("Exception:", e)
         # print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -1404,8 +1455,8 @@ def POrderCommunication(cookie_dict,  uuid, msg, type, caption, msgid=None, file
 def CAppmntcomm(cookie_dict,  uuid, accId, msg, type, caption, msgid=None, file=None):
     
     url = BASE_URL + '/consumer/appointment/communicate/' + str(uuid) + '?account=' + str(accId)
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -1429,10 +1480,11 @@ def CAppmntcomm(cookie_dict,  uuid, accId, msg, type, caption, msgid=None, file=
             'captions': (None, json.dumps(cap_dict), 'application/json')
             }
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -1441,8 +1493,8 @@ def CAppmntcomm(cookie_dict,  uuid, accId, msg, type, caption, msgid=None, file=
 
 def PAppmntComm(cookie_dict,  uuid, msg, type, caption, msgid=None, file=None): 
     url = BASE_URL + '/provider/appointment/communicate/' + str(uuid)
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -1466,10 +1518,11 @@ def PAppmntComm(cookie_dict,  uuid, msg, type, caption, msgid=None, file=None):
             'captions': (None, json.dumps(cap_dict), 'application/json')
             }
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -1480,8 +1533,8 @@ def CAppmntCommMultiFile(cookie_dict, uuid, accId, msg, type, msgid=None, *files
     
     url = BASE_URL + '/consumer/appointment/communicate/' + str(uuid) + '?account=' + str(accId)
     cap_dict={}
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -1524,10 +1577,11 @@ def CAppmntCommMultiFile(cookie_dict, uuid, accId, msg, type, msgid=None, *files
         #     'captions': (None, json.dumps(cap_dict), 'application/json')
         #     }
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -1536,8 +1590,8 @@ def PAppmntCommMultiFile(cookie_dict, uuid, msg, type, msgid=None, *fileswithcap
   
     url = BASE_URL + '/provider/appointment/communicate/' + str(uuid)
     cap_dict={}
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -1567,10 +1621,11 @@ def PAppmntCommMultiFile(cookie_dict, uuid, msg, type, msgid=None, *fileswithcap
             files_data.append(tuple(('captions', capdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -1580,8 +1635,8 @@ def PAppmntCommMultiFile(cookie_dict, uuid, msg, type, msgid=None, *fileswithcap
 def ConsWLCommunication(cookie_dict, uuid, accId, msg, type, caption, msgid=None, file=None):
     
     url = BASE_URL + '/consumer/waitlist/communicate/' + str(uuid) + '?account=' + str(accId)
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
 
         headers = {
@@ -1605,10 +1660,11 @@ def ConsWLCommunication(cookie_dict, uuid, accId, msg, type, caption, msgid=None
             'captions': (None, json.dumps(cap_dict), 'application/json')
             }
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -1619,8 +1675,8 @@ def CWLSCommMultiFile(cookie_dict, accId, uuid, msg, type, msgid=None, *fileswit
   
     url = BASE_URL + '/consumer/waitlist/communicate/' + str(uuid) + '?account=' + str(accId)
     cap_dict={}
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -1650,10 +1706,11 @@ def CWLSCommMultiFile(cookie_dict, accId, uuid, msg, type, msgid=None, *fileswit
             files_data.append(tuple(('captions', capdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -1663,8 +1720,8 @@ def CApptQAnsUpload(cookie_dict, accId, uuid, data, *files):
   
     url = BASE_URL + '/consumer/appointment/questionnaire/' + str(uuid) + '?account=' + str(accId)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -1683,10 +1740,11 @@ def CApptQAnsUpload(cookie_dict, accId, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -1695,8 +1753,8 @@ def CWlQAnsUpload(cookie_dict, accId, uuid, data, *files):
   
     url = BASE_URL + '/consumer/waitlist/questionnaire/' + str(uuid) + '?account=' + str(accId)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -1715,10 +1773,11 @@ def CWlQAnsUpload(cookie_dict, accId, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -1728,8 +1787,8 @@ def CDonationQAnsUpload(cookie_dict, accId, uuid, data, *files):
   
     url = BASE_URL + '/consumer/donation/questionnaire/submit/' + str(uuid) + '?account=' + str(accId)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -1748,10 +1807,11 @@ def CDonationQAnsUpload(cookie_dict, accId, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -1761,8 +1821,8 @@ def CApptResubmitQns(cookie_dict, accId, uuid, data, *files):
   
     url = BASE_URL + '/consumer/appointment/questionnaire/resubmit/' + str(uuid) + '?account=' + str(accId)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -1781,10 +1841,11 @@ def CApptResubmitQns(cookie_dict, accId, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -1793,8 +1854,8 @@ def CWlResubmitQns(cookie_dict, accId, uuid, data, *files):
   
     url = BASE_URL + '/consumer/waitlist/questionnaire/resubmit/' + str(uuid) + '?account=' + str(accId)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -1813,10 +1874,11 @@ def CWlResubmitQns(cookie_dict, accId, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -1826,8 +1888,8 @@ def CDonationResubmitQns(cookie_dict, accId, uuid, data, *files):
   
     url = BASE_URL + '/consumer/donation/questionnaire/resubmit/' + str(uuid) + '?account=' + str(accId)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -1846,10 +1908,11 @@ def CDonationResubmitQns(cookie_dict, accId, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -1859,8 +1922,8 @@ def PApptQAnsUpload(cookie_dict, uuid, data, *files):
   
     url = BASE_URL + '/provider/appointment/questionnaire/' + str(uuid)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -1879,10 +1942,11 @@ def PApptQAnsUpload(cookie_dict, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -1891,8 +1955,8 @@ def PWlQAnsUpload(cookie_dict, uuid, data, *files):
   
     url = BASE_URL + '/provider/waitlist/questionnaire/' + str(uuid)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -1911,10 +1975,11 @@ def PWlQAnsUpload(cookie_dict, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -1924,8 +1989,8 @@ def PDonationQAnsUpload(cookie_dict, uuid, data, *files):
   
     url = BASE_URL + '/provider/donation/questionnaire/submit/' + str(uuid)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -1944,10 +2009,11 @@ def PDonationQAnsUpload(cookie_dict, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -1957,8 +2023,8 @@ def PApptResubmitQns(cookie_dict, uuid, data, *files):
   
     url = BASE_URL + '/provider/appointment/questionnaire/resubmit/' + str(uuid)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -1977,10 +2043,11 @@ def PApptResubmitQns(cookie_dict, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -1989,8 +2056,8 @@ def PWlResubmitQns(cookie_dict, uuid, data, *files):
   
     url = BASE_URL + '/provider/waitlist/questionnaire/resubmit/' + str(uuid)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2009,8 +2076,11 @@ def PWlResubmitQns(cookie_dict, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -2020,8 +2090,8 @@ def PDonationResubmitQns(cookie_dict, uuid, data, *files):
   
     url = BASE_URL + '/provider/donation/questionnaire/resubmit/' + str(uuid)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2040,8 +2110,11 @@ def PDonationResubmitQns(cookie_dict, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -2055,8 +2128,8 @@ def PAppMassCommMultiFile( cookie_dict, msg_dict,  *fileswithcaption ):
   
     url = BASE_URL + '/provider/appointment/consumerMassCommunication' 
     cap_dict={}
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2082,10 +2155,11 @@ def PAppMassCommMultiFile( cookie_dict, msg_dict,  *fileswithcaption ):
             files_data.append(tuple(('captions', capdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -2096,8 +2170,8 @@ def providerWLMassCom( cookie_dict, msg_dict,  *fileswithcaption ):
   
     url = BASE_URL + '/provider/waitlist/consumerMassCommunication' 
     cap_dict={}
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2123,10 +2197,11 @@ def providerWLMassCom( cookie_dict, msg_dict,  *fileswithcaption ):
             files_data.append(tuple(('captions', capdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -2137,8 +2212,8 @@ def providerOrderMassCommunication( cookie_dict, msg_dict,  *fileswithcaption ):
   
     url = BASE_URL + '/provider/orders/consumerMassCommunication' 
     cap_dict={}
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2164,10 +2239,11 @@ def providerOrderMassCommunication( cookie_dict, msg_dict,  *fileswithcaption ):
             files_data.append(tuple(('captions', capdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -2177,8 +2253,8 @@ def POrderQAnsUpload(cookie_dict, uuid, data, *files):
   
     url = BASE_URL + '/provider/orders/questionnaire/' + str(uuid)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2197,10 +2273,11 @@ def POrderQAnsUpload(cookie_dict, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -2210,8 +2287,8 @@ def POrderResubmitQns(cookie_dict, uuid, data, *files):
   
     url = BASE_URL + '/provider/orders/questionnaire/resubmit/' + str(uuid)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2230,10 +2307,11 @@ def POrderResubmitQns(cookie_dict, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -2244,8 +2322,8 @@ def COrderQAnsUpload(cookie_dict, accId, uuid, data, *files):
   
     url = BASE_URL + '/consumer/orders/questionnaire/' + str(uuid) + '?account=' + str(accId)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2264,10 +2342,11 @@ def COrderQAnsUpload(cookie_dict, accId, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -2277,8 +2356,8 @@ def COrderResubmitQns(cookie_dict, accId, uuid, data, *files):
   
     url = BASE_URL + '/consumer/orders/questionnaire/resubmit/' + str(uuid) + '?account=' + str(accId)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2297,10 +2376,11 @@ def COrderResubmitQns(cookie_dict, accId, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
 
@@ -2309,8 +2389,8 @@ def Uploadfiletojaldeedrive(cookie_dict, folderName, providerId, *fileswithcapti
     url = BASE_URL + '/provider/fileShare/upload/' + str(folderName) + '/'  + str(providerId)
     cap_dict={}
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2336,10 +2416,11 @@ def Uploadfiletojaldeedrive(cookie_dict, folderName, providerId, *fileswithcapti
             files_data.append(tuple(('captions', capdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
          print ("Exception:", e)
          print ("Exception at line no:", e.traceback.tb_lineno)
@@ -2349,8 +2430,8 @@ def PServiceOptionsUpload(cookie_dict, uuid, data, *files):
   
     url = BASE_URL + '/provider/waitlist/serviceoption/' + str(uuid)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2369,10 +2450,11 @@ def PServiceOptionsUpload(cookie_dict, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -2382,8 +2464,8 @@ def PResubmitServiceOptions(cookie_dict, uuid, data, *files):
   
     url = BASE_URL + '/provider/waitlist/serviceoptoin/resubmit/' + str(uuid)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2402,10 +2484,11 @@ def PResubmitServiceOptions(cookie_dict, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -2415,8 +2498,8 @@ def PApptserviceoptionsUpload(cookie_dict, uuid, data, *files):
   
     url = BASE_URL + '/provider/appointment/serviceoption/' + str(uuid)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2435,10 +2518,11 @@ def PApptserviceoptionsUpload(cookie_dict, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -2447,8 +2531,8 @@ def PResubmitApptserviceoptionsUpload(cookie_dict, uuid, data, *files):
   
     url = BASE_URL + '/provider/appointment/serviceoption/resubmit/' + str(uuid)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2467,10 +2551,11 @@ def PResubmitApptserviceoptionsUpload(cookie_dict, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -2479,8 +2564,8 @@ def PSubmitServiceOptionsForOrder(cookie_dict, uuid, data, *files):
   
     url = BASE_URL + '/provider/orders/serviceoption/' + str(uuid)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2499,10 +2584,11 @@ def PSubmitServiceOptionsForOrder(cookie_dict, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -2511,8 +2597,8 @@ def PResubmitServiceOptionsForOrder(cookie_dict, uuid, data, *files):
   
     url = BASE_URL + '/provider/orders/serviceoption/resubmit/' + str(uuid)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2531,10 +2617,11 @@ def PResubmitServiceOptionsForOrder(cookie_dict, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -2544,8 +2631,8 @@ def CWlSerOptUpload(cookie_dict, accId, uuid, data, *files):
   
     url = BASE_URL + '/consumer/waitlist/serviceoption/' + str(uuid) + '?account=' + str(accId)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2564,10 +2651,11 @@ def CWlSerOptUpload(cookie_dict, accId, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -2576,8 +2664,8 @@ def CWlResubmitServiceOption(cookie_dict, accId, uuid, data, *files):
   
     url = BASE_URL + '/consumer/waitlist/serviceoption/resubmit/' + str(uuid) + '?account=' + str(accId)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2596,10 +2684,11 @@ def CWlResubmitServiceOption(cookie_dict, accId, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -2608,8 +2697,8 @@ def CApptSerOptUpload(cookie_dict, accId, uuid, data, *files):
   
     url = BASE_URL + '/consumer/appointment/serviceoption/' + str(uuid) + '?account=' + str(accId)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2628,8 +2717,11 @@ def CApptSerOptUpload(cookie_dict, accId, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -2638,8 +2730,8 @@ def CApptResubmitServiceOption(cookie_dict, accId, uuid, data, *files):
   
     url = BASE_URL + '/consumer/appointment/serviceoption/resubmit/' + str(uuid) + '?account=' + str(accId)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2658,10 +2750,11 @@ def CApptResubmitServiceOption(cookie_dict, accId, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -2675,8 +2768,8 @@ def uploadTaskAttachment( cookie_dict, taskuid, *fileswithcaption ):
     url = BASE_URL + '/provider/task/' + str(taskuid) + '/' + 'attachment'
     cap_dict={}
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2703,10 +2796,11 @@ def uploadTaskAttachment( cookie_dict, taskuid, *fileswithcaption ):
             files_data.append(tuple(('captions', capdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
          print ("Exception:", e)
          print ("Exception at line no:", e.traceback.tb_lineno)
@@ -2717,8 +2811,8 @@ def ShareFilesInJaldeeDrive ( cookie_dict, sharedto, fileid_list, comm):
       
     
     url = BASE_URL + '/provider/fileShare/sharefiles' 
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2733,10 +2827,11 @@ def ShareFilesInJaldeeDrive ( cookie_dict, sharedto, fileid_list, comm):
         }
     
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -2745,8 +2840,8 @@ def CSubmitSerOptForItem(cookie_dict, item, uuid, accId, data, *files):
   
     url = BASE_URL + '/consumer/orders/item/serviceoption/'+ str(item) + '/' + str(uuid) + '?account=' + str(accId)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2765,10 +2860,11 @@ def CSubmitSerOptForItem(cookie_dict, item, uuid, accId, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -2777,8 +2873,8 @@ def CResubmitSerOptForItem(cookie_dict, uuid, accId, data, *files):
   
     url = BASE_URL + '/consumer/orders/item/serviceoption/resubmit/'+ str(uuid) + '?account=' + str(accId)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2797,10 +2893,11 @@ def CResubmitSerOptForItem(cookie_dict, uuid, accId, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -2809,8 +2906,8 @@ def PSubmitSerOptForItem(cookie_dict, item, uuid, data, *files):
   
     url = BASE_URL + '/provider/orders/item/serviceoption/'+ str(item) + '/' + str(uuid)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2829,10 +2926,11 @@ def PSubmitSerOptForItem(cookie_dict, item, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -2841,8 +2939,8 @@ def PResubmitSerOptForItem(cookie_dict, uuid, data, *files):
   
     url = BASE_URL + '/provider/orders/item/serviceoption/resubmit/'+ '/' + str(uuid)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2861,10 +2959,11 @@ def PResubmitSerOptForItem(cookie_dict, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -2873,8 +2972,8 @@ def CSubmitSerOptForOrder(cookie_dict, accId, uuid, data, *files):
   
     url = BASE_URL + '/consumer/orders/serviceoption/'+ '/' + str(uuid) + '?account=' + str(accId)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2893,10 +2992,11 @@ def CSubmitSerOptForOrder(cookie_dict, accId, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -2905,8 +3005,8 @@ def CResubmitSerOptForOrder(cookie_dict, accId, uuid, data, *files):
   
     url = BASE_URL + '/consumer/orders/serviceoption/resubmit/'+ '/' + str(uuid) + '?account=' + str(accId)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2925,10 +3025,11 @@ def CResubmitSerOptForOrder(cookie_dict, accId, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -2937,8 +3038,8 @@ def CSubmitSerOptForDonation(cookie_dict, accId, uuid, data, *files):
   
     url = BASE_URL + '/consumer/donation/serviceoption/submit/'+ '/' + str(uuid) + '?account=' + str(accId)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -2957,10 +3058,11 @@ def CSubmitSerOptForDonation(cookie_dict, accId, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -2969,8 +3071,8 @@ def CResubmitSerOptForDonation(cookie_dict, accId, uuid, data, *files):
   
     url = BASE_URL + '/consumer/donation/serviceoption/resubmit/'+ '/' + str(uuid) + '?account=' + str(accId)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)
+    session = requests.Session()
+    session.cookies.update(cookie_dict)
     # s.headers.update({'Content-Type': "multipart/form-data"})      
     try:
         headers = {
@@ -2990,11 +3092,12 @@ def CResubmitSerOptForDonation(cookie_dict, accId, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        # resp = s.post(url, files=files_data, headers=headers)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        # response = session.post(url, files=files_data, headers=headers)
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -3003,8 +3106,8 @@ def PLeadQAnsUpload(cookie_dict, uuid, data, *files):
   
     url = BASE_URL + '/provider/lead/questionnaire/' + str(uuid)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -3023,10 +3126,11 @@ def PLeadQAnsUpload(cookie_dict, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -3036,8 +3140,8 @@ def PLeadResubmitQns(cookie_dict, uuid, data, *files):
   
     url = BASE_URL + '/provider/lead/questionnaire/resubmit/' + str(uuid)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -3056,10 +3160,11 @@ def PLeadResubmitQns(cookie_dict, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -3069,8 +3174,8 @@ def SalessubmitQns(cookie_dict, uuid, data, *files):
       
     url = BASE_URL + '/provider/lead/questionnaire/proceed/' + str(uuid)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -3089,10 +3194,11 @@ def SalessubmitQns(cookie_dict, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.put(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.put(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -3103,8 +3209,8 @@ def SalessubmitQns(cookie_dict, uuid, data, *files):
       
 #     url = BASE_URL + '/provider/lead/status/questionnaire/' + str(uuid)
 #     files_data = []
-#     s = requests.Session()
-#     s.cookies.update(cookie_dict)      
+#     session = requests.Session()
+#     session.cookies.update(cookie_dict)      
 #     try:
 #         headers = {
 #             'Content-Type': "multipart/form-data",
@@ -3123,10 +3229,11 @@ def SalessubmitQns(cookie_dict, uuid, data, *files):
 #             files_data.append(tuple(('question', ansdata)))
                 
 #         print (files_data)
-#         resp = s.put(url, files=files_data)
-#         log_request(resp)
-#         log_response(resp)
-#         return resp
+#         response = session.put(url, files=files_data)
+#         log_request(response)
+#         log_response(response)
+#         check_deprecation(response, inspect.stack()[0].function)
+#         return response
 #     except Exception as e:
 #         print ("Exception:", e)
 #         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -3135,8 +3242,8 @@ def PLeadStatusQAnsUpload(cookie_dict, uuid, data, *files):
   
     url = BASE_URL + '/provider/lead/status/questionnaire/' + str(uuid)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -3155,10 +3262,11 @@ def PLeadStatusQAnsUpload(cookie_dict, uuid, data, *files):
             files_data.append(tuple(('question', ansdata)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -3166,8 +3274,8 @@ def PLeadStatusQAnsUpload(cookie_dict, uuid, data, *files):
 qnrfile = '/ebs/TDD/CDL_BRANCHES.xlsx'
 def ImportBranchesfromSuperAdmin(cookie_dict, accId, file=qnrfile):
     url = SA_BASE_URL + '/account/import/branches'
-    s = requests.Session()
-    s.cookies.update(cookie_dict)
+    session = requests.Session()
+    session.cookies.update(cookie_dict)
     print (file)      
     try:
         headers = {
@@ -3193,10 +3301,11 @@ def ImportBranchesfromSuperAdmin(cookie_dict, accId, file=qnrfile):
         # 'files': (file, open(file, 'rb'), 'application/vnd.ms-excel'), 
         # }
         # print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -3206,8 +3315,8 @@ def loanDigitalSignUpload(cookie_dict,accId,loanApplicationUid,loanApplicationKy
     url = BASE_URL + '/provider/loanapplication/'+ str(loanApplicationUid) + '/kyc/' + str(loanApplicationKycId) +'/digitalsign'  + '?account=' + str(accId)
     
 
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
 
         cap_dict = {"caption":str(caption)}
@@ -3218,10 +3327,11 @@ def loanDigitalSignUpload(cookie_dict,accId,loanApplicationUid,loanApplicationKy
         }
     
         # print (data)
-        resp = s.post(url, files=data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -3232,8 +3342,8 @@ def loanDigitalSignUpload(cookie_dict,accId,loanApplicationUid,loanApplicationKy
   
 #     url = BASE_URL + '/provider/ivr/questionnaire/submit/' + str(uuid)
 #     files_data = []
-#     s = requests.Session()
-#     s.cookies.update(cookie_dict)      
+#     session = requests.Session()
+#     session.cookies.update(cookie_dict)      
 #     try:
 #         headers = {
 #             'Content-Type': "application/json",
@@ -3243,10 +3353,10 @@ def loanDigitalSignUpload(cookie_dict,accId,loanApplicationUid,loanApplicationKy
 #         files_data.append(tuple(('question', ansdata)))
                 
 #         print (files_data)
-#         resp = s.post(url, data=files_data, headers=headers)
-#         log_request(resp)
-#         log_response(resp)
-#         return resp
+#         response = session.post(url, data=files_data, headers=headers)
+#         log_request(response)
+#         log_response(response)
+#         return response
 #     except Exception as e:
 #         print ("Exception:", e)
 #         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -3255,8 +3365,8 @@ def loanDigitalSignUpload(cookie_dict,accId,loanApplicationUid,loanApplicationKy
 def UploadQNRfiletoTempLocation(cookie_dict, proid, qnrid, caption, mimeType, keyName, urls, size, labelName):
 
     url = BASE_URL + '/provider/questionnaire/upload/file'
-    s = requests.Session()
-    s.cookies.update(cookie_dict)
+    session = requests.Session()
+    session.cookies.update(cookie_dict)
 
     request = {"proId": proid,"questionnaireId": qnrid}
     files = [{"caption": caption,"mimeType": mimeType,"keyName": keyName,"url": urls,"size": size,"labelName": labelName}]
@@ -3272,10 +3382,11 @@ def UploadQNRfiletoTempLocation(cookie_dict, proid, qnrid, caption, mimeType, ke
         # files_data.append(tuple(('request', data1)('files', data2)))
 
         print (data)
-        resp = s.post(url, files=data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
 
     except Exception as e:
         print ("Exception:", e)
@@ -3284,7 +3395,7 @@ def UploadQNRfiletoTempLocation(cookie_dict, proid, qnrid, caption, mimeType, ke
 
 
 def ProconLogin(phno,accId,token,countrycode=91):
-    s = requests.Session()
+    session = requests.Session()
     url = BASE_URL+'/consumer/login'
     try:
         headers = {
@@ -3293,11 +3404,12 @@ def ProconLogin(phno,accId,token,countrycode=91):
                 'Authorization': token
             }
         data = json.dumps({"loginId": str(phno), "accountId":str(accId), "countryCode":str(countrycode)})
-        r = s.post(url, data=data, headers=headers)
-        log_request(r)
-        log_response(r)
-        cookie_dict = s.cookies.get_dict()
-        return cookie_dict,r
+        response = session.post(url, data=data, headers=headers)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        cookie_dict = session.cookies.get_dict()
+        return cookie_dict, response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -3307,8 +3419,8 @@ def DataMigrationUpload(cookie_dict, account, migrationType, *files):
   
     url = SA_BASE_URL + '/spdataimport/account/' + str(account) +'/upload/' + str(migrationType)
     files_data = []
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         headers = {
             'Content-Type': "multipart/form-data",
@@ -3324,18 +3436,19 @@ def DataMigrationUpload(cookie_dict, account, migrationType, *files):
                 files_data.append(tuple(('files', formfile)))
                 
         print (files_data)
-        resp = s.post(url, files=files_data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=files_data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.traceback.tb_lineno)
 
 def UploadJrxitemSA(cookie_dict, file):
     url = SA_BASE_URL + '/item/upload'
-    s = requests.Session()
-    s.cookies.update(cookie_dict)
+    session = requests.Session()
+    session.cookies.update(cookie_dict)
     print (file)      
     try:
         # headers = {
@@ -3354,10 +3467,11 @@ def UploadJrxitemSA(cookie_dict, file):
         'files': (file, open(file, 'rb'), mimetype), 
         }
         print (data)
-        resp = s.post(url, files=data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -3367,8 +3481,8 @@ coverimg = '/ebs/TDD/cover.jpg'
 coverpty='/ebs/TDD/cover.json'
 def uploadCoverPhoto(cookie_dict,ppty=coverpty,img=coverimg):
     url = BASE_URL + '/provider/coverPicture'
-    s = requests.Session()
-    s.cookies.update(cookie_dict)      
+    session = requests.Session()
+    session.cookies.update(cookie_dict)      
     try:
         # headers = {
         #     'Content-Type': "multipart/form-data",
@@ -3381,10 +3495,11 @@ def uploadCoverPhoto(cookie_dict,ppty=coverpty,img=coverimg):
         }
     
         # print (data)
-        resp = s.post(url, files=data)
-        log_request(resp)
-        log_response(resp)
-        return resp
+        response = session.post(url, files=data)
+        log_request(response)
+        log_response(response)
+        check_deprecation(response, inspect.stack()[0].function)
+        return response
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
