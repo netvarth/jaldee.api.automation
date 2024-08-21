@@ -17226,6 +17226,24 @@ Crm Lead Update Notes
     RETURN  ${resp}
 
 
+Get Location Suggestion
+    [Arguments]    ${sug}
+    Check And Create YNW Session
+    ${sug}=  Create Dictionary    criteria=${sug}
+    ${resp}=    GET On Session  ynw  /provider/search/suggester/location  params=${sug}   expected_status=any
+    Check Deprication  ${resp}  Create And Verify Alert
+    RETURN    ${resp}
+
+
+Get Specialization Suggestion
+    [Arguments]    ${sug}
+    Check And Create YNW Session
+    ${sug}=  Create Dictionary    criteria=${sug}
+    ${resp}=    GET On Session  ynw  /provider/search/suggester/specialization  params=${sug}   expected_status=any
+    Check Deprication  ${resp}  Create And Verify Alert
+    RETURN    ${resp}
+
+
 *** Comments ***
 
 

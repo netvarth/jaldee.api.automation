@@ -349,20 +349,7 @@ Cloud Search
     ${resp}=    GET On Session  cs  /2013-01-01/search   params=${kwargs}   expected_status=any
     RETURN    ${resp}
 
-Get Location Suggestion
-    [Arguments]    ${sug}
-    Check And Create YNW Session
-    ${sug}=  Create Dictionary    criteria=${sug}
-    ${resp}=    GET On Session  ynw  /provider/search/suggester/location  params=${sug}   expected_status=any
-    RETURN    ${resp}
     
-Get Specialization Suggestion
-    [Arguments]    ${sug}
-    Check And Create YNW Session
-    ${sug}=  Create Dictionary    criteria=${sug}
-    ${resp}=    GET On Session  ynw  /provider/search/suggester/specialization  params=${sug}   expected_status=any
-    RETURN    ${resp}
- 
 Convert To twodigitfloat
     [Arguments]  ${value}
     ${value_float}=  twodigitfloat  ${value}
