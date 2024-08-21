@@ -318,6 +318,7 @@ Create And Verify Alert
     Should Be Equal As Strings    ${resp_post.status_code}    200
     ${resp_get}=    GET On Session    ynw    provider/alerts/${resp_post.json()}   expected_status=any
     Should Be Equal As Strings    ${resp_get.status_code}    200
+    Check Deprication  ${resp_get}  Create And Verify Alert
     RETURN    ${resp_get}
 
 Verify Response
@@ -327,11 +328,6 @@ Verify Response
         Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['${key}']}  ${value}
     END
 
-Get Slot
-    [Arguments]    &{kwargs}
-    Check And Create YNW Session
-    ${resp_get}=    GET On Session  ynw  /provider/appointments/availability  params=${kwargs}   expected_status=any
-    RETURN    ${resp_get}
 
 Verify Response List
     [Arguments]  ${resp}  ${no}   &{kwargs}

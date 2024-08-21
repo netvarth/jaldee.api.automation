@@ -1034,6 +1034,13 @@ Update Appointment Schedule
     ${resp}=  PUT On Session  ynw  /provider/appointment/schedule  data=${data}  expected_status=any
     Check Deprication  ${resp}  Update Appointment Schedule
     RETURN  ${resp}
+
+Get Slot
+    [Arguments]    &{kwargs}
+    Check And Create YNW Session
+    ${resp}=    GET On Session  ynw  /provider/appointments/availability  params=${kwargs}   expected_status=any
+    Check Deprication  ${resp}  Get Slot
+    RETURN    ${resp}
     
 ######### WAITLIST ###########
 
