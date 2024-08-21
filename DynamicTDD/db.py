@@ -28,7 +28,7 @@ from base64 import b64encode, b64decode
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding
 import socket
-from Keywordspy import create_tz
+from Keywordspy import create_tz, check_deprecation
 from dateutil import tz
 import re
 from decimal import Decimal, ROUND_HALF_UP
@@ -1249,6 +1249,7 @@ def get_time():
     r = requests.get(url = URL)
     log_request(r)
     log_response(r)
+    check_deprecation(r, inspect.stack()[0].function)
     data = r.json()
     date,time= data.split()
     try:
@@ -1296,6 +1297,7 @@ def get_date():
     r = requests.get(url = URL)
     log_request(r)
     log_response(r)
+    check_deprecation(r, inspect.stack()[0].function)
     data = r.json()
     date,time= data.split()
     try:
@@ -1617,6 +1619,7 @@ def add_time24(h,m):
     r = requests.get(url = URL)
     log_request(r)
     log_response(r)
+    check_deprecation(r, inspect.stack()[0].function)
     data = r.json()
     # print data
     try:
@@ -2408,6 +2411,7 @@ def get_time_secs():
     r = requests.get(url = URL)
     log_request(r)
     log_response(r)
+    check_deprecation(r, inspect.stack()[0].function)
     data = r.json()
     date,time= data.split()
     try:
@@ -3120,6 +3124,7 @@ def get_date_time():
     r = requests.get(url = URL)
     log_request(r)
     log_response(r)
+    check_deprecation(r, inspect.stack()[0].function)
     data = r.json()
     date,time= data.split()
     try:
@@ -5944,6 +5949,7 @@ def get_Timezone_by_lat_long(latitude, longitude):
     print (r)
     log_request(r)
     log_response(r)
+    check_deprecation(r, inspect.stack()[0].function)
     data = r.json()
     print (data)
     data =  create_tz(data)
@@ -5962,6 +5968,7 @@ def get_time_by_timezone(tz):
         r = requests.get(url = URL)
         log_request(r)
         log_response(r)
+        check_deprecation(r, inspect.stack()[0].function)
         print(r.status_code)
         # r.raise_for_status()
         data = r.json()
@@ -5984,6 +5991,7 @@ def get_date_by_timezone(tz):
     r = requests.get(url = URL)
     log_request(r)
     log_response(r)
+    check_deprecation(r, inspect.stack()[0].function)
     data = r.json()
     date,time= data.split()
     try:
@@ -6004,6 +6012,7 @@ def get_date_time_by_timezone(tz):
     r = requests.get(url = URL)
     log_request(r)
     log_response(r)
+    check_deprecation(r, inspect.stack()[0].function)
     data = r.json()
     return data
     # date,time= data.split()

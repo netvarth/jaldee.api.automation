@@ -37,10 +37,25 @@ Library           /ebs/TDD/CustomKeywords.py
 #     Check Deprication  ${resp}  Get BusinessDomainsConf
 #     RETURN  ${resp}
 
+*** Keywords ***
+My Keyword
+    ${keyword_name}=    Get Current Keyword Name
+    Log    Keyword inside My Keyword is ${keyword_name}
+
 
 
 
 *** Test Cases ***
+Example Test Case
+    ${keyword_name}=    Get Current Keyword Name
+    Log    Current keyword name is ${keyword_name}
+    My Keyword
+    ${keyword_name}=    Get Current Keyword Name
+    Log    Current keyword name after calling My Keyword is ${keyword_name}
+
+    
+
+*** COMMENTS ***
 Testing Deprecation
     
     # example_keyword
@@ -54,7 +69,7 @@ Testing Deprecation
     # END
     ${resp}=  get_business_domains_conf  
 
-*** COMMENTS ***
+
 JD-TC-55num-1
     ${PUSERPH0}=    Generate Random 555 Number
     Log To Console  ${PUSERPH0}
