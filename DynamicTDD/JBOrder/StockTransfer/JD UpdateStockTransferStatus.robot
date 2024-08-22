@@ -1011,6 +1011,7 @@ JD-TC-Update Stock Transfer Status-5
 
 
     ${Password_n}=    Random Int  min=11111111  max=99999999
+    Set Suite Variable      ${Password_n}
 
     ${resp}=    Forgot Password   loginId=${loginId_n}  password=${Password_n}
     Log   ${resp.content}
@@ -1040,16 +1041,47 @@ JD-TC-Update Stock Transfer Status-5
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${users}=  Create List  ${user1}
-    ${stores}=  Create List  ${store_id4}
+    ${stores}=  Create List  ${store_id3}
 
     ${resp}=  AssignUser to Store   ${users}    ${stores}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Update Stock Transfer Status   ${Stock_transfer_uid1}  ${stockTransfer[1]}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Stock Transfer By Uid   ${Stock_transfer_uid1}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+
+
+JD-TC-Update Stock Transfer Status-UH6
+    [Documentation]    update stock transfer status as dispatched using another user
+
+    ${resp}=  Encrypted Provider Login  ${loginId_n}  ${Password_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${CANNOT_CHANGE_STATUS_FROM_TO}=  format String   ${CANNOT_CHANGE_STATUS_FROM_TO}  Declined  Stock transfer  Cancelled
+    ${resp}=  Update Stock Transfer Status   ${Stock_transfer_uid1}  ${stockTransfer[2]}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}    ${CANNOT_CHANGE_STATUS_FROM_TO} 
+
+JD-TC-Update Stock Transfer Status-UH7
+    [Documentation]    update stock transfer status as cancelled using another user
+
+    ${resp}=  Encrypted Provider Login  ${loginId_n}  ${Password_n}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${CANNOT_CHANGE_STATUS_FROM_TO}=  format String   ${CANNOT_CHANGE_STATUS_FROM_TO}  Declined  Stock transfer  Cancelled
+    ${resp}=  Update Stock Transfer Status   ${Stock_transfer_uid1}  ${stockTransfer[4]}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}    ${CANNOT_CHANGE_STATUS_FROM_TO}   
 
 
 
