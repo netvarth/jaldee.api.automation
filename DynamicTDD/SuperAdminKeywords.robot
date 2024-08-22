@@ -1073,14 +1073,14 @@ Change Corporate License
     ${apple}=    json.dumps    ${auth}
     Check And Create YNW SuperAdmin Session
     ${resp}=    PUT On Session   synw  /corporate/${ci_d}/license/${licPkgid}    data=${apple}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Change Corporate License
     RETURN  ${resp} 
 
 Get corporate license details
     [Arguments]  ${ci_d}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw  /corporate/${ci_d}/license  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get corporate license details
     RETURN  ${resp}  
 
 
@@ -1090,7 +1090,7 @@ Change corporate Addon
     ${apple}=    json.dumps    ${auth}
     Check And Create YNW SuperAdmin Session
     ${resp}=   PUT On Session    synw    corporate/${ci_d}/addon/${AddonId}    data=${apple}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Change corporate Addon
     RETURN  ${resp}
 
 
@@ -1100,7 +1100,7 @@ Delete Corporate Addon
     ${apple}=    json.dumps    ${auth}
     Check And Create YNW SuperAdmin Session  
     ${resp}=    DELETE On Session   synw   corporate/${ci_d}/addon/${AddonId}    data=${apple}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Delete Corporate Addon
     RETURN  ${resp}
 
 Renew Corporate License 
@@ -1109,7 +1109,7 @@ Renew Corporate License
     ${apple}=    json.dumps    ${auth}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PUT On Session   synw   /corporate/license/renewal   data=${apple}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Renew Corporate License
     RETURN  ${resp}
 
 
@@ -1119,16 +1119,16 @@ Create License Discount code
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session   synw    /license/discount/code   data=${data}  expected_status=any   
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Create License Discount code
     RETURN  ${resp}
 
 Update license discount code
-     [Arguments]  ${id}  ${Lcode}  ${desn}  ${lcdsp}   
-     ${data}=  Create Dictionary   licDiscCode=${Lcode}   description=${desn}  licDiscPercentage=${lcdsp}
-     ${data}=  json.dumps  ${data}
-     Check And Create YNW SuperAdmin Session
-     ${resp}=  PUT On Session   synw   /license/discount/code/${id}   data=${data}  expected_status=any   
-     Check Deprication  ${resp}  Get BusinessDomainsConf  
+    [Arguments]  ${id}  ${Lcode}  ${desn}  ${lcdsp}   
+    ${data}=  Create Dictionary   licDiscCode=${Lcode}   description=${desn}  licDiscPercentage=${lcdsp}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW SuperAdmin Session
+    ${resp}=  PUT On Session   synw   /license/discount/code/${id}   data=${data}  expected_status=any   
+    Check Deprication  ${resp}  Update license discount code
     RETURN  ${resp}
 
 
@@ -1136,14 +1136,14 @@ Get license discount codes by optional
     [Arguments]  &{kwargs}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session   synw   /license/discount/code   params=${kwargs}  expected_status=any 
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get license discount codes by optional
     RETURN  ${resp}   
 
 Get license discount code details by discCodeId 
     [Arguments]  ${discCodeId}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session   synw    /license/discount/code/${discCodeId}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get license discount code details by discCodeId
     RETURN  ${resp} 
 
 
@@ -1153,7 +1153,7 @@ Delete license discount code by discCodeId
     ${apple}=    json.dumps    ${auth}
     Check And Create YNW SuperAdmin Session  
     ${resp}=    DELETE On Session   synw   /license/discount/code/${discCodeId}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Delete license discount code by discCodeId
     RETURN  ${resp}
 
 
@@ -1163,7 +1163,7 @@ Update Subdomain_Level sa
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /sa/branch/provider/bProfile/${subdomain}   data=${data}   params=${params}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update Subdomain_Level sa
     RETURN  ${resp}
 
 
@@ -1173,14 +1173,14 @@ Update license of branches
     ${apple}=    json.dumps    ${auth}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PUT On Session   synw  /corporate/${corpId}/branch/license  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update license of branches
     RETURN  ${resp}
 
 Get Addons of corporate 
     [Arguments]  ${ci_d}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw  /corporate/${ci_d}/addon  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Addons of corporate
     RETURN  ${resp}  
 
 Change Subscription Bill cycle 
@@ -1188,7 +1188,7 @@ Change Subscription Bill cycle
     ${auth}=    Create Dictionary   accId=${accId}    licBillCycle=${licBillCycle} 
     Check And Create YNW SuperAdmin Session
     ${resp}=    PUT On Session    synw  /account/${accId}/license/billing/${licBillCycle}  expected_status=any 
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Change Subscription Bill cycle
     RETURN  ${resp}  
 
 Get Start date of next Bill Cycle
@@ -1196,7 +1196,7 @@ Get Start date of next Bill Cycle
     ${auth}=    Create Dictionary   accId=${accId}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw  /account/${accId}/license/billing/nextBillCycle  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Start date of next Bill Cycle
     RETURN  ${resp}  
 
 Get license bill cycle Subscription type
@@ -1204,7 +1204,7 @@ Get license bill cycle Subscription type
     ${auth}=    Create Dictionary   accId=${accId}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw  /account/${accId}/license/billing  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get license bill cycle Subscription type
     RETURN  ${resp}
 
 Change Subscription type to Annual 
@@ -1212,7 +1212,7 @@ Change Subscription type to Annual
     ${auth}=    Create Dictionary   accId=${accId}
     Check And Create YNW SuperAdmin Session
     ${resp}=    PUT On Session    synw  /account/license/subscription/${accId}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Change Subscription type to Annual
     RETURN  ${resp} 
 
 
@@ -1223,7 +1223,7 @@ Get jdn config of a corporate
     ${apple}=    json.dumps    ${auth}
     Check And Create YNW SuperAdmin Session
     ${resp}=  GET On Session   synw  /corporate/${corpId}/jdn/config  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get jdn config of a corporate
     RETURN  ${resp}
 
 Disable jdn of a corporate  
@@ -1232,7 +1232,7 @@ Disable jdn of a corporate
     ${apple}=    json.dumps    ${auth}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PUT On Session   synw  /corporate/${corpId}/jdn/disable  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Disable jdn of a corporate
     RETURN  ${resp}
 
 Enable jdn if it is already disabled
@@ -1241,7 +1241,7 @@ Enable jdn if it is already disabled
     ${apple}=    json.dumps    ${auth}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PUT On Session   synw  /corporate/${corpId}/jdn/enable  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Enable jdn if it is already disabled
     RETURN  ${resp}
 
 Create JDN 
@@ -1250,7 +1250,7 @@ Create JDN
     ${apple}=    json.dumps    ${auth}
     Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session   synw  /corporate/${corpId}/jdn/enable  data=${apple}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Create JDN
     RETURN  ${resp}
 
 Update JDN 
@@ -1259,7 +1259,7 @@ Update JDN
     ${apple}=    json.dumps    ${auth}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PUT On Session   synw  /corporate/${corpId}/jdn  data=${apple}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update JDN
     RETURN  ${resp}
 
 
@@ -1269,7 +1269,7 @@ Enable JDN of Branches
     ${apple}=    json.dumps    ${auth}
     Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session   synw  /corporate/${corpId}/branch/jdn/enable   data=${apple}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Enable JDN of Branches
     RETURN  ${resp}
     
 Get discount details of a corporate  
@@ -1277,7 +1277,7 @@ Get discount details of a corporate
     ${auth}=    Create Dictionary  corpId=${corpId} 
     Check And Create YNW SuperAdmin Session
     ${resp}=  GET On Session   synw   /corporate/${corpId}/jdn   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get discount details of a corporate
     RETURN  ${resp}
 
 
@@ -1286,7 +1286,7 @@ Get Account JDN
     ${auth}=    Create Dictionary  accId=${accId} 
     Check And Create YNW SuperAdmin Session
     ${resp}=  GET On Session   synw   /account/${accId}/jdn   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Account JDN
     RETURN  ${resp}
 
 Create SA SalesChannel 
@@ -1299,26 +1299,26 @@ Create SA SalesChannel
     Log  ${log}
     Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session  synw  /sc   data=${log}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Create SA SalesChannel
     RETURN  ${resp}
 
 Get SCAccount Configuration
      Check And Create YNW SuperAdmin Session
      ${resp}=  GET On Session   synw  /account/config  expected_status=any       
-     Check Deprication  ${resp}  Get BusinessDomainsConf  
+     Check Deprication  ${resp}  Get SCAccount Configuration
     RETURN  ${resp}
 
 Get SalesChannel By Id 
     [Arguments]  ${ScId}
     Check And Create YNW SuperAdmin Session
     ${resp}=  GET On Session   synw  /sc/${ScId}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get SalesChannel By Id
     RETURN  ${resp}
 
 Get SC Configuration
      Check And Create YNW SuperAdmin Session
      ${resp}=  GET On Session   synw  /sc/config  expected_status=any     
-     Check Deprication  ${resp}  Get BusinessDomainsConf  
+     Check Deprication  ${resp}  Get SC Configuration
     RETURN  ${resp}
 
 Update SC By Id
@@ -1330,7 +1330,7 @@ Update SC By Id
     Log  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PUT On Session  synw  /sc/${scId}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update SC By Id
     RETURN  ${resp}
     
 
@@ -1340,7 +1340,7 @@ Create Branch SP
     ${data}=   json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=    POST On Session   ynw    /provider/branch/createSp    data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Create Branch SP
     RETURN  ${resp}
 
 Delete SC By Id
@@ -1348,16 +1348,16 @@ Delete SC By Id
     [Arguments]  ${ScId}
     Check And Create YNW SuperAdmin Session
     ${resp}=  DELETE On Session   synw  /sc/${ScId}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Delete SC By Id
     RETURN  ${resp}
 
-Get SC By IdStatus
+Get SC By Id Status
 
     [Arguments]  ${scId}  ${scStatus}
     Check And Create YNW SuperAdmin Session
     Log  ${scStatus}
     ${resp}=  PUT On Session   synw  /sc/${scId}/${scStatus}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get SC By Id Status
     RETURN  ${resp}
 
 Create SP SalesRep 
@@ -1369,14 +1369,14 @@ Create SP SalesRep
     Log  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session  synw  /sc/rep  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Create SP SalesRep
     RETURN  ${resp} 
 
 Get SC List
     [Arguments]   &{kwargs}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session   synw   /sc  params=${kwargs}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get SC List
     RETURN  ${resp} 
 
 Delete SP By Id
@@ -1384,7 +1384,7 @@ Delete SP By Id
     Check And Create YNW SuperAdmin Session
     Log  ${SpId}
     ${resp}=  DELETE On Session   synw   /sc/rep/${SpId}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Delete SP By Id
     RETURN  ${resp}
 
 Update SC By Id And Status
@@ -1395,7 +1395,7 @@ Update SC By Id And Status
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PUT On Session  synw  /sc/${scId}/${stat}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update SC By Id And Status
     RETURN  ${resp}
 
 Create SalesRep 
@@ -1406,7 +1406,7 @@ Create SalesRep
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session  synw  /sc/rep  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Create SalesRep
     RETURN  ${resp}
 
 
@@ -1418,7 +1418,7 @@ Create Sales Channel Rep
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session  synw  /sc/rep  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Create Sales Channel Rep
     RETURN  ${resp} 
 
 
@@ -1426,21 +1426,21 @@ Delete Rep By Id
     [Arguments]   ${SpId}
     Check And Create YNW SuperAdmin Session
     ${resp}=  DELETE On Session   synw   /sc/rep/${SpId}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Delete Rep By Id
     RETURN  ${resp}
 
 Get Rep List
     [Arguments]   &{kwargs}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session   synw   /sc/rep   params=${kwargs}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Rep List
     RETURN  ${resp} 
 
 Get Sales Rep By Id 
     [Arguments]  ${spId}
     Check And Create YNW SuperAdmin Session
     ${resp}=  GET On Session   synw  /sc/rep/${spId}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Sales Rep By Id
     RETURN  ${resp}
 
 Update REP By Id
@@ -1450,7 +1450,7 @@ Update REP By Id
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PUT On Session  synw  /sc/rep/${repId}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update REP By Id
     RETURN  ${resp}
 
 Update REP By Id And Status
@@ -1460,28 +1460,28 @@ Update REP By Id And Status
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PUT On Session  synw  /sc/rep/${repId}/${status}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update REP By Id And Status
     RETURN  ${resp}  
 
 Get reimburse
 
     Check And Create YNW SuperAdmin Session
     ${resp}=   GET On Session   synw  /jc/reports  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get reimburse
     RETURN  ${resp}
 
 Recreate reimburse report
     [Arguments]   ${id}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PUT On Session   synw    /jc/reimburse/report/reGenerate/${id}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Recreate reimburse report
     RETURN  ${resp}
 
 Remove reimburse report
     [Arguments]  ${id}
     Check And Create YNW SuperAdmin Session
     ${resp}=    DELETE On Session   synw   /jc/reimburse/report/cancel/${id}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Remove reimburse report
     RETURN  ${resp}
 
 
@@ -1489,14 +1489,14 @@ Remove Redis Cache
     [Arguments]   ${id}
     Check And Create YNW SuperAdmin Session
     ${resp}=    DELETE On Session   synw  /account/${id}/license/cache  expected_status=any 
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Remove Redis Cache
     RETURN  ${resp} 
 
 Get Redis Cache
     [Arguments]   ${id}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session   synw   /account/${id}/license/cache  expected_status=any 
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Redis Cache
     RETURN  ${resp} 
 
 
@@ -1504,7 +1504,7 @@ Get Invoices Verify
     [Arguments]   &{kwargs}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session   synw   /account/license/invoice   params=${kwargs}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Invoices Verify
     RETURN  ${resp}
 
 Create Manual Statements
@@ -1513,14 +1513,14 @@ Create Manual Statements
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session  synw  /account/license/invoice  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Create Manual Statements
     RETURN  ${resp}
 
 Get Manual Statements
     [Arguments]   &{kwargs}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session   synw   /account/license/invoice   params=${kwargs}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Manual Statements
     RETURN  ${resp}
 
 Cancel Manual Statements 
@@ -1529,7 +1529,7 @@ Cancel Manual Statements
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PUT On Session  synw  /account/license/invoice  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Cancel Manual Statements
     RETURN  ${resp}
 
 
@@ -1537,7 +1537,7 @@ Change Status of Questionnaire
     [Arguments]  ${accountid}  ${status}  ${questionnaireid}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PUT On Session   synw  url=/b2b/${accountid}/questionnaire/change/${status}/${questionnaireid}?account=${accountid}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Change Status of Questionnaire
     RETURN  ${resp}
   
 
@@ -1545,7 +1545,7 @@ Get Questionnaire By Id
     [Arguments]   ${accountid}  ${qnid}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session   synw   /b2b/${accountid}/questionnaire/${qnid}  expected_status=any 
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Questionnaire By Id
     RETURN  ${resp}
 
 
@@ -1553,7 +1553,7 @@ Get Questionnaire List
     [Arguments]   ${accountid}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session   synw   /b2b/${accountid}/questionnaire/  expected_status=any 
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Questionnaire List
     RETURN  ${resp}
 
 
@@ -1561,123 +1561,123 @@ Provider Update SC
     [Arguments]   ${accId}   ${salesChannelCode}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PUT On Session  synw  /account/sc/${accId}/${salesChannelCode}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Provider Update SC
     RETURN  ${resp}
 
 Get Provider Under SC
     [Arguments]   &{kwargs}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session   synw   /account/sc   params=${kwargs}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Provider Under SC
     RETURN  ${resp}
  
 Put Downgrade Accounts Revert
     [Arguments]  ${accLicId}  ${accountId}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PUT On Session   synw   /account/license/${accLicId}/downgrade/revert/${accountId}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Put Downgrade Accounts Revert
     RETURN  ${resp}
 
 Get Active License Details
     [Arguments]  ${accountId}
     Check And Create YNW SuperAdmin Session
     ${resp}=  GET On Session   synw   /account/license/${accountId}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Active License Details
     RETURN  ${resp}
 
 Put Downgrade Corporate 
     [Arguments]  ${corpId}  ${licPkgId}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PUT On Session   synw   /corporate/${corpId}/license/${licPkgId}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Put Downgrade Corporate
     RETURN  ${resp}
 
 Get Active License Corporate Details
     [Arguments]  ${corpId}
     Check And Create YNW SuperAdmin Session
     ${resp}=  GET On Session   synw   /corporate/${corpId}/license  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Active License Corporate Details
     RETURN  ${resp}
 
 Put Downgrade Corporate Revert
     [Arguments]  ${corpLicId}   ${corpId}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PUT On Session   synw   /corporate/license/${corpLicId}/downgrade/revert/${corpId}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Put Downgrade Corporate Revert
     RETURN  ${resp}
 
 Get Addon Corporate
     [Arguments]   ${corpId}
     Check And Create YNW SuperAdmin Session
     ${resp}=  GET On Session   synw  /corporate/${corpId}/addon  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Addon Corporate
     RETURN  ${resp}
 
 Delete Addon Corporate
     [Arguments]   ${corpId}  ${addonId}
     Check And Create YNW SuperAdmin Session
     ${resp}=  DELETE On Session    synw   /corporate/${corpId}/addon/${addonId}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Delete Addon Corporate
     RETURN  ${resp}
 
 Get Corporate Config
     Check And Create YNW SuperAdmin Session
     ${resp}=  GET On Session   synw    /account/license/conf  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Corporate Config
     RETURN  ${resp}
 
 Subscription License
     [Arguments]  ${acid}  
     Check And Create YNW SuperAdmin Session
     ${resp}=  PUT On Session   synw   /account/license/subscription/${acid}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Subscription License
     RETURN  ${resp}
 
 SC_invoice_Id
     [Arguments]  ${invoiceId}
     Check And Create YNW SuperAdmin Session
     ${resp}=  GET On Session   synw    /sc/invoice/${invoiceId}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  SC_invoice_Id
     RETURN  ${resp}
 
 SC_invoice
     [Arguments]   &{kwargs}
     Check And Create YNW SuperAdmin Session
     ${resp}=  GET On Session   synw    /sc/invoice   params=${kwargs}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  SC_invoice
     RETURN  ${resp}
 
 SC_invoice_Count
     Check And Create YNW SuperAdmin Session
     ${resp}=  GET On Session   synw    /sc/invoice/count  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  SC_invoice_Count
     RETURN  ${resp}
 
 SC_Commission_Report
     Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session   synw   /sc/commission  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  SC_Commission_Report
     RETURN  ${resp}
 
 SC_Get_Report_id
     [Arguments]  ${reportId}
     Check And Create YNW SuperAdmin Session
     ${resp}=  GET On Session   synw    sc/commission/${reportId}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  SC_Get_Report_id
     RETURN  ${resp}
 
 SC_Report_Filter
     [Arguments]   &{kwargs}
     Check And Create YNW SuperAdmin Session
     ${resp}=  GET On Session   synw    sc/commission   params=${kwargs}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  SC_Report_Filter
     RETURN  ${resp}  
 
 SC_Report_Count
     [Arguments]   &{kwargs}
     Check And Create YNW SuperAdmin Session
     ${resp}=  GET On Session   synw    sc/commission/count   params=${kwargs}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  SC_Report_Count
     RETURN  ${resp} 
 
 SC_Update_Status
@@ -1686,7 +1686,7 @@ SC_Update_Status
     ${data}=  Create Dictionary  privateNote=${privateNote}
     ${data}=  json.dumps  ${data}
     ${resp}=  PUT On Session   synw    sc/commission/${comReportId}/${status}   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  SC_Update_Status
     RETURN  ${resp} 
 
 SC_Update_Id
@@ -1695,7 +1695,7 @@ SC_Update_Id
     ${data}=  Create Dictionary  reportStatus=${reportStatus}   reviewedBy=${reviewedBy}  paidOn=${paidOn}  paidTotal=${paidTotal}  paidBy=${paidBy}  disputeAmt=${disputeAmt}  paymentMode=${paymentMode}  paymentNote=${paymentNote}  paidConfirmationNo=${paidConfirmationNo}  addressSent=${addressSent}  privateNote=${privateNote}  adjustments=${adjustments}
     ${data}=  json.dumps  ${data}
     ${resp}=  PUT On Session   synw    sc/commission/${comReportId}   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  SC_Update_Id
     RETURN  ${resp} 
 
 Update_RazorPay
@@ -1704,14 +1704,14 @@ Update_RazorPay
     ${data}=  Create Dictionary   accountId=${accountId}   merchantId=${merchantId}   merchantKey=${merchantKey}   webHookId=${webHookId}
     ${data}=  json.dumps  ${data}
     ${resp}=  PUT On Session   synw    /payment/razorPay   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update_RazorPay
     RETURN  ${resp} 
 
 Get_PaymentSettings
     [Arguments]  ${accountId}  
     Check And Create YNW SuperAdmin Session
     ${resp}=  GET On Session   synw    account/payment/settings/${accountId}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get_PaymentSettings
     RETURN  ${resp} 
 
 
@@ -1724,14 +1724,14 @@ Updat_Virtual_Calling_Mode
     ${data}=  Create Dictionary   virtualCallingModes=${vcm}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PUT On Session  synw  /account/settings/${accountId}/virtualCallingModes   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Updat_Virtual_Calling_Mode
     RETURN  ${resp}
 
 Get_Virtual Settings
     [Arguments]  ${accountId}
     Check And Create YNW SuperAdmin Session
     ${resp}=  GET On Session   synw   /account/settings/${accountId}/virtualCallingModes  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get_Virtual Settings
     RETURN  ${resp}
 
 
@@ -1742,7 +1742,7 @@ Support_Market Login
     ${data}=  json.dumps  ${data}
     Check And Create YNW Rest Session
     ${resp}=    POST On Session     syn    /${ustype}/login    data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Support_Market Login
     RETURN  ${resp}
 
 Create Users
@@ -1751,7 +1751,7 @@ Create Users
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session  synw  /user   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Create Users
     RETURN  ${resp} 
 
 Create Users_Support
@@ -1760,7 +1760,7 @@ Create Users_Support
     ${data}=  json.dumps  ${data}
     Check And Create YNW Rest Session
     ${resp}=  POST On Session  syn  /mgmt/user   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Create Users_Support
     RETURN  ${resp}
 
 Update User Id
@@ -1769,7 +1769,7 @@ Update User Id
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PUT On Session  synw  /user/${userId}   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update User Id
     RETURN  ${resp}
 
 Update User Id_Support
@@ -1778,53 +1778,53 @@ Update User Id_Support
     ${data}=  json.dumps  ${data}
     Check And Create YNW Rest Session
     ${resp}=  PUT On Session  syn  /mgmt/user/${userId}   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update User Id_Support
     RETURN  ${resp}
 
 Update SAUser Status
     [Arguments]  ${userId}  ${status}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PUT On Session  synw  /user/${status}/${userId}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update SAUser Status
     RETURN  ${resp}
 
 Get SAUser ById
     [Arguments]  ${userId}
     Check And Create YNW SuperAdmin Session
     ${resp}=  GET On Session  synw  /user/${userId}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get SAUser ById
     RETURN  ${resp}
 
 Get User Types
     Check And Create YNW SuperAdmin Session
     ${resp}=  GET On Session  synw  /user/saUserType  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get User Types
     RETURN  ${resp}
 
 Get User Types_Support
      Check And Create YNW Rest Session
     ${resp}=  GET On Session  syn  /mgmt/user/saUserType  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get User Types_Support
     RETURN  ${resp}
 
 Get Transactions
 	Check And Create YNW SuperAdmin Session
 	${resp}=    GET On Session   synw    /analytics/transactions/count  expected_status=any
- 	Check Deprication  ${resp}  Get BusinessDomainsConf  
+ 	Check Deprication  ${resp}  Get Transactions
     RETURN  ${resp}
 	
 Get Account Configuration
     Check And Create YNW Rest Session
     #Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session   syn  /mgmt/account/config  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Account Configuration
     RETURN  ${resp}   
 
 Get Account Verify
     [Arguments]   &{kwargs}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session   synw   /unverify/account   params=${kwargs}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Account Verify
     RETURN  ${resp}
 
 
@@ -1840,7 +1840,7 @@ Create Jaldee Cash Offer
     Log  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=    POST On Session   synw   /jcash/offer    data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Create Jaldee Cash Offer
     RETURN  ${resp}
 
 
@@ -1856,7 +1856,7 @@ Update Jaldee Cash Offer
     Log  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=    PUT On Session   synw   /jcash/offer/${offerId}    data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update Jaldee Cash Offer
     RETURN  ${resp}
 
 
@@ -1865,7 +1865,7 @@ Enable Jaldee Cash Offer
     [Arguments]  ${offerId}
     Check And Create YNW SuperAdmin Session
     ${resp}=    PUT On Session     synw   /jcash/offer/${offerId}/ENABLED  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Enable Jaldee Cash Offer
     RETURN  ${resp}
 
 
@@ -1873,7 +1873,7 @@ Disable Jaldee Cash Offer
     [Arguments]  ${offerId}
     Check And Create YNW SuperAdmin Session
     ${resp}=    PUT On Session     synw   /jcash/offer/${offerId}/DISABLED  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Disable Jaldee Cash Offer
     RETURN  ${resp}
 
 
@@ -1881,7 +1881,7 @@ Get Jaldee Cash Offer By Id
     [Arguments]  ${offerId}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session     synw   /jcash/offer/${offerId}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Jaldee Cash Offer By Id
     RETURN  ${resp}
 
 
@@ -1889,7 +1889,7 @@ Get Jaldee Cash Offers By Criteria
     [Arguments]  &{kwargs}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session     synw   /jcash/offer  params=${kwargs}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Jaldee Cash Offers By Criteria
     RETURN  ${resp}
 
 
@@ -1897,7 +1897,7 @@ Delete Jaldee Cash Offer
     [Arguments]   ${offerId}  
     Check And Create YNW SuperAdmin Session
     ${resp}=  DELETE On Session    synw   /jcash/offer/${offerId}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Delete Jaldee Cash Offer
     RETURN  ${resp}
 
 
@@ -1905,35 +1905,35 @@ Get Jaldee Cash Offer Count
     [Arguments]  &{kwargs}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session     synw   /jcash/offer/count  params=${kwargs}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Jaldee Cash Offer Count
     RETURN  ${resp}
 
 
 Get Jaldee Cash Global Max Spendlimit
     Check And Create YNW Session
     ${resp}=    GET On Session    synw  /jcash/offer/config/spendLimit     expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Jaldee Cash Global Max Spendlimit
     RETURN  ${resp}
 
 
 Get Jaldee Cash Offer Stat Count for Today
     Check And Create YNW Session
     ${resp}=    GET On Session    synw  /jcash/offer/stat/date/TODAY        expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Jaldee Cash Offer Stat Count for Today
     RETURN  ${resp}
 
 
 Get Jaldee Cash Offer Stat Count for Lastweek
     Check And Create YNW Session
     ${resp}=    GET On Session    synw  /jcash/offer/stat/date/LAST_WEEK        expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Jaldee Cash Offer Stat Count for Lastweek
     RETURN  ${resp}
 
 
 Get Total Jaldee Cash Offer Stat Count 
     Check And Create YNW Session
     ${resp}=    GET On Session    synw  /jcash/offer/stat/date/TOTAL        expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Total Jaldee Cash Offer Stat Count
     RETURN  ${resp}
 
 
@@ -1941,7 +1941,7 @@ Get Consumer Jaldee Cash Offer Stat Count
     [Arguments]   ${statType}   ${dateCategory}
     Check And Create YNW Session
     ${resp}=    GET On Session    synw  /jcash/offer/stat/consumer/statType/${statType}/category/${dateCategory}    expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Consumer Jaldee Cash Offer Stat Count
     RETURN  ${resp}
 
 
@@ -1949,7 +1949,7 @@ Get SP Jaldee Cash Offer Stat Count
     [Arguments]   ${statType}   ${dateCategory}
     Check And Create YNW Session
     ${resp}=    GET On Session    synw  /jcash/offer/stat/sp/statType/${statType}/category/${dateCategory}    expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get SP Jaldee Cash Offer Stat Count
     RETURN  ${resp}
 
 
@@ -1957,7 +1957,7 @@ Get Jaldee Cash Offer Stat Count
     [Arguments]   ${statType}   ${dateCategory}
     Check And Create YNW Session
     ${resp}=    GET On Session    synw  /jcash/offer/stat/offer/statType/${statType}/category/${dateCategory}    expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Jaldee Cash Offer Stat Count
     RETURN  ${resp}
 
 
@@ -1970,14 +1970,14 @@ Issue Jaldee Cash
     Log  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=    POST On Session   synw   /jcash    data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Issue Jaldee Cash
     RETURN  ${resp}
 
 Get Domain Level Analytics
     [Arguments]   &{kwargs}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /analytics/domain  params=${kwargs}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Domain Level Analytics
     RETURN  ${resp}
 
 
@@ -1985,42 +1985,43 @@ Get Subdomain Level Analytics
     [Arguments]   &{kwargs}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /analytics/subdomain  params=${kwargs}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Subdomain Level Analytics
     RETURN  ${resp}
 
 Account Level Analytics
     [Arguments]   &{kwargs}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /analytics/account  params=${kwargs}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Account Level Analytics
     RETURN  ${resp}
 
 Get User Level Analytics
     [Arguments]   &{kwargs}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /analytics/user  params=${kwargs}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get User Level Analytics
     RETURN  ${resp}
 
 Get Department Level Analytics
     [Arguments]   &{kwargs}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /analytics/dept  params=${kwargs}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Department Level Analytics
     RETURN  ${resp}
 
 Get Team Level Analytics
     [Arguments]   &{kwargs}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /analytics/team  params=${kwargs}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Team Level Analytics
     RETURN  ${resp}
 
 Superadmin Change Questionnaire Status    
     [Arguments]  ${qnrid}   ${status}   ${account_id}
     Check And Create YNW Session
     ${resp}=    PUT On Session  SYNW  /b2b/${account_id}/questionnaire/change/${Status}/${qnrid}  expected_status=any
-    RETURN    ${resp}
+    Check Deprication  ${resp}  Superadmin Change Questionnaire Status
+    RETURN  ${resp}
 
 
 #......MULTIPLE PAYMENT PROFILES......#
@@ -2035,7 +2036,7 @@ Payment Profile For Prepayment
     END
     Check And Create YNW SuperAdmin Session
     ${resp}=   PUT On Session  synw  url=/payment/advancePayBank?accountId=${acc_id}    expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Payment Profile For Prepayment
     RETURN  ${resp}
 
 
@@ -2049,7 +2050,7 @@ Create Bank Info
     ${data}=   json.dumps   ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=   POST On Session  synw  /payment/settings/bankInfo/${acc_id}     data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Create Bank Info
     RETURN  ${resp}
 
 
@@ -2057,7 +2058,7 @@ Get Bank Info By Id
     [Arguments]   ${bankid}  ${acc_id}
     Check And Create YNW SuperAdmin Session
     ${resp}=   GET On Session  synw  /payment/settings/bankInfo/${bankid}/${acc_id}    expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Bank Info By Id
     RETURN  ${resp}
 
 
@@ -2065,7 +2066,7 @@ Get All Bank Info
     [Arguments]     ${acc_id}
     Check And Create YNW SuperAdmin Session
     ${resp}=   GET On Session  synw  /payment/settings/bankInfo/${acc_id}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get All Bank Info
     RETURN  ${resp}
 
 
@@ -2084,7 +2085,7 @@ Update Bank Info
     ${data}=   json.dumps   ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=   PUT On Session  synw  /payment/settings/bankInfo/${bankid}/${acc_id}     data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update Bank Info
     RETURN  ${resp}
 
 
@@ -2093,7 +2094,7 @@ Get Payment Bank Details
     [Arguments]    ${acc_id} 
     Check And Create YNW SuperAdmin Session
     ${resp}=   GET On Session  synw   url=/account/payment/payBankDetails?accountId=${acc_id}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Payment Bank Details
     RETURN  ${resp}
 
 
@@ -2102,7 +2103,7 @@ Create Lucene Search
     # Check And Create YNW Session
     Check And Create YNW SuperAdmin Session
     ${resp}=    POST On Session    synw    /searchdetails/${account}/providerconsumer/create	    expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Create Lucene Search
     RETURN  ${resp}
 
 Get Lucene Search
@@ -2110,7 +2111,7 @@ Get Lucene Search
     # Check And Create YNW Session
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw    /searchdetails/${account}/providerconsumer/search    params=${param}     expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Lucene Search
     RETURN  ${resp}
 
 Delete Lucene Search  
@@ -2118,7 +2119,7 @@ Delete Lucene Search
     # Check And Create YNW Session
     Check And Create YNW SuperAdmin Session
     ${resp}=    DELETE On Session    synw    /searchdetails/${account}/providerconsumer/delete	   params=${param}      expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Delete Lucene Search
     RETURN  ${resp}
 
 
@@ -2127,7 +2128,7 @@ Enable Disable Invoice Generartion
     [Arguments]       ${acc_id}   ${bySystem}
     Check And Create YNW SuperAdmin Session
     ${resp}=    PUT On Session    synw    account/license/createBySystem/${acc_id}/${bySystem}	    expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Enable Disable Invoice Generartion
     RETURN  ${resp}
 
 
@@ -2136,7 +2137,7 @@ Revert Invoice
     [Arguments]       ${acc_id}   ${invoice_id}
     Check And Create YNW SuperAdmin Session
     ${resp}=    PUT On Session    synw    account/license/invoice/revert/${invoice_id}/${acc_id}	    expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Revert Invoice
     RETURN  ${resp}
 
 
@@ -2147,7 +2148,7 @@ Update Notes and Collected Details
     ${data}=   json.dumps   ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=    PUT On Session    synw    payment	 data=${data}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update Notes and Collected Details
     RETURN  ${resp}
 
 
@@ -2162,7 +2163,7 @@ Enable Disable Channel
     ${data}=   json.dumps   ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=    PUT On Session    synw    account/${acc_id}/${actiontype} 	 data=${data}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Enable Disable Channel
     RETURN  ${resp}
 
 
@@ -2170,7 +2171,7 @@ Get Service Label Config
 
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw    account/serviceConfig    expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Service Label Config
     RETURN  ${resp}
 
 
@@ -2182,7 +2183,7 @@ Update Reimbursement By InvoiceId
     ${data}=   json.dumps   ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=    PUT On Session   synw    /jc/reimburse/${invoice_id}    data=${data}    expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update Reimbursement By InvoiceId
     RETURN  ${resp}
 
     
@@ -2190,7 +2191,7 @@ Get Reminder Notification
 
     Check And Create YNW SuperAdmin Session
     ${resp}=    POST On Session    synw    /userAgent/reminderNotificationTask    expected_status=any  
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Reminder Notification
     RETURN  ${resp} 
 
     
@@ -2198,7 +2199,7 @@ Get Appointment Reminder
 
     Check And Create YNW SuperAdmin Session
     ${resp}=    POST On Session    synw    /userAgent/apptNotificationTask    expected_status=any  
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Appointment Reminder
     RETURN  ${resp}
 
 Delete Not Used AddOn 
@@ -2206,14 +2207,14 @@ Delete Not Used AddOn
     # Check And Create YNW Session
     Check And Create YNW SuperAdmin Session
     ${resp}=    DELETE On Session    synw    account/license/${account}/licAddonId/${accLicAddonId}	   params=${param}      expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Delete Not Used AddOn
     RETURN  ${resp}
 
 Month Matrix Cache Task
 
     Check And Create YNW SuperAdmin Session
     ${resp}=   POST On Session  synw   userAgent/monthMatrixCacheTask   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Month Matrix Cache Task
     RETURN  ${resp}
 
 
@@ -2225,7 +2226,7 @@ Enable Disable Consent Form
 
     Check And Create YNW SuperAdmin Session
     ${resp}=    PUT On Session    synw    account/settings/${accountId}/consentform/${status}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Enable Disable Consent Form
     RETURN  ${resp}
 
 Create Consent Form Settings
@@ -2236,7 +2237,7 @@ Create Consent Form Settings
     ${data}=   json.dumps   ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=    POST On Session    synw    consentform/${accountId}/settings  data=${data}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Create Consent Form Settings
     RETURN  ${resp}
 
 Update Consent Form Settings
@@ -2247,7 +2248,7 @@ Update Consent Form Settings
     ${data}=   json.dumps   ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=    PATCH On Session    synw    consentform/${accountId}/settings  data=${data}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update Consent Form Settings
     RETURN  ${resp}
 
 Get Consent Form Settings
@@ -2256,7 +2257,7 @@ Get Consent Form Settings
 
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw    consentform/${accountId}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Consent Form Settings
     RETURN  ${resp}
 
 Get Consent Form Settings By Id
@@ -2265,7 +2266,7 @@ Get Consent Form Settings By Id
 
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw    consentform/${accountId}/settings/${settingId}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Consent Form Settings By Id
     RETURN  ${resp}
 
 Update Consent Form Settings Status
@@ -2274,7 +2275,7 @@ Update Consent Form Settings Status
 
     Check And Create YNW SuperAdmin Session
     ${resp}=    PATCH On Session    synw    consentform/${accountId}/settings/${settingId}/status/${status}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update Consent Form Settings Status
     RETURN  ${resp}
 
 
@@ -2284,7 +2285,7 @@ Get List
     [Arguments]     ${account}  
     Check And Create YNW SuperAdmin Session
     ${resp}=  GET On Session  synw  /spdataimport/account/${account}/list   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get List
     RETURN  ${resp}
 
 
@@ -2292,14 +2293,14 @@ Get Data By Uid
     [Arguments]     ${account}  ${uid}
     Check And Create YNW SuperAdmin Session
     ${resp}=  GET On Session  synw  /spdataimport/account/${account}/${uid}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Data By Uid
     RETURN  ${resp}
 
 Generate OTP for patient migration
     [Arguments]    ${account}  ${customerseries}  ${uid}
     Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session   synw   /spdataimport/account/${account}/${customerseries}/Patients/migrate/${uid}/generateotp    expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Generate OTP for patient migration
     RETURN  ${resp}
 
 Verify OTP For Patients Migration
@@ -2308,14 +2309,14 @@ Verify OTP For Patients Migration
     Check And Create YNW SuperAdmin Session
     ${otp}=   verify accnt  ${propertyphone_no}  ${purpose}
     ${resp}=  POST On Session   synw   /spdataimport/account/${account}/${customerIdFormat}/Patients/migrate/${uid}/verifyotp/${otp}    expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Verify OTP For Patients Migration
     RETURN  ${resp}
 
 Generate OTP For Appointment Migration
     [Arguments]    ${account}    ${uid}   ${tz}
     Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session   synw    /spdataimport/account/${account}/Appointments/migrate/${uid}/generateotp    expected_status=any    data="${tz}"
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Generate OTP For Appointment Migration
     RETURN  ${resp}
 
 
@@ -2325,14 +2326,14 @@ Verify OTP For Appointment Migration
     Check And Create YNW SuperAdmin Session
     ${otp}=   verify accnt  ${propertyphone_no}  ${purpose}
     ${resp}=  POST On Session   synw   /spdataimport/account/${account}/Appointments/migrate/${uid}/verifyotp/${otp}    expected_status=any   data="${tz}"
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Verify OTP For Appointment Migration
     RETURN  ${resp}
 
 Generate OTP For Notes Migration
     [Arguments]    ${account}    ${uid}
     Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session   synw   /spdataimport/account/${account}/Notes/migrate/${uid}/generateotp    expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Generate OTP For Notes Migration
     RETURN  ${resp}
 
 Verify OTP For Notes Migration
@@ -2341,14 +2342,14 @@ Verify OTP For Notes Migration
     Check And Create YNW SuperAdmin Session
     ${otp}=   verify accnt  ${propertyphone_no}  ${purpose}
     ${resp}=  POST On Session   synw   /spdataimport/account/${account}/Notes/migrate/${uid}/verifyotp/${otp}    expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Verify OTP For Notes Migration
     RETURN  ${resp}
 
 Generate OTP For Revert
     [Arguments]    ${account}   ${uid}
     Check And Create YNW SuperAdmin Session
     ${resp}=  DELETE On Session   synw   /spdataimport/account/${account}/revert/${uid}/generateotp    expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Generate OTP For Revert
     RETURN  ${resp}
 
 Verify OTP For Revert Migration
@@ -2357,7 +2358,7 @@ Verify OTP For Revert Migration
     Check And Create YNW SuperAdmin Session
     ${otp}=   verify accnt  ${propertyphone_no}  ${purpose}
     ${resp}=  DELETE On Session   synw   /spdataimport/account/${account}/revert/${uid}/verifyotp/${otp}    expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Verify OTP For Revert Migration
     RETURN  ${resp}
 
 
@@ -2370,7 +2371,7 @@ Create Store Type
     ${data}=   json.dumps   ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=    POST On Session    synw    /account/store/type   data=${data}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Create Store Type
     RETURN  ${resp}
 
 
@@ -2378,7 +2379,7 @@ Get Store Type By EncId
     [Arguments]  ${storeTypeEncId}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /account/store/type/id/${storeTypeEncId}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Store Type By EncId
     RETURN  ${resp}
 
 Update Store Type
@@ -2388,14 +2389,14 @@ Update Store Type
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PUT On Session  synw  /account/store/type/${uid}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update Store Type
     RETURN  ${resp}  
 
 Get Store Type Filter
     [Arguments]   &{param}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /account/store/type   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Store Type Filter
     RETURN  ${resp}
 
 Get Store Type Filter Count
@@ -2404,7 +2405,7 @@ Get Store Type Filter Count
 
     Check And Create YNW SuperAdmin Session
     ${resp}=  GET On Session  synw  /account/store/type/count   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Store Type Filter Count
     RETURN  ${resp}  
 
 #........ ITEM CATEGORY .................
@@ -2416,7 +2417,7 @@ Create Item Category SA
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session  synw  /item/${account}/category  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Create Item Category SA
     RETURN  ${resp}  
 
 Get Item Category SA
@@ -2424,7 +2425,7 @@ Get Item Category SA
     [Arguments]  ${account}  ${id}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/category/${id}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Item Category SA
     RETURN  ${resp}
 
 Update Item Category SA
@@ -2434,7 +2435,7 @@ Update Item Category SA
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/${account}/category  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update Item Category SA
     RETURN  ${resp}  
 
 Get Item Category By Filter SA  
@@ -2442,7 +2443,7 @@ Get Item Category By Filter SA
     [Arguments]   ${account}  &{param}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/category   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Item Category By Filter SA
     RETURN  ${resp}
 
 Update Item Category Status SA
@@ -2451,7 +2452,7 @@ Update Item Category Status SA
     
     Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/${account}/category/${categoryCode}/status/${status}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update Item Category Status SA
     RETURN  ${resp}  
 
 Get Item Category Count By Filter SA
@@ -2459,7 +2460,7 @@ Get Item Category Count By Filter SA
     [Arguments]   ${account}  &{param}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/category/count   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Item Category Count By Filter SA
     RETURN  ${resp}
 
 # ......... ITEM TYPE .............
@@ -2471,7 +2472,7 @@ Create Item Type SA
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session  synw  /item/${account}/type  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Create Item Type SA
     RETURN  ${resp}  
 
 Get Item Type SA
@@ -2479,7 +2480,7 @@ Get Item Type SA
     [Arguments]  ${account}  ${id}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/type/${id}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Item Type SA
     RETURN  ${resp}
 
 Update Item Type SA
@@ -2489,7 +2490,7 @@ Update Item Type SA
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/${account}/type  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update Item Type SA
     RETURN  ${resp}  
 
 Get Item Type By Filter SA
@@ -2497,7 +2498,7 @@ Get Item Type By Filter SA
     [Arguments]   ${account}  &{param}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/type   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Item Type By Filter SA
     RETURN  ${resp}
 
 Update Item Type Status SA
@@ -2505,7 +2506,7 @@ Update Item Type Status SA
     [Arguments]   ${account}  ${typeCode}   ${status}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/${account}/type/${typeCode}/status/${status}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update Item Type Status SA
     RETURN  ${resp}  
 
 Get Item Type Count By Filter SA
@@ -2513,7 +2514,7 @@ Get Item Type Count By Filter SA
     [Arguments]   ${account}  &{param}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/type/count   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Item Type Count By Filter SA
     RETURN  ${resp}
 
 
@@ -2526,7 +2527,7 @@ Create Item manufacturer SA
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session  synw  /item/${account}/manufacturer  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Create Item manufacturer SA
     RETURN  ${resp}  
 
 Get Item manufacturer SA
@@ -2534,7 +2535,7 @@ Get Item manufacturer SA
     [Arguments]  ${account}  ${id}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/manufacturer/${id}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Item manufacturer SA
     RETURN  ${resp}
 
 Update Item manufacturer SA
@@ -2544,7 +2545,7 @@ Update Item manufacturer SA
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/${account}/manufacturer  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update Item manufacturer SA
     RETURN  ${resp}  
 
 Get Item manufacturer By Filter SA
@@ -2552,7 +2553,7 @@ Get Item manufacturer By Filter SA
     [Arguments]   ${account}  &{param}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/manufacturer   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Item manufacturer By Filter SA
     RETURN  ${resp}
 
 Update Item manufacturer Status SA
@@ -2560,7 +2561,7 @@ Update Item manufacturer Status SA
     [Arguments]   ${account}  ${manufacturerCode}   ${status}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/${account}/manufacturer/${manufacturerCode}/status/${status}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update Item manufacturer Status SA
     RETURN  ${resp}  
 
 Get Item manufacturer Count By Filter SA
@@ -2568,7 +2569,7 @@ Get Item manufacturer Count By Filter SA
     [Arguments]   ${account}  &{param}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/manufacturer/count   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Item manufacturer Count By Filter SA
     RETURN  ${resp}
 
 
@@ -2584,7 +2585,7 @@ Create Item Tax SA
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session  synw  /item/${account}/tax  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Create Item Tax SA
     RETURN  ${resp}  
 
 Get Item Tax SA
@@ -2592,7 +2593,7 @@ Get Item Tax SA
     [Arguments]  ${account}  ${id}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/tax/${id}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Item Tax SA
     RETURN  ${resp}
 
 Update Item Tax SA
@@ -2605,7 +2606,7 @@ Update Item Tax SA
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/${account}/tax  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update Item Tax SA
     RETURN  ${resp}  
 
 Get Item Tax By Filter SA
@@ -2613,7 +2614,7 @@ Get Item Tax By Filter SA
     [Arguments]   ${account}  &{param}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/tax   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Item Tax By Filter SA
     RETURN  ${resp}
 
 Update Item Tax Status SA
@@ -2621,7 +2622,7 @@ Update Item Tax Status SA
     [Arguments]   ${account}  ${taxCode}   ${status}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/${account}/tax/${taxCode}/status/${status}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update Item Tax Status SA
     RETURN  ${resp}  
 
 Get Item Tax Count By Filter SA
@@ -2629,7 +2630,7 @@ Get Item Tax Count By Filter SA
     [Arguments]   ${account}  &{param}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/tax/count   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Item Tax Count By Filter SA
     RETURN  ${resp}
 
 
@@ -2642,7 +2643,7 @@ Create Item Unit SA
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session  synw  /item/${account}/unit  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Create Item Unit SA
     RETURN  ${resp}  
 
 Get Item Unit SA
@@ -2650,7 +2651,7 @@ Get Item Unit SA
     [Arguments]  ${account}  ${id}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/unit/${id}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Item Unit SA
     RETURN  ${resp}
 
 Update Item Unit SA
@@ -2660,7 +2661,7 @@ Update Item Unit SA
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/${account}/unit  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update Item Unit SA
     RETURN  ${resp}  
 
 Get Item Unit By Filter SA
@@ -2668,7 +2669,7 @@ Get Item Unit By Filter SA
     [Arguments]   ${account}  &{param}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/unit   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Item Unit By Filter SA
     RETURN  ${resp}
 
 Update Item Unit Status SA
@@ -2676,7 +2677,7 @@ Update Item Unit Status SA
     [Arguments]   ${account}  ${unitCode}   ${status}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/${account}/unit/${unitCode}/status/${status}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update Item Unit Status SA
     RETURN  ${resp}  
 
 Get Item Unit Count By Filter SA
@@ -2684,7 +2685,7 @@ Get Item Unit Count By Filter SA
     [Arguments]   ${account}  &{param}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/unit/count   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Item Unit Count By Filter SA
     RETURN  ${resp}
 
 
@@ -2697,7 +2698,7 @@ Create Item Composition SA
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session  synw  /item/${account}/composition  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Create Item Composition SA
     RETURN  ${resp}  
 
 Get Item Composition SA
@@ -2705,7 +2706,7 @@ Get Item Composition SA
     [Arguments]  ${account}  ${id}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/composition/${id}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Item Composition SA
     RETURN  ${resp}
 
 Update Item Composition SA
@@ -2715,7 +2716,7 @@ Update Item Composition SA
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/${account}/composition  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update Item Composition SA
     RETURN  ${resp}  
 
 Get Item Composition By Filter SA
@@ -2723,7 +2724,7 @@ Get Item Composition By Filter SA
     [Arguments]   ${account}  &{param}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/composition   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Item Composition By Filter SA
     RETURN  ${resp}
 
 Update Item Composition Status SA
@@ -2731,7 +2732,7 @@ Update Item Composition Status SA
     [Arguments]   ${account}  ${compositionCode}   ${status}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/${account}/composition/${compositionCode}/status/${status}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update Item Composition Status SA
     RETURN  ${resp}  
 
 Get Item Composition Count By Filter SA
@@ -2739,7 +2740,7 @@ Get Item Composition Count By Filter SA
     [Arguments]   ${account}  &{param}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/composition/count   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Item Composition Count By Filter SA
     RETURN  ${resp}
 
 # ......... ITEM HSN .............
@@ -2751,7 +2752,7 @@ Create Item Hsn SA
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session  synw  /item/${account}/hsn  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Create Item Hsn SA
     RETURN  ${resp}  
 
 Get Item Hsn SA
@@ -2759,7 +2760,7 @@ Get Item Hsn SA
     [Arguments]  ${account}  ${id}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/hsn/${id}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Item Hsn SA
     RETURN  ${resp}
 
 Update Item Hsn SA
@@ -2769,7 +2770,7 @@ Update Item Hsn SA
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/${account}/hsn  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update Item Hsn SA
     RETURN  ${resp}  
 
 Get Item Hsn By Filter SA
@@ -2777,7 +2778,7 @@ Get Item Hsn By Filter SA
     [Arguments]   ${account}  &{param}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/hsn   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Item Hsn By Filter SA
     RETURN  ${resp}
 
 Update Item Hsn Status SA
@@ -2785,7 +2786,7 @@ Update Item Hsn Status SA
     [Arguments]   ${account}  ${id}   ${status}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/${account}/hsn/${id}/status/${status}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update Item Hsn Status SA
     RETURN  ${resp}  
 
 Get Item Hsn Count By Filter SA
@@ -2793,7 +2794,7 @@ Get Item Hsn Count By Filter SA
     [Arguments]   ${account}  &{param}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/hsn/count   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Item Hsn Count By Filter SA
     RETURN  ${resp}
 
 
@@ -2811,7 +2812,7 @@ Create Item Jrx
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session  synw  /item/jrx  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Create Item Jrx
     RETURN  ${resp}  
 
 Get Item Jrx by id
@@ -2820,7 +2821,7 @@ Get Item Jrx by id
 
     Check And Create YNW SuperAdmin Session
     ${resp}=  GET On Session  synw  /item/jrx/${id}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Item Jrx by id
     RETURN  ${resp}
 
 Update Item Jrx 
@@ -2835,7 +2836,7 @@ Update Item Jrx
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/jrx  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Update Item Jrx
     RETURN  ${resp} 
 
 Get Item Jrx Filter
@@ -2843,7 +2844,7 @@ Get Item Jrx Filter
     [Arguments]   &{param}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/jrx   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Item Jrx Filter
     RETURN  ${resp}
 
 Get Item Jrx Filter Count
@@ -2851,7 +2852,7 @@ Get Item Jrx Filter Count
     [Arguments]   &{param}
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/jrx/count   params=${param}   expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  Get Item Jrx Filter Count
     RETURN  ${resp}
 
 
@@ -2868,7 +2869,7 @@ SA Create Frequency
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session  synw  /provider/medicalrecord/frequency   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  SA Create Frequency
     RETURN  ${resp} 
 
 SA Get Frequency
@@ -2877,7 +2878,7 @@ SA Get Frequency
 
     Check And Create YNW SuperAdmin Session
     ${resp}=  GET On Session  synw  /provider/medicalrecord/frequency/${id}     expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  SA Get Frequency
     RETURN  ${resp}
 
 SA Update Frequency
@@ -2891,7 +2892,7 @@ SA Update Frequency
     ${data}=  json.dumps  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=  PUT On Session  synw  /provider/medicalrecord/frequency  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  SA Update Frequency
     RETURN  ${resp} 
 
 SA Delete Frequency
@@ -2900,7 +2901,7 @@ SA Delete Frequency
 
     Check And Create YNW SuperAdmin Session
     ${resp}=  DELETE On Session  synw  /provider/medicalrecord/frequency/${id}     expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  SA Delete Frequency
     RETURN  ${resp}
 
 SA Get Frequency By Account
@@ -2909,5 +2910,5 @@ SA Get Frequency By Account
 
     Check And Create YNW SuperAdmin Session
     ${resp}=  GET On Session  synw  /provider/medicalrecord/frequency/account/${account}    expected_status=any
-    Check Deprication  ${resp}  Get BusinessDomainsConf  
+    Check Deprication  ${resp}  SA Get Frequency By Account
     RETURN  ${resp}

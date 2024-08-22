@@ -35,23 +35,27 @@ iphone App Consumer SignUp
     ${apple}=  Consumer Creation  ${firstname}  ${lastname}  ${address}  ${primaryNo}  ${alternativeNo}  ${dob}  ${gender}  ${email}   countryCode=${countryCode}    
     iphone App Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /consumer   data=${apple}  expected_status=any
+    Check Deprication  ${resp}  iphone App Consumer SignUp
     RETURN  ${resp}
 
 iphone App Consumer Activation
     [Arguments]  ${email}  ${purpose}
     iphone App Check And Create YNW Session
     ${key}=   verify accnt  ${email}  ${purpose}
-    ${resp_val}=  POST On Session   ynw  /consumer/${key}/verify   expected_status=any
-    RETURN  ${resp_val}
+    ${resp}=  POST On Session   ynw  /consumer/${key}/verify   expected_status=any
+    Check Deprication  ${resp}  iphone App Consumer Activation
+    RETURN  ${resp}
 
 iphone App Consumer Login
     [Arguments]    ${usname}  ${passwrd}  ${countryCode}=+91
     ${log}=  Android App Login  ${usname}  ${passwrd}   countryCode=${countryCode}
     ${resp}=    POST On Session    ynw    /consumer/login    data=${log}  expected_status=any
+    Check Deprication  ${resp}  iphone App Consumer Login
     RETURN  ${resp}
 
 iphone App Consumer Logout
     iphone App Check And Create YNW Session
     ${resp}=    DELETE On Session    ynw    /consumer/login  expected_status=any
+    Check Deprication  ${resp}  iphone App Consumer Logout
     RETURN  ${resp}
 
