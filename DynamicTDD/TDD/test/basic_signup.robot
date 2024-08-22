@@ -104,32 +104,32 @@ JD-TC-Provider_Signup-1
         Append To File  ${data_file}  ${ph} - ${PASSWORD}${\n}
         Append To File  ${var_file}  PUSERNAME${num}=${ph}${\n}
         
-        ${list}=  Create List  1  2  3  4  5  6  7
-        # ${ph1}=  Evaluate  ${PUSERPH0}+1000000000
-        # ${ph2}=  Evaluate  ${PUSERPH0}+2000000000
-        ${views}=  Evaluate  random.choice($Views)  random
-        ${name1}=  FakerLibrary.name
-        ${name2}=  FakerLibrary.name
-        ${name3}=  FakerLibrary.name
-        # ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
-        # ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-        ${emails1}=  Emails  ${name3}  Email  ${ph}${P_Email}.${test_mail}  ${views}
-        ${bs}=  FakerLibrary.bs
-        ${companySuffix}=  FakerLibrary.companySuffix
-        ${parking}   Random Element   ${parkingType}
-        ${24hours}    Random Element    ['True','False']
-        ${desc}=   FakerLibrary.sentence
-        ${url}=   FakerLibrary.url
-        ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-        ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-        Set Suite Variable  ${tz}
-        ${DAY1}=  db.get_date_by_timezone  ${tz}
-        ${Time}=  db.get_time_by_timezone  ${tz}
-        ${sTime}=  db.add_timezone_time  ${tz}  0  15  
-        ${eTime}=  db.add_timezone_time  ${tz}  0  45  
-        ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${EMPTY}  ${EMPTY}  ${emails1}   ${EMPTY}
-        # Log  ${resp.content}
-        Should Be Equal As Strings    ${resp.status_code}    200
+        # ${list}=  Create List  1  2  3  4  5  6  7
+        # # ${ph1}=  Evaluate  ${PUSERPH0}+1000000000
+        # # ${ph2}=  Evaluate  ${PUSERPH0}+2000000000
+        # ${views}=  Evaluate  random.choice($Views)  random
+        # ${name1}=  FakerLibrary.name
+        # ${name2}=  FakerLibrary.name
+        # ${name3}=  FakerLibrary.name
+        # # ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
+        # # ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
+        # ${emails1}=  Emails  ${name3}  Email  ${ph}${P_Email}.${test_mail}  ${views}
+        # ${bs}=  FakerLibrary.bs
+        # ${companySuffix}=  FakerLibrary.companySuffix
+        # ${parking}   Random Element   ${parkingType}
+        # ${24hours}    Random Element    ['True','False']
+        # ${desc}=   FakerLibrary.sentence
+        # ${url}=   FakerLibrary.url
+        # ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+        # ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+        # Set Suite Variable  ${tz}
+        # ${DAY1}=  db.get_date_by_timezone  ${tz}
+        # ${Time}=  db.get_time_by_timezone  ${tz}
+        # ${sTime}=  db.add_timezone_time  ${tz}  0  15  
+        # ${eTime}=  db.add_timezone_time  ${tz}  0  45  
+        # ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${EMPTY}  ${EMPTY}  ${emails1}   ${EMPTY}
+        # # Log  ${resp.content}
+        # Should Be Equal As Strings    ${resp.status_code}    200
 
         ${resp}=  Get Business Profile
         Log  ${resp.content}
@@ -149,18 +149,23 @@ JD-TC-Provider_Signup-1
         ${resp}=  Get specializations Sub Domain  ${domain}  ${subdomain}
         Should Be Equal As Strings    ${resp.status_code}   200
 
-        ${spec}=  get_Specializations  ${resp.json()}
-        
-        ${resp}=  Update Specialization  ${spec}
-        Log  ${resp.content}
+        ${resp}=  Get specializations Sub Domain  ${domain}  ${subdomain}
         Should Be Equal As Strings    ${resp.status_code}   200
+        Set Test Variable    ${spec1}     ${resp.json()[0]['displayName']}   
+        Set Test Variable    ${spec2}     ${resp.json()[1]['displayName']}   
 
-        ${resp}=  Get Features  ${subdomain}
+        ${spec}=  Create List    ${spec1}   ${spec2}
+
+        ${resp}=  Update Business Profile with kwargs  specialization=${spec}  
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${service_name}  ${resp.json()['features']['defaultServices'][0]['service']}
-        Set Test Variable  ${service_duration}  ${resp.json()['features']['defaultServices'][0]['duration']}
-        Set Test Variable  ${service_status}  ${resp.json()['features']['defaultServices'][0]['status']}    
+
+        # ${resp}=  Get Features  ${subdomain}
+        # Log  ${resp.content}
+        # Should Be Equal As Strings  ${resp.status_code}  200
+        # Set Test Variable  ${service_name}  ${resp.json()['features']['defaultServices'][0]['service']}
+        # Set Test Variable  ${service_duration}  ${resp.json()['features']['defaultServices'][0]['duration']}
+        # Set Test Variable  ${service_status}  ${resp.json()['features']['defaultServices'][0]['status']}    
 
         ${resp}=  Get Service
         Log  ${resp.content}

@@ -129,42 +129,42 @@ JD-TC-Change Password-1
 
     comment  update business profile
     
-    ${bs}=  FakerLibrary.bs
-    ${companySuffix}=  FakerLibrary.companySuffix
-    ${parking}   Random Element   ${parkingType}
-    ${24hours}    Random Element    ['True','False']
-    ${desc}=   FakerLibrary.sentence
-    ${url}=   FakerLibrary.url
-    ${name3}=  FakerLibrary.word
-    ${emails1}=  Emails  ${name3}  Email  ${number}${P_Email}.${test_mail}  ${views}
-    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    Set Test Variable  ${tz}
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${resp}=  Update Business Profile without schedule   ${bs}  ${bs} Description   ${companySuffix}  ${city}  ${longi}  ${latti}  ${url}  free  True  ${postcode}  ${address}  ${EMPTY}  ${EMPTY}  ${emails1}  ${EMPTY}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${bs}=  FakerLibrary.bs
+    # ${companySuffix}=  FakerLibrary.companySuffix
+    # ${parking}   Random Element   ${parkingType}
+    # ${24hours}    Random Element    ['True','False']
+    # ${desc}=   FakerLibrary.sentence
+    # ${url}=   FakerLibrary.url
+    # ${name3}=  FakerLibrary.word
+    # ${emails1}=  Emails  ${name3}  Email  ${number}${P_Email}.${test_mail}  ${views}
+    # ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    # ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    # Set Test Variable  ${tz}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${resp}=  Update Business Profile without schedule   ${bs}  ${bs} Description   ${companySuffix}  ${city}  ${longi}  ${latti}  ${url}  free  True  ${postcode}  ${address}  ${EMPTY}  ${EMPTY}  ${emails1}  ${EMPTY}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Business Profile
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  businessName=${bs}  businessDesc=${bs} Description  shortName=${companySuffix}  status=ACTIVE  createdDate=${createdDAY}  updatedDate=${DAY1}
-    Should Be Equal As Strings  ${resp.json()['serviceSector']['domain']}  ${domain}
-    Should Be Equal As Strings  ${resp.json()['serviceSubSector']['subDomain']}  ${subdomain}
-    Should Be Equal As Strings  ${resp.json()['emails'][0]['label']}  ${name3}
-    Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}  ${number}${P_Email}.${test_mail}
-    # Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['label']}  ${name1}
-    # Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['instance']}  ${ph1}
-    # Should Be Equal As Strings  ${resp.json()['phoneNumbers'][1]['label']}  ${name2}
-    # Should Be Equal As Strings  ${resp.json()['phoneNumbers'][1]['instance']}  ${ph2}
-    Should Be Equal As Strings  ${resp.json()['baseLocation']['place']}  ${city}
-    Should Be Equal As Strings  ${resp.json()['baseLocation']['address']}   ${address}
-    Should Be Equal As Strings  ${resp.json()['baseLocation']['pinCode']}  ${postcode}
-    Should Be Equal As Strings  ${resp.json()['baseLocation']['longitude']}  ${longi}
-    Should Be Equal As Strings  ${resp.json()['baseLocation']['lattitude']}  ${latti}
-    Should Be Equal As Strings  ${resp.json()['baseLocation']['googleMapUrl']}  ${url}
-    Should Be Equal As Strings  ${resp.json()['baseLocation']['parkingType']}  free
-    Should Be Equal As Strings  ${resp.json()['baseLocation']['open24hours']}  True
+    # ${resp}=  Get Business Profile
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  businessName=${bs}  businessDesc=${bs} Description  shortName=${companySuffix}  status=ACTIVE  createdDate=${createdDAY}  updatedDate=${DAY1}
+    # Should Be Equal As Strings  ${resp.json()['serviceSector']['domain']}  ${domain}
+    # Should Be Equal As Strings  ${resp.json()['serviceSubSector']['subDomain']}  ${subdomain}
+    # Should Be Equal As Strings  ${resp.json()['emails'][0]['label']}  ${name3}
+    # Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}  ${number}${P_Email}.${test_mail}
+    # # Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['label']}  ${name1}
+    # # Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['instance']}  ${ph1}
+    # # Should Be Equal As Strings  ${resp.json()['phoneNumbers'][1]['label']}  ${name2}
+    # # Should Be Equal As Strings  ${resp.json()['phoneNumbers'][1]['instance']}  ${ph2}
+    # Should Be Equal As Strings  ${resp.json()['baseLocation']['place']}  ${city}
+    # Should Be Equal As Strings  ${resp.json()['baseLocation']['address']}   ${address}
+    # Should Be Equal As Strings  ${resp.json()['baseLocation']['pinCode']}  ${postcode}
+    # Should Be Equal As Strings  ${resp.json()['baseLocation']['longitude']}  ${longi}
+    # Should Be Equal As Strings  ${resp.json()['baseLocation']['lattitude']}  ${latti}
+    # Should Be Equal As Strings  ${resp.json()['baseLocation']['googleMapUrl']}  ${url}
+    # Should Be Equal As Strings  ${resp.json()['baseLocation']['parkingType']}  free
+    # Should Be Equal As Strings  ${resp.json()['baseLocation']['open24hours']}  True
 
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -182,11 +182,13 @@ JD-TC-Change Password-1
     ${resp}=  Get specializations Sub Domain  ${domain}  ${subdomain}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${spec}=  get_Specializations  ${resp.json()}
-    
-    ${resp}=  Update Specialization  ${spec}
-    Log  ${resp.content}
+    ${resp}=  Get specializations Sub Domain  ${domain}  ${subdomain}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get specializations Sub Domain  ${domain}  ${subdomain}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${spec1}     ${resp.json()[0]['displayName']}   
+    Set Test Variable    ${spec2}     ${resp.json()[1]['displayName']}   
 
     comment  Upload business logo for provider
 

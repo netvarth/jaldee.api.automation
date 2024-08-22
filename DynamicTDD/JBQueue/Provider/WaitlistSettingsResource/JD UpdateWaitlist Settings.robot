@@ -110,3 +110,9 @@ JD-TC-UpdateWaitlistSettings-5
     Log   ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  maxPartySize=100
+
+JD-TC-UpdateWaitlistSettings-UH1
+    [Documentation]  Update wailist settings without login
+    ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  30  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}"
