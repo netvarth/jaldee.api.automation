@@ -609,6 +609,25 @@ Update store status
     Check Deprication  ${resp}  Update store status
     RETURN  ${resp}
 
+AssignUser to Store
+    [Arguments]  ${users}  ${stores}  &{kwargs}
+    ${data}=  Create Dictionary  users=${users}    stores=${stores}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/store/assignUsers  data=${data} expected_status=any
+    Check Deprication  ${resp}  AssignUser to Store
+    RETURN  ${resp}
+
+UnAssignUser From Store
+    [Arguments]  ${storeid}  ${userid}  
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/store/${storeid}/unassignUser/${userid}  expected_status=any
+    Check Deprication  ${resp}  UnAssignUser From Store
+    RETURN  ${resp}
+
 Create Provider Reminder
 
     [Arguments]   ${rem_name}  ${prov}  ${rt}  ${ri}  ${sDate}  ${eDate}   ${stime}  ${etime}  ${msg}  ${remindersource}   @{vargs}  &{kwargs}
