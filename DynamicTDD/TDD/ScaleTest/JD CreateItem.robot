@@ -30,8 +30,6 @@ JD-TC-Account Setup-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-# ---------------------------------------------------------------------------------------------------
-
 # ----------------------------------------  Create Item ---------------------------------------------
 
     ${displayName1}=     FakerLibrary.name

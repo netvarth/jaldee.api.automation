@@ -1,70 +1,160 @@
 *** Settings ***
 Suite Teardown    Delete All Sessions
 Test Teardown     Delete All Sessions
-Force Tags        STORE 
+Force Tags        Appointment  Waitlist
 Library           Collections
+Library           OperatingSystem
 Library           String
 Library           json
+Library           random
 Library           DateTime
 Library           requests
 Library           FakerLibrary
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
-Resource          /ebs/TDD/Keywords.robot
-Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
+Resource          /ebs/TDD/Keywords.robot
+
+
 
 *** Variables ***
+@{Views}  self  all  customersOnly
+${CAUSERNAME}             admin.support@jaldee.com
+${PASSWORD}               Jaldee01
+${NEWPASSWORD}            Jaldee12
+${SPASSWORD}              Netvarth1
+${test_mail}              test@jaldee.com
+${count}                  ${1}
 ${order}        0
-      
+
 *** Test Cases ***
 
-JD-TC-Account Setup-1
-    [Documentation]    create a sales order with inventory ON case.
-    ${iscorp_subdomains}=  get_iscorp_subdomains  1
-    Log  ${iscorp_subdomains}
-    Set Suite Variable  ${iscorp_subdomains}
-    Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
-    Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
-    Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
-    ${firstname_A}=  FakerLibrary.first_name
-    Set Suite Variable  ${firstname_A}
-    ${lastname_A}=  FakerLibrary.last_name
-    Set Suite Variable  ${lastname_A}
-    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+45485121
-    ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${PUSERNAME_E}  0
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E}
-    Should Be Equal As Strings    ${resp.status_code}    200
+JD-TC-Provider_Signup-1
+    [Documentation]   Provider Signup in Random Domain 
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
+    ${data_dir_path}=  Set Variable    ${EXECDIR}/data/${ENVIRONMENT}data/
+    ${data_file}=  Set Variable    ${EXECDIR}/data/${ENVIRONMENT}data/${ENVIRONMENT}phnumbers.txt
+    ${var_dir_path}=  Set Variable    ${EXECDIR}/data/${ENVIRONMENT}_varfiles/
+    ${var_file}=    Set Variable    ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
+    ${data_dir_path1}=  Set Variable    ${EXECDIR}/data/${ENVIRONMENT}data/
+    ${var_file1}=    Set Variable    ${EXECDIR}/data/${ENVIRONMENT}_varfiles/usedproviders.py
 
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
+    IF  ${{os.path.exists($data_dir_path)}} is False
+        Create Directory   ${data_dir_path}
+    END
+    IF  ${{os.path.exists($data_file)}} is False
+        Create File   ${data_file}
+    END
+    IF  ${{os.path.exists($var_dir_path)}} is False
+        Create Directory   ${var_dir_path}
+    END
+    IF  ${{os.path.exists($var_file)}} is False
+        Create File   ${var_file}
+    END
+    IF  ${{os.path.exists($data_dir_path1)}} is False
+        Create Directory   ${data_dir_path1}
+    END
+    IF  ${{os.path.exists($var_file1)}} is False
+        Create File   ${var_file1}
+    END
 
-    Set Suite Variable  ${pid}  ${decrypted_data['id']}
-    Set Suite Variable    ${pdrname}    ${decrypted_data['userName']}
-    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
-    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
+    
+    ${num}=  find_last  ${var_file}
+    ${PUSERPH0}=    Generate Random 555 Number
+    FOR  ${index}  IN RANGE   ${count}
+        ${num}=  Evaluate   ${num}+1
+        ${ph}=  Evaluate   ${PUSERPH0}+${index}
+        Log   ${ph}
+        # ${ph1}=  Evaluate  ${ph}+1000000000
+        # ${ph2}=  Evaluate  ${ph}+2000000000
+        # ${licresp}=   Get Licensable Packages
+        # Should Be Equal As Strings  ${licresp.status_code}  200
+        # # Log   ${licresp.content}
+        # ${liclen}=  Get Length  ${licresp.json()}
+        # Set Test Variable  ${licpkgid}  ${licresp.json()[0]['pkgId']}
+        # Set Test Variable  ${licpkgname}  ${licresp.json()[0]['displayName']}
+        ${licpkgid}  ${licpkgname}=  get_highest_license_pkg
+        ${corp_resp}=   get_iscorp_subdomains  1
+        
+        ${resp}=  Get BusinessDomainsConf
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        
+        ${dom_len}=  Get Length  ${resp.json()}
+        ${dom}=  random.randint  ${0}  ${dom_len-1}
+        ${sdom_len}=  Get Length  ${resp.json()[${dom}]['subDomains']}
+        Set Test Variable  ${domain}  ${resp.json()[${dom}]['domain']}
+        Log   ${domain}
+        FOR  ${subindex}  IN RANGE  ${sdom_len}
+            ${sdom}=  random.randint  ${0}  ${sdom_len-1}
+            Set Test Variable  ${subdomain}  ${resp.json()[${dom}]['subDomains'][${subindex}]['subDomain']}
+            ${is_corp}=  check_is_corp  ${subdomain}
+            Exit For Loop If  '${is_corp}' == 'False'
+        END
+        Log   ${subdomain}
+        
+        ${fname}=  FakerLibrary.name
+        ${lname}=  FakerLibrary.lastname
 
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
-    Set Suite Variable  ${PUSERNAME_E}
-    ${id}=  get_id  ${PUSERNAME_E}
-    Set Suite Variable  ${id}
-    ${bs}=  FakerLibrary.bs
-    Set Suite Variable  ${bs}
+        ${resp}=  Account SignUp  ${fname}  ${lname}  ${None}  ${domain}  ${subdomain}  ${ph}   ${licpkgid}
+        Log   ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}    202
+
+        ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderSignUp']}
+        Log   ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}    200
+
+        ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${ph}
+        Log   ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}    200
+
+        sleep  03s
+        
+        ${resp}=  Provider Login  ${ph}  ${PASSWORD}
+        Log   ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}    200
+
+        Append To File  ${data_file}  ${ph} - ${PASSWORD}${\n}
+        Append To File  ${var_file}  PUSERNAME${num}=${ph}${\n}
+        Append To File  ${var_file1}  PUSERNAME_G=${ph}${\n}
+ 
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+        ${fields}=   Get subDomain level Fields  ${domain}  ${subdomain}
+        Log  ${fields.content}
+        Should Be Equal As Strings    ${fields.status_code}   200
+
+        ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+
+        ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${subdomain}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+        ${resp}=  Get specializations Sub Domain  ${domain}  ${subdomain}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+        ${resp}=  Get specializations Sub Domain  ${domain}  ${subdomain}
+        Should Be Equal As Strings    ${resp.status_code}   200
+        Set Test Variable    ${spec1}     ${resp.json()[0]['displayName']}   
+        # Set Test Variable    ${spec2}     ${resp.json()[1]['displayName']}   
+
+        # ${spec}=  Create List    ${spec1}   ${spec2}
+        ${spec}=  Create List    ${spec1}   
+        ${resp}=  Update Business Profile with kwargs  specialization=${spec}  
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    
 
     ${resp}=  Toggle Department Enable
     Log   ${resp.json()}
@@ -157,7 +247,7 @@ JD-TC-Account Setup-1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -229,3 +319,5 @@ JD-TC-Account Setup-1
     Set Suite Variable  ${inv_order_encid}  ${resp.json()}
 
 
+
+    END
