@@ -1011,6 +1011,8 @@ Get Appointment Status
     RETURN  ${resp}
 
 Appointment Action 
+    #... for cancel can add  cancelReason=${cancelReason}  communicationMessage=${message}   
+    #... for rejection add   communicationMessage=${message}   date=${date}   rejectReason=${rejectReason}
     [Arguments]   ${status}   ${appmntId}   &{kwargs}
     ${data}=  Create Dictionary
     FOR  ${key}  ${value}  IN  &{kwargs}
@@ -1021,7 +1023,7 @@ Appointment Action
     ${resp}=  PUT On Session   ynw  /provider/appointment/statuschange/${status}/${appmntId}  data=${data}  expected_status=any
     Check Deprication  ${resp}  Appointment Action
     RETURN  ${resp}
-
+    
 Get Appointment Note
     [Arguments]   ${uuid}
     Check And Create YNW Session
@@ -3052,61 +3054,6 @@ Customer Creation after updation
     ${data}=  Create Dictionary  userProfile=${up}
     ${data}=  json.dumps  ${data}
     RETURN  ${data}
-
-AddCustomer with email
-    [Arguments]  ${firstname}  ${lastname}  ${address}  ${yemail}  ${ygender}  ${ydob}  ${primaryNo}   ${jid}  ${countryCode}=91  
-    Check And Create YNW Session
-    ${data}=  Create Dictionary  firstName=${firstname}  lastName=${lastname}  address=${address}  email=${yemail}  gender=${ygender}  dob=${ydob}  phoneNo=${primaryNo}  countryCode=${countryCode}  jaldeeId=${jid}
-    ${data}=  json.dumps  ${data}
-    ${resp}=  POST On Session  ynw  /provider/customers  data=${data}  expected_status=any
-    Check Deprication  ${resp}  AddCustomer with email
-    RETURN  ${resp}
-
-
-AddCustomer without email
-    [Arguments]  ${firstname}  ${lastname}  ${address}  ${ygender}  ${ydob}  ${primaryNo}   ${jid}   ${countryCode}=91   
-    Check And Create YNW Session
-    ${data}=  Create Dictionary  firstName=${firstname}  lastName=${lastname}  address=${address}   gender=${ygender}  dob=${ydob}  phoneNo=${primaryNo}  countryCode=${countryCode}  jaldeeId=${jid}
-    ${data}=  json.dumps  ${data}
-    ${resp}=  POST On Session  ynw  /provider/customers  data=${data}  expected_status=any
-    Check Deprication  ${resp}  AddCustomer without email
-    RETURN  ${resp}
-
-UpdateCustomer
-	[Arguments]  ${firstname}  ${lastname}  ${primaryNo}  ${ydob}  ${ygender}  ${yemail}  ${c_id}   ${jid}  ${address}=${EMPTY}  &{kwargs}
-	Check And Create YNW Session
-    ${items}=  Get Dictionary items  ${kwargs}
-    ${data}=  Customer Creation after updation  ${firstname}  ${lastname}  ${primaryNo}  ${ydob}  ${ygender}  ${yemail}  ${c_id}  ${jid}  ${address}
-    ${data}=  json.dumps  ${data}
-    FOR  ${key}  ${value}  IN  @{items}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${resp}=  PUT On Session  ynw  /provider/customers  data=${data}  expected_status=any
-    Check Deprication  ${resp}  UpdateCustomer
-    RETURN  ${resp}
-
-UpdateCustomer with email
-    [Arguments]  ${c_id}   ${firstname}  ${lastname}  ${address}  ${yemail}  ${ygender}  ${ydob}  ${primaryNo}   ${jid}   ${countryCode}=91  &{kwargs}
-    Check And Create YNW Session
-    ${items}=  Get Dictionary items  ${kwargs}
-    ${data}=  Create Dictionary  id=${c_id}  firstName=${firstname}  lastName=${lastname}  address=${address}  email=${yemail}  gender=${ygender}  dob=${ydob}  phoneNo=${primaryNo}  countryCode=${countryCode}  jaldeeId=${jid}
-    ${data}=  json.dumps  ${data}
-    FOR  ${key}  ${value}  IN  @{items}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${resp}=  PUT On Session  ynw  /provider/customers  data=${data}  expected_status=any
-    Check Deprication  ${resp}  UpdateCustomer with email
-    RETURN  ${resp}
-
-UpdateCustomer without email
-    [Arguments]  ${c_id}   ${firstname}  ${lastname}  ${address}   ${ygender}  ${ydob}  ${primaryNo}   ${jid}   ${countryCode}=91  
-    Check And Create YNW Session
-    ${data}=  Create Dictionary  id=${c_id}  firstName=${firstname}  lastName=${lastname}  address=${address}  gender=${ygender}  dob=${ydob}  phoneNo=${primaryNo}  countryCode=${countryCode}  jaldeeId=${jid}
-    ${data}=  json.dumps  ${data}
-    ${resp}=  PUT On Session  ynw  /provider/customers  data=${data}  expected_status=any
-    Check Deprication  ${resp}  UpdateCustomer without email
-    RETURN  ${resp}
-
 
 Update Customer Details
     [Arguments]  ${c_id}   &{kwargs}
@@ -6143,25 +6090,6 @@ Get Appointment By EncodedId
     ${resp}=    GET On Session     ynw   /provider/appointment/enc/${encId}   expected_status=any
     Check Deprication  ${resp}  Get Appointment By EncodedId
     RETURN  ${resp}    
-
-Provider Cancel Appointment
-    [Arguments]  ${appmntId}  ${cancelReason}  ${message}   
-    ${data}=  Create Dictionary  cancelReason=${cancelReason}  communicationMessage=${message}   
-    ${data}=    json.dumps    ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session   ynw  /provider/appointment/statuschange/Cancelled/${appmntId}    data=${data}  expected_status=any 
-    Check Deprication  ${resp}  Provider Cancel Appointment
-    RETURN  ${resp}
-
-Reject Appointment
-    [Arguments]  ${appmntId}  ${rejectReason}  ${message}   ${date}  
-    ${data}=  Create Dictionary  communicationMessage=${message}   date=${date}   rejectReason=${rejectReason}
-    ${data}=    json.dumps    ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session   ynw  /provider/appointment/statuschange/Rejected/${appmntId}    data=${data}  expected_status=any 
-    Check Deprication  ${resp}  Reject Appointment
-    RETURN  ${resp}
-    
     
 Enable Future Appointment
     Check And Create YNW Session
