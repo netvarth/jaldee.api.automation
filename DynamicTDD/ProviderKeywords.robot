@@ -1011,6 +1011,8 @@ Get Appointment Status
     RETURN  ${resp}
 
 Appointment Action 
+    #... for cancel can add  cancelReason=${cancelReason}  communicationMessage=${message}   
+    #... for rejection add   communicationMessage=${message}   date=${date}   rejectReason=${rejectReason}
     [Arguments]   ${status}   ${appmntId}   &{kwargs}
     ${data}=  Create Dictionary
     FOR  ${key}  ${value}  IN  &{kwargs}
@@ -1021,7 +1023,7 @@ Appointment Action
     ${resp}=  PUT On Session   ynw  /provider/appointment/statuschange/${status}/${appmntId}  data=${data}  expected_status=any
     Check Deprication  ${resp}  Appointment Action
     RETURN  ${resp}
-
+    
 Get Appointment Note
     [Arguments]   ${uuid}
     Check And Create YNW Session
@@ -6143,25 +6145,6 @@ Get Appointment By EncodedId
     ${resp}=    GET On Session     ynw   /provider/appointment/enc/${encId}   expected_status=any
     Check Deprication  ${resp}  Get Appointment By EncodedId
     RETURN  ${resp}    
-
-Provider Cancel Appointment
-    [Arguments]  ${appmntId}  ${cancelReason}  ${message}   
-    ${data}=  Create Dictionary  cancelReason=${cancelReason}  communicationMessage=${message}   
-    ${data}=    json.dumps    ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session   ynw  /provider/appointment/statuschange/Cancelled/${appmntId}    data=${data}  expected_status=any 
-    Check Deprication  ${resp}  Provider Cancel Appointment
-    RETURN  ${resp}
-
-Reject Appointment
-    [Arguments]  ${appmntId}  ${rejectReason}  ${message}   ${date}  
-    ${data}=  Create Dictionary  communicationMessage=${message}   date=${date}   rejectReason=${rejectReason}
-    ${data}=    json.dumps    ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session   ynw  /provider/appointment/statuschange/Rejected/${appmntId}    data=${data}  expected_status=any 
-    Check Deprication  ${resp}  Reject Appointment
-    RETURN  ${resp}
-    
     
 Enable Future Appointment
     Check And Create YNW Session
