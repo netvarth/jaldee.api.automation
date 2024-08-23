@@ -2543,3 +2543,4 @@ GIVEN_INV_CAT_ITEM_NOT_IN_INV_CAT = "The item {} is not in the inventory catalog
 ITEM_X_OUT_OF_STOCK_CURRENT_STOCK_IS_X = "{} is currently out of stock. Current stock is {}"
 CANNOT_CHANGE_STATUS_FROM_TO = "Can not change status to {}, because this {} is in {}"
 CANNOT_UPDATE_ST_X = "Can not update stock transfer because it is in {} status"
+NO_PERMISSION_TO_DO = "You are not permitted to do this"
