@@ -153,9 +153,6 @@ JD-TC-AddAppointmentRating-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${cid1}=  get_id  ${CUSERNAME6}
-    Set Suite Variable  ${cid1} 
-
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200

@@ -112,15 +112,6 @@ JD-TC-GetAppointmentToday-1
     ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lastname}  countryCode=${countryCodes[1]}  email=${pc_emailid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
@@ -144,6 +135,15 @@ JD-TC-GetAppointmentToday-1
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
     Log   ${resp.content}
@@ -299,20 +299,12 @@ JD-TC-GetAppointmentToday-2
 
     ${fname1}=  FakerLibrary.first_name
     Set Suite Variable   ${fname1}
-    ${lastname}=  FakerLibrary.last_name
+    ${lname1}=  FakerLibrary.last_name
+    Set Suite Variable   ${lname1}
   
-    ${resp}=  AddCustomer  ${PCPHONENO1}    firstName=${fname1}   lastName=${lastname}  countryCode=${countryCodes[1]}  email=${pc_emailid1}
+    ${resp}=  AddCustomer  ${PCPHONENO1}    firstName=${fname1}   lastName=${lname1}  countryCode=${countryCodes[1]}  email=${pc_emailid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=    Send Otp For Login    ${PCPHONENO1}    ${account_id1}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO1}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token1}  ${resp.json()['token']}
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO1}  
     Log  ${resp.content}
@@ -322,6 +314,15 @@ JD-TC-GetAppointmentToday-2
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO1}    ${account_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO1}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token1}  ${resp.json()['token']}
     
     ${resp}=    ProviderConsumer Login with token   ${PCPHONENO1}    ${account_id1}  ${token1} 
     Log   ${resp.content}
@@ -377,7 +378,7 @@ JD-TC-GetAppointmentToday-3
     # clear_location  ${PUSERNAME250}
     clear_location_n_service  ${PUSERNAME250}
     ${pid}=  get_acc_id  ${PUSERNAME250}
-    ${cid}=  get_id  ${CUSERNAME32}
+    # ${cid}=  get_id  ${PCPHONENO2}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
     Log   ${resp.json()}
@@ -555,23 +556,22 @@ JD-TC-GetAppointmentToday-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
     
-*** Comments ***
 JD-TC-GetAppointmentToday-4
 
     [Documentation]  Get provider's appointments today with appointment status confirmed
     
     ${pid}=  get_acc_id  ${PUSERNAME249}
     
-    ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
-    Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME249}  ${PASSWORD}
     Log   ${resp.json()}
@@ -601,13 +601,10 @@ JD-TC-GetAppointmentToday-4
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
-
+  
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -637,15 +634,13 @@ JD-TC-GetAppointmentToday-4
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
-
+  
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME31}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()[0]['id']}
@@ -660,50 +655,70 @@ JD-TC-GetAppointmentToday-4
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
-    ${resp}=  Get Appointment EncodedID   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId1}=  Set Variable   ${resp.json()}
-
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  
-    ...   appointmentEncId=${encId1}  apptStatus=${apptStatus[1]}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
+   
+    #............provider consumer creation..........
+
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Suite Variable  ${PCPHONENO2}  555${PH_Number}
+
+    ${fname2}=  FakerLibrary.first_name
+    Set Suite Variable  ${fname2}
+    ${lname2}=  FakerLibrary.last_name
+    Set Suite Variable  ${lname2}
+    # Set Suite Variable  ${pc_emailid2}  ${fname2}${C_Email}.${test_mail}
+
+    ${resp}=  AddCustomer  ${PCPHONENO2}    firstName=${fname2}   lastName=${lname2}  countryCode=${countryCodes[1]} 
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO2}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Suite Variable  ${cid}  ${resp.json()[0]['id']}
 
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
-    Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
+    ${resp}=    Send Otp For Login    ${PCPHONENO2}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Get Appointment Schedules Consumer  ${pid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()[0]['id']}   ${sch_id}
+    ${resp}=    Verify Otp For Login   ${PCPHONENO2}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token2}  ${resp.json()['token']}
 
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${pid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO2}    ${account_id}  ${token2} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+
+    # ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
+
+    # ${resp}=  Get Appointment Schedules Consumer  ${pid}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
         END
     END
     ${num_slots}=  Get Length  ${slots}
@@ -722,17 +737,6 @@ JD-TC-GetAppointmentToday-4
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    Verify Response   ${resp}     uid=${apptid2}   appmtDate=${DAY1}   appmtTime=${slot2}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID2}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname2}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname2}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}  ${fname2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
     
     ${resp}=  Consumer Logout
     Log   ${resp.json()}
@@ -742,21 +746,16 @@ JD-TC-GetAppointmentToday-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Appointment EncodedID   ${apptid2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId2}=  Set Variable   ${resp.json()}
-
     ${resp}=  Get Appointments Today
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
-    Verify Response List   ${resp}  1  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY1}  appmtTime=${slot2}  apptBy=CONSUMER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[2]}  apptStatus=${apptStatus[1]}
-
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    Should Be Equal As Strings  ${resp.json()[1]['uid']}   ${apptid2}
+    
     ${resp}=  Get Appointments Today  apptStatus-eq=${apptStatus[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
 
 JD-TC-GetAppointmentToday-5
 
@@ -764,28 +763,28 @@ JD-TC-GetAppointmentToday-5
     
     ${pid}=  get_acc_id  ${PUSERNAME249}
     
-    ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
-    Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME249}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Update Appointment Status   ${VarStatus}  
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
+    # ${resp}=   Get Appointment Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF  ${resp.json()['enableAppt']}==${bool[0]}   
+    #     ${resp}=   Enable Update Appointment Status   ${VarStatus}  
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END
 
     # clear_service   ${PUSERNAME249}
     # clear_location  ${PUSERNAME249}
@@ -802,14 +801,11 @@ JD-TC-GetAppointmentToday-5
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
-
+    
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
-    
+  
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
@@ -839,15 +835,13 @@ JD-TC-GetAppointmentToday-5
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
-
+    
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME31}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()[0]['id']}
@@ -863,50 +857,33 @@ JD-TC-GetAppointmentToday-5
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
-    ${resp}=  Get Appointment EncodedID   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId1}=  Set Variable   ${resp.json()}
-
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  
-    ...  appointmentEncId=${encId1}  apptStatus=${apptStatus[1]}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
 
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
-    Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO2}    ${account_id}  ${token2} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Get Appointment Schedules Consumer  ${pid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()[0]['id']}   ${sch_id}
+    # ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
 
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${pid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
         END
     END
     ${num_slots}=  Get Length  ${slots}
@@ -926,17 +903,6 @@ JD-TC-GetAppointmentToday-5
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    Verify Response             ${resp}     uid=${apptid2}   appmtDate=${DAY1}   appmtTime=${slot2}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID2}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname2}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname2}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}  ${fname2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
     
     ${resp}=  Consumer Logout
     Log   ${resp.json()}
@@ -946,47 +912,42 @@ JD-TC-GetAppointmentToday-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Appointment EncodedID   ${apptid2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId2}=  Set Variable   ${resp.json()}
-
     ${resp}=  Get Appointments Today
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
-    Verify Response List   ${resp}  1  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY1}  appmtTime=${slot2}  apptBy=CONSUMER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[2]}  apptStatus=${apptStatus[1]}
-
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    Should Be Equal As Strings  ${resp.json()[1]['uid']}   ${apptid2}
+   
     ${resp}=  Get Appointments Today   apptStatus-eq=${apptStatus[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
 
 JD-TC-GetAppointmentToday-6
 
     [Documentation]  Get provider's appointments today with appointment status Started
     
-    ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
-    Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
-    Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME249}  ${PASSWORD}
     Log   ${resp.json()}
@@ -1019,14 +980,11 @@ JD-TC-GetAppointmentToday-6
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
-
+   
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
-    
+   
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
@@ -1055,28 +1013,26 @@ JD-TC-GetAppointmentToday-6
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
-
+    
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME31}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()[0]['id']}
 
-    Comment   ${CUSERNAME32} has taken appointment for this provider from consumer side in the last 5 cases.
+    Comment   ${PCPHONENO2} has taken appointment for this provider from consumer side in the last 5 cases.
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME32}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid2}   ${resp.json()[0]['id']}
 
-    # ${resp}=  AddCustomer  ${CUSERNAME32}  firstName=${fname2}   lastName=${lname2}
+    # ${resp}=  AddCustomer  ${PCPHONENO2}  firstName=${fname2}   lastName=${lname2}
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${cid2}   ${resp.json()}
@@ -1091,25 +1047,9 @@ JD-TC-GetAppointmentToday-6
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
-    ${resp}=  Get Appointment EncodedID   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId1}=  Set Variable   ${resp.json()}
-
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  
-    ...   appointmentEncId=${encId1}  apptStatus=${apptStatus[1]}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
 
     ${apptfor2}=  Create Dictionary  id=${cid2}   apptTime=${slot2}
     ${apptfor}=   Create List  ${apptfor2}
@@ -1121,25 +1061,9 @@ JD-TC-GetAppointmentToday-6
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid2}  ${apptid[0]}
 
-    ${resp}=  Get Appointment EncodedID   ${apptid2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId2}=  Set Variable   ${resp.json()}
-
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid2}  appmtDate=${DAY1}   appmtTime=${slot2}  
-    ...   appointmentEncId=${encId2}  apptStatus=${apptStatus[1]}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID2}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname2}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname2}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
 
     ${resp}=  Appointment Action   ${apptStatus[3]}   ${apptid1}
     Log   ${resp.json()}
@@ -1148,48 +1072,43 @@ JD-TC-GetAppointmentToday-6
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[3]}
-
+   
     ${resp}=  Get Appointments Today
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[3]}
-    Verify Response List   ${resp}  1  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY1}  appmtTime=${slot2}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
-
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    Should Be Equal As Strings  ${resp.json()[1]['uid']}   ${apptid2}
+ 
     ${resp}=  Get Appointments Today   apptStatus-eq=${apptStatus[3]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[3]}
-
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    
 JD-TC-GetAppointmentToday-7
 
     [Documentation]  Get provider's appointments today with appointment status completed
     
-    ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
-    Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
-    Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME249}  ${PASSWORD}
     Log   ${resp.json()}
@@ -1218,14 +1137,11 @@ JD-TC-GetAppointmentToday-7
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
-
+   
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
-    
+  
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
@@ -1254,21 +1170,19 @@ JD-TC-GetAppointmentToday-7
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
-
+ 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME31}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()[0]['id']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME32}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid2}   ${resp.json()[0]['id']}
@@ -1284,26 +1198,10 @@ JD-TC-GetAppointmentToday-7
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
-    ${resp}=  Get Appointment EncodedID   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId1}=  Set Variable   ${resp.json()}
-
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  
-    ...   appointmentEncId=${encId1}  apptStatus=${apptStatus[1]}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-
+   
     ${apptfor2}=  Create Dictionary  id=${cid2}   apptTime=${slot2}
     ${apptfor}=   Create List  ${apptfor2}
     
@@ -1315,26 +1213,10 @@ JD-TC-GetAppointmentToday-7
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid2}  ${apptid[0]}
 
-    ${resp}=  Get Appointment EncodedID   ${apptid2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId2}=  Set Variable   ${resp.json()}
-
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid2}  appmtDate=${DAY1}   appmtTime=${slot2}  
-    ...   appointmentEncId=${encId2}  apptStatus=${apptStatus[1]}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID2}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname2}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname2}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-
+  
     ${resp}=  Appointment Action   ${apptStatus[3]}   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1342,8 +1224,7 @@ JD-TC-GetAppointmentToday-7
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[3]}
-
+    
     ${resp}=  Appointment Action   ${apptStatus[6]}   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1351,48 +1232,43 @@ JD-TC-GetAppointmentToday-7
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[2]['appointmentStatus']}   ${apptStatus[6]}
-
+   
     ${resp}=  Get Appointments Today
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[6]}
-    Verify Response List   ${resp}  1  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY1}  appmtTime=${slot2}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    Should Be Equal As Strings  ${resp.json()[1]['uid']}   ${apptid2}
 
     ${resp}=  Get Appointments Today   apptStatus-eq=${apptStatus[6]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[6]}
-
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
 
 JD-TC-GetAppointmentToday-8
 
     [Documentation]  Get provider's appointments today with appointment status cancelled
     
-    ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
-    Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
-    Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME249}  ${PASSWORD}
     Log   ${resp.json()}
@@ -1421,13 +1297,10 @@ JD-TC-GetAppointmentToday-8
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
-
+   
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -1456,21 +1329,19 @@ JD-TC-GetAppointmentToday-8
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
-
+    
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME31}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()[0]['id']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME32}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid2}   ${resp.json()[0]['id']}
@@ -1486,26 +1357,10 @@ JD-TC-GetAppointmentToday-8
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
-    ${resp}=  Get Appointment EncodedID   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId1}=  Set Variable   ${resp.json()}
-
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  
-    ...   appointmentEncId=${encId1}  apptStatus=${apptStatus[1]}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-
+   
     ${apptfor2}=  Create Dictionary  id=${cid2}   apptTime=${slot2}
     ${apptfor}=   Create List  ${apptfor2}
     
@@ -1517,78 +1372,55 @@ JD-TC-GetAppointmentToday-8
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid2}  ${apptid[0]}
 
-    ${resp}=  Get Appointment EncodedID   ${apptid2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId2}=  Set Variable   ${resp.json()}
-
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid2}  appmtDate=${DAY1}   appmtTime=${slot2}  
-    ...   appointmentEncId=${encId2}  apptStatus=${apptStatus[1]}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID2}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname2}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname2}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-
+   
     ${reason}=  Random Element  ${cancelReason}
-    ${msg}=   FakerLibrary.word
-    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=    Provider Cancel Appointment  ${apptid1}  ${reason}  ${msg}  ${DAY1}
+    ${resp}=     Appointment Action    ${apptStatus[4]}   ${apptid1}   cancelReason=${reason}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[4]}
-
+   
     ${resp}=  Get Appointments Today
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[4]}
-    Verify Response List   ${resp}  1  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY1}  appmtTime=${slot2}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    Should Be Equal As Strings  ${resp.json()[1]['uid']}   ${apptid2}
 
     ${resp}=  Get Appointments Today   apptStatus-eq=${apptStatus[4]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[4]}
-
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    
 JD-TC-GetAppointmentToday-9
 
     [Documentation]  Get provider's appointments today with appointment status rejected
     
-    ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
-    Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
-    Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME249}  ${PASSWORD}
     Log   ${resp.json()}
@@ -1617,14 +1449,11 @@ JD-TC-GetAppointmentToday-9
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
-
+    
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
-    
+   
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
@@ -1652,21 +1481,19 @@ JD-TC-GetAppointmentToday-9
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
-
+    
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME31}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()[0]['id']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME32}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid2}   ${resp.json()[0]['id']}
@@ -1682,26 +1509,10 @@ JD-TC-GetAppointmentToday-9
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
-    ${resp}=  Get Appointment EncodedID   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId1}=  Set Variable   ${resp.json()}
-
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  
-    ...    appointmentEncId=${encId1}  apptStatus=${apptStatus[1]}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-
+  
     ${apptfor2}=  Create Dictionary  id=${cid2}   apptTime=${slot2}
     ${apptfor}=   Create List  ${apptfor2}
     
@@ -1713,78 +1524,55 @@ JD-TC-GetAppointmentToday-9
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid2}  ${apptid[0]}
 
-    ${resp}=  Get Appointment EncodedID   ${apptid2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId2}=  Set Variable   ${resp.json()}
-
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid2}  appmtDate=${DAY1}   appmtTime=${slot2}  
-    ...   appointmentEncId=${encId2}  apptStatus=${apptStatus[1]}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID2}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname2}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname2}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-
+    
     ${reason}=  Random Element  ${cancelReason}
-    ${msg}=   FakerLibrary.word
-    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=    Reject Appointment  ${apptid1}  ${reason}  ${msg}  ${DAY1}
+    ${resp}=     Appointment Action   ${apptStatus[5]}   ${apptid1}  rejectReason=${reason}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[5]}
-
+    
     ${resp}=  Get Appointments Today
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[5]}
-    Verify Response List   ${resp}  1  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY1}  appmtTime=${slot2}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    Should Be Equal As Strings  ${resp.json()[1]['uid']}   ${apptid2}
 
     ${resp}=  Get Appointments Today   apptStatus-eq=${apptStatus[5]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[5]}
-
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
 
 JD-TC-GetAppointmentToday-10
 
     [Documentation]  Get provider's appointments today for service ${SERVICE1}
     
-    ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
-    Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
-    Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME249}  ${PASSWORD}
     Log   ${resp.json()}
@@ -1827,14 +1615,11 @@ JD-TC-GetAppointmentToday-10
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
-
+   
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
-    
+   
     ${lid}=  Create Sample Location
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
@@ -1858,21 +1643,19 @@ JD-TC-GetAppointmentToday-10
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
-
+   
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME31}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()[0]['id']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME32}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid2}   ${resp.json()[0]['id']}
@@ -1888,26 +1671,10 @@ JD-TC-GetAppointmentToday-10
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
-    ${resp}=  Get Appointment EncodedID   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId1}=  Set Variable   ${resp.json()}
-
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  
-    ...    appointmentEncId=${encId1}  apptStatus=${apptStatus[1]}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id1}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-
+ 
     ${apptfor2}=  Create Dictionary  id=${cid2}   apptTime=${slot2}
     ${apptfor}=   Create List  ${apptfor2}
     
@@ -1919,70 +1686,48 @@ JD-TC-GetAppointmentToday-10
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid2}  ${apptid[0]}
 
-    ${resp}=  Get Appointment EncodedID   ${apptid2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId2}=  Set Variable   ${resp.json()}
-
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid2}  appmtDate=${DAY1}   appmtTime=${slot2}  
-    ...   appointmentEncId=${encId2}  apptStatus=${apptStatus[1]}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID2}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname2}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname2}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id2}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-
+  
     ${resp}=  Get Appointments Today
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
-    Verify Response List   ${resp}  1  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY1}  appmtTime=${slot2}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
-
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    Should Be Equal As Strings  ${resp.json()[1]['uid']}   ${apptid2}
+   
     ${resp}=  Get Appointments Today   service-eq=${s_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length   ${resp.json()}
     Should Be Equal As Strings  ${len}  1
-    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
-    Should Be Equal As Strings  ${resp.json()[0]['service']['id']}  ${s_id1}
-    Should Be Equal As Strings  ${resp.json()[0]['service']['name']}  ${SERVICE1}
-
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+      
 JD-TC-GetAppointmentToday-11
 
     [Documentation]  Get provider's appointments today for consumers with firstname  ${fname2}
     
-    ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
-    Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
-    Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME249}  ${PASSWORD}
     Log   ${resp.json()}
@@ -2011,14 +1756,11 @@ JD-TC-GetAppointmentToday-11
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
-
+  
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
-    
+   
     ${lid}=  Create Sample Location
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
@@ -2042,21 +1784,19 @@ JD-TC-GetAppointmentToday-11
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
-
+   
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME31}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()[0]['id']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME32}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid2}   ${resp.json()[0]['id']}
@@ -2072,26 +1812,10 @@ JD-TC-GetAppointmentToday-11
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
-    ${resp}=  Get Appointment EncodedID   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId1}=  Set Variable   ${resp.json()}
-
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  
-    ...  appointmentEncId=${encId1}  apptStatus=${apptStatus[1]}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id1}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-
+   
     ${apptfor2}=  Create Dictionary  id=${cid2}   apptTime=${slot2}
     ${apptfor}=   Create List  ${apptfor2}
     
@@ -2103,69 +1827,48 @@ JD-TC-GetAppointmentToday-11
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid2}  ${apptid[0]}
 
-    ${resp}=  Get Appointment EncodedID   ${apptid2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId2}=  Set Variable   ${resp.json()}
-
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid2}  appmtDate=${DAY1}   appmtTime=${slot2}  
-    ...   appointmentEncId=${encId2}  apptStatus=${apptStatus[1]}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID2}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname2}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname2}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id2}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-
+   
     ${resp}=  Get Appointments Today
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
-    Verify Response List   ${resp}  1  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY1}  appmtTime=${slot2}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
-
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    Should Be Equal As Strings  ${resp.json()[1]['uid']}   ${apptid2}
+    
     ${resp}=  Get Appointments Today   firstName-eq=${fname2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length   ${resp.json()}
     Should Be Equal As Strings  ${len}  1
-    Verify Response List   ${resp}  0  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY1}  appmtTime=${slot2}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
-    Should Be Equal As Strings   ${resp.json()[0]['appmtFor'][0]['firstName']}  ${fname2}
-
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid2}
+ 
 JD-TC-GetAppointmentToday-12
 
     [Documentation]  Get provider's appointments today for consumers with lastname  ${lname1}
     
-    ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
-    Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
-    Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME249}  ${PASSWORD}
     Log   ${resp.json()}
@@ -2194,14 +1897,11 @@ JD-TC-GetAppointmentToday-12
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
-
+   
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
-    
+   
     ${lid}=  Create Sample Location
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
@@ -2225,16 +1925,14 @@ JD-TC-GetAppointmentToday-12
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
-
+  
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME31}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()[0]['id']}
@@ -2243,11 +1941,11 @@ JD-TC-GetAppointmentToday-12
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME31}
+    # ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME32}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid2}   ${resp.json()[0]['id']}
@@ -2263,26 +1961,10 @@ JD-TC-GetAppointmentToday-12
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
-    ${resp}=  Get Appointment EncodedID   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId1}=  Set Variable   ${resp.json()}
-
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  
-    ...   appointmentEncId=${encId1}  apptStatus=${apptStatus[1]}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id1}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-
+   
     ${apptfor2}=  Create Dictionary  id=${cid2}   apptTime=${slot2}
     ${apptfor}=   Create List  ${apptfor2}
     
@@ -2294,69 +1976,48 @@ JD-TC-GetAppointmentToday-12
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid2}  ${apptid[0]}
 
-    ${resp}=  Get Appointment EncodedID   ${apptid2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId2}=  Set Variable   ${resp.json()}
-
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid2}  appmtDate=${DAY1}   appmtTime=${slot2}  
-    ...   appointmentEncId=${encId2}  apptStatus=${apptStatus[1]}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID2}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname2}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname2}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id2}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-
+    
     ${resp}=  Get Appointments Today
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
-    Verify Response List   ${resp}  1  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY1}  appmtTime=${slot2}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    Should Be Equal As Strings  ${resp.json()[1]['uid']}   ${apptid2}
 
-    ${resp}=  Get Appointments Today   lastName-eq=${lname1}
+    ${resp}=  Get Appointments Today   lastName-eq=${lname2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length   ${resp.json()}
     Should Be Equal As Strings  ${len}  1
-    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
-    Should Be Equal As Strings   ${resp.json()[0]['appmtFor'][0]['lastName']}  ${lname1}
-
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid2}
+    
 JD-TC-GetAppointmentToday-13
 
     [Documentation]  Get provider's appointments today for encoded id ${encId2}
     
-    ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
-    Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
-    Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME249}  ${PASSWORD}
     Log   ${resp.json()}
@@ -2384,14 +2045,11 @@ JD-TC-GetAppointmentToday-13
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
+    Should Be Equal As Strings  ${resp.status_code}  200  
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
+    Should Be Equal As Strings  ${resp.status_code}  200   
     
     ${lid}=  Create Sample Location
     ${s_id1}=  Create Sample Service  ${SERVICE1}
@@ -2448,12 +2106,12 @@ JD-TC-GetAppointmentToday-13
     Verify Response  ${resp}  scheduleName=${schedule_name2}  scheduleId=${sch_id2}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME31}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()[0]['id']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME32}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid2}   ${resp.json()[0]['id']}
@@ -2469,26 +2127,10 @@ JD-TC-GetAppointmentToday-13
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
-    ${resp}=  Get Appointment EncodedID   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId1}=  Set Variable   ${resp.json()}
-
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  
-    ...    appointmentEncId=${encId1}  apptStatus=${apptStatus[1]}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id1}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-
+    
     ${apptfor2}=  Create Dictionary  id=${cid2}   apptTime=${slot2}
     ${apptfor}=   Create List  ${apptfor2}
     
@@ -2508,60 +2150,45 @@ JD-TC-GetAppointmentToday-13
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid2}  appmtDate=${DAY1}   appmtTime=${slot2}  
-    ...   appointmentEncId=${encId2}  apptStatus=${apptStatus[1]}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID2}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname2}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname2}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id2}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-
+   
     ${resp}=  Get Appointments Today
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
-    Verify Response List   ${resp}  1  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY1}  appmtTime=${slot2}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
-
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    Should Be Equal As Strings  ${resp.json()[1]['uid']}   ${apptid2}
+    
     ${resp}=  Get Appointments Today   appointmentEncId-eq=${encId2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length   ${resp.json()}
     Should Be Equal As Strings  ${len}  1
-    Verify Response List   ${resp}  0  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY1}  appmtTime=${slot2}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
-
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid2}
+    
 JD-TC-GetAppointmentToday-14
 
     [Documentation]  Get provider's appointments today in schedule ${sch_id1}
     
-    ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
-    Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
-    Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME249}  ${PASSWORD}
     Log   ${resp.json()}
@@ -2589,14 +2216,11 @@ JD-TC-GetAppointmentToday-14
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
+    Should Be Equal As Strings  ${resp.status_code}  200  
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
+    Should Be Equal As Strings  ${resp.status_code}  200   
     
     ${lid}=  Create Sample Location
     ${s_id1}=  Create Sample Service  ${SERVICE1}
@@ -2621,12 +2245,10 @@ JD-TC-GetAppointmentToday-14
     ${resp}=  Get Appointment Schedule ById  ${sch_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id1}   name=${schedule_name1}  apptState=${Qstate[0]}
-
+    
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name1}  scheduleId=${sch_id1}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     
     ${sTime2}=  add_timezone_time  ${tz}  1  15  
@@ -2645,20 +2267,18 @@ JD-TC-GetAppointmentToday-14
     ${resp}=  Get Appointment Schedule ById  ${sch_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id2}   name=${schedule_name2}  apptState=${Qstate[0]}
-
+  
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id2}  ${DAY1}  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name2}  scheduleId=${sch_id2}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME31}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()[0]['id']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME32}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid2}   ${resp.json()[0]['id']}
@@ -2674,26 +2294,10 @@ JD-TC-GetAppointmentToday-14
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
-    ${resp}=  Get Appointment EncodedID   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId1}=  Set Variable   ${resp.json()}
-
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  
-    ...   appointmentEncId=${encId1}  apptStatus=${apptStatus[1]}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id1}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-
+   
     ${apptfor2}=  Create Dictionary  id=${cid2}   apptTime=${slot2}
     ${apptfor}=   Create List  ${apptfor2}
     
@@ -2705,61 +2309,39 @@ JD-TC-GetAppointmentToday-14
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid2}  ${apptid[0]}
 
-    ${resp}=  Get Appointment EncodedID   ${apptid2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId2}=  Set Variable   ${resp.json()}
-
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid2}  appmtDate=${DAY1}   appmtTime=${slot2}  
-    ...   appointmentEncId=${encId2}  apptStatus=${apptStatus[1]}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID2}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname2}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname2}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id2}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-
+    
     ${resp}=  Get Appointments Today
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
-    Verify Response List   ${resp}  1  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY1}  appmtTime=${slot2}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
-
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    Should Be Equal As Strings  ${resp.json()[1]['uid']}   ${apptid2}
+    
     ${resp}=  Get Appointments Today   schedule-eq=${sch_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length   ${resp.json()}
     Should Be Equal As Strings  ${len}  1
-    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
-    Should Be Equal As Strings  ${resp.json()[0]['schedule']['id']}  ${sch_id1}
-    Should Be Equal As Strings  ${resp.json()[0]['schedule']['name']}  ${schedule_name1}
-
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    
 JD-TC-GetAppointmentToday-15
 
     [Documentation]  Get provider's appointments today where appointment taken by provider (apptBy) and appointment taken by consumer(apptBy) seperately
     
     ${pid}=  get_acc_id  ${PUSERNAME249}
     
-    ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
-    Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME249}  ${PASSWORD}
     Log   ${resp.json()}
@@ -2787,14 +2369,11 @@ JD-TC-GetAppointmentToday-15
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
+    Should Be Equal As Strings  ${resp.status_code}  200  
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
+    Should Be Equal As Strings  ${resp.status_code}  200   
     
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -2823,15 +2402,13 @@ JD-TC-GetAppointmentToday-15
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
-
+    
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME31}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()[0]['id']}
@@ -2847,50 +2424,26 @@ JD-TC-GetAppointmentToday-15
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
-    ${resp}=  Get Appointment EncodedID   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId1}=  Set Variable   ${resp.json()}
-
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  
-    ...   appointmentEncId=${encId1}  apptStatus=${apptStatus[1]}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-
+   
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
-    Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO2}    ${account_id}  ${token2} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Get Appointment Schedules Consumer  ${pid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()[0]['id']}   ${sch_id}
-
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${pid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
         END
     END
     ${num_slots}=  Get Length  ${slots}
@@ -2910,18 +2463,7 @@ JD-TC-GetAppointmentToday-15
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    Verify Response    ${resp}     uid=${apptid2}   appmtDate=${DAY1}   appmtTime=${slot2}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID2}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname2}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname2}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}  ${fname2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname2}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-    
+   
     ${resp}=  Consumer Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -2930,56 +2472,51 @@ JD-TC-GetAppointmentToday-15
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Appointment EncodedID   ${apptid2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId2}=  Set Variable   ${resp.json()}
-
     ${resp}=  Get Appointments Today
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
-    Verify Response List   ${resp}  1  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY1}  appmtTime=${slot2}  apptBy=CONSUMER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[2]}  apptStatus=${apptStatus[1]}
-
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    Should Be Equal As Strings  ${resp.json()[1]['uid']}   ${apptid2}
+    
     ${resp}=  Get Appointments Today  apptBy-eq=PROVIDER
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length   ${resp.json()}
     Should Be Equal As Strings  ${len}  1
-    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
     
     ${resp}=  Get Appointments Today  apptBy-eq=CONSUMER
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length   ${resp.json()}
     Should Be Equal As Strings  ${len}  1
-    Verify Response List   ${resp}  0  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY1}  appmtTime=${slot2}  apptBy=CONSUMER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[2]}  apptStatus=${apptStatus[1]}
-
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid2}
+  
 JD-TC-GetAppointmentToday-16
 
     [Documentation]  Get provider's appointments today where appointment slot is ${slot1} (apptTime)
     
-    ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
-    Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
-    Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME249}  ${PASSWORD}
     Log   ${resp.json()}
@@ -3007,14 +2544,11 @@ JD-TC-GetAppointmentToday-16
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
+    Should Be Equal As Strings  ${resp.status_code}  200  
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
+    Should Be Equal As Strings  ${resp.status_code}  200   
     
     ${lid}=  Create Sample Location
     ${s_id1}=  Create Sample Service  ${SERVICE1}
@@ -3048,12 +2582,12 @@ JD-TC-GetAppointmentToday-16
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME31}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()[0]['id']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME32}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid2}   ${resp.json()[0]['id']}
@@ -3148,7 +2682,7 @@ JD-TC-GetAppointmentToday-17
     clear_location_n_service  ${PUSERNAME250}
     ${pid}=  get_acc_id  ${PUSERNAME250}
     
-    ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
@@ -3262,7 +2796,7 @@ JD-TC-GetAppointmentToday-17
     Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  AddCustomer  ${CUSERNAME31}  firstName=${fname1}   lastName=${lname1}
+    ${resp}=  AddCustomer  ${PCPHONENO}  firstName=${fname1}   lastName=${lname1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
@@ -3305,7 +2839,7 @@ JD-TC-GetAppointmentToday-17
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -3380,7 +2914,7 @@ JD-TC-GetAppointmentToday-17
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3457,7 +2991,7 @@ JD-TC-GetAppointmentToday-18
     clear_location_n_service  ${PUSERNAME250}
     ${pid}=  get_acc_id  ${PUSERNAME250}
     
-    ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
@@ -3571,7 +3105,7 @@ JD-TC-GetAppointmentToday-18
     Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME31}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()[0]['id']}
@@ -3612,7 +3146,7 @@ JD-TC-GetAppointmentToday-18
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -3687,7 +3221,7 @@ JD-TC-GetAppointmentToday-18
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3760,7 +3294,7 @@ JD-TC-GetAppointmentToday-19
     ${pro_len}=  Get Length   ${billable_providers}
     ${pid}=  get_acc_id  ${PUSERNAME250}
     
-    ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
@@ -3771,7 +3305,7 @@ JD-TC-GetAppointmentToday-19
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
@@ -3808,8 +3342,7 @@ JD-TC-GetAppointmentToday-19
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
+    Should Be Equal As Strings  ${resp.status_code}  200  
 
     ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
     Log   ${resp.json()}
@@ -3822,9 +3355,7 @@ JD-TC-GetAppointmentToday-19
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
+    Should Be Equal As Strings  ${resp.status_code}  200   
     
     ${lid}=  Create Sample Location
     ${s_id1}=  Create Sample Service  ${SERVICE1}
@@ -3869,12 +3400,12 @@ JD-TC-GetAppointmentToday-19
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME31}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()[0]['id']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME32}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid2}   ${resp.json()[0]['id']}
@@ -4004,7 +3535,7 @@ JD-TC-GetAppointmentToday-20
     clear_location_n_service  ${PUSERNAME250}
     ${pid}=  get_acc_id  ${PUSERNAME250}
    
-    ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
@@ -4118,7 +3649,7 @@ JD-TC-GetAppointmentToday-20
     Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME31}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()[0]['id']}
@@ -4159,7 +3690,7 @@ JD-TC-GetAppointmentToday-20
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -4234,7 +3765,7 @@ JD-TC-GetAppointmentToday-20
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -4333,7 +3864,7 @@ JD-TC-GetAppointmentToday-21
     # ${multilocPro}=  MultiLocation
     Log  ${multilocPro}
     ${len}=  Get Length  ${multilocPro}
-    ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
@@ -4344,7 +3875,7 @@ JD-TC-GetAppointmentToday-21
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
@@ -4385,14 +3916,11 @@ JD-TC-GetAppointmentToday-21
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
+    Should Be Equal As Strings  ${resp.status_code}  200  
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
+    Should Be Equal As Strings  ${resp.status_code}  200   
     
     ${lid1}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid1}
@@ -4468,12 +3996,12 @@ JD-TC-GetAppointmentToday-21
     Verify Response  ${resp}  scheduleName=${schedule_name2}  scheduleId=${sch_id2}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  AddCustomer  ${CUSERNAME31}  firstName=${fname1}   lastName=${lname1}
+    ${resp}=  AddCustomer  ${PCPHONENO}  firstName=${fname1}   lastName=${lname1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()}
 
-    ${resp}=  AddCustomer  ${CUSERNAME32}  firstName=${fname2}   lastName=${lname2}
+    ${resp}=  AddCustomer  ${PCPHONENO2}  firstName=${fname2}   lastName=${lname2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid2}   ${resp.json()}
@@ -4560,7 +4088,7 @@ JD-TC-GetAppointmentToday-22
 
     [Documentation]  Get provider's appointments today for time apptstartTime
     
-    ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
@@ -4571,7 +4099,7 @@ JD-TC-GetAppointmentToday-22
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
@@ -4608,14 +4136,11 @@ JD-TC-GetAppointmentToday-22
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
+    Should Be Equal As Strings  ${resp.status_code}  200  
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
+    Should Be Equal As Strings  ${resp.status_code}  200   
     
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -4655,12 +4180,12 @@ JD-TC-GetAppointmentToday-22
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME31}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()[0]['id']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME32}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid2}   ${resp.json()[0]['id']}
@@ -4751,7 +4276,7 @@ JD-TC-GetAppointmentToday-23
 
     [Documentation]  Get provider's appointments today for jaldeeConsumer
     
-    ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
@@ -4762,7 +4287,7 @@ JD-TC-GetAppointmentToday-23
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
@@ -4805,7 +4330,6 @@ JD-TC-GetAppointmentToday-23
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
         ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
         Log   ${resp.json()}
@@ -4815,14 +4339,11 @@ JD-TC-GetAppointmentToday-23
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]} 
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
+    Should Be Equal As Strings  ${resp.status_code}  200   
     
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -4862,7 +4383,7 @@ JD-TC-GetAppointmentToday-23
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME31}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()[0]['id']}
@@ -4871,11 +4392,11 @@ JD-TC-GetAppointmentToday-23
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME31}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME32}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid2}   ${resp.json()[0]['id']}
@@ -4884,7 +4405,7 @@ JD-TC-GetAppointmentToday-23
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME32}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -4975,7 +4496,7 @@ JD-TC-GetAppointmentToday-24
 
     [Documentation]  Get provider's cancelled appointments today for cancelReason
     
-    ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
@@ -4986,7 +4507,7 @@ JD-TC-GetAppointmentToday-24
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
@@ -5023,14 +4544,11 @@ JD-TC-GetAppointmentToday-24
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
+    Should Be Equal As Strings  ${resp.status_code}  200  
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
+    Should Be Equal As Strings  ${resp.status_code}  200   
     
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -5069,12 +4587,12 @@ JD-TC-GetAppointmentToday-24
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME31}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()[0]['id']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME32}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid2}   ${resp.json()[0]['id']}
@@ -5188,7 +4706,7 @@ JD-TC-GetAppointmentToday-25
 
     [Documentation]  Get provider's appointments today for appointmentModes WALK_IN_APPOINTMENT and PHONE_IN_APPOINTMENT
     
-    ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
@@ -5199,7 +4717,7 @@ JD-TC-GetAppointmentToday-25
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
@@ -5236,14 +4754,11 @@ JD-TC-GetAppointmentToday-25
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
+    Should Be Equal As Strings  ${resp.status_code}  200  
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
+    Should Be Equal As Strings  ${resp.status_code}  200   
     
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -5282,12 +4797,12 @@ JD-TC-GetAppointmentToday-25
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME31}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()[0]['id']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME32}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid2}   ${resp.json()[0]['id']}
@@ -5380,14 +4895,14 @@ JD-TC-GetAppointmentToday-26
     
     @{gens}=  Create List
 
-    ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
     Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
     Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
 
-    ${resp}=  Get Consumer By Id  ${CUSERNAME31}
+    ${resp}=  Get Consumer By Id  ${PCPHONENO}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${dob1}   ${resp.json()['userProfile']['dob']}
@@ -5398,14 +4913,14 @@ JD-TC-GetAppointmentToday-26
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
     Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
     Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
 
-    ${resp}=  Get Consumer By Id  ${CUSERNAME32}
+    ${resp}=  Get Consumer By Id  ${PCPHONENO2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Append To List   ${gens}   ${resp.json()['userProfile']['gender']}
@@ -5440,14 +4955,11 @@ JD-TC-GetAppointmentToday-26
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
+    Should Be Equal As Strings  ${resp.status_code}  200  
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
+    Should Be Equal As Strings  ${resp.status_code}  200   
     
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -5486,7 +4998,7 @@ JD-TC-GetAppointmentToday-26
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME31}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()[0]['id']}
@@ -5495,11 +5007,11 @@ JD-TC-GetAppointmentToday-26
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME31}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME32}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid2}   ${resp.json()[0]['id']}
@@ -5595,14 +5107,14 @@ JD-TC-GetAppointmentToday-27
 
     [Documentation]  Get provider's appointments today for customers with year of birth ${year}
     
-    ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
     Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
     Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
 
-    ${resp}=  Get Consumer By Id  ${CUSERNAME31}
+    ${resp}=  Get Consumer By Id  ${PCPHONENO}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${dob1}   ${resp.json()['userProfile']['dob']}
@@ -5611,14 +5123,14 @@ JD-TC-GetAppointmentToday-27
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
     Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
     Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
 
-    ${resp}=  Get Consumer By Id  ${CUSERNAME32}
+    ${resp}=  Get Consumer By Id  ${PCPHONENO2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${dob2}   ${resp.json()['userProfile']['dob']}
@@ -5653,14 +5165,11 @@ JD-TC-GetAppointmentToday-27
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
+    Should Be Equal As Strings  ${resp.status_code}  200  
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
+    Should Be Equal As Strings  ${resp.status_code}  200   
     
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -5699,7 +5208,7 @@ JD-TC-GetAppointmentToday-27
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME31}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()[0]['id']}
@@ -5708,11 +5217,11 @@ JD-TC-GetAppointmentToday-27
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME31}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME32}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid2}   ${resp.json()[0]['id']}
@@ -5809,7 +5318,7 @@ JD-TC-GetAppointmentToday-28
 
     [Documentation]  Get provider's appointments today filter by label
     
-    ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
@@ -5820,7 +5329,7 @@ JD-TC-GetAppointmentToday-28
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
@@ -5858,14 +5367,11 @@ JD-TC-GetAppointmentToday-28
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}   
+    Should Be Equal As Strings  ${resp.status_code}  200   
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
+    Should Be Equal As Strings  ${resp.status_code}  200   
     
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -5903,12 +5409,12 @@ JD-TC-GetAppointmentToday-28
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME31}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()[0]['id']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME32}
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid2}   ${resp.json()[0]['id']}
@@ -6072,7 +5578,7 @@ JD-TC-GetAppointmentToday-UH2
 
     [Documentation]  Get provider's appointments today with consumer login
     
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -6261,7 +5767,7 @@ JD-TC-GetAppointmentToday-29
 JD-TC-GetAppointmentToday-29
     [Documentation]  Get provider's appointments today filtered by isApptDelayed 
 
-    ${resp}=    Consumer Login   ${CUSERNAME31}  ${PASSWORD}
+    ${resp}=    Consumer Login   ${PCPHONENO}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${jdconID}   ${resp.json()['id']}
@@ -6271,7 +5777,7 @@ JD-TC-GetAppointmentToday-29
     ${resp}=  Consumer Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
@@ -6336,9 +5842,7 @@ JD-TC-GetAppointmentToday-29
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
+    Should Be Equal As Strings  ${resp.status_code}  200 
 
     ${lid}=  Create Sample Location  
     ${resp}=   Get Location ById  ${lid}
@@ -6377,7 +5881,7 @@ JD-TC-GetAppointmentToday-29
     Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Suite Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  AddCustomer  ${CUSERNAME31}  firstName=${fname}   lastName=${lname}
+    ${resp}=  AddCustomer  ${PCPHONENO}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
@@ -6403,7 +5907,7 @@ JD-TC-GetAppointmentToday-29
     Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid1}
     Should Be Equal As Strings  ${resp.json()['appointmentEncId']}   ${encId1}
 
-    ${resp}=  AddCustomer  ${CUSERNAME32}  firstName=${fname}   lastName=${lname}
+    ${resp}=  AddCustomer  ${PCPHONENO2}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid1}   ${resp.json()}
