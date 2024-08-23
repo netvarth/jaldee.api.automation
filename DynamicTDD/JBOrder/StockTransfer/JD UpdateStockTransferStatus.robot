@@ -1064,24 +1064,24 @@ JD-TC-Update Stock Transfer Status-UH6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${CANNOT_CHANGE_STATUS_FROM_TO}=  format String   ${CANNOT_CHANGE_STATUS_FROM_TO}  Declined  Stock transfer  Cancelled
+
     ${resp}=  Update Stock Transfer Status   ${Stock_transfer_uid1}  ${stockTransfer[2]}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings  ${resp.json()}    ${CANNOT_CHANGE_STATUS_FROM_TO} 
+    Should Be Equal As Strings  ${resp.json()}    ${NO_PERMISSION_TO_DO} 
 
 JD-TC-Update Stock Transfer Status-UH7
-    [Documentation]    update stock transfer status as cancelled using another user
+    [Documentation]    update stock transfer status as declined using another user
 
     ${resp}=  Encrypted Provider Login  ${loginId_n}  ${Password_n}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${CANNOT_CHANGE_STATUS_FROM_TO}=  format String   ${CANNOT_CHANGE_STATUS_FROM_TO}  Declined  Stock transfer  Cancelled
-    ${resp}=  Update Stock Transfer Status   ${Stock_transfer_uid1}  ${stockTransfer[4]}    
+
+    ${resp}=  Update Stock Transfer Status   ${Stock_transfer_uid1}  ${stockTransfer[3]}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings  ${resp.json()}    ${CANNOT_CHANGE_STATUS_FROM_TO}   
+    Should Be Equal As Strings  ${resp.json()}    ${NO_PERMISSION_TO_DO}   
 
 
 

@@ -939,8 +939,10 @@ JD-TC-Update Stock Transfer-2
     ${resp}=  Get Stock Transfer By Uid   ${Stock_transfer_uid1}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable              ${Stock_transferItem_uid1}                                   ${resp.json()['items'][0]['uid']}
 
-    ${list1}=  Create Dictionary  sourceInvCatalogItem=${sourceInvCatalogItem}    transferQuantity=55   uid=${Stock_transfer_uid1}
+
+    ${list1}=  Create Dictionary  sourceInvCatalogItem=${sourceInvCatalogItem}    transferQuantity=55   uid=${Stock_transferItem_uid1}
     ${items1}=  Create List  ${list1}
     Set Suite Variable  ${items1} 
 
@@ -970,6 +972,8 @@ JD-TC-Update Stock Transfer-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  ${resp.json()}    ${CANNOT_UPDATE_ST_X} 
+
+
 
 
 
