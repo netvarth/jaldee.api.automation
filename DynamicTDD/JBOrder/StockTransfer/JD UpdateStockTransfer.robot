@@ -1,6 +1,5 @@
 *** Settings ***
 Test Teardown    Delete All Sessions
-Test Teardown     Delete All Sessions
 Force Tags        STORE 
 Library           Collections
 Library           String
@@ -980,18 +979,19 @@ JD-TC-Update Stock Transfer-UH3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${INVALID_X}=  format String   ${INVALID_X}   Stock transfer uid
     ${resp}=  Update Stock Transfer   ${Stock_transfer_uid1}   ${DAY1}  ${store_id3}    ${store_id4}  ${Catalog_EncIds3}     ${Catalog_EncIds4}  items=${items1}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}    ${INVALID_X} 
 
 JD-TC-Update Stock Transfer-UH4
     [Documentation]     update stock transfer with uid without login.
 
-
-
     ${resp}=  Update Stock Transfer   ${Stock_transfer_uid1}   ${DAY1}  ${store_id3}    ${store_id4}  ${Catalog_EncIds3}     ${Catalog_EncIds4}  items=${items1}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    4219
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings  ${resp.json()}    ${SESSION_EXPIRED} 
 
 
 
