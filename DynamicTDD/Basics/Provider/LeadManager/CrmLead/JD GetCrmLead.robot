@@ -35,6 +35,21 @@ JD-TC-Get_CRM_Lead-1
     Set Suite Variable      ${pid}          ${decrypted_data['id']}
     Set Suite Variable      ${pdrname}      ${decrypted_data['userName']}
 
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    ${parking}   Random Element   ${parkingType}
+    ${24hours}    Random Element    ['True','False']
+    ${desc}=   FakerLibrary.sentence
+    ${url}=   FakerLibrary.url
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    Set Suite Variable   ${sTime}
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    Set Suite Variable   ${eTime}
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1} 
+
     ${resp}=    Get Business Profile
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -133,7 +148,23 @@ JD-TC-Get_CRM_Lead-1
 
     ${resp}=    Get Crm Lead   ${crm_lead_id} 
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
+    Should Be Equal As Strings  ${resp.status_code}                  200
+    Should Be Equal As Strings  ${resp.json()['uid']}                ${crm_lead_id}
+    Should Be Equal As Strings  ${resp.json()['productEnum']}        ${productEnum[0]}
+    Should Be Equal As Strings  ${resp.json()['productName']}        ${typeName1}
+    Should Be Equal As Strings  ${resp.json()['productUid']}         ${lpid}
+    Should Be Equal As Strings  ${resp.json()['channelType']}        ${leadchannel[0]}
+    Should Be Equal As Strings  ${resp.json()['channelName']}        ${ChannelName1}
+    Should Be Equal As Strings  ${resp.json()['channelUid']}         ${clid}
+    Should Be Equal As Strings  ${resp.json()['consumerFirstName']}  ${firstName_n}
+    Should Be Equal As Strings  ${resp.json()['consumerLastName']}   ${lastName_n}
+    Should Be Equal As Strings  ${resp.json()['internalStatus']}     ${status[0]}
+    Should Be Equal As Strings  ${resp.json()['ownerId']}            ${pid}
+    Should Be Equal As Strings  ${resp.json()['ownerName']}          ${pdrname}
+    Should Be Equal As Strings  ${resp.json()['createdBy']}          ${pid}
+    Should Be Equal As Strings  ${resp.json()['createdByName']}      ${pdrname}
+    Should Be Equal As Strings  ${resp.json()['createdDate']}        ${DAY1}
+
 
 JD-TC-Get_CRM_Lead-UH1
 
