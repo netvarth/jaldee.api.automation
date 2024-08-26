@@ -131,7 +131,7 @@ JD-TC-Unassign_User_To_Crm_Lead-1
     Should Be Equal As Strings  ${resp.status_code}     200
     Set Suite variable           ${crm_lead_id}          ${resp.json()}
 
-    $[resp]=    Get Crm Lead   ${crm_lead_id} 
+    ${resp}=    Get Crm Lead   ${crm_lead_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
@@ -148,7 +148,7 @@ JD-TC-Unassign_User_To_Crm_Lead-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    $[resp]=    Get Crm Lead   ${crm_lead_id} 
+    ${resp}=    Get Crm Lead   ${crm_lead_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
@@ -156,7 +156,7 @@ JD-TC-Unassign_User_To_Crm_Lead-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    $[resp]=    Get Crm Lead   ${crm_lead_id} 
+    ${resp}=    Get Crm Lead   ${crm_lead_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
@@ -170,7 +170,7 @@ JD-TC-Unassign_User_To_Crm_Lead-2
 
     ${resp}=    Crm Lead Update Unassign  ${crm_lead_id}  ${user1_id}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
+    Should Be Equal As Strings  ${resp.status_code}     422
 
 JD-TC-Unassign_User_To_Crm_Lead-3
 
@@ -182,9 +182,12 @@ JD-TC-Unassign_User_To_Crm_Lead-3
 
     ${inv}  Random int  min=1  max=999
 
+    ${INVALID_Y_ID}=   Replace String  ${INVALID_Y_ID}  {}   Lead
+
     ${resp}=    Crm Lead Update Unassign  ${inv}  ${user1_id}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
+    Should Be Equal As Strings  ${resp.status_code}     422
+    Should Be Equal As Strings  ${resp.json()}          ${INVALID_Y_ID}
 
 
 JD-TC-Unassign_User_To_Crm_Lead-4
@@ -199,7 +202,7 @@ JD-TC-Unassign_User_To_Crm_Lead-4
 
     ${resp}=    Crm Lead Update Unassign  ${crm_lead_id}  ${inv}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
+    Should Be Equal As Strings  ${resp.status_code}     422
 
 JD-TC-Unassign_User_To_Crm_Lead-5
 
@@ -207,5 +210,6 @@ JD-TC-Unassign_User_To_Crm_Lead-5
 
     ${resp}=    Crm Lead Update Unassign  ${crm_lead_id}  ${user1_id}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
+    Should Be Equal As Strings  ${resp.status_code}     419
+    Should Be Equal As Strings  ${resp.json()}          ${SESSION_EXPIRED}
 

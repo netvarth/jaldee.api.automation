@@ -129,9 +129,9 @@ JD-TC-Assign_User_To_Crm_Lead-1
     ${resp}=    Create Crm Lead  ${clid}  ${firstName_n}  ${con_id}  ${lastName_n}  ${pid}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
-    Set Test variable           ${crm_lead_id}          ${resp.json()}
+    Set Suite variable           ${crm_lead_id}          ${resp.json()}
 
-    $[resp]=    Get Crm Lead   ${crm_lead_id} 
+    ${resp}=    Get Crm Lead   ${crm_lead_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
@@ -143,17 +143,19 @@ JD-TC-Assign_User_To_Crm_Lead-1
     Should Be Equal As Strings          ${resp.status_code}  200
     Set Suite Variable  ${user1_id}     ${resp.json()['id']}
     Set Suite Variable  ${user_num}     ${resp.json()['mobileNo']}
+    Set Suite Variable  ${firstName}    ${resp.json()['firstName']}
+    Set Suite Variable  ${lastName}     ${resp.json()['lastName']}
 
     ${resp}=    Crm Lead Update Assign  ${crm_lead_id}  ${user1_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    $[resp]=    Get Crm Lead   ${crm_lead_id} 
+    ${resp}=    Get Crm Lead   ${crm_lead_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
 
-JD-TC-Assign_User_To_Crm_Lead-2
+JD-TC-Assign_User_To_Crm_Lead-UH1
 
     [Documentation]   Assign User To Crm Lead - Unassign the same user again
 
@@ -161,11 +163,15 @@ JD-TC-Assign_User_To_Crm_Lead-2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${LEAD_ALREADY_ASSIGNED}=   Replace String  ${LEAD_ALREADY_ASSIGNED}  {}   ${firstName} ${lastName}
+
     ${resp}=    Crm Lead Update Assign  ${crm_lead_id}  ${user1_id}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
+    Should Be Equal As Strings  ${resp.status_code}     422
+    Should Be Equal As Strings  ${resp.json()}          ${LEAD_ALREADY_ASSIGNED}
 
-JD-TC-Assign_User_To_Crm_Lead-3
+
+JD-TC-Assign_User_To_Crm_Lead-UH2
 
     [Documentation]   Assign User To Crm Lead - where lead id is invalid
 
@@ -175,12 +181,15 @@ JD-TC-Assign_User_To_Crm_Lead-3
 
     ${inv}  Random int  min=1  max=999
 
+    ${INVALID_Y_ID}=   Replace String  ${INVALID_Y_ID}  {}   Lead
+
     ${resp}=    Crm Lead Update Assign  ${inv}  ${user1_id}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
+    Should Be Equal As Strings  ${resp.status_code}     422
+    Should Be Equal As Strings  ${resp.json()}          ${INVALID_Y_ID}
 
 
-JD-TC-Assign_User_To_Crm_Lead-4
+JD-TC-Assign_User_To_Crm_Lead-UH3
 
     [Documentation]   Assign User To Crm Lead - where user id is invalid
 
@@ -192,13 +201,14 @@ JD-TC-Assign_User_To_Crm_Lead-4
 
     ${resp}=    Crm Lead Update Assign  ${crm_lead_id}  ${inv}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
+    Should Be Equal As Strings  ${resp.status_code}     422
 
-JD-TC-Assign_User_To_Crm_Lead-5
+JD-TC-Assign_User_To_Crm_Lead-UH4
 
     [Documentation]   Assign User To Crm Lead - without login
 
     ${resp}=    Crm Lead Update Assign  ${crm_lead_id}  ${user1_id}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
+    Should Be Equal As Strings  ${resp.status_code}     419
+    Should Be Equal As Strings  ${resp.json()}          ${SESSION_EXPIRED}
 

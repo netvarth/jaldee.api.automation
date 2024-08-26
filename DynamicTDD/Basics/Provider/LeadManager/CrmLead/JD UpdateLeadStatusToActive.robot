@@ -129,9 +129,9 @@ JD-TC-Update_Lead_Status_To_Active-1
     ${resp}=    Create Crm Lead  ${clid}  ${firstName_n}  ${con_id}  ${lastName_n}  ${pid}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
-    Set Test variable           ${crm_lead_id}          ${resp.json()}
+    Set Suite variable           ${crm_lead_id}          ${resp.json()}
 
-    $[resp]=    Get Crm Lead   ${crm_lead_id} 
+    ${resp}=    Get Crm Lead   ${crm_lead_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
@@ -139,7 +139,7 @@ JD-TC-Update_Lead_Status_To_Active-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    $[resp]=    Get Crm Lead   ${crm_lead_id} 
+    ${resp}=    Get Crm Lead   ${crm_lead_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
@@ -153,9 +153,12 @@ JD-TC-Update_Lead_Status_To_Active-UH1
 
     ${inv}=     Random int  min=1  max=999
 
+    ${INVALID_Y_ID}=   Replace String  ${INVALID_Y_ID}  {}   Lead
+
     ${resp}=    Crm Lead Status Change To Active  ${inv}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
+    Should Be Equal As Strings  ${resp.status_code}     422
+    Should Be Equal As Strings  ${resp.json()}          ${INVALID_Y_ID}
 
 
 JD-TC-Update_Lead_Status_To_Active-UH2
@@ -164,7 +167,8 @@ JD-TC-Update_Lead_Status_To_Active-UH2
 
     ${resp}=    Crm Lead Status Change To Active  ${crm_lead_id}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
+    Should Be Equal As Strings  ${resp.status_code}     419
+    Should Be Equal As Strings  ${resp.json()}          ${SESSION_EXPIRED}
 
 
 JD-TC-Update_Lead_Status_To_Active-2
@@ -175,11 +179,11 @@ JD-TC-Update_Lead_Status_To_Active-2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Crm Lead Status Change To Rejected  ${crm_lead_id}
+    ${resp}=    Crm Lead Status Change To Reject  ${crm_lead_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    $[resp]=    Get Crm Lead   ${crm_lead_id} 
+    ${resp}=    Get Crm Lead   ${crm_lead_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
@@ -187,11 +191,11 @@ JD-TC-Update_Lead_Status_To_Active-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    $[resp]=    Get Crm Lead   ${crm_lead_id} 
+    ${resp}=    Get Crm Lead   ${crm_lead_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-JD-TC-Update_Lead_Status_To_Active-2
+JD-TC-Update_Lead_Status_To_Active-UH3
 
     [Documentation]   Update Lead Status To Active - Active to active status
 
@@ -199,9 +203,12 @@ JD-TC-Update_Lead_Status_To_Active-2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${LEAD_STATUS_IS_ALREADY}=   Replace String  ${LEAD_STATUS_IS_ALREADY}  {}   ACTIVE
+
     ${resp}=    Crm Lead Status Change To Active  ${crm_lead_id}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
+    Should Be Equal As Strings  ${resp.status_code}     422
+    Should Be Equal As Strings  ${resp.json()}          ${LEAD_STATUS_IS_ALREADY}
 
 JD-TC-Update_Lead_Status_To_Active-UH4
 
@@ -215,7 +222,7 @@ JD-TC-Update_Lead_Status_To_Active-UH4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    $[resp]=    Get Crm Lead   ${crm_lead_id} 
+    ${resp}=    Get Crm Lead   ${crm_lead_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 

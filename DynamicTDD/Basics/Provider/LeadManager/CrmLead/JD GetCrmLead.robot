@@ -23,9 +23,9 @@ ${order}        0
 
 *** Test Cases ***
 
-JD-TC-Update_Lead_Status_To_Reject-1
+JD-TC-Get_CRM_Lead-1
 
-    [Documentation]   Update Lead Status To Reject 
+    [Documentation]   Get Crm Lead
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Log  ${resp.json()}
@@ -135,113 +135,59 @@ JD-TC-Update_Lead_Status_To_Reject-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp}=    Crm Lead Status Change To Reject  ${crm_lead_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
+JD-TC-Get_CRM_Lead-UH1
 
-    ${resp}=    Get Crm Lead   ${crm_lead_id} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
-
-
-JD-TC-Update_Lead_Status_To_Reject-2
-
-    [Documentation]   Update Lead Status To Reject - Active to rejected status
+    [Documentation]   Get Crm Lead - where uid is invalid
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Crm Lead Status Change To Active  ${crm_lead_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
-
-    ${resp}=    Get Crm Lead   ${crm_lead_id} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
-
-    ${resp}=    Crm Lead Status Change To Reject  ${crm_lead_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
-
-    ${resp}=    Get Crm Lead   ${crm_lead_id} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
-
-JD-TC-Update_Lead_Status_To_Reject-UH1
-
-    [Documentation]   Update Lead Status To Reject - Rejected to rejected status
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get Crm Lead   ${crm_lead_id} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
-
-    ${LEAD_STATUS_IS_ALREADY}=   Replace String  ${LEAD_STATUS_IS_ALREADY}  {}   REJECTED
-
-    ${resp}=    Crm Lead Status Change To Reject  ${crm_lead_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     422
-    Should Be Equal As Strings  ${resp.json()}          ${LEAD_STATUS_IS_ALREADY}
-
-JD-TC-Update_Lead_Status_To_Reject-UH2
-
-    [Documentation]   Update Lead Status To Reject - Completed to rejected status
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Crm Lead Status Change To Complete  ${crm_lead_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
-
-    ${resp}=    Get Crm Lead   ${crm_lead_id} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
-
-    ${resp}=    Crm Lead Status Change To Reject  ${crm_lead_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
-
-JD-TC-Update_Lead_Status_To_Reject-UH3
-
-    [Documentation]   Update Lead Status To Reject - without Login
-
-    ${resp}=    Crm Lead Status Change To Reject  ${crm_lead_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     419
-    Should Be Equal As Strings  ${resp.json()}          ${SESSION_EXPIRED}
-
-JD-TC-Update_Lead_Status_To_Reject-UH4
-
-    [Documentation]   Update Lead Status To Reject - where uid is invalid
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${inv}=     Random Int  min=1  max=999
 
     ${INVALID_Y_ID}=   Replace String  ${INVALID_Y_ID}  {}   Lead
 
-    ${resp}=    Crm Lead Status Change To Reject  ${inv}
+    ${inv}  Random int  min=1  max=999
+
+    ${resp}=    Get Crm Lead   ${inv} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     422
     Should Be Equal As Strings  ${resp.json()}          ${INVALID_Y_ID}
 
-JD-TC-Update_Lead_Status_To_Reject-UH5
+JD-TC-Get_CRM_Lead-UH2
 
-    [Documentation]   Update Lead Status To Reject - with another provider login
+    [Documentation]   Get Crm Lead - without login
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=    Get Crm Lead   ${crm_lead_id} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}     419
+    Should Be Equal As Strings  ${resp.json()}          ${SESSION_EXPIRED}
+
+
+JD-TC-Get_CRM_Lead-2
+
+    [Documentation]   Get Crm Lead - with another login
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Crm Lead Status Change To Reject  ${crm_lead_id}
+    ${resp}=    Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${accountId}        ${resp.json()['id']}
+    Set Suite Variable    ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  '${resp.json()['enableCrmLead']}'=='${bool[0]}'
+
+        ${resp}=    Enable Disable CRM Lead  ${toggle[0]}
+        Log  ${resp.json()}
+        Should Be Equal As Strings    ${resp.status_code}    200
+
+    END
+
+    ${resp}=    Get Crm Lead   ${crm_lead_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     422
-    Should Be Equal As Strings  ${resp.json()}          ${CRM_LEAD_DISABLED}

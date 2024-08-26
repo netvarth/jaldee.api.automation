@@ -131,7 +131,7 @@ JD-TC-Update_Lead_Status_To_Complete-1
     Should Be Equal As Strings  ${resp.status_code}     200
     Set Suite variable           ${crm_lead_id}          ${resp.json()}
 
-    $[resp]=    Get Crm Lead   ${crm_lead_id} 
+    ${resp}=    Get Crm Lead   ${crm_lead_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
@@ -139,7 +139,7 @@ JD-TC-Update_Lead_Status_To_Complete-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    $[resp]=    Get Crm Lead   ${crm_lead_id} 
+    ${resp}=    Get Crm Lead   ${crm_lead_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
@@ -151,7 +151,7 @@ JD-TC-Update_Lead_Status_To_Complete-2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    $[resp]=    Get Crm Lead   ${crm_lead_id} 
+    ${resp}=    Get Crm Lead   ${crm_lead_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
@@ -184,7 +184,7 @@ JD-TC-Update_Lead_Status_To_Complete-3
     Should Be Equal As Strings  ${resp.status_code}     200
     Set Test variable           ${crm_lead_id1}          ${resp.json()}
 
-    $[resp]=    Get Crm Lead   ${crm_lead_id1} 
+    ${resp}=    Get Crm Lead   ${crm_lead_id1} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
@@ -192,7 +192,7 @@ JD-TC-Update_Lead_Status_To_Complete-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
     
-    $[resp]=    Get Crm Lead   ${crm_lead_id} 
+    ${resp}=    Get Crm Lead   ${crm_lead_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
@@ -225,7 +225,7 @@ JD-TC-Update_Lead_Status_To_Complete-3
     Should Be Equal As Strings  ${resp.status_code}     200
     Set Test variable           ${crm_lead_id1}          ${resp.json()}
 
-    $[resp]=    Get Crm Lead   ${crm_lead_id1} 
+    ${resp}=    Get Crm Lead   ${crm_lead_id1} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
@@ -233,7 +233,7 @@ JD-TC-Update_Lead_Status_To_Complete-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
     
-    $[resp]=    Get Crm Lead   ${crm_lead_id} 
+    ${resp}=    Get Crm Lead   ${crm_lead_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
