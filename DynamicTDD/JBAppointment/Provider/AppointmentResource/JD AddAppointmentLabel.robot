@@ -1006,10 +1006,6 @@ JD-TC-AddAppointmentLabel-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
-
-
-
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -1109,7 +1105,6 @@ JD-TC-AddAppointmentLabel-UH4
     END
 
     clear_service   ${PUSERNAME175}
-
     clear_appt_schedule   ${PUSERNAME175}
 
     ${resp}=   Get Service
@@ -1117,14 +1112,22 @@ JD-TC-AddAppointmentLabel-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Locations
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    END
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1195,7 +1198,6 @@ JD-TC-AddAppointmentLabel-UH4
     ${resp}=  Get Label By Id  ${label_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
     
     ${len}=  Get Length  ${ValueSet}
     ${i}=   Random Int   min=0   max=${len-1}
@@ -1218,10 +1220,7 @@ JD-TC-AddAppointmentLabel-UH4
     END
 
     clear_service   ${PUSERNAME176}
-    clear_location  ${PUSERNAME176}
     clear_appt_schedule   ${PUSERNAME176}
-
-
 
     ${resp}=    Get Business Profile
     Log  ${resp.json()}
@@ -1297,8 +1296,6 @@ JD-TC-AddAppointmentLabel-UH4
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-
 
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name1}=  FakerLibrary.bs

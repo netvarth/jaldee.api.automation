@@ -1,6 +1,6 @@
 *** Settings ***
 Suite Teardown    Delete All Sessions
-Test Teardown    Delete All Sessions
+Test Teardown     Delete All Sessions
 Force Tags        Appointment  Label
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
@@ -11,15 +11,17 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 
 *** Variables ***
+
 ${self}     0
 ${digits}       0123456789
 &{Emptydict}
 
 *** Test Cases ***
+
 JD-TC-AddMultipleAppointmentLabel-1
+
     [Documentation]  Add 1 label to multiple appointments
 
-    
     ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
@@ -31,7 +33,6 @@ JD-TC-AddMultipleAppointmentLabel-1
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -46,7 +47,6 @@ JD-TC-AddMultipleAppointmentLabel-1
         Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
-
 
 # -------------------------------- Add a provider Consumer -----------------------------------
 
@@ -64,7 +64,12 @@ JD-TC-AddMultipleAppointmentLabel-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
+    Log  ${resp.headers['Set-Cookie']}
+    ${Sesioncookie}    ${rest}    Split String    ${resp.headers['Set-Cookie']}    ;  1
+    ${cookie_parts}    ${jsessionynw_value}    Split String    ${Sesioncookie}    =
+    Log   ${jsessionynw_value}
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}   JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
