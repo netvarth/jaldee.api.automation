@@ -1185,10 +1185,10 @@ MultiLocation Domain Providers
         ${status} 	${value} = 	Run Keyword And Ignore Error  List Should Contain Value  ${dom_list}  ${domain}
         Log Many  ${status} 	${value}
         Run Keyword If  '${status}' == 'PASS'   Append To List   ${multiloc_providers}  ${PUSERNAME${a}}
-        ${resp}=  View Waitlist Settings
+        ${resp}=  Get Waitlist Settings
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
-	    ${resp}=  View Waitlist Settings
+	    ${resp}=  Get Waitlist Settings
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         IF  ${resp.json()['filterByDept']}==${bool[1]}
@@ -17056,10 +17056,12 @@ Consumer Lead Status Change
 
 Create Crm Lead
 
-    [Arguments]  ${channel_uid}  ${consumerFirstName}  ${consumerUid}  ${consumerLastName}  ${ownerId}  &{kwargs}
+    # if consumer avaliable only cosumer uid is req, if not avaliable should provider firstname and last name required. consumerFirstName,  consumerUid,  consumerLastName
+
+    [Arguments]  ${channel_uid}    ${ownerId}  ${location}  &{kwargs}
 
     ${channel}=  Create Dictionary  uid=${channel_uid}
-    ${data}=     Create Dictionary  channel=${channel}  consumerFirstName=${consumerFirstName}  consumerUid=${consumerUid}  consumerLastName=${consumerLastName}  ownerId=${ownerId}
+    ${data}=     Create Dictionary  channel=${channel}  ownerId=${ownerId}  location=${location}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
     END     
@@ -17081,12 +17083,16 @@ Get Crm Lead
 
 Get Crm Lead By Filter  
 
+    [Arguments]  &{param}
+
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/crm/lead   params=${param}   expected_status=any
     Check Deprication  ${resp}  Get Crm Lead By Filter
     RETURN  ${resp}
 
 Get Crm Lead Count By Filter  
+
+    [Arguments]  &{param}
 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/crm/lead/count   params=${param}   expected_status=any

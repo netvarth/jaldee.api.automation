@@ -44,7 +44,7 @@ JD-TC-Take Appointment-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -90,17 +90,6 @@ JD-TC-Take Appointment-1
     ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lastname}  countryCode=${countryCodes[1]}  email=${pc_emailid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    sleep  02s
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
@@ -149,6 +138,15 @@ JD-TC-Take Appointment-1
     ${resp}=  ProviderLogout
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
     Log   ${resp.content}
@@ -1066,14 +1064,6 @@ JD-TC-Take Appointment-11
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${spec}=  get_Specializations  ${resp.json()}
-    
-    # ${resp}=  Update Specialization  ${spec}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=  Get Features  ${subdomain}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${resp}=  Update Service Provider With Emailid   ${pro_id}   ${fname}   ${fname}   ${Genderlist[0]}  ${EMPTY}  ${email_id}
     # Log  ${resp.json()}
@@ -1091,7 +1081,7 @@ JD-TC-Take Appointment-11
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -1176,15 +1166,6 @@ JD-TC-Take Appointment-11
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
-
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
@@ -1212,16 +1193,6 @@ JD-TC-Take Appointment-11
           
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid2}  ${apptid[0]}
-
-    ${resp}=  Get Appointment EncodedID   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId1}=  Set Variable   ${resp.json()}
-
-    ${resp}=  Get Appointment EncodedID   ${apptid2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId2}=  Set Variable   ${resp.json()}
 
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
@@ -1327,17 +1298,6 @@ JD-TC-Take Appointment-12
     ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  email=${pc_emailid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    sleep  2s
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
@@ -1390,7 +1350,7 @@ JD-TC-Take Appointment-13
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -1500,15 +1460,6 @@ JD-TC-Take Appointment-13
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
-
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
@@ -1560,7 +1511,7 @@ JD-TC-Take Appointment-14
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
     ${resp}=   Get Service
@@ -1657,15 +1608,6 @@ JD-TC-Take Appointment-14
     ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  email=${pc_emailid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
@@ -1782,15 +1724,7 @@ JD-TC-Take Appointment-15
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
-
+    
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
@@ -1878,15 +1812,6 @@ JD-TC-Take Appointment-15
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${PCPHONENO1}    ${account_id1}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO1}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token1}  ${resp.json()['token']}
-
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO1}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
@@ -1992,15 +1917,6 @@ JD-TC-Take Appointment-16
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
-
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
@@ -2088,14 +2004,6 @@ JD-TC-Take Appointment-16
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${PCPHONENO1}    ${account_id1}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO1}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-   
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO1}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
@@ -2207,14 +2115,6 @@ JD-TC-Take Appointment-17
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-  
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
@@ -2301,14 +2201,6 @@ JD-TC-Take Appointment-17
     ${resp}=  AddCustomer  ${PCPHONENO1}    firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  email=${pc_emailid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=    Send Otp For Login    ${PCPHONENO1}    ${account_id1}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO1}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
     
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO1}  
     Log  ${resp.content}
@@ -2416,14 +2308,6 @@ JD-TC-Take Appointment-18
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
- 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
@@ -2510,14 +2394,6 @@ JD-TC-Take Appointment-18
     ${resp}=  AddCustomer  ${PCPHONENO1}    firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  email=${pc_emailid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=    Send Otp For Login    ${PCPHONENO1}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO1}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
     
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO1}  
     Log  ${resp.content}
@@ -2625,14 +2501,6 @@ JD-TC-Take Appointment-19
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
@@ -2727,14 +2595,6 @@ JD-TC-Take Appointment-19
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${PCPHONENO1}    ${account_id1}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO1}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-   
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO1}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
@@ -2833,14 +2693,6 @@ JD-TC-Take Appointment-20
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-  
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
@@ -2863,9 +2715,7 @@ JD-TC-Take Appointment-20
     Should Be Equal As Strings  ${resp.status_code}  200
    
     ${reason}=  Random Element  ${cancelReason}
-    ${msg}=   FakerLibrary.word
-    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=    Provider Cancel Appointment  ${apptid1}  ${reason}  ${msg} 
+    ${resp}=     Appointment Action    ${apptStatus[4]}   ${apptid1}   cancelReason=${reason}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2971,14 +2821,6 @@ JD-TC-Take Appointment-21
     ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]} 
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
   
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
@@ -3073,15 +2915,7 @@ JD-TC-Take Appointment-22
     ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  email=${pc_emailid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-  
+ 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
@@ -3158,7 +2992,7 @@ JD-TC-Take Appointment-23
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
     
@@ -3216,15 +3050,7 @@ JD-TC-Take Appointment-23
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
-  
+      
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
@@ -3253,6 +3079,15 @@ JD-TC-Take Appointment-23
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
     Log   ${resp.content}
@@ -3857,7 +3692,7 @@ JD-TC-Take Appointment-27
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -4036,7 +3871,7 @@ JD-TC-Take Appointment-28
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -4265,7 +4100,7 @@ JD-TC-Take Appointment-29
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -4596,7 +4431,7 @@ JD-TC-Take Appointment-30
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -4994,7 +4829,7 @@ JD-TC-Take Appointment-33
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
     Run Keyword If  ${resp.json()['enableToday']}==${bool[0]}   Enable Today Appointment
@@ -5482,7 +5317,7 @@ JD-TC-Take Appointment-36
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -5649,7 +5484,7 @@ JD-TC-Take Appointment-37
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -5924,7 +5759,7 @@ JD-TC-Take Appointment-38
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -6227,7 +6062,7 @@ JD-TC-Take Appointment-39
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -6599,7 +6434,7 @@ JD-TC-Take Appointment-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -8606,7 +8441,7 @@ JD-TC-Take Appointment-UH25
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -8794,7 +8629,7 @@ JD-TC-Take Appointment-UH26
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -8929,7 +8764,7 @@ JD-TC-Take Appointment-UH28
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -9298,7 +9133,7 @@ JD-TC-Take Appointment-40
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -9437,7 +9272,7 @@ JD-TC-Take Appointment-41
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -9758,7 +9593,7 @@ JD-TC-Take Appointment-UH30
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -10282,7 +10117,7 @@ JD-TC-Take Appointment-45
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -10482,7 +10317,7 @@ JD-TC-Take Appointment-UH32
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -10706,7 +10541,7 @@ JD-TC-Take Appointment-46
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
