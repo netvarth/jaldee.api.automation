@@ -17056,10 +17056,12 @@ Consumer Lead Status Change
 
 Create Crm Lead
 
-    [Arguments]  ${channel_uid}  ${consumerFirstName}  ${consumerUid}  ${consumerLastName}  ${ownerId}  &{kwargs}
+    # if consumer avaliable only cosumer uid is req, if not avaliable should provider firstname and last name required. consumerFirstName,  consumerUid,  consumerLastName
+
+    [Arguments]  ${channel_uid}    ${ownerId}  ${location}  &{kwargs}
 
     ${channel}=  Create Dictionary  uid=${channel_uid}
-    ${data}=     Create Dictionary  channel=${channel}  consumerFirstName=${consumerFirstName}  consumerUid=${consumerUid}  consumerLastName=${consumerLastName}  ownerId=${ownerId}
+    ${data}=     Create Dictionary  channel=${channel}  ownerId=${ownerId}  location=${location}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
     END     
