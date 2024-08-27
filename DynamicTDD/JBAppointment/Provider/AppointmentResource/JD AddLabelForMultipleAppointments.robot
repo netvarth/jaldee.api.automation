@@ -1568,12 +1568,11 @@ JD-TC-AddMultipleAppointmentLabel-9
     ${mem_lname}=   FakerLibrary.last_name
     ${dob}=      FakerLibrary.date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMember   ${mem_fname}  ${mem_lname}  ${dob}  ${gender}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200  
-    Set Test Variable   ${mem_id1}   ${resp.json()}
+    ${resp}=  AddFamilyMemberByProvider  ${cid1}  ${mem_fname}  ${mem_lname}  ${dob}  ${gender}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${mem_id1}  ${resp.json()}
 
-    ${resp}=  ListFamilyMember
+    ${resp}=  ListFamilyMemberByProvider  ${cid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

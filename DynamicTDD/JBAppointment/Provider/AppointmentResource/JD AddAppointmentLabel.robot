@@ -18,13 +18,14 @@ ${digits}       0123456789
 &{Emptydict}
 
 *** Test Cases ***
+
 JD-TC-AddAppointmentLabel-1
+
     [Documentation]  Add label to appointment
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-
 
     ${resp}=    Get Business Profile
     Log  ${resp.json()}
@@ -44,7 +45,6 @@ JD-TC-AddAppointmentLabel-1
         Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
-
 
 # -------------------------------- Add a provider Consumer -----------------------------------
 
@@ -94,7 +94,7 @@ JD-TC-AddAppointmentLabel-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -214,7 +214,7 @@ JD-TC-AddAppointmentLabel-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -344,7 +344,7 @@ JD-TC-AddAppointmentLabel-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -468,7 +468,7 @@ JD-TC-AddAppointmentLabel-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -496,6 +496,7 @@ JD-TC-AddAppointmentLabel-4
     
     ${lid}=  Create Sample Location
 
+    sleep  1s
     ${resp}=  Get Location By Id   ${lid} 
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
@@ -617,7 +618,7 @@ JD-TC-AddAppointmentLabel-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -769,7 +770,7 @@ JD-TC-AddAppointmentLabel-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -869,7 +870,7 @@ JD-TC-AddAppointmentLabel-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -986,7 +987,7 @@ JD-TC-AddAppointmentLabel-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -1100,7 +1101,7 @@ JD-TC-AddAppointmentLabel-UH4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -1215,7 +1216,7 @@ JD-TC-AddAppointmentLabel-UH4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -1360,7 +1361,7 @@ JD-TC-AddAppointmentLabel-UH5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -1481,7 +1482,7 @@ JD-TC-AddAppointmentLabel-UH6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -1606,7 +1607,7 @@ JD-TC-AddAppointmentLabel-UH7
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -1724,7 +1725,7 @@ JD-TC-AddAppointmentLabel-UH8
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -1841,7 +1842,7 @@ JD-TC-AddAppointmentLabel-UH9
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 

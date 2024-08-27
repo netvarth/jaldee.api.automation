@@ -1671,6 +1671,8 @@ JD-TC-Take Appointment-15
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lid}=  Create Sample Location
+
+    sleep  1s
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2255,6 +2257,8 @@ JD-TC-Take Appointment-18
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lid}=  Create Sample Location
+
+    sleep  1s
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2862,6 +2866,7 @@ JD-TC-Take Appointment-22
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lid}=  Create Sample Location
+    sleep  1s
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200

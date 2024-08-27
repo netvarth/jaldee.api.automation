@@ -201,14 +201,14 @@ JD-TC-GetAppointmentToday-2
     # Set Suite Variable   ${multilocPro}
     
     # ${pro_len}=  Get Length   ${billable_providers}
-    # clear_service   ${PUSERNAME250}
-    # clear_location  ${PUSERNAME250}
-    clear_location_n_service  ${PUSERNAME250}
-    clear_customer   ${PUSERNAME250}
-    # clear_appt_schedule   ${PUSERNAME250}
-    ${pid}=  get_acc_id  ${PUSERNAME250}
+    # clear_service   ${PUSERNAME234}
+    # clear_location  ${PUSERNAME234}
+    clear_location_n_service  ${PUSERNAME234}
+    clear_customer   ${PUSERNAME234}
+    # clear_appt_schedule   ${PUSERNAME234}
+    ${pid}=  get_acc_id  ${PUSERNAME234}
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME234}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -359,7 +359,7 @@ JD-TC-GetAppointmentToday-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME234}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -374,14 +374,28 @@ JD-TC-GetAppointmentToday-3
     
     # Log   ${billable_providers}
     # ${pro_len}=  Get Length   ${billable_providers}
-    # clear_service   ${PUSERNAME250}
-    # clear_location  ${PUSERNAME250}
-    clear_location_n_service  ${PUSERNAME250}
-    ${pid}=  get_acc_id  ${PUSERNAME250}
+    # clear_service   ${PUSERNAME234}
+    # clear_location  ${PUSERNAME234}
+    clear_location_n_service  ${PUSERNAME234}
+    ${pid}=  get_acc_id  ${PUSERNAME234}
     # ${cid}=  get_id  ${PCPHONENO2}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME234}  ${PASSWORD}
     Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+    Set Test Variable  ${firstname}   ${decrypted_data['firstName']}
+    Set Test Variable  ${lastname}   ${decrypted_data['lastName']}
+
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+    Set Test Variable  ${email_id}  ${PUSERNAME234}.${P_EMAIL}.${test_mail}
+
+    ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
+    Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Service
@@ -400,22 +414,9 @@ JD-TC-GetAppointmentToday-3
     #     Should Be Equal As Strings  ${resp.status_code}  200
     # END
 
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
-        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    END
-
-    ${resp}=  Get jp finance settings    
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${lid}=  Create Sample Location
 
+    sleep  1s
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -432,11 +433,25 @@ JD-TC-GetAppointmentToday-3
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
 
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Auto Invoice Generation For Service   ${s_id}    ${toggle[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # clear_appt_schedule   ${PUSERNAME250}
+    # clear_appt_schedule   ${PUSERNAME234}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -511,7 +526,7 @@ JD-TC-GetAppointmentToday-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Encrypted Provider Login   ${PUSERNAME250}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME234}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -547,7 +562,7 @@ JD-TC-GetAppointmentToday-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME234}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -594,10 +609,6 @@ JD-TC-GetAppointmentToday-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -606,11 +617,19 @@ JD-TC-GetAppointmentToday-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    END
 
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
@@ -971,10 +990,6 @@ JD-TC-GetAppointmentToday-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -983,11 +998,19 @@ JD-TC-GetAppointmentToday-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    END
 
     ${s_id}=  Create Sample Service  ${SERVICE1}
     # clear_appt_schedule   ${PUSERNAME249}
@@ -1128,10 +1151,6 @@ JD-TC-GetAppointmentToday-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1140,11 +1159,19 @@ JD-TC-GetAppointmentToday-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    END
 
     ${s_id}=  Create Sample Service  ${SERVICE1}
     # clear_appt_schedule   ${PUSERNAME249}
@@ -2637,10 +2664,10 @@ JD-TC-GetAppointmentToday-17
     
     # Log   ${billable_providers}
     # ${pro_len}=  Get Length   ${billable_providers}
-    # clear_service   ${PUSERNAME250}
-    # clear_location  ${PUSERNAME250}
-    clear_location_n_service  ${PUSERNAME250}
-    ${pid}=  get_acc_id  ${PUSERNAME250}
+    # clear_service   ${PUSERNAME234}
+    # clear_location  ${PUSERNAME234}
+    clear_location_n_service  ${PUSERNAME234}
+    ${pid}=  get_acc_id  ${PUSERNAME234}
     
     # ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
     # Log   ${resp.json()}
@@ -2653,7 +2680,7 @@ JD-TC-GetAppointmentToday-17
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME234}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2673,23 +2700,40 @@ JD-TC-GetAppointmentToday-17
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${lid}=  Create Sample Location
-
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    END
 
     ${SERVICE1}=    FakerLibrary.Word
-    ${min_pre}=   Random Int   min=10   max=50
-    ${servicecharge}=   Random Int  min=100  max=200
-    ${s_id}=  Create Sample Service    ${SERVICE1}  
+    # ${min_pre}=   Random Int   min=10   max=50
+    # ${servicecharge}=   Random Int  min=100  max=200
+    # ${s_id}=  Create Sample Service    ${SERVICE1}  
+    ${description}=  FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=1   max=10
+    ${Total}=  Random Int   min=11   max=100
+    ${min_pre}=  Convert To Number  ${min_pre}  0
+    ${Total}=  Convert To Number  ${Total}  0
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${resp}=  Create Service  ${SERVICE1}  ${description}   ${srv_duration}  ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[0]}   maxBookingsAllowed=10
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Set Test Variable  ${s_id}  ${resp.json()}
 
     ${resp}=  Auto Invoice Generation For Service   ${s_id}    ${toggle[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # clear_appt_schedule   ${PUSERNAME250}
+    # clear_appt_schedule   ${PUSERNAME234}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -2701,14 +2745,14 @@ JD-TC-GetAppointmentToday-17
     ${bank_name}=  FakerLibrary.company
     ${name}=  FakerLibrary.name
     ${branch}=   db.get_place
-    ${resp}=   Update Account Payment Settings   ${bool[0]}  ${bool[0]}  ${bool[1]}  ${PUSERNAME250}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
+    ${resp}=   Update Account Payment Settings   ${bool[0]}  ${bool[0]}  ${bool[1]}  ${PUSERNAME234}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  payuVerify  ${pid}
     Log  ${resp}
 
-    ${resp}=   Update Account Payment Settings   ${bool[1]}  ${bool[0]}  ${bool[1]}  ${PUSERNAME250}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
+    ${resp}=   Update Account Payment Settings   ${bool[1]}  ${bool[0]}  ${bool[1]}  ${PUSERNAME234}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2747,11 +2791,16 @@ JD-TC-GetAppointmentToday-17
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  AddCustomer  ${PCPHONENO}  firstName=${fname1}   lastName=${lname1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}   ${resp.json()}
+    # ${resp}=  AddCustomer  ${PCPHONENO}  firstName=${fname1}   lastName=${lname1}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${cid}   ${resp.json()}
     
+    ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO1}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${cid}  ${resp.json()[0]['id']}
+
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
@@ -2772,7 +2821,7 @@ JD-TC-GetAppointmentToday-17
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO2}    ${account_id}  ${token2} 
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO1}    ${account_id1}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2783,7 +2832,7 @@ JD-TC-GetAppointmentToday-17
     # Set Test Variable  ${fname}   ${resp.json()['firstName']}
     # Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id1}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
@@ -2821,7 +2870,7 @@ JD-TC-GetAppointmentToday-17
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Encrypted Provider Login   ${PUSERNAME250}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME234}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2857,7 +2906,7 @@ JD-TC-GetAppointmentToday-17
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME234}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2885,10 +2934,10 @@ JD-TC-GetAppointmentToday-18
     
     Log   ${billable_providers}
     ${pro_len}=  Get Length   ${billable_providers}
-    # clear_service   ${PUSERNAME250}
-    # clear_location  ${PUSERNAME250}
-    clear_location_n_service  ${PUSERNAME250}
-    ${pid}=  get_acc_id  ${PUSERNAME250}
+    # clear_service   ${PUSERNAME234}
+    # clear_location  ${PUSERNAME234}
+    clear_location_n_service  ${PUSERNAME234}
+    ${pid}=  get_acc_id  ${PUSERNAME234}
     
     ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
     Log   ${resp.json()}
@@ -2901,7 +2950,7 @@ JD-TC-GetAppointmentToday-18
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME234}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2937,7 +2986,7 @@ JD-TC-GetAppointmentToday-18
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # clear_appt_schedule   ${PUSERNAME250}
+    # clear_appt_schedule   ${PUSERNAME234}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -2949,14 +2998,14 @@ JD-TC-GetAppointmentToday-18
     ${bank_name}=  FakerLibrary.company
     ${name}=  FakerLibrary.name
     ${branch}=   db.get_place
-    ${resp}=   Update Account Payment Settings   ${bool[0]}  ${bool[0]}  ${bool[1]}  ${PUSERNAME250}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
+    ${resp}=   Update Account Payment Settings   ${bool[0]}  ${bool[0]}  ${bool[1]}  ${PUSERNAME234}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  payuVerify  ${pid}
     Log  ${resp}
 
-    ${resp}=   Update Account Payment Settings   ${bool[1]}  ${bool[0]}  ${bool[1]}  ${PUSERNAME250}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
+    ${resp}=   Update Account Payment Settings   ${bool[1]}  ${bool[0]}  ${bool[1]}  ${PUSERNAME234}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3108,7 +3157,7 @@ JD-TC-GetAppointmentToday-18
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Encrypted Provider Login   ${PUSERNAME250}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME234}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3157,7 +3206,7 @@ JD-TC-GetAppointmentToday-18
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME234}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3191,7 +3240,7 @@ JD-TC-GetAppointmentToday-19
     
     Log   ${billable_providers}
     ${pro_len}=  Get Length   ${billable_providers}
-    ${pid}=  get_acc_id  ${PUSERNAME250}
+    ${pid}=  get_acc_id  ${PUSERNAME234}
     
     ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
     Log   ${resp.json()}
@@ -3215,7 +3264,7 @@ JD-TC-GetAppointmentToday-19
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME234}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3227,9 +3276,9 @@ JD-TC-GetAppointmentToday-19
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    # clear_service   ${PUSERNAME250}
-    # clear_location  ${PUSERNAME250}
-    clear_location_n_service  ${PUSERNAME250}
+    # clear_service   ${PUSERNAME234}
+    # clear_location  ${PUSERNAME234}
+    clear_location_n_service  ${PUSERNAME234}
     
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3270,7 +3319,7 @@ JD-TC-GetAppointmentToday-19
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    # clear_appt_schedule   ${PUSERNAME250}
+    # clear_appt_schedule   ${PUSERNAME234}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -3429,10 +3478,10 @@ JD-TC-GetAppointmentToday-20
     
     Log   ${billable_providers}
     ${pro_len}=  Get Length   ${billable_providers}
-    # clear_service   ${PUSERNAME250}
-    # clear_location  ${PUSERNAME250}
-    clear_location_n_service  ${PUSERNAME250}
-    ${pid}=  get_acc_id  ${PUSERNAME250}
+    # clear_service   ${PUSERNAME234}
+    # clear_location  ${PUSERNAME234}
+    clear_location_n_service  ${PUSERNAME234}
+    ${pid}=  get_acc_id  ${PUSERNAME234}
    
     ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
     Log   ${resp.json()}
@@ -3445,7 +3494,7 @@ JD-TC-GetAppointmentToday-20
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME234}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3481,7 +3530,7 @@ JD-TC-GetAppointmentToday-20
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # clear_appt_schedule   ${PUSERNAME250}
+    # clear_appt_schedule   ${PUSERNAME234}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -3493,14 +3542,14 @@ JD-TC-GetAppointmentToday-20
     ${bank_name}=  FakerLibrary.company
     ${name}=  FakerLibrary.name
     ${branch}=   db.get_place
-    ${resp}=   Update Account Payment Settings   ${bool[0]}  ${bool[0]}  ${bool[1]}  ${PUSERNAME250}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
+    ${resp}=   Update Account Payment Settings   ${bool[0]}  ${bool[0]}  ${bool[1]}  ${PUSERNAME234}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  payuVerify  ${pid}
     Log  ${resp}
 
-    ${resp}=   Update Account Payment Settings   ${bool[1]}  ${bool[0]}  ${bool[1]}  ${PUSERNAME250}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
+    ${resp}=   Update Account Payment Settings   ${bool[1]}  ${bool[0]}  ${bool[1]}  ${PUSERNAME234}   ${pan_num}  ${bank_ac}  ${bank_name}  ${ifsc_code}  ${name}  ${name}  ${branch}  ${businessFilingStatus[1]}  ${accountType[1]}   
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3652,7 +3701,7 @@ JD-TC-GetAppointmentToday-20
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Encrypted Provider Login   ${PUSERNAME250}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME234}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3706,7 +3755,7 @@ JD-TC-GetAppointmentToday-20
     # Should Be Equal As Strings  ${resp.json()[1]['accountId']}  ${pid}    
     # Should Be Equal As Strings  ${resp.json()[1]['paymentGateway']}  RAZORPAY
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME234}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
