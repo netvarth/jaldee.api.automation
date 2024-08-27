@@ -40,7 +40,7 @@ JD-TC-GetAppointmentToday-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${VarStatus} 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -229,7 +229,7 @@ JD-TC-GetAppointmentToday-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${VarStatus}  
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -581,7 +581,7 @@ JD-TC-GetAppointmentToday-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${VarStatus}  
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -955,7 +955,7 @@ JD-TC-GetAppointmentToday-6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${VarStatus}  
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -1116,7 +1116,7 @@ JD-TC-GetAppointmentToday-7
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${VarStatus}  
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -1276,7 +1276,7 @@ JD-TC-GetAppointmentToday-8
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${VarStatus}  
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -1428,7 +1428,7 @@ JD-TC-GetAppointmentToday-9
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${VarStatus}  
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -1594,7 +1594,7 @@ JD-TC-GetAppointmentToday-10
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${VarStatus}  
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -1735,7 +1735,7 @@ JD-TC-GetAppointmentToday-11
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${VarStatus}  
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -1876,7 +1876,7 @@ JD-TC-GetAppointmentToday-12
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${VarStatus}  
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -2025,7 +2025,7 @@ JD-TC-GetAppointmentToday-13
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${VarStatus}  
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -2196,7 +2196,7 @@ JD-TC-GetAppointmentToday-14
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${VarStatus}  
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -2349,7 +2349,7 @@ JD-TC-GetAppointmentToday-15
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${VarStatus}  
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -2524,7 +2524,7 @@ JD-TC-GetAppointmentToday-16
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${VarStatus}  
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -2669,7 +2669,7 @@ JD-TC-GetAppointmentToday-17
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${VarStatus}  
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -2917,7 +2917,7 @@ JD-TC-GetAppointmentToday-18
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${VarStatus}  
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -3223,7 +3223,7 @@ JD-TC-GetAppointmentToday-19
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${VarStatus}  
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -3461,7 +3461,7 @@ JD-TC-GetAppointmentToday-20
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${VarStatus}  
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -3796,7 +3796,7 @@ JD-TC-GetAppointmentToday-21
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${VarStatus}  
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -4017,7 +4017,7 @@ JD-TC-GetAppointmentToday-22
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${VarStatus}  
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -4205,7 +4205,7 @@ JD-TC-GetAppointmentToday-23
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${VarStatus}  
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -4425,7 +4425,7 @@ JD-TC-GetAppointmentToday-24
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${VarStatus}  
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -4635,7 +4635,7 @@ JD-TC-GetAppointmentToday-25
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${VarStatus}  
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -4836,7 +4836,7 @@ JD-TC-GetAppointmentToday-26
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${VarStatus}  
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -5046,7 +5046,7 @@ JD-TC-GetAppointmentToday-27
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${VarStatus}  
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -5247,7 +5247,7 @@ JD-TC-GetAppointmentToday-28
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${VarStatus}  
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -5703,7 +5703,7 @@ JD-TC-GetAppointmentToday-29
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${VarStatus}  
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 

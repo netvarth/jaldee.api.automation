@@ -43,9 +43,9 @@ JD-TC-RemoveMultipleAppointmentLabel-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -123,15 +123,6 @@ JD-TC-RemoveMultipleAppointmentLabel-1
     ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  email=${pc_emailid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
@@ -165,15 +156,6 @@ JD-TC-RemoveMultipleAppointmentLabel-1
     ${resp}=  AddCustomer  ${PCPHONENO1}    firstName=${fname1}   lastName=${lname1}  countryCode=${countryCodes[1]}  email=${pc_emailid2}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=    Send Otp For Login    ${PCPHONENO1}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO1}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token1}  ${resp.json()['token']}
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO1}  
     Log  ${resp.content}
@@ -294,9 +276,9 @@ JD-TC-RemoveMultipleAppointmentLabel-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -375,14 +357,6 @@ JD-TC-RemoveMultipleAppointmentLabel-2
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
@@ -403,15 +377,7 @@ JD-TC-RemoveMultipleAppointmentLabel-2
     ${resp}=  AddCustomer  ${PCPHONENO1}    firstName=${fname1}   lastName=${lname1}  countryCode=${countryCodes[1]}  email=${pc_emailid2}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=    Send Otp For Login    ${PCPHONENO1}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO1}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token1}  ${resp.json()['token']}
+   
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO1}  
     Log  ${resp.content}
@@ -510,9 +476,9 @@ JD-TC-RemoveMultipleAppointmentLabel-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -578,14 +544,6 @@ JD-TC-RemoveMultipleAppointmentLabel-3
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
@@ -656,9 +614,9 @@ JD-TC-RemoveMultipleAppointmentLabel-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -736,14 +694,6 @@ JD-TC-RemoveMultipleAppointmentLabel-4
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
@@ -824,9 +774,9 @@ JD-TC-RemoveMultipleAppointmentLabel-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -913,14 +863,6 @@ JD-TC-RemoveMultipleAppointmentLabel-5
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
@@ -941,15 +883,7 @@ JD-TC-RemoveMultipleAppointmentLabel-5
     ${resp}=  AddCustomer  ${PCPHONENO1}    firstName=${fname1}   lastName=${lname1}  countryCode=${countryCodes[1]}  email=${pc_emailid2}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=    Send Otp For Login    ${PCPHONENO1}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO1}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token1}  ${resp.json()['token']}
+   
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO1}  
     Log  ${resp.content}
@@ -1070,9 +1004,9 @@ JD-TC-RemoveMultipleAppointmentLabel-6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -1162,14 +1096,6 @@ JD-TC-RemoveMultipleAppointmentLabel-6
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
@@ -1190,15 +1116,7 @@ JD-TC-RemoveMultipleAppointmentLabel-6
     ${resp}=  AddCustomer  ${PCPHONENO1}    firstName=${fname1}   lastName=${lname1}  countryCode=${countryCodes[1]}  email=${pc_emailid2}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=    Send Otp For Login    ${PCPHONENO1}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO1}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token1}  ${resp.json()['token']}
+   
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO1}  
     Log  ${resp.content}
@@ -1296,9 +1214,9 @@ JD-TC-RemoveMultipleAppointmentLabel-7
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -1394,14 +1312,6 @@ JD-TC-RemoveMultipleAppointmentLabel-7
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
@@ -1422,15 +1332,7 @@ JD-TC-RemoveMultipleAppointmentLabel-7
     ${resp}=  AddCustomer  ${PCPHONENO1}    firstName=${fname1}   lastName=${lname1}  countryCode=${countryCodes[1]}  email=${pc_emailid2}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=    Send Otp For Login    ${PCPHONENO1}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO1}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token1}  ${resp.json()['token']}
+   
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO1}  
     Log  ${resp.content}
@@ -1524,9 +1426,9 @@ JD-TC-RemoveMultipleAppointmentLabel-8
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -1604,14 +1506,6 @@ JD-TC-RemoveMultipleAppointmentLabel-8
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
@@ -1632,15 +1526,7 @@ JD-TC-RemoveMultipleAppointmentLabel-8
     ${resp}=  AddCustomer  ${PCPHONENO1}    firstName=${fname1}   lastName=${lname1}  countryCode=${countryCodes[1]}  email=${pc_emailid2}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=    Send Otp For Login    ${PCPHONENO1}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO1}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token1}  ${resp.json()['token']}
+   
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO1}  
     Log  ${resp.content}
@@ -1734,9 +1620,9 @@ JD-TC-RemoveMultipleAppointmentLabel-9
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -1801,14 +1687,6 @@ JD-TC-RemoveMultipleAppointmentLabel-9
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
 
     #............provider consumer creation..........
 
@@ -1824,36 +1702,32 @@ JD-TC-RemoveMultipleAppointmentLabel-9
     ${resp}=  AddCustomer  ${PCPHONENO1}    firstName=${fname1}   lastName=${lname1}  countryCode=${countryCodes[1]}  email=${pc_emailid2}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=    Send Otp For Login    ${PCPHONENO1}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO1}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token1}  ${resp.json()['token']}
-
+   
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${resp}=  Get Appointment Schedules Consumer  ${account_id}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-   
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${account_id}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
         END
     END
     ${num_slots}=  Get Length  ${slots}
@@ -1878,22 +1752,27 @@ JD-TC-RemoveMultipleAppointmentLabel-9
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=    Send Otp For Login    ${PCPHONENO1}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${PCPHONENO1}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token1}  ${resp.json()['token']}
+
     ${resp}=    ProviderConsumer Login with token   ${PCPHONENO1}    ${account_id}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Get Appointment Schedules Consumer  ${account_id}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${account_id}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
         END
     END
     ${num_slots}=  Get Length  ${slots}
@@ -1985,9 +1864,9 @@ JD-TC-RemoveMultipleAppointmentLabel-10
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -2055,14 +1934,6 @@ JD-TC-RemoveMultipleAppointmentLabel-10
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
@@ -2083,15 +1954,7 @@ JD-TC-RemoveMultipleAppointmentLabel-10
     ${resp}=  AddCustomer  ${PCPHONENO1}    firstName=${fname1}   lastName=${lname1}  countryCode=${countryCodes[1]}  email=${pc_emailid2}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=    Send Otp For Login    ${PCPHONENO1}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO1}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token1}  ${resp.json()['token']}
+   
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO1}  
     Log  ${resp.content}
@@ -2189,9 +2052,9 @@ JD-TC-RemoveMultipleAppointmentLabel-11
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -2347,9 +2210,9 @@ JD-TC-RemoveMultipleAppointmentLabel-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -2422,14 +2285,6 @@ JD-TC-RemoveMultipleAppointmentLabel-UH1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
@@ -2450,15 +2305,7 @@ JD-TC-RemoveMultipleAppointmentLabel-UH1
     ${resp}=  AddCustomer  ${PCPHONENO1}    firstName=${fname1}   lastName=${lname1}  countryCode=${countryCodes[1]}  email=${pc_emailid2}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=    Send Otp For Login    ${PCPHONENO1}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO1}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token1}  ${resp.json()['token']}
+   
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO1}  
     Log  ${resp.content}
@@ -2561,9 +2408,9 @@ JD-TC-RemoveMultipleAppointmentLabel-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -2630,14 +2477,6 @@ JD-TC-RemoveMultipleAppointmentLabel-UH2
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
@@ -2658,15 +2497,7 @@ JD-TC-RemoveMultipleAppointmentLabel-UH2
     ${resp}=  AddCustomer  ${PCPHONENO1}    firstName=${fname1}   lastName=${lname1}  countryCode=${countryCodes[1]}  email=${pc_emailid2}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=    Send Otp For Login    ${PCPHONENO1}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO1}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token1}  ${resp.json()['token']}
+   
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO1}  
     Log  ${resp.content}
@@ -2781,9 +2612,9 @@ JD-TC-RemoveMultipleAppointmentLabel-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -2850,14 +2681,6 @@ JD-TC-RemoveMultipleAppointmentLabel-UH3
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
@@ -2878,15 +2701,7 @@ JD-TC-RemoveMultipleAppointmentLabel-UH3
     ${resp}=  AddCustomer  ${PCPHONENO1}    firstName=${fname1}   lastName=${lname1}  countryCode=${countryCodes[1]}  email=${pc_emailid2}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=    Send Otp For Login    ${PCPHONENO1}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO1}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token1}  ${resp.json()['token']}
+   
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO1}  
     Log  ${resp.content}
@@ -3080,6 +2895,11 @@ JD-TC-RemoveMultipleAppointmentLabel-UH5
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
+   
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
     ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -3088,10 +2908,6 @@ JD-TC-RemoveMultipleAppointmentLabel-UH5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
-   
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
     Log   ${resp.content}
@@ -3261,9 +3077,9 @@ JD-TC-RemoveMultipleAppointmentLabel-UH10
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -3330,14 +3146,6 @@ JD-TC-RemoveMultipleAppointmentLabel-UH10
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
@@ -3358,15 +3166,7 @@ JD-TC-RemoveMultipleAppointmentLabel-UH10
     ${resp}=  AddCustomer  ${PCPHONENO1}    firstName=${fname1}   lastName=${lname1}  countryCode=${countryCodes[1]}  email=${pc_emailid2}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=    Send Otp For Login    ${PCPHONENO1}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO1}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token1}  ${resp.json()['token']}
+   
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO1}  
     Log  ${resp.content}
@@ -3452,7 +3252,7 @@ JD-TC-RemoveMultipleAppointmentLabel-UH11
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
@@ -3511,14 +3311,6 @@ JD-TC-RemoveMultipleAppointmentLabel-UH11
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO}  
     Log  ${resp.content}
@@ -3539,15 +3331,7 @@ JD-TC-RemoveMultipleAppointmentLabel-UH11
     ${resp}=  AddCustomer  ${PCPHONENO1}    firstName=${fname1}   lastName=${lname1}  countryCode=${countryCodes[1]}  email=${pc_emailid2}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=    Send Otp For Login    ${PCPHONENO1}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${PCPHONENO1}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token1}  ${resp.json()['token']}
+   
 
     ${resp}=  GetCustomer  phoneNo-eq=${PCPHONENO1}  
     Log  ${resp.content}

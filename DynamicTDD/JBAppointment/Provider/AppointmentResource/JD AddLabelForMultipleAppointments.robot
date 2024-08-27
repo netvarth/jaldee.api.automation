@@ -132,9 +132,9 @@ JD-TC-AddMultipleAppointmentLabel-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -331,9 +331,9 @@ JD-TC-AddMultipleAppointmentLabel-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
     clear_service   ${PUSERNAME65}
     clear_Label  ${PUSERNAME65}
@@ -589,9 +589,9 @@ JD-TC-AddMultipleAppointmentLabel-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
 
     clear_service   ${PUSERNAME65}
@@ -697,9 +697,9 @@ JD-TC-AddMultipleAppointmentLabel-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
 
 
@@ -843,9 +843,9 @@ JD-TC-AddMultipleAppointmentLabel-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -1003,9 +1003,9 @@ JD-TC-AddMultipleAppointmentLabel-6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
 
     clear_service   ${PUSERNAME65}
@@ -1176,9 +1176,9 @@ JD-TC-AddMultipleAppointmentLabel-7
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
 
 
@@ -1324,9 +1324,9 @@ JD-TC-AddMultipleAppointmentLabel-8
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -1492,23 +1492,19 @@ JD-TC-AddMultipleAppointmentLabel-8
 JD-TC-AddMultipleAppointmentLabel-9
     [Documentation]  Add label to appointment taken from consumer side
 
-
-    
     ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
-
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
     clear_service   ${PUSERNAME65}
-
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1524,8 +1520,6 @@ JD-TC-AddMultipleAppointmentLabel-9
     ${resp}=  Get Label By Id  ${label_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    
 
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -1543,11 +1537,9 @@ JD-TC-AddMultipleAppointmentLabel-9
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
 
     ${resp}=  Provider Logout
     Log   ${resp.json()}
@@ -1557,19 +1549,14 @@ JD-TC-AddMultipleAppointmentLabel-9
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Get Appointment Schedules Consumer  ${accountId}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()[0]['id']}   ${sch_id}
-
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${accountId}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
         END
     END
     ${num_slots}=  Get Length  ${slots}
@@ -1590,7 +1577,6 @@ JD-TC-AddMultipleAppointmentLabel-9
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
     ${apptfor}=   db.apptfor  ${self}  ${slot1}  ${fname}  ${mem_id1}  ${slot2}  ${mem_fname}
 
     ${cnote}=   FakerLibrary.name
@@ -1605,12 +1591,9 @@ JD-TC-AddMultipleAppointmentLabel-9
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-
     ${resp}=   Get consumer Appointment By Id   ${accountId}  ${apptid2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-
-    
 
     ${resp}=  Consumer Logout
     Log   ${resp.json()}
@@ -1620,19 +1603,14 @@ JD-TC-AddMultipleAppointmentLabel-9
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${resp}=  Get Appointment Schedules Consumer  ${accountId}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${accountId}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
         END
     END
     ${num_slots}=  Get Length  ${slots}
@@ -1667,12 +1645,10 @@ JD-TC-AddMultipleAppointmentLabel-9
     ${resp}=   Get consumer Appointment By Id   ${accountId}  ${apptid3}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
- 
 
     ${resp}=   Get consumer Appointment By Id   ${accountId}  ${apptid4}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-
 
     ${resp}=  Consumer Logout
     Log   ${resp.json()}
@@ -1681,26 +1657,6 @@ JD-TC-AddMultipleAppointmentLabel-9
     ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
-
-    ${resp}=  Get Appointment EncodedID   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId1}=  Set Variable   ${resp.json()}
-
-    ${resp}=  Get Appointment EncodedID   ${apptid2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId2}=  Set Variable   ${resp.json()}
-
-    ${resp}=  Get Appointment EncodedID   ${apptid3}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId3}=  Set Variable   ${resp.json()}
-
-    ${resp}=  Get Appointment EncodedID   ${apptid4}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId4}=  Set Variable   ${resp.json()}
 
     ${resp}=  Get Label By Id  ${label_id}
     Log  ${resp.json()}
@@ -1738,17 +1694,13 @@ JD-TC-AddMultipleAppointmentLabel-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['label']}   ${label}
 
-
 JD-TC-AddMultipleAppointmentLabel-10
+
     [Documentation]  Add label to appointment with prepayment pending status
-
-
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
-
-
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -1759,9 +1711,9 @@ JD-TC-AddMultipleAppointmentLabel-10
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
 
 
@@ -1852,19 +1804,14 @@ JD-TC-AddMultipleAppointmentLabel-10
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${resp}=  Get Appointment Schedules Consumer  ${accountId}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-  
-
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${accountId}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
         END
     END
     ${num_slots}=  Get Length  ${slots}
@@ -1892,11 +1839,6 @@ JD-TC-AddMultipleAppointmentLabel-10
     ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
-
-    ${resp}=  Get Appointment EncodedID   ${apptid2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId2}=  Set Variable   ${resp.json()}
 
     ${resp}=  Get Label By Id  ${label_id}
     Log  ${resp.json()}
@@ -1933,7 +1875,6 @@ JD-TC-AddMultipleAppointmentLabel-11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1943,11 +1884,9 @@ JD-TC-AddMultipleAppointmentLabel-11
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
-
-
+    END
 
     clear_service   ${PUSERNAME65}
 
@@ -2004,16 +1943,9 @@ JD-TC-AddMultipleAppointmentLabel-11
           
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
-    ${resp}=  Get Appointment EncodedID   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId1}=  Set Variable   ${resp.json()}
-
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-
 
     ${apptfor1}=  Create Dictionary  id=${cid2}   apptTime=${slot2}
     ${apptfor}=   Create List  ${apptfor1}
@@ -2025,20 +1957,12 @@ JD-TC-AddMultipleAppointmentLabel-11
     
     ${apptid2}=  Get From Dictionary  ${resp.json()}  ${fname1}
 
-    ${resp}=  Get Appointment EncodedID   ${apptid2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId2}=  Set Variable   ${resp.json()}
-
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
     ${reason}=  Random Element  ${cancelReason}
-    ${msg}=   FakerLibrary.word
-    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=    Provider Cancel Appointment  ${apptid1}  ${reason}  ${msg}  
+    ${resp}=     Appointment Action    ${apptStatus[4]}   ${apptid1}   cancelReason=${reason}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2046,12 +1970,10 @@ JD-TC-AddMultipleAppointmentLabel-11
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    
     ${resp}=  Get Label By Id  ${label_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2073,17 +1995,14 @@ JD-TC-AddMultipleAppointmentLabel-11
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['label']}   ${label}
 
-
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['label']}   ${label}
 
-
 JD-TC-AddMultipleAppointmentLabel-12
+
     [Documentation]  Add label to rejected appointments
-
-
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
@@ -2098,9 +2017,9 @@ JD-TC-AddMultipleAppointmentLabel-12
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
 
 
@@ -2179,9 +2098,6 @@ JD-TC-AddMultipleAppointmentLabel-12
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
-
-
     ${apptfor1}=  Create Dictionary  id=${cid2}   apptTime=${slot2}
     ${apptfor}=   Create List  ${apptfor1}
     
@@ -2201,24 +2117,18 @@ JD-TC-AddMultipleAppointmentLabel-12
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
     ${reason}=  Random Element  ${cancelReason}
-    ${msg}=   FakerLibrary.word
-    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=    Reject Appointment  ${apptid1}  ${reason}  ${msg}  ${DAY1}
+    ${resp}=     Appointment Action   ${apptStatus[5]}   ${apptid1}  rejectReason=${reason}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
 
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    
     ${resp}=  Get Label By Id  ${label_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2239,46 +2149,37 @@ JD-TC-AddMultipleAppointmentLabel-12
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['label']}   ${label}
- 
 
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['label']}   ${label}
 
-
 JD-TC-AddMultipleAppointmentLabel-13
+
     [Documentation]  Add label to 15 appointments of one customer at a time
 
-   
     ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
-
-
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
-
-
+    END
 
     clear_service   ${PUSERNAME65}
-
 
     ${resp}=   Get Service
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -2411,9 +2312,9 @@ JD-TC-AddMultipleAppointmentLabel-14
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
 
 
@@ -2578,9 +2479,9 @@ JD-TC-AddMultipleAppointmentLabel-15
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
     clear_service   ${PUSERNAME65}
 
@@ -4016,9 +3917,9 @@ JD-TC-AddMultipleAppointmentLabel-UH13
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
+        ${resp}=   Update Appointment Status   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    END
 
 
 
@@ -4161,8 +4062,8 @@ JD-TC-AddMultipleAppointmentLabel-UH13
 
 
 JD-TC-AddMultipleAppointmentLabel-UH14
+
     [Documentation]  Add label to waitlists
-    
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
@@ -4172,10 +4073,9 @@ JD-TC-AddMultipleAppointmentLabel-UH14
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
 
     clear_service   ${PUSERNAME65}
 
@@ -4199,7 +4099,6 @@ JD-TC-AddMultipleAppointmentLabel-UH14
         Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    
     ${label_id}=  Create Sample Label
 
     ${resp}=  Get Label By Id  ${label_id}
@@ -4240,8 +4139,6 @@ JD-TC-AddMultipleAppointmentLabel-UH14
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
-
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid2}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}
     Log   ${resp.json()}
@@ -4257,7 +4154,6 @@ JD-TC-AddMultipleAppointmentLabel-UH14
     ${resp}=  Get Waitlist By Id  ${wid2} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
 
     ${resp}=  Get Label By Id  ${label_id}
     Log  ${resp.json()}
