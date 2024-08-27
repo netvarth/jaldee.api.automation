@@ -1185,10 +1185,10 @@ MultiLocation Domain Providers
         ${status} 	${value} = 	Run Keyword And Ignore Error  List Should Contain Value  ${dom_list}  ${domain}
         Log Many  ${status} 	${value}
         Run Keyword If  '${status}' == 'PASS'   Append To List   ${multiloc_providers}  ${PUSERNAME${a}}
-        ${resp}=  View Waitlist Settings
+        ${resp}=  Get Waitlist Settings
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
-	    ${resp}=  View Waitlist Settings
+	    ${resp}=  Get Waitlist Settings
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         IF  ${resp.json()['filterByDept']}==${bool[1]}
