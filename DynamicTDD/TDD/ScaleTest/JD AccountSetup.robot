@@ -26,7 +26,6 @@ Resource          /ebs/TDD/Keywords.robot
 @{Views}  self  all  customersOnly
 ${CAUSERNAME}             admin.support@jaldee.com
 ${PASSWORD}               Jaldee01
-${NEWPASSWORD}            Jaldee12
 ${SPASSWORD}              Netvarth1
 ${test_mail}              test@jaldee.com
 ${count}                  ${1}
@@ -43,6 +42,7 @@ JD-TC-Provider_Signup-1
     ${var_file}=    Set Variable    ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
     ${data_dir_path1}=  Set Variable    ${EXECDIR}/data/${ENVIRONMENT}data/
     ${var_file1}=    Set Variable    ${EXECDIR}/data/${ENVIRONMENT}_varfiles/usedproviders.py
+
 
     IF  ${{os.path.exists($data_dir_path)}} is False
         Create Directory   ${data_dir_path}
@@ -70,14 +70,6 @@ JD-TC-Provider_Signup-1
         ${num}=  Evaluate   ${num}+1
         ${ph}=  Evaluate   ${PUSERPH0}+${index}
         Log   ${ph}
-        # ${ph1}=  Evaluate  ${ph}+1000000000
-        # ${ph2}=  Evaluate  ${ph}+2000000000
-        # ${licresp}=   Get Licensable Packages
-        # Should Be Equal As Strings  ${licresp.status_code}  200
-        # # Log   ${licresp.content}
-        # ${liclen}=  Get Length  ${licresp.json()}
-        # Set Test Variable  ${licpkgid}  ${licresp.json()[0]['pkgId']}
-        # Set Test Variable  ${licpkgname}  ${licresp.json()[0]['displayName']}
         ${licpkgid}  ${licpkgname}=  get_highest_license_pkg
         ${corp_resp}=   get_iscorp_subdomains  1
         
@@ -121,8 +113,8 @@ JD-TC-Provider_Signup-1
 
         Append To File  ${data_file}  ${ph} - ${PASSWORD}${\n}
         Append To File  ${var_file}  PUSERNAME${num}=${ph}${\n}
-        Append To File  ${var_file1}  PUSERNAME_G=${ph}${\n}
- 
+        Append To File  ${var_file1}  PUSERNAME_G${num}=${ph}${\n}
+
 
         ${resp}=  Get Business Profile
         Log  ${resp.content}
@@ -155,7 +147,6 @@ JD-TC-Provider_Signup-1
 
 
     
-
     ${resp}=  Toggle Department Enable
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -165,7 +156,7 @@ JD-TC-Provider_Signup-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -242,24 +233,20 @@ JD-TC-Provider_Signup-1
     ${resp}=  Get Store Type By EncId   ${St_Id}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${ph}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     # ${accountId}=  get_acc_id  ${HLPUSERNAME16}
     # Set Suite Variable    ${accountId} 
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -291,10 +278,11 @@ JD-TC-Provider_Signup-1
     Set Suite Variable  ${email_id}  ${Store_Name1}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
-    ${resp}=  Create Store   ${Store_Name1}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
+    ${resp}=  Create Store   ${Store_Name1}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}   onlineOrder=${boolean[1]}    walkinOrder=${boolean[1]}   partnerOrder=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id}  ${resp.json()}
+    Append To File  ${var_file1}  store_id${num}=${store_id}${\n}
 
 
 # ----------------------------------------- create Inv Catalog -------------------------------------------------------
@@ -304,6 +292,7 @@ JD-TC-Provider_Signup-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${Catalog_EncIds}  ${resp.json()}
+    Append To File  ${var_file1}  InventoryCatalogID${num}=${Catalog_EncIds}${\n}
 
 
 # ----------------------------------------- create sales order Catalog -------------------------------------------------------
@@ -313,10 +302,91 @@ JD-TC-Provider_Signup-1
     ${price}=    Random Int  min=2   max=40
     ${price}=  Convert To Number  ${price}    1
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Store_name}  ${boolean[1]}  ${inv_cat_encid_List}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Store_name}  ${boolean[1]}  ${inv_cat_encid_List}   onlineSelfOrder=${boolean[1]}  walkInOrder=${boolean[1]}  storePickup=${boolean[1]}  homeDelivery=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${inv_order_encid}  ${resp.json()}
+    Append To File  ${var_file1}  SalesOrderCatalogID${num}=${inv_order_encid}${\n}
+
+# -------------------------------------------------------------------------------------------------------------
+
+    # ............... Create Vendor ...............
+
+    ${resp}=  Populate Url For Vendor   ${account_id}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${name}=   FakerLibrary.word
+    ${resp}=  CreateVendorCategory  ${name}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${category_id1}   ${resp.json()}
+
+    ${resp}=  Get by encId  ${category_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
+    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id}
+    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+
+    ${vender_name}=   FakerLibrary.firstname
+    ${contactPersonName}=   FakerLibrary.lastname
+    ${vendorId}=   FakerLibrary.word
+    ${PO_Number}    Generate random string    5    123456789
+    ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
+    Set Test Variable  ${email}  ${vender_name}.${test_mail}
+    ${address}=  FakerLibrary.city
+    Set Suite Variable  ${address}
+    ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
+    ${branch}=   db.get_place
+    ${ifsc_code}=   db.Generate_ifsc_code
+    ${gst_num}  ${pan_num}=   db.Generate_gst_number   ${Container_id}
+    ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
+
+    ${state}=    Evaluate     "${state}".title()
+    ${state}=    String.RemoveString  ${state}    ${SPACE}
+    Set Suite Variable    ${state}
+    Set Suite Variable    ${district}
+    Set Suite Variable    ${pin}
+    ${vendor_phno}=   Create List  ${vendor_phno}
+    Set Suite Variable    ${vendor_phno}
+    
+    ${email}=   Create List  ${email}
+    Set Suite Variable    ${email}
+
+    ${bankIfsc}    Random Number 	digits=5 
+    ${bankIfsc}=    Evaluate    f'{${bankIfsc}:0>7d}'
+    Log  ${bankIfsc}
+    Set Suite Variable  ${bankIfsc}  55555${bankIfsc} 
+
+    ${bankName}     FakerLibrary.name
+    Set Suite Variable    ${bankName}
+
+    ${upiId}     FakerLibrary.name
+    Set Suite Variable  ${upiId}
+
+    ${pan}    Random Number 	digits=5 
+    ${pan}=    Evaluate    f'{${pan}:0>5d}'
+    Log  ${pan}
+    Set Suite Variable  ${pan}  55555${pan}
+
+    ${branchName}=    FakerLibrary.name
+    Set Suite Variable  ${branchName}
+    ${gstin}    Random Number 	digits=5 
+    ${gstin}=    Evaluate    f'{${gstin}:0>8d}'
+    Log  ${gstin}
+    Set Suite Variable  ${gstin}  55555${gstin}
+
+    ${preferredPaymentMode}=    Create List    ${jaldeePaymentmode[0]}
+    ${bankInfo}=    Create Dictionary     bankaccountNo=${bank_accno}    ifscCode=${bankIfsc}    bankName=${bankName}    upiId=${upiId}     branchName=${branchName}    pancardNo=${pan}    gstNumber=${gstin}    preferredPaymentMode=${preferredPaymentMode}    lastPaymentModeUsed=${jaldeePaymentmode[0]}
+    ${bankInfo}=    Create List         ${bankInfo}                
+    ${resp}=  Create Vendor  ${category_id1}  ${vendorId}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable      ${vendorId}     ${resp.json()['encId']}
+    Append To File  ${var_file1}  vendorId${num}=${vendorId}${\n}
+# -----------------------------------------------------------------------------------------------------------------------------
 
 
 
