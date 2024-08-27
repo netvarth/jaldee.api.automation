@@ -17083,12 +17083,16 @@ Get Crm Lead
 
 Get Crm Lead By Filter  
 
+    [Arguments]  &{param}
+
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/crm/lead   params=${param}   expected_status=any
     Check Deprication  ${resp}  Get Crm Lead By Filter
     RETURN  ${resp}
 
 Get Crm Lead Count By Filter  
+
+    [Arguments]  &{param}
 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/crm/lead/count   params=${param}   expected_status=any
