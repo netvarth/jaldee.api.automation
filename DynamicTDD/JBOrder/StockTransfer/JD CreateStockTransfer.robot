@@ -498,6 +498,36 @@ JD-TC-Create Stock Transfer-UH3
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  ${resp.json()}    ${INVALID_X} 
 
+JD-TC-Create Stock Transfer-UH10
+    [Documentation]    create stock transfer-(souce catalog is empty)
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${sourceInvCatalogItem}=  Create Dictionary  encId=${ic_Item_id}  
+    ${list}=  Create Dictionary  sourceInvCatalogItem=${sourceInvCatalogItem}    transferQuantity=50
+    ${items}=  Create List  ${list}
+    # ${INVALID_X}=  format String   ${INVALID_X}   Items
+    ${resp}=  Create Stock Transfer   ${DAY1}  ${store_id}    ${store_id2}  ${EMPTY}     ${Catalog_EncIds2}  items=${items}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    # Should Be Equal As Strings  ${resp.json()}    ${INVALID_X} 
+
+JD-TC-Create Stock Transfer-UH11
+    [Documentation]    create stock transfer-(destination catalog is empty)
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${sourceInvCatalogItem}=  Create Dictionary  encId=${ic_Item_id}  
+    ${list}=  Create Dictionary  sourceInvCatalogItem=${sourceInvCatalogItem}    transferQuantity=50
+    ${items}=  Create List  ${list}
+    # ${INVALID_X}=  format String   ${INVALID_X}   Items
+    ${resp}=  Create Stock Transfer   ${DAY1}  ${store_id}    ${store_id2}  ${Catalog_EncIds}     ${EMPTY}  items=${items}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    # Should Be Equal As Strings  ${resp.json()}    ${INVALID_X} 
+
 JD-TC-Create Stock Transfer-2
     [Documentation]    create stock transfer-(Batch enabled,Item is not in destination)
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
