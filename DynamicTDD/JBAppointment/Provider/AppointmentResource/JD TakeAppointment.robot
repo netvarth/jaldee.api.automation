@@ -3108,7 +3108,7 @@ JD-TC-Take Appointment-23
     ${resp}=  Consumer Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-*** comments ***
+
 
 JD-TC-Take Appointment-24
     [Documentation]  Provider takes appointment for jaldee consumer and family member when onlinePresence and walkinConsumerBecomesJdCons is enabled and checks it in consumer side
