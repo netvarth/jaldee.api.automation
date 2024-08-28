@@ -6508,6 +6508,7 @@ Get License UsageInfo
 
 
 Get Monthly Schedule Availability by Location and Service
+    #.....in hold
     [Arguments]  ${Location_id}   ${Service_id}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/appointment/availability/location/${Location_id}/service/${Service_id}   expected_status=any
