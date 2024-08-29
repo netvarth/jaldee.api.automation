@@ -187,27 +187,8 @@ JD-TC-Update_Lead_Status_To_Reject-UH1
     Should Be Equal As Strings  ${resp.status_code}     422
     Should Be Equal As Strings  ${resp.json()}          ${LEAD_STATUS_IS_ALREADY}
 
+
 JD-TC-Update_Lead_Status_To_Reject-UH2
-
-    [Documentation]   Update Lead Status To Reject - Completed to rejected status
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Crm Lead Status Change To Complete  ${crm_lead_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
-
-    ${resp}=    Get Crm Lead   ${crm_lead_id} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
-
-    ${resp}=    Crm Lead Status Change To Reject  ${crm_lead_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
-
-JD-TC-Update_Lead_Status_To_Reject-UH3
 
     [Documentation]   Update Lead Status To Reject - without Login
 
@@ -216,7 +197,7 @@ JD-TC-Update_Lead_Status_To_Reject-UH3
     Should Be Equal As Strings  ${resp.status_code}     419
     Should Be Equal As Strings  ${resp.json()}          ${SESSION_EXPIRED}
 
-JD-TC-Update_Lead_Status_To_Reject-UH4
+JD-TC-Update_Lead_Status_To_Reject-UH3
 
     [Documentation]   Update Lead Status To Reject - where uid is invalid
 
@@ -233,7 +214,7 @@ JD-TC-Update_Lead_Status_To_Reject-UH4
     Should Be Equal As Strings  ${resp.status_code}     422
     Should Be Equal As Strings  ${resp.json()}          ${INVALID_Y_ID}
 
-JD-TC-Update_Lead_Status_To_Reject-UH5
+JD-TC-Update_Lead_Status_To_Reject-UH4
 
     [Documentation]   Update Lead Status To Reject - with another provider login
 

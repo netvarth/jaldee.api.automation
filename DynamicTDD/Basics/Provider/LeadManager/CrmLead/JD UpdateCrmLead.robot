@@ -17,15 +17,16 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 
 *** Variables ***
+
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
 ${fileSize}     0.00458
 ${order}        0
 
 *** Test Cases ***
 
-JD-TC-Update_Crm_Lead-1
+JD-TC-Update_Lead-1
 
-    [Documentation]   Update Crm Lead 
+    [Documentation]   Update lead - updating same firstname and lastname
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Log  ${resp.json()}
@@ -34,6 +35,21 @@ JD-TC-Update_Crm_Lead-1
     Log  ${decrypted_data}
     Set Suite Variable      ${pid}          ${decrypted_data['id']}
     Set Suite Variable      ${pdrname}      ${decrypted_data['userName']}
+
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    ${parking}   Random Element   ${parkingType}
+    ${24hours}    Random Element    ['True','False']
+    ${desc}=   FakerLibrary.sentence
+    ${url}=   FakerLibrary.url
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    Set Suite Variable   ${sTime}
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    Set Suite Variable   ${eTime}
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1} 
 
     ${resp}=    Get Business Profile
     Log  ${resp.json()}
@@ -59,8 +75,8 @@ JD-TC-Update_Crm_Lead-1
     Set Suite Variable      ${lid}      ${resp.json()[0]['id']}
     Set Suite Variable      ${place}    ${resp.json()[0]['place']}
 
-    ${lid}=     Create Dictionary  id=${lid}
-    ${loc_id}=  Create List   ${lid}
+    ${locid}=     Create Dictionary  id=${lid}
+    ${loc_id}=  Create List   ${locid}
 
     ${typeName1}=    FakerLibrary.Name
     Set Suite Variable      ${typeName1}
@@ -120,31 +136,192 @@ JD-TC-Update_Crm_Lead-1
     ${resp}=    Create Lead Consumer  ${firstName_n}  ${lastName_n}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test variable   ${con_id}   ${resp.json()}
+    Set Suite variable   ${con_id}   ${resp.json()}
 
     ${resp}=    Get Lead Consumer  ${con_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}             200
 
-    ${resp}=    Create Crm Lead  ${clid}  ${firstName_n}  ${con_id}  ${lastName_n}  ${pid}  
+    ${resp}=    Create Crm Lead  ${clid}  ${pid}  ${lid}  consumerUid=${con_id}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
-    Set Test variable           ${crm_lead_id}          ${resp.json()}
+    Set Suite variable           ${crm_lead_id}          ${resp.json()}
 
     ${resp}=    Get Crm Lead   ${crm_lead_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
+    Should Be Equal As Strings  ${resp.json()['uid']}                ${crm_lead_id}
+    Should Be Equal As Strings  ${resp.json()['productEnum']}        ${productEnum[0]}
+    Should Be Equal As Strings  ${resp.json()['productName']}        ${typeName1}
+    Should Be Equal As Strings  ${resp.json()['productUid']}         ${lpid}
+    Should Be Equal As Strings  ${resp.json()['channelType']}        ${leadchannel[0]}
+    Should Be Equal As Strings  ${resp.json()['channelName']}        ${ChannelName1}
+    Should Be Equal As Strings  ${resp.json()['channelUid']}         ${clid}
+    Should Be Equal As Strings  ${resp.json()['consumerFirstName']}  ${firstName_n}
+    Should Be Equal As Strings  ${resp.json()['consumerLastName']}   ${lastName_n}
+    Should Be Equal As Strings  ${resp.json()['internalStatus']}     ${status[0]}
+    Should Be Equal As Strings  ${resp.json()['ownerId']}            ${pid}
+    Should Be Equal As Strings  ${resp.json()['ownerName']}          ${pdrname}
+    Should Be Equal As Strings  ${resp.json()['createdBy']}          ${pid}
+    Should Be Equal As Strings  ${resp.json()['createdByName']}      ${pdrname}
+    Should Be Equal As Strings  ${resp.json()['createdDate']}        ${DAY1}
 
-    ${resp}=    Get Crm Lead By Filter
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
-
-    ${productName}=     FakerLibrary.firstName
-
-    ${resp}=    Update Crm Lead  ${crm_lead_id}  productName=${productName}
+    ${resp}=    Update Crm Lead  ${crm_lead_id}  ${firstName_n}  ${lastName_n}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
     ${resp}=    Get Crm Lead   ${crm_lead_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
+    Should Be Equal As Strings  ${resp.json()['uid']}                ${crm_lead_id}
+    Should Be Equal As Strings  ${resp.json()['productEnum']}        ${productEnum[0]}
+    Should Be Equal As Strings  ${resp.json()['productName']}        ${typeName1}
+    Should Be Equal As Strings  ${resp.json()['productUid']}         ${lpid}
+    Should Be Equal As Strings  ${resp.json()['channelType']}        ${leadchannel[0]}
+    Should Be Equal As Strings  ${resp.json()['channelName']}        ${ChannelName1}
+    Should Be Equal As Strings  ${resp.json()['channelUid']}         ${clid}
+    Should Be Equal As Strings  ${resp.json()['consumerFirstName']}  ${firstName_n}
+    Should Be Equal As Strings  ${resp.json()['consumerLastName']}   ${lastName_n}
+    Should Be Equal As Strings  ${resp.json()['internalStatus']}     ${status[0]}
+    Should Be Equal As Strings  ${resp.json()['ownerId']}            ${pid}
+    Should Be Equal As Strings  ${resp.json()['ownerName']}          ${pdrname}
+    Should Be Equal As Strings  ${resp.json()['createdBy']}          ${pid}
+    Should Be Equal As Strings  ${resp.json()['createdByName']}      ${pdrname}
+    Should Be Equal As Strings  ${resp.json()['createdDate']}        ${DAY1}
+
+JD-TC-Update_Lead-2
+
+    [Documentation]   Update lead - update firstname
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${firstName2}=   FakerLibrary.firstName
+
+    ${resp}=    Update Crm Lead  ${crm_lead_id}  ${firstName2}  ${lastName_n} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}     200
+
+    ${resp}=    Get Crm Lead   ${crm_lead_id} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}     200
+    Should Be Equal As Strings  ${resp.json()['uid']}                ${crm_lead_id}
+    Should Be Equal As Strings  ${resp.json()['productEnum']}        ${productEnum[0]}
+    Should Be Equal As Strings  ${resp.json()['productName']}        ${typeName1}
+    Should Be Equal As Strings  ${resp.json()['productUid']}         ${lpid}
+    Should Be Equal As Strings  ${resp.json()['channelType']}        ${leadchannel[0]}
+    Should Be Equal As Strings  ${resp.json()['channelName']}        ${ChannelName1}
+    Should Be Equal As Strings  ${resp.json()['channelUid']}         ${clid}
+    Should Be Equal As Strings  ${resp.json()['consumerFirstName']}  ${firstName2}
+    Should Be Equal As Strings  ${resp.json()['consumerLastName']}   ${lastName_n}
+    Should Be Equal As Strings  ${resp.json()['internalStatus']}     ${status[0]}
+    Should Be Equal As Strings  ${resp.json()['ownerId']}            ${pid}
+    Should Be Equal As Strings  ${resp.json()['ownerName']}          ${pdrname}
+    Should Be Equal As Strings  ${resp.json()['createdBy']}          ${pid}
+    Should Be Equal As Strings  ${resp.json()['createdByName']}      ${pdrname}
+    Should Be Equal As Strings  ${resp.json()['createdDate']}        ${DAY1}
+
+JD-TC-Update_Lead-3
+
+    [Documentation]   Update lead - update lastname
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${lastName2}=   FakerLibrary.firstName
+
+    ${resp}=    Update Crm Lead  ${crm_lead_id}  ${firstName_n}  ${lastName2} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}     200
+
+    ${resp}=    Get Crm Lead   ${crm_lead_id} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}     200
+    Should Be Equal As Strings  ${resp.json()['uid']}                ${crm_lead_id}
+    Should Be Equal As Strings  ${resp.json()['productEnum']}        ${productEnum[0]}
+    Should Be Equal As Strings  ${resp.json()['productName']}        ${typeName1}
+    Should Be Equal As Strings  ${resp.json()['productUid']}         ${lpid}
+    Should Be Equal As Strings  ${resp.json()['channelType']}        ${leadchannel[0]}
+    Should Be Equal As Strings  ${resp.json()['channelName']}        ${ChannelName1}
+    Should Be Equal As Strings  ${resp.json()['channelUid']}         ${clid}
+    Should Be Equal As Strings  ${resp.json()['consumerFirstName']}  ${firstName_n}
+    Should Be Equal As Strings  ${resp.json()['consumerLastName']}   ${lastName2}
+    Should Be Equal As Strings  ${resp.json()['internalStatus']}     ${status[0]}
+    Should Be Equal As Strings  ${resp.json()['ownerId']}            ${pid}
+    Should Be Equal As Strings  ${resp.json()['ownerName']}          ${pdrname}
+    Should Be Equal As Strings  ${resp.json()['createdBy']}          ${pid}
+    Should Be Equal As Strings  ${resp.json()['createdByName']}      ${pdrname}
+    Should Be Equal As Strings  ${resp.json()['createdDate']}        ${DAY1}
+
+JD-TC-Update_Lead-UH1
+
+    [Documentation]   Update lead - firstname is empty
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${FIELD_CANT_BE_EMPTY}=   Replace String  ${FIELD_CANT_BE_EMPTY}  {}   first name
+
+    ${resp}=    Update Crm Lead  ${crm_lead_id}  ${NULL}  ${lastName_n} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}     422
+    Should Be Equal As Strings  ${resp.json()}          ${FIELD_CANT_BE_EMPTY}
+
+JD-TC-Update_Lead-UH2
+
+    [Documentation]   Update lead - lastname is empty
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${FIELD_CANT_BE_EMPTY}=   Replace String  ${FIELD_CANT_BE_EMPTY}  {}   last name
+
+    ${resp}=    Update Crm Lead  ${crm_lead_id}  ${firstName_n}  ${NULL} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}     422
+    Should Be Equal As Strings  ${resp.json()}          ${FIELD_CANT_BE_EMPTY}
+
+JD-TC-Update_Lead-UH3
+
+    [Documentation]   Update lead - firstname and lastname is empty
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${FIELD_CANT_BE_EMPTY}=   Replace String  ${FIELD_CANT_BE_EMPTY}  {}   first name
+
+    ${resp}=    Update Crm Lead  ${crm_lead_id}  ${NULL}  ${NULL} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}     422
+    Should Be Equal As Strings  ${resp.json()}          ${FIELD_CANT_BE_EMPTY}
+
+JD-TC-Update_Lead-UH4
+
+    [Documentation]   Update lead - uid is invalid
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=111  max=999
+
+    ${INVALID_Y_ID}=   Replace String  ${INVALID_Y_ID}  {}   Lead
+
+    ${resp}=    Update Crm Lead  ${inv}  ${firstName_n}  ${lastName_n} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}     422
+    Should Be Equal As Strings  ${resp.json()}          ${INVALID_Y_ID}
+
+JD-TC-Update_Lead-UH5
+
+    [Documentation]   Update lead - without login
+
+    ${resp}=    Update Crm Lead  ${crm_lead_id}  ${firstName_n}  ${lastName_n} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}     419
+    Should Be Equal As Strings  ${resp.json()}          ${SESSION_EXPIRED}

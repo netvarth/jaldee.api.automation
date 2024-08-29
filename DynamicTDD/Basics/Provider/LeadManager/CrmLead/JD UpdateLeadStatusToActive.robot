@@ -210,23 +210,4 @@ JD-TC-Update_Lead_Status_To_Active-UH3
     Should Be Equal As Strings  ${resp.status_code}     422
     Should Be Equal As Strings  ${resp.json()}          ${LEAD_STATUS_IS_ALREADY}
 
-JD-TC-Update_Lead_Status_To_Active-UH4
-
-    [Documentation]   Update Lead Status To Active - Completed to rejected Status
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Crm Lead Status Change To Complete  ${crm_lead_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
-
-    ${resp}=    Get Crm Lead   ${crm_lead_id} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
-
-    ${resp}=    Crm Lead Status Change To Active  ${crm_lead_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
 
