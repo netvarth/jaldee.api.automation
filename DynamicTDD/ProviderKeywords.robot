@@ -6579,7 +6579,7 @@ Get MedicalRecords
     Check Deprication  ${resp}  Get MedicalRecords
     RETURN  ${resp}
 
-Get Appointment Messages
+Get YnwConf Appointment Messages
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/ynwConf/appointment/messages  expected_status=any
     Check Deprication  ${resp}  Get Appointment Messages
