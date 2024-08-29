@@ -11,8 +11,10 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 
 *** Test Cases ***
+
 JD-TC-GetWaitlistCountToday-1   
       [Documentation]   View Waitlist by Provider login
 
@@ -162,6 +164,73 @@ JD-TC-GetWaitlistCountToday-1
       ${resp}=  Get Waitlist Count Today
       Should Be Equal As Strings  ${resp.status_code}  200
       Should Be Equal As Integers  ${resp.json()}  4
+
+JD-TC-GetWaitlistCountToday-58
+      [Documentation]   Get waitlist count today location-eq=${lid1} from=0  count=10
+
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${resp}=  AddCustomer  ${CUSERNAME3}    
+      # ...    firstName=${cname2}  
+      # ...      lastName=${lname2}
+      Log   ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable  ${cid}  ${resp.json()}
+
+      ${resp}=  GetCustomer ById  ${cid}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable  ${j_id}  ${resp.json()['jaldeeId']}
+
+      ${resp}=   Create Sample Location
+      Set Suite Variable    ${lid1}    ${resp}  
+      ${ser_name4}=   FakerLibrary.word
+      Set Suite Variable    ${ser_name4} 
+      ${resp}=   Create Sample Service  ${ser_name4}
+      Set Suite Variable    ${ser_id4}    ${resp}  
+      ${ser_name5}=   FakerLibrary.word
+      Set Suite Variable    ${ser_name5} 
+      ${resp}=   Create Sample Service  ${ser_name5}
+      Set Suite Variable    ${ser_id5}    ${resp}  
+      ${q_name1}=    FakerLibrary.name
+      Set Suite Variable    ${q_name1}  
+      ${resp}=  Create Queue    ${q_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}   ${lid1}  ${ser_id4}  ${ser_id5} 
+      Log   ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${qid2}   ${resp.json()} 
+      ${resp}=  Add To Waitlist  ${cid}  ${ser_id4}  ${qid2}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      ${wid}=  Get Dictionary Values  ${resp.json()}
+      Set Suite Variable  ${waitlist_id5}  ${wid[0]}
+      ${tid}=  Get Dictionary Keys  ${resp.json()}
+      Set Suite Variable  ${token_id5}  ${tid[0]}
+
+      ${resp}=  AddCustomer  ${CUSERNAME2}
+      Log   ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable  ${cid1}  ${resp.json()}
+
+      ${resp}=  Add To Waitlist  ${cid1}  ${ser_id5}  ${qid2}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      ${wid}=  Get Dictionary Values  ${resp.json()}
+      Set Suite Variable  ${waitlist_id6}  ${wid[0]}
+
+      ${resp}=  AddCustomer  ${CUSERNAME4}
+      Log   ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable  ${cid2}  ${resp.json()}
+
+      ${resp}=  Add To Waitlist  ${cid2}  ${ser_id5}  ${qid2}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      ${wid}=  Get Dictionary Values  ${resp.json()}
+      Set Suite Variable  ${waitlist_id7}  ${wid[0]}
+      ${tid}=  Get Dictionary Keys  ${resp.json()}
+      Set Suite Variable  ${token_id7}  ${tid[0]}
+      ${resp}=  Get Waitlist Count Today  location-eq=${lid1}  from=0  count=10
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Should Be Equal As Integers  ${resp.json()}  3
+*** Comments ***
 
 JD-TC-GetWaitlistCountToday-2
       [Documentation]   View Waitlist after cancel
@@ -711,10 +780,17 @@ JD-TC-GetWaitlistCountToday-58
       ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${resp}=  AddCustomer  ${CUSERNAME3}
+      ${resp}=  AddCustomer  ${CUSERNAME3}    
+      # ...    firstName=${cname2}  
+      # ...      lastName=${lname2}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${cid}  ${resp.json()}
+
+      ${resp}=  GetCustomer ById  ${cid}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable  ${j_id}  ${resp.json()['jaldeeId']}
 
       ${resp}=   Create Sample Location
       Set Suite Variable    ${lid1}    ${resp}  
@@ -1018,8 +1094,46 @@ JD-TC-GetWaitlistCountToday-78
 JD-TC-GetWaitlistCountToday-UH1
       [Documentation]   Get waitlist using consumer login
 
-      ${resp}=  ConsumerLogin  ${CUSERNAME0}  ${PASSWORD}
-      Should Be Equal As Strings  ${resp.status_code}  200      
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME145}  ${PASSWORD}
+      Log   ${resp.json()}
+      Should Be Equal As Strings    ${resp.status_code}    200
+
+      ${resp}=  Get Business Profile
+      Log   ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable  ${account_id}  ${resp.json()['id']} 
+
+      #............provider consumer creation..........
+
+      ${PH_Number}=  FakerLibrary.Numerify  %#####
+      ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+      Log  ${PH_Number}
+      Set Suite Variable  ${PCPHONENO}  555${PH_Number}
+
+      ${fname}=  FakerLibrary.first_name
+      Set Suite Variable  ${fname}
+      ${lastname}=  FakerLibrary.last_name
+
+      ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lastname}  countryCode=${countryCodes[1]} 
+      Log   ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${resp}=  Provider Logout
+      Log   ${resp.json()}
+      Should Be Equal As Strings    ${resp.status_code}    200
+
+      ${resp}=    Send Otp For Login    ${PCPHONENO}    ${account_id}
+      Log   ${resp.content}
+      Should Be Equal As Strings    ${resp.status_code}   200
+
+      ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
+      Log   ${resp.content}
+      Should Be Equal As Strings    ${resp.status_code}   200
+      Set Suite Variable  ${token}  ${resp.json()['token']}
+
+      ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
+      Log   ${resp.content}
+      Should Be Equal As Strings    ${resp.status_code}   200   
       ${resp}=  Get Waitlist Count Today  service-neq=${ser_id2}  waitlistStatus-neq=${wl_status[1]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  401
       Should Be Equal As Strings  "${resp.json()}"     "${LOGIN_NO_ACCESS_FOR_URL}"
