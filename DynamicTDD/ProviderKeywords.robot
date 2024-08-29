@@ -17100,16 +17100,7 @@ Crm Lead Status Change To Active
     ${resp}=  PUT On Session  ynw  /provider/crm/lead/${uid}/status/active  expected_status=any
     Check Deprication  ${resp}  Crm Lead Status Change To Active
     RETURN  ${resp}
-
-Crm Lead Status Change To Complete
-
-    [Arguments]  ${uid}
-
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/crm/lead/${uid}/status/complete  expected_status=any
-    Check Deprication  ${resp}  Crm Lead Status Change To Complete
-    RETURN  ${resp}
-
+    
 Crm Lead Status Change To Reject
 
     [Arguments]  ${uid}
