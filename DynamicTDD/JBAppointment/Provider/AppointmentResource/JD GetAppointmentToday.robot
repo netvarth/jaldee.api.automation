@@ -3216,16 +3216,16 @@ JD-TC-GetAppointmentToday-19
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
-    Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME234}  ${PASSWORD}
     Log   ${resp.json()}
@@ -3597,12 +3597,16 @@ JD-TC-GetAppointmentToday-20
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    Set Test Variable  ${lname}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    # Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Test Variable  ${lname}   ${resp.json()['lastName']}
+
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO2}    ${account_id1}  ${token2} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Appointment Schedules Consumer  ${pid}
     Log   ${resp.json()}
@@ -3672,9 +3676,9 @@ JD-TC-GetAppointmentToday-20
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO2}    ${account_id1}  ${token2} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     # ${resp}=  Get Bill By consumer  ${apptid2}  ${pid} 
     # Log  ${resp.json()}
@@ -3782,16 +3786,16 @@ JD-TC-GetAppointmentToday-21
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
-    Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
     # ${i}=  Evaluate   ${len}/2
     ${resp}=  Encrypted Provider Login  ${multilocPro[2]}  ${PASSWORD}
@@ -4001,16 +4005,16 @@ JD-TC-GetAppointmentToday-22
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
-    Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME249}  ${PASSWORD}
     Log   ${resp.json()}
@@ -4365,16 +4369,16 @@ JD-TC-GetAppointmentToday-24
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
-    Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
 
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Logout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME249}  ${PASSWORD}
     Log   ${resp.json()}
@@ -4560,28 +4564,6 @@ JD-TC-GetAppointmentToday-25
 
     [Documentation]  Get provider's appointments today for appointmentModes WALK_IN_APPOINTMENT and PHONE_IN_APPOINTMENT
     
-    # ${resp}=  Consumer Login  ${PCPHONENO}  ${PASSWORD}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
-    # Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
-    # Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
-
-    # ${resp}=  Consumer Logout
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
-    Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
-
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
     ${resp}=  Encrypted Provider Login  ${PUSERNAME249}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -4763,12 +4745,15 @@ JD-TC-GetAppointmentToday-26
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
-    Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO2}    ${account_id1}  ${token2} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Consumer By Id  ${PCPHONENO2}
     Log   ${resp.json()}
@@ -4969,12 +4954,16 @@ JD-TC-GetAppointmentToday-27
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
-    Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
+    # ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID2}   ${resp.json()['id']}
+    # Set Suite Variable  ${fname2}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname2}   ${resp.json()['lastName']}
+
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO2}    ${account_id1}  ${token2} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Consumer By Id  ${PCPHONENO2}
     Log   ${resp.json()}
@@ -5372,9 +5361,9 @@ JD-TC-GetAppointmentToday-UH2
 
     [Documentation]  Get provider's appointments today with consumer login
     
-    ${resp}=  Consumer Login  ${PCPHONENO2}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO2}    ${account_id1}  ${token2} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Appointments Today
     Log   ${resp.json()}
