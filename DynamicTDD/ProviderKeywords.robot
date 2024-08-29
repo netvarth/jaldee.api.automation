@@ -5875,14 +5875,6 @@ Delete Report Criteria
     Check Deprication  ${resp}  Delete Report Criteria
     RETURN  ${resp}
 
-
-Appointment Status
-    [Arguments]  ${status}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/account/settings/appointment/${status}  expected_status=any
-    Check Deprication  ${resp}  Appointment Status
-    RETURN  ${resp}
-
 JaldeeId Format  
     [Arguments]  ${customerseries}  ${prefi}  ${sufi}
     ${data}=  create Dictionary  prefix=${prefi}  suffix=${sufi}
