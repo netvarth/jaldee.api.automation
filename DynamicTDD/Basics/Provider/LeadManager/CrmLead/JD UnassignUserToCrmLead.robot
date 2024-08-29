@@ -59,8 +59,8 @@ JD-TC-Unassign_User_To_Crm_Lead-1
     Set Suite Variable      ${lid}      ${resp.json()[0]['id']}
     Set Suite Variable      ${place}    ${resp.json()[0]['place']}
 
-    ${lid}=     Create Dictionary  id=${lid}
-    ${loc_id}=  Create List   ${lid}
+    ${locid}=     Create Dictionary  id=${lid}
+    ${loc_id}=  Create List   ${locid}
 
     ${typeName1}=    FakerLibrary.Name
     Set Suite Variable      ${typeName1}
@@ -126,7 +126,7 @@ JD-TC-Unassign_User_To_Crm_Lead-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}             200
 
-    ${resp}=    Create Crm Lead  ${clid}  ${firstName_n}  ${con_id}  ${lastName_n}  ${pid}  
+    ${resp}=    Create Crm Lead  ${clid}  ${pid}  ${lid}  consumerUid=${con_id}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
     Set Suite variable           ${crm_lead_id}          ${resp.json()}
@@ -170,7 +170,7 @@ JD-TC-Unassign_User_To_Crm_Lead-2
 
     ${resp}=    Crm Lead Update Unassign  ${crm_lead_id}  ${user1_id}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     422
+    Should Be Equal As Strings  ${resp.status_code}     200
 
 JD-TC-Unassign_User_To_Crm_Lead-3
 

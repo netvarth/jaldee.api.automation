@@ -17129,9 +17129,9 @@ Crm Lead Status Change To Reject
 
 Update Crm Lead  
 
-    [Arguments]  ${uid}  &{kwargs}
+    [Arguments]  ${uid}  ${consumerFirstName}  ${consumerLastName}  &{kwargs}
 
-    ${data}=  Create Dictionary
+    ${data}=     Create Dictionary   consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END

@@ -196,6 +196,18 @@ JD-TC-Create_Lead-3
     Should Be Equal As Strings  ${resp.status_code}     200
 
 
+JD-TC-Create_Lead-4
+
+    [Documentation]   Create Lead - where location id is empty
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Create Crm Lead  ${clid}  ${pid}  ${NULL}  consumerUid=${con_id}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}     200
+
 JD-TC-Create_Lead-UH1
 
     [Documentation]   Create Lead - where channel id is empty
@@ -226,19 +238,8 @@ JD-TC-Create_Lead-UH2
     Should Be Equal As Strings  ${resp.status_code}     422
     Should Be Equal As Strings  ${resp.json()}          ${INVALID_Y_ID}
 
+
 JD-TC-Create_Lead-UH3
-
-    [Documentation]   Create Lead - where location id is empty
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Create Crm Lead  ${clid}  ${pid}  ${NULL}  consumerUid=${con_id}  
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
-
-JD-TC-Create_Lead-UH4
 
     [Documentation]   Create Lead - where consumer id is empty
 
@@ -252,7 +253,7 @@ JD-TC-Create_Lead-UH4
     Should Be Equal As Strings  ${resp.json()}          ${INVALID_CONSUMER_ID}
 
 
-JD-TC-Create_Lead-UH5
+JD-TC-Create_Lead-UH4
 
     [Documentation]   Create Lead - where firstname and uid is empty
 
@@ -268,7 +269,7 @@ JD-TC-Create_Lead-UH5
     Should Be Equal As Strings  ${resp.json()}          ${FIELD_CANT_BE_EMPTY}
 
 
-JD-TC-Create_Lead-UH6
+JD-TC-Create_Lead-UH5
 
     [Documentation]   Create Lead - where lastname and uid is empty
 
@@ -286,7 +287,7 @@ JD-TC-Create_Lead-UH6
     Should Be Equal As Strings  ${resp.json()}          ${FIELD_CANT_BE_EMPTY}
 
 
-JD-TC-Create_Lead-UH7
+JD-TC-Create_Lead-UH6
 
     [Documentation]   Create Lead - without login
 

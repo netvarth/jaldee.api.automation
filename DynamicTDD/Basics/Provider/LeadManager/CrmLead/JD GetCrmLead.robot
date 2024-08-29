@@ -88,6 +88,7 @@ JD-TC-Get_CRM_Lead-1
     ${resp}=    Get Lead Product By Uid  ${lpid}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}      200
+    Set Suite Variable    ${product_id}      ${resp.json()['id']}
 
     ${ChannelName1}=    FakerLibrary.Name
     Set Suite Variable      ${ChannelName1}
@@ -126,6 +127,7 @@ JD-TC-Get_CRM_Lead-1
     ${resp}=    Get Lead Channel By Uid  ${clid}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
+    Set Suite Variable    ${channel_id}      ${resp.json()['id']}
 
     ${firstName_n}=   FakerLibrary.firstName
     ${lastName_n}=    FakerLibrary.lastName
@@ -149,6 +151,11 @@ JD-TC-Get_CRM_Lead-1
     ${resp}=    Get Crm Lead   ${crm_lead_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}                  200
+    Set Suite Variable      ${id}   ${resp.json()['id']}
+    Set Suite Variable      ${referenceNo}   ${resp.json()['referenceNo']}
+
+    Should Be Equal As Strings  ${resp.json()['productType']['id']}  ${product_id}
+    Should Be Equal As Strings  ${resp.json()['channel']['id']}      ${channel_id}   
     Should Be Equal As Strings  ${resp.json()['uid']}                ${crm_lead_id}
     Should Be Equal As Strings  ${resp.json()['productEnum']}        ${productEnum[0]}
     Should Be Equal As Strings  ${resp.json()['productName']}        ${typeName1}
@@ -164,6 +171,8 @@ JD-TC-Get_CRM_Lead-1
     Should Be Equal As Strings  ${resp.json()['createdBy']}          ${pid}
     Should Be Equal As Strings  ${resp.json()['createdByName']}      ${pdrname}
     Should Be Equal As Strings  ${resp.json()['createdDate']}        ${DAY1}
+    Should Be Equal As Strings  ${resp.json()['location']}           ${lid}
+    Should Be Equal As Strings  ${resp.json()['locationName']}       ${place}
 
 
 JD-TC-Get_CRM_Lead-UH1
@@ -221,4 +230,5 @@ JD-TC-Get_CRM_Lead-2
 
     ${resp}=    Get Crm Lead   ${crm_lead_id} 
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     422
+    Should Be Equal As Strings  ${resp.status_code}     401
+    Should Be Equal As Strings  ${resp.json()}          ${NO_PERMISSION}
