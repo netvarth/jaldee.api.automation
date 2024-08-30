@@ -17199,7 +17199,7 @@ Create Stage
 
     [Arguments]     ${stage}  ${uid}  ${userId}
 
-    ${assigneeDto}=  CCreate Dictionary  userId=${userId}
+    ${assigneeDto}=  Create Dictionary  userId=${userId}
     ${data}=  Create Dictionary  stage=${stage}  uid=${uid}  assigneeDto=${assigneeDto}
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
@@ -17211,7 +17211,7 @@ Update stage
 
     [Arguments]     ${uid}  ${stage}  ${uid}  ${userId}
 
-    ${assigneeDto}=  CCreate Dictionary  userId=${userId}
+    ${assigneeDto}=  Create Dictionary  userId=${userId}
     ${data}=  Create Dictionary  stage=${stage}  uid=${uid}  assigneeDto=${assigneeDto}
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
