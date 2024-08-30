@@ -17162,6 +17162,38 @@ Crm Lead Update Notes
     Check Deprication  ${resp}  Crm Lead Update Notes 
     RETURN  ${resp}
 
+Get Consolidated Graph
+
+    [Arguments]     ${category}  ${startDate}  ${endDate}
+
+    ${data}=  Create Dictionary  category=${category}  startDate=${startDate}  endDate=${endDate}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=    PUT On Session  ynw  /provider/crm/lead/graph  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Get Consolidated Graph 
+    RETURN  ${resp}
+
+Get Chart Graph
+
+    [Arguments]     ${category}  ${startDate}  ${endDate}
+
+    ${data}=  Create Dictionary  category=${category}  startDate=${startDate}  endDate=${endDate}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=    PUT On Session  ynw  /provider/crm/lead/graph/chart  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Get Chart Graph 
+    RETURN  ${resp}
+
+Get Pie Chart
+
+    [Arguments]     ${category}  ${startDate}  ${endDate}
+
+    ${data}=  Create Dictionary  category=${category}  startDate=${startDate}  endDate=${endDate}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=    PUT On Session  ynw  /provider/crm/lead/graph/pie  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Get Pie Chart 
+    RETURN  ${resp}
 
 Get Location Suggestion
     [Arguments]    ${sug}
