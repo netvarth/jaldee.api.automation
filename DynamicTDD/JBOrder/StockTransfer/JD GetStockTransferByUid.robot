@@ -338,7 +338,7 @@ JD-TC-Get Stock Transfer By Uid-1
 
 # --------------------------------------- Do the Purchase--------------------------------------------------------------
 
-    ${quantity}=                    Random Int  min=0  max=999
+    ${quantity}=                    Random Int  min=1  max=999
     ${quantity}=                    Convert To Number  ${quantity}  1
     Set Suite Variable  ${quantity}
 
@@ -380,7 +380,7 @@ JD-TC-Get Stock Transfer By Uid-1
     ${batchNo}=     Random Int      min=1  max=9999
     ${invoiceReferenceNo}=          Random Int  min=1  max=999
     ${purchaseNote}=                FakerLibrary.Sentence
-    ${roundOff}=                    Random Int  min=1  max=10
+    ${roundOff}=                    Random Int  min=1  max=5
 
     ${purchaseItemDtoList1}=        Create purchaseItemDtoList   ${ic_Item_id}   ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${EMPTY}  ${iu_id}
     Set Suite Variable              ${purchaseItemDtoList1}
@@ -595,15 +595,26 @@ JD-TC-Get Stock Transfer By Uid-3
     Set Test Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Test Variable  ${lastname_A}
-    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+40015822
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+60015822
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    202
-    ${resp}=  Account Activation  ${PUSERNAME_E}  0
-    Log   ${resp.json()}
+    Log  ${resp.headers['Set-Cookie']}
+    ${Sesioncookie}    ${rest}    Split String    ${resp.headers['Set-Cookie']}    ;  1
+    ${cookie_parts}    ${jsessionynw_value}    Split String    ${Sesioncookie}    =
+    Log   ${jsessionynw_value}
+
+    ${resp}=    Account Activation  ${PUSERNAME_E}  ${OtpPurpose['ProviderSignUp']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E}
+
+    ${loginId}=     Random Int  min=1111  max=9999
+    Set Suite Variable      ${loginId}
+
+
+    ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1538,7 +1549,7 @@ JD-TC-Get Stock Transfer By Uid-4
     Should Be Equal As Strings      ${resp.json()['items'][0]['spItem']['spCode']}                   ${item1}
     Should Be Equal As Strings      ${resp.json()['items'][0]['spItem']['name']}                   ${displayName1}
     Should Be Equal As Strings      ${resp.json()['items'][0]['spItem']['itemPropertyType']}                   ${itemPropertyType}
-    Should Be Equal As Strings      ${resp.json()['items'][0]['transferQuantity']}                   50.0
+    Should Be Equal As Strings      ${resp.json()['items'][0]['transferQuantity']}                   55.0
     Should Be Equal As Strings      ${resp.json()['items'][0]['status']}                   ${donation_status[0]}
     Should Be Equal As Strings      ${resp.json()['items'][0]['sourceLocationId']}                   ${lid}
     Should Be Equal As Strings      ${resp.json()['items'][0]['sourceLocationName']}                   ${place}

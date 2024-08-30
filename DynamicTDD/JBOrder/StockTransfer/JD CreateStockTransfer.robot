@@ -695,6 +695,10 @@ JD-TC-Create Stock Transfer-2
     Set Test Variable  ${DAY1} 
 
     ${Store_Name1}=    FakerLibrary.first name
+    # Generate a random number between 1 and 100
+    ${random_number}=    Evaluate    random.randint(1, 100)    random
+    # Combine the first name with the random number
+    ${Store_Name1}=    Set Variable    ${Store_Name1}${random_number}
     Set Test Variable  ${Store_Name1}
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
     Set Test Variable  ${email_id}  ${Store_Name1}${PhoneNumber}.${test_mail}
