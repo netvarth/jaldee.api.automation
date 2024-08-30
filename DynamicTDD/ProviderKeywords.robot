@@ -17195,6 +17195,57 @@ Get Pie Chart
     Check Deprication  ${resp}  Get Pie Chart 
     RETURN  ${resp}
 
+Create Stage
+
+    [Arguments]     ${stage}  ${uid}  ${userId}
+
+    ${assigneeDto}=  CCreate Dictionary  userId=${userId}
+    ${data}=  Create Dictionary  stage=${stage}  uid=${uid}  assigneeDto=${assigneeDto}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=    POST On Session  ynw  /provider/crm/lead/stage  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Create Stage
+    RETURN  ${resp}
+
+Update stage
+
+    [Arguments]     ${uid}  ${stage}  ${uid}  ${userId}
+
+    ${assigneeDto}=  CCreate Dictionary  userId=${userId}
+    ${data}=  Create Dictionary  stage=${stage}  uid=${uid}  assigneeDto=${assigneeDto}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=    PUT On Session  ynw  /provider/crm/lead/stage/${uid}  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Create Stage
+    RETURN  ${resp}
+
+Get Stage By Id  
+
+    [Arguments]  ${uid}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/crm/lead/stage/${uid}  expected_status=any
+    Check Deprication  ${resp}  Get Stage By Id
+    RETURN  ${resp}
+
+Get Stage By Filter  
+
+    [Arguments]  &{param}
+
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/crm/lead/stage   params=${param}   expected_status=any
+    Check Deprication  ${resp}  Get Stage By Filter 
+    RETURN  ${resp}
+
+Get Stage Count By Filter  
+
+    [Arguments]  &{param}
+
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/crm/lead/stage/count   params=${param}   expected_status=any
+    Check Deprication  ${resp}  Get Stage Count By Filter 
+    RETURN  ${resp}
+
 Get Location Suggestion
     [Arguments]    ${sug}
     Check And Create YNW Session
