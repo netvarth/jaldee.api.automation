@@ -17263,6 +17263,15 @@ Get Specialization Suggestion
     Check Deprication  ${resp}  Create And Verify Alert
     RETURN    ${resp}
 
+Reset Password
+
+    [Arguments]     ${oldpassword}  ${password}
+
+    ${data}=    Create Dictionary   oldpassword=${oldpassword}  password=${password}
+    ${data}=    json.dumps    ${data} 
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/login/reset/password   data=${data}   expected_status=any
+    RETURN  ${resp}
 
 *** Comments ***
 
