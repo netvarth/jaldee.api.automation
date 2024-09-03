@@ -28,7 +28,6 @@ VAR_DIR='varfiles'
 BASE_DIR="$(dirname "${PWD%*/*/*}")"
 # CONF_DIR="$(find $BASE_DIR -type d -name "ynwconf" -print0 2>/dev/null | tr -d '\0')"
 
-
 # Shows usage of the script. used when this script is run without a parameter.
 usage()
 {

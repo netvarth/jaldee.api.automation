@@ -150,7 +150,7 @@ JD-TC-List_ALL_LINKS-2
 
     [Documentation]    List all Links - where provider didnt linked any account
 
-    ${ph3}=  Evaluate  ${PUSERNAME}+5666011
+    ${ph3}=  Evaluate  ${PUSERNAME}+5487011
     Set Suite Variable  ${ph3}
     ${firstname3}=  FakerLibrary.first_name
     ${lastname3}=  FakerLibrary.last_name
@@ -160,12 +160,8 @@ JD-TC-List_ALL_LINKS-2
     ${resp1}=  Account SignUp  ${firstname3}  ${lastname3}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph3}   1
     Log   ${resp1.content}
     Should Be Equal As Strings    ${resp1.status_code}    202
-    Log    Request Headers: ${resp1.request.headers}
-    Log    Request Cookies: ${resp1.request.headers['Cookie']}
-    ${cookie_parts}    ${jsessionynw_value}    Split String    ${resp1.request.headers['Cookie']}    =
-    Log   ${jsessionynw_value}
 
-    ${resp}=    Account Activation  ${ph3}  ${OtpPurpose['ProviderSignUp']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Account Activation  ${ph3}  ${OtpPurpose['ProviderSignUp']} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
