@@ -2537,6 +2537,7 @@ CONSUMER_STATUS_INACTIVE= "Consumer status is already INACTIVE"
 INVALID_Y_ID=   "Invalid {} id"
 LEAD_STATUS_IS_ALREADY= "Lead status is already {}"
 LEAD_ALREADY_ASSIGNED=  "{} is already assigned"
+STAGE_NAME_SIZE = "Stage name charater should be between 3 and 100"
 
 # ......  STOCK TRANSFER...........
 CANT_ST_TRNFR_BTW_SAME_INV = "You cannot transfer stock within the same inventory catalog"
