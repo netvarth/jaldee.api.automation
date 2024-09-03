@@ -152,7 +152,7 @@ JD-TC-GetPrescriptionByProviderConsumer-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -293,7 +293,7 @@ JD-TC-GetPrescriptionByProviderConsumer-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
    
@@ -373,7 +373,7 @@ JD-TC-GetPrescriptionByProviderConsumer-2
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedDate']}     ${DAY1}
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionNotes']}     ${note}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
    

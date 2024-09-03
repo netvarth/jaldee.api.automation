@@ -75,7 +75,7 @@ JD-TC-Update Provider Consumer Notes-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -463,7 +463,7 @@ JD-TC-Update Provider Consumer Notes-8
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token1}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
