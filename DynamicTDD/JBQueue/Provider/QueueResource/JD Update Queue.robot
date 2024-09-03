@@ -11,6 +11,9 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
+Variables         /ebs/TDD/varfiles/hl_providers.py
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
+
 
 *** Variables ***
 ${SERVICE1}  Makeup  
@@ -27,11 +30,12 @@ ${start}        90
 
 JD-TC-UpdateQueue-1
     [Documentation]    Update a queue in a location with  new services
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
+    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME110}
-    clear_location  ${PUSERNAME110}
-    clear_queue  ${PUSERNAME110}
+    clear_service   ${HLPUSERNAME4}
+    clear_location  ${HLPUSERNAME4}
+    clear_queue  ${HLPUSERNAME4}
 
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}
@@ -62,10 +66,12 @@ JD-TC-UpdateQueue-1
     ${queue_name}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name}
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${s_id}  ${s_id1}
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${qid}  ${resp.json()}
     
     ${resp}=  Update Queue  ${qid}  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${s_id2}  ${s_id3}
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Queue ById  ${qid}
@@ -86,13 +92,16 @@ JD-TC-UpdateQueue-1
 
 JD-TC-UpdateQueue-2
     [Documentation]    Update a queue in a location without location id and verify location id is the previous one
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
+    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Update Queue  ${qid}  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${EMPTY}  ${s_id2}  ${s_id3}
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get Queue ById  ${qid}
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}  ${queue_name} 
     Should Be Equal As Strings  ${resp.json()['location']['id']}  ${lid}
@@ -110,10 +119,12 @@ JD-TC-UpdateQueue-2
     
 JD-TC-UpdateQueue-3
     [Documentation]    Update a queue in a location without service id and verify service id is the previous one
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
+    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Update Queue without service  ${qid}  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  2  3  ${lid}  
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get Queue ById  ${qid}
@@ -135,11 +146,12 @@ JD-TC-UpdateQueue-3
 
 JD-TC-UpdateQueue-4
     [Documentation]    Update a queue in a location with  a service used in another disbled queue
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME178}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
+    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME178}
-    clear_location  ${PUSERNAME178}
-    clear_queue  ${PUSERNAME178}
+    clear_service   ${HLPUSERNAME4}
+    clear_location  ${HLPUSERNAME4}
+    clear_queue  ${HLPUSERNAME4}
     
     ${lid1}=  Create Sample Location
     Set Suite Variable   ${lid1}
@@ -155,6 +167,7 @@ JD-TC-UpdateQueue-4
     ${queue_name}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name}
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid1}  ${s_id4}
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${qid1}  ${resp.json()}
     
@@ -165,13 +178,17 @@ JD-TC-UpdateQueue-4
     ${queue_name1}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name1}
     ${resp}=  Create Queue  ${queue_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  1  5  ${lid1}  ${s_id4}  ${s_id5}
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${qid2}  ${resp.json()}
     sleep  2s
 
     ${resp}=  Disable Queue  ${qid2}
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Get Queue ById  ${qid2} 
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.json()['name']}   ${queue_name1}
     Should Be Equal As Strings  ${resp.json()['queueSchedule']['timeSlots'][0]['sTime']}  ${sTime2}
     Should Be Equal As Strings  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}  ${eTime2}
@@ -179,8 +196,11 @@ JD-TC-UpdateQueue-4
     Should Be Equal As Strings  ${resp.json()['queueSchedule']['startDate']}  ${DAY1}
 
     ${resp}=  Update Queue   ${qid1}  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}   ${EMPTY}  ${sTime1}  ${eTime1}  2  3  ${lid1}  ${s_id4}  ${s_id5}
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Get Queue ById  ${qid1} 
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.json()['queueSchedule']['timeSlots'][0]['sTime']}  ${sTime1}
     Should Be Equal As Strings  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}  ${eTime1}
     Should Be Equal As Strings  ${resp.json()['queueState']}  ENABLED
@@ -191,14 +211,14 @@ JD-TC-UpdateQueue-4
 
 JD-TC-UpdateQueue-5
     [Documentation]  check overlapping of schedules in same location with disabled queue
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME178}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Update Queue   ${qid1}  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}   ${EMPTY}  ${sTime2}  ${eTime2}  2  3  ${lid1}  ${s_id4}  ${s_id5}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-UpdateQueue-UH1
     [Documentation]  Update queue to an already existing name in same location
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME178}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Update Queue   ${qid1}  ${queue_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}   ${EMPTY}  ${sTime2}  ${eTime2}  2  3  ${lid1}  ${s_id4}  ${s_id5}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -206,7 +226,7 @@ JD-TC-UpdateQueue-UH1
     
 JD-TC-UpdateQueue-UH2
     [Documentation]  check overlapping of schedules in same location with enabled queue
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME178}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${sTime3}=  add_timezone_time  ${tz}  3  15  
     Set Suite Variable   ${sTime3}
@@ -301,7 +321,7 @@ JD-TC-UpdateQueue-UH3
 
 JD-TC-UpdateQueue-UH4
     [Documentation]    Update a queue without queue id 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Update Queue  ${EMPTY}  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${s_id2}  ${s_id3}
     Should Be Equal As Strings  ${resp.status_code}  404  
@@ -337,7 +357,7 @@ JD-TC-UpdateQueue-6
 
 JD-TC-UpdateQueue-UH6
     [Documentation]  Update another provider's queue
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME178}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Update Queue  ${qid5}  ${queue_name5}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid3}  ${s_id}  ${s_id1}
     Should Be Equal As Strings  ${resp.status_code}  401
@@ -345,8 +365,41 @@ JD-TC-UpdateQueue-UH6
 
 JD-TC-UpdateQueue-UH7
     [Documentation]  Update queue using consumer login
-    ${resp}=  Consumer Login  ${CUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${account_id}=  get_acc_id  ${HLPUSERNAME4}
+
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Suite Variable  ${PCPHONENO}  555${PH_Number}
+
+    ${fname}=  FakerLibrary.first_name
+    ${lname}=  FakerLibrary.last_name
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+
+    ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  email=${pc_emailid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  Send Otp For Login    ${PCPHONENO}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+   
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Update Queue  ${qid5}  ${queue_name5}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid3}  ${s_id}  ${s_id1}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}"
@@ -359,7 +412,7 @@ JD-TC-UpdateQueue-UH8
     
 JD-TC-UpdateQueue-UH9
     [Documentation]  Update queue with another provider's location
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Update Queue  ${qid5}  ${queue_name5}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid1}  ${s_id}  ${s_id1}
     Should Be Equal As Strings  ${resp.status_code}  401
@@ -367,7 +420,7 @@ JD-TC-UpdateQueue-UH9
 
 JD-TC-UpdateQueue-UH10
     [Documentation]  Update queue with another provider's services
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Update Queue  ${qid5}  ${queue_name5}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid3}  ${s_id4}
     Should Be Equal As Strings  ${resp.status_code}  401
