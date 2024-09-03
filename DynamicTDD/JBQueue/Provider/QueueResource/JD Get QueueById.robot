@@ -13,6 +13,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/hl_providers.py
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 
 *** Variables ***
 ${SERVICE1}  Makeup  
@@ -89,7 +90,7 @@ JD-TC-Get Queue By Id-2
     ${resp}=  Create Queue With TokenStart  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${token_start}  ${s_id}  ${s_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${q_id1}  ${resp.json()}
+    Set Suite Variable  ${q_id1}  ${resp.json()}
     ${resp}=  Get Queue ById  ${q_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -159,9 +160,9 @@ JD-TC-Get Queue By Id-UH2
     
 JD-TC-Get Queue By Id-UH3
 	[Documentation]  Get Queues by id using another  provider's id
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    ${resp}=  Get Queue ById  ${q_id}
+    ${resp}=  Get Queue ById  ${q_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION}"
