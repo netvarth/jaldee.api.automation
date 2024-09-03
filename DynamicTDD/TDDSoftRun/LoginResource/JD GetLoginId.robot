@@ -50,7 +50,7 @@ JD-TC-Get_LoginId-1
 
     # ........ Provider 1 ..........
 
-    ${ph}=  Evaluate  ${PUSERNAME}+5666409
+    ${ph}=  Evaluate  ${PUSERNAME}+5666003
     Set Suite Variable  ${ph}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -128,7 +128,8 @@ JD-TC-Get_LoginId-3
 
     ${resp}=    Get LoginId  ${inv}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    404
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${INV_USER_ID}
 
 JD-TC-Get_LoginId-4
 

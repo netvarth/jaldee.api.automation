@@ -42,7 +42,7 @@ JD-TC-Link_With_Other_Login-1
 
     # ........ Provider 1 ..........
 
-    ${ph}=  Evaluate  ${PUSERNAME}+5666514
+    ${ph}=  Evaluate  ${PUSERNAME}+5666004
     Set Suite Variable  ${ph}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -88,7 +88,7 @@ JD-TC-Link_With_Other_Login-1
     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
     ${emails1}=  Set Variable  ${P_Email}${bs}.${test_mail}  
      
-    ${resp}=  Update Business Profile without details  ${bs}  ${bs}Desc   ${companySuffix}  ${ph}   ${emails1}
+    ${resp}=  Create Business Profile without details  ${bs}  ${bs}Desc   ${companySuffix}  ${ph}   ${emails1}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Provider Logout
@@ -344,31 +344,6 @@ JD-TC-Link_With_Other_Login-7
     Set Suite Variable  ${acc_id}   ${resp.json()['id']}
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
-    ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-
-    END
-
-    ${resp}=  Get Departments
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}' 
-        ${dep_name1}=  FakerLibrary.bs
-        ${dep_code1}=   Random Int  min=100   max=999
-        ${dep_desc1}=   FakerLibrary.word  
-        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-        Set Suite Variable  ${dep_id}  ${resp1.json()}
-    ELSE
-        Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
-    END
-
     ${user1}=  Create Sample User 
     Set suite Variable                    ${user1}
     
@@ -555,10 +530,12 @@ JD-TC-Link_With_Other_Login-UH4
 
     ${inv}=     Random Int  min=100000  max=200000
 
+    ${INVALID_X}=  format String   ${INVALID_X}   LoginId
+
     ${resp}=    Connect with other login  ${inv}    password=${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${INV_LOGIN_ID}
+    Should Be Equal As Strings    ${resp.json()}    ${INVALID_X}
 
     ${resp}=    Provider Logout
     Log   ${resp.content}

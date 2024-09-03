@@ -42,7 +42,7 @@ JD-TC-UNLINK_ONE_LOGIN-1
 
     # ........ Provider 1 ..........
 
-    ${ph}=  Evaluate  ${PUSERNAME}+5666478
+    ${ph}=  Evaluate  ${PUSERNAME}+5666010
     Set Suite Variable  ${ph}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -78,31 +78,6 @@ JD-TC-UNLINK_ONE_LOGIN-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${acc_id}   ${resp.json()['id']}
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
-
-    ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-
-    END
-
-    ${resp}=  Get Departments
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}' 
-        ${dep_name1}=  FakerLibrary.bs
-        ${dep_code1}=   Random Int  min=100   max=999
-        ${dep_desc1}=   FakerLibrary.word  
-        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-        Set Test Variable  ${dep_id}  ${resp1.json()}
-    ELSE
-        Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
-    END
 
     ${user1}=  Create Sample User 
     Set suite Variable                    ${user1}
@@ -385,6 +360,10 @@ JD-TC-UNLINK_ONE_LOGIN-UH4
 JD-TC-UNLINK_ONE_LOGIN-5
 
     [Documentation]    Unlink Login - login existing login and link one and after unlink and check   
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Log   ${resp.content}

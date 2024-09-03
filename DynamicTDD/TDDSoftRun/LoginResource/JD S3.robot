@@ -66,7 +66,7 @@ JD-TC-JD S3-1
     Set Suite Variable   ${sTime}
     ${eTime}=  add_timezone_time  ${tz}  0  25  
     Set Suite Variable   ${eTime}
-    ${resp}=  Update Business Profile with schedule   ${bs_name}  ${bs_desc} Desc   ${companySuffix}  ${city}   ${longi}  ${latti}  www.${companySuffix}.com  free  ${bool[0]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
+    ${resp}=  Create Business Profile without details   ${bs_name}  ${bs_desc} Desc   ${companySuffix}  ${city}   ${longi}  ${latti}  www.${companySuffix}.com  free  ${bool[0]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
