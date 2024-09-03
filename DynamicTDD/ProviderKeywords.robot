@@ -17263,7 +17263,7 @@ Get Specialization Suggestion
     Check Deprication  ${resp}  Create And Verify Alert
     RETURN    ${resp}
 
-Reset Password
+Reset Password LoginId
 
     [Arguments]     ${oldpassword}  ${password}
 
