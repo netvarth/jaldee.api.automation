@@ -17,7 +17,7 @@ ${Invalid_email}          inv.${test_mail}
 ${merchantid}             6811180
 @{wl_status}              checkedIn     arrived   started   prepaymentPending   cancelled    done   unrevertable   failed   blocked
 @{waitlist_cancl_reasn}   closingSoon   tooFull   prePaymentPending   holiday   noshowup   blocked   QueueDisabled   self
-@{waitlist_actions}       REPORT    STARTED    CANCEL   CHECK_IN    DONE
+@{waitlist_actions}       REPORT    STARTED    CANCEL   CHECK_IN    DONE    CHECK_IN
 @{calc_mode}              ML    Fixed   NoCalc   Conventional
 @{payment_modes}          cash  DC  CC  NB  PPI  Mock  UPI  self_pay
 ${pay_mode_selfpay}       self pay
