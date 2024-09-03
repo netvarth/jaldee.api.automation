@@ -193,6 +193,14 @@ runAnalytics()
     pabot --processes 5 --outputdir "TDD_Output/AnalyticsLog" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
 }
 
+runTDDSoftRun()
+{
+    echo "Running $2"
+    mkdir -p "TDD_Output/TDDSoftRunLog/$Log_DIR"
+    # pabot --processes 5 --outputdir "TDD_Output/TDDSoftRunLog/$Log_DIR" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
+    pabot --processes 5 --outputdir "TDD_Output/TDDSoftRunLog" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
+}
+
 # runProvider()
 # {
 #     echo "Running $2"
@@ -403,6 +411,9 @@ case $ENV_KEY in
     elif [ "${var}" == "RBAC" ]; then
         echo "Executing case *- Jenkins- RBAC"
         runRBAC VariablesForJenkins.py "$tddpath"
+    elif [ "${var}" == "TDDSoftRun" ]; then
+        echo "Executing case *- Jenkins- TDDSoftRun"
+        runTDDSoftRun VariablesForJenkins.py "$tddpath"
     elif [ "${var}" == "Reports" ]; then
         echo "Executing case *- Jenkins- Reports"
         runReports VariablesForJenkins.py "$tddpath"
@@ -644,6 +655,9 @@ case $ENV_KEY in
     elif [ "${var}" == "JBQueue" ]; then
         echo "Executing case *- local- JBQueue"
         runJBQueue VariablesForLocalServer.py "$tddpath"
+    elif [ "${var}" == "TDDSoftRun" ]; then
+        echo "Executing case *- local- TDDSoftRun"
+        runTDDSoftRun VariablesForLocalServer.py "$tddpath"
     elif [ "${var}" == "JBAppointment" ]; then
         echo "Executing case *- local- JBAppointment"
         runJBAppointment VariablesForLocalServer.py "$tddpath"

@@ -45,6 +45,7 @@ usage()
     echo -e "\n[--Time] - Runs Time. Example usage: $0 --Time"
     echo -e "\n[--Basics | --basics] - Runs Basic functionalities Resources like login and signup. Example usage: $0 --Basics"
     echo -e "\n[ --JBQueue | --jbqueue] - Runs Queue and Waitlist based resources. Example usage: $0 --JBQueue"
+    echo -e "\n[ --TDDSoftRun | --jbqueue] - Runs Queue and Waitlist based resources. Example usage: $0 --TDDSoftRun"
     echo -e "\n[--JBAppointment | --jbappointment] - Runs Schedule and appointment based resources. Example usage: $0 --JBAppointment"
     echo -e "\n[--JBOrder | --jborder] - Runs Catalog and Order based resources. Example usage: $0  --JBOrder"
     echo -e "\n[--LendingCRM | --lendingcrm] - Runs Lending CRM (cdl and lms) resources. Example usage: $0 --LendingCRM"
@@ -779,6 +780,13 @@ while [ "$1" != "" ]; do
                 setPathVariables
                 shift
                 echo "Run JBQueue."
+            ;;
+        "--TDDSoftRun" | "--tddsoftrun")
+                suite="TDDSoftRun"
+                setPaths
+                setPathVariables
+                shift
+                echo "Run TDDSoftRun."
             ;;
         "--JBAppointment" | "--jbappointment")
                 suite="JBAppointment"
