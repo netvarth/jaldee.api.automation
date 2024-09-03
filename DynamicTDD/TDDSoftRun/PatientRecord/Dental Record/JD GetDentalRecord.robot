@@ -38,7 +38,7 @@ JD-TC-Get Dental Record-1
 
     [Documentation]    Create a Dental Record and verify .
 
-    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -119,7 +119,7 @@ JD-TC-Get Dental Record-1
     Set Suite Variable    ${proconlname}    ${resp.json()['lastName']} 
     Set Suite Variable    ${fullname}       ${proconfname}${space}${proconlname}
 
-    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -177,7 +177,7 @@ JD-TC-Get Dental Record-2
 
     [Documentation]    Create a Dental Record then update toothType and verify .
 
-    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -248,7 +248,7 @@ JD-TC-Get Dental Record-3
 
     [Documentation]    Delete Dental Record and Get that record using id.
 
-    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -265,7 +265,7 @@ JD-TC-Get Dental Record-4
 
     [Documentation]    Creating a Dental record with multiple  tooth surfaces and Get that record using id.
 
-    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -302,7 +302,7 @@ JD-TC-Get Dental Record-5
 
     [Documentation]    Try to Create Dental record with toothConditions field and Get that record by id.
 
-    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -335,7 +335,7 @@ JD-TC-Get Dental Record-6
 
     [Documentation]    Try to Create Dental record with toothRestorations field and Get that record by id.
 
-    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -368,7 +368,7 @@ JD-TC-Get Dental Record-7
 
     [Documentation]    Try to Create Dental record with all the fields and Get that record by id.
 
-    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -406,7 +406,7 @@ JD-TC-Get Dental Record-UH1
 
     [Documentation]    Get Dental records using invalid id.
 
-    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLPUSERNAME53}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

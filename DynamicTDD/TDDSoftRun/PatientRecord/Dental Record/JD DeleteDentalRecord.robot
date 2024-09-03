@@ -97,6 +97,7 @@ JD-TC-Delete Dental Record-1
     ${cookie_parts}    ${jsessionynw_value}    Split String    ${Sesioncookie}    =
     Log   ${jsessionynw_value}
 
+    sleep  1s
     ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
