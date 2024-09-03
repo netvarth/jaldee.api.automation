@@ -101,7 +101,12 @@ JD-TC-Get Case Count Filter-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
+    Log  ${resp.headers['Set-Cookie']}
+    ${Sesioncookie}    ${rest}    Split String    ${resp.headers['Set-Cookie']}    ;  1
+    ${cookie_parts}    ${jsessionynw_value}    Split String    ${Sesioncookie}    =
+    Log   ${jsessionynw_value}
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}   JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
@@ -292,7 +297,7 @@ JD-TC-Get Case Count Filter-7
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${accoun_Id}        ${resp.json()['id']}  
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}

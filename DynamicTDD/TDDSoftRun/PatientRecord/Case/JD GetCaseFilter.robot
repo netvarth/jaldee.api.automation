@@ -292,7 +292,7 @@ JD-TC-Get Case Filter-7
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${accoun_Id}        ${resp.json()['id']}  
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
