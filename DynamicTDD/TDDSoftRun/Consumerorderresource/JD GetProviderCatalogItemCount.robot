@@ -74,7 +74,7 @@ JD-TC-Get Provider Catalogs Items Count-1
     ${accountId}=  get_acc_id  ${HLPUSERNAME48}
     Set Suite Variable    ${accountId} 
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
@@ -148,7 +148,7 @@ JD-TC-Get Provider Catalogs Items Count-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -168,7 +168,7 @@ JD-TC-Get Provider Catalogs Items Count-1
     Should Be Equal As Strings    ${resp.json()}                                              1
 
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -230,7 +230,7 @@ JD-TC-Get Provider Catalogs Items Count-2
     Should Be Equal As Strings    ${resp.json()}                                              3
 
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -367,7 +367,7 @@ JD-TC-Get Provider Catalogs Items Count-4
 
 
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -386,7 +386,7 @@ JD-TC-Get Provider Catalogs Items Count-5
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()}                                              1
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -406,7 +406,7 @@ JD-TC-Get Provider Catalogs Items Count-6
     Should Be Equal As Strings    ${resp.json()}                                              1
 
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -426,7 +426,7 @@ JD-TC-Get Provider Catalogs Items Count-7
     Should Be Equal As Strings    ${resp.json()}                                              1
 
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -446,7 +446,7 @@ JD-TC-Get Provider Catalogs Items Count-UH3
     Should Be Equal As Strings    ${resp.json()}                                             0
 
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -479,6 +479,6 @@ JD-TC-Get Provider Catalogs Items Count-8
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()}                                              1
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200

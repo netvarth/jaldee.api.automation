@@ -73,7 +73,7 @@ JD-TC-Get Provider Catalogs Items-1
     ${accountId}=  get_acc_id  ${HLPUSERNAME49}
     Set Suite Variable    ${accountId} 
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
@@ -147,7 +147,7 @@ JD-TC-Get Provider Catalogs Items-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -179,7 +179,7 @@ JD-TC-Get Provider Catalogs Items-1
     Should Be Equal As Strings    ${resp.json()[0]['invMgmt']}                                                ${bool[0]}
     Should Be Equal As Strings    ${resp.json()[0]['status']}                                                 ${toggle[0]}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -299,7 +299,7 @@ JD-TC-Get Provider Catalogs Items-2
     END
 
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -522,7 +522,7 @@ JD-TC-Get Provider Catalogs Items-4
     Should Be Equal As Strings    ${resp.json()[0]['status']}                                                 ${toggle[0]}
 
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -555,7 +555,7 @@ JD-TC-Get Provider Catalogs Items-5
     Should Be Equal As Strings    ${resp.json()[0]['invMgmt']}                                                ${bool[1]}
     Should Be Equal As Strings    ${resp.json()[0]['status']}                                                 ${toggle[0]}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -589,7 +589,7 @@ JD-TC-Get Provider Catalogs Items-6
     Should Be Equal As Strings    ${resp.json()[0]['status']}                                                 ${toggle[0]}
 
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -623,7 +623,7 @@ JD-TC-Get Provider Catalogs Items-7
     Should Be Equal As Strings    ${resp.json()[0]['status']}                                                 ${toggle[0]}
 
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -643,7 +643,7 @@ JD-TC-Get Provider Catalogs Items-UH4
     Should Be Equal As Strings    ${resp.json()}                                             []
 
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -690,7 +690,7 @@ JD-TC-Get Provider Catalogs Items-8
     Should Be Equal As Strings    ${resp.json()[0]['invMgmt']}                                                ${bool[1]}
     Should Be Equal As Strings    ${resp.json()[0]['status']}                                                 ${toggle[1]}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -747,7 +747,7 @@ JD-TC-Get Provider Catalogs Items-UH5
     ${accountId}=  get_acc_id  ${PUSERNAME154}
     Set Suite Variable    ${accountId} 
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
@@ -836,7 +836,7 @@ JD-TC-Get Provider Catalogs Items-UH5
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -855,7 +855,7 @@ JD-TC-Get Provider Catalogs Items-UH5
     Should Be Equal As Strings    ${resp.status_code}    422
 
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

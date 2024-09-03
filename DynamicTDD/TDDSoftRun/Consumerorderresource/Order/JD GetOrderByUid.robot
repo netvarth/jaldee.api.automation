@@ -126,7 +126,7 @@ JD-TC-Get Order By UID-1
     Set Test Variable   ${p1_id}   ${resp.json()[0]['id']}
 
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -248,7 +248,7 @@ JD-TC-Get Order By UID-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -577,7 +577,7 @@ JD-TC-Get Order By UID-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_id}   ${resp.json()[0]['id']}
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -678,7 +678,7 @@ JD-TC-Get Order By UID-2
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -870,7 +870,7 @@ JD-TC-Get Order By UID-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -991,7 +991,7 @@ JD-TC-Get Order By UID-3
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1177,7 +1177,7 @@ JD-TC-Get Order By UID-4
     ${accountId}=  get_acc_id  ${PUSERNAME152}
     Set Test Variable    ${accountId} 
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1261,7 +1261,7 @@ JD-TC-Get Order By UID-4
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1396,7 +1396,7 @@ JD-TC-Get Order By UID-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_id}   ${resp.json()[0]['id']}
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1486,7 +1486,7 @@ JD-TC-Get Order By UID-5
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

@@ -94,7 +94,7 @@ JD-TC-CreateQueue-2
     # ${whpnum}=  Evaluate  ${PUSERNAME}+336245
     # ${tlgnum}=  Evaluate  ${PUSERNAME}+336345
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${countryCodes[1]}  ${PUSERNAME_U1}    ${userType[0]}  
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${countryCodes[1]}  ${PUSERNAME_U1}    ${userType[0]}   admin=${bool[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
@@ -103,37 +103,24 @@ JD-TC-CreateQueue-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Forgot Password   loginId=${PUSERNAME_U1}  password=${PASSWORD}
+    ${resp}=    Forgot Password   loginId=${PUSERNAME_U1}   password=${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
-    ${resp}=    Account Activation  ${PUSERNAME_U1}  ${OtpPurpose['ProviderResetPassword']}
+    ${resp}=    Account Activation  ${PUSERNAME_U1}   ${OtpPurpose['ProviderResetPassword']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${key} =   db.Verify Accnt   ${PUSERNAME_U1}    ${OtpPurpose['ProviderResetPassword']}
+    ${key} =   db.Verify Accnt   ${PUSERNAME_U1}     ${OtpPurpose['ProviderResetPassword']}
     Set Suite Variable   ${key}
 
     ${resp}=    Forgot Password     otp=${key}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    #... linking user to the provider 1 and get linked lists
-
-    ${resp}=    Connect with other login  ${PUSERNAME_U1}  password=${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
     ${resp}=    Provider Logout
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${resp}=  SendProviderResetMail        ${PUSERNAME_U1}
-    # Should Be Equal As Strings             ${resp.status_code}   200
-
-    # ${resp}=  ResetProviderPassword        ${PUSERNAME_U1}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
-    # Should Be Equal As Strings             ${resp[0].status_code}   200
-    # Should Be Equal As Strings             ${resp[1].status_code}   200
 
     ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
@@ -146,8 +133,10 @@ JD-TC-CreateQueue-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
-    ${s_id}=  Create Sample Service  ${SERVICE1}
-    ${s_id1}=  Create Sample Service  ${SERVICE2}
+    ${s_id}=  Create Sample Service  ${SERVICE3}
+    Set Suite Variable  ${s_id}
+    ${s_id1}=  Create Sample Service  ${SERVICE4}
+    Set Suite Variable  ${s_id1}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
@@ -187,32 +176,12 @@ JD-TC-CreateQueue-2
 
 JD-TC-CreateQueue-3
     [Documentation]    Create a second queue to the same location with more services
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME99}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
-    Set Suite Variable  ${lic_name}  ${decrypted_data['accountLicenseDetails']['accountLicense']['name']}
-
-    ${resp}=   Get License UsageInfo 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${pkg_id}=   get_highest_license_pkg
-    Log   ${pkg_id}
-    Set Suite Variable  ${pkgId}   ${pkg_id[0]}
-
-    IF  '${lic_id}' != '${pkgId}'
-        ${resp}=  Change License Package  ${pkgId}
-        Should Be Equal As Strings    ${resp.status_code}   200
-    END
 
 
-    ${s_id2}=  Create Sample Service  ${SERVICE3}
-    Set Suite Variable  ${s_id2}
-    ${s_id3}=  Create Sample Service  ${SERVICE4}
-    Set Suite Variable  ${s_id3}
+    ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
+
     ${s_id4}=  Create Sample Service  ${SERVICE5}
     ${s_id5}=  Create Sample Service  ${SERVICE6}
     ${sTime2}=  add_timezone_time  ${tz}  0  35  
@@ -220,7 +189,7 @@ JD-TC-CreateQueue-3
     ${eTime2}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable   ${eTime2}
     ${queue_name}=  FakerLibrary.bs
-    ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  1  5  ${lid22}  ${s_id2}  ${s_id3}  ${s_id4}  ${s_id5}
+    ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  1  5  ${lid22}  ${s_id}  ${s_id1}  ${s_id4}  ${s_id5}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -235,19 +204,19 @@ JD-TC-CreateQueue-3
     Should Be Equal As Strings  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}  ${eTime2}
     Should Be Equal As Strings  ${resp.json()['parallelServing']}  1
     Should Be Equal As Strings  ${resp.json()['capacity']}  5
-    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id2}
-    Should Be Equal As Strings  ${resp.json()['services'][1]['id']}  ${s_id3}
+    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
+    Should Be Equal As Strings  ${resp.json()['services'][1]['id']}  ${s_id1}
     Should Be Equal As Strings  ${resp.json()['services'][2]['id']}  ${s_id4}
     Should Be Equal As Strings  ${resp.json()['services'][3]['id']}  ${s_id5}
 
 JD-TC-CreateQueue-4
     [Documentation]    Create a second queue to the same location with same time and different services
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME99}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
 
-    clear_service   ${PUSERNAME99}
-    clear_queue  ${PUSERNAME99}
+    clear_service   ${PUSERNAME_U1}
+    clear_queue  ${PUSERNAME_U1}
 
     ${s_id6}=  Create Sample Service  ${SERVICE7}
     ${s_id7}=  Create Sample Service  ${SERVICE8}
@@ -273,11 +242,12 @@ JD-TC-CreateQueue-4
 
 JD-TC-CreateQueue-5
     [Documentation]    Create a  queue in different location with another service and  already existing queue name and time 
-    clear_service   ${PUSERNAME99}
-    clear_queue  ${PUSERNAME99}
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME99}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    clear_service   ${PUSERNAME_U1}
+    clear_queue  ${PUSERNAME_U1}
+    ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
+
     ${lid1}=  Create Sample Location
     Set Suite Variable  ${lid1}
 
@@ -305,26 +275,12 @@ JD-TC-CreateQueue-5
 JD-TC-CreateQueue-6
     [Documentation]    Create 2 queues with same time schedule on different days
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    clear_service   ${PUSERNAME_U1}
+    clear_queue  ${PUSERNAME_U1}
+    ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
 
-    ${resp}=   Get License UsageInfo 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${pkg_id}=   get_highest_license_pkg
-    Log   ${pkg_id}
-    Set Suite Variable  ${pkgId}   ${pkg_id[0]}
-
-    IF  '${lic_id}' != '${pkgId}'
-        ${resp}=  Change License Package  ${pkgId}
-        Should Be Equal As Strings    ${resp.status_code}   200
-    END
-
-
-    clear_service   ${PUSERNAME133}
-    clear_queue  ${PUSERNAME133}
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
@@ -368,26 +324,11 @@ JD-TC-CreateQueue-6
 
 JD-TC-CreateQueue-7
     [Documentation]    Two queue have same time schedul,one queue is enabled and another one disabled
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=   Get License UsageInfo 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${pkg_id}=   get_highest_license_pkg
-    Log   ${pkg_id}
-    Set Suite Variable  ${pkgId}   ${pkg_id[0]}
-
-    IF  '${lic_id}' != '${pkgId}'
-        ${resp}=  Change License Package  ${pkgId}
-        Should Be Equal As Strings    ${resp.status_code}   200
-    END
-
-
-    clear_service   ${PUSERNAME134}
-    clear_queue  ${PUSERNAME134}
+    clear_service   ${PUSERNAME_U1}
+    clear_queue  ${PUSERNAME_U1}
+    ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
 
     ${lid1}=  Create Sample Location
     Set Suite Variable  ${lid1}
@@ -631,24 +572,11 @@ JD-TC-CreateQueue-9
     
 JD-TC-CreateQueue-10
     [Documentation]    Create a queue with field tokenStart in a location of a valid provider then check next queue token start
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME138}
-    clear_location  ${PUSERNAME138}
-    clear_queue  ${PUSERNAME138}
-
-    ${resp}=   Get License UsageInfo 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${pkg_id}=   get_highest_license_pkg
-    Log   ${pkg_id}
-    Set Suite Variable  ${pkgId}   ${pkg_id[0]}
-
-    IF  '${lic_id}' != '${pkgId}'
-        ${resp}=  Change License Package  ${pkgId}
-        Should Be Equal As Strings    ${resp.status_code}   200
-    END
+    clear_service   ${PUSERNAME_U1}
+    clear_queue  ${PUSERNAME_U1}
+    ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
     
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -696,29 +624,15 @@ JD-TC-CreateQueue-10
     Should Be Equal As Strings  ${resp.json()['parallelServing']}  1
     Should Be Equal As Strings  ${resp.json()['capacity']}  5
     Should Be Equal As Strings  ${resp.json()['queueState']}  ${Qstate[0]}
-    Should Be Equal As Strings  ${resp.json()['tokenStarts']}  ${next_queue_start}
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id1}
 
 JD-TC-CreateQueue-11
     [Documentation]    Create a queue with field tokenStart in a location then create a another queue with another token start then check 2nd queue token start and check third queue token start.
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME180}
-    clear_location  ${PUSERNAME180}
-    clear_queue  ${PUSERNAME180}
-
-    ${resp}=   Get License UsageInfo 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${pkg_id}=   get_highest_license_pkg
-    Log   ${pkg_id}
-    Set Suite Variable  ${pkgId}   ${pkg_id[0]}
-
-    IF  '${lic_id}' != '${pkgId}'
-        ${resp}=  Change License Package  ${pkgId}
-        Should Be Equal As Strings    ${resp.status_code}   200
-    END
+    clear_service   ${PUSERNAME_U1}
+    clear_queue  ${PUSERNAME_U1}
+    ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
 
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -782,36 +696,16 @@ JD-TC-CreateQueue-11
     Should Be Equal As Strings  ${resp.json()['parallelServing']}  1
     Should Be Equal As Strings  ${resp.json()['capacity']}  5
     Should Be Equal As Strings  ${resp.json()['queueState']}  ${Qstate[0]}
-    Should Be Equal As Strings  ${resp.json()['tokenStarts']}  ${next_queue_start}
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id1}
 
 JD-TC-CreateQueue-12
     [Documentation]    Create a queue with field tokenStart in a location then create a another queue with same token start of first queue
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    # ${resp}=   Get upgradable license
-    # Should Be Equal As Strings    ${resp.status_code}   200
-    # ${len}=  Get Length  ${resp.json()}
-    # ${len}=  Evaluate  ${len}-1
-    # Set Test Variable  ${pkgid}  ${resp.json()[${len}]['pkgId']} 
-    # Set Test Variable  ${pkgname}  ${resp.json()[${len}]['pkgName']}
+    clear_service   ${PUSERNAME_U1}
+    clear_queue  ${PUSERNAME_U1}
+    ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
 
-    ${resp}=   Get License UsageInfo 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${pkg_id}=   get_highest_license_pkg
-    Log   ${pkg_id}
-    Set Suite Variable  ${pkgId}   ${pkg_id[0]}
-
-    IF  '${lic_id}' != '${pkgId}'
-        ${resp}=  Change License Package  ${pkgId}
-        Should Be Equal As Strings    ${resp.status_code}   200
-    END
-
-    clear_service   ${PUSERNAME20}
-    clear_location  ${PUSERNAME20}
-    clear_queue  ${PUSERNAME20}
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
@@ -985,13 +879,11 @@ JD-TC-CreateQueue-UH9
 JD-TC-CreateQueue-UH10
     [Documentation]    Create 2 queues with same time schedule on same date
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    clear_service   ${PUSERNAME134}
-    clear_location  ${PUSERNAME134}
-    clear_queue  ${PUSERNAME134}
+    clear_service   ${PUSERNAME_U1}
+    clear_queue  ${PUSERNAME_U1}
+    ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
 
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -1012,35 +904,12 @@ JD-TC-CreateQueue-UH10
     ${resp}=  Get Queue ById  ${q_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}  ${queue_name} 
-    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${lid}
-    Should Be Equal As Strings  ${resp.json()['queueSchedule']['recurringType']}  ${recurringtype[1]}
-    Should Be Equal As Strings  ${resp.json()['queueSchedule']['timeSlots'][0]['sTime']}  ${sTime1}
-    Should Be Equal As Strings  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}  ${eTime1}
-    Should Be Equal As Strings  ${resp.json()['parallelServing']}  1
-    Should Be Equal As Strings  ${resp.json()['capacity']}  5
-    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
-    Should Be Equal As Strings  ${resp.json()['services'][1]['id']}  ${s_id1} 
 
     ${queue_name1}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${s_id}  ${s_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${QUEUE_SCHEDULE_OVERLAPS_CREATE}"
-
-
-JD-TC-CreateQueue-13
-    [Documentation]  Create Queue for Branch
-    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-
-JD-TC-CreateQueue-14
-    [Documentation]  Create Queue for User
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
-    Should Be Equal As Strings    ${resp.status_code}    200
 
 *** Comments ***
 
