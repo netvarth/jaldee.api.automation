@@ -49,8 +49,12 @@ JD-TC-List_ALL_LINKS-1
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph}   ${highest_package[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
+    Log    Request Headers: ${resp.request.headers}
+    Log    Request Cookies: ${resp.request.headers['Cookie']}
+    ${cookie_parts}    ${jsessionynw_value}    Split String    ${resp.request.headers['Cookie']}    =
+    Log   ${jsessionynw_value}
 
-    ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderSignUp']}
+    ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderSignUp']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -88,7 +92,7 @@ JD-TC-List_ALL_LINKS-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
-    ${resp}=    Account Activation  ${ph2}  ${OtpPurpose['ProviderSignUp']}
+    ${resp}=    Account Activation  ${ph2}  ${OtpPurpose['ProviderSignUp']}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -146,18 +150,22 @@ JD-TC-List_ALL_LINKS-2
 
     [Documentation]    List all Links - where provider didnt linked any account
 
-    ${ph3}=  Evaluate  ${PUSERNAME}+5666478
+    ${ph3}=  Evaluate  ${PUSERNAME}+5666011
     Set Suite Variable  ${ph3}
     ${firstname3}=  FakerLibrary.first_name
     ${lastname3}=  FakerLibrary.last_name
     Set Suite Variable      ${firstname3}
     Set Suite Variable      ${lastname3}
 
-    ${resp}=  Account SignUp  ${firstname3}  ${lastname3}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph}   1
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    202
+    ${resp1}=  Account SignUp  ${firstname3}  ${lastname3}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph3}   1
+    Log   ${resp1.content}
+    Should Be Equal As Strings    ${resp1.status_code}    202
+    Log    Request Headers: ${resp1.request.headers}
+    Log    Request Cookies: ${resp1.request.headers['Cookie']}
+    ${cookie_parts}    ${jsessionynw_value}    Split String    ${resp1.request.headers['Cookie']}    =
+    Log   ${jsessionynw_value}
 
-    ${resp}=    Account Activation  ${ph3}  ${OtpPurpose['ProviderSignUp']}
+    ${resp}=    Account Activation  ${ph3}  ${OtpPurpose['ProviderSignUp']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

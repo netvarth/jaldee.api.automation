@@ -62,8 +62,12 @@ JD-TC-Get_LoginId-1
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph}   ${highest_package[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
+    Log    Request Headers: ${resp.request.headers}
+    Log    Request Cookies: ${resp.request.headers['Cookie']}
+    ${cookie_parts}    ${jsessionynw_value}    Split String    ${resp.request.headers['Cookie']}    =
+    Log   ${jsessionynw_value}
 
-    ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderSignUp']}
+    ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderSignUp']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

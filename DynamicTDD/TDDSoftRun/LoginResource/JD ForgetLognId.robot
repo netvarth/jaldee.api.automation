@@ -64,7 +64,7 @@ JD-TC-Forget_LoginId-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${loginId}=     Random Int  min=1  max=9999
+    ${loginId}=     Random Int  min=1111  max=9999
     Set Suite Variable      ${loginId}
 
 
