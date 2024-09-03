@@ -22,11 +22,11 @@ ${self}     0
 
 *** Test Cases ***
 
-JD-TC-GetAppointmentToday-1
+JD-TC-GetAppointmentTodayCount-1
 
-    [Documentation]  takes two walkin appointment for today and verify today appointment details.
+    [Documentation]  takes two walkin appointment for today and verify today appointment details count.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -38,8 +38,8 @@ JD-TC-GetAppointmentToday-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME100}
-    clear_customer   ${PUSERNAME100}
+    clear_location_n_service  ${PUSERNAME105}
+    clear_customer   ${PUSERNAME105}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -84,7 +84,7 @@ JD-TC-GetAppointmentToday-1
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
    
-    ${resp}=  AddCustomer  ${CUSERNAME20}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
+    ${resp}=  AddCustomer  ${CUSERNAME18}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${cid}  ${resp.json()}
@@ -106,7 +106,7 @@ JD-TC-GetAppointmentToday-1
     ${fname1}=  FakerLibrary.first_name
     ${lname1}=  FakerLibrary.last_name
    
-    ${resp}=  AddCustomer  ${CUSERNAME21}   firstName=${fname1}   lastName=${lname1}  countryCode=${countryCodes[1]}  
+    ${resp}=  AddCustomer  ${CUSERNAME19}   firstName=${fname1}   lastName=${lname1}  countryCode=${countryCodes[1]}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${cid1}  ${resp.json()}
@@ -125,43 +125,16 @@ JD-TC-GetAppointmentToday-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Appointments Today
+    ${resp}=  Get Today Appointment Count
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}  2
+    Should Be Equal As Strings  ${resp.json()}  2
 
-    FOR  ${i}  IN RANGE   ${len}
-
-        IF  '${resp.json()[${i}]['uid']}' == '${apptid1}'  
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cid}      
-            Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot1}
-            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['firstName']}          ${fname}
-            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['lastName']}           ${lname}
-            Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}                         ${lid}
-            Should Be Equal As Strings  ${resp.json()[${i}]['service']['id']}                          ${s_id}
-            Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id}
-
-        ELSE IF   '${resp.json()[${i}]['uid']}' == '${apptid2}'     
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cid1}      
-            Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot2}
-            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['firstName']}          ${fname1}
-            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['lastName']}           ${lname1}
-            Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}                         ${lid}
-            Should Be Equal As Strings  ${resp.json()[${i}]['service']['id']}                          ${s_id}
-            Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id}
-        END
-    END
-
-JD-TC-GetAppointmentToday-2
+JD-TC-GetAppointmentTodayCount-2
 
     [Documentation]  takes two online appointment for today and verify today appointment details.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -189,16 +162,16 @@ JD-TC-GetAppointmentToday-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME20}    ${account_id}
+    ${resp}=    Send Otp For Login    ${CUSERNAME18}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME20}   ${OtpPurpose['Authentication']}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME18}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${fname}   ${resp.json()['firstName']}
@@ -234,16 +207,16 @@ JD-TC-GetAppointmentToday-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME21}    ${account_id}
+    ${resp}=    Send Otp For Login    ${CUSERNAME19}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME21}   ${OtpPurpose['Authentication']}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME19}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME21}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${fname1}   ${resp.json()['firstName']}
@@ -279,35 +252,20 @@ JD-TC-GetAppointmentToday-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${apptids}=  Create List   ${apptid4}  ${apptid3}  ${apptid2}  ${apptid1}
-    ${resp}=  Get Appointments Today
+    ${resp}=  Get Today Appointment Count
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}  4
+    Should Be Equal As Strings  ${resp.json()}  4
 
-    FOR  ${i}  IN RANGE   ${len}
-
-        IF  '${resp.json()[${i}]['uid']}' == '${apptid1}'  
-            CONTINUE
-        ELSE IF   '${resp.json()[${i}]['uid']}' == '${apptid2}'     
-            CONTINUE
-        ELSE IF   '${resp.json()[${i}]['uid']}' == '${apptid3}'     
-            CONTINUE
-        ELSE IF   '${resp.json()[${i}]['uid']}' == '${apptid4}'     
-            CONTINUE
-        END
-    END
-    
-JD-TC-GetAppointmentToday-3
+JD-TC-GetAppointmentTodayCount-3
 
     [Documentation]  takes a walkin appointment for today for a service with prepayment , and it should show in today appointment with status as confirmed.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -316,8 +274,8 @@ JD-TC-GetAppointmentToday-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME100}
-    clear_appt_schedule   ${PUSERNAME100}
+    clear_service   ${PUSERNAME105}
+    clear_appt_schedule   ${PUSERNAME105}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -352,7 +310,7 @@ JD-TC-GetAppointmentToday-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
   
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
@@ -371,20 +329,16 @@ JD-TC-GetAppointmentToday-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Appointments Today
+    ${resp}=  Get Today Appointment Count
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  1
 
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}   1
-
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
-
-JD-TC-GetAppointmentToday-4
+JD-TC-GetAppointmentTodayCount-4
 
     [Documentation]  takes an online appointment for today for a service with prepayment , and it should not show in today appointment with status as confirmed.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -398,8 +352,8 @@ JD-TC-GetAppointmentToday-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME100}
-    clear_appt_schedule   ${PUSERNAME100}
+    clear_service   ${PUSERNAME105}
+    clear_appt_schedule   ${PUSERNAME105}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -433,16 +387,16 @@ JD-TC-GetAppointmentToday-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME20}    ${account_id}
+    ${resp}=    Send Otp For Login    ${CUSERNAME18}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME20}   ${OtpPurpose['Authentication']}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME18}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${fname}   ${resp.json()['firstName']}
@@ -478,20 +432,20 @@ JD-TC-GetAppointmentToday-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Appointments Today
+    ${resp}=  Get Today Appointment Count 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()}    []
+    Should Be Equal As Strings  ${resp.json()}  0
 
-JD-TC-GetAppointmentToday-5
+JD-TC-GetAppointmentTodayCount-5
 
     [Documentation]  takes an online appointment for today for a service with prepayment then do the pre payment , and it should in today appointment with status as confirmed.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -519,8 +473,8 @@ JD-TC-GetAppointmentToday-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME100}
-    clear_appt_schedule   ${PUSERNAME100}
+    clear_service   ${PUSERNAME105}
+    clear_appt_schedule   ${PUSERNAME105}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -554,16 +508,16 @@ JD-TC-GetAppointmentToday-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME20}    ${account_id}
+    ${resp}=    Send Otp For Login    ${CUSERNAME18}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME20}   ${OtpPurpose['Authentication']}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME18}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${fname}   ${resp.json()['firstName']}
@@ -603,22 +557,20 @@ JD-TC-GetAppointmentToday-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Appointments Today
+    ${resp}=  Get Today Appointment Count
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  1
 
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}   1
-
-JD-TC-GetAppointmentToday-6
+JD-TC-GetAppointmentTodayCount-6
 
     [Documentation]  takes an online and a walkin appointment for today, then verify the get appointment today with filter apptStatus as confirmed.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -632,8 +584,8 @@ JD-TC-GetAppointmentToday-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME100}
-    clear_appt_schedule   ${PUSERNAME100}
+    clear_service   ${PUSERNAME105}
+    clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -659,7 +611,7 @@ JD-TC-GetAppointmentToday-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
   
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME21}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
@@ -682,16 +634,16 @@ JD-TC-GetAppointmentToday-6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME20}    ${account_id}
+    ${resp}=    Send Otp For Login    ${CUSERNAME18}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME20}   ${OtpPurpose['Authentication']}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME18}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${fname}   ${resp.json()['firstName']}
@@ -727,35 +679,25 @@ JD-TC-GetAppointmentToday-6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Appointments Today
+    ${resp}=  Get Today Appointment Count
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  2
 
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}   2
-
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
-    Should Be Equal As Strings  ${resp.json()[1]['uid']}   ${apptid2}
-
-    ${resp}=  Get Appointments Today   apptStatus-eq=${apptStatus[1]}
+    ${resp}=  Get Today Appointment Count  apptStatus-eq=${apptStatus[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  1
 
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}   2
-
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
-    Should Be Equal As Strings  ${resp.json()[1]['uid']}   ${apptid2}
-
-JD-TC-GetAppointmentToday-7
+JD-TC-GetAppointmentTodayCount-7
 
     [Documentation]  takes two walkin appointment for today, change first appointemtn to started, then verify the get appointment today with filter apptStatus as started.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -764,8 +706,8 @@ JD-TC-GetAppointmentToday-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME100}
-    clear_appt_schedule   ${PUSERNAME100}
+    clear_service   ${PUSERNAME105}
+    clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -792,7 +734,7 @@ JD-TC-GetAppointmentToday-7
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
   
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME21}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
@@ -811,7 +753,7 @@ JD-TC-GetAppointmentToday-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
@@ -838,19 +780,16 @@ JD-TC-GetAppointmentToday-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Appointments Today   apptStatus-eq=${apptStatus[3]}
+    ${resp}=  Get Today Appointment Count  apptStatus-eq=${apptStatus[3]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  1
 
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
-
-JD-TC-GetAppointmentToday-8
+JD-TC-GetAppointmentTodayCount-8
 
     [Documentation]  takes two walkin appointment for today, change first appointemtn to completed, then verify the get appointment today with filter apptStatus as completed.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -859,8 +798,8 @@ JD-TC-GetAppointmentToday-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME100}
-    clear_appt_schedule   ${PUSERNAME100}
+    clear_service   ${PUSERNAME105}
+    clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -887,7 +826,7 @@ JD-TC-GetAppointmentToday-8
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
   
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME21}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
@@ -906,7 +845,7 @@ JD-TC-GetAppointmentToday-8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
@@ -941,19 +880,16 @@ JD-TC-GetAppointmentToday-8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Appointments Today   apptStatus-eq=${apptStatus[6]}
+    ${resp}=  Get Today Appointment Count  apptStatus-eq=${apptStatus[6]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}   1
 
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
-
-JD-TC-GetAppointmentToday-9
+JD-TC-GetAppointmentTodayCount-9
 
     [Documentation]  takes two walkin appointment for today, change first appointment to cancelled, then verify the get appointment today with filter apptStatus as cancelled.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -962,8 +898,8 @@ JD-TC-GetAppointmentToday-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME100}
-    clear_appt_schedule   ${PUSERNAME100}
+    clear_service   ${PUSERNAME105}
+    clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -990,7 +926,7 @@ JD-TC-GetAppointmentToday-9
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
   
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME21}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
@@ -1009,7 +945,7 @@ JD-TC-GetAppointmentToday-9
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
@@ -1037,19 +973,16 @@ JD-TC-GetAppointmentToday-9
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Appointments Today   apptStatus-eq=${apptStatus[4]}
+    ${resp}=  Get Today Appointment Count  apptStatus-eq=${apptStatus[4]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  1
 
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
-
-JD-TC-GetAppointmentToday-10
+JD-TC-GetAppointmentTodayCount-10
 
     [Documentation]  takes two walkin appointment for today, change first appointment to rejected, then verify the get appointment today with filter as rejected.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1058,8 +991,8 @@ JD-TC-GetAppointmentToday-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME100}
-    clear_appt_schedule   ${PUSERNAME100}
+    clear_service   ${PUSERNAME105}
+    clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -1086,7 +1019,7 @@ JD-TC-GetAppointmentToday-10
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
   
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME21}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
@@ -1105,7 +1038,7 @@ JD-TC-GetAppointmentToday-10
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
@@ -1133,19 +1066,16 @@ JD-TC-GetAppointmentToday-10
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Appointments Today   apptStatus-eq=${apptStatus[5]}
+    ${resp}=  Get Today Appointment Count  apptStatus-eq=${apptStatus[5]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  1
 
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
-
-JD-TC-GetAppointmentToday-11
+JD-TC-GetAppointmentTodayCount-11
 
     [Documentation]  takes two walkin appointment for today for two different services,then verify the get appointment today with filter as service.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1154,8 +1084,8 @@ JD-TC-GetAppointmentToday-11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME100}
-    clear_appt_schedule   ${PUSERNAME100}
+    clear_service   ${PUSERNAME105}
+    clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -1189,7 +1119,7 @@ JD-TC-GetAppointmentToday-11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][0]['time']}
   
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME21}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
@@ -1221,19 +1151,16 @@ JD-TC-GetAppointmentToday-11
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Appointments Today   service-eq=${s_id1}
+    ${resp}=  Get Today Appointment Count  service-eq=${s_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  1
 
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid2}
-
-JD-TC-GetAppointmentToday-12
+JD-TC-GetAppointmentTodayCount-12
 
     [Documentation]  takes two walkin appointment for today for two different provider consumers, then verify the get appointment today with filter as firstName.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1242,8 +1169,8 @@ JD-TC-GetAppointmentToday-12
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME100}
-    clear_appt_schedule   ${PUSERNAME100}
+    clear_service   ${PUSERNAME105}
+    clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -1270,7 +1197,7 @@ JD-TC-GetAppointmentToday-12
     Set Test Variable   ${slot1}    ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME21}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
@@ -1289,7 +1216,7 @@ JD-TC-GetAppointmentToday-12
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
@@ -1308,19 +1235,16 @@ JD-TC-GetAppointmentToday-12
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Appointments Today   firstName-eq=${fname1}
+    ${resp}=  Get Today Appointment Count  firstName-eq=${fname1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  1
 
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid2}
-
-JD-TC-GetAppointmentToday-13
+JD-TC-GetAppointmentTodayCount-13
 
     [Documentation]  takes two walkin appointment for today for two different provider consumers, then verify the get appointment today with filter as lastName.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1329,8 +1253,8 @@ JD-TC-GetAppointmentToday-13
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME100}
-    clear_appt_schedule   ${PUSERNAME100}
+    clear_service   ${PUSERNAME105}
+    clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -1357,7 +1281,7 @@ JD-TC-GetAppointmentToday-13
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME21}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
@@ -1377,7 +1301,7 @@ JD-TC-GetAppointmentToday-13
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
@@ -1396,19 +1320,16 @@ JD-TC-GetAppointmentToday-13
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Appointments Today   firstName-eq=${lname}
+    ${resp}=  Get Today Appointment Count  firstName-eq=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  1
 
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
-
-JD-TC-GetAppointmentToday-14
+JD-TC-GetAppointmentTodayCount-14
 
     [Documentation]  takes two walkin appointment for today, then verify the get appointment today with filter as encoded id.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1417,8 +1338,8 @@ JD-TC-GetAppointmentToday-14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME100}
-    clear_appt_schedule   ${PUSERNAME100}
+    clear_service   ${PUSERNAME105}
+    clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -1444,7 +1365,7 @@ JD-TC-GetAppointmentToday-14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
   
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME21}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
@@ -1463,7 +1384,7 @@ JD-TC-GetAppointmentToday-14
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
@@ -1487,19 +1408,16 @@ JD-TC-GetAppointmentToday-14
     Should Be Equal As Strings  ${resp.status_code}  200
     ${encId2}=  Set Variable   ${resp.json()}
 
-    ${resp}=  Get Appointments Today   appointmentEncId-eq=${encId2}
+    ${resp}=  Get Today Appointment Count  appointmentEncId-eq=${encId2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  1
 
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid2}
-
-JD-TC-GetAppointmentToday-15
+JD-TC-GetAppointmentTodayCount-15
 
     [Documentation]  takes two walkin appointment for today, then verify the get appointment today with filter as schedule id.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1508,8 +1426,8 @@ JD-TC-GetAppointmentToday-15
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME100}
-    clear_appt_schedule   ${PUSERNAME100}
+    clear_service   ${PUSERNAME105}
+    clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -1551,7 +1469,7 @@ JD-TC-GetAppointmentToday-15
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][0]['time']}
   
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME21}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
@@ -1583,19 +1501,16 @@ JD-TC-GetAppointmentToday-15
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Appointments Today   schedule-eq=${sch_id1}
+    ${resp}=  Get Today Appointment Count  schedule-eq=${sch_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  1
 
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid2}
-
-JD-TC-GetAppointmentToday-16
+JD-TC-GetAppointmentTodayCount-16
 
     [Documentation]  takes an online and a walkin appointment for today, then verify the get appointment today with filter as appointment by.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1609,8 +1524,8 @@ JD-TC-GetAppointmentToday-16
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME100}
-    clear_appt_schedule   ${PUSERNAME100}
+    clear_service   ${PUSERNAME105}
+    clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -1636,7 +1551,7 @@ JD-TC-GetAppointmentToday-16
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
   
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME21}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
@@ -1659,16 +1574,16 @@ JD-TC-GetAppointmentToday-16
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME20}    ${account_id}
+    ${resp}=    Send Otp For Login    ${CUSERNAME18}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME20}   ${OtpPurpose['Authentication']}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME18}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${fname}   ${resp.json()['firstName']}
@@ -1704,31 +1619,25 @@ JD-TC-GetAppointmentToday-16
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Appointments Today   apptBy-eq=${apptBy[1]}
+    ${resp}=  Get Today Appointment Count  apptBy-eq=${apptBy[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  1
 
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}   1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid2}
-
-    ${resp}=  Get Appointments Today   apptBy-eq=${apptBy[0]}
+    ${resp}=  Get Today Appointment Count  apptBy-eq=${apptBy[0]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  1
 
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}   1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
-
-JD-TC-GetAppointmentToday-17
+JD-TC-GetAppointmentTodayCount-17
 
     [Documentation]  takes two walkin appointment for today, then verify the get appointment today with filter as appt time.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1737,8 +1646,8 @@ JD-TC-GetAppointmentToday-17
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME100}
-    clear_appt_schedule   ${PUSERNAME100}
+    clear_service   ${PUSERNAME105}
+    clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -1765,7 +1674,7 @@ JD-TC-GetAppointmentToday-17
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
   
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME21}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
@@ -1784,7 +1693,7 @@ JD-TC-GetAppointmentToday-17
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
@@ -1803,19 +1712,16 @@ JD-TC-GetAppointmentToday-17
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Appointments Today   apptTime-eq=${slot1}
+    ${resp}=  Get Today Appointment Count  apptTime-eq=${slot1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  1
 
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
-
-JD-TC-GetAppointmentToday-18
+JD-TC-GetAppointmentTodayCount-18
 
     [Documentation]  takes two walkin appointment for today, then verify the get appointment today with filter as paymentStatus NotPaid.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1824,8 +1730,8 @@ JD-TC-GetAppointmentToday-18
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME100}
-    clear_appt_schedule   ${PUSERNAME100}
+    clear_service   ${PUSERNAME105}
+    clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -1852,7 +1758,7 @@ JD-TC-GetAppointmentToday-18
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
   
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME21}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
@@ -1871,7 +1777,7 @@ JD-TC-GetAppointmentToday-18
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
@@ -1890,20 +1796,16 @@ JD-TC-GetAppointmentToday-18
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Appointments Today   paymentStatus-eq=${paymentStatus[0]}
+    ${resp}=  Get Today Appointment Count  paymentStatus-eq=${paymentStatus[0]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  2
 
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    2
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
-    Should Be Equal As Strings  ${resp.json()[1]['uid']}   ${apptid2}
-
-JD-TC-GetAppointmentToday-19
+JD-TC-GetAppointmentTodayCount-19
 
     [Documentation]  takes two walkin appointment for today, then verify the get appointment today with filter as paymentStatus PartiallyPaid.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1912,8 +1814,8 @@ JD-TC-GetAppointmentToday-19
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME100}
-    clear_appt_schedule   ${PUSERNAME100}
+    clear_service   ${PUSERNAME105}
+    clear_appt_schedule   ${PUSERNAME105}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -1948,7 +1850,7 @@ JD-TC-GetAppointmentToday-19
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
   
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME21}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
@@ -1967,7 +1869,7 @@ JD-TC-GetAppointmentToday-19
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
@@ -1991,19 +1893,16 @@ JD-TC-GetAppointmentToday-19
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Appointments Today   paymentStatus-eq=${paymentStatus[1]}
+    ${resp}=  Get Today Appointment Count  paymentStatus-eq=${paymentStatus[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  1
 
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
-
-JD-TC-GetAppointmentToday-20
+JD-TC-GetAppointmentTodayCount-20
 
     [Documentation]  takes two walkin appointment for today, then verify the get appointment today with filter as paymentStatus FullyPaid.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2012,8 +1911,8 @@ JD-TC-GetAppointmentToday-20
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME100}
-    clear_appt_schedule   ${PUSERNAME100}
+    clear_service   ${PUSERNAME105}
+    clear_appt_schedule   ${PUSERNAME105}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -2049,7 +1948,7 @@ JD-TC-GetAppointmentToday-20
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
   
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME21}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
@@ -2068,7 +1967,7 @@ JD-TC-GetAppointmentToday-20
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
@@ -2092,19 +1991,16 @@ JD-TC-GetAppointmentToday-20
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Appointments Today   paymentStatus-eq=${paymentStatus[2]}
+    ${resp}=  Get Today Appointment Count  paymentStatus-eq=${paymentStatus[2]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}   1
 
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
-
-JD-TC-GetAppointmentToday-21
+JD-TC-GetAppointmentTodayCount-21
 
     [Documentation]  takes two walkin appointment for today, then verify the get appointment today with filter as paymentStatus Refund.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2113,8 +2009,8 @@ JD-TC-GetAppointmentToday-21
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME100}
-    clear_appt_schedule   ${PUSERNAME100}
+    clear_service   ${PUSERNAME105}
+    clear_appt_schedule   ${PUSERNAME105}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -2150,7 +2046,7 @@ JD-TC-GetAppointmentToday-21
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
   
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME21}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
@@ -2169,7 +2065,7 @@ JD-TC-GetAppointmentToday-21
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
@@ -2198,19 +2094,16 @@ JD-TC-GetAppointmentToday-21
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Appointments Today   paymentStatus-eq=${paymentStatus[3]}
+    ${resp}=  Get Today Appointment Count  paymentStatus-eq=${paymentStatus[3]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  1
 
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
-
-JD-TC-GetAppointmentToday-22
+JD-TC-GetAppointmentTodayCount-22
 
     [Documentation]  takes two walkin appointment for today, then verify the get appointment today with filter as location.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2219,8 +2112,8 @@ JD-TC-GetAppointmentToday-22
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME100}
-    clear_appt_schedule   ${PUSERNAME100}
+    clear_service   ${PUSERNAME105}
+    clear_appt_schedule   ${PUSERNAME105}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -2256,7 +2149,7 @@ JD-TC-GetAppointmentToday-22
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
   
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME21}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
@@ -2275,7 +2168,7 @@ JD-TC-GetAppointmentToday-22
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
@@ -2294,20 +2187,16 @@ JD-TC-GetAppointmentToday-22
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Appointments Today   location-eq=${lid}
+    ${resp}=  Get Today Appointment Count  location-eq=${lid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}   2
 
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    2
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
-    Should Be Equal As Strings  ${resp.json()[1]['uid']}   ${apptid2}
-
-JD-TC-GetAppointmentToday-23
+JD-TC-GetAppointmentTodayCount-23
 
     [Documentation]  takes two walkin appointment for today, then verify the get appointment today with filter as appt start time.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2316,8 +2205,8 @@ JD-TC-GetAppointmentToday-23
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME100}
-    clear_appt_schedule   ${PUSERNAME100}
+    clear_service   ${PUSERNAME105}
+    clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -2344,7 +2233,7 @@ JD-TC-GetAppointmentToday-23
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
   
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME21}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
@@ -2363,7 +2252,7 @@ JD-TC-GetAppointmentToday-23
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
@@ -2384,19 +2273,16 @@ JD-TC-GetAppointmentToday-23
 
     ${slot1_time}=  Get Substring   ${slot1}  0  5
 
-    ${resp}=  Get Appointments Today   apptstartTime-eq=${slot1_time}
+    ${resp}=  Get Today Appointment Count  apptstartTime-eq=${slot1_time}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  1
 
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
-
-JD-TC-GetAppointmentToday-24
+JD-TC-GetAppointmentTodayCount-24
 
     [Documentation]  takes two walkin appointment for today, change first appointment to cancelled, then verify the get appointment today with filter cancel reason.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2405,8 +2291,8 @@ JD-TC-GetAppointmentToday-24
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME100}
-    clear_appt_schedule   ${PUSERNAME100}
+    clear_service   ${PUSERNAME105}
+    clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -2433,7 +2319,7 @@ JD-TC-GetAppointmentToday-24
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
   
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME21}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
@@ -2452,7 +2338,7 @@ JD-TC-GetAppointmentToday-24
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
@@ -2487,18 +2373,16 @@ JD-TC-GetAppointmentToday-24
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Appointments Today   cancelReason-eq=${reason1}
+    ${resp}=  Get Today Appointment Count  cancelReason-eq=${reason1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    Should Be Equal As Strings  ${resp.json()}  1
 
-JD-TC-GetAppointmentToday-25
+JD-TC-GetAppointmentTodayCount-25
 
     [Documentation]  takes an online and a walkin appointment for today, then verify the get appointment today with filter apptmode.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2512,8 +2396,8 @@ JD-TC-GetAppointmentToday-25
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME100}
-    clear_appt_schedule   ${PUSERNAME100}
+    clear_service   ${PUSERNAME105}
+    clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -2539,7 +2423,7 @@ JD-TC-GetAppointmentToday-25
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
   
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME21}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
@@ -2562,16 +2446,16 @@ JD-TC-GetAppointmentToday-25
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME20}    ${account_id}
+    ${resp}=    Send Otp For Login    ${CUSERNAME18}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME20}   ${OtpPurpose['Authentication']}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME18}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME18}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${fname}   ${resp.json()['firstName']}
@@ -2607,31 +2491,25 @@ JD-TC-GetAppointmentToday-25
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Appointments Today   appointmentMode-eq=${appointmentMode[0]}
+    ${resp}=  Get Today Appointment Count  appointmentMode-eq=${appointmentMode[0]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}   1
 
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}   1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
-
-    ${resp}=  Get Appointments Today   appointmentMode-eq=${appointmentMode[2]}
+    ${resp}=  Get Today Appointment Count  appointmentMode-eq=${appointmentMode[2]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}   1
 
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}   1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid2}
-
-JD-TC-GetAppointmentToday-26
+JD-TC-GetAppointmentTodayCount-26
 
     [Documentation]  takes two walkin appointment for today for two different provider consumers, then verify the get appointment today with filter as dob.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2640,9 +2518,9 @@ JD-TC-GetAppointmentToday-26
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME100}
-    clear_appt_schedule   ${PUSERNAME100}
-    clear_customer   ${PUSERNAME100}
+    clear_service   ${PUSERNAME105}
+    clear_appt_schedule   ${PUSERNAME105}
+    clear_customer   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -2674,7 +2552,7 @@ JD-TC-GetAppointmentToday-26
     ${dob1}=    FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
    
-    ${resp}=  AddCustomer  ${CUSERNAME22}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}   gender=${gender}  dob=${dob1} 
+    ${resp}=  AddCustomer  ${CUSERNAME16}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}   gender=${gender}  dob=${dob1} 
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${cid}  ${resp.json()}
@@ -2684,7 +2562,7 @@ JD-TC-GetAppointmentToday-26
     ${dob2}=    FakerLibrary.Date
     ${gender1}=  Random Element    ${Genderlist}
    
-    ${resp}=  AddCustomer  ${CUSERNAME23}   firstName=${fname1}   lastName=${lname1}  countryCode=${countryCodes[1]}   gender=${gender1}  dob=${dob2} 
+    ${resp}=  AddCustomer  ${CUSERNAME17}   firstName=${fname1}   lastName=${lname1}  countryCode=${countryCodes[1]}   gender=${gender1}  dob=${dob2} 
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${cid1}  ${resp.json()}
@@ -2715,27 +2593,23 @@ JD-TC-GetAppointmentToday-26
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Appointments Today   dob-eq=${dob1}
+    ${resp}=  Get Today Appointment Count  dob-eq=${dob1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}   1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    Should Be Equal As Strings  ${resp.json()}   1
 
-    ${resp}=  Get Appointments Today   dob-eq=${dob2}
+    ${resp}=  Get Today Appointment Count  dob-eq=${dob2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}   1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid2}
+    Should Be Equal As Strings  ${resp.json()}   1
 
-JD-TC-GetAppointmentToday-27
+JD-TC-GetAppointmentTodayCount-27
 
     [Documentation]  takes two walkin appointment for today for two different provider consumers, then verify the get appointment today with filter as gender.
     
     @{gens}=  Create List
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2744,8 +2618,8 @@ JD-TC-GetAppointmentToday-27
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME100}
-    clear_appt_schedule   ${PUSERNAME100}
+    clear_service   ${PUSERNAME105}
+    clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -2772,7 +2646,7 @@ JD-TC-GetAppointmentToday-27
     Set Test Variable   ${slot1}    ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME22}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME16}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
@@ -2792,7 +2666,7 @@ JD-TC-GetAppointmentToday-27
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME23}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME17}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
@@ -2815,23 +2689,21 @@ JD-TC-GetAppointmentToday-27
     ${count_male}=  Get Match Count  ${gens}  ${Genderlist[1]}
     ${count_female}=  Get Match Count  ${gens}  ${Genderlist[0]}
 
-    ${resp}=  Get Appointments Today   gender-eq=${Genderlist[1]} 
+    ${resp}=  Get Today Appointment Count  gender-eq=${Genderlist[1]} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${len}=  Get Length   ${resp.json()}
-    Should Be Equal As Strings  ${len}  ${count_male}
-    
-    ${resp}=  Get Appointments Today   gender-eq=${Genderlist[0]}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${len}=  Get Length   ${resp.json()}
-    Should Be Equal As Strings  ${len}  ${count_female}
+    Should Be Equal As Strings  ${resp.json()}  ${count_male}
 
-JD-TC-GetAppointmentToday-28
+    ${resp}=  Get Today Appointment Count  gender-eq=${Genderlist[0]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  ${count_female}
+
+JD-TC-GetAppointmentTodayCount-28
 
     [Documentation]  takes two walkin appointment for today for two different provider consumers, then verify the get appointment today with filter as dob.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2840,9 +2712,9 @@ JD-TC-GetAppointmentToday-28
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME100}
-    clear_appt_schedule   ${PUSERNAME100}
-    clear_Label  ${PUSERNAME100}
+    clear_service   ${PUSERNAME105}
+    clear_appt_schedule   ${PUSERNAME105}
+    clear_Label  ${PUSERNAME105}
   
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -2869,13 +2741,13 @@ JD-TC-GetAppointmentToday-28
     Set Test Variable   ${slot1}    ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME22}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME16}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
     Set Test Variable  ${fname}  ${resp.json()[0]['firstName']}
     
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME23}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME17}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
@@ -2945,12 +2817,12 @@ JD-TC-GetAppointmentToday-28
    
     ${labelinput}=  Set Variable  ${labelname[0]}::${label_value1}
 
-    ${resp}=  Get Appointments Today   label-eq=${labelinput}
+    ${resp}=  Get Today Appointment Count  label-eq=${labelinput}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    Should Be Equal As Strings  ${resp.json()}   1
 
-JD-TC-GetAppointmentToday-29
+JD-TC-GetAppointmentTodayCount-29
 
     [Documentation]  taking a appt for a provider who has a branch in US. base location is India.(online appt from India),
     ...   then verify get appt today details. 
@@ -3077,27 +2949,25 @@ JD-TC-GetAppointmentToday-29
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=    Get Consumer Appointments Today  
+    ${resp}=    Get Consumer Appointments Today Count
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}  1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    Should Be Equal As Strings  ${resp.json()}   1
 
-JD-TC-GetAppointmentToday-UH1
+JD-TC-GetAppointmentTodayCount-UH1
 
     [Documentation]  Get provider's appointments today without provider login
     
-    ${resp}=  Get Appointments Today
+    ${resp}=  Get Today Appointment Count
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}"
 
-JD-TC-GetAppointmentToday-UH2
+JD-TC-GetAppointmentTodayCount-UH2
 
     [Documentation]  Get provider's appointments today with consumer login
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3110,25 +2980,25 @@ JD-TC-GetAppointmentToday-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME22}    ${account_id}
+    ${resp}=    Send Otp For Login    ${CUSERNAME16}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME22}   ${OtpPurpose['Authentication']}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME16}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME22}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Get Appointments Today
+    ${resp}=  Get Today Appointment Count
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}"
 
-JD-TC-GetAppointmentToday-UH3
+JD-TC-GetAppointmentTodayCount-UH3
 
     [Documentation]  Get provider's appointments today filtered by account id of another provider
     
@@ -3137,6 +3007,6 @@ JD-TC-GetAppointmentToday-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Appointments Today   account-eq=${pid}
+    ${resp}=  Get Today Appointment Count  account-eq=${pid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
