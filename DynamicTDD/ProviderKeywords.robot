@@ -504,7 +504,7 @@ Create Sample Service with Prepayment
     RETURN  ${resp.json()}
 
 Create Sample User
-    [Arguments]   ${admin}=${bool[0]}
+    [Arguments]    ${admin}=${bool[0]}   &{kwargs}
 
     ${random_ph}=   Random Int   min=10000   max=20000
     ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+${random_ph}
@@ -513,7 +513,7 @@ Create Sample User
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${countryCodes[1]}  ${PUSERNAME_U1}   ${userType[0]}  
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${countryCodes[1]}  ${PUSERNAME_U1}   ${userType[0]}  &{kwargs}
     Should Be Equal As Strings  ${resp.status_code}  200
     RETURN  ${resp.json()}
 
