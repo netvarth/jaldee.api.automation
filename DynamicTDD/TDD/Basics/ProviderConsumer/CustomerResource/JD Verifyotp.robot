@@ -117,9 +117,8 @@ JD-TC-Verify Otp-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Log  ${resp.headers['Set-Cookie']}
-    ${Sesioncookie}    ${rest}    Split String    ${resp.headers['Set-Cookie']}    ;  1
-    ${cookie_parts}    ${jsessionynw_value}    Split String    ${Sesioncookie}    =
+    Log  ${resp.request.headers['Cookie']}
+        ${cookie_parts}    ${jsessionynw_value}    Split String    ${resp.request.headers['Cookie']}    =
     Log   ${jsessionynw_value}
 
     ${resp}=    Verify Otp For Login   ${cust1}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}

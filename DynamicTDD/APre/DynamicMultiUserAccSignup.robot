@@ -159,11 +159,13 @@ SignUp Account
         ${lastname}=  FakerLibrary.last_name
         ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d}  ${sd}   ${PUSER}  ${pkgId}
         Log  ${resp.json()}
-        Should Be Equal As Strings    ${resp.status_code}    200
-        ${resp}=  Account Activation   ${PUSER}  0
+        Should Be Equal As Strings    ${resp.status_code}    202
+        ${cookie_parts}    ${jsessionynw_value}    Split String    ${resp.request.headers['Cookie']}    =
+        Log   ${jsessionynw_value}
+        ${resp}=  Account Activation   ${PUSER}  0  JSESSIONYNW=${jsessionynw_value}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${resp}=  Account Set Credential   ${PUSER}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSER}
+        ${resp}=  Account Set Credential   ${PUSER}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSER}  JSESSIONYNW=${jsessionynw_value}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         # ${is_corp}=  check_is_corp  ${sd}

@@ -36,6 +36,7 @@ TODAY=`date +"%d%b%y%H%M"`
 MYSQL_PASSWORD='netvarth'
 readonly  default_BACKUP_PATH MYSQL_HOST MYSQL_PORT MYSQL_USER DefaultDB_NAME MYSQL_PASSWORD
 INPUT_LOC="$(dirname "$PWD")/DynamicTDD"
+DATA_LOC="$(dirname "$PWD")/Data"
 NUM_FILE='numbers.txt'
 PAN_FILE='pan.txt'
 TIME_FILE='time.txt'
@@ -195,7 +196,7 @@ clear()
   # archiveAndDeleteLog ${default_BACKUP_PATH}
 
   echo "clearing files in TDD_Logs and $VAR_DIR"
-  for file in "${INPUT_LOC%/}/TDD_Logs/"*; do >$file; done
+  for file in "${DATA_LOC%/}/TDD_Logs/"*; do >$file; done
   rm -rf "${INPUT_LOC%/}/$VAR_DIR"/*
   # echo -n "" > "${INPUT_LOC%/}/$NUM_FILE"
   # echo -n "" > "${INPUT_LOC%/}/$PAN_FILE"
