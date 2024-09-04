@@ -18,6 +18,9 @@ tomcat_log_path="/ebs/apache-tomcat-8.0.36/logs"
         echo "-- clearing /logs" | addTimestamp
         find /logs/ -mindepth 1 -maxdepth 1 -not -name $LOGFILE -print -delete
 
+        echo "-- clearing /logs gz files" | addTimestamp
+        find /logs/ -depth -type f -mtime +$days -name '*.gz' -print -delete && find /logs/ -depth -type f -mtime $days -name '*.gz' -print -delete && find /logs/ -empty -type d -print -delete
+
         echo "-- clearing tomcat logs" | addTimestamp
         find "$tomcat_log_path/" -mindepth 1 -maxdepth 1 -type f -print -delete
 
