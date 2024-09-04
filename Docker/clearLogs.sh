@@ -36,8 +36,8 @@ tomcat_log_path="/ebs/apache-tomcat-8.0.36/logs"
     fi
 
 
-    echo "-- clearing log.html from telegram desktop" | addTimestamp
-    find "/home/archana/Downloads/Telegram Desktop/" -mindepth 1 -type f -mtime $days -name log*.html -print -delete
+    # echo "-- clearing log.html from telegram desktop" | addTimestamp
+    # find "${HOME}/Downloads/Telegram Desktop/" -mindepth 1 -type f -mtime $days -name log*.html -print -delete
 
     echo "-- clearing clearlogs" | addTimestamp
     find /logs/ -mindepth 1 -type f -mtime $days -name 'clearlogs-*.txt' -not -name $LOGFILE -print -delete
