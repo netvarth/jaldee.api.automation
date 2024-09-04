@@ -322,10 +322,10 @@ Get Locations
     RETURN  ${resp}
 
 Disable Location
-   [Arguments]   ${id}
-   Check And Create YNW Session
-   ${resp}=    DELETE On Session    ynw  /provider/locations/${id}/disable  expected_status=any
-   Check Deprication  ${resp}  Disable Location
+    [Arguments]   ${id}
+    Check And Create YNW Session
+    ${resp}=    DELETE On Session    ynw  /provider/locations/${id}/disable  expected_status=any
+    Check Deprication  ${resp}  Disable Location
     RETURN  ${resp}
 
 AddCustomer
