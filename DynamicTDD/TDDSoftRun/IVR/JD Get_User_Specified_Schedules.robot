@@ -119,7 +119,7 @@ JD-TC-Get_User_Specified_Schedules-1
     ${lastName}=    FakerLibrary.lastName
     Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
 
-    ${so_id1}=  Create Sample User 
+    ${so_id1}=  Create Sample User   deptId=${dep_id} 
     Set Suite Variable  ${so_id1}
 
     ${resp}=  Get Business Profile

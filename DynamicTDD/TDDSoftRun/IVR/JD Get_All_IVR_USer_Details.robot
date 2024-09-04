@@ -113,7 +113,7 @@ JD-TC-GET_All_IVR_USer_Details-1
     ${whpnum}=  Evaluate  ${PUSERNAME}+${random_ph}
     ${tlgnum}=  Evaluate  ${PUSERNAME}+${random_ph}
 
-    ${so_id1}=  Create Sample User   
+    ${so_id1}=  Create Sample User   deptId=${dep_id}   deptId=${dep_id}
     Set Suite Variable  ${so_id1}
 
    
@@ -451,7 +451,7 @@ JD-TC-GET_All_IVR_USer_Details-2
     ${whpnum}=  Evaluate  ${PUSERNAME}+${random_ph}
     ${tlgnum}=  Evaluate  ${PUSERNAME}+${random_ph}
 
-    ${so_id1}=  Create Sample User   
+    ${so_id1}=  Create Sample User   deptId=${dep_id}   
     Set Suite Variable  ${so_id1}
 
    
@@ -668,7 +668,7 @@ JD-TC-GET_All_IVR_USer_Details-3
     ${whpnum}=  Evaluate  ${PUSERNAME}+${random_ph}
     ${tlgnum}=  Evaluate  ${PUSERNAME}+${random_ph}
 
-    ${so_id1}=  Create Sample User   
+    ${so_id1}=  Create Sample User   deptId=${dep_id}   
     Set Suite Variable  ${so_id1}
 
    
@@ -864,7 +864,7 @@ JD-TC-GET_All_IVR_USer_Details-UH3
     ${whpnum}=  Evaluate  ${PUSERNAME}+${random_ph}
     ${tlgnum}=  Evaluate  ${PUSERNAME}+${random_ph}
 
-    ${so_id1}=  Create Sample User   
+    ${so_id1}=  Create Sample User   deptId=${dep_id}   
     Set Suite Variable  ${so_id1}
 
    

@@ -106,7 +106,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-1
     ${lastName}=    FakerLibrary.lastName
     Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
 
-    ${so_id1}=  Create Sample User 
+    ${so_id1}=  Create Sample User   deptId=${dep_id} 
     Set Suite Variable  ${so_id1}
     
     ${resp}=  Get User By Id  ${so_id1}

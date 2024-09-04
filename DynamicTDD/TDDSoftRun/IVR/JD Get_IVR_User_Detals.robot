@@ -607,7 +607,7 @@ JD-TC-Get_IVR_USER_DETAILS-UH7
     ${whpnum}=  Evaluate  ${PUSERNAME}+${random_ph}
     ${tlgnum}=  Evaluate  ${PUSERNAME}+${random_ph}
 
-    ${so_id1}=  Create Sample User   
+    ${so_id1}=  Create Sample User   deptId=${dep_id}   
     Set Suite Variable  ${so_id1}
 
    

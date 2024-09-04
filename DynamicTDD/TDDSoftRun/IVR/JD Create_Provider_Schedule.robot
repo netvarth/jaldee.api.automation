@@ -738,7 +738,7 @@ JD-TC-Create_Provider_Schedule-UH12
     ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${date}  ${DAY8}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[0]}  ${user_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"  "${INVAID_DATE_FORMAT}"
+    Should Be Equal As Strings  "${resp.json()}"  "${Invalid_Date_reminders}"
 
 JD-TC-Create_Provider_Schedule-UH13
 
