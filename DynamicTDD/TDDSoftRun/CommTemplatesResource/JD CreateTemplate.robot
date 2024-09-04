@@ -1281,8 +1281,6 @@ JD-TC-CreateTemplate-UH9
     Set Test Variable   ${temp_id1}   ${resp.json()['id']}
     Set Test Variable   ${temp_name1}   ${resp.json()['templateName']}
     Set Test Variable   ${content1}    ${resp.json()['content']['intro']}
-    Set Test Variable   ${dyn_var1}    ${resp.json()['variables']['content'][0]}
-    Set Test Variable   ${dyn_var2}    ${resp.json()['variables']['content'][1]}
 
     ${comm_chanl}=  Create List   ${CommChannel[0]}  
     ${comm_target}=  Create List   ${CommTarget[0]}  
