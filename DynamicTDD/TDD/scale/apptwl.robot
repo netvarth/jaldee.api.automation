@@ -24,14 +24,14 @@ ${order}        0
 
 JD-TC-AddToWL-1
     [Documentation]   Add To waitlist
-    ${providers_list}=   Get File    ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py
+    ${providers_list}=   Get File    ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
     ${pro_list}=   Split to lines  ${providers_list}
 
     FOR  ${provider}  IN  @{pro_list}
         ${provider}=  Remove String    ${provider}    ${SPACE}
         ${provider}  ${ph}=   Split String    ${provider}  =
         Set Test Variable  ${ph}
-        # ${cust_pro}=  Evaluate  random.choice(list(open('${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py')))  random
+        # ${cust_pro}=  Evaluate  random.choice(list(open('${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py')))  random
         # Log  ${cust_pro}
         # ${cust_pro}=    Remove String    ${cust_pro}    ${SPACE}
         # ${cust_pro}=    Remove String    ${cust_pro}    ${\n}
@@ -284,7 +284,7 @@ JD-TC-AddToWL-1
 
 JD-TC-TakeAppointment-1
     [Documentation]   Take appointment
-    ${providers_list}=   Get File    ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py
+    ${providers_list}=   Get File    ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
     ${pro_list}=   Split to lines  ${providers_list}
 
     FOR  ${provider}  IN  @{pro_list}

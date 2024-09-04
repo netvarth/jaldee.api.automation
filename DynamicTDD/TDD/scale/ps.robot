@@ -26,13 +26,13 @@ JD-TC-Provider_Signup-1
     [Documentation]   Provider Signup in Random Domain 
 
     Create Directory   ${EXECDIR}/TDD/${ENVIRONMENT}data/
-    Create Directory   ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/
-    # Create File   ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py
+    Create Directory   ${EXECDIR}/data/${ENVIRONMENT}_varfiles/
+    # Create File   ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
     
     # ${PO_Number}=  FakerLibrary.Numerify  %#####
     # ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Log  ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py
-    ${num}=  find_last  ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py
+    Log  ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
+    ${num}=  find_last  ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
     ${PH_Number}    Random Number 	digits=5  #fix_len=True
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
@@ -83,7 +83,7 @@ JD-TC-Provider_Signup-1
         ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         Append To File  ${EXECDIR}/TDD/${ENVIRONMENT}data/${ENVIRONMENT}phnumbers.txt  ${ph} - ${PASSWORD}${\n}
-        Append To File  ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py  PUSERNAME${num}=${ph}${\n}
+        Append To File  ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py  PUSERNAME${num}=${ph}${\n}
         
         ${list}=  Create List  1  2  3  4  5  6  7
         ${ph1}=  Evaluate  ${PUSERPH0}+1000000000
@@ -329,7 +329,7 @@ JD-TC-Provider_Signup-1
 # *** Comments ***
 JD-TC-AddToWL-1
     [Documentation]   Add To waitlist
-    ${cust_pro}=  Evaluate  random.choice(list(open('${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py')))  random
+    ${cust_pro}=  Evaluate  random.choice(list(open('${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py')))  random
     Log  ${cust_pro}
     # ${cust_pro}=    Remove String    ${cust_pro}    ${SPACE}
     # ${cust_pro}=    Remove String    ${cust_pro}    ${\n}

@@ -22,11 +22,11 @@ ${count}  ${1000}
 
 JD-TC-Login-1
     [Documentation]   Add To waitlist
-    ${providers_list}=   Get File    ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py
+    ${providers_list}=   Get File    ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
     ${pro_list}=   Split to lines  ${providers_list}
     ${pro}=  Remove String    ${pro_list[0]}    ${SPACE}
     ${pro} 	${ph}=   Split String    ${pro}  =
-    # ${cust_pro}=  Evaluate  random.choice(list(open('${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py')))  random
+    # ${cust_pro}=  Evaluate  random.choice(list(open('${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py')))  random
     # Log  ${cust_pro}
     # ${cust_pro}=   Set Variable  ${cust_pro.strip()}
     # ${var} 	${ph}=   Split String    ${cust_pro}  =  

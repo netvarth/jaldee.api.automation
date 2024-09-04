@@ -110,7 +110,7 @@ cheking if variable is empty
 Cheking files exists
 
     # Create Directory   ${EXECDIR}/TDD/${ENVIRONMENT}data/
-    # Create Directory   ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/
+    # Create Directory   ${EXECDIR}/data/${ENVIRONMENT}_varfiles/
 
     # ${ph1}=  Evaluate  ${PUSERPH0}+1000000000
     # ${ph2}=  Evaluate  ${PUSERPH0}+2000000000
@@ -142,8 +142,8 @@ Cheking files exists
     Log  ${ph_nos}
         
     ${data_dir_path}=  Set Variable    ${EXECDIR}/TDD/${ENVIRONMENT}data/
-    ${var_dir_path}=  Set Variable    ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/
-    ${file_name}=    Set Variable    ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py
+    ${var_dir_path}=  Set Variable    ${EXECDIR}/data/${ENVIRONMENT}_varfiles/
+    ${file_name}=    Set Variable    ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
 
     IF  ${{os.path.exists($data_dir_path)}} is False
         Log  Data Directory exists

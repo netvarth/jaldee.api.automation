@@ -61,9 +61,9 @@ JD-TC-CaseShareNotification-1
 # ...........signup a provider.......
 
     Create Directory   ${EXECDIR}/TDD/${ENVIRONMENT}data/
-    Create Directory   ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/
-    Log  ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py
-    ${num}=  find_last  ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py
+    Create Directory   ${EXECDIR}/data/${ENVIRONMENT}_varfiles/
+    Log  ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
+    ${num}=  find_last  ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
 
     ${PH_Number}    Random Number 	digits=5 
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
@@ -120,7 +120,7 @@ JD-TC-CaseShareNotification-1
     Set Suite Variable  ${pro_id}  ${decrypted_data['id']}
 
     Append To File  ${EXECDIR}/TDD/${ENVIRONMENT}data/${ENVIRONMENT}phnumbers.txt  ${ph} - ${PASSWORD}${\n}
-    Append To File  ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py  PUSERNAME${num}=${ph}${\n}
+    Append To File  ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py  PUSERNAME${num}=${ph}${\n}
     
     ${list}=  Create List  1  2  3  4  5  6  7
     ${views}=  Evaluate  random.choice($Views)  random
