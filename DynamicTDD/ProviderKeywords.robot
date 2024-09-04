@@ -2853,18 +2853,11 @@ Get Queues Counts
     Check Deprication  ${resp}  Get Queues Counts
     RETURN  ${resp}
 
-Enable Queue
-    [Arguments]  ${qid}
+Enable Disable Queue
+    [Arguments]  ${qid}    ${status}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/waitlist/queues/${qid}/enable  expected_status=any
-    Check Deprication  ${resp}  Enable Queue
-    RETURN  ${resp}
-
-Disable Queue
-    [Arguments]  ${qid}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/waitlist/queues/${qid}/disable  expected_status=any
-    Check Deprication  ${resp}  Disable Queue
+    ${resp}=  PUT On Session  ynw  /provider/waitlist/queues/${qid}/${status}  expected_status=any   
+    Check Deprication  ${resp}  Enable Disable Queue
     RETURN  ${resp}
 
 Get Queue Location

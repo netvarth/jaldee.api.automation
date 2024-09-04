@@ -290,7 +290,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{toothRestorations}                BRIDGE_TOOTH     CROWN_TOOTH     EXTRACTED_TOOTH
 @{productEnum}                      APPOINTMENT     CHECKIN     ORDER    IVR
 @{stockTransfer}                    DRAFT   DISPATCHED   RECEIVED   DECLINED   CANCELED
-
+@{toggleButton}                     enable  disable
 *** Keywords ***
 
 
