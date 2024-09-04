@@ -6878,7 +6878,7 @@ Billable Domain Providers
         Log  ${decrypted_data}
         ${domain}=   Set Variable    ${decrypted_data['sector']}
         ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
-	    ${resp}=  View Waitlist Settings
+	    ${resp}=  Get Waitlist Settings
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         IF  ${resp.json()['filterByDept']}==${bool[1]}

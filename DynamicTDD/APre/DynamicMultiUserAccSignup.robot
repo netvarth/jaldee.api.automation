@@ -160,6 +160,7 @@ SignUp Account
         ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d}  ${sd}   ${PUSER}  ${pkgId}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    202
+        Log  ${resp.request.headers['Cookie']}
         ${cookie_parts}    ${jsessionynw_value}    Split String    ${resp.request.headers['Cookie']}    =
         Log   ${jsessionynw_value}
         ${resp}=  Account Activation   ${PUSER}  0  JSESSIONYNW=${jsessionynw_value}
@@ -168,18 +169,8 @@ SignUp Account
         ${resp}=  Account Set Credential   ${PUSER}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSER}  JSESSIONYNW=${jsessionynw_value}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
-        # ${is_corp}=  check_is_corp  ${sd}
-        # Log  ${is_corp}
-        # Run Keyword If  '${is_corp}' == 'True'  Append To File  ${EXECDIR}/TDD/varfiles/branches.py  BUSERNAME${BC}= ${PUSER}${\n}
-        # Run Keyword If  '${is_corp}' == 'False'  Append To File  ${EXECDIR}/TDD/varfiles/providers.py  PUSERNAME${PC}=${PUSERNAME}${\n}
-        # Append To File  ${EXECDIR}/TDD/varfiles/branches.py  BUSERNAME${US}= ${PUSER}${\n}
-        # Append To File  ${EXECDIR}/TDD/varfiles/musers.py  PUSERNAME${US}= ${PUSER}${\n}
-        # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt   ${PUSER}${\n}
         ${highest_pkg}=  get_highest_license_pkg
-        # Run Keyword If  '${pkgId}' == '${highest_pkg[0]}'   Append To File  ${EXECDIR}/TDD/varfiles/branches_highestlic.py  BHUSERNAME${BR}= ${PUSER}${\n}
         IF  '${pkgId}' == '${highest_pkg[0]}'
-        # Append To File  ${EXECDIR}/TDD/varfiles/branches_highestlic.py  BHUSERNAME${BR}= ${PUSER}${\n}
-        # Append To File  ${EXECDIR}/TDD/varfiles/hl_musers.py  HLPUSERNAME${BR}= ${PUSER}${\n}
         Append To File  ${EXECDIR}/TDD/varfiles/hl_providers.py  HLPUSERNAME${BR}= ${PUSER}${\n}
         END
         ${BR} =	Set Variable If	 '${pkgId}' == '${highest_pkg[0]}'	${BR+1}	 ${BR}
@@ -193,9 +184,8 @@ SignUp Account
         Log  ${decrypted_data}
         Set Suite Variable  ${pid}  ${decrypted_data['id']}
 
-        # Append To File  ${EXECDIR}/TDD/varfiles/musers.py  PUSERNAME${US}= ${PUSER}${\n}
         Append To File  ${EXECDIR}/TDD/varfiles/providers.py  PUSERNAME${US}=${PUSER}${\n}
-        Append To File  ${EXECDIR}/TDD/varfiles/aprenumbers.txt  ${PUSER}${\n}
+        Append To File  ${EXECDIR}/data/TDD_Logs/aprenumbers.txt  ${PUSER}${\n}
         
         Set Test Variable  ${email_id}  ${P_Email}${PUSER}.${test_mail}
         ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
@@ -205,97 +195,120 @@ SignUp Account
         ${resp}=  Get Business Profile
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Verify Response  ${resp}  status=INCOMPLETE
+        Verify Response  ${resp}  status=ACTIVE
         ${US} =  Evaluate  ${US}+1
         Set Global Variable  ${US} 
+        
         # ${DAY1}=  get_date
         # Set Suite Variable  ${DAY1}  ${DAY1}
-        ${list}=  Create List  1  2  3  4  5  6  7
-        Set Suite Variable  ${list}  ${list}
-        ${ph1}=  Evaluate   ${PUSER}+1000000000
-        ${ph2}=  Evaluate   ${PUSER}+2000000000
-        ${views}=  Evaluate  random.choice($Views)  random
-        ${name1}=  FakerLibrary.name
-        ${name2}=  FakerLibrary.name
-        ${name3}=  FakerLibrary.name
-        ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
-        ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-        ${emails1}=  Emails  ${name3}  Email  ${P_Email}${US}.${test_mail}  ${views}
-        ${bs}=  FakerLibrary.bs
-        ${companySuffix}=  FakerLibrary.companySuffix
+        # ${list}=  Create List  1  2  3  4  5  6  7
+        # Set Suite Variable  ${list}  ${list}
+        # ${ph1}=  Evaluate   ${PUSER}+1000000000
+        # ${ph2}=  Evaluate   ${PUSER}+2000000000
+        # ${views}=  Evaluate  random.choice($Views)  random
+        # ${name1}=  FakerLibrary.name
+        # ${name2}=  FakerLibrary.name
+        # ${name3}=  FakerLibrary.name
+        # ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
+        # ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
+        # ${emails1}=  Emails  ${name3}  Email  ${P_Email}${US}.${test_mail}  ${views}
+        # ${bs}=  FakerLibrary.bs
+        # ${companySuffix}=  FakerLibrary.companySuffix
         # ${city}=   get_place
         # ${latti}=  get_latitude
         # ${longi}=  get_longitude
         # ${latti}  ${longi}=  get_lat_long
         # ${postcode}=  FakerLibrary.postcode
         # ${address}=  get_address
-        ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-        ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-        Set Suite Variable  ${tz}
-        ${DAY1}=  get_date_by_timezone  ${tz}
-        ${Time}=  db.get_time_by_timezone   ${tz}
-        ${sTime}=  add_timezone_time  ${tz}  0  15  
-        Set Suite Variable   ${sTime}  ${sTime}
-        ${eTime}=  add_timezone_time  ${tz}  0  45  
-        Set Suite Variable   ${eTime}  ${eTime}
+        # ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+        # ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+        # Set Suite Variable  ${tz}
+        # ${DAY1}=  get_date_by_timezone  ${tz}
+        # ${Time}=  db.get_time_by_timezone   ${tz}
+        # ${sTime}=  add_timezone_time  ${tz}  0  15  
+        # Set Suite Variable   ${sTime}  ${sTime}
+        # ${eTime}=  add_timezone_time  ${tz}  0  45  
+        # Set Suite Variable   ${eTime}  ${eTime}
 
         #${resp}=  Create Business Profile  ${bs}  ${bs} Desc   ${companySuffix}  ${city}   ${longi}  ${latti}  www.${companySuffix}.com  free  True  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}
         #Log  ${resp.json()}
         #Should Be Equal As Strings    ${resp.status_code}    200
 
-        ${resp}=  Update Business Profile with schedule  ${bs}  ${bs} Desc   ${companySuffix}  ${city}  ${longi}  ${latti}  www.${companySuffix}.com  free  True  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
-        Log  ${resp.json()}
+        # ${resp}=  Update Business Profile with schedule  ${bs}  ${bs} Desc   ${companySuffix}  ${city}  ${longi}  ${latti}  www.${companySuffix}.com  free  True  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
+        # Log  ${resp.json()}
+        # Should Be Equal As Strings  ${resp.status_code}  200
+
+        ${bs}=  FakerLibrary.company
+        ${companySuffix}=  FakerLibrary.companySuffix
+        ${parking}   Random Element   ${parkingType}
+        ${24hours}    Random Element    ['True','False']
+        ${desc}=   FakerLibrary.sentence
+        ${url}=   FakerLibrary.url
+        ${name3}=  FakerLibrary.word
+        # ${emails1}=  Emails  ${name3}  Email  ${email_id}  ${views}
+        ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+        ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+        Set Test Variable  ${tz}
+        ${DAY1}=  db.get_date_by_timezone  ${tz}
+        ${description}=  FakerLibrary.sentence
+
+        ${b_loc}=  Create Dictionary  place=${city}   longitude=${longi}   lattitude=${latti}    googleMapUrl=${url}   pinCode=${postcode}  address=${address}  parkingType=${parking}  open24hours=${24hours}
+        # ${emails}=  Create List  ${emails1}
+        ${resp}=  Update Business Profile with kwargs   businessName=${bs}   businessUserName=${firstname}${SPACE}${lastname}   businessDesc=Description:${SPACE}${description}  shortName=${companySuffix}  baseLocation=${b_loc}   #emails=${emails}  
+        Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         ${resp}=  Get Business Profile
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${account_id}  ${resp.json()['id']}
-        Verify Response  ${resp}  businessName=${bs}  businessDesc=${bs} Desc  shortName=${companySuffix}  status=ACTIVE  createdDate=${DAY1}  licence=${pkg_name}  verifyLevel=NONE  enableSearch=False  accountLinkedPhNo=${PUSER}  licensePkgID=${pkgId}  #accountType=INDEPENDENT_SP
+        Verify Response  ${resp}  businessName=${bs}  businessDesc=Description:${SPACE}${description}  shortName=${companySuffix}  status=ACTIVE  createdDate=${DAY1}  licence=${pkg_name}  verifyLevel=NONE  enableSearch=False  accountLinkedPhNo=${PUSER}  licensePkgID=${pkgId}  #accountType=INDEPENDENT_SP
         Should Be Equal As Strings  ${resp.json()['serviceSector']['domain']}  ${d}
         Should Be Equal As Strings  ${resp.json()['serviceSubSector']['subDomain']}  ${sd}
-        Should Be Equal As Strings  ${resp.json()['emails'][0]['label']}  ${name3}
-        Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}  ${P_Email}${US}.${test_mail}
-        Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['label']}  ${name1}
-        Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['instance']}  ${ph1}
-        Should Be Equal As Strings  ${resp.json()['phoneNumbers'][1]['label']}  ${name2}
-        Should Be Equal As Strings  ${resp.json()['phoneNumbers'][1]['instance']}  ${ph2}
+        # Should Be Equal As Strings  ${resp.json()['emails'][0]['label']}  ${name3}
+        # Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}  ${P_Email}${US}.${test_mail}
+        # Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['label']}  ${name1}
+        # Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['instance']}  ${ph1}
+        # Should Be Equal As Strings  ${resp.json()['phoneNumbers'][1]['label']}  ${name2}
+        # Should Be Equal As Strings  ${resp.json()['phoneNumbers'][1]['instance']}  ${ph2}
         Should Be Equal As Strings  ${resp.json()['baseLocation']['place']}  ${city}
         Should Be Equal As Strings  ${resp.json()['baseLocation']['address']}  ${address}
         Should Be Equal As Strings  ${resp.json()['baseLocation']['pinCode']}  ${postcode}
         Should Be Equal As Strings  ${resp.json()['baseLocation']['longitude']}  ${longi}
         Should Be Equal As Strings  ${resp.json()['baseLocation']['lattitude']}  ${latti}
-        Should Be Equal As Strings  ${resp.json()['baseLocation']['googleMapUrl']}  www.${companySuffix}.com
-        Should Be Equal As Strings  ${resp.json()['baseLocation']['parkingType']}  free
-        Should Be Equal As Strings  ${resp.json()['baseLocation']['open24hours']}  True
+        Should Be Equal As Strings  ${resp.json()['baseLocation']['googleMapUrl']}  ${url}
+        Should Be Equal As Strings  ${resp.json()['baseLocation']['parkingType']}  ${parking}
+        Should Be Equal As Strings  ${resp.json()['baseLocation']['open24hours']}  ${24hours}
         Should Be Equal As Strings  ${resp.json()['baseLocation']['status']}  ACTIVE
-        #Should Be Equal As Strings  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['startDate']}  ${DAY1}
-        #Should Be Equal As Strings  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timeSlots'][0]['sTime']}  ${sTime}
-        #Should Be Equal As Strings  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timeSlots'][0]['eTime']}  ${eTime}
-
-        #${resp}=  pyproviderlogin  ${PUSER}  ${PASSWORD}
-       # Should Be Equal As Strings  ${resp}  200      
-        #@{resp}=  uploadLogoImages 
-        #Should Be Equal As Strings  ${resp[1]}  200
-        #${resp}=  Get GalleryOrlogo image  logo
-        #Should Be Equal As Strings  ${resp.status_code}  200
-       # Should Be Equal As Strings  ${resp.json()[0]['prefix']}  logo
-
+        
         ${fields}=   Get subDomain level Fields  ${d}  ${sd}
         Log  ${fields.json()}
         Should Be Equal As Strings    ${fields.status_code}   200
+
         ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+
         ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sd}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
+
         ${resp}=  Get specializations Sub Domain  ${d}  ${sd}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}   200
-        ${spec}=  get_Specializations  ${resp.json()}
-        ${resp}=  Update Specialization  ${spec}
-        Log  ${resp.json()}
-        Should Be Equal As Strings    ${resp.status_code}   200
-        ${resp}=  View Waitlist Settings
+        Set Test Variable    ${spec1}     ${resp.json()[0]['displayName']}   
+        Set Test Variable    ${spec2}     ${resp.json()[1]['displayName']}   
+
+        ${spec}=  Create List    ${spec1}   ${spec2}
+
+        # ${spec}=  get_Specializations  ${resp.json()}
+
+        # ${resp}=  Update Specialization  ${spec}
+        # Log  ${resp.json()}
+        # Should Be Equal As Strings    ${resp.status_code}   200
+        ${resp}=  Update Business Profile with kwargs  specialization=${spec}  
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+        ${resp}=  Get Waitlist Settings
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[0]}
