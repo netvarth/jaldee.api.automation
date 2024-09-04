@@ -2382,6 +2382,7 @@ RECORD_STATUS_SAME= "Record status is already {}"
 RX_ITEMS_ARE_NOT_AVAILABLE_FOR_ORDER_CREATION="Rx items are not available for order creation"
 FIELD_ALREADY_EXISTS = "{} exists with given {}"
 NO_PERMISSION_TO_CHANGE_STORE_LOCATION="No permission to change store location"
+CANT_DISABLE_INV_CAT_FROM_SO_CAT_BCZ_ITEM = "Can't disable the inventory catalog from this sales order catalog, because the inventory catalog items are there"
 
 # Vendor
 INVALID_NAME="Invalid Name"

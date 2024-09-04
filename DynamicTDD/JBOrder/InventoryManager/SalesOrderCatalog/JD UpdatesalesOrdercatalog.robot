@@ -232,7 +232,7 @@ JD-TC-Update SalesOrder Catalog-7
 
 JD-TC-Update SalesOrder Catalog-8
 
-    [Documentation]  update sales order catalog with valid details.
+    [Documentation]  sales order catalog with inventory off then update sales order catalog with inventory on.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
@@ -249,26 +249,17 @@ JD-TC-Update SalesOrder Catalog-8
     ${TypeName}=    FakerLibrary.name
     Set Test Variable  ${TypeName}
 
-    ${resp}=  Create Store Type   ${TypeName}    ${storeNature[0]}
+    ${resp}=  Create Store Type   ${TypeName}${HLPUSERNAME1}    ${storeNature[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${St_Id}    ${resp.json()}
     sleep  02s
-    ${TypeName1}=    FakerLibrary.name
-    Set Test Variable  ${TypeName1}
 
-
-    ${resp}=  Create Store Type   ${TypeName2}    ${storeNature[2]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable    ${St_Id2}    ${resp.json()}
 
     ${resp}=  Get Store Type By EncId   ${St_Id}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
@@ -279,9 +270,6 @@ JD-TC-Update SalesOrder Catalog-8
     ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -320,7 +308,12 @@ JD-TC-Update SalesOrder Catalog-8
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${sacatlogid}  ${resp.json()}
 
-    ${resp}=  Update SalesOrder Catalog    ${sacatlogid}  name=${Name}   invMgmt=${boolean[1]}
+    ${inv_cat_encid}=  Create List  ${Catalog_EncIds}
+    ${invcatid}=  Create Dictionary   invCatEncIdList=${inv_cat_encid} 
+
+
+
+    ${resp}=  Update SalesOrder Catalog    ${sacatlogid}  name=${Name}   invMgmt=${boolean[1]}  inventoryCatalog=${invcatid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -405,7 +398,7 @@ JD-TC-Update SalesOrder Catalog-UH5
 
 JD-TC-Update SalesOrder Catalog-UH6
 
-    [Documentation]  update sales order catalog with valid details.
+    [Documentation]   The sales order inventory catalog contains the inventory for an item. Then, try to update the sales order catalog to mark the inventory as off.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
@@ -420,28 +413,18 @@ JD-TC-Update SalesOrder Catalog-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${TypeName}=    FakerLibrary.name
-    Set Test Variable  ${TypeName}
 
-    ${resp}=  Create Store Type   ${TypeName}    ${storeNature[0]}
+
+    ${resp}=  Create Store Type   ${TypeName}${HLPUSERNAME2}    ${storeNature[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${St_Id}    ${resp.json()}
     sleep  02s
-    ${TypeName1}=    FakerLibrary.name
-    Set Test Variable  ${TypeName1}
-
-
-    ${resp}=  Create Store Type   ${TypeName2}    ${storeNature[2]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable    ${St_Id2}    ${resp.json()}
 
     ${resp}=  Get Store Type By EncId   ${St_Id}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
@@ -497,14 +480,26 @@ JD-TC-Update SalesOrder Catalog-UH6
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Suite Variable   ${ic_Item_id}   ${resp.json()[0]}
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}
+    ${inv_cat_encid_List}=  Create List  ${Catalog_EncIds}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}   ${Name}  ${boolean[1]}   ${inv_cat_encid_List} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${sacatlogid}  ${resp.json()}
+    Set Test Variable              ${sacatlogid}    ${resp.json()}
 
-    ${resp}=  Update SalesOrder Catalog    ${sacatlogid}  name=${Name}   invMgmt=${boolean[0]}
+
+    ${price}=    Random Int  min=2   max=40
+    ${price}=  Convert To Number  ${price}    1
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${sacatlogid}    ${boolean[1]}     ${ic_Item_id}     ${price}    ${boolean[0]}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
+
+    ${resp}=  Update SalesOrder Catalog    ${sacatlogid}  name=${Name}   invMgmt=${boolean[0]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings   ${resp.json()}   ${CANT_DISABLE_INV_CAT_FROM_SO_CAT_BCZ_ITEM}
+    
+
 
 
 

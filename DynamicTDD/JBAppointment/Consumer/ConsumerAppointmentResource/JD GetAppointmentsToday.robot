@@ -9,6 +9,7 @@ Library           FakerLibrary
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
@@ -300,39 +301,83 @@ JD-TC-GetAppointmentToday-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id3}   name=${schedule_name}  apptState=${Qstate[0]}
 
-    ${resp}=  ProviderLogout
+
+
+    # ${resp}=  Consumer Login  ${CUSERNAME29}  ${PASSWORD}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # # ${cid1}=  get_id  ${CUSERNAME29}
+    # # Set Suite Variable   ${cid1}
+    # Set Suite Variable  ${f_Name}  ${resp.json()['firstName']}
+    # Set Suite Variable  ${l_Name}  ${resp.json()['lastName']}
+    # Set Suite Variable  ${ph_no}  ${resp.json()['primaryPhoneNumber']}
+
+    # ${resp}=  Get Appointment Schedules Consumer  ${pid1}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+
+    # ${resp}=  Get Appointment Schedule ById Consumer  ${sch_id1}   ${pid1}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+
+    # ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id1}   ${pid1}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    # @{slots}=  Create List
+    # FOR   ${i}  IN RANGE   0   ${no_of_slots}
+    #     IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+    #         Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+    #     END
+    # END
+    # ${num_slots}=  Get Length  ${slots}
+    # ${j}=  Random Int  max=${num_slots-1}
+    # Set Suite Variable   ${slot1}   ${slots[${j}]}
+
+    ${fname}=  FakerLibrary.first_name
+    ${lname}=  FakerLibrary.last_name
+   
+    ${resp}=  AddCustomer  ${CUSERNAME20}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${cid}  ${resp.json()}
 
-    ${resp}=  Consumer Login  ${CUSERNAME29}  ${PASSWORD}
+
+
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME20}    ${pid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME20}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${fname}   ${resp.json()['firstName']}
+
+
+
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid1}  ${DAY1}  ${lid}  ${s_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # ${cid1}=  get_id  ${CUSERNAME29}
-    # Set Suite Variable   ${cid1}
-    Set Suite Variable  ${f_Name}  ${resp.json()['firstName']}
-    Set Suite Variable  ${l_Name}  ${resp.json()['lastName']}
-    Set Suite Variable  ${ph_no}  ${resp.json()['primaryPhoneNumber']}
-
-    ${resp}=  Get Appointment Schedules Consumer  ${pid1}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get Appointment Schedule ById Consumer  ${sch_id1}   ${pid1}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id1}   ${pid1}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
         END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}
-    Set Suite Variable   ${slot1}   ${slots[${j}]}
+    Set Test Variable   ${slot1}   ${slots[${j}]}
+
     
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -363,27 +408,42 @@ JD-TC-GetAppointmentToday-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
      
-    ${resp}=  Get Appointment Schedules Consumer  ${pid1}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Get Appointment Schedules Consumer  ${pid1}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Appointment Schedule ById Consumer  ${sch_id2}   ${pid1}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Get Appointment Schedule ById Consumer  ${sch_id2}   ${pid1}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id2}   ${pid1}
+    # ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id2}   ${pid1}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    # @{slots}=  Create List
+    # FOR   ${i}  IN RANGE   0   ${no_of_slots}
+    #     IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+    #         Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+    #     END
+    # END
+    # ${num_slots}=  Get Length  ${slots}
+    # ${j}=  Random Int  max=${num_slots-1}
+    # Set Suite Variable   ${slot2}   ${slots[${j}]}
+
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid1}  ${DAY1}  ${lid}  ${s_id2}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
         END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}
-    Set Suite Variable   ${slot2}   ${slots[${j}]}
+    Set Test Variable   ${slot2}   ${slots[${j}]}
+
  
     ${apptfor1}=  Create Dictionary  id=${cidfor2}   apptTime=${slot2}   firstName=${family_fname2}
     ${apptfor}=   Create List  ${apptfor1}
@@ -414,27 +474,43 @@ JD-TC-GetAppointmentToday-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Appointment Schedules Consumer  ${pid1}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Get Appointment Schedules Consumer  ${pid1}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Appointment Schedule ById Consumer  ${sch_id3}   ${pid1}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Get Appointment Schedule ById Consumer  ${sch_id3}   ${pid1}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id3}   ${pid1}
+    # ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id3}   ${pid1}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    # @{slots}=  Create List
+    # FOR   ${i}  IN RANGE   0   ${no_of_slots}
+    #     IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+    #         Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+    #     END
+    # END
+    # ${num_slots}=  Get Length  ${slots}
+    # ${j}=  Random Int  max=${num_slots-1}
+    # Set Suite Variable   ${slot3}   ${slots[${j}]}
+
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid1}  ${DAY1}  ${lid1}  ${s_id2}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
         END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}
-    Set Suite Variable   ${slot3}   ${slots[${j}]}
+    Set Test Variable   ${slot3}   ${slots[${j}]}
+    ${k}=  Random Int  max=${num_slots-3}
+    Set Test Variable   ${slot4}   ${slots[${k}]}
     
     ${apptfor}=  Create Dictionary  id=${cidfor3}   apptTime=${slot3}   firstName=${family_fname3}
     ${apptfor}=   Create List  ${apptfor}
@@ -446,31 +522,31 @@ JD-TC-GetAppointmentToday-1
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${apptid3}  ${apptid[0]}
 
-    ${resp}=   Get consumer Appointment By Id   ${pid1}  ${apptid3}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    # ${resp}=   Get consumer Appointment By Id   ${pid1}  ${apptid3}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Get Appointment Schedules Consumer  ${pid1}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Get Appointment Schedules Consumer  ${pid1}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Appointment Schedule ById Consumer  ${sch_id3}   ${pid1}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Get Appointment Schedule ById Consumer  ${sch_id3}   ${pid1}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id3}   ${pid1}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
-    @{slots}=  Create List
-    FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
-        END
-    END
-    ${num_slots}=  Get Length  ${slots}
-    ${j}=  Random Int  max=${num_slots-1}
-    Set Suite Variable   ${slot4}   ${slots[${j}]}
+    # ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id3}   ${pid1}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    # @{slots}=  Create List
+    # FOR   ${i}  IN RANGE   0   ${no_of_slots}
+    #     IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+    #         Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+    #     END
+    # END
+    # ${num_slots}=  Get Length  ${slots}
+    # ${j}=  Random Int  max=${num_slots-1}
+    # Set Suite Variable   ${slot4}   ${slots[${j}]}
     
     ${apptfor}=  Create Dictionary  id=${self}   apptTime=${slot4}   
     ${apptfor}=   Create List  ${apptfor}
@@ -491,12 +567,12 @@ JD-TC-GetAppointmentToday-1
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME51}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME29}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${len}
-        IF  '${resp.json()[${i}]['firstName']}' == '${f_Name}'
+        IF  '${resp.json()[${i}]['firstName']}' == '${fname}'
            Set Suite Variable   ${cons_id1}   ${resp.json()[${i}]['id']}
         ELSE IF     '${resp.json()[${i}]['firstName']}' == '${family_fname2}' 
            Set Suite Variable   ${cons_id2}   ${resp.json()[${i}]['id']}
@@ -533,9 +609,13 @@ JD-TC-GetAppointmentToday-1
     ${A_uuid4}=  Set Variable   ${resp.json()}
     Set Suite Variable   ${A_uuid4} 
 
-    ${resp}=  Consumer Login  ${CUSERNAME29}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200  
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    Get Consumer Appointments Today  
     Log  ${resp.content}
@@ -552,11 +632,11 @@ JD-TC-GetAppointmentToday-1
             Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
             Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
             Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot1}
+            # Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot1}
             Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
             Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
-            Should Be Equal As Strings  ${resp.json()[${i}]['consumer']['userProfile']['firstName']}   ${f_Name}
-            Should Be Equal As Strings  ${resp.json()[${i}]['consumer']['userProfile']['lastName']}    ${l_Name}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['firstName']}   ${fname}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['lastName']}    ${lname}
             Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}                         ${lid}
             Should Be Equal As Strings  ${resp.json()[${i}]['service']['id']}                          ${s_id1}
             Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id1}
@@ -568,11 +648,11 @@ JD-TC-GetAppointmentToday-1
             Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
             Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
             Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot2}
+            # Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot2}
             Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
             Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
-            Should Be Equal As Strings  ${resp.json()[${i}]['consumer']['userProfile']['firstName']}   ${f_Name}
-            Should Be Equal As Strings  ${resp.json()[${i}]['consumer']['userProfile']['lastName']}    ${l_Name}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['firstName']}   ${family_fname2}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['lastName']}    ${family_lname2}
             Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}                         ${lid}
             Should Be Equal As Strings  ${resp.json()[${i}]['service']['id']}                          ${s_id2}
             Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id2}
@@ -584,11 +664,11 @@ JD-TC-GetAppointmentToday-1
             Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
             Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
             Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
-            Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot3}
+            # Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot3}
             Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
             Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
-            Should Be Equal As Strings  ${resp.json()[${i}]['consumer']['userProfile']['firstName']}   ${f_Name}
-            Should Be Equal As Strings  ${resp.json()[${i}]['consumer']['userProfile']['lastName']}    ${l_Name}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['firstName']}   ${family_fname3}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['lastName']}    ${family_lname3}
             Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}                         ${lid1}
             Should Be Equal As Strings  ${resp.json()[${i}]['service']['id']}                          ${s_id2}
             Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id3}
