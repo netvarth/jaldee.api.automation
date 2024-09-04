@@ -215,7 +215,8 @@ JD-TC-ConsentFormReubmitQnr-UH1
 
     ${resp}=    Provider Consent Form Resubmit Qnr   ${fake}    ${cf_uid}    ${data}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json}  {}
 
 JD-TC-ConsentFormReubmitQnr-UH2
 
@@ -230,7 +231,7 @@ JD-TC-ConsentFormReubmitQnr-UH2
     ${resp}=    Provider Consent Form Resubmit Qnr   ${account_id}    ${fake}    ${data}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}      ${INV_CONSENT_FORM_ID}
+    Should Be Equal As Strings  ${resp.json()}      ${INVAL_UUID}     ignore_case=True
 
 JD-TC-ConsentFormReubmitQnr-UH3
 

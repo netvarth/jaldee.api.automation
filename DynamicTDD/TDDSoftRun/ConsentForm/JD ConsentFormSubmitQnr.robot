@@ -233,7 +233,7 @@ JD-TC-ConsentFormSubmitQnr-UH2
     ${resp}=    Provider Consent Form Submit Qnr   ${account_id}    ${fake}    ${data}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}      ${INV_CONSENT_FORM_ID}
+    Should Be Equal As Strings  ${resp.json()}      ${INVAL_UUID}     ignore_case=True
 
 JD-TC-ConsentFormSubmitQnr-UH3
 
