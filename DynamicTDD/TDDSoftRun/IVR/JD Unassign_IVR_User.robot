@@ -110,7 +110,7 @@ JD-TC-Unassign_IVR_User-1
     ${lastName}=    FakerLibrary.lastName
     Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
 
-    ${so_id1}=  Create Sample User 
+    ${so_id1}=  Create Sample User   deptId=${dep_id}
     Set Suite Variable  ${so_id1}
     
     ${resp}=  Get User By Id  ${so_id1}
@@ -459,7 +459,7 @@ JD-TC-Unassign_IVR_User-2
     ${lastName}=    FakerLibrary.lastName
     Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
 
-    ${so_id1}=  Create Sample User 
+    ${so_id1}=  Create Sample User   deptId=${dep_id}
     Set Suite Variable  ${so_id1}
     
     ${resp}=  Get User By Id  ${so_id1}
@@ -832,7 +832,7 @@ JD-TC-Unassign_IVR_User-UH3
     ${lastName}=    FakerLibrary.lastName
     Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
 
-    ${so_id1}=  Create Sample User 
+    ${so_id1}=  Create Sample User   deptId=${dep_id}
     Set Suite Variable  ${so_id1}
     
     ${resp}=  Get User By Id  ${so_id1}
@@ -1163,7 +1163,7 @@ JD-TC-Unassign_IVR_User-UH4
     ${lastName}=    FakerLibrary.lastName
     Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
 
-    ${so_id1}=  Create Sample User 
+    ${so_id1}=  Create Sample User   deptId=${dep_id}
     Set Suite Variable  ${so_id1}
     
     ${resp}=  Get User By Id  ${so_id1}
@@ -1500,7 +1500,7 @@ JD-TC-Unassign_IVR_User-UH5
     ${lastName}=    FakerLibrary.lastName
     Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
 
-    ${so_id1}=  Create Sample User 
+    ${so_id1}=  Create Sample User   deptId=${dep_id}
     Set Suite Variable  ${so_id1}
     
     ${resp}=  Get User By Id  ${so_id1}
@@ -1836,7 +1836,7 @@ JD-TC-Unassign_IVR_User-UH6
     ${lastName}=    FakerLibrary.lastName
     Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
 
-    ${so_id1}=  Create Sample User 
+    ${so_id1}=  Create Sample User   deptId=${dep_id}
     Set Suite Variable  ${so_id1}
     
     ${resp}=  Get User By Id  ${so_id1}
@@ -2172,7 +2172,7 @@ JD-TC-Unassign_IVR_User-UH7
     ${lastName}=    FakerLibrary.lastName
     Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
 
-    ${so_id1}=  Create Sample User 
+    ${so_id1}=  Create Sample User   deptId=${dep_id}
     Set Suite Variable  ${so_id1}
     
     ${resp}=  Get User By Id  ${so_id1}

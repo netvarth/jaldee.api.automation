@@ -13,8 +13,9 @@ Library		      /ebs/TDD/Imageupload.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables       /ebs/TDD/varfiles/providers.py
-Variables       /ebs/TDD/varfiles/consumerlist.py 
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
@@ -240,11 +241,8 @@ JD-TC-Update_Provider_Schedule-UH3
 
     ${resp}=  Update Provider Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${SPACE}  ${DAY6}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[0]}  ${user_id}   id=${sch_id}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-     ${resp}=    Get all schedules of an account 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}    ${Invalid_Date_reminders}
 
 JD-TC-Update_Provider_Schedule-UH4
 

@@ -50,12 +50,23 @@ JD-TC-Incall_IVR-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable  ${user_id}  ${decrypted_data['id']}
     Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
-    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Set Test Variable  ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    Set Test Variable  ${lic_name}   ${decrypted_data['accountLicenseDetails']['accountLicense']['name']}
+   
+    ${highest_package}=  get_highest_license_pkg
+    Log  ${highest_package}
+    Set Test variable  ${lic2}  ${highest_package[0]}
+
+    IF  '${lic_id}' != '${lic2}'
+        ${resp1}=   Change License Package  ${highest_package[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Suite Variable   ${acc_id} 
@@ -751,17 +762,16 @@ JD-TC-Incall_IVR-UH3
 JD-TC-Incall_IVR-UH4
 
     [Documentation]   Incall IVR with another provider login
-    
- 
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable    ${user_id1}    ${resp.json()['id']}
-    Set Test Variable    ${user_name1}    ${resp.json()['userName']}
 
-
-   
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${user_id1}  ${decrypted_data['id']}
+    Set Test Variable  ${user_name1}  ${decrypted_data['userName']}
+ 
     ${resp}=  Get Account Settings  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -845,11 +855,35 @@ JD-TC-Incall_IVR-UH5
 
     [Documentation]   Incall IVR with consumer login
     
- 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME6}  ${PASSWORD}
+    ${resp}=  Get Business Profile
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']} 
+
+    ${resp}=  AddCustomer  ${CUSERNAME20}   
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME20}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME20}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${user_id1}    ${resp.json()['id']}
     Set Test Variable    ${user_name1}    ${resp.json()['userName']}
 

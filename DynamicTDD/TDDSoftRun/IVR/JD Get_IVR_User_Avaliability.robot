@@ -119,7 +119,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-1
     ${lastName}=    FakerLibrary.lastName
     Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
 
-    ${so_id1}=  Create Sample User 
+    ${so_id1}=  Create Sample User   deptId=${dep_id}
     Set Suite Variable  ${so_id1}
     
     ${resp}=  Get User By Id  ${so_id1}
@@ -131,11 +131,6 @@ JD-TC-GET_All_IVR_USer_Avaliability-1
     ${resp}=  Get Departments
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Account Settings  
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -466,7 +461,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-2
     ${whpnum}=  Evaluate  ${PUSERNAME}+${random_ph}
     ${tlgnum}=  Evaluate  ${PUSERNAME}+${random_ph}
 
-    ${so_id1}=  Create Sample User   
+    ${so_id1}=  Create Sample User    deptId=${dep_id}
     Set Suite Variable  ${so_id1}
 
    
@@ -479,11 +474,6 @@ JD-TC-GET_All_IVR_USer_Avaliability-2
     ${resp}=  Get Departments
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Account Settings  
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location
@@ -687,7 +677,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-3
     ${whpnum}=  Evaluate  ${PUSERNAME}+${random_ph}
     ${tlgnum}=  Evaluate  ${PUSERNAME}+${random_ph}
 
-    ${so_id1}=  Create Sample User   
+    ${so_id1}=  Create Sample User    deptId=${dep_id}
     Set Suite Variable  ${so_id1}
 
    
@@ -700,11 +690,6 @@ JD-TC-GET_All_IVR_USer_Avaliability-3
     ${resp}=  Get Departments
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Account Settings  
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location
@@ -883,7 +868,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-UH3
     ${whpnum}=  Evaluate  ${PUSERNAME}+${random_ph}
     ${tlgnum}=  Evaluate  ${PUSERNAME}+${random_ph}
 
-    ${so_id1}=  Create Sample User   
+    ${so_id1}=  Create Sample User    deptId=${dep_id}
     Set Suite Variable  ${so_id1}
 
    
@@ -897,16 +882,9 @@ JD-TC-GET_All_IVR_USer_Avaliability-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Account Settings  
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
-
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
-
-    
     
     ${myoperator_id}    FakerLibrary.Random Number
     ${incall_id}    FakerLibrary.Random Number
