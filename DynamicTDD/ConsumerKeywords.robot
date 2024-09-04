@@ -1772,9 +1772,9 @@ Get Consumer Appointment By EncodedId
     RETURN  ${resp} 
   
 Cancel Appointment By Consumer
-    [Arguments]  ${appmntId}  ${acct_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    [Arguments]  ${appmntId}    &{kwargs}  #${timeZone}=Asia/Kolkata
     ${cons_headers}=  Create Dictionary  &{headers} 
-    ${cons_params}=  Create Dictionary  account=${acct_id}
+    ${cons_params}=  Create Dictionary  
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
