@@ -3,16 +3,17 @@
 # PS4='\033[0;33m+(${BASH_SOURCE}:${LINENO}):\033[0m ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
 # set -x
 
-LOGFILE="/logs/clearlogs-$(date +"%F").txt"
+LOGFILE="clearlogs-$(date +"%F").txt"
+LOGPATH="/logs/$LOGFILE"
 m2_path="$HOME/.m2/repository/com/nv"
 days="1"
 tomcat_pid=$(ps aux | grep '[t]omcat' | awk '{print $2}')
 tomcat_log_path="/ebs/apache-tomcat-8.0.36/logs"
-. $(dirname "$0")/customlogger.sh $LOGFILE
+. $(dirname "$0")/customlogger.sh $LOGPATH
 
 (
 
-    logheader >> $LOGFILE
+    logheader >> $LOGPATH
 
     if [[ ! -n "$tomcat_pid" ]]; then
         echo "-- clearing /logs" | addTimestamp
@@ -54,4 +55,4 @@ tomcat_log_path="/ebs/apache-tomcat-8.0.36/logs"
         done
     done
 
-) 2>&1 | tee -a $LOGFILE
+) 2>&1 | tee -a $LOGPATH
