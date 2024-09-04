@@ -177,6 +177,10 @@ JD-TC-Reset_Password-7
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${NEW_PASSWORD_REQ}
 
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
 JD-TC-Reset_Password-8
 
     [Documentation]    Reset Password - without login

@@ -304,7 +304,7 @@ JD-TC-Forget_LoginId-5
     Set Suite Variable  ${user1_id}       ${resp.json()['id']}
     Set Suite Variable  ${user_num}    ${resp.json()['mobileNo']}
 
-    ${loginId_n}=     Random Int  min=1  max=9999
+    ${loginId_n}=     Random Int  min=1111  max=9999
     Set Suite Variable      ${loginId_n}
 
     ${resp}=    Reset LoginId  ${user1_id}  ${loginId_n}
@@ -383,7 +383,7 @@ JD-TC-Forget_LoginId-6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${loginId555}=     Random Int  min=1  max=9999
+    ${loginId555}=     Random Int  min=1111  max=9999
     Set Suite Variable      ${loginId555}
     
     ${resp}=  Account Set Credential  ${phone}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId555}
