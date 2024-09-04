@@ -110,7 +110,7 @@ JD-TC-Assign_IVR_User-1
     ${lastName}=    FakerLibrary.lastName
     Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
 
-    ${so_id1}=  Create Sample User 
+    ${so_id1}=  Create Sample User   deptId=${dep_id}
     Set Suite Variable  ${so_id1}
     
     ${resp}=  Get User By Id  ${so_id1}
@@ -119,7 +119,7 @@ JD-TC-Assign_IVR_User-1
     Set Suite Variable  ${SOUSERNAME1}  ${resp.json()['mobileNo']}
     Set Suite Variable  ${name}  ${resp.json()['firstName']}
 
-    ${vo_id1}=  Create Sample User 
+    ${vo_id1}=  Create Sample User  deptId=${dep_id}
     Set Suite Variable  ${vo_id1}
     
     ${resp}=  Get User By Id  ${vo_id1}
