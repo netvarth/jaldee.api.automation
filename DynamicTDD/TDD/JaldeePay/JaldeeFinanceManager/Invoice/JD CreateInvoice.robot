@@ -1469,7 +1469,7 @@ JD-TC-CreateInvoice-11
 
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/data/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid1}  ${p1_qid}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -1563,7 +1563,7 @@ JD-TC-CreateInvoice-12
 
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/data/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid1}  ${p1_qid}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -2026,7 +2026,7 @@ JD-TC-CreateInvoice-13
 
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/data/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid2}  ${p1_qid1}  ${DAY}  ${p1_sid11}  ${msg}  ${bool[0]}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -2136,7 +2136,7 @@ JD-TC-CreateInvoice-14
 
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/data/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid2}  ${p1_qid1}  ${DAY}  ${p1_sid11}  ${msg}  ${bool[0]}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -3489,7 +3489,7 @@ JD-TC-CreateInvoice-UH4
 
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/data/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid1}  ${p1_qid}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 

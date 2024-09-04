@@ -415,7 +415,7 @@ checkSignup()
         # bcount=$defaultBCount
         # bseries=$defaultBSeries
 
-    elif [ "$suite" == "APre/Dynamic Consumer Signup.robot" ]; then
+    elif [ "$suite" == "APre/Dynamic Customer Numbers.robot" ]; then
         setConsumerCount
         pusercount=$defaultPUserCount
         pseries=$defaultPSeries
