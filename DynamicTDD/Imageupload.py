@@ -1099,32 +1099,32 @@ def CWLAttachment(cookie_dict, acc_id, uuid, caption, file=comfile):
         print ("Exception at line no:", e.__traceback__.tb_lineno)
 
 
-def PApptAttachment(cookie_dict,  uuid, caption, file=comfile):
-    url = BASE_URL + '/provider/appointment/'+ str(uuid) +'/attachment'
-    session = requests.Session()
-    session.cookies.update(cookie_dict)      
-    try:
+# def PApptAttachment(cookie_dict,  uuid, caption, file=comfile):
+#     url = BASE_URL + '/provider/appointment/'+ str(uuid) +'/attachment'
+#     session = requests.Session()
+#     session.cookies.update(cookie_dict)      
+#     try:
 
-        headers = {
-            'Content-Type': "multipart/form-data",
-        }
-        cap_dict = {"0":str(caption)}
+#         headers = {
+#             'Content-Type': "multipart/form-data",
+#         }
+#         cap_dict = {"0":str(caption)}
 
-        mimetype, encoding = mimetypes.guess_type(file)
-        data = {
-        'attachments': (file, open(file, 'rb'), mimetype), 
-        'captions': (None, json.dumps(cap_dict), 'application/json'),
-        # 'message': (None, json.dumps(message), 'application/json')
-        }
-        print (data)
-        response = session.post(url, files=data)
-        log_request(response)
-        log_response(response)
-        check_deprecation(response, inspect.stack()[0].function)
-        return response
-    except Exception as e:
-        print ("Exception:", e)
-        print ("Exception at line no:", e.__traceback__.tb_lineno)
+#         mimetype, encoding = mimetypes.guess_type(file)
+#         data = {
+#         'attachments': (file, open(file, 'rb'), mimetype), 
+#         'captions': (None, json.dumps(cap_dict), 'application/json'),
+#         # 'message': (None, json.dumps(message), 'application/json')
+#         }
+#         print (data)
+#         response = session.post(url, files=data)
+#         log_request(response)
+#         log_response(response)
+#         check_deprecation(response, inspect.stack()[0].function)
+#         return response
+#     except Exception as e:
+#         print ("Exception:", e)
+#         print ("Exception at line no:", e.__traceback__.tb_lineno)
 
 
 def CApptAttachment(cookie_dict, acc_id, uuid, message, caption, file=comfile):
