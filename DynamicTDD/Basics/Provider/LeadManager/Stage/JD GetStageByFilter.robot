@@ -24,9 +24,9 @@ ${order}        0
 
 *** Test Cases ***
 
-JD-TC-Get_CRM_Lead_Count_By_Filter-1
+JD-TC-Get_Stage_By_Filter-1
 
-    [Documentation]   Get Crm Lead Count By Filter 
+    [Documentation]   Get Stage By Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Log  ${resp.json()}
@@ -35,6 +35,21 @@ JD-TC-Get_CRM_Lead_Count_By_Filter-1
     Log  ${decrypted_data}
     Set Suite Variable      ${pid}          ${decrypted_data['id']}
     Set Suite Variable      ${pdrname}      ${decrypted_data['userName']}
+
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    ${parking}   Random Element   ${parkingType}
+    ${24hours}    Random Element    ['True','False']
+    ${desc}=   FakerLibrary.sentence
+    ${url}=   FakerLibrary.url
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    Set Suite Variable   ${sTime}
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    Set Suite Variable   ${eTime}
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1} 
 
     ${resp}=    Get Business Profile
     Log  ${resp.json()}
@@ -60,8 +75,8 @@ JD-TC-Get_CRM_Lead_Count_By_Filter-1
     Set Suite Variable      ${lid}      ${resp.json()[0]['id']}
     Set Suite Variable      ${place}    ${resp.json()[0]['place']}
 
-    ${lid}=     Create Dictionary  id=${lid}
-    ${loc_id}=  Create List   ${lid}
+    ${locid}=     Create Dictionary  id=${lid}
+    ${loc_id}=  Create List   ${locid}
 
     ${typeName1}=    FakerLibrary.Name
     Set Suite Variable      ${typeName1}
@@ -121,21 +136,40 @@ JD-TC-Get_CRM_Lead_Count_By_Filter-1
     ${resp}=    Create Lead Consumer  ${firstName_n}  ${lastName_n}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test variable   ${con_id}   ${resp.json()}
+    Set Suite variable   ${con_id}   ${resp.json()}
 
     ${resp}=    Get Lead Consumer  ${con_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}             200
 
-    ${resp}=    Create Crm Lead  ${clid}  ${firstName_n}  ${con_id}  ${lastName_n}  ${pid}  
+    ${resp}=    Create Crm Lead  ${clid}  ${pid}  ${lid}  consumerUid=${con_id}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
-    Set Test variable           ${crm_lead_id}          ${resp.json()}
+    Set Suite variable           ${crm_lead_id}          ${resp.json()}
 
-    ${resp}=    Get Crm Lead By Filter
+    ${resp}=    Get Crm Lead   ${crm_lead_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp}=    Get Crm Lead Count By Filter
+    ${user1}=  Create Sample User 
+    Set suite Variable                    ${user1}
+    
+    ${resp}=  Get User By Id            ${user1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings          ${resp.status_code}  200
+    Set Suite Variable  ${user1_id}     ${resp.json()['id']}
+
+    ${stage}=   FakerLibrary.firstName
+
+    ${resp}=    Create Stage  ${stage}  ${crm_lead_id}  ${user1_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}     200
+    Set Suite variable           ${stage_id}            ${resp.json()}
+
+    ${resp}=    Get Stage By Id  ${stage_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}     200
+
+    ${resp}=    Get Stage By Filter
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200

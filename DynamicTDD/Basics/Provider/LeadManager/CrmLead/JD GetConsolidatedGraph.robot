@@ -17,16 +17,15 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 
 *** Variables ***
-
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
 ${fileSize}     0.00458
 ${order}        0
 
 *** Test Cases ***
 
-JD-TC-Get_CRM_Lead_Count_By_Filter-1
+JD-TC-Get_Consolidated_Graph-1
 
-    [Documentation]   Get Crm Lead Count By Filter 
+    [Documentation]   Get Consolidated Graph
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Log  ${resp.json()}
@@ -35,6 +34,21 @@ JD-TC-Get_CRM_Lead_Count_By_Filter-1
     Log  ${decrypted_data}
     Set Suite Variable      ${pid}          ${decrypted_data['id']}
     Set Suite Variable      ${pdrname}      ${decrypted_data['userName']}
+
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    ${parking}   Random Element   ${parkingType}
+    ${24hours}    Random Element    ['True','False']
+    ${desc}=   FakerLibrary.sentence
+    ${url}=   FakerLibrary.url
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    Set Suite Variable   ${sTime}
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    Set Suite Variable   ${eTime}
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1} 
 
     ${resp}=    Get Business Profile
     Log  ${resp.json()}
@@ -60,8 +74,8 @@ JD-TC-Get_CRM_Lead_Count_By_Filter-1
     Set Suite Variable      ${lid}      ${resp.json()[0]['id']}
     Set Suite Variable      ${place}    ${resp.json()[0]['place']}
 
-    ${lid}=     Create Dictionary  id=${lid}
-    ${loc_id}=  Create List   ${lid}
+    ${locid}=     Create Dictionary  id=${lid}
+    ${loc_id}=  Create List   ${locid}
 
     ${typeName1}=    FakerLibrary.Name
     Set Suite Variable      ${typeName1}
@@ -74,6 +88,7 @@ JD-TC-Get_CRM_Lead_Count_By_Filter-1
     ${resp}=    Get Lead Product By Uid  ${lpid}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}      200
+    Set Suite Variable    ${product_id}      ${resp.json()['id']}
 
     ${ChannelName1}=    FakerLibrary.Name
     Set Suite Variable      ${ChannelName1}
@@ -112,6 +127,7 @@ JD-TC-Get_CRM_Lead_Count_By_Filter-1
     ${resp}=    Get Lead Channel By Uid  ${clid}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
+    Set Suite Variable    ${channel_id}      ${resp.json()['id']}
 
     ${firstName_n}=   FakerLibrary.firstName
     ${lastName_n}=    FakerLibrary.lastName
@@ -127,15 +143,33 @@ JD-TC-Get_CRM_Lead_Count_By_Filter-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}             200
 
-    ${resp}=    Create Crm Lead  ${clid}  ${firstName_n}  ${con_id}  ${lastName_n}  ${pid}  
+    ${resp}=    Create Crm Lead  ${clid}  ${pid}  ${lid}  consumerUid=${con_id}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
-    Set Test variable           ${crm_lead_id}          ${resp.json()}
+    Set Suite variable           ${crm_lead_id}          ${resp.json()}
 
-    ${resp}=    Get Crm Lead By Filter
+    ${resp}=    Get Crm Lead   ${crm_lead_id} 
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
+    Should Be Equal As Strings  ${resp.status_code}                  200
 
-    ${resp}=    Get Crm Lead Count By Filter
+    FOR   ${a}  IN RANGE   15
+       
+        ${resp}=  Flush Analytics Data to DB
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        sleep  1s
+        Exit For Loop If    ${resp.content}=="FREE"
+    
+    END
+
+    ${converted_date}=    Evaluate    datetime.datetime.strptime('${DAY1}', '%Y-%m-%d').strftime('%d %b %Y')    modules=datetime
+    ${label}=    Evaluate    '${leadchannel[0]}'.capitalize()
+
+    ${resp}=    Get Consolidated Graph  ${ivr_category[2]}  ${DAY1}  ${DAY1}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     200
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['chartDto']['labels'][0]}                ${converted_date}
+    Should Be Equal As Strings  ${resp.json()['chartDto']['datasets'][0]['label']}     ${label}
+    Should Be Equal As Strings  ${resp.json()['channelPieChart']['data'][0]['value']}  ${ChannelName1}
+
+    
