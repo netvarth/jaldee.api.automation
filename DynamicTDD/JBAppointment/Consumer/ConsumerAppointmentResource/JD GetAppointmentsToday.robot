@@ -30,22 +30,7 @@ JD-TC-GetAppointmentToday-1
 
     [Documentation]  Get consumer's appointments Today.
 
-    # ${multilocdoms}=  get_mutilocation_domains
-    # Log  ${multilocdoms}
-    # Set Suite Variable  ${dom}  ${multilocdoms[0]['domain']}
-    # Set Suite Variable  ${sub_dom}  ${multilocdoms[0]['subdomains'][0]}
 
-    # ${firstname}=  FakerLibrary.first_name
-    # ${lastname}=  FakerLibrary.last_name
-    # ${HLPUSERNAME51}=  Evaluate  ${PUSERNAME}+5566013
-    # ${highest_package}=  get_highest_license_pkg
-    # ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${HLPUSERNAME51}    ${highest_package[0]}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # ${resp}=  Account Activation  ${HLPUSERNAME51}  0
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # ${resp}=  Account Set Credential  ${HLPUSERNAME51}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${HLPUSERNAME51}
-    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME51}  ${PASSWORD}
     Log  ${resp.content}
@@ -55,67 +40,7 @@ JD-TC-GetAppointmentToday-1
     Set Suite Variable  ${p_id}  ${decrypted_data['id']}
     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${HLPUSERNAME51}${\n}
     Set Suite Variable  ${HLPUSERNAME51}
-    # Set Suite Variable  ${HLPUSERNAME51}   ${PUSERNAME136}
-    # ${resp}=  Encrypted Provider Login  ${HLPUSERNAME51}  ${PASSWORD}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # Set Suite Variable  ${p_id}  ${resp.json()['id']}
 
-    # Set Test Variable  ${email_id}  ${P_Email}${HLPUSERNAME51}.${test_mail}
-
-    # ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${list}=  Create List  1  2  3  4  5  6  7
-    # ${ph1}=  Evaluate  ${HLPUSERNAME51}+15566124
-    # ${ph2}=  Evaluate  ${HLPUSERNAME51}+25566128
-    # ${views}=  Random Element    ${Views}
-    # ${name1}=  FakerLibrary.name
-    # ${name2}=  FakerLibrary.name
-    # ${name3}=  FakerLibrary.name
-    # ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
-    # ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    # ${emails1}=  Emails  ${name3}  Email  ${P_Email}${HLPUSERNAME51}.${test_mail}  ${views}
-    # ${bs}=  FakerLibrary.bs
-    # ${companySuffix}=  FakerLibrary.companySuffix
-    # # ${city}=   FakerLibrary.state
-    # # ${latti}=  get_latitude
-    # # ${longi}=  get_longitude
-    # # ${postcode}=  FakerLibrary.postcode
-    # # ${address}=  get_address
-
-    # ${parking}   Random Element   ${parkingType}
-    # ${24hours}    Random Element    ${bool}
-    # ${desc}=   FakerLibrary.sentence
-    # ${url}=   FakerLibrary.url
-    # ${sTime}=  add_timezone_time  ${tz}  0  15  
-    # ${eTime}=  add_timezone_time  ${tz}  2  45  
-    # ${resp}=  Update Business Profile with Schedule    ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${resp}=  Get Business Profile
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${fields}=   Get subDomain level Fields  ${dom}  ${sub_dom}
-    # Log  ${fields.json()}
-    # Should Be Equal As Strings    ${fields.status_code}   200
-
-    # ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
-
-    # ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sub_dom}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=  Get specializations Sub Domain  ${dom}  ${sub_dom}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-
-    # ${spec}=  get_Specializations  ${resp.json()}
-    # ${resp}=  Update Specialization  ${spec}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -125,19 +50,11 @@ JD-TC-GetAppointmentToday-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    Set Suite Variable  ${tz}
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    
-    # ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[0]}  ${boolean[0]}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    
-    # ${resp}=  Get jaldeeIntegration Settings
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+    # ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    # ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    # Set Suite Variable  ${tz}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
+
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -145,30 +62,27 @@ JD-TC-GetAppointmentToday-1
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
-    ${pid1}=  get_acc_id  ${HLPUSERNAME51}
-    Set Suite Variable   ${pid1}
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    Set Suite Variable   ${DAY1}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${list}=  Create List  1  2  3  4  5  6  7
-    # ${sTime1}=  db.get_time_by_timezone   ${tz}
-    ${sTime1}=  db.get_time_by_timezone  ${tz}
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
-    
+
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    FOR  ${i}  IN RANGE   5
-        ${city1}=   get_place
-        Exit For Loop If  '${city1}' != '${city}'
-    END
-    Set Test Variable  ${city}  ${city1}  
+    # FOR  ${i}  IN RANGE   5
+    #     ${city1}=   get_place
+    #     Exit For Loop If  '${city1}' != '${city}'
+    # END
+    # Set Test Variable  ${city}  ${city1}  
     
+    ${list}=  Create List  1  2  3  4  5  6  7
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_two   ${sTime1}  ${delta}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable   ${DAY1}
 
     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
     ${tz1}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
@@ -180,6 +94,15 @@ JD-TC-GetAppointmentToday-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid1}  ${resp.json()}
+
+
+    ${pid1}=  get_acc_id  ${HLPUSERNAME51}
+    Set Suite Variable   ${pid1}
+
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+
+
+    
 
     ${SERVICE1}=   FakerLibrary.name
     ${s_id1}=  Create Sample Service  ${SERVICE1}
