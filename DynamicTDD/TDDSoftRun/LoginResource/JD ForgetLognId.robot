@@ -319,7 +319,9 @@ JD-TC-Forget_LoginId-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
-    ${resp}=    Account Activation  ${user_num}  ${OtpPurpose['ResetLoginId']}
+    ${jsessionynw_value}=   Get Cookie  ${resp}
+
+    ${resp}=    Account Activation  ${user_num}  ${OtpPurpose['ResetLoginId']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
