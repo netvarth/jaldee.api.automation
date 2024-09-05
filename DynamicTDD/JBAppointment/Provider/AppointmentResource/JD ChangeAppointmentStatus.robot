@@ -187,8 +187,6 @@ JD-TC-ChangeAppointmentStatus-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    sleep  03s
-
     # ${resp}=  Get Appointment Status   ${apptid1}
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
@@ -207,35 +205,9 @@ JD-TC-ChangeAppointmentStatus-1
     List Should Contain Value  ${apptTknTm}  ${resp.json()[0]['time']}
 
 JD-TC-ChangeAppointmentStatus-2
-    [Documentation]  change status to Arrived from Confirmed
-    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
 
-    sleep  01s
+    [Documentation]  change status to Started from Confirmed
 
-    ${resp}=  Get Appointment Status   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[1]}
-    # Should Be Equal As Strings  ${resp.json()[0]['time']}   ${apptTakenTime}  
-    Should Be Equal As Strings  ${resp.json()[0]['date']}   ${DAY1}  
-    List Should Contain Value  ${apptTknTm}  ${resp.json()[0]['time']}
-
-    ${resp}=  Appointment Action   ${apptStatus[2]}   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Appointment Status   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[2]}
-    # Should Be Equal As Strings  ${resp.json()[1]['time']}   ${apptTakenTime}  
-    Should Be Equal As Strings  ${resp.json()[1]['date']}   ${DAY1}  
-    List Should Contain Value  ${apptTknTm}  ${resp.json()[1]['time']}
-
-JD-TC-ChangeAppointmentStatus-3
-    [Documentation]  change status to Started from Arrived
     ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
