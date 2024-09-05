@@ -293,21 +293,20 @@ JD-TC-Update MR Case-8
     ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
-    Set Test Variable  ${dep_id}  ${resp1.json()}
+    Set Suite Variable  ${dep_id}  ${resp1.json()}
 
     ${resp}=  Get Departments
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${u_id}=  Create Sample User
+    ${u_id}=  Create Sample User   deptId=${dep_id}
     Set Suite Variable  ${u_id}
 
     ${resp}=  Get User By Id      ${u_id}
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Suite Variable      ${PUSERNAME_U1}     ${resp.json()['mobileNo']}
-    Set Suite Variable      ${sam_email}     ${resp.json()['email']}
-
+   
     ${resp}=    Reset LoginId  ${u_id}  ${PUSERNAME_U1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -329,9 +328,9 @@ JD-TC-Update MR Case-8
 
     #... linking user to the provider 1 and get linked lists
 
-    ${resp}=    Connect with other login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=    Connect with other login  ${PUSERNAME_U1}  password=${PASSWORD}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    202
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
@@ -364,7 +363,7 @@ JD-TC-Update MR Case-9
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${u_id2}=  Create Sample User
+    ${u_id2}=  Create Sample User  deptId=${dep_id}
     Set Test Variable  ${u_id2}
 
     ${usr}=  Create List      ${u_id}

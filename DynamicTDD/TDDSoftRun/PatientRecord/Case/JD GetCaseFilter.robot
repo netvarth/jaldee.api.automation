@@ -314,15 +314,14 @@ JD-TC-Get Case Filter-7
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${u_id}=  Create Sample User
+    ${u_id}=  Create Sample User   deptId=${dep_id}
     Set Suite Variable  ${u_id}
 
     ${resp}=  Get User By Id      ${u_id}
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Suite Variable      ${PUSERNAME_U1}     ${resp.json()['mobileNo']}
-    Set Suite Variable      ${sam_email}     ${resp.json()['email']}
-
+    
     ${resp}=    Reset LoginId  ${u_id}  ${PUSERNAME_U1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -344,9 +343,9 @@ JD-TC-Get Case Filter-7
 
     #... linking user to the provider 1 and get linked lists
 
-    ${resp}=    Connect with other login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=    Connect with other login  ${PUSERNAME_U1}  password=${PASSWORD}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    202
 
     ${resp}=    Provider Logout
     Log   ${resp.content}

@@ -335,7 +335,7 @@ JD-TC-Delete Provider Consumer Notes-6
     ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
-    Set Test Variable  ${dep_id}  ${resp1.json()}
+    Set Suite Variable  ${dep_id}  ${resp1.json()}
 
     ${resp}=  Get Departments
     Log  ${resp.content}
@@ -378,17 +378,14 @@ JD-TC-Delete Provider Consumer Notes-6
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-
-
-    ${u_id}=  Create Sample User
+    ${u_id}=  Create Sample User   deptId=${dep_id}
     Set Suite Variable  ${u_id}
 
     ${resp}=  Get User By Id      ${u_id}
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Suite Variable      ${PUSERNAME_U1}     ${resp.json()['mobileNo']}
-    Set Suite Variable      ${sam_email}     ${resp.json()['email']}
-
+    
 
     ${title3}=  FakerLibrary.name
     ${description3}=  FakerLibrary.last_name
@@ -538,17 +535,14 @@ JD-TC-Delete Provider Consumer Notes-7
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-
-
-    ${u_id}=  Create Sample User
+    ${u_id}=  Create Sample User   deptId=${dep_id}
     Set Suite Variable  ${u_id}
 
     ${resp}=  Get User By Id      ${u_id}
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Suite Variable      ${PUSERNAME_U1}     ${resp.json()['mobileNo']}
-    Set Suite Variable      ${sam_email}     ${resp.json()['email']}
-
+    
 
     ${title3}=  FakerLibrary.name
     ${description3}=  FakerLibrary.last_name
@@ -723,8 +717,7 @@ JD-TC-Delete Provider Consumer Notes-8
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Suite Variable      ${PUSERNAME_U1}     ${resp.json()['mobileNo']}
-    Set Suite Variable      ${sam_email}     ${resp.json()['email']}
-
+    
 
     ${title3}=  FakerLibrary.name
     ${description3}=  FakerLibrary.last_name
@@ -896,8 +889,7 @@ JD-TC-Delete Provider Consumer Notes-9
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Suite Variable      ${PUSERNAME_U1}     ${resp.json()['mobileNo']}
-    Set Suite Variable      ${sam_email}     ${resp.json()['email']}
-
+    
 
     ${title3}=  FakerLibrary.name
     ${description3}=  FakerLibrary.last_name

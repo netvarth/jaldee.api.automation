@@ -92,8 +92,7 @@ JD-TC-Delete Dental Record-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Log  ${resp.request.headers['Cookie']}
-        ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
     sleep  1s
     ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}    JSESSIONYNW=${jsessionynw_value}
@@ -268,8 +267,7 @@ JD-TC-Delete Dental Record-UH4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Log  ${resp.request.headers['Cookie']}
-        ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
     ${resp}=    Verify Otp For Login   ${primaryMobileNo}    ${OtpPurpose['Authentication']}     JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}

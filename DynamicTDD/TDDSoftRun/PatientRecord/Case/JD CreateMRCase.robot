@@ -652,9 +652,9 @@ JD-TC-Create MR Case-11
 
     #... linking user to the provider 1 and get linked lists
 
-    ${resp}=    Connect with other login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=    Connect with other login  ${PUSERNAME_U1}  password=${PASSWORD}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    202
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
