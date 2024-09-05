@@ -561,15 +561,14 @@ JD-TC-CreateLocation-UH7
       Set Suite Variable  ${account_id1}  ${resp.json()['id']}
       Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
-      ${resp}=  View Waitlist Settings
-      Log  ${resp.content}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      IF  ${resp.json()['filterByDept']}==${bool[0]}
-            ${resp}=  Toggle Department Enable
-            Log  ${resp.content}
-            Should Be Equal As Strings  ${resp.status_code}  200
-
-      END
+      ${resp}= Get Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
       sleep  2s
       ${resp}=  Get Departments

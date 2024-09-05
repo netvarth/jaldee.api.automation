@@ -29,8 +29,8 @@ ${digits}       0123456789
 #         Should Be Equal As Strings    ${resp.status_code}    200
 #         ${domain}=   Set Variable    ${resp.json()['sector']}
 #         ${subdomain}=    Set Variable      ${resp.json()['subSector']}
-#         ${resp}=  View Waitlist Settings
-# 	    ${resp}=  View Waitlist Settings
+#         ${resp}= Get Waitlist Settings
+# 	    ${resp}= Get Waitlist Settings
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
     # IF  ${resp.json()['filterByDept']}==${bool[1]}

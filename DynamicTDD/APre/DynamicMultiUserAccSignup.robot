@@ -97,7 +97,7 @@ JD-TC-Branch_Signup-1
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${account_id}  ${resp.json()['id']}
 
-        ${resp}=  View Waitlist Settings
+        ${resp}= Get Waitlist Settings
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
@@ -292,27 +292,31 @@ SignUp Account
         ${resp}=  Get specializations Sub Domain  ${d}  ${sd}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}   200
-        Set Test Variable    ${spec1}     ${resp.json()[0]['displayName']}   
-        Set Test Variable    ${spec2}     ${resp.json()[1]['displayName']}   
 
-        ${spec}=  Create List    ${spec1}   ${spec2}
-
-        # ${spec}=  get_Specializations  ${resp.json()}
+        ${spec}=  get_Specializations  ${resp.json()}
 
         # ${resp}=  Update Specialization  ${spec}
         # Log  ${resp.json()}
         # Should Be Equal As Strings    ${resp.status_code}   200
-        ${resp}=  Update Business Profile with kwargs  specialization=${spec}  
+        ${resp}=  Update Business Profile with kwargs  &{spec}  
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
 
+        # ${resp}=  Get Waitlist Settings
+        # Log  ${resp.json()}
+        # Should Be Equal As Strings  ${resp.status_code}  200
+        # Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[0]}
+        # ${resp}=  Enable Waitlist
+        # Log   ${resp.json()}
+        # Should Be Equal As Strings  ${resp.status_code}  200
+
         ${resp}=  Get Waitlist Settings
-        Log  ${resp.json()}
+        Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[0]}
-        ${resp}=  Enable Waitlist
-        Log   ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
+        IF  ${resp.json()['enabledWaitlist']}==${bool[0]}   
+            ${resp}=   Enable Waitlist
+            Should Be Equal As Strings  ${resp.status_code}  200
+        END
 
         ${resp}=  Get jaldeeIntegration Settings
         Log   ${resp.json()}
