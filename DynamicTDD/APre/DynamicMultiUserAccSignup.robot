@@ -342,6 +342,7 @@ SignUp Account
             ${resp}=   Enable Disable Appointment   ${toggle[0]}
             Should Be Equal As Strings  ${resp.status_code}  200
         END
+        
         ${resp}=   Get Account Settings
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200

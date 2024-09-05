@@ -6109,11 +6109,11 @@ Update Appointmet Settings
     Check Deprication  ${resp}  Update Appointmet Settings
     RETURN  ${resp}
 
-Update Appointment Status
+Enable Disable Appointment
     [Arguments]   ${status}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/appointment/${status}   expected_status=any
-    Check Deprication  ${resp}  Update Appointment Status
+    Check Deprication  ${resp}  Enable Disable Appointment
     RETURN  ${resp}
     
 Enable Calling Status

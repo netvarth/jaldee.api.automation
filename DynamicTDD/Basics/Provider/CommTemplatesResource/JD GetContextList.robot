@@ -44,7 +44,7 @@ JD-TC-GetContexts-2
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[1]}   
-        ${resp}=   Disable Appointment
+        ${resp}=   Enable Disable Appointment   ${toggle[1]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
