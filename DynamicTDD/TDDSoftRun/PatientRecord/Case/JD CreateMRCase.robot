@@ -551,7 +551,7 @@ JD-TC-Create MR Case-10
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${u_id1}=  Create Sample User
+    ${u_id1}=  Create Sample User   deptId=${dep_id}
     Set Suite Variable  ${u_id1}
 
     ${doctor1}=  Create Dictionary  id=${u_id1} 
@@ -562,13 +562,11 @@ JD-TC-Create MR Case-10
     Set Suite Variable      ${ufname}     ${resp.json()['firstName']}
     Set Suite Variable      ${ulname}     ${resp.json()['lastName']}
     Set Suite Variable      ${PUSERNAME_U11}     ${resp.json()['mobileNo']}
-    Set Suite Variable      ${sam_email1}     ${resp.json()['email']}
 
-
-     ${resp}=    Create MR Case    ${category}  ${type}  ${doctor1}  ${consumer}   ${title}  ${description}  
+    ${resp}=    Create MR Case    ${category}  ${type}  ${doctor1}  ${consumer}   ${title}  ${description}  
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}  200
-     Set Suite Variable    ${caseUId7}    ${resp.json()['uid']}
+    Set Suite Variable    ${caseUId7}    ${resp.json()['uid']}
 
     ${resp}=    Get MR Case By UID   ${caseUId7}    
     Log   ${resp.content}
@@ -617,16 +615,15 @@ JD-TC-Create MR Case-11
     ${resp}=  Get Departments
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${u_id}=  Create Sample User
+  
+    ${u_id}=  Create Sample User   deptId=${dep_id}
     Set Suite Variable  ${u_id}
 
     ${resp}=  Get User By Id      ${u_id}
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Suite Variable      ${PUSERNAME_U1}     ${resp.json()['mobileNo']}
-    Set Suite Variable      ${sam_email}     ${resp.json()['email']}
-
+   
     # ${resp}=  SendProviderResetMail   ${sam_email}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
