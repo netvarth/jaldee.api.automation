@@ -63,7 +63,7 @@ JD-TC-GetContexts-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enabledWaitlist']}==${bool[1]}   

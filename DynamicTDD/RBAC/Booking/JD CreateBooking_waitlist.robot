@@ -113,7 +113,7 @@ JD-TC-CreateBooking_Waitlist-1
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
-    # ${resp}=  View Waitlist Settings
+    # ${resp}= Get Waitlist Settings
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
     # IF  ${resp.json()['filterByDept']}==${bool[0]}
