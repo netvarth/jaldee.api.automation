@@ -97,7 +97,7 @@ JD-TC-Branch_Signup-1
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${account_id}  ${resp.json()['id']}
 
-        ${resp}= Get Waitlist Settings
+        ${resp}=  Get Waitlist Settings
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
