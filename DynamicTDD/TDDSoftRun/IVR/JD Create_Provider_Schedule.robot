@@ -701,7 +701,7 @@ JD-TC-Create_Provider_Schedule-UH11
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
-    ${resp}=  Create Provider Schedule  ${empty}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${empty}  ${JCstatus[0]}  ${user_id}
+    ${resp}=  Create Provider Schedule  ${empty}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[0]}  ${user_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${NECESSARY_FIELD_MISSING}"

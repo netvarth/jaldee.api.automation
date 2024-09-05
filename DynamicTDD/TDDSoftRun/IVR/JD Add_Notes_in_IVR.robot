@@ -712,10 +712,6 @@ JD-TC-Add_Notes_in_IVR-UH4
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
     ${resp}=    Send Otp For Login    ${CUSERNAME20}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
