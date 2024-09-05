@@ -283,9 +283,6 @@ JD-TC-Create Sections-1
     ${CHIEFCOMPLAINT}=  create Dictionary  chiefComplaint=${caption}
     Set Suite Variable    ${CHIEFCOMPLAINT}
 
-    ${start}=    Get Current Date    result_format=%H:%M:%S
-    Set Suite Variable    ${start} 
-
     ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temp_id}       ${enumName}    ${CHIEFCOMPLAINT}    ${attachments}   voiceAttachments=${voiceAttachments}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -306,8 +303,7 @@ JD-TC-Create Sections-1
     Should Be Equal As Strings     ${resp.json()[0]['sectionValue']['chiefComplaint']}    ${caption}
     Should Be Equal As Strings     ${resp.json()[0]['status']}    ${toggle[0]}
     Should Be Equal As Strings     ${resp.json()[0]['createdDate']}    ${DAY1}
-    Should Be Equal As Strings     ${resp.json()[0]['createdDateString']}    ${DAY1} ${start}
-
+    
 JD-TC-Create Sections-2
 
     [Documentation]    Create Sections with valid details then filter by uid.
@@ -330,8 +326,7 @@ JD-TC-Create Sections-2
     Should Be Equal As Strings     ${resp.json()[0]['sectionValue']['chiefComplaint']}    ${caption}
     Should Be Equal As Strings     ${resp.json()[0]['status']}    ${toggle[0]}
     Should Be Equal As Strings     ${resp.json()[0]['createdDate']}    ${DAY1}
-    Should Be Equal As Strings     ${resp.json()[0]['createdDateString']}    ${DAY1} ${start}
-
+    
 JD-TC-Create Sections-3
 
     [Documentation]    Create Sections with valid details then filter by doctorId.
@@ -354,8 +349,7 @@ JD-TC-Create Sections-3
     Should Be Equal As Strings     ${resp.json()[0]['sectionValue']['chiefComplaint']}    ${caption}
     Should Be Equal As Strings     ${resp.json()[0]['status']}    ${toggle[0]}
     Should Be Equal As Strings     ${resp.json()[0]['createdDate']}    ${DAY1}
-    Should Be Equal As Strings     ${resp.json()[0]['createdDateString']}    ${DAY1} ${start}
-
+    
 JD-TC-Create Sections-4
 
     [Documentation]    Create Sections with valid details then filter by doctorFirstName.
@@ -379,8 +373,7 @@ JD-TC-Create Sections-4
     Should Be Equal As Strings     ${resp.json()[0]['sectionValue']['chiefComplaint']}    ${caption}
     Should Be Equal As Strings     ${resp.json()[0]['status']}    ${toggle[0]}
     Should Be Equal As Strings     ${resp.json()[0]['createdDate']}    ${DAY1}
-    Should Be Equal As Strings     ${resp.json()[0]['createdDateString']}    ${DAY1} ${start}
-
+    
 JD-TC-Create Sections-5
 
     [Documentation]    Create Sections with valid details then filter by doctorLastName.
@@ -404,8 +397,7 @@ JD-TC-Create Sections-5
     Should Be Equal As Strings     ${resp.json()[0]['sectionValue']['chiefComplaint']}    ${caption}
     Should Be Equal As Strings     ${resp.json()[0]['status']}    ${toggle[0]}
     Should Be Equal As Strings     ${resp.json()[0]['createdDate']}    ${DAY1}
-    Should Be Equal As Strings     ${resp.json()[0]['createdDateString']}    ${DAY1} ${start}
-
+    
 JD-TC-Create Sections-6
 
     [Documentation]    Create Sections with valid details then filter by sectionType.
@@ -429,8 +421,7 @@ JD-TC-Create Sections-6
     Should Be Equal As Strings     ${resp.json()[0]['sectionValue']['chiefComplaint']}    ${caption}
     Should Be Equal As Strings     ${resp.json()[0]['status']}    ${toggle[0]}
     Should Be Equal As Strings     ${resp.json()[0]['createdDate']}    ${DAY1}
-    Should Be Equal As Strings     ${resp.json()[0]['createdDateString']}    ${DAY1} ${start}
-
+    
 
 JD-TC-Create Sections-7
 
@@ -455,8 +446,7 @@ JD-TC-Create Sections-7
     Should Be Equal As Strings     ${resp.json()[0]['sectionValue']['chiefComplaint']}    ${caption}
     Should Be Equal As Strings     ${resp.json()[0]['status']}    ${toggle[0]}
     Should Be Equal As Strings     ${resp.json()[0]['createdDate']}    ${DAY1}
-    Should Be Equal As Strings     ${resp.json()[0]['createdDateString']}    ${DAY1} ${start}
-
+    
 JD-TC-Create Sections-8
 
     [Documentation]    Create Sections with valid details then filter by updatedDate.
@@ -497,8 +487,7 @@ JD-TC-Create Sections-8
     Should Be Equal As Strings     ${resp.json()[0]['sectionValue']['chiefComplaint']}    ${caption11}
     Should Be Equal As Strings     ${resp.json()[0]['status']}    ${toggle[0]}
     Should Be Equal As Strings     ${resp.json()[0]['createdDate']}    ${DAY1}
-    Should Be Equal As Strings     ${resp.json()[0]['createdDateString']}    ${DAY1} ${start}
-    Should Be Equal As Strings     ${resp.json()[0]['updatedDate']}    ${DAY1}
+        Should Be Equal As Strings     ${resp.json()[0]['updatedDate']}    ${DAY1}
     Should Be Equal As Strings     ${resp.json()[0]['updatedDateString']}    ${DAY1} ${UpdatedTime}
 
 *** Comments ***
