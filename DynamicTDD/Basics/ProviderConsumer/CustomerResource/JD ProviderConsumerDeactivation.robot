@@ -169,7 +169,7 @@ JD-TC-SPConsumer Deactivation -2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Enable Appointment
+    ${resp}=  Enable Disable Appointment   ${toggle[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep   01s

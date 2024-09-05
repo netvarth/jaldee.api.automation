@@ -26,7 +26,7 @@ JD-TC-EnableDisableAppointment-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${toggle[0]}
+        ${resp}=   Enable Disable Appointment   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -42,7 +42,7 @@ JD-TC-EnableDisableAppointment-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[1]}   
-        ${resp}=   Update Appointment Status   ${toggle[1]}
+        ${resp}=   Enable Disable Appointment   ${toggle[1]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -58,11 +58,11 @@ JD-TC-EnableDisableAppointment-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${toggle[0]}
+        ${resp}=   Enable Disable Appointment   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=   Update Appointment Status   ${toggle[0]}
+    ${resp}=   Enable Disable Appointment   ${toggle[0]}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings    ${resp.json()}   ${APPONTMENT_ALREDY_ENABLED}
@@ -79,11 +79,11 @@ JD-TC-EnableDisableAppointment-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[1]}   
-        ${resp}=   Update Appointment Status   ${toggle[1]}
+        ${resp}=   Enable Disable Appointment   ${toggle[1]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=   Update Appointment Status   ${toggle[1]}
+    ${resp}=   Enable Disable Appointment   ${toggle[1]}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings    ${resp.json()}    ${APPONTMENT_ALREDY_DISABLED}
@@ -122,7 +122,7 @@ JD-TC-EnableDisableAppointment-UH3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=   Update Appointment Status   ${toggle[0]}
+    ${resp}=   Enable Disable Appointment   ${toggle[0]}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   401
     Should Be Equal As Strings  ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
@@ -143,7 +143,7 @@ JD-TC-EnableDisableAppointment-UH4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=   Update Appointment Status   ${toggle[1]}
+    ${resp}=   Enable Disable Appointment   ${toggle[1]}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   401
     Should Be Equal As Strings  ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
@@ -152,7 +152,7 @@ JD-TC-EnableDisableAppointment-UH5
 
     [Documentation]  Get appointment messages from ynwconf without login.
     
-    ${resp}=   Update Appointment Status   ${toggle[0]}
+    ${resp}=   Enable Disable Appointment   ${toggle[0]}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   419
     Should Be Equal As Strings    ${resp.json()}      ${SESSION_EXPIRED}

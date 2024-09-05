@@ -43,7 +43,7 @@ JD-TC-GetConsumerAppointments-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Update Appointment Status   ${toggle[0]}
+        ${resp}=   Enable Disable Appointment   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
@@ -250,7 +250,7 @@ JD-TC-GetConsumerAppointments-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp1}=  Enable Appointment
+        ${resp1}=  Enable Disable Appointment   ${toggle[0]}
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
 
@@ -1292,7 +1292,7 @@ JD-TC-GetConsumerAppointments-17
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp1}=  Enable Appointment
+        ${resp1}=  Enable Disable Appointment   ${toggle[0]}
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
 

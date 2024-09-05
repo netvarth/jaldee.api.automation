@@ -315,27 +315,33 @@ SignUp Account
         ${resp}=  Enable Waitlist
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
+
         ${resp}=  Get jaldeeIntegration Settings
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[0]}   
+        Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[0]}  
+
         ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[0]}  ${boolean[0]}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
+
         ${resp}=  Get jaldeeIntegration Settings
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]} 
+
         ${resp}=   Get Account Settings
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Should Be Equal As Strings  ${resp.json()['appointment']}   ${bool[0]}
+        
         ${resp}=   Get Appointment Settings
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${result}=  Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
-        Log   ${result.json()}
-        Should Be Equal As Strings  ${result.status_code}  200
+        IF  ${resp.json()['enableAppt']}==${bool[0]}   
+            ${resp}=   Enable Disable Appointment   ${toggle[0]}
+            Should Be Equal As Strings  ${resp.status_code}  200
+        END
         ${resp}=   Get Account Settings
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
