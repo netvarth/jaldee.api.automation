@@ -235,12 +235,12 @@ JD-TC-GetAppointmentToday-1
     ${j}=  Random Int  max=${num_slots-1}
     Set Suite Variable   ${slot11}   ${slots[${j}]}
     
-    ${resp}=  AddCustomer  ${CUSERNAME16}  
+    ${resp}=  AddCustomer  ${CUSERNAME17}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME16}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME17}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
@@ -335,7 +335,9 @@ JD-TC-GetAppointmentToday-1
     # Set Suite Variable   ${slot1}   ${slots[${j}]}
 
     ${fname}=  FakerLibrary.first_name
+    Set Suite Variable   ${fname}
     ${lname}=  FakerLibrary.last_name
+    Set Suite Variable   ${lname}
    
     ${resp}=  AddCustomer  ${CUSERNAME16}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
     Log   ${resp.content}
@@ -355,7 +357,7 @@ JD-TC-GetAppointmentToday-1
     ${resp}=    Verify Otp For Login   ${CUSERNAME16}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
+    Set Suite Variable  ${token}  ${resp.json()['token']}
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
     Log   ${resp.content}
@@ -674,3 +676,708 @@ JD-TC-GetAppointmentToday-1
             Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id3}
         END
     END
+
+JD-TC-GetAppointmentToday-2
+
+	[Documentation]  Filter Appointment Today by service id.
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Consumer Appointments Today    service-eq=${s_id2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${len}=  Get Length  ${resp.json()}
+    Should Be Equal As Integers  ${len}  2
+
+    FOR  ${i}  IN RANGE   ${len}
+
+        IF  '${resp.json()[${i}]['uid']}' == '${apptid2}'  
+    
+            Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid2}       
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id2}       
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['jaldeeFamilyMemberId']}    ${cidfor2}        
+            Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
+            # Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot2}
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
+            Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['firstName']}   ${family_fname2}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['lastName']}    ${family_lname2}
+            Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}                         ${lid}
+            Should Be Equal As Strings  ${resp.json()[${i}]['service']['id']}                          ${s_id2}
+            Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id2}
+
+        ELSE IF   '${resp.json()[${i}]['uid']}' == '${apptid3}' 
+    
+            Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid3}  
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id3}           
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['jaldeeFamilyMemberId']}    ${cidfor3}        
+            Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
+            # Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot3}
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
+            Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['firstName']}   ${family_fname3}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['lastName']}    ${family_lname3}
+            Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}                         ${lid1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['service']['id']}                          ${s_id2}
+            Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id3}
+        END
+    END
+
+
+JD-TC-GetAppointmentToday-3
+
+	[Documentation]  Filter Appointment Today by appointmentEncId.
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Consumer Appointments Today   appointmentEncId-eq=${A_uuid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${len}=  Get Length  ${resp.json()}
+    Should Be Equal As Integers  ${len}  1
+
+    FOR  ${i}  IN RANGE   ${len}
+
+        IF  '${resp.json()[${i}]['uid']}' == '${apptid1}'  
+
+            Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid1}       
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id1}      
+            Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
+            # Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
+            Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['firstName']}   ${fname}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['lastName']}    ${lname}
+            Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}                         ${lid}
+            Should Be Equal As Strings  ${resp.json()[${i}]['service']['id']}                          ${s_id1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id1}
+
+        END
+    END
+    
+    ${len}=  Get Length  ${resp.json()}
+    Should Be Equal As Integers  ${len}  1
+
+    ${resp}=    Get Consumer Appointments Today   appointmentEncId-eq=${A_uuid3}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+            Should Be Equal As Strings       ${resp.json()[0]['appointmentEncId']}                       ${A_uuid3}  
+            Should Be Equal As Strings  ${resp.json()[0]['appmtFor'][0]['id']}                      ${cons_id3}           
+            Should Be Equal As Strings  ${resp.json()[0]['appmtFor'][0]['jaldeeFamilyMemberId']}    ${cidfor3}        
+            Should Be Equal As Strings  ${resp.json()[0]['appointmentMode']}                        ${appointmentMode[2]}  
+            Should Be Equal As Strings  ${resp.json()[0]['apptStatus']}                             ${apptStatus[1]}    
+            Should Be Equal As Strings  ${resp.json()[0]['appmtDate']}                              ${DAY1}
+            # Should Be Equal As Strings  ${resp.json()[0]['appmtTime']}                              ${slot3}
+            Should Be Equal As Strings  ${resp.json()[0]['apptBy']}                                 CONSUMER
+            Should Be Equal As Strings  ${resp.json()[0]['paymentStatus']}                          ${paymentStatus[0]}
+            Should Be Equal As Strings  ${resp.json()[0]['providerConsumer']['firstName']}   ${family_fname3}
+            Should Be Equal As Strings  ${resp.json()[0]['providerConsumer']['lastName']}    ${family_lname3}
+            Should Be Equal As Strings  ${resp.json()[0]['location']['id']}                         ${lid1}
+            Should Be Equal As Strings  ${resp.json()[0]['service']['id']}                          ${s_id2}
+            Should Be Equal As Strings  ${resp.json()[0]['schedule']['id']}                         ${sch_id3}
+    
+    ${len}=  Get Length  ${resp.json()}
+    Should Be Equal As Integers  ${len}  1
+
+    ${resp}=    Get Consumer Appointments Today   appointmentEncId-eq=${A_uuid4}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}     []
+
+    ${len}=  Get Length  ${resp.json()}
+    Should Be Equal As Integers  ${len}  0
+
+JD-TC-GetAppointmentToday-4
+
+	[Documentation]  Filter Appointment Today by first name.
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Consumer Appointments Today   firstName-eq=${fname}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${len}=  Get Length  ${resp.json()}
+    Should Be Equal As Integers  ${len}  1
+
+    FOR  ${i}  IN RANGE   ${len}
+
+        IF  '${resp.json()[${i}]['uid']}' == '${apptid1}'  
+     
+            Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid1}       
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id1}      
+            Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
+            # Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
+            Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['firstName']}   ${fname}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['lastName']}    ${lname}
+            Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}                         ${lid}
+            Should Be Equal As Strings  ${resp.json()[${i}]['service']['id']}                          ${s_id1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id1}
+        END
+    END
+
+JD-TC-GetAppointmentToday-5
+
+	[Documentation]  Filter Appointment Today by last name.
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Consumer Appointments Today   lastName-eq=${lname}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${len}=  Get Length  ${resp.json()}
+    Should Be Equal As Integers  ${len}  1
+
+    FOR  ${i}  IN RANGE   ${len}
+
+        IF  '${resp.json()[${i}]['uid']}' == '${apptid1}'  
+     
+            Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid1}       
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id1}      
+            Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
+            # Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
+            Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['firstName']}   ${fname}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['lastName']}    ${lname}
+            Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}                         ${lid}
+            Should Be Equal As Strings  ${resp.json()[${i}]['service']['id']}                          ${s_id1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id1}
+        END
+    END
+
+JD-TC-GetAppointmentToday-6
+
+	[Documentation]  Filter Appointment Today by schedule id.
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Consumer Appointments Today   schedule-eq=${sch_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${len}=  Get Length  ${resp.json()}
+    Should Be Equal As Integers  ${len}  1
+
+    FOR  ${i}  IN RANGE   ${len}
+
+        IF  '${resp.json()[${i}]['uid']}' == '${apptid1}'  
+     
+            Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid1}       
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id1}      
+            Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
+            # Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
+            Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['firstName']}   ${fname}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['lastName']}    ${lname}
+            Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}                         ${lid}
+            Should Be Equal As Strings  ${resp.json()[${i}]['service']['id']}                          ${s_id1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id1}
+        END
+    END
+
+JD-TC-GetAppointmentToday-7
+
+	[Documentation]  Get consumer's appointments today where appointment taken by consumer(apptBy).
+
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Consumer Appointments Today   apptBy-eq=CONSUMER
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+   ${len}=  Get Length  ${resp.json()}
+    Should Be Equal As Integers  ${len}  3
+
+    FOR  ${i}  IN RANGE   ${len}
+
+        IF  '${resp.json()[${i}]['uid']}' == '${apptid1}'  
+            Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid1}       
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id1}      
+            Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
+            # Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
+            Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['firstName']}   ${fname}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['lastName']}    ${lname}
+            Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}                         ${lid}
+            Should Be Equal As Strings  ${resp.json()[${i}]['service']['id']}                          ${s_id1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id1}
+
+        ELSE IF     '${resp.json()[${i}]['uid']}' == '${apptid2}'     
+            Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid2}       
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id2}       
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['jaldeeFamilyMemberId']}    ${cidfor2}        
+            Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
+            # Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot2}
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
+            Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['firstName']}   ${family_fname2}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['lastName']}    ${family_lname2}
+            Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}                         ${lid}
+            Should Be Equal As Strings  ${resp.json()[${i}]['service']['id']}                          ${s_id2}
+            Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id2}
+
+        ELSE IF   '${resp.json()[${i}]['uid']}' == '${apptid3}' 
+            Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid3}  
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id3}           
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['jaldeeFamilyMemberId']}    ${cidfor3}        
+            Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
+            # Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot3}
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
+            Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['firstName']}   ${family_fname3}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['lastName']}    ${family_lname3}
+            Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}                         ${lid1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['service']['id']}                          ${s_id2}
+            Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id3}
+        END
+    END
+
+JD-TC-GetAppointmentToday-8
+
+	[Documentation]   Filter consumer Appointments Today by location.
+
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Consumer Appointments Today   location-eq=${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+   ${len}=  Get Length  ${resp.json()}
+    Should Be Equal As Integers  ${len}  2
+
+    FOR  ${i}  IN RANGE   ${len}
+
+        IF  '${resp.json()[${i}]['uid']}' == '${apptid1}'  
+            Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid1}       
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id1}      
+            Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
+            # Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
+            Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['firstName']}   ${fname}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['lastName']}    ${lname}
+            Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}                         ${lid}
+            Should Be Equal As Strings  ${resp.json()[${i}]['service']['id']}                          ${s_id1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id1}
+
+        ELSE IF     '${resp.json()[${i}]['uid']}' == '${apptid2}'     
+            Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid2}       
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id2}       
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['jaldeeFamilyMemberId']}    ${cidfor2}        
+            Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
+            # Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot2}
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
+            Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['firstName']}   ${family_fname2}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['lastName']}    ${family_lname2}
+            Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}                         ${lid}
+            Should Be Equal As Strings  ${resp.json()[${i}]['service']['id']}                          ${s_id2}
+            Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id2}
+
+        END
+    END
+
+JD-TC-GetAppointmentToday-9
+
+	[Documentation]   Filter Appointment Today by Appointment status Arrived.
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME51}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Appointment Action   ${apptStatus[2]}   ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment Status   ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Contain   ${resp.text}  ${apptStatus[2]}
+
+    ${resp}=  Provider Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Consumer Appointments Today   apptStatus-eq=${apptStatus[2]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+   ${len}=  Get Length  ${resp.json()}
+    Should Be Equal As Integers  ${len}  1
+
+    FOR  ${i}  IN RANGE   ${len}
+
+        IF  '${resp.json()[${i}]['uid']}' == '${apptid1}'  
+            Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid1}       
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id1}      
+            Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[2]}    
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
+            # Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
+            Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['firstName']}   ${fname}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['lastName']}    ${lname}
+            Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}                         ${lid}
+            Should Be Equal As Strings  ${resp.json()[${i}]['service']['id']}                          ${s_id1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id1}
+
+        END
+    END
+JD-TC-GetAppointmentToday-10
+
+	[Documentation]   Filter Appointment Today by Appointment status started.
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME51}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Appointment Action   ${apptStatus[3]}   ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment Status   ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Contain   ${resp.text}  ${apptStatus[3]}
+
+    ${resp}=  Provider Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Consumer Appointments Today   apptStatus-eq=${apptStatus[3]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+   ${len}=  Get Length  ${resp.json()}
+    Should Be Equal As Integers  ${len}  1
+
+    FOR  ${i}  IN RANGE   ${len}
+
+        IF  '${resp.json()[${i}]['uid']}' == '${apptid1}'  
+            Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid1}       
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id1}      
+            Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[3]}    
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
+            # Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
+            Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['firstName']}   ${fname}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['lastName']}    ${lname}
+            Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}                         ${lid}
+            Should Be Equal As Strings  ${resp.json()[${i}]['service']['id']}                          ${s_id1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id1}
+
+        END
+    END
+JD-TC-GetAppointmentToday-11
+
+	[Documentation]   Filter Appointment Today by Appointment status completed.
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME51}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Appointment Action   ${apptStatus[6]}   ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment Status   ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Contain   ${resp.text}  ${apptStatus[6]}
+
+    ${resp}=  Provider Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Consumer Appointments Today   apptStatus-eq=${apptStatus[6]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+   ${len}=  Get Length  ${resp.json()}
+    Should Be Equal As Integers  ${len}  1
+
+    FOR  ${i}  IN RANGE   ${len}
+
+        IF  '${resp.json()[${i}]['uid']}' == '${apptid1}'  
+            Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid1}       
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id1}      
+            Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[6]}    
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
+            # Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
+            Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['firstName']}   ${fname}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['lastName']}    ${lname}
+            Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}                         ${lid}
+            Should Be Equal As Strings  ${resp.json()[${i}]['service']['id']}                          ${s_id1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id1}
+
+        END
+    END
+JD-TC-GetAppointmentToday-12
+
+	[Documentation]   Filter Appointment Today by Appointment status cancelled.
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME51}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${reason}=  Random Element  ${cancelReason}
+
+    ${resp}=  Appointment Action   ${apptStatus[4]}   ${apptid2}    cancelReason=${reason}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment Status   ${apptid2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Contain  ${resp.text}  ${apptStatus[4]}
+
+    ${resp}=  Provider Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Consumer Appointments Today   apptStatus-eq=${apptStatus[4]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+   ${len}=  Get Length  ${resp.json()}
+    Should Be Equal As Integers  ${len}  1
+
+    FOR  ${i}  IN RANGE   ${len}
+
+        IF  '${resp.json()[${i}]['uid']}' == '${apptid2}'  
+            Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid2}       
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id2}       
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['jaldeeFamilyMemberId']}    ${cidfor2}        
+            Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[4]}    
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
+            # Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot2}
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
+            Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['firstName']}   ${family_fname2}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['lastName']}    ${family_lname2}
+            Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}                         ${lid}
+            Should Be Equal As Strings  ${resp.json()[${i}]['service']['id']}                          ${s_id2}
+            Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id2}
+        END
+    END
+
+JD-TC-GetAppointmentToday-13
+
+	[Documentation]   Filter Appointment Today by Appointment status Rejected.
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME51}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${reason}=  Random Element  ${cancelReason}
+
+    ${resp}=  Appointment Action   ${apptStatus[5]}   ${apptid3}    rejectReason=${reason}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment Status   ${apptid3}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Contain  ${resp.text}  ${apptStatus[5]}
+
+
+    ${resp}=  Provider Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Consumer Appointments Today   apptStatus-eq=${apptStatus[5]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+   ${len}=  Get Length  ${resp.json()}
+    Should Be Equal As Integers  ${len}  1
+
+    FOR  ${i}  IN RANGE   ${len}
+
+        IF  '${resp.json()[${i}]['uid']}' == '${apptid3}'  
+            Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid3}  
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id3}           
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['jaldeeFamilyMemberId']}    ${cidfor3}        
+            Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[5]}    
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
+            # Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot3}
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
+            Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['firstName']}   ${family_fname3}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['lastName']}    ${family_lname3}
+            Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}                         ${lid1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['service']['id']}                          ${s_id2}
+            Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id3}
+        END
+    END
+
+JD-TC-GetAppointmentToday-14
+
+	[Documentation]  Filter consumer Appointments Today by appointment Date.
+
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME16}    ${pid1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Consumer Appointments Today   date-eq=${DAY1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+   ${len}=  Get Length  ${resp.json()}
+    Should Be Equal As Integers  ${len}  3
+
+    FOR  ${i}  IN RANGE   ${len}
+
+        IF  '${resp.json()[${i}]['uid']}' == '${apptid1}'  
+            Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid1}       
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id1}      
+            Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[6]}    
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
+            # Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
+            Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['firstName']}   ${fname}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['lastName']}    ${lname}
+            Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}                         ${lid}
+            Should Be Equal As Strings  ${resp.json()[${i}]['service']['id']}                          ${s_id1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id1}
+
+        ELSE IF     '${resp.json()[${i}]['uid']}' == '${apptid2}'     
+            Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid2}       
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id2}       
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['jaldeeFamilyMemberId']}    ${cidfor2}        
+            Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[4]}    
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
+            # Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot2}
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
+            Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['firstName']}   ${family_fname2}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['lastName']}    ${family_lname2}
+            Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}                         ${lid}
+            Should Be Equal As Strings  ${resp.json()[${i}]['service']['id']}                          ${s_id2}
+            Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id2}
+
+        ELSE IF   '${resp.json()[${i}]['uid']}' == '${apptid3}' 
+            Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid3}  
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id3}           
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['jaldeeFamilyMemberId']}    ${cidfor3}        
+            Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[5]}    
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
+            # Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot3}
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
+            Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['firstName']}   ${family_fname3}
+            Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['lastName']}    ${family_lname3}
+            Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}                         ${lid1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['service']['id']}                          ${s_id2}
+            Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id3}
+        END
+    END
+
+JD-TC-GetAppointmentToday-UH1
+
+    [Documentation]  Get consumer's appointments today with provider login
+    
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME51}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Consumer Appointments Today
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"   "${NO_ACCESS_TO_URL}"
+
+JD-TC-GetAppointmentToday-UH2
+
+    [Documentation]  Get consumer's appointments today without consumer login
+    
+    ${resp}=  Get Consumer Appointments Today
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings  "${resp.json()}"   "${SESSION_EXPIRED}"
+
+
+
