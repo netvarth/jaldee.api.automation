@@ -102,8 +102,7 @@ JD-TC-Get Case Count Filter-1
     Should Be Equal As Strings    ${resp.status_code}   200
 
     Log  ${resp.request.headers['Cookie']}
-        ${cookie_parts}    ${jsessionynw_value}    Split String    ${resp.request.headers['Cookie']}    =
-    Log   ${jsessionynw_value}
+        ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
     ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}   JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}

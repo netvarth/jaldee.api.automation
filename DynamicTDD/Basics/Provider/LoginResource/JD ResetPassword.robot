@@ -49,8 +49,7 @@ JD-TC-Reset_Password-1
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${ph}   ${highest_package[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
-    ${cookie_parts}    ${jsessionynw_value}    Split String    ${resp.request.headers['Cookie']}    =
-    Log   ${jsessionynw_value}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
     ${resp}=    Account Activation  ${ph}  ${OtpPurpose['ProviderSignUp']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}

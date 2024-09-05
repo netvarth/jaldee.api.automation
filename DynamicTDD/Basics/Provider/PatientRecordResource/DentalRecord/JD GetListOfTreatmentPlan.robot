@@ -222,10 +222,7 @@ JD-TC-Get List of Treatment Plan against a Case and Tooth-UH4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Log    Request Headers: ${resp.request.headers}
-    Log    Request Cookies: ${resp.request.headers['Cookie']}
-    ${cookie_parts}    ${jsessionynw_value}    Split String    ${resp.request.headers['Cookie']}    =
-    Log   ${jsessionynw_value}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
   
     ${resp}=    Verify Otp For Login   ${primaryMobileNo}    ${OtpPurpose['Authentication']}     JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}

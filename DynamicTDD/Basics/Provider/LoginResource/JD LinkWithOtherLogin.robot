@@ -59,10 +59,7 @@ JD-TC-Link_With_Other_Login-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Log    Request Headers: ${resp.request.headers}
-    Log    Request Cookies: ${resp.request.headers['Cookie']}
-    ${cookie_parts}    ${jsessionynw_value}    Split String    ${resp.request.headers['Cookie']}    =
-    Log   ${jsessionynw_value}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
     Set Suite Variable   ${jsessionynw_value}
 
     ${loginId}=     Random Int  min=111111  max=999999

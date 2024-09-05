@@ -160,9 +160,7 @@ SignUp Account
         ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d}  ${sd}   ${PUSER}  ${pkgId}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    202
-        Log  ${resp.request.headers['Cookie']}
-        ${cookie_parts}    ${jsessionynw_value}    Split String    ${resp.request.headers['Cookie']}    =
-        Log   ${jsessionynw_value}
+        ${jsessionynw_value}=   Get Cookie from Header  ${resp}
         ${resp}=  Account Activation   ${PUSER}  0  JSESSIONYNW=${jsessionynw_value}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
@@ -342,7 +340,7 @@ SignUp Account
             ${resp}=   Enable Disable Appointment   ${toggle[0]}
             Should Be Equal As Strings  ${resp.status_code}  200
         END
-        
+
         ${resp}=   Get Account Settings
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200

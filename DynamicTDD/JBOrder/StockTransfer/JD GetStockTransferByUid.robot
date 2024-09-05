@@ -601,8 +601,7 @@ JD-TC-Get Stock Transfer By Uid-3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    202
     Log  ${resp.request.headers['Cookie']}
-        ${cookie_parts}    ${jsessionynw_value}    Split String    ${resp.request.headers['Cookie']}    =
-    Log   ${jsessionynw_value}
+        ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
     ${resp}=    Account Activation  ${PUSERNAME_E}  ${OtpPurpose['ProviderSignUp']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}

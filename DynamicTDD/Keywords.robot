@@ -448,7 +448,7 @@ Check Deprication
 #     RETURN  ${tzheaders}  ${kwargs}  ${locparam}
     
 
-Get Cookie
+Get Cookie from Header
     [Arguments]    ${response}
     IF  'Set-Cookie' in &{response.headers}
         Log  ${response.headers['Set-Cookie']}
