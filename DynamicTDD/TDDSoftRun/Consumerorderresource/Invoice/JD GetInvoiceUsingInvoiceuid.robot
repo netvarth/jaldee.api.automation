@@ -397,7 +397,7 @@ JD-TC-Get Invoice Using InvoiceID-1
 
 JD-TC-Get Invoice Using InvoiceID-UH1
 
-    [Documentation]  In the sales order catalog where inventory manager is on , Purchase item but sales rate is not updated .thrn check invoice
+    [Documentation]  In the sales order catalog where inventory manager is on , Purchase item but sales rate is not updated .then check invoice
 
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
