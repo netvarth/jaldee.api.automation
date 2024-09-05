@@ -456,8 +456,8 @@ Get Cookie from Header
         ${cookie_parts}    ${jsessionynw_value}    Split String    ${Sesioncookie}    =
         Log   ${jsessionynw_value}
     ELSE IF  'Cookie' in &{response.request.headers}
-        Log  ${resp.request.headers['Cookie']}
-        ${cookie_parts}    ${jsessionynw_value}    Split String    ${resp.request.headers['Cookie']}    =
+        Log  ${response.request.headers['Cookie']}
+        ${cookie_parts}    ${jsessionynw_value}    Split String    ${response.request.headers['Cookie']}    =
         Log   ${jsessionynw_value}
     END
     RETURN    ${jsessionynw_value}
