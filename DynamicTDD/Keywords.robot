@@ -447,4 +447,18 @@ Check Deprication
 #     Log  ${kwargs}
 #     RETURN  ${tzheaders}  ${kwargs}  ${locparam}
     
+
+Get Cookie
+    [Arguments]    ${response}
+    IF  'Set-Cookie' in &{response.headers}
+        Log  ${response.headers['Set-Cookie']}
+        ${Sesioncookie}    ${rest}    Split String    ${response.headers['Set-Cookie']}    ;  1
+        ${cookie_parts}    ${jsessionynw_value}    Split String    ${Sesioncookie}    =
+        Log   ${jsessionynw_value}
+    ELSE IF  'Cookie' in &{response.request.headers}
+        Log  ${resp.request.headers['Cookie']}
+        ${cookie_parts}    ${jsessionynw_value}    Split String    ${resp.request.headers['Cookie']}    =
+        Log   ${jsessionynw_value}
+    END
+    RETURN    ${jsessionynw_value}
     
