@@ -364,7 +364,7 @@ JD-TC-CreateQueue-7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Disable Queue  ${qid}
+    ${resp}=  Enable Disable Queue  ${qid}    ${toggleButton[1]}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Queue ById  ${qid}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -498,7 +498,7 @@ JD-TC-CreateQueue-8
     Set Test Variable  ${q_id1}  ${resp.json()}
 
     ${resp}=  Get Queue ById  ${q_id1}
-    ${resp}=  Disable Queue  ${q_id1}
+    ${resp}=  Enable Disable Queue  ${q_id1}    ${toggleButton[1]}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Queue ById  ${q_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -513,7 +513,7 @@ JD-TC-CreateQueue-8
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id2}  ${resp.json()}
-    ${resp}=  Disable Queue  ${q_id2}
+    ${resp}=  Enable Disable Queue  ${q_id2}    ${toggleButton[1]}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Queue ById  ${q_id2}
     Should Be Equal As Strings  ${resp.status_code}  200

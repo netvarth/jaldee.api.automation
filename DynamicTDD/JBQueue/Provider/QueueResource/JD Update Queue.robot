@@ -183,7 +183,7 @@ JD-TC-UpdateQueue-4
     Set Suite Variable  ${qid2}  ${resp.json()}
     sleep  2s
 
-    ${resp}=  Disable Queue  ${qid2}
+    ${resp}=  Enable Disable Queue  ${qid2}    ${toggleButton[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -339,7 +339,7 @@ JD-TC-UpdateQueue-6
     [Documentation]  check overlapping of schedules in different locations with disabled queue
     ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Disable Queue  ${qid}
+    ${resp}=  Enable Disable Queue  ${qid}    ${toggleButton[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${sTime5}=  add_timezone_time  ${tz}  5  15  

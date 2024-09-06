@@ -144,7 +144,7 @@ JD-TC-GetQueuesCount-3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Disable Queue  ${q_id2}
+    ${resp}=  Enable Disable Queue  ${q_id2}    ${toggleButton[1]}
     sleep  02s
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -157,7 +157,7 @@ JD-TC-GetQueuesCount-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  2
 
-    ${resp}=  Enable Queue  ${q_id2}
+    ${resp}=  Enable Disable Queue  ${q_id2}    ${toggleButton[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep  02s
