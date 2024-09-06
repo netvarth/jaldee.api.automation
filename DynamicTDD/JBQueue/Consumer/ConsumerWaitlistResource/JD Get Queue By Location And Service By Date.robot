@@ -237,9 +237,12 @@ JD-TC-Get Queue By Location and Service By Date-1
     Should Be Equal As Strings  ${resp.json()[0]['name']}  ${p1queue1}
 
 JD-TC-Get Queue By Location and Service By Date-2
-	[Documentation]  Get Queue By Location and Service By Date 
-    ${resp}=  Consumer Login  ${CUSERNAME9}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
+	
+    [Documentation]  Get Queue By Location and Service By Date 
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME2}    ${accId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Queue By Location and service By Date  ${p1_l2}  ${p1_s2}  ${tomorrow}  ${accId}
     Log  ${resp.json()} 
@@ -249,8 +252,9 @@ JD-TC-Get Queue By Location and Service By Date-2
 
 JD-TC-Get Queue By Location and Service By Date-UH1
 	[Documentation]  Get Queue By Location and Service By Date
-    ${resp}=  Consumer Login  ${CUSERNAME9}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME2}    ${accId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Queue By Location and service By Date  ${p1_l1}  ${p1_s2}  ${DAY}  ${accId}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -258,8 +262,9 @@ JD-TC-Get Queue By Location and Service By Date-UH1
 
 JD-TC-Get Queue By Location and Service By Date-UH2
 	[Documentation]  Get Queue By Location and Service By Date url using another providers accunt id
-    ${resp}=  Consumer Login  ${CUSERNAME9}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME2}    ${accId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${accId1}=  get_acc_id  ${PUSERNAME111}
 
@@ -277,8 +282,9 @@ JD-TC-Get Queue By Location and Service By Date-3
 
 JD-TC-Get Queue By Location and Service By Date-UH3
 	[Documentation]  try to get Disbled queue
-    ${resp}=  Consumer Login  ${CUSERNAME9}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME2}    ${accId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Queue By Location and service By Date  ${p1_l2}  ${p1_s3}  ${DAY}  ${accId}
     Should Be Equal As Strings  ${resp.status_code}  200
