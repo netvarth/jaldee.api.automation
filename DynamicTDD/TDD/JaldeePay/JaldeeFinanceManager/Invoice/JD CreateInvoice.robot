@@ -1164,7 +1164,7 @@ JD-TC-CreateInvoice-11
     ${PO_Number}    Generate random string    8    1234564879
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH1}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH1}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH1}${\n}
     Set Suite Variable   ${PUSERPH1}
     ${resp}=   Run Keywords  clear_queue  ${PUSERPH1}   AND  clear_service  ${PUSERPH1}  AND  clear_Item    ${PUSERPH1}  AND   clear_Coupon   ${PUSERPH1}   AND  clear_Discount  ${PUSERPH1}  AND  clear_appt_schedule   ${PUSERPH1}
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -1757,7 +1757,7 @@ JD-TC-CreateInvoice-13
     ${PO_Number}    Generate random string    8    1235464879
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
     Set Suite Variable   ${PUSERPH2}
     ${resp}=   Run Keywords  clear_queue  ${PUSERPH2}   AND  clear_service  ${PUSERPH2}  AND  clear_Item    ${PUSERPH2}  AND   clear_Coupon   ${PUSERPH2}   AND  clear_Discount  ${PUSERPH2}  AND  clear_appt_schedule   ${PUSERPH2}
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -3186,7 +3186,7 @@ JD-TC-CreateInvoice-UH4
     ${PO_Number}    Generate random string    8    9784564123
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
     Set Suite Variable   ${PUSERPH2}
     ${resp}=   Run Keywords  clear_queue  ${PUSERPH2}   AND  clear_service  ${PUSERPH2}  AND  clear_Item    ${PUSERPH2}  AND   clear_Coupon   ${PUSERPH2}   AND  clear_Discount  ${PUSERPH2}  AND  clear_appt_schedule   ${PUSERPH2}
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -3562,7 +3562,7 @@ JD-TC-ApplyDiscountForOrder-21
     ${PO_Number}    Generate random string    8    9784564123
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
     Set Suite Variable   ${PUSERPH2}
     ${resp}=   Run Keywords  clear_queue  ${PUSERPH2}   AND  clear_service  ${PUSERPH2}  AND  clear_Item    ${PUSERPH2}  AND   clear_Coupon   ${PUSERPH2}   AND  clear_Discount  ${PUSERPH2}  AND  clear_appt_schedule   ${PUSERPH2}
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -4054,7 +4054,7 @@ JD-TC-CreateInvoice-24
     ${PO_Number}    Generate random string    8    9784654123
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH5}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH5}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH5}${\n}
     Set Suite Variable   ${PUSERPH5}
     ${resp}=   Run Keywords  clear_queue  ${PUSERPH5}   AND  clear_service  ${PUSERPH5}  AND  clear_Item    ${PUSERPH5}  AND   clear_Coupon   ${PUSERPH5}   AND  clear_Discount  ${PUSERPH5}  AND  clear_appt_schedule   ${PUSERPH5}
     ${licid}  ${licname}=  get_highest_license_pkg

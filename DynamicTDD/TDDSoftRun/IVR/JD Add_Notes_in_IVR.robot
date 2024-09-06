@@ -17,7 +17,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 *** Variables ***
 
 ${pdffile}     /ebs/TDD/sample.pdf
-${txtfile}     /ebs/TDD/numbers.txt
+${txtfile}     /ebs/data/TDD_Logs/numbers.txt
 ${excelfile}   /ebs/TDD/sampleqnr.xlsx
 ${jpgfile}     /ebs/TDD/small.jpg
 ${pngfile}     /ebs/TDD/upload.png

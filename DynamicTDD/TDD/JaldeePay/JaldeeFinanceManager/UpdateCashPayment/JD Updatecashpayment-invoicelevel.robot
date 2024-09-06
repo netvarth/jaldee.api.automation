@@ -376,7 +376,7 @@ JD-TC-Update cash payment- finance invoice level-3
     ${PO_Number}    Generate random string    8    1235468479
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
     Set Suite Variable   ${PUSERPH2}
     ${resp}=   Run Keywords  clear_queue  ${PUSERPH2}   AND  clear_service  ${PUSERPH2}  AND  clear_Item    ${PUSERPH2}  AND   clear_Coupon   ${PUSERPH2}   AND  clear_Discount  ${PUSERPH2}  AND  clear_appt_schedule   ${PUSERPH2}
     ${licid}  ${licname}=  get_highest_license_pkg

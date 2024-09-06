@@ -683,6 +683,12 @@ Get Provider Reminder By Id
    Check Deprication  ${resp}  Get Provider Reminder By Id
     RETURN  ${resp}
 
+Get Features
+    [Arguments]  ${subdomain}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/ynwConf/features/${subdomain}  expected_status=any
+    RETURN  ${resp}
+
 ########## BOOKING #############
 
 Queue
