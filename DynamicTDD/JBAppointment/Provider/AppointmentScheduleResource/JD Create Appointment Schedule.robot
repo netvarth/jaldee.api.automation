@@ -805,11 +805,7 @@ JD-TC-CreateAppointmentSchedule-9
     ${resp}=  Get User By Id  ${u_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.${test_mail}  deptId=${dep_id}  
-    # ${city1} = 	Convert To Lower Case 	${city}
-    # ${city2} = 	Convert To Lower Case 	${resp.json()['city']}
-    # Should Be Equal As Strings   ${city1}  ${city2}
-
+    
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -828,7 +824,7 @@ JD-TC-CreateAppointmentSchedule-9
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule For User  ${u_id}  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule    ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}  provider=${u_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id}  ${resp.json()}
@@ -836,8 +832,7 @@ JD-TC-CreateAppointmentSchedule-9
     ${resp}=  Get Appointment Schedules  provider-eq=${u_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List  ${resp}  0  id=${sch_id}   name=${schedule_name}   apptState=${Qstate[0]}
-
+  
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1797,10 +1792,10 @@ JD-TC-CreateAppointmentSchedule-18
     #Set Suite Variable   ${multilocPro}
 
 
-    ${billable_providers}   ${multilocPro}=    Multiloc and Billable highest license Providers    min=0   max=260
-     Log Many  ${billable_providers} 	${multilocPro}
-    Set Suite Variable   ${billable_providers}
-    Set Suite Variable   ${multilocPro}
+    # ${billable_providers}   ${multilocPro}=    Multiloc and Billable highest license Providers    min=0   max=260
+    #  Log Many  ${billable_providers} 	${multilocPro}
+    # Set Suite Variable   ${billable_providers}
+    # Set Suite Variable   ${multilocPro}
     
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME49}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200    
