@@ -233,8 +233,6 @@ setDefaults()
     setSuite
     ifExists "$DB_BACKUP_PATH"
     createDir $? 0 "$DB_BACKUP_PATH"
-    # dynSignUp="${dynSignUp:-$defaultDynSignUp}"
-    # timeFlag="${timeFlag:-$defaulttimeFlag}"
     dynSignUp="yes"
     timeFlag="True"
     setCounts

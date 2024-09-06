@@ -196,7 +196,6 @@ populateBankMasterTable()
     else
         echo "bank_master_tbl count= '$bnkcount'. bank_master_tbl already populated."
     fi
-
 }
 
 createPrePostSqlFiles()

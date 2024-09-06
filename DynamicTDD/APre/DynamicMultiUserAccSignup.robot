@@ -258,10 +258,6 @@ SignUp Account
         Should Be Equal As Strings  ${resp.json()['baseLocation']['parkingType']}  ${parking}
         Should Be Equal As Strings  ${resp.json()['baseLocation']['open24hours']}  ${24hours}
         Should Be Equal As Strings  ${resp.json()['baseLocation']['status']}  ACTIVE
-
-        ${resp}=    Get Locations
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
         
         ${fields}=   Get subDomain level Fields  ${d}  ${sd}
         Log  ${fields.json()}
@@ -326,7 +322,11 @@ SignUp Account
         enquiryStatus  ${account_id}
         leadStatus  ${account_id}
 
-          
+        ${resp}=    Get Locations
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Run Keyword And Continue On Failure  Verify Response List   ${resp}  0  place=${city}  address=${address}  pinCode=${postcode}
+
     END
 
 Domain Loop
