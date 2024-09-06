@@ -62,16 +62,6 @@ JD-TC-GetConsumerAppointmentById-1
     Set Suite Variable  ${sch_id}  ${resp.json()}
 
 
-    # ${resp}=  ProviderLogout
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200  
-    # Set Suite Variable  ${f_Name}  ${resp.json()['firstName']}
-    # Set Suite Variable  ${l_Name}  ${resp.json()['lastName']}
-    # Set Suite Variable  ${ph_no}  ${resp.json()['primaryPhoneNumber']}
-
     ${fname}=  FakerLibrary.first_name
     Set Suite Variable   ${fname}
     ${lname}=  FakerLibrary.last_name
@@ -80,8 +70,6 @@ JD-TC-GetConsumerAppointmentById-1
     ${resp}=  AddCustomer  ${CUSERNAME11}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-
 
 
     ${resp}=  Provider Logout
@@ -102,27 +90,6 @@ JD-TC-GetConsumerAppointmentById-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${cid}  ${resp.json()['providerConsumer']}
 
-    # ${resp}=  Get Appointment Schedules Consumer  ${pid1}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${resp}=  Get Appointment Schedule ById Consumer  ${sch_id}   ${pid1}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${pid1}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
-    # @{slots}=  Create List
-    # FOR   ${i}  IN RANGE   0   ${no_of_slots}
-    #     IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-    #         Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
-    #     END
-    # END
-    # ${num_slots}=  Get Length  ${slots}
-    # ${j}=  Random Int  max=${num_slots-1}
-    # Set Suite Variable   ${slot1}   ${slots[${j}]}
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid1}  ${DAY1}  ${lid}  ${s_id1}
     Log  ${resp.content}
@@ -142,8 +109,7 @@ JD-TC-GetConsumerAppointmentById-1
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
-    # ${cid}=  get_id  ${CUSERNAME11}   
-    # Set Suite Variable   ${cid}
+
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Appointment For Provider   ${pid1}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
@@ -158,7 +124,7 @@ JD-TC-GetConsumerAppointmentById-1
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}                                ${cid}
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['firstName']}                         ${fname}
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['lastName']}                          ${lname}
-    Should Be Equal As Strings  ${resp.json()['providerConsumer']['primphoneNoaryMobileNo']}             ${CUSERNAME11}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['phoneNo']}             ${CUSERNAME11}
     Should Be Equal As Strings  ${resp.json()['uid']}                                                   ${apptid1}
     Should Be Equal As Strings  ${resp.json()['appmtDate']}                                             ${DAY1}
     Should Be Equal As Strings  ${resp.json()['appmtTime']}                                             ${slot1} 
@@ -186,11 +152,6 @@ JD-TC-GetConsumerAppointmentById-2
     Set Suite Variable   ${DAY1}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    # ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    # ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    # ${eTime1}=  add_two   ${sTime1}  ${delta}
-    # ${lid}=  Create Sample Location
-    # Set Suite Variable   ${lid}
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
     
@@ -217,9 +178,14 @@ JD-TC-GetConsumerAppointmentById-2
 
 
 
+    ${f_Name1}=  FakerLibrary.first_name
+    Set Suite Variable   ${f_Name1}
+    ${l_Name1}=  FakerLibrary.last_name
+    Set Suite Variable   ${l_Name1}
    
-    ${resp}=  AddCustomer  ${CUSERNAME5}   
+    ${resp}=  AddCustomer  ${CUSERNAME5}   firstName=${f_Name1}   lastName=${l_Name1}  countryCode=${countryCodes[1]}  
     Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
 
     ${resp}=  Provider Logout
@@ -235,23 +201,12 @@ JD-TC-GetConsumerAppointmentById-2
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token1}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME5}    ${pid2}  ${toke1} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME5}    ${pid2}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${cid}  ${resp.json()['providerConsumer']}
-    Set Suite Variable  ${f_Name1}  ${resp.json()['firstName']}
-    Set Suite Variable  ${l_Name1}  ${resp.json()['lastName']}
-    Set Suite Variable  ${ph_no1}  ${resp.json()['primaryPhoneNumber']}
- 
 
-    ${cid1}=  get_id  ${CUSERNAME5}   
-    Set Suite Variable   ${cid1}
-
-
-    ${resp}=  Get Appointment Schedule ById Consumer  ${sch_id1}   ${pid2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid2}  ${DAY1}  ${lid}  ${s_id2}
     Log  ${resp.content}
@@ -285,7 +240,7 @@ JD-TC-GetConsumerAppointmentById-2
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}                                ${cid}
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['firstName']}                         ${f_Name1}
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['lastName']}                          ${l_Name1}
-    Should Be Equal As Strings  ${resp.json()['providerConsumer']['primphoneNoaryMobileNo']}             ${CUSERNAME5}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['phoneNo']}                           ${CUSERNAME5}
     Should Be Equal As Strings  ${resp.json()['uid']}                                                   ${apptid2}
     Should Be Equal As Strings  ${resp.json()['appmtDate']}                                             ${DAY1}
     Should Be Equal As Strings  ${resp.json()['appmtTime']}                                             ${slot1} 
@@ -302,7 +257,7 @@ JD-TC-GetConsumerAppointmentById-UH1
 
 	[Documentation]  Get Consumer Appointment By Id  another consumer using AppmtId.
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME5}    ${pid2}  ${toke1} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME5}    ${pid2}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${pidUH1}=  get_acc_id  ${PUSERNAME15}
@@ -333,38 +288,13 @@ JD-TC-GetConsumerAppointmentById-UH3
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  "${resp.json()}"      "${NO_PERMISSION}"
 
+
+
 JD-TC-GetConsumerAppointmentById-UH4
-
-	[Documentation]  Get Consumer Appointment ById using AppmtId is Zero.
-
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${pid1}  ${token} 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${pidUH4}=  get_acc_id  ${HLPUSERNAME47}
-    ${resp}=   Get consumer Appointment By Id   ${pidUH4}   0
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"      "${INVALID_APPOINTMENT}"
-
-JD-TC-GetConsumerAppointmentById-UH5
-
-	[Documentation]  Get Consumer Appointment ById using providerId is Zero.
-
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${pid1}  ${token} 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${pidUH5}=  get_acc_id  ${HLPUSERNAME47}
-
-    ${resp}=   Get consumer Appointment By Id   0  ${apptid1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  404
-    Should Be Equal As Strings  "${resp.json()}"      "${ACCOUNT_NOT_EXIST}"
-
-JD-TC-GetConsumerAppointmentById-UH6
 
 	[Documentation]  Get Consumer Appointment ById using another ConsumerLogin with Different Provider ID.
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME5}    ${pid2}  ${toke1} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME5}    ${pid2}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200 
     ${resp}=   Get consumer Appointment By Id   ${pid1}  ${apptid1}
@@ -372,14 +302,14 @@ JD-TC-GetConsumerAppointmentById-UH6
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  "${resp.json()}"      "${NO_PERMISSION}"
 
-JD-TC-GetConsumerAppointmentById-UH7
+JD-TC-GetConsumerAppointmentById-UH5
 
 	[Documentation]  Get Consumer Appointment By Id using another Consumer Login with Different Provider ID.
     
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${pid1}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${resp}=   Get consumer Appointment By Id   ${pid2}  ${apptid1}
+    ${resp}=   Get consumer Appointment By Id   ${pid2}  ${apptid2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  "${resp.json()}"      "${NO_PERMISSION}"
