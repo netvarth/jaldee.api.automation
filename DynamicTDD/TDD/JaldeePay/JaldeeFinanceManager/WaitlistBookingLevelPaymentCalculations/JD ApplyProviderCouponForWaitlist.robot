@@ -154,7 +154,7 @@ JD-TC-ApplyProviderCouponforwaitlist-1
       ${resp}=   Get Location ById  ${loc_id1}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
       ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
       Set Suite Variable  ${CUR_DAY}
@@ -813,7 +813,7 @@ JD-TC-ApplyProviderCouponforwaitlist-UH9
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -935,7 +935,7 @@ JD-TC-ApplyProviderCouponforwaitlist-UH10
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_lid}  ${resp.json()['id']} 
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}

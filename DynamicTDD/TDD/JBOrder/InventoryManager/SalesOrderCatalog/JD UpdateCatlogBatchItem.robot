@@ -67,7 +67,7 @@ JD-TC-Update Catalog Item Batch-1
     ${resp}=   Get Location ById  ${loc_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${resp}=  Provider Logout
     Log  ${resp.content}
@@ -139,10 +139,10 @@ JD-TC-Update Catalog Item Batch-1
         ${resp}=   Get Location ById  ${locId1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${Name}=    FakerLibrary.last name
@@ -843,7 +843,7 @@ JD-TC-Update Catalog Item Batch-2
     ${resp}=   Get Location ById  ${loc_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${resp}=  Provider Logout
     Log  ${resp.content}
@@ -915,10 +915,10 @@ JD-TC-Update Catalog Item Batch-2
         ${resp}=   Get Location ById  ${locId1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${Name}=    FakerLibrary.last name
@@ -1480,10 +1480,10 @@ JD-TC-Update Catalog Item Batch-1
         ${resp}=   Get Location ById  ${locId1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${Name}=    FakerLibrary.last name

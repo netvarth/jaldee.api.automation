@@ -170,7 +170,7 @@ JD-TC-Appointment_Report-1
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_l1}  ${resp.json()[0]['id']}
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${eTime1}=  add_timezone_time  ${tz}  4  30  
@@ -3076,7 +3076,7 @@ JD-TC-Appointment_Report-8
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${description2}=  FakerLibrary.sentence
     ${dur2}=  FakerLibrary.Random Int  min=10  max=20
     ${amt2}=  FakerLibrary.Random Int  min=200  max=500
@@ -3737,7 +3737,7 @@ JD-TC-Appointment_Report-9
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${description2}=  FakerLibrary.sentence
     ${dur2}=  FakerLibrary.Random Int  min=10  max=20
     ${amt2}=  FakerLibrary.Random Int  min=200  max=500

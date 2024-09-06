@@ -2690,10 +2690,10 @@ Create Sample Queue
         ${resp}=   Get Location ById  ${lid}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${resp}=   Get Service
@@ -2737,7 +2737,7 @@ Sample Queue
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${list}=  Create List  1  2  3  4  5  6  7
     # ${DAY1}=  get_date

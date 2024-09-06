@@ -33,7 +33,7 @@ JD-TC-Get Waitist Rating-1
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_l1}  ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name

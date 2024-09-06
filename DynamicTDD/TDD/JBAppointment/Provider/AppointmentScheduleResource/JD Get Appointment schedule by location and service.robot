@@ -46,7 +46,7 @@ JD-TC-Get schedule By loc and service-1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME210}
 
@@ -187,7 +187,7 @@ JD-TC-Get schedule By loc and service-3
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME210}
 
@@ -214,7 +214,7 @@ JD-TC-Get schedule By loc and service-3
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
 	${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
@@ -349,7 +349,7 @@ JD-TC-Get schedule By loc and service-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
 	${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}    200

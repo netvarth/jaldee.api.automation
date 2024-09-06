@@ -59,7 +59,7 @@ JD-TC-PCAddAppointmentRating-1
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     clear_appt_schedule   ${PUSERNAME99}
 
     ${SERVICE1}=   FakerLibrary.name
@@ -400,7 +400,7 @@ JD-TC-PCAddAppointmentRating-3
 
     ${resp}=  Get Location By Id   ${lid} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
     
     ${resp}=  ProviderLogout 
     Log   ${resp.json()}
@@ -500,7 +500,7 @@ JD-TC-PCAddAppointmentRating-4
 
     ${resp}=  Get Location By Id   ${lid} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
     
     ${resp}=  ProviderLogout 
     Log   ${resp.json()}
@@ -589,7 +589,7 @@ JD-TC-PCAddAppointmentRating-5
 
     ${resp}=  Get Location By Id   ${lid} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ${DAY3}=  db.add_timezone_date  ${tz}  9
 
@@ -631,7 +631,7 @@ JD-TC-PCAddAppointmentRating-UH1
 
     ${resp}=  Get Location By Id   ${lid} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
     
     ${resp}=  ProviderLogout 
     Log   ${resp.json()}
@@ -703,7 +703,7 @@ JD-TC-PCAddAppointmentRating-UH2
 
     ${resp}=  Get Location By Id   ${lid} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
     
     ${resp}=  ProviderLogout 
     Log   ${resp.json()}
@@ -775,7 +775,7 @@ JD-TC-PCAddAppointmentRating-UH3
 
     ${resp}=  Get Location By Id   ${lid} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
     
     ${resp}=  ProviderLogout 
     Log   ${resp.json()}

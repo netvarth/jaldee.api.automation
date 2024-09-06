@@ -1578,7 +1578,7 @@ JD-TC-Create Payment-11
     ${resp}=   Get Location By Id   ${p1_l1} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1676,7 +1676,7 @@ JD-TC-Create Payment-12
     ${resp}=   Get Location By Id   ${p1_l1} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Test Variable  ${DAY}
@@ -1769,7 +1769,7 @@ JD-TC-Create Payment-13
     ${resp}=   Get Location By Id   ${p1_l1} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        

@@ -606,7 +606,7 @@ JD-TC-DeleteVacation-6
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=   Get License UsageInfo 
     Log  ${resp.content}
@@ -744,7 +744,7 @@ JD-TC-DeleteVacation-7
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${DAY}=  db.get_date_by_timezone  ${tz}
     # ${DAY1}=  db.add_timezone_date  ${tz}  3  

@@ -34,7 +34,7 @@ JD-TC-CreateProviderReminder-1
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
@@ -67,7 +67,7 @@ JD-TC-CreateProviderReminder-2
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
@@ -103,7 +103,7 @@ JD-TC-CreateProviderReminder-3
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
@@ -136,7 +136,7 @@ JD-TC-CreateProviderReminder-4
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
@@ -169,7 +169,7 @@ JD-TC-CreateProviderReminder-5
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
@@ -202,7 +202,7 @@ JD-TC-CreateProviderReminder-6
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
@@ -235,7 +235,7 @@ JD-TC-CreateProviderReminder-7
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=   db.get_date_by_timezone  ${tz}
@@ -268,7 +268,7 @@ JD-TC-CreateProviderReminder-8
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
@@ -307,7 +307,7 @@ JD-TC-CreateProviderReminder-9
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id}  ${resp.json()['id']}
-    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${ufname1}=  FakerLibrary.name
     ${ulname1}=  FakerLibrary.last_name
@@ -393,7 +393,7 @@ JD-TC-CreateProviderReminder-UH1
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=   db.add_timezone_date  ${tz}  10  
@@ -425,7 +425,7 @@ JD-TC-CreateProviderReminder-UH2
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
@@ -457,7 +457,7 @@ JD-TC-CreateProviderReminder-UH3
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -488,7 +488,7 @@ JD-TC-CreateProviderReminder-UH4
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${DAY1}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -519,7 +519,7 @@ JD-TC-CreateProviderReminder-UH5
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
@@ -545,7 +545,7 @@ JD-TC-CreateProviderReminder-UH6
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
@@ -578,7 +578,7 @@ JD-TC-CreateProviderReminder-UH7
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
@@ -610,7 +610,7 @@ JD-TC-CreateProviderReminder-UH8
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      

@@ -39,10 +39,10 @@ JD-TC-CreateTaskforUser-1
         ${resp}=   Get Location ById  ${locId10}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Suite Variable  ${locId10}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}
@@ -102,7 +102,7 @@ JD-TC-CreateTaskforUser-2
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     
     ${lid1}=  Create Sample Location
     Set Suite Variable  ${lid1}
@@ -110,7 +110,7 @@ JD-TC-CreateTaskforUser-2
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
     
     ${lid2}=  Create Sample Location
     Set Suite Variable  ${lid2}
@@ -118,7 +118,7 @@ JD-TC-CreateTaskforUser-2
     ${resp}=   Get Location ById  ${lid2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz2}  ${resp.json()['timezone']}
     
     ${lid3}=  Create Sample Location
     Set Suite Variable  ${lid3}
@@ -126,7 +126,7 @@ JD-TC-CreateTaskforUser-2
     ${resp}=   Get Location ById  ${lid3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz3}  ${resp.json()['timezone']}
     
 
 
@@ -225,7 +225,7 @@ JD-TC-CreateTaskforUser-2
     ${resp}=   Get Location ById  ${locId}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
 
     ${title}=  FakerLibrary.user name
@@ -305,7 +305,7 @@ JD-TC-CreateTaskforUser-3
     ${resp}=   Get Location ById  ${locId}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
 
     ${title}=  FakerLibrary.user name
@@ -330,7 +330,7 @@ JD-TC-CreateTaskforUser-4
     ${resp}=   Get Location ById  ${locId}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
 
     ${title}=  FakerLibrary.user name
@@ -443,7 +443,7 @@ JD-TC-CreateTaskforUser-6(UH)
     ${resp}=   Get Location ById  ${locId1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${title}=  FakerLibrary.user name
     ${desc}=   FakerLibrary.word 
@@ -627,10 +627,10 @@ JD-TC-CreateTaskforUser-12
         ${resp}=   Get Location ById  ${locId}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
     
     ${resp}=    Get Task Status
@@ -705,10 +705,10 @@ JD-TC-CreateTaskforUser-14
         ${resp}=   Get Location ById  ${locId}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
   
     ${resp}=  categorytype  ${p_id}
@@ -746,7 +746,7 @@ JD-TC-CreateTaskforUser-15
     ${resp}=   Get Location ById  ${locId1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${title}=  FakerLibrary.user name
     ${desc}=   FakerLibrary.word 
@@ -855,7 +855,7 @@ JD-TC-CreateTaskforUser-UH4
     ${resp}=   Get Location ById  ${locId1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${title}=  FakerLibrary.user name
     ${desc}=   FakerLibrary.word 
@@ -901,7 +901,7 @@ JD-TC-CreateTaskforUser-UH6
     ${resp}=   Get Location ById  ${locId1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${title}=  FakerLibrary.user name
     ${desc}=   FakerLibrary.word 
@@ -945,7 +945,7 @@ JD-TC-CreateTaskforUser-UH8
     ${resp}=   Get Location ById  ${locId1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${title}=  FakerLibrary.user name
     ${desc}=   FakerLibrary.word 

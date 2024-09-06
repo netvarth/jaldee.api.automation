@@ -124,7 +124,7 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME${a}}    
     # ${sTime1}=  db.get_time_by_timezone   ${tz}
@@ -280,7 +280,7 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-2
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME69}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -413,7 +413,7 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-3
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME68}     
     ${list}=  Create List    1  2  3  4  5  6
@@ -566,7 +566,7 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-4
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME67}
 

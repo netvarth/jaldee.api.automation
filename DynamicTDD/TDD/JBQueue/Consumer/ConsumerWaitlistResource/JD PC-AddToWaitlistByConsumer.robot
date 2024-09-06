@@ -374,7 +374,7 @@ JD-TC-Add To WaitlistByConsumer-2
     ${resp}=   Get Location ById  ${p1_l1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1049,7 +1049,7 @@ JD-TC-Add To WaitlistByConsumer-10
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     Set Suite Variable   ${p1_l2}   ${resp.json()[1]['id']}
 
     ${p1queue2}=    FakerLibrary.word
@@ -2298,7 +2298,7 @@ JD-TC-Add To WaitlistByConsumer-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     Set Test Variable   ${p1_l2}   ${resp.json()[1]['id']}
 
     ${p1queue1}=    FakerLibrary.word
@@ -2435,7 +2435,7 @@ JD-TC-Add To WaitlistByConsumer-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     Set Test Variable   ${p1_l2}   ${resp.json()[1]['id']}
 
     ${p1queue1}=    FakerLibrary.word
@@ -2715,7 +2715,7 @@ JD-TC-Add To WaitlistByConsumer-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     Set Test Variable   ${p1_l2}   ${resp.json()[1]['id']}
 
     ${p1queue11}=    FakerLibrary.word
@@ -3006,7 +3006,7 @@ JD-TC-Add To WaitlistByConsumer-UH12
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     Set Test Variable   ${p1_l2}   ${resp.json()[1]['id']}
 
     ${p1queue1}=    FakerLibrary.word
@@ -3095,7 +3095,7 @@ JD-TC-Add To WaitlistByConsumer-UH13
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     Set Test Variable   ${p1_l2}   ${resp.json()[1]['id']}
 
     ${p1queue1}=    FakerLibrary.word
@@ -3189,7 +3189,7 @@ JD-TC-Add To WaitlistByConsumer-UH14
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     Set Test Variable   ${p1_l2}   ${resp.json()[1]['id']}
 
     ${p1queue1}=    FakerLibrary.word
@@ -3279,7 +3279,7 @@ JD-TC-Add To WaitlistByConsumer-UH15
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     Set Test Variable   ${p1_l2}   ${resp.json()[1]['id']}
     
     ${p1queue1}=    FakerLibrary.word
@@ -3685,7 +3685,7 @@ JD-TC-Add To WaitlistByConsumer-UH17
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p2_l1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     Set Test Variable   ${p2_l2}   ${resp.json()[1]['id']}
 
     # ${sTime1}=  db.subtract_timezone_time  ${tz}  0  30
@@ -3804,7 +3804,7 @@ JD-TC-Add To WaitlistByConsumer-21
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p2_l1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     Set Test Variable   ${p2_l2}   ${resp.json()[1]['id']}
 
     # ${sTime1}=  add_timezone_time  ${tz}  0  30  
@@ -3909,7 +3909,7 @@ JD-TC-Add To WaitlistByConsumer-22
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p2_l1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     Set Test Variable   ${p2_l2}   ${resp.json()[1]['id']}
 
     # ${DAY}=  db.get_date_by_timezone  ${tz}
@@ -3994,7 +3994,7 @@ JD-TC-Add To WaitlistByConsumer-23
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p2_l1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     Set Test Variable   ${p2_l2}   ${resp.json()[1]['id']}
 
     # ${DAY}=  db.get_date_by_timezone  ${tz}
@@ -4180,7 +4180,7 @@ JD-TC-Add To WaitlistByConsumer-24
     ${resp}=  Update Business Profile with schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${lid}  ${resp.json()['baseLocation']['id']}
-    # Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    # Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
     Log    ${resp.json()}
@@ -4237,7 +4237,7 @@ JD-TC-Add To WaitlistByConsumer-24
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${loc1}  ${resp.json()[0]['id']} 
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     ${P1SERVICE1}=    FakerLibrary.word
     Set Suite Variable   ${P1SERVICE1}
@@ -4467,7 +4467,7 @@ JD-TC-Add To WaitlistByConsumer-25
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${loc1}  ${resp.json()[0]['id']} 
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     # ${DAY}=  db.add_timezone_date  ${tz}  3  
     ${DAY}=  db.add_timezone_date  ${tz}  3
@@ -4612,7 +4612,7 @@ JD-TC-Add To WaitlistByConsumer-UH18
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     Set Test Variable   ${p1_l2}   ${resp.json()[1]['id']}
 
     # ${TODAY}=  db.get_date_by_timezone  ${tz}
@@ -4738,7 +4738,7 @@ JD-TC-Add To WaitlistByConsumer-UH19
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     Set Test Variable   ${p1_l2}   ${resp.json()[1]['id']}
 
     # ${sTime1}=  add_timezone_time  ${tz}  0  30  
@@ -4865,7 +4865,7 @@ JD-TC-Add To WaitlistByConsumer-26
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
-    # Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    # Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -4907,7 +4907,7 @@ JD-TC-Add To WaitlistByConsumer-26
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_queue   ${PUSERNAME132}
 
@@ -4927,7 +4927,7 @@ JD-TC-Add To WaitlistByConsumer-26
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${lid}  ${resp.json()[0]['id']} 
-    # Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${resp}=  Get Queues
     Log  ${resp.content}
@@ -5029,7 +5029,7 @@ JD-TC-Add To WaitlistByConsumer-UH20
     ${resp}=   Get Location ById  ${p1_l1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     # ${DAY}=  db.get_date_by_timezone  ${tz}
     ${DAY}=  get_date_by_timezone  ${tz}
@@ -5126,7 +5126,7 @@ JD-TC-Add To WaitlistByConsumer-18
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     Set Test Variable   ${p1_l2}   ${resp.json()[1]['id']}
 
     ${resp}=    Get Queues

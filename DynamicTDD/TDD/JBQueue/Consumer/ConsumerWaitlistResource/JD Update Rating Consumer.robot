@@ -36,7 +36,7 @@ JD-TC-Update Rating Consumer-1
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid1}  ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}    
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}    
     ${DAY}=  db.get_date_by_timezone  ${tz}  
     Set Suite Variable  ${DAY} 
     ${desc}=  FakerLibrary.word

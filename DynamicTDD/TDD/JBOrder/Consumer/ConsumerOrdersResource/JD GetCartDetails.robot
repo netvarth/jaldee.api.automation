@@ -138,7 +138,7 @@ JD-TC-Get_Cart_Details-1
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${startDate}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${startDate} 

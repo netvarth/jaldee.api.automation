@@ -199,7 +199,7 @@ JD-TC-Take Appointment in Different Timezone-1
     ${resp}=   Get Location By Id   ${p1_l1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz1}  ${resp.json()['timezone']}
 
     # ${sTime1}=  add_timezone_time  ${tz}  0  30  
     # ${eTime1}=  add_timezone_time  ${tz}  5  00  

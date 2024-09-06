@@ -153,7 +153,7 @@ JD-TC-GetFutureAppointmentCount-1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
 
     # ${sTime1}=  add_timezone_time  ${tz}  0  15  
     # ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -614,7 +614,7 @@ JD-TC-GetFutureAppointmentCount-2
     ${resp}=   Get Location ById  ${lid2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz3}  ${resp.json()['timezone']}
 
     ${SERVICE3}=   FakerLibrary.name
     ${s_id3}=  Create Sample Service  ${SERVICE3}
@@ -1426,7 +1426,7 @@ JD-TC-GetFutureAppointmentCount-10
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50

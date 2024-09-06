@@ -95,7 +95,7 @@ JD-TC-PaymentReport-1
         ${resp}=   Get Location ById  ${locId}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
@@ -434,7 +434,7 @@ JD-TC-PaymentReport-2
         ${resp}=   Get Location ById  ${locId}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
@@ -793,7 +793,7 @@ JD-TC-PaymentReport-3
         ${resp}=   Get Location ById  ${locId}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
@@ -1095,7 +1095,7 @@ JD-TC-PaymentReport-4
         ${resp}=   Get Location ById  ${locId}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
@@ -1431,7 +1431,7 @@ JD-TC-PaymentReport-5
         ${resp}=   Get Location ById  ${locId}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}

@@ -73,7 +73,7 @@ JD-TC-CreateHoliday-1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME185}
     
@@ -181,7 +181,7 @@ JD-TC-CreateHoliday-2
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME185}
     
@@ -333,7 +333,7 @@ JD-TC-CreateHoliday-3
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME180}
     
@@ -465,7 +465,7 @@ JD-TC-CreateHoliday-5
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME180}
     
@@ -577,7 +577,7 @@ JD-TC-CreateHoliday-UH1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME180}
     
@@ -706,7 +706,7 @@ JD-TC-CreateHoliday-UH3
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${SERVICE1}=    FakerLibrary.job
     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -786,7 +786,7 @@ JD-TC-CreateHoliday-UH4
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${SERVICE1}=    FakerLibrary.job
     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -890,7 +890,7 @@ JD-TC-CreateHoliday-UH5
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${SERVICE1}=    FakerLibrary.job
     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -1014,7 +1014,7 @@ JD-TC-CreateHoliday-6
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
     
@@ -1199,7 +1199,7 @@ JD-TC-CreateHoliday-UH6
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
     
@@ -1403,7 +1403,7 @@ JD-TC-CreateHoliday-7
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
     
@@ -1556,7 +1556,7 @@ JD-TC-CreateHoliday-8
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${u_id1}=  Create Sample User 
 

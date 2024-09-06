@@ -1198,7 +1198,7 @@ Jaldee-TC-CreateIQ-UH-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${ri}=  Create List  @{EMPTY}
     ${queue17}=    FakerLibrary.word

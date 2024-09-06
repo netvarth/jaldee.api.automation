@@ -98,7 +98,7 @@ JD-TC-CreateUser-1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     sleep  2s
     ${resp}=  Get Departments
@@ -1904,7 +1904,7 @@ JD-TC-CreateUser-UH16
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
@@ -2004,7 +2004,7 @@ JD-TC-CreateUser-16
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
@@ -2131,7 +2131,7 @@ JD-TC-CreateUser-UH13
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
@@ -2204,7 +2204,7 @@ JD-TC-CreateUser-UH14
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}

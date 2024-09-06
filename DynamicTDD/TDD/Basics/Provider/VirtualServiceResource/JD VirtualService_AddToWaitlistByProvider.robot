@@ -1190,7 +1190,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-10
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
-    Set Suite Variable  ${p1_tz1}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${p1_tz1}  ${resp.json()[0]['timezone']}
     ${DAY}=  db.get_date_by_timezone  ${tz}
     ${sTime1}=  add_timezone_time  ${tz}  0  30  
     ${eTime1}=  add_timezone_time  ${tz}  0  45  
@@ -2626,7 +2626,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
-    Set Suite Variable  ${p1_tz1}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${p1_tz1}  ${resp.json()[0]['timezone']}
     ${DAY}=  db.get_date_by_timezone  ${tz}
     ${sTime1}=  db.subtract_timezone_time  ${tz}  0  30
     ${eTime1}=  db.subtract_timezone_time  ${tz}   0  20

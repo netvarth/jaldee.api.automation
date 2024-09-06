@@ -106,7 +106,7 @@ JD-TC-ServiceOptionOrderPayment-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=  Get Order Settings by account id
     Log  ${resp.content}
@@ -345,7 +345,7 @@ JD-TC-ServiceOptionOrderPayment-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=  Get Order Settings by account id
     Log  ${resp.content}
@@ -599,7 +599,7 @@ JD-TC-ServiceOptionOrderPayment-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
     ${resp}=  Update Tax Percentage  ${gstpercentage[2]}  ${GST_num}
@@ -875,7 +875,7 @@ JD-TC-ServiceOptionOrderPayment-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[1]}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1216,7 +1216,7 @@ JD-TC-ServiceOptionOrderPayment-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[1]}
     Should Be Equal As Strings  ${resp.status_code}  200

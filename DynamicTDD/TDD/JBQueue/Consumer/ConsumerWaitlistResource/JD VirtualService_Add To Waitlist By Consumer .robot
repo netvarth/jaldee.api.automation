@@ -334,7 +334,7 @@ JD-TC-VirtualService_Add To WaitlistByConsumer-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p1_l1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     ${DAY}=  db.get_date_by_timezone  ${tz}
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${eTime1}=  add_timezone_time  ${tz}  0  45  
@@ -2746,7 +2746,7 @@ JD-TC-VirtualService_Add To WaitlistByConsumer-UH18
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
-    Set Suite Variable  ${p1_tz1}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${p1_tz1}  ${resp.json()[0]['timezone']}
     ${DAY}=  db.get_date_by_timezone  ${p1_tz1}
     ${sTime1}=  db.subtract_timezone_time  ${p1_tz1}  0  30
     ${eTime1}=  db.subtract_timezone_time  ${p1_tz1}   0  10
@@ -2925,7 +2925,7 @@ JD-TC-VirtualService_Add To WaitlistByConsumer-UH21
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
-    Set Suite Variable  ${p1_tz1}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${p1_tz1}  ${resp.json()[0]['timezone']}
     ${DAY}=  db.get_date_by_timezone  ${p1_tz1}
     ${sTime1}=  add_timezone_time  ${p1_tz1}  5  50
     ${eTime1}=  add_timezone_time  ${p1_tz1}   6  00
@@ -3440,7 +3440,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-21
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p1_l1}   ${resp.json()[0]['id']}
-    Set Suite Variable  ${p1_tz1}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${p1_tz1}  ${resp.json()[0]['timezone']}
 
     ${DAY}=  db.get_date_by_timezone  ${p1_tz1}
     ${sTime1}=  add_timezone_time  ${p1_tz1}  6  10

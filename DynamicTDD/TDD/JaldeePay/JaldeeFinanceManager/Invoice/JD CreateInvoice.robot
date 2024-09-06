@@ -77,7 +77,7 @@ JD-TC-CreateInvoice-1
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
 
     ${resp}=    Get Locations
@@ -727,7 +727,7 @@ JD-TC-CreateInvoice-5
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${CUR_DAY}
@@ -1278,7 +1278,7 @@ JD-TC-CreateInvoice-11
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=   Get License UsageInfo 
     Log  ${resp.content}
@@ -1871,7 +1871,7 @@ JD-TC-CreateInvoice-13
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid2}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=   Get License UsageInfo 
     Log  ${resp.content}
@@ -2336,7 +2336,7 @@ JD-TC-CreateInvoice-15
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
 
     ${resp}=    Get Locations
@@ -2953,7 +2953,7 @@ JD-TC-CreateInvoice-19
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
@@ -3300,7 +3300,7 @@ JD-TC-CreateInvoice-UH4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid1}  ${resp.json()['id']}
-    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=   Get License UsageInfo 
     Log  ${resp.content}
@@ -4168,7 +4168,7 @@ JD-TC-CreateInvoice-24
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid1}  ${resp.json()['id']}
-    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=   Get License UsageInfo 
     Log  ${resp.content}

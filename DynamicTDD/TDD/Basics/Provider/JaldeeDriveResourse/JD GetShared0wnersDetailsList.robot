@@ -572,7 +572,7 @@ JD-TC-GetSharedOnwnersDetailsList-8
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
    
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
@@ -671,7 +671,7 @@ JD-TC-GetSharedOnwnersDetailsList-9
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
    
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
@@ -778,7 +778,7 @@ JD-TC-GetSharedOnwnersDetailsList-10
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
    
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
@@ -894,7 +894,7 @@ JD-TC-GetSharedOnwnersDetailsList-11
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
    
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
@@ -1002,7 +1002,7 @@ JD-TC-GetSharedOnwnersDetailsList-12
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
    
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
@@ -1975,7 +1975,7 @@ JD-TC-GetSharedOnwnersDetailsList-17
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz} 
     ${SERVICE1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${SERVICE1}
@@ -2082,7 +2082,7 @@ JD-TC-GetSharedOnwnersDetailsList-18
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${SERVICE1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${SERVICE1}
@@ -2172,7 +2172,7 @@ JD-TC-GetSharedOnwnersDetailsList-19
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz} 
     ${SERVICE1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${SERVICE1}
@@ -2273,7 +2273,7 @@ JD-TC-GetSharedOnwnersDetailsList-20
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz} 
     ${SERVICE1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${SERVICE1}
@@ -2370,7 +2370,7 @@ JD-TC-GetSharedOnwnersDetailsList-21
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz} 
     ${SERVICE1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${SERVICE1}
@@ -2470,7 +2470,7 @@ JD-TC-GetSharedOnwnersDetailsList-22
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
@@ -2708,7 +2708,7 @@ JD-TC-GetSharedOnwnersDetailsList-23
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
 
     ${ser_name1}=   FakerLibrary.word
     Set Suite Variable    ${ser_name1} 
@@ -2962,13 +2962,13 @@ JD-TC-GetSharedOnwnersDetailsList-24
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
     ${lid}=   Create Sample Location
     Set Suite Variable    ${lid} 
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${id}=  get_id  ${PUSERNAME167}
     Set Suite Variable  ${id}
   
@@ -3036,7 +3036,7 @@ JD-TC-GetSharedOnwnersDetailsList-24
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}

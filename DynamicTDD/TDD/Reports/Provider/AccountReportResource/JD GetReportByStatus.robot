@@ -146,7 +146,7 @@ JD-TC-Get_Report_ByStatus-1
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_l1}  ${resp.json()[0]['id']}
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${eTime1}=  add_timezone_time  ${tz}  2  30  
@@ -977,7 +977,7 @@ JD-TC-Get_Report_ByStatus-2
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_l1}  ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
 
     ${schedule_name}=  FakerLibrary.bs

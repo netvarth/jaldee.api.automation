@@ -38,7 +38,7 @@ JD-TC-PublishProviderCoupon-1
     
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
      
     ${coupon1}=    FakerLibrary.word
     ${desc}=  FakerLibrary.Sentence   nb_words=2

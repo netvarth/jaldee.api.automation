@@ -117,7 +117,7 @@ JD-TC-GetServiceOptionForOrder-1
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id}  ${resp.json()['id']}
-    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
   
     ${resp}=  Get Order Settings by account id
     Log  ${resp.content}
@@ -321,7 +321,7 @@ JD-TC-GetServiceOptionForOrder-2
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -518,7 +518,7 @@ JD-TC-GetServiceOptionForOrder-3
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -716,7 +716,7 @@ JD-TC-GetServiceOptionForOrder-4
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}

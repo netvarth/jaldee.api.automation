@@ -262,7 +262,7 @@ JD-TC-paymentprofiles-1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${min_pre1}=   Random Int   min=50   max=100
     ${Tot}=   Random Int   min=150   max=500
@@ -472,7 +472,7 @@ JD-TC-paymentprofiles-1.1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${min_pre1}=   Random Int   min=50   max=100
     ${Tot}=   Random Int   min=150   max=500
@@ -658,7 +658,7 @@ JD-TC-paymentprofiles-1.2
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${min_pre1}=   Random Int   min=50   max=100
     ${Tot}=   Random Int   min=150   max=500
@@ -836,7 +836,7 @@ JD-TC-paymentprofiles-1.3
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${min_pre1}=   Random Int   min=50   max=100
     ${Tot}=   Random Int   min=150   max=500
@@ -1029,7 +1029,7 @@ JD-TC-paymentprofiles-2.1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -1276,7 +1276,7 @@ JD-TC-paymentprofiles-2.2
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -1524,7 +1524,7 @@ JD-TC-paymentprofiles-2.3
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -2328,7 +2328,7 @@ JD-TC-paymentprofiles-4.1
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
     ${description}=  FakerLibrary.sentence
     ${min_don_amt1}=   Random Int   min=100   max=500
     ${mod}=  Evaluate  ${min_don_amt1}%${multiples[0]}
@@ -2518,7 +2518,7 @@ JD-TC-paymentprofiles-P2
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -2659,7 +2659,7 @@ JD-TC-paymentprofiles-P2.1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -3014,7 +3014,7 @@ JD-TC-paymentprofiles-P3.1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${min_pre1}=   Random Int   min=50   max=100
     ${Tot}=   Random Int   min=150   max=500
@@ -3193,7 +3193,7 @@ JD-TC-paymentprofiles-P3.2
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -3711,7 +3711,7 @@ JD-TC-paymentprofiles-5
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${min_pre1}=   Random Int   min=50   max=100
     ${Tot}=   Random Int   min=150   max=500
@@ -3877,7 +3877,7 @@ JD-TC-paymentprofiles-7s
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${min_pre1}=   Random Int   min=50   max=100
     ${Tot}=   Random Int   min=150   max=500
@@ -4080,7 +4080,7 @@ JD-TC-paymentprofiles-8
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
     ${description}=  FakerLibrary.sentence
     ${min_don_amt1}=   Random Int   min=100   max=500
     ${mod}=  Evaluate  ${min_don_amt1}%${multiples[0]}
@@ -4414,7 +4414,7 @@ JD-TC-paymentprofiles-2.4
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50

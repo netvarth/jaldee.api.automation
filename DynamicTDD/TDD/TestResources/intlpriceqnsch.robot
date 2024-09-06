@@ -30,7 +30,7 @@ JD-TC-CreateService-28
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     clear_service   ${PUSERNAME27}
     
@@ -42,7 +42,7 @@ JD-TC-CreateService-28
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${SERVICE1}=  FakerLibrary.Job
     ${desc}=   FakerLibrary.sentence

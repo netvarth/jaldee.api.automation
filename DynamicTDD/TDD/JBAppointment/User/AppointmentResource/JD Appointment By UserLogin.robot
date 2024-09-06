@@ -175,7 +175,7 @@ JD-TC-AppointmentByUserLogin-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${id}=  get_id  ${PUSERNAME_E}
     Set Suite Variable  ${id}
@@ -1433,12 +1433,12 @@ JD-TC-AppointmentByUserLogin-11
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${lid1}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
     clear_appt_schedule   ${PUSERNAME${a}}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
@@ -1597,7 +1597,7 @@ JD-TC-AppointmentByUserLogin-12
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
 
@@ -1757,12 +1757,12 @@ JD-TC-AppointmentByUserLogin-13
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${lid1}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
     clear_appt_schedule   ${PUSERNAME${a}}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
@@ -1921,12 +1921,12 @@ JD-TC-AppointmentByUserLogin-14
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${lid1}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
     clear_appt_schedule   ${PUSERNAME${a}}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
@@ -2105,7 +2105,7 @@ JD-TC-AppointmentByUserLogin-15
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
     
@@ -2203,7 +2203,7 @@ JD-TC-AppointmentByUserLogin-15
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
     clear_appt_schedule   ${PUSERNAME186}
 
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -2303,7 +2303,7 @@ JD-TC-AppointmentByUserLogin-16
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     # ${lid1}=  Create Sample Location
     clear_appt_schedule   ${PUSERNAME144}
     
@@ -2401,7 +2401,7 @@ JD-TC-AppointmentByUserLogin-16
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
     clear_appt_schedule   ${PUSERNAME186}
 
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -2506,7 +2506,7 @@ JD-TC-AppointmentByUserLogin-17
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     # ${lid1}=  Create Sample Location
     clear_appt_schedule   ${PUSERNAME144}
     
@@ -2604,7 +2604,7 @@ JD-TC-AppointmentByUserLogin-17
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
     clear_appt_schedule   ${PUSERNAME186}
 
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -2709,7 +2709,7 @@ JD-TC-AppointmentByUserLogin-18
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     # ${lid1}=  Create Sample Location
     clear_appt_schedule   ${PUSERNAME144}
 
@@ -2807,7 +2807,7 @@ JD-TC-AppointmentByUserLogin-18
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
     clear_appt_schedule   ${PUSERNAME186}
 
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -3131,7 +3131,7 @@ JD-TC-AppointmentByUserLogin-20
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
     
@@ -3290,7 +3290,7 @@ JD-TC-AppointmentByUserLogin-21
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
 
@@ -3403,7 +3403,7 @@ JD-TC-AppointmentByUserLogin-22
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
     
@@ -3572,7 +3572,7 @@ JD-TC-AppointmentByUserLogin-23
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME${a}}
 
@@ -3737,7 +3737,7 @@ JD-TC-AppointmentByUserLogin-24
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
 
@@ -3945,7 +3945,7 @@ JD-TC-AppointmentByUserLogin-25
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
 
@@ -4060,7 +4060,7 @@ JD-TC-AppointmentByUserLogin-26
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
 
@@ -4310,7 +4310,7 @@ JD-TC-AppointmentByUserLogin-27
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME${a}}
     
@@ -4491,7 +4491,7 @@ JD-TC-AppointmentByUserLogin-28
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
     
@@ -4723,7 +4723,7 @@ JD-TC-AppointmentByUserLogin-29
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
     
@@ -5057,7 +5057,7 @@ JD-TC-AppointmentByUserLogin-30
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
     
@@ -5180,7 +5180,7 @@ JD-TC-AppointmentByUserLogin-31
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
 
@@ -5313,7 +5313,7 @@ JD-TC-AppointmentByUserLogin-32
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
     
@@ -5458,7 +5458,7 @@ JD-TC-AppointmentByUserLogin-33
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${ml_pro}
     
@@ -5622,7 +5622,7 @@ JD-TC-AppointmentByUserLogin-34
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
     
@@ -5787,7 +5787,7 @@ JD-TC-AppointmentByUserLogin-35
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
     
@@ -5954,7 +5954,7 @@ JD-TC-AppointmentByUserLogin-36
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
     
@@ -6095,7 +6095,7 @@ JD-TC-AppointmentByUserLogin-37
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -6390,7 +6390,7 @@ JD-TC-AppointmentByUserLogin-38
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -6724,7 +6724,7 @@ JD-TC-AppointmentByUserLogin-39
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
     
@@ -7068,7 +7068,7 @@ JD-TC-AppointmentByUserLogin-UH1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME_A}
 
@@ -7241,7 +7241,7 @@ JD-TC-AppointmentByUserLogin-UH4
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME_A}
 
@@ -7318,7 +7318,7 @@ JD-TC-AppointmentByUserLogin-UH5
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME_A}
 
@@ -7428,7 +7428,7 @@ JD-TC-AppointmentByUserLogin-UH7
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME1}
    
@@ -7529,7 +7529,7 @@ JD-TC-AppointmentByUserLogin-UH10
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
    
@@ -7644,12 +7644,12 @@ JD-TC-AppointmentByUserLogin-UH11
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME${a}}
    
@@ -7731,7 +7731,7 @@ JD-TC-AppointmentByUserLogin-UH12
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
    
@@ -7806,7 +7806,7 @@ JD-TC-AppointmentByUserLogin-UH13
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
    
@@ -7880,7 +7880,7 @@ JD-TC-AppointmentByUserLogin-UH14
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
 
@@ -7984,7 +7984,7 @@ JD-TC-AppointmentByUserLogin-UH15
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
 
@@ -8124,12 +8124,12 @@ JD-TC-AppointmentByUserLogin-UH16
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${lid1}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
     clear_appt_schedule   ${PUSERNAME${a}}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
@@ -8286,7 +8286,7 @@ JD-TC-AppointmentByUserLogin-UH18
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
 
@@ -8439,7 +8439,7 @@ D-TC-AppointmentByUserLogin-UH19
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
     
@@ -8532,7 +8532,7 @@ JD-TC-AppointmentByUserLogin-UH20
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
 
@@ -8610,7 +8610,7 @@ JD-TC-AppointmentByUserLogin-UH21
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
 
@@ -8699,7 +8699,7 @@ JD-TC-AppointmentByUserLogin-UH22
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
 
@@ -8855,7 +8855,7 @@ JD-TC-AppointmentByUserLogin-UH23
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
 
@@ -8988,12 +8988,12 @@ JD-TC-AppointmentByUserLogin-UH24
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${ml_pro}
    
@@ -9141,7 +9141,7 @@ JD-TC-AppointmentByUserLogin-UH25
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
     
@@ -9327,7 +9327,7 @@ JD-TC-AppointmentByUserLogin-UH26
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
     
@@ -9465,7 +9465,7 @@ JD-TC-AppointmentByUserLogin-UH28
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
 
@@ -9632,7 +9632,7 @@ JD-TC-AppointmentByUserLogin-UH29
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
 
@@ -9861,7 +9861,7 @@ JD-TC-AppointmentByUserLogin-40
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
     
@@ -10003,7 +10003,7 @@ JD-TC-AppointmentByUserLogin-41
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
     
@@ -10109,7 +10109,7 @@ JD-TC-AppointmentByUserLogin-42
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME144}
 

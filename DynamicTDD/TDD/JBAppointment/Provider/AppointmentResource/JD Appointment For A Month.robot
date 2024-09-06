@@ -41,7 +41,7 @@ JD-TC-TakeAppointmentforaMonth-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -77,7 +77,7 @@ JD-TC-TakeAppointmentforaMonth-1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     clear_appt_schedule   ${PUSERNAME31}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}

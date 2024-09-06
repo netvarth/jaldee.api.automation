@@ -123,7 +123,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-1
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -178,7 +178,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -313,7 +313,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-2
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
@@ -324,7 +324,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -473,7 +473,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -701,7 +701,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -873,7 +873,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -1061,7 +1061,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -1227,7 +1227,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -1372,7 +1372,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -1554,7 +1554,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-6
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -1609,7 +1609,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}

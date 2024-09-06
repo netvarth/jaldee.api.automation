@@ -34,7 +34,7 @@ JD-TC-GetLeadTemplates-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${resp}=    Get Locations
@@ -45,10 +45,10 @@ JD-TC-GetLeadTemplates-1
         ${resp}=   Get Location ById  ${locId}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME13}  
@@ -494,7 +494,7 @@ JD-TC-AddLeadToken-UH4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -504,10 +504,10 @@ JD-TC-AddLeadToken-UH4
         ${resp}=   Get Location ById  ${locId}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME13}  

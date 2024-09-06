@@ -29,7 +29,7 @@ JD-TC-GetNextAvailability-1
     ${resp}=   Get Location ById  ${loc_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${ser_name}=    FakerLibrary.name
     Set Test Variable     ${ser_name}
     ${resp}=  Create Sample Service   ${ser_name}
@@ -103,7 +103,7 @@ JD-TC-GetNextAvailability-2
     ${resp}=   Get Location ById  ${loc_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${ser_name}=    FakerLibrary.name
     Set Test Variable     ${ser_name}
     ${resp}=  Create Sample Service   ${ser_name}

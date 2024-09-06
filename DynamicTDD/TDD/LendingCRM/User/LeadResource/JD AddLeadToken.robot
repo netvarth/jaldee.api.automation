@@ -102,16 +102,16 @@ JD-TC-AddLeadToken-1
         ${resp}=   Get Location ById  ${locId}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
    
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}
@@ -119,7 +119,7 @@ JD-TC-AddLeadToken-1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     
     ${lid1}=  Create Sample Location
     Set Suite Variable  ${lid1}
@@ -127,7 +127,7 @@ JD-TC-AddLeadToken-1
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
     
     ${lid2}=  Create Sample Location
     Set Suite Variable  ${lid2}
@@ -135,7 +135,7 @@ JD-TC-AddLeadToken-1
     ${resp}=   Get Location ById  ${lid2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz2}  ${resp.json()['timezone']}
     
     ${lid3}=  Create Sample Location
     Set Suite Variable  ${lid3}
@@ -143,7 +143,7 @@ JD-TC-AddLeadToken-1
     ${resp}=   Get Location ById  ${lid3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz3}  ${resp.json()['timezone']}
     # Set Suite Variable  ${id}
 
     enquiryStatus  ${account_id}
@@ -528,7 +528,7 @@ JD-TC-AddLeadToken-1
     ${resp}=   Get Location ById  ${loc_id4}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${ser_name3}=    FakerLibrary.name
     Set Test Variable     ${ser_name3}
     ${resp}=  Create Sample Service   ${ser_name3}

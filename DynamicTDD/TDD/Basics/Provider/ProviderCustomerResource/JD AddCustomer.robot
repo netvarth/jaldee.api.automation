@@ -554,7 +554,7 @@ JD-TC-AddCustomer-9
      ${resp}=   Get Location ById  ${loc_id1}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+     Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
 
      ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      ${resp}=   Create Sample Service  ${SERVICE1}
@@ -702,7 +702,7 @@ JD-TC-AddCustomer-10
      ${resp}=   Get Location ById  ${loc_id1}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+     Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
 
      ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      ${resp}=   Create Sample Service  ${SERVICE1}
@@ -864,7 +864,7 @@ JD-TC-AddCustomer-11
      ${resp}=   Get Location ById  ${loc_id1}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+     Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
 
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id1}    ${resp}
@@ -1025,7 +1025,7 @@ JD-TC-AddCustomer-12
      ${resp}=   Get Location ById  ${loc_id1}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+     Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
 
      ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
 
@@ -1150,7 +1150,7 @@ JD-TC-AddCustomer-13
      ${resp}=   Get Location ById  ${loc_id1}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+     Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
 
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id1}    ${resp}
@@ -1355,7 +1355,7 @@ JD-TC-AddCustomer-15
      ${resp}=   Get Location ById  ${loc_id1}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+     Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
 
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id1}    ${resp}
@@ -1582,7 +1582,7 @@ JD-TC-AddCustomer-16
      ${resp}=   Get Location ById  ${loc_id1}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+     Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
 
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id1}    ${resp}
@@ -1664,7 +1664,7 @@ JD-TC-AddCustomer-16
      ${resp}=   Get Location ById  ${loc_id2}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+     Set Suite Variable  ${tz2}  ${resp.json()['timezone']} 
 
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id2}    ${resp}
@@ -1735,7 +1735,7 @@ JD-TC-AddCustomer-16
      ${resp}=   Get Location ById  ${loc_id3}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+     Set Suite Variable  ${tz3}  ${resp.json()['timezone']} 
 
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id3}    ${resp}
@@ -1896,7 +1896,7 @@ JD-TC-AddCustomer-17
      ${resp}=   Get Location ById  ${lid1}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+     Set Test Variable  ${tz}  ${resp.json()['timezone']} 
  
      clear_appt_schedule   ${PUSERNAME213}
 
@@ -2039,7 +2039,7 @@ JD-TC-AddCustomer-17
      ${resp}=   Get Location ById  ${lid2}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Set Test Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+     Set Test Variable  ${tz2}  ${resp.json()['timezone']}
 
      clear_appt_schedule   ${PUSERNAME259}
 
@@ -2169,7 +2169,7 @@ JD-TC-AddCustomer-17
      ${resp}=   Get Location ById  ${lid3}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Set Test Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+     Set Test Variable  ${tz3}  ${resp.json()['timezone']}
      clear_appt_schedule   ${PUSERNAME257}
 
      ${s_id3}=  Create Sample Service  ${SERVICE2}
@@ -2431,7 +2431,7 @@ JD-TC-AddCustomer-18
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME259}
 
@@ -2614,7 +2614,7 @@ JD-TC-AddCustomer-19
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME259}
     
@@ -2779,7 +2779,7 @@ JD-TC-AddCustomer-20
      ${resp}=   Get Location ById  ${loc_id1}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+     Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
      
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id1}    ${resp}  
@@ -2854,7 +2854,7 @@ JD-TC-AddCustomer-21
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${loc_id1}  ${resp.json()[0]['id']}
-     Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
      ${resp}=   Get jaldeeIntegration Settings
      Log  ${resp.content}
@@ -2957,7 +2957,7 @@ JD-TC-AddCustomer-22
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${loc_id1}  ${resp.json()[0]['id']}
-     Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
      ${resp}=   Get jaldeeIntegration Settings
      Log  ${resp.content}
@@ -3170,7 +3170,7 @@ JD-TC-AddCustomer-23
      ${resp}=   Get Location ById  ${loc_id1}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+     Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id1}    ${resp} 
      ${resp}=   Create Sample Service  ${SERVICE2}
@@ -4435,7 +4435,7 @@ JD-TC-AddCustomer-91
      ${resp}=   Get Location ById  ${loc_id1}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+     Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id1}    ${resp}
      ${q_name}=    FakerLibrary.name
@@ -4600,7 +4600,7 @@ JD-TC-AddCustomer-16
      ${resp}=   Get Location ById  ${loc_id1}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+     Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id1}    ${resp}
      ${q_name}=    FakerLibrary.name

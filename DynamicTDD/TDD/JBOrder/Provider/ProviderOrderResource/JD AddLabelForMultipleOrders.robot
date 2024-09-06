@@ -85,7 +85,7 @@ JD-TC-AddLabelForMultipleOrders-1
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${startDate}=  db.get_date_by_timezone  ${tz}
     ${endDate}=  db.add_timezone_date  ${tz}  10        
@@ -411,7 +411,7 @@ JD-TC-AddLabelForMultipleOrders-2
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${startDate}=  db.get_date_by_timezone  ${tz}
     ${endDate}=  db.add_timezone_date  ${tz}  10        
@@ -733,7 +733,7 @@ JD-TC-AddLabelForMultipleOrders-3
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${startDate}=  db.get_date_by_timezone  ${tz}
     ${endDate}=  db.add_timezone_date  ${tz}  10        
@@ -986,7 +986,7 @@ JD-TC-AddLabelForMultipleOrders-4
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${startDate}=  db.get_date_by_timezone  ${tz}
     ${endDate}=  db.add_timezone_date  ${tz}  10        
@@ -1325,7 +1325,7 @@ JD-TC-AddLabelForMultipleOrders-5
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${startDate}=  db.get_date_by_timezone  ${tz}
     ${endDate}=  db.add_timezone_date  ${tz}  10        
@@ -1627,7 +1627,7 @@ JD-TC-AddLabelForMultipleOrders-6
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${startDate}=  db.get_date_by_timezone  ${tz}
     ${endDate}=  db.add_timezone_date  ${tz}  10        
@@ -1913,7 +1913,7 @@ JD-TC-AddLabelForMultipleOrders-7
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 

@@ -37,7 +37,7 @@ JD-TC-GetWaitingTimeOfProviders-1
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
@@ -91,7 +91,7 @@ JD-TC-GetWaitingTimeOfProviders-1
     ${resp}=   Get Location ById  ${lid2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz2}  ${resp.json()['timezone']}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
@@ -143,7 +143,7 @@ JD-TC-GetWaitingTimeOfProviders-1
     ${resp}=   Get Location ById  ${lid3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz3}  ${resp.json()['timezone']}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
@@ -277,7 +277,7 @@ JD-TC-GetWaitingTimeOfProviders-4
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
@@ -421,7 +421,7 @@ JD-TC-GetWaitingTimeOfProviders-5
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id}
     ${s_id1}=  Create Sample Service  ${SERVICE2}

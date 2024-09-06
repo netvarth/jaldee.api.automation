@@ -567,7 +567,7 @@ JD-TC-Switch_Login-6
     ${resp}=   Get Location By Id   ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
 
     ${SERVICE1}=   FakerLibrary.name
     ${sid3}=  Create Sample Service  ${SERVICE1}
@@ -829,7 +829,7 @@ JD-TC-Switch_Login-10
     ${resp}=   Get Location By Id   ${lid2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz2}  ${resp.json()['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz2}
     ${DAY2}=  db.add_timezone_date  ${tz2}  10        
@@ -1081,7 +1081,7 @@ JD-TC-Switch_Login-12
     
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz2}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz2}  ${resp.json()['baseLocation']['timezone']}
     
     ${coupon}=    FakerLibrary.word
     Set Suite Variable   ${coupon}
@@ -1814,7 +1814,7 @@ JD-TC-Switch_Login-16
         ${resp}=   Get Location ById  ${locId}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
         Set Test Variable  ${loc_name}  ${resp.json()['place']}
 
     ELSE
@@ -2074,10 +2074,10 @@ JD-TC-Switch_Login-17
         ${resp}=   Get Location ById  ${locId1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details

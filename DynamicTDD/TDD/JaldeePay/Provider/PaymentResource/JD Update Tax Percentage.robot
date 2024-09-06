@@ -95,7 +95,7 @@ JD-TC-Update Tax Percentage -3
        ${resp}=   Get Location By Id   ${loc_id} 
        Log  ${resp.content}
        Should Be Equal As Strings  ${resp.status_code}  200
-       Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+       Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
        ${DAY1}=  db.get_date_by_timezone  ${tz} 
        ${q_name}=    FakerLibrary.name

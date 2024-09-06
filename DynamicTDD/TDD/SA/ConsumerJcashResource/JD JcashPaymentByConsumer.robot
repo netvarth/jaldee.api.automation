@@ -450,7 +450,7 @@ JD-TC-JcashPaymentByConsumer-2
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     clear_appt_schedule   ${PUSERNAME99}
 
     ${ser_durtn}=   Random Int   min=2   max=10

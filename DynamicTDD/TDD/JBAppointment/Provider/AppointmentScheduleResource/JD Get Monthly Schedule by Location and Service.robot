@@ -33,7 +33,7 @@ JD-TC-MonthlySchedule-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -69,7 +69,7 @@ JD-TC-MonthlySchedule-1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     clear_appt_schedule   ${PUSERNAME31}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -145,13 +145,13 @@ JD-TC-MonthlySchedule-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
   
     # ${lid}=  Create Sample Location  
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     clear_appt_schedule   ${PUSERNAME31}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -244,7 +244,7 @@ JD-TC-MonthlySchedule-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     clear_appt_schedule   ${PUSERNAME31}
     
@@ -331,7 +331,7 @@ JD-TC-MonthlySchedule-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     clear_appt_schedule   ${PUSERNAME31}
     
@@ -477,7 +477,7 @@ JD-TC-MonthlySchedule-5
     ${resp}=    Get Location By Id   ${lid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME${a}}
     
@@ -977,7 +977,7 @@ JD-TC-MonthlySchedule-8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -1039,7 +1039,7 @@ JD-TC-MonthlySchedule-8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}     
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -1108,7 +1108,7 @@ JD-TC-MonthlySchedule-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
    
     ${resp}=  Provider Logout
     Log   ${resp.json()}
@@ -1127,7 +1127,7 @@ JD-TC-MonthlySchedule-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     clear_appt_schedule   ${PUSERNAME31}
     
@@ -1197,7 +1197,7 @@ JD-TC-MonthlySchedule-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${resp}=  Provider Logout
     Log   ${resp.json()}
@@ -1216,7 +1216,7 @@ JD-TC-MonthlySchedule-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     clear_appt_schedule   ${PUSERNAME31}
     
@@ -1286,7 +1286,7 @@ JD-TC-MonthlySchedule-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     clear_appt_schedule   ${PUSERNAME31}
     
@@ -1410,7 +1410,7 @@ JD-TC-MonthlySchedule-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     clear_appt_schedule   ${PUSERNAME31}
     
@@ -1488,7 +1488,7 @@ JD-TC-MonthlySchedule-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${resp}=  Get Monthly Schedule Availability by Location and Service  ${lid}  ${s_id}
     Log  ${resp.json()}
@@ -1588,7 +1588,7 @@ JD-TC-MonthlySchedule-UH10
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     clear_appt_schedule   ${PUSERNAME31}
     

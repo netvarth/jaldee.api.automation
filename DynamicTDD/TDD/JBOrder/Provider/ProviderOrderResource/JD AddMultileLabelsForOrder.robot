@@ -82,7 +82,7 @@ JD-TC-AddMultipleLabelsForOrder-1
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${startDate}=  db.get_date_by_timezone  ${tz}
     ${endDate}=  db.add_timezone_date  ${tz}  10        
@@ -562,7 +562,7 @@ JD-TC-AddMultipleLabelsForOrder-4
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${startDate}=  db.get_date_by_timezone  ${tz}
     ${endDate}=  db.add_timezone_date  ${tz}  10        
@@ -919,7 +919,7 @@ JD-TC-AddMultipleLabelsForOrder-5
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${startDate}=  db.get_date_by_timezone  ${tz}
     ${endDate}=  db.add_timezone_date  ${tz}  10        

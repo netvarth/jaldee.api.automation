@@ -807,7 +807,7 @@ JD-TC-Get Next Available Dates-8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${ulid}   ${resp.json()[0]['id']}
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${SERVICE1}=    FakerLibrary.word
     ${description}=  FakerLibrary.sentence

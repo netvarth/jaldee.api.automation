@@ -196,7 +196,7 @@ JD-TC-CreateBooking_Appmt-1
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     clear_location   ${HLPUSERNAME1}
 

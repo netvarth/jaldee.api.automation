@@ -34,7 +34,7 @@ JD-TC-Reveal Phone Number of Consumer-1
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid1}  ${resp.json()[0]['id']}
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
@@ -135,7 +135,7 @@ JD-TC-Reveal Phone Number of Consumer-2
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid2}  ${resp.json()[0]['id']}
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     clear_customer   ${PUSERNAME13}
 

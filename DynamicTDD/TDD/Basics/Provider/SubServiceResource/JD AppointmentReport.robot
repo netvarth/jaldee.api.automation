@@ -83,7 +83,7 @@ JD-TC-AppointmentReport-1
         ${resp}=   Get Location ById  ${locId}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
         Set Test Variable  ${loc_name}  ${resp.json()['bSchedule']['place']}
 
     ELSE
@@ -304,7 +304,7 @@ JD-TC-AppointmentReport-2
         ${resp}=   Get Location ById  ${locId}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
         Set Test Variable  ${loc_name}  ${resp.json()['bSchedule']['place']}
 
     ELSE
@@ -551,7 +551,7 @@ JD-TC-AppointmentReport-3
         ${resp}=   Get Location ById  ${locId}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
         Set Test Variable  ${loc_name}  ${resp.json()['bSchedule']['place']}
 
     ELSE

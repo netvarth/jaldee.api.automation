@@ -158,7 +158,7 @@ JD-TC-GetFutureAppointment-1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -600,7 +600,7 @@ JD-TC-GetFutureAppointment-2
     ${resp}=   Get Location ById  ${lid2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz2}  ${resp.json()['timezone']}
 
     ${SERVICE3}=   FakerLibrary.name
     ${s_id3}=  Create Sample Service  ${SERVICE3}
@@ -1334,7 +1334,7 @@ JD-TC-GetFutureAppointment-10
     ${resp}=  Get Location By Id   ${loc_id1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ${DAY2}=  db.add_timezone_date  ${tz}  9      
     ${list}=  Create List  1  2  3  4  5  6  7

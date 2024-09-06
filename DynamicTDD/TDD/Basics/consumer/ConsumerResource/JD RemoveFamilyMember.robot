@@ -54,7 +54,7 @@ JD-TC-RemoveFamilyMember-2
       ${resp}=   Get Location ById  ${lid}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
       
       ${resp}=   ProviderLogout
       Should Be Equal As Strings    ${resp.status_code}   200
@@ -150,7 +150,7 @@ JD-TC-RemoveFamilyMember-UH1
       ${resp}=   Get Location ById  ${lid}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
       ${resp}=  AddCustomer  ${CUSERNAME22}
       Log   ${resp.json()}
@@ -309,7 +309,7 @@ JD-TC-RemoveFamilyMember-UH6
       ${resp}=   Get Location ById  ${lid}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
       ${firstname1}=  FakerLibrary.first_name
       ${lastname1}=  FakerLibrary.last_name
       ${dob1}=  FakerLibrary.Date

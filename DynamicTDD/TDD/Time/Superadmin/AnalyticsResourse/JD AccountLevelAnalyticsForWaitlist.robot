@@ -173,7 +173,7 @@ JD-TC-AccountLevelAnalytics-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     FOR  ${i}  IN RANGE   5
         ${ser_names}=  FakerLibrary.Words  	nb=25

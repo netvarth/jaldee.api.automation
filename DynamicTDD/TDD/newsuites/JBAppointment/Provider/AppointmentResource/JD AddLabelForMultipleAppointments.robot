@@ -42,10 +42,10 @@ JD-TC-AddMultipleAppointmentLabel-1
         ${resp}=   Get Location ById  ${lid}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
 # -------------------------------- Add a provider Consumer -----------------------------------
@@ -1030,7 +1030,7 @@ JD-TC-AddMultipleAppointmentLabel-6
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
@@ -2037,10 +2037,10 @@ JD-TC-AddMultipleAppointmentLabel-12
         ${resp}=   Get Location ById  ${lid}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
  
 
@@ -2187,10 +2187,10 @@ JD-TC-AddMultipleAppointmentLabel-13
         ${resp}=   Get Location ById  ${lid}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
 
@@ -2332,10 +2332,10 @@ JD-TC-AddMultipleAppointmentLabel-14
         ${resp}=   Get Location ById  ${lid}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
 
@@ -2496,10 +2496,10 @@ JD-TC-AddMultipleAppointmentLabel-15
         ${resp}=   Get Location ById  ${lid}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END 
 
     clear_Label  ${PUSERNAME65}
@@ -2734,10 +2734,10 @@ JD-TC-AddMultipleAppointmentLabel-UH3
         ${resp}=   Get Location ById  ${lid}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
@@ -2851,10 +2851,10 @@ JD-TC-AddMultipleAppointmentLabel-UH4
         ${resp}=   Get Location ById  ${lid}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${SERVICE1}=    FakerLibrary.Word
@@ -3001,10 +3001,10 @@ JD-TC-AddMultipleAppointmentLabel-UH5
         ${resp}=   Get Location ById  ${lid}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -3180,10 +3180,10 @@ JD-TC-AddMultipleAppointmentLabel-UH7
         ${resp}=   Get Location ById  ${lid2}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz2}  ${resp.json()['timezone']}
     ELSE
         Set Suite Variable  ${lid2}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz2}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz2}  ${resp.json()[0]['timezone']}
     END
 
 # -------------------------------- Add a provider Consumer -----------------------------------
@@ -3425,10 +3425,10 @@ JD-TC-AddMultipleAppointmentLabel-UH8
         ${resp}=   Get Location ById  ${lid}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -3552,10 +3552,10 @@ JD-TC-AddMultipleAppointmentLabel-UH10
         ${resp}=   Get Location ById  ${lid}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -3679,10 +3679,10 @@ JD-TC-AddMultipleAppointmentLabel-UH11
         ${resp}=   Get Location ById  ${lid}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
     ${DAY1}=  db.get_date_by_timezone  ${tz}
 
@@ -3804,10 +3804,10 @@ JD-TC-AddMultipleAppointmentLabel-UH12
         ${resp}=   Get Location ById  ${lid}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -3936,10 +3936,10 @@ JD-TC-AddMultipleAppointmentLabel-UH13
         ${resp}=   Get Location ById  ${lid}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END 
 
     ${label_id}=  Create Sample Label
@@ -4091,10 +4091,10 @@ JD-TC-AddMultipleAppointmentLabel-UH14
         ${resp}=   Get Location ById  ${lid}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${label_id}=  Create Sample Label

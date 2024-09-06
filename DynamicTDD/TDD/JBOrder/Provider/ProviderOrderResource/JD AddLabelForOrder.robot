@@ -75,7 +75,7 @@ JD-TC-AddOrderLabel-1
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${startDate}=  db.get_date_by_timezone  ${tz}
     ${endDate}=  db.add_timezone_date  ${tz}  10        
@@ -325,7 +325,7 @@ JD-TC-AddOrderLabel-2
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${startDate}=  db.get_date_by_timezone  ${tz}
     ${endDate}=  db.add_timezone_date  ${tz}  10        
@@ -573,7 +573,7 @@ JD-TC-AddOrderLabel-3
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${startDate}=  db.get_date_by_timezone  ${tz}
     ${endDate}=  db.add_timezone_date  ${tz}  10        
@@ -817,7 +817,7 @@ JD-TC-AddOrderLabel-4
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${startDate}=  db.get_date_by_timezone  ${tz}
     ${endDate}=  db.add_timezone_date  ${tz}  10        
@@ -1082,7 +1082,7 @@ JD-TC-AddOrderLabel-5
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${startDate}=  db.get_date_by_timezone  ${tz}
     ${endDate}=  db.add_timezone_date  ${tz}  10        
@@ -1363,7 +1363,7 @@ JD-TC-AddOrderLabel-6
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${startDate}=  db.get_date_by_timezone  ${tz}
     ${endDate}=  db.add_timezone_date  ${tz}  10        
@@ -1659,7 +1659,7 @@ JD-TC-AddOrderLabel-UH3
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${startDate}=  db.get_date_by_timezone  ${tz}
     ${endDate}=  db.add_timezone_date  ${tz}  10        
@@ -1936,7 +1936,7 @@ JD-TC-AddOrderLabel-UH7
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${startDate}=  db.get_date_by_timezone  ${tz}
     ${endDate}=  db.add_timezone_date  ${tz}  10        
@@ -2168,7 +2168,7 @@ JD-TC-AddOrderLabel-UH8
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${startDate}=  db.get_date_by_timezone  ${tz}
     ${endDate}=  db.add_timezone_date  ${tz}  10        

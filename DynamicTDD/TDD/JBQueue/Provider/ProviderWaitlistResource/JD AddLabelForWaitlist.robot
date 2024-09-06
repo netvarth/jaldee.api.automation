@@ -125,7 +125,7 @@ JD-TC-AddWaitlistLabel-1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable    ${s_id1}
     ${s_id2}=   Create Sample Service  ${SERVICE2}
@@ -316,7 +316,7 @@ JD-TC-AddWaitlistLabel-3
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${s_id3}=  Create Sample Service  ${SERVICE3}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -460,7 +460,7 @@ JD-TC-AddWaitlistLabel-4
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${s_id3}=  Create Sample Service  ${SERVICE3}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -622,7 +622,7 @@ JD-TC-AddWaitlistLabel-5
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${s_id3}=  Create Sample Service  ${SERVICE3}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -818,7 +818,7 @@ JD-TC-AddWaitlistLabel-UH1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${s_id3}=  Create Sample Service  ${SERVICE3}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1171,7 +1171,7 @@ JD-TC-AddWaitlistLabel-UH10
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${s_id3}=  Create Sample Service  ${SERVICE3}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}

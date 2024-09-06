@@ -56,7 +56,7 @@ JD-TC-GetLocationsByUserId-1
     Set Suite Variable  ${longitude}     ${resp.json()[0]['longitude']}
     Set Suite Variable  ${lattitude}     ${resp.json()[0]['lattitude']}
     Set Suite Variable  ${googleMapUrl}  ${resp.json()[0]['googleMapUrl']}
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
 
     ${resp}=  View Waitlist Settings

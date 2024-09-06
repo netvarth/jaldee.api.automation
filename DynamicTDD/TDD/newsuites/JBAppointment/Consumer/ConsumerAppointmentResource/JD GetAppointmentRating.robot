@@ -46,7 +46,7 @@ JD-TC-GetAppointmentRating-1
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     clear_appt_schedule   ${PUSERNAME200}
 
     ${resp}=   Get License UsageInfo 
@@ -353,7 +353,7 @@ JD-TC-GetAppointmentRating-3
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid1}  ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     clear_appt_schedule   ${PUSERNAME101}
 
     ${SERVICE1}=   FakerLibrary.name
@@ -554,7 +554,7 @@ JD-TC-GetAppointmentRating-4
 
     ${resp}=  Get Location By Id   ${lid1} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
     
     ${resp}=  ProviderLogout 
     Log   ${resp.json()}
@@ -672,7 +672,7 @@ JD-TC-GetAppointmentRating-8
 
     # ${resp}=  Get Location By Id   ${lid1} 
     # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    # Set Test Variable  ${tz}  ${resp.json()['timezone']}
     
     # ${resp}=  ProviderLogout 
     # Log   ${resp.json()}

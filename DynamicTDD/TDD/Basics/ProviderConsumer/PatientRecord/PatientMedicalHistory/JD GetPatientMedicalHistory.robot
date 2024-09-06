@@ -62,7 +62,7 @@ JD-TC-Get Patient Medical History-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${accountId}        ${resp.json()['id']}
     Set Suite Variable    ${accountName}      ${resp.json()['businessName']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -216,7 +216,7 @@ JD-TC-Get Patient Medical History-3
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${accountId}        ${resp.json()['id']}
     Set Suite Variable    ${accountName}      ${resp.json()['businessName']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
     Log   ${resp.content}
@@ -405,7 +405,7 @@ JD-TC-Get Patient Medical History-6
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${accountId}        ${resp.json()['id']}
     Set Suite Variable    ${accountName}      ${resp.json()['businessName']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}

@@ -68,7 +68,7 @@ JD-TC-Delete Coupon-1
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
      
     ${coupon1}=    FakerLibrary.word
     ${desc1}=  FakerLibrary.Sentence   nb_words=2
@@ -268,7 +268,7 @@ JD-TC-Delete Coupon-UH5
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     
     ${resp}=  AddCustomer  ${CUSERNAME4}
     Log   ${resp.json()}

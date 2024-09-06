@@ -50,7 +50,7 @@ JD-TC-ConsumerDonation-1
         ${resp}=   Get Location ById  ${loc_id1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
         ${description}=  FakerLibrary.sentence
         ${min_don_amt1}=   Random Int   min=100   max=500
         ${mod}=  Evaluate  ${min_don_amt1}%${multiples[0]}
@@ -402,7 +402,7 @@ JD-TC-ConsumerDonation-6
         ${resp}=   Get Location ById  ${loc_id1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
         ${description}=  FakerLibrary.sentence
         ${min_don_amt1}=   Random Int   min=100   max=500
         ${mod}=  Evaluate  ${min_don_amt1}%${multiples[0]}

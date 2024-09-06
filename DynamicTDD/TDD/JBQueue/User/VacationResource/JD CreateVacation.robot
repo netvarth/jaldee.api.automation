@@ -1848,7 +1848,7 @@ JD-TC-CreateVacation-UH17
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${number}=  Random Int  min=3000  max=3999
     ${PUSERNAME_U2}=  Evaluate  ${PUSERNAME}+${number}
@@ -2342,7 +2342,7 @@ JD-TC-CreateVacation-22
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${s_id}=  Create Sample Service For User  ${SERVICE1}  ${dep_id}  ${u_id}
     ${schedule_name}=  FakerLibrary.bs

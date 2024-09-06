@@ -198,7 +198,7 @@ JD-TC-GetPaymentBankDetails---1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${min_pre1}=   Random Int   min=50   max=100
     ${Tot}=   Random Int   min=150   max=500
@@ -465,7 +465,7 @@ JD-TC-GetPaymentBankDetails---2
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${min_pre1}=   Random Int   min=50   max=100
     ${Tot}=   Random Int   min=150   max=500
@@ -632,7 +632,7 @@ JD-TC-GetPaymentBankDetails---3
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${min_pre1}=   Random Int   min=50   max=100
     ${Tot}=   Random Int   min=150   max=500
@@ -800,7 +800,7 @@ JD-TC-GetPaymentBankDetails---4
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${min_pre1}=   Random Int   min=50   max=100
     ${Tot}=   Random Int   min=150   max=500

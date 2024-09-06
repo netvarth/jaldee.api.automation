@@ -56,7 +56,7 @@ JD-TC-Create MR Case-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${accountId}        ${resp.json()['id']}
     Set Suite Variable    ${accountName}      ${resp.json()['businessName']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -705,7 +705,7 @@ JD-TC-Create MR Case-UH1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${accountId}        ${resp.json()['id']}
     Set Suite Variable    ${accountName}      ${resp.json()['businessName']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -761,7 +761,7 @@ JD-TC-Create MR Case-UH2
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${accountId}        ${resp.json()['id']}
     Set Suite Variable    ${accountName}      ${resp.json()['businessName']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -960,7 +960,7 @@ JD-TC-Create MR Case-UH1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${accountId}        ${resp.json()['id']}
     Set Suite Variable    ${accountName}      ${resp.json()['businessName']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -1016,7 +1016,7 @@ JD-TC-Create MR Case-UH2
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${accountId}        ${resp.json()['id']}
     Set Suite Variable    ${accountName}      ${resp.json()['businessName']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}

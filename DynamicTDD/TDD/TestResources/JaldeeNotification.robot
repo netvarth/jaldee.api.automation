@@ -3847,7 +3847,7 @@ JD-TC-DonationPayment, order item by cosumer , order mass communication-1
         ${resp}=   Get Location ById  ${loc_id1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
         ${description}=  FakerLibrary.sentence
         ${min_don_amt1}=   Random Int   min=100   max=500
         ${mod}=  Evaluate  ${min_don_amt1}%${multiples[0]}
@@ -4818,7 +4818,7 @@ JD-TC-Payment By Consumer-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     
     ${DAY}=  db.get_date_by_timezone  ${tz}
@@ -5659,7 +5659,7 @@ Appointment Cancellation-8
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${ConsMobilenum}
     
@@ -5754,7 +5754,7 @@ Appointment Cancellation-8
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${ConsMobilenum}
     

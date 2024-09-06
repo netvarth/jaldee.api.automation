@@ -185,7 +185,7 @@ JD-TC- Delete Discount-UH5
        ${resp}=   Get Location ById  ${lid}
        Log  ${resp.content}
        Should Be Equal As Strings  ${resp.status_code}  200
-       Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+       Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
        ${resp}=  AddCustomer  ${CUSERNAME4}
        Log   ${resp.json()}
@@ -239,7 +239,7 @@ JD-TC- Delete Discount-UH6
 
        ${resp}=  Get Business Profile
        Should Be Equal As Strings  ${resp.status_code}  200
-       Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+       Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
      
        clear_Discount  ${PUSERNAME${a}}
        clear_customer   ${PUSERNAME${a}}

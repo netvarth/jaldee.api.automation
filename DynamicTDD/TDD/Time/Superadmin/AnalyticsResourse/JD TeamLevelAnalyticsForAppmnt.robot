@@ -221,7 +221,7 @@ JD-TC-TeamLevelAnalytics-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
       ${resp}=  Create Sample Schedule   ${lid}   ${s_id0}  
     Log  ${resp.content}

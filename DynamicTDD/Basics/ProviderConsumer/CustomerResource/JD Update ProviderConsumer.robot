@@ -97,7 +97,7 @@ JD-TC-UpdateProviderConsumer-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id}  ${resp.json()['id']}
-    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
    
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -107,10 +107,10 @@ JD-TC-UpdateProviderConsumer-2
         ${resp}=   Get Location ById  ${locId}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
 

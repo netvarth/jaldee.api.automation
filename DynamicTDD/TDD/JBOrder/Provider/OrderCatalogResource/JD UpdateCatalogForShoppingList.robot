@@ -37,7 +37,7 @@ JD-TC-Update_Catalog_For_ShoppingList-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     ${startDate}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${startDate}

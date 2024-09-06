@@ -92,10 +92,10 @@ JD-TC-create cart-1
         ${resp}=   Get Location ById  ${locId1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${Name}=    FakerLibrary.last name
@@ -424,10 +424,10 @@ JD-TC-create cart-2
         ${resp}=   Get Location ById  ${locId1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Test Variable  ${locId1}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${Name}=    FakerLibrary.last name
@@ -680,10 +680,10 @@ JD-TC-create cart-UH2
         ${resp}=   Get Location ById  ${locId1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Test Variable  ${locId1}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${Name}=    FakerLibrary.last name
@@ -824,10 +824,10 @@ JD-TC-create cart-5
         ${resp}=   Get Location ById  ${locId1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Test Variable  ${locId1}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${Name}=    FakerLibrary.last name
@@ -968,10 +968,10 @@ JD-TC-create cart-UH4
         ${resp}=   Get Location ById  ${locId1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Test Variable  ${locId1}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${Name}=    FakerLibrary.last name
@@ -1114,10 +1114,10 @@ JD-TC-create cart-3
         ${resp}=   Get Location ById  ${locId1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Test Variable  ${locId1}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${Name}=    FakerLibrary.last name
@@ -1291,10 +1291,10 @@ JD-TC-create cart-6
         ${resp}=   Get Location ById  ${locId1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Test Variable  ${locId1}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${Name}=    FakerLibrary.last name
@@ -1612,10 +1612,10 @@ JD-TC-create cart-UH13
         ${resp}=   Get Location ById  ${locId1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Test Variable  ${locId1}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${Name}=    FakerLibrary.last name
@@ -1716,10 +1716,10 @@ JD-TC-create cart-UH14
         ${resp}=   Get Location ById  ${locId1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Test Variable  ${locId1}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${Name}=    FakerLibrary.last name
@@ -1820,10 +1820,10 @@ JD-TC-create cart-4
         ${resp}=   Get Location ById  ${locId1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Test Variable  ${locId1}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${Name}=    FakerLibrary.last name
@@ -2012,7 +2012,7 @@ JD-TC-create cart-UH15
     ${resp}=   Get Location ById  ${loc_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ${resp}=  Provider Logout
     Log  ${resp.content}
@@ -2084,11 +2084,11 @@ JD-TC-create cart-UH15
         ${resp}=   Get Location ById  ${locId1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
         Set Test Variable  ${place}    ${resp.json()[0]['place']}
     ELSE
         Set Test Variable  ${locId1}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
         Set Test Variable  ${place}    ${resp.json()[0]['place']}
     END
 

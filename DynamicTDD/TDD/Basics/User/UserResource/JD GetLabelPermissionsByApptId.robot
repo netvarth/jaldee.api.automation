@@ -84,7 +84,7 @@ JD-TC-GetLabelPremissions-1
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
 
     ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+4507778
     Set Suite Variable  ${PUSERNAME_U1}
@@ -277,7 +277,7 @@ JD-TC-GetLabelPremissions-1
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -595,7 +595,7 @@ JD-TC-GetLabelPremissions-4
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -881,7 +881,7 @@ JD-TC-GetLabelPremissions-5
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1187,7 +1187,7 @@ JD-TC-GetLabelPremissions-UH1
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1486,7 +1486,7 @@ JD-TC-GetLabelPremissions-UH2
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1806,7 +1806,7 @@ JD-TC-GetLabelPremissions-UH3
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz} 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7

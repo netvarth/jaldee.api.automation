@@ -134,7 +134,7 @@ JD-TC-Provider Note-1
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
     ${ser_name1}=   FakerLibrary.word
     Set Suite Variable    ${ser_name1} 
     ${resp}=   Create Sample Service  ${ser_name1}
@@ -331,7 +331,7 @@ JD-TC-Provider Note-2
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
     ${ser_name1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${ser_name1}
     Set Test Variable    ${ser_id1}    ${resp}  
@@ -402,7 +402,7 @@ JD-TC-Provider Note-3
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
     ${ser_name1}=   FakerLibrary.word
     Set Suite Variable    ${ser_name1} 
     ${resp}=   Create Sample Service  ${ser_name1}
@@ -483,7 +483,7 @@ JD-TC-Provider Note-4
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
     ${ser_name1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${ser_name1}
     Set Test Variable    ${ser_id1}    ${resp}  
@@ -553,7 +553,7 @@ JD-TC-Provider Note-5
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
     ${ser_name1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${ser_name1}
     Set Test Variable    ${ser_id1}    ${resp}  
@@ -622,7 +622,7 @@ JD-TC-Provider Note-6
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
     ${ser_name1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${ser_name1}
     Set Test Variable    ${ser_id1}    ${resp}  
@@ -691,7 +691,7 @@ JD-TC-Provider Note-7
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
     ${ser_name1}=   FakerLibrary.word
     Set Suite Variable    ${ser_name1} 
     ${resp}=   Create Sample Service  ${ser_name1}
@@ -768,7 +768,7 @@ JD-TC-Provider Note-8
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
     ${ser_name1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${ser_name1}
     Set Test Variable    ${ser_id1}    ${resp}  
@@ -832,7 +832,7 @@ JD-TC-Provider Note-9
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
     ${ser_name1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${ser_name1}
     Set Test Variable    ${ser_id1}    ${resp}  
@@ -963,7 +963,7 @@ JD-TC-Provider Note-UH6
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
     ${ser_name1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${ser_name1}
     Set Test Variable    ${ser_id1}    ${resp}  

@@ -135,7 +135,7 @@ JD-TC-Disable Service-UH6
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${resp}=  Get queues
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get Service By Id  ${s_id}
@@ -200,7 +200,7 @@ JD-TC-Disable Service-UH7
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7

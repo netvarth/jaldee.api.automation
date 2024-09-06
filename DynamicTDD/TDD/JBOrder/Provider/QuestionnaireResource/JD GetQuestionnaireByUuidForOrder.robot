@@ -254,7 +254,7 @@ JD-TC-GetQuestionnaireByUuidForOrder-1
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${displayName1}=   FakerLibrary.user name    
     ${price1}=  Evaluate    random.uniform(50.0,300) 
@@ -426,7 +426,7 @@ D-TC-GetQuestionnaireByUuidForOrder-2
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
   
     ${resp}=  Get Order Settings by account id
     Log  ${resp.content}

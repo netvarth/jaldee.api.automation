@@ -643,7 +643,7 @@ JD-TC-Get Next Available Dates-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${ulid}   ${resp.json()[0]['id']}
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
@@ -737,7 +737,7 @@ JD-TC-Get Next Available Dates-8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${ulid}   ${resp.json()[0]['id']}
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     ${start_time}=  db.add_timezone_time  ${tz}  0  15
     Set Suite Variable   ${start_time}

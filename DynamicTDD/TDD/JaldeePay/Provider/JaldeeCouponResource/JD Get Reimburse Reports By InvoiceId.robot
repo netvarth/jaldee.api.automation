@@ -76,7 +76,7 @@ JD-TC-GetReimburseReportByInvoiceId-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${d1}    ${resp.json()['serviceSector']['domain']}  
     Set Suite Variable    ${sd1}   ${resp.json()['serviceSubSector']['subDomain']}  
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${domains}=  Jaldee Coupon Target Domains   ${d1}    
     ${sub_domains}=  Jaldee Coupon Target SubDomains   ${d1}_${sd1}  

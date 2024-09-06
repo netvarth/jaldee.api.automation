@@ -130,7 +130,7 @@ Jaldee-TC-UpdateIQ-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
@@ -192,7 +192,7 @@ Jaldee-TC-UpdateIQ-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
@@ -292,7 +292,7 @@ Jaldee-TC-UpdateIQ-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
@@ -356,7 +356,7 @@ Jaldee-TC-UpdateIQ-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
@@ -418,7 +418,7 @@ Jaldee-TC-UpdateIQ-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
@@ -490,7 +490,7 @@ Jaldee-TC-UpdateIQ-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}       
@@ -553,7 +553,7 @@ Jaldee-TC-UpdateIQ-9
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
@@ -632,7 +632,7 @@ Jaldee-TC-UpdateIQ-10
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
@@ -699,7 +699,7 @@ Jaldee-TC-UpdateIQ-UH-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
@@ -748,7 +748,7 @@ Jaldee-TC-UpdateIQ-UH-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
@@ -794,7 +794,7 @@ Jaldee-TC-UpdateIQ-UH-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
@@ -856,7 +856,7 @@ Jaldee-TC-UpdateIQ-UH-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
@@ -920,7 +920,7 @@ Jaldee-TC-UpdateIQ-UH-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
@@ -966,7 +966,7 @@ Jaldee-TC-UpdateIQ-UH-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
@@ -1041,7 +1041,7 @@ Jaldee-TC-UpdateIQ-UH-8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
@@ -1104,7 +1104,7 @@ Jaldee-TC-UpdateIQ-UH-9
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1160,7 +1160,7 @@ Jaldee-TC-UpdateIQ-8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}

@@ -41,7 +41,7 @@ JD-TC-ProviderCouponBill-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${accId}  ${resp.json()['id']}
-    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
      
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -348,7 +348,7 @@ JD-TC-ProviderCouponBill-1
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10

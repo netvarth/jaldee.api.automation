@@ -51,7 +51,7 @@ JD-TC-DonationBill-1
         ${resp}=   Get Location ById  ${loc_id1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
         
         ${description}=  FakerLibrary.sentence
         ${min_don_amt1}=   Random Int   min=100   max=500
@@ -168,7 +168,7 @@ JD-TC-DonationBill-2
         ${resp}=   Get Location ById  ${loc_id1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
         ${gstper}=  Random Element  ${gstpercentage}
         ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
         ${resp}=  Update Tax Percentage  ${gstper}  ${GST_num}

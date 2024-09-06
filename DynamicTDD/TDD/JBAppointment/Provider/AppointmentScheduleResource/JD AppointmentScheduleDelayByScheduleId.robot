@@ -105,7 +105,7 @@ JD-TC-Appointment Schedule Delay By Scheduleid-1
     ${resp}=   Get Location By Id   ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
@@ -376,7 +376,7 @@ JD-TC-Appointment Schedule Delay By Scheduleid-2
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME61}
     clear_consumer_msgs  ${CUSERNAME5}
@@ -563,7 +563,7 @@ JD-TC-Appointment Schedule Delay By Scheduleid-3
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     clear_appt_schedule   ${PUSERNAME69}
 
     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -865,7 +865,7 @@ JD-TC-Appointment Schedule Delay By Scheduleid-6
     ${resp}=   Get Location By Id   ${lid2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
     
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
@@ -1015,7 +1015,7 @@ JD-TC-Appointment Schedule Delay By Scheduleid-7
     ${resp}=   Get Location By Id   ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
     
     ${SERVICE2}=    FakerLibrary.name
     ${s_id2}=  Create Sample Service  ${SERVICE2}

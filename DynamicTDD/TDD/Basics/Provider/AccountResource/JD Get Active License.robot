@@ -20,7 +20,7 @@ JD-TC-Get Active License -1
        ${resp}=    Get Locations
        Log   ${resp.json()}
        Should Be Equal As Strings  ${resp.status_code}  200
-       Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+       Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
        ${resp}=   Get upgradable license
        Log  ${resp.json()}
        Should Be Equal As Strings    ${resp.status_code}   200

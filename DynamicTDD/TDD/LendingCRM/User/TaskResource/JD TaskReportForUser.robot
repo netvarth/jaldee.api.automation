@@ -42,10 +42,10 @@ JD-TC-TaskReport-1
         ${resp}=   Get Location ById  ${locId}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Suite Variable          ${locId}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
     
     ${resp}=  categorytype          ${p_id}
@@ -314,22 +314,22 @@ JD-TC-TaskReport-4
     ${resp}=   Get Location ById  ${locId1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
     ${locId2}=  Create Sample Location
     ${resp}=   Get Location ById  ${locId2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz2}  ${resp.json()['timezone']}
     ${locId3}=  Create Sample Location
     ${resp}=   Get Location ById  ${locId3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz3}  ${resp.json()['timezone']}
     ${locId4}=  Create Sample Location
     ${resp}=   Get Location ById  ${locId4}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz4}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz4}  ${resp.json()['timezone']}
     ${locId1}=  Convert To String  ${locId1}
     ${locId2}=  Convert To String  ${locId2}
     ${locId3}=  Convert To String  ${locId3}
@@ -1496,10 +1496,10 @@ JD-TC-TaskReport-7
         ${resp}=   Get Location ById  ${locId}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Suite Variable          ${locId}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
     
     ${resp}=  categorytype          ${p_id}
@@ -1625,10 +1625,10 @@ JD-TC-TaskReport-8
         ${resp}=   Get Location ById  ${locId}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Suite Variable          ${locId}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
     
     ${resp}=  categorytype          ${p_id}
@@ -1948,22 +1948,22 @@ JD-TC-TaskReport-12
     ${resp}=   Get Location ById  ${locId1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
     ${locId2}=  Create Sample Location
     ${resp}=   Get Location ById  ${locId2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz2}  ${resp.json()['timezone']}
     ${locId3}=  Create Sample Location
     ${resp}=   Get Location ById  ${locId3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz3}  ${resp.json()['timezone']}
     ${locId4}=  Create Sample Location
     ${resp}=   Get Location ById  ${locId4}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz4}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz4}  ${resp.json()['timezone']}
     ${locId1}=  Convert To String  ${locId1}
     ${locId2}=  Convert To String  ${locId2}
     ${locId3}=  Convert To String  ${locId3}
@@ -3152,22 +3152,22 @@ JD-TC-TaskReport-15
     ${resp}=   Get Location ById  ${locId1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
     ${locId2}=  Create Sample Location
     ${resp}=   Get Location ById  ${locId2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz2}  ${resp.json()['timezone']}
     ${locId3}=  Create Sample Location
     ${resp}=   Get Location ById  ${locId3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz3}  ${resp.json()['timezone']}
     ${locId4}=  Create Sample Location
     ${resp}=   Get Location ById  ${locId4}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz4}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz4}  ${resp.json()['timezone']}
     ${locId1}=  Convert To String  ${locId1}
     ${locId2}=  Convert To String  ${locId2}
     ${locId3}=  Convert To String  ${locId3}
@@ -3511,22 +3511,22 @@ JD-TC-TaskReport-16
     ${resp}=   Get Location ById  ${locId1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
     ${locId2}=  Create Sample Location
     ${resp}=   Get Location ById  ${locId2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz2}  ${resp.json()['timezone']}
     ${locId3}=  Create Sample Location
     ${resp}=   Get Location ById  ${locId3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz3}  ${resp.json()['timezone']}
     ${locId4}=  Create Sample Location
     ${resp}=   Get Location ById  ${locId4}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz4}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz4}  ${resp.json()['timezone']}
     ${locId1}=  Convert To String  ${locId1}
     ${locId2}=  Convert To String  ${locId2}
     ${locId3}=  Convert To String  ${locId3}
@@ -4183,22 +4183,22 @@ JD-TC-TaskReport-18
     ${resp}=   Get Location ById  ${locId1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
     ${locId2}=  Create Sample Location
     ${resp}=   Get Location ById  ${locId2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz2}  ${resp.json()['timezone']}
     ${locId3}=  Create Sample Location
     ${resp}=   Get Location ById  ${locId3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz3}  ${resp.json()['timezone']}
     ${locId4}=  Create Sample Location
     ${resp}=   Get Location ById  ${locId4}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz4}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz4}  ${resp.json()['timezone']}
     ${locId1}=  Convert To String  ${locId1}
     ${locId2}=  Convert To String  ${locId2}
     ${locId3}=  Convert To String  ${locId3}
@@ -4548,22 +4548,22 @@ JD-TC-TaskReport-19
     ${resp}=   Get Location ById  ${locId1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
     ${locId2}=  Create Sample Location
     ${resp}=   Get Location ById  ${locId2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz2}  ${resp.json()['timezone']}
     ${locId3}=  Create Sample Location
     ${resp}=   Get Location ById  ${locId3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz3}  ${resp.json()['timezone']}
     ${locId4}=  Create Sample Location
     ${resp}=   Get Location ById  ${locId4}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz4}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz4}  ${resp.json()['timezone']}
     ${locId1}=  Convert To String  ${locId1}
     ${locId2}=  Convert To String  ${locId2}
     ${locId3}=  Convert To String  ${locId3}
@@ -4911,22 +4911,22 @@ JD-TC-TaskReport-20
     ${resp}=   Get Location ById  ${locId1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
     ${locId2}=  Create Sample Location
     ${resp}=   Get Location ById  ${locId2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz2}  ${resp.json()['timezone']}
     ${locId3}=  Create Sample Location
     ${resp}=   Get Location ById  ${locId3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz3}  ${resp.json()['timezone']}
     ${locId4}=  Create Sample Location
     ${resp}=   Get Location ById  ${locId4}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz4}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz4}  ${resp.json()['timezone']}
     ${locId1}=  Convert To String  ${locId1}
     ${locId2}=  Convert To String  ${locId2}
     ${locId3}=  Convert To String  ${locId3}
@@ -5590,22 +5590,22 @@ JD-TC-TaskReport-22
     ${resp}=   Get Location ById  ${locId1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
     ${locId2}=  Create Sample Location
     ${resp}=   Get Location ById  ${locId2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz2}  ${resp.json()['timezone']}
     ${locId3}=  Create Sample Location
     ${resp}=   Get Location ById  ${locId3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz3}  ${resp.json()['timezone']}
     ${locId4}=  Create Sample Location
     ${resp}=   Get Location ById  ${locId4}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz4}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz4}  ${resp.json()['timezone']}
     ${locId1}=  Convert To String  ${locId1}
     ${locId2}=  Convert To String  ${locId2}
     ${locId3}=  Convert To String  ${locId3}
@@ -5936,10 +5936,10 @@ JD-TC-TaskReport-23
         ${resp}=   Get Location ById  ${locId}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Suite Variable          ${locId}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${area}=     FakerLibrary.City
@@ -6068,10 +6068,10 @@ JD-TC-TaskReport-24
         ${resp}=   Get Location ById  ${locId}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Suite Variable          ${locId}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${area}=     FakerLibrary.City

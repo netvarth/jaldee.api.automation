@@ -460,7 +460,7 @@ JD-TC-Switch_Login-6
     ${resp}=   Get Location By Id   ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
 
     ${SERVICE1}=   FakerLibrary.name
     ${sid3}=  Create Sample Service  ${SERVICE1}
@@ -672,7 +672,7 @@ JD-TC-Switch_Login-10
     ${resp}=   Get Location By Id   ${lid2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz2}  ${resp.json()['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz2}
     ${DAY2}=  db.add_timezone_date  ${tz2}  10        

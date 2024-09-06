@@ -91,7 +91,7 @@ JD-TC-UserPerformanceReport-1
         ${resp}=   Get Location ById  ${locId}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
@@ -384,7 +384,7 @@ JD-TC-UserPerformanceReport-2
         ${resp}=   Get Location ById  ${locId}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
@@ -677,7 +677,7 @@ JD-TC-UserPerformanceReport-3
         ${resp}=   Get Location ById  ${locId}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
@@ -1000,7 +1000,7 @@ JD-TC-UserPerformanceReport-4
         ${resp}=   Get Location ById  ${locId}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
@@ -1348,7 +1348,7 @@ JD-TC-UserPerformanceReport-5
         ${resp}=   Get Location ById  ${locId}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
@@ -1697,7 +1697,7 @@ JD-TC-UserPerformanceReport-6
         ${resp}=   Get Location ById  ${locId}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
@@ -2111,7 +2111,7 @@ JD-TC-UserPerformanceReport-7
         ${resp}=   Get Location ById  ${locId}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
@@ -2509,7 +2509,7 @@ JD-TC-UserPerformanceReport-8
         ${resp}=   Get Location ById  ${locId}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
@@ -2901,7 +2901,7 @@ JD-TC-UserPerformanceReport-9
         ${resp}=   Get Location ById  ${locId}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
@@ -3187,7 +3187,7 @@ JD-TC-UserPerformanceReport-10
         ${resp}=   Get Location ById  ${locId}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
@@ -3484,7 +3484,7 @@ JD-TC-UserPerformanceReport-11
         ${resp}=   Get Location ById  ${locId}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
@@ -3814,7 +3814,7 @@ JD-TC-UserPerformanceReport-12
         ${resp}=   Get Location ById  ${locId}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}

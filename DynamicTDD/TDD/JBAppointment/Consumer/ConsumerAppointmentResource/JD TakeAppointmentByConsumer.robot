@@ -173,7 +173,7 @@ JD-TC-Take Appointment-1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME_B}
     ${SERVICE1}=   FakerLibrary.name
@@ -1659,7 +1659,7 @@ JD-TC-Take Appointment-14
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -2533,14 +2533,14 @@ JD-TC-Take Appointment-UH1
     ${resp}=   Get Location ById  ${p1_l1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz1}  ${resp.json()['timezone']}
 
     ${p1_l2}=  Create Sample Location
     Set Suite Variable   ${p1_l2}
     ${resp}=   Get Location ById  ${p1_l2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz2}  ${resp.json()['timezone']}
     clear_appt_schedule   ${PUSERNAME76}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -2639,14 +2639,14 @@ JD-TC-Take Appointment-UH2
     ${resp}=   Get Location ById  ${p1_l1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz1}  ${resp.json()['timezone']}
 
     ${p1_l2}=  Create Sample Location
     Set Suite Variable   ${p1_l2}
     ${resp}=   Get Location ById  ${p1_l2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz2}  ${resp.json()['timezone']}
 
     ${pidUH1}=  get_acc_id  ${PUSERNAME76}
     Set Suite Variable   ${pidUH1}
@@ -2724,14 +2724,14 @@ JD-TC-Take Appointment-UH3
     ${resp}=   Get Location ById  ${p1_l1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz1}  ${resp.json()['timezone']}
 
     ${p1_l2}=  Create Sample Location
     Set Suite Variable   ${p1_l2}
     ${resp}=   Get Location ById  ${p1_l2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz2}  ${resp.json()['timezone']}
     
     ${pidUH1}=  get_acc_id  ${PUSERNAME76}
     Set Suite Variable   ${pidUH1}
@@ -2821,14 +2821,14 @@ JD-TC-Take Appointment-UH4
     ${resp}=   Get Location ById  ${p1_l1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz1}  ${resp.json()['timezone']}
 
     ${p1_l2}=  Create Sample Location
     Set Suite Variable   ${p1_l2}
     ${resp}=   Get Location ById  ${p1_l2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz2}  ${resp.json()['timezone']}
     
     ${pidUH1}=  get_acc_id  ${PUSERNAME76}
     Set Suite Variable   ${pidUH1}
@@ -2911,7 +2911,7 @@ JD-TC-Take Appointment-UH5
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${pidUH5}=  get_acc_id  ${PUSERNAME76}
     Set Suite Variable   ${pidUH1}
@@ -3024,7 +3024,7 @@ JD-TC-Take Appointment-UH6
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
@@ -3147,7 +3147,7 @@ JD-TC-Take Appointment-UH7
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
@@ -3271,7 +3271,7 @@ JD-TC-Take Appointment-UH8
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
@@ -3373,7 +3373,7 @@ JD-TC-Take Appointment-UH9
     ${resp}=   Get Location ById  ${p1_l1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.content}
@@ -3476,7 +3476,7 @@ JD-TC-Take Appointment-UH11
     ${resp}=   Get Location ById  ${p1_l1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz1}  ${resp.json()['timezone']}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.content}
@@ -3495,7 +3495,7 @@ JD-TC-Take Appointment-UH11
     ${resp}=   Get Location ById  ${p1_l2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz2}  ${resp.json()['timezone']}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.content}
@@ -3707,7 +3707,7 @@ JD-TC-Take Appointment-UH12
     ${resp}=   Get Location ById  ${p1_l1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz1}  ${resp.json()['timezone']}
 
     ${sTime1}=  add_timezone_time  ${tz}  1  30  
     ${eTime1}=  add_timezone_time  ${tz}  2  30  
@@ -3868,7 +3868,7 @@ JD-TC-Take Appointment-18
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${SERVICE1}=    FakerLibrary.Word
     ${min_pre}=   Random Int   min=10   max=50
@@ -4165,7 +4165,7 @@ JD-TC-Take Appointment-19
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.content}
@@ -4308,7 +4308,7 @@ JD-TC-Take Appointment-20
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME72}
 
@@ -4511,7 +4511,7 @@ JD-TC-Take Appointment-21
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 	
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service For User  ${SERVICE1}  ${dep_id}  ${u_id}
@@ -4744,7 +4744,7 @@ JD-TC-Take Appointment-UH14
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -4884,7 +4884,7 @@ JD-TC-Take Appointment-UH15
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    # Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     ${SERVICE1}=   FakerLibrary.name
     ${p1_s1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${p1_s1}
@@ -4896,7 +4896,7 @@ JD-TC-Take Appointment-UH15
     ${resp}=   Get Location ById  ${p1_l1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${pid01}=  get_acc_id  ${PUSERNAME_X}
     Set Suite Variable   ${pid01}

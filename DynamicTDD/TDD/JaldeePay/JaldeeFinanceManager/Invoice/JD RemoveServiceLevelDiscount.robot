@@ -191,7 +191,7 @@ JD-TC-Remove Service Level Discount-1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     
     ${name}=   FakerLibrary.word
     ${resp}=  CreateVendorCategory  ${name}  
@@ -748,7 +748,7 @@ JD-TC-Remove Service Level Discount-5
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     # Set Suite Variable  ${CUR_DAY}
@@ -911,7 +911,7 @@ JD-TC-Remove Service Level Discount-6
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     clear_appt_schedule   ${PUSERPH0}
 
     ${SERVICE1}=    FakerLibrary.word
@@ -1046,7 +1046,7 @@ JD-TC-Remove Service Level Discount-7
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     # Set Suite Variable  ${CUR_DAY}
@@ -1333,7 +1333,7 @@ JD-TC-Remove Service Level Discount-UH6
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     # Set Suite Variable  ${CUR_DAY}

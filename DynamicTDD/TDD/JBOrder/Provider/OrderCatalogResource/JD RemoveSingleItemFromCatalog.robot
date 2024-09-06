@@ -38,7 +38,7 @@ JD-TC-Remove_Single_Item_From_Catalog-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     ${displayName1}=   FakerLibrary.name 
     Set Suite Variable  ${displayName1}  

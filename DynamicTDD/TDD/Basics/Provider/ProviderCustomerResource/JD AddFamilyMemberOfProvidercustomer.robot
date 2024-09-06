@@ -662,7 +662,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-10
       ${resp}=   Get Location ById  ${lid}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
       # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME1}
       # Log   ${resp.json()}
@@ -802,7 +802,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-UH4
       ${resp}=   Get Location ById  ${lid}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
       # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME3}
       # Log   ${resp.json()}
       # Should Be Equal As Strings  ${resp.status_code}  200
@@ -871,7 +871,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-UH4
       ${resp}=   Get Location ById  ${lid}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
       # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME3}
       # Log   ${resp.json()}
@@ -1234,7 +1234,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-15
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     clear_appt_schedule   ${PUSERNAME0}
 
     ${SERVICE1}=    FakerLibrary.word

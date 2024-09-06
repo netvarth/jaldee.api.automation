@@ -43,7 +43,7 @@ JD-TC-Waitlist Location High Level Test Case-1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${resp}=  Disable service  ${s_id}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -210,7 +210,7 @@ JD-TC-Waitlist Location High Level Test Case-UH1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${resp}=  AddCustomer  ${CUSERNAME6}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
@@ -270,7 +270,7 @@ JD-TC- Waitlist Location High Level Test Case-3
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${resp}=  AddCustomer  ${CUSERNAME2}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
@@ -316,7 +316,7 @@ JD-TC-Waitlist Location High Level Test Case-4
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${resp}=  AddCustomer  ${CUSERNAME6}
     Log   ${resp.json()}
@@ -354,7 +354,7 @@ JD-TC-Waitlist Location High Level Test Case-5
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
     Log   ${resp.json()}

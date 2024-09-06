@@ -115,6 +115,10 @@ JD-TC-Branch_Signup-1
         Run Keyword And Continue On Failure  Verify Response List   ${resp}  0  name=${service_name}  status=${service_status}  serviceDuration=${service_duration}
         #Verify Response List   ${resp}  0  totalAmount=${service_amt}
 
+        ${resp}=    Get Locations
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
         ${resp}=   Get Appointment Settings
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -254,6 +258,10 @@ SignUp Account
         Should Be Equal As Strings  ${resp.json()['baseLocation']['parkingType']}  ${parking}
         Should Be Equal As Strings  ${resp.json()['baseLocation']['open24hours']}  ${24hours}
         Should Be Equal As Strings  ${resp.json()['baseLocation']['status']}  ACTIVE
+
+        ${resp}=    Get Locations
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
         
         ${fields}=   Get subDomain level Fields  ${d}  ${sd}
         Log  ${fields.json()}

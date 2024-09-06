@@ -49,7 +49,7 @@ JD-TC-GetWaitlistAttachment-1
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${ser_name1}=   FakerLibrary.word
@@ -141,7 +141,7 @@ JD-TC-GetWaitlistAttachment-2
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${ser_name1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${ser_name1}
@@ -221,7 +221,7 @@ JD-TC-GetWaitlistAttachment-3
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz} 
     ${ser_name1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${ser_name1}
@@ -303,7 +303,7 @@ JD-TC-GetWaitlistAttachment-4
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz} 
     ${ser_name1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${ser_name1}
@@ -384,7 +384,7 @@ JD-TC-GetWaitlistAttachment-5
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz} 
     ${ser_name1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${ser_name1}
@@ -465,7 +465,7 @@ JD-TC-GetWaitlistAttachment-6
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz} 
     ${ser_name1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${ser_name1}
@@ -593,7 +593,7 @@ JD-TC-GetWaitlistAttachment-UH4
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz} 
     ${ser_name1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${ser_name1}
@@ -676,7 +676,7 @@ JD-TC-GetWaitlistAttachment-UH5
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz} 
     ${ser_name1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${ser_name1}
@@ -746,7 +746,7 @@ JD-TC-GetWaitlistAttachment-UH6
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz} 
     ${ser_name1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${ser_name1}
@@ -845,7 +845,7 @@ JD-TC-GetWaitlistAttachment-UH8
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     clear_appt_schedule   ${PUSERNAME99}
 
     ${SERVICE1}=   FakerLibrary.name
@@ -975,7 +975,7 @@ JD-TC-GetWaitlistAttachment-UH9
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     FOR  ${i}  IN RANGE   5
         ${ser_names}=  FakerLibrary.Words  	nb=3

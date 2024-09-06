@@ -201,7 +201,7 @@ JD-TC-Get Bill By Id-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     ${list}=  Create List   1  2  3  4  5  6  7
     ${sTime}=  add_timezone_time  ${tz}  0  15  
     ${eTime}=  add_timezone_time  ${tz}  0  30  

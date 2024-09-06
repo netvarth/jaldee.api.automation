@@ -58,7 +58,7 @@ JD-TC-UpdateOrderForElectronicDelivery-1
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${displayName1}=   FakerLibrary.name 
     ${shortDesc1}=  FakerLibrary.Sentence   nb_words=2        

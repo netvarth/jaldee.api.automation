@@ -114,7 +114,7 @@ JD-TC-UpdateDeliveryCharge-1
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${startDate}=  db.get_date_by_timezone  ${tz}
     ${endDate}=  db.add_timezone_date  ${tz}  10        
@@ -661,7 +661,7 @@ JD-TC-UpdateDeliveryCharge-6
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${startDate}=  db.get_date_by_timezone  ${tz}
     ${endDate}=  db.add_timezone_date  ${tz}  10        
@@ -1355,7 +1355,7 @@ JD-TC-UpdateDeliveryCharge-8
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${startDate}=  db.get_date_by_timezone  ${tz}
     ${endDate}=  db.add_timezone_date  ${tz}  10        
@@ -1590,7 +1590,7 @@ JD-TC-UpdateDeliveryCharge-9
      ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     ${DAY}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10  
@@ -2192,7 +2192,7 @@ JD-TC-UpdateDeliveryCharge-11
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz11}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz11}  ${resp.json()[0]['timezone']}
 
     ${startDate}=  db.get_date_by_timezone  ${tz11}
     ${endDate}=  db.add_timezone_date  ${tz11}  10        
@@ -2694,7 +2694,7 @@ JD-TC-UpdateDeliveryCharge-13
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     ${startDate}=  db.get_date_by_timezone  ${tz}
     ${endDate}=  db.add_timezone_date  ${tz}  10        
@@ -2871,7 +2871,7 @@ JD-TC-UpdateDeliveryCharge-14
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     ${startDate}=  db.get_date_by_timezone  ${tz}
     ${endDate}=  db.add_timezone_date  ${tz}  10        
@@ -3097,7 +3097,7 @@ JD-TC-UpdateDeliveryCharge-15
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     ${startDate}=  db.get_date_by_timezone  ${tz}
     ${endDate}=  db.add_timezone_date  ${tz}  10        
@@ -3335,7 +3335,7 @@ JD-TC-UpdateDeliveryCharge-16
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     ${startDate}=  db.get_date_by_timezone  ${tz}
     ${endDate}=  db.add_timezone_date  ${tz}  10        
@@ -3622,7 +3622,7 @@ JD-TC-UpdateDeliveryCharge-17
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     ${startDate}=  db.get_date_by_timezone  ${tz}
     ${endDate}=  db.add_timezone_date  ${tz}  10        
@@ -3961,7 +3961,7 @@ JD-TC-UpdateDeliveryCharge-18
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.json()}

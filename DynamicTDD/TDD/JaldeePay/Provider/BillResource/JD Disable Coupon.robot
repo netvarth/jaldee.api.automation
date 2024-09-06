@@ -65,7 +65,7 @@ JD-TC-Disable coupon-1
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
      
     ${coupon}=    FakerLibrary.word
     ${desc}=  FakerLibrary.Sentence   nb_words=2
@@ -228,7 +228,7 @@ JD-TC-Disable coupon-2
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     
 
     ${coupon}=    FakerLibrary.word

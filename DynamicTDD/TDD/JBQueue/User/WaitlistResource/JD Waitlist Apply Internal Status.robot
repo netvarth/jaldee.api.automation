@@ -207,7 +207,7 @@ JD-TC-WaitlistApplyInternalSts-1
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
 
     ${q_name}=    FakerLibrary.name
     Set Suite Variable    ${q_name}

@@ -120,7 +120,7 @@ JD-TC-ProviderStatusChangeForServiceOptionForItem-1
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id}  ${resp.json()['id']}
-    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
   
     ${resp}=  Get Order Settings by account id
     Log  ${resp.content}

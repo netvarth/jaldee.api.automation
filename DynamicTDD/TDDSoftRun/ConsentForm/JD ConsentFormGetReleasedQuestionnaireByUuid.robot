@@ -149,10 +149,10 @@ JD-TC-GetReleasedQuestionnaireByUuid-1
     Should Be Equal As Strings  ${resp.json()['status']}      ${toggle[0]}
     Should Be Equal As Strings  ${resp.json()['settingId']}   ${cfid}
 
-    ${respo}=    Provider Consent Form Get released questionnaire by uuid  ${cf_uid}
-    Log  ${respo.content}
-    Should Be Equal As Strings  ${respo.status_code}  200
-    Set Suite Variable     ${Quid}  ${respo.json()[0]['id']}
+    ${resp}=    Provider Consent Form Get released questionnaire by uuid  ${cf_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable     ${Quid}  ${resp.json()[0]['id']}
 
 
 JD-TC-GetReleasedQuestionnaireByUuid-2
@@ -247,7 +247,7 @@ JD-TC-GetReleasedQuestionnaireByUuid-UH2
     ${respo}=    Provider Consent Form Get released questionnaire by uuid  ${fake}
     Log  ${respo.content}
     Should Be Equal As Strings  ${respo.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}      ${INV_CONSENT_FORM_ID}
+    Should Be Equal As Strings  ${respo.json()}      ${INV_CONSENT_FORM_ID}
 
 JD-TC-GetReleasedQuestionnaireByUuid-UH3
 

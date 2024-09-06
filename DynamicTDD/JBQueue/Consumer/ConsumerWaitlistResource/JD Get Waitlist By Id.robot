@@ -58,7 +58,7 @@ JD-TC-Get Waitlist By Id Consumer-1
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_l1}  ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${P1SERVICE1}=    FakerLibrary.word
     Set Suite Variable  ${P1SERVICE1}

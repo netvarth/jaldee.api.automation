@@ -170,7 +170,7 @@ JD-TC-SubmitQuestionnaireForOrder-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=  Get Order Settings by account id
     Log  ${resp.content}
@@ -1290,7 +1290,7 @@ JD-TC-SubmitQuestionnaireForOrder-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']} 
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']} 
 
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}

@@ -67,7 +67,7 @@ JD-TC-Payment By Consumer-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']} 
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']} 
    
     ${min_pre1}=   Random Int   min=40   max=50
     ${Tot}=   Random Int   min=100   max=500

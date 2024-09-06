@@ -159,7 +159,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=   Get License UsageInfo 
     Log  ${resp.content}
@@ -2193,7 +2193,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-19
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${SERVICE13}=    Set Variable  ${ser_names[12]}
     ${s_id10}=  Create Sample Service  ${SERVICE13}  maxBookingsAllowed=10

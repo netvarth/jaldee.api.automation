@@ -234,7 +234,7 @@ JD-TC-ChangeLeadPriority-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${locId}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${resp}=  categorytype  ${p_id}
     ${resp}=  tasktype      ${p_id}

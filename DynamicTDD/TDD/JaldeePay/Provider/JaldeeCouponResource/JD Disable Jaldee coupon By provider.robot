@@ -47,7 +47,7 @@ JD-TC-DisableJaldeeCoupon-1
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -274,7 +274,7 @@ JD-TC-DisableJaldeeCoupon-5
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${d1}  ${resp.json()['serviceSector']['domain']}
     Set Test Variable  ${sd1}  ${resp.json()['serviceSubSector']['subDomain']}
-    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200

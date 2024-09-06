@@ -69,7 +69,7 @@ JD-TC-Create_Provider_Schedule-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${acc_id}   ${resp.json()['id']}
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
 
 

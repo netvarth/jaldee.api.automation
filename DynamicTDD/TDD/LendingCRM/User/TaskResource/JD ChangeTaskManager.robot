@@ -57,7 +57,7 @@ JD-TC-ChangeTaskManager-1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     
     ${lid1}=  Create Sample Location
     Set Suite Variable  ${lid1}
@@ -65,7 +65,7 @@ JD-TC-ChangeTaskManager-1
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
     
     ${lid2}=  Create Sample Location
     Set Suite Variable  ${lid2}
@@ -73,7 +73,7 @@ JD-TC-ChangeTaskManager-1
     ${resp}=   Get Location ById  ${lid2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz2}  ${resp.json()['timezone']}
     
     ${lid3}=  Create Sample Location
     Set Suite Variable  ${lid3}
@@ -81,7 +81,7 @@ JD-TC-ChangeTaskManager-1
     ${resp}=   Get Location ById  ${lid3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz3}  ${resp.json()['timezone']}
     
 
 

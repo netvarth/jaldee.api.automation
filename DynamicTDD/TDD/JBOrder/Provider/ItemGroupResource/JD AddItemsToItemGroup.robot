@@ -406,7 +406,7 @@ JD-TC-AddItemsToItemGroup-4
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
   
     clear_Item  ${PUSERNAME183}
 

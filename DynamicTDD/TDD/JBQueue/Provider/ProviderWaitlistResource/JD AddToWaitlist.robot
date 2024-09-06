@@ -54,7 +54,7 @@ JD-TC-AddToWaitlist-0
       ${resp}=   Get Location ById  ${loc_id1}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
       ${resp}=   Create Sample Service  ${SERVICE1}
       Set Test Variable    ${ser_id1}    ${resp}  
       ${resp}=   Create Sample Service  ${SERVICE2}
@@ -155,7 +155,7 @@ JD-TC-AddToWaitlist-1
       ${resp}=   Get Location ById  ${loc_id1}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
       ${resp}=   Create Sample Service  ${SERVICE1}
       Set Suite Variable    ${ser_id1}    ${resp}  
       ${resp}=   Create Sample Service  ${SERVICE2}
@@ -343,7 +343,7 @@ JD-TC-AddToWaitlist-7
       ${resp}=   Get Location ById  ${loc_id2}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
       ${resp}=   Create Sample Service  ${SERVICE5}
       Set Suite Variable    ${ser_id5}    ${resp}  
       ${resp}=   Create Sample Service  ${SERVICE6}
@@ -556,7 +556,7 @@ JD-TC-AddToWaitlist-11
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable    ${loc_id3}   ${resp.json()[0]['id']}
-      Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
       ${ser_id7}=   Create Sample Service  ${SERVICE1}
       Set Suite Variable   ${ser_id7}
       ${q_name1}=    FakerLibrary.name
@@ -830,7 +830,7 @@ JD-TC-AddToWaitlist-UH7
       ${resp}=   Get Location ById  ${loc_id4}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
       ${SERVICE8}=    FakerLibrary.Word
       ${ser_id8}=  Create Sample Service  ${SERVICE8}
 
@@ -1223,7 +1223,7 @@ JD-TC-AddToWaitlist-14
       ${resp}=   Get Location ById  ${lid}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
       clear_queue   ${PUSERNAME161}
 
       ${resp}=  Get Queues
@@ -1330,7 +1330,7 @@ JD-TC-AddToWaitlist-15
       ${resp}=   Get Location ById  ${lid}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
       clear_queue   ${PUSERNAME161}
 
       ${resp}=  Get Queues
@@ -1437,7 +1437,7 @@ JD-TC-AddToWaitlist-UH18
       ${resp}=   Get Location ById  ${lid}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
       clear_queue   ${PUSERNAME161}
 
       ${resp}=  Get Queues
@@ -1547,7 +1547,7 @@ JD-TC-AddToWaitlist-16
       ${resp}=   Get Location ById  ${lid}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
       clear_queue   ${PUSERNAME161}
 
       ${resp}=  Get Queues
@@ -1655,7 +1655,7 @@ JD-TC-AddToWaitlist-UH19
       ${resp}=   Get Location ById  ${lid}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
       clear_queue   ${PUSERNAME161}
 
       ${resp}=  Get Queues

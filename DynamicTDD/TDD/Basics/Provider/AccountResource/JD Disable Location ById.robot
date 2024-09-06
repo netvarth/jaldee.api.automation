@@ -47,7 +47,7 @@ JD-TC-DisableLocation-1
       ${resp}=   Get Location ById  ${lid1}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
       ${DAY}=  db.get_date_by_timezone  ${tz}
     	Set Suite Variable  ${DAY}
@@ -131,7 +131,7 @@ JD-TC-DisableLocation-2
       ${resp}=   Get Location ById  ${lid}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
       ${DAY}=  db.get_date_by_timezone  ${tz}
     	Set Suite Variable  ${DAY}
@@ -204,7 +204,7 @@ JD-TC-DisableLocation-UH2
       ${resp}=   Get Location ById  ${lid3}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz3}  ${resp.json()['timezone']}
       ${resp}=   ProviderLogout
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
@@ -255,7 +255,7 @@ JD-TC-DisableLocation-UH6
       ${resp}=   Get Location ById  ${lid4}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz4}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz4}  ${resp.json()['timezone']}
       ${resp}=  Disable Location  ${lid4}
       Should Be Equal As Strings  ${resp.status_code}  422
       Should Be Equal As Strings  "${resp.json()}"  "${BASE_LOCATION_CANNOT_BE_DISABLED}"
@@ -316,7 +316,7 @@ JD-TC-DisableLocation-UH7
       ${resp}=   Get Location ById  ${lid_A}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tzA}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tzA}  ${resp.json()['timezone']}
       # ${resp}=  Get Locations
       # Log  ${resp.json()}
       # Should Be Equal As Strings  ${resp.status_code}  200

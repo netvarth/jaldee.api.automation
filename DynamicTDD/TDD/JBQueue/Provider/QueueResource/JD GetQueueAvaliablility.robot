@@ -56,7 +56,7 @@ JD-TC-GetQueueAvaliability-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid2}
 
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable  ${s_id}

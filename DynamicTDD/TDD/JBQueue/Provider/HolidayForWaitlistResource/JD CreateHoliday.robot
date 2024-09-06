@@ -34,7 +34,7 @@ JD-TC-CreateHoliday-1
       ${resp}=   Get Location ById  ${loc_id}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
       ${ser_name}=    FakerLibrary.name
       Set Test Variable     ${ser_name}
       ${resp}=  Create Sample Service   ${ser_name}
@@ -135,7 +135,7 @@ JD-TC-CreateHoliday-3
       ${resp}=   Get Location ById  ${loc_id1}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
       ${q_name1}=    FakerLibrary.name
       Set Suite Variable      ${q_name1}
       ${start_time1}=   add_timezone_time  ${tz}  2  00  
@@ -189,7 +189,7 @@ JD-TC-CreateHoliday-4
       ${resp}=   Get Location ById  ${loc_id2}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
       ${desc}=    FakerLibrary.name
       Set Test Variable      ${desc}
       ${DAY_ONE}=  db.add_timezone_date  ${tz}  1
@@ -236,7 +236,7 @@ JD-TC-CreateHoliday-5
       ${resp}=   Get Location ById  ${loc_id4}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
       ${DAY_TWO}=  db.add_timezone_date  ${tz}   4
       Set Suite Variable    ${DAY_TWO}
       ${cur_time1}=  add_timezone_time  ${tz}  1  45  
@@ -289,7 +289,7 @@ JD-TC-CreateHoliday-6
       ${resp}=   Get Location ById  ${loc_id3}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
       ${qu_name}=    FakerLibrary.name
       Set Suite Variable      ${qu_name}
@@ -448,7 +448,7 @@ JD-TC-CreateHoliday-10
       ${resp}=   Get Location ById  ${loc_id}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
       ${ser_name}=    FakerLibrary.name
       Set Test Variable     ${ser_name}
       ${resp}=  Create Sample Service   ${ser_name}
@@ -622,7 +622,7 @@ JD-TC-CreateHoliday-UH9
       ${resp}=   Get Location ById  ${loc_id}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
       ${ser_name}=    FakerLibrary.name
       Set Test Variable     ${ser_name}
       ${resp}=  Create Sample Service   ${ser_name}
@@ -693,7 +693,7 @@ JD-TC-CreateHoliday-UH10
       ${resp}=   Get Location ById  ${loc_id}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
       ${ser_name}=    FakerLibrary.name
       Set Test Variable     ${ser_name}
       ${resp}=  Create Sample Service   ${ser_name}
@@ -739,7 +739,7 @@ JD-TC-CreateHoliday-UH11
       ${resp}=   Get Location ById  ${loc_id5}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
       ${ser_name5}=    FakerLibrary.name
       Set Test Variable     ${ser_name5}
       ${resp}=  Create Sample Service   ${ser_name5}
@@ -1323,7 +1323,7 @@ JD-TC-CreateHoliday-UH10
       ${resp}=   Get Location ById  ${loc_id}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
       ${ser_name}=    FakerLibrary.name
       Set Test Variable     ${ser_name}
       ${resp}=  Create Sample Service   ${ser_name}
@@ -1403,7 +1403,7 @@ JD-TC-CreateHoliday-UH15
       ${resp}=   Get Location ById  ${loc_id7}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
       ${ser_name}=    FakerLibrary.name
       Set Test Variable     ${ser_name}
       ${resp}=  Create Sample Service   ${ser_name}
@@ -1441,7 +1441,7 @@ JD-TC-CreateHoliday-UH16
       ${resp}=   Get Location ById  ${loc_id7}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
       ${ser_name}=    FakerLibrary.name
       Set Test Variable     ${ser_name}
       ${resp}=  Create Sample Service   ${ser_name}

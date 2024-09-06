@@ -116,7 +116,7 @@ JD-TC-GetServiceOptionForOrder-1
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${displayName1}=   FakerLibrary.user name    
     ${price1}=  Evaluate    random.uniform(50.0,300) 
@@ -296,7 +296,7 @@ JD-TC-GetServiceOptionForOrder-2
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${displayName1}=   FakerLibrary.user name    
     ${price1}=  Evaluate    random.uniform(50.0,300) 
@@ -486,7 +486,7 @@ JD-TC-GetServiceOptionForOrder-3
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${displayName1}=   FakerLibrary.user name    
     ${price1}=  Evaluate    random.uniform(50.0,300) 
@@ -674,7 +674,7 @@ JD-TC-GetServiceOptionForOrder-UH1
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${displayName1}=   FakerLibrary.user name    
     ${price1}=  Evaluate    random.uniform(50.0,300) 

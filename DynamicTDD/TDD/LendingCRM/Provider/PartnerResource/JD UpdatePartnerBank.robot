@@ -94,7 +94,7 @@ JD-TC-Update Partner Bank-1
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${locname}  ${resp.json()['place']}
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
         Set Suite Variable  ${address1}  ${resp.json()['address']}
         ${address2}    FakerLibrary.Street name
         Set Suite Variable    ${address2}
@@ -103,7 +103,7 @@ JD-TC-Update Partner Bank-1
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
         Set Suite Variable  ${locname}  ${resp.json()[0]['place']}
         Set Suite Variable  ${address1}  ${resp.json()[0]['address']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
         ${address2}    FakerLibrary.Street name
         Set Suite Variable    ${address2}
     END

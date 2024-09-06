@@ -62,7 +62,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-1
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     clear_appt_schedule   ${ProviderPH}
 
@@ -222,7 +222,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-3
     ${resp}=   Get Location ById  ${l_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -357,7 +357,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-5
     ${resp}=   Get Location ById  ${l_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${SERVICE2}=   FakerLibrary.name
     ${s_id2}=  Create Sample Service  ${SERVICE2}
@@ -553,7 +553,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-UH4
     ${resp}=   Get Location ById  ${l_id3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${SERVICE4}=   FakerLibrary.name
     ${s_id4}=  Create Sample Service  ${SERVICE4}
@@ -724,7 +724,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-UH8
     ${resp}=   Get Location ById  ${l_id4}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${SERVICE5}=   FakerLibrary.name
     ${s_id5}=  Create Sample Service  ${SERVICE5}
@@ -787,7 +787,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-6
     ${resp}=   Get Location ById  ${l_id4}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     
     ${SERVICE5}=   FakerLibrary.name
     ${s_id5}=  Create Sample Service  ${SERVICE5}
@@ -867,7 +867,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-7
     ${resp}=   Get Location ById  ${l_id5}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${SERVICE6}=   FakerLibrary.name
     ${desc}=   FakerLibrary.sentence
@@ -991,7 +991,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-8
     ${resp}=   Get Location ById  ${l_id6}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     
     ${SERVICE7}=   FakerLibrary.name
     ${desc}=   FakerLibrary.sentence

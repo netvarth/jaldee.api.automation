@@ -78,11 +78,11 @@ JD-TC-Get Stock TransferFilter-1
         ${resp}=   Get Location ById  ${lid}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
         Set Suite Variable  ${place}  ${resp.json()[0]['place']}
     ELSE
         Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
         Set Suite Variable  ${place}  ${resp.json()[0]['place']}
     END
 

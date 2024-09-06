@@ -206,7 +206,7 @@ JD-TC-Remove Item Level Discount-1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     
     ${name}=   FakerLibrary.name
     ${resp}=  CreateVendorCategory  ${name}  
@@ -511,7 +511,7 @@ JD-TC-Remove Item Level Discount-2
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${resp}=  Get Departments
     Log  ${resp.content}
@@ -1140,7 +1140,7 @@ JD-TC-Remove Item Level Discount-5
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
     
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
@@ -1439,7 +1439,7 @@ JD-TC-Remove Item Level Discount-6
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
     
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
@@ -1927,7 +1927,7 @@ JD-TC-Remove Item Level Discount-3
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${resp}=  Get Departments
     Log  ${resp.content}

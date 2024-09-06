@@ -228,7 +228,7 @@ JD-TC-Consumer Deactivation -2
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${pid}=  get_acc_id  ${PUSERNAME_B}
     Set Suite Variable   ${pid}
@@ -917,7 +917,7 @@ JD-TC-Consumer Deactivation -6
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${s_id1}=   Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id1}
@@ -1065,7 +1065,7 @@ JD-TC-Consumer Deactivation -7
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${s_id1}=   Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id1}
@@ -1229,7 +1229,7 @@ JD-TC-Consumer Deactivation -8
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
 
     ${resp}=   Create Sample Service  ${SERVICE3}    maxBookingsAllowed=2
     Set Suite Variable    ${ser_id1}    ${resp}  

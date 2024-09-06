@@ -22,7 +22,7 @@ JD-TC-JD S3-1
     ${resp}=   Get Business Profile
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
@@ -198,7 +198,7 @@ JD-TC-JD S3-5
     ${resp}=   Get Location ById  ${locatid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${resp}=   Create Sample Location 
     Set Suite Variable  ${locationid1}  ${resp}
@@ -206,7 +206,7 @@ JD-TC-JD S3-5
     ${resp}=   Get Location ById  ${locationid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${resp}=  Disable Location  ${locationid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

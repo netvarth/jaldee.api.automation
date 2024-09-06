@@ -148,7 +148,7 @@ JD-TC-Consumer-Payment-Transaction-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${highest_package}=  get_highest_license_pkg
     Log  ${highest_package}
@@ -225,7 +225,7 @@ JD-TC-Consumer-Payment-Transaction-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_lid}  ${resp.json()[0]['id']} 
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     
     ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}  

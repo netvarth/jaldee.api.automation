@@ -67,7 +67,7 @@ JD-TC-Get coupons-1
     
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
      
     ${coupon}=    FakerLibrary.word
     ${desc}=  FakerLibrary.Sentence   nb_words=2

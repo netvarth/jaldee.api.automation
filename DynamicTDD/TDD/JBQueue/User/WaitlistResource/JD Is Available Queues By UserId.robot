@@ -188,10 +188,10 @@ JD-TC-Is AvailableQueueNow ByProviderId-1
         ${resp}=   Get Location ById  ${lid}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
         Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${description}=  FakerLibrary.sentence
@@ -533,7 +533,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-4
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${list}=  Create List    1  2  3  4  5  6
 
     ${curr_weekday}=  get_timezone_weekday  ${tz}
@@ -670,7 +670,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-5
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${list}=  Create List    1  2  3  4  5  6
 
     # ${sTime1}=  db.get_time_by_timezone   ${tz}
@@ -806,7 +806,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-6
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${list}=  Create List    1  2  3  4  5  6
 
     # ${sTime1}=  db.get_time_by_timezone   ${tz}
@@ -920,7 +920,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-7
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${list}=  Create List    1  2  3  4  5  6
 
     # ${sTime1}=  db.get_time_by_timezone   ${tz}
@@ -1041,7 +1041,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-8
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     # ${list}=  Create List    1  2  3  4  5  6
     
     ${resp}=    Is Available Queue Now ByProviderId    ${u_id1}

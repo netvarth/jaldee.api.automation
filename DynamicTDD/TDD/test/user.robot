@@ -52,14 +52,14 @@ JD-TC-AssignBussinessLocationsToUser-1
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
 
     ${lid2}=   Create Sample Location
     Set Suite Variable    ${lid2} 
     ${resp}=   Get Location ById  ${lid2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+    Set Suite Variable  ${tz2}  ${resp.json()['timezone']} 
 
     ${resp}=    Get Locations
     Log   ${resp.json()}

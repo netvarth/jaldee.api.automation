@@ -46,7 +46,7 @@ JD-TC-UpdateAppointmentRating-1
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${resp}=   Get License UsageInfo 
     Log  ${resp.content}
@@ -226,7 +226,7 @@ JD-TC-UpdateAppointmentRating-2
 
     ${resp}=  Get Location By Id   ${lid} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     
     ${resp}=  ProviderLogout 
     Log   ${resp.json()}

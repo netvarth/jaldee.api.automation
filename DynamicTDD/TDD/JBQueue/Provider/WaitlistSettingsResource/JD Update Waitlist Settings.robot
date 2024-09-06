@@ -89,7 +89,7 @@ JD-TC-UpdateWaitlistSettings-2
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${resp}=  AddCustomer  ${CUSERNAME16}
     Log   ${resp.json()}
@@ -140,7 +140,7 @@ JD-TC-UpdateWaitlistSettings-3
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${resp}=  AddCustomer  ${CUSERNAME1}
     Log   ${resp.json()}
@@ -193,7 +193,7 @@ JD-TC-UpdateWaitlistSettings-4
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
 
     ${resp}=  AddCustomer  ${CUSERNAME1}
@@ -249,7 +249,7 @@ JD-TC-UpdateWaitlistSettings-5
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${resp}=  ConsumerLogin  ${CUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
@@ -306,7 +306,7 @@ JD-TC-UpdateWaitlistSettings-6
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${DAY2}=  db.add_timezone_date  ${tz}  3  
     Set Suite Variable  ${DAY2}  ${DAY2}
@@ -357,7 +357,7 @@ JD-TC-UpdateWaitlistSettings-7
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${resp}=  AddCustomer  ${CUSERNAME4}
     Log   ${resp.json()}
@@ -428,7 +428,7 @@ JD-TC-UpdateWaitlistSettings-8
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${resp}=  AddCustomer  ${CUSERNAME4}
     Log   ${resp.json()}
@@ -572,7 +572,7 @@ JD-TC-UpdateWaitlistSettings-9
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()['baseLocation']['id']}  
-    # Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    # Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${P1SERVICE1}=    FakerLibrary.word
     Set Suite Variable  ${P1SERVICE1}
@@ -805,7 +805,7 @@ JD-TC-UpdateWaitlistSettings-UH1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${pid}=  get_acc_id   ${PUSERNAME168}
     ${resp}=  ConsumerLogin  ${CUSERNAME1}  ${PASSWORD}
@@ -858,7 +858,7 @@ JD-TC-UpdateWaitlistSettings-UH2
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -914,7 +914,7 @@ JD-TC-UpdateWaitlistSettings-UH3
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${resp}=  AddCustomer  ${CUSERNAME3}
     Log   ${resp.json()}
@@ -1077,7 +1077,7 @@ JD-TC-UpdateWaitlistSettings-7
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${cid}=  get_id  ${CUSERNAME2}
     Set Suite Variable  ${cid}  ${cid}
@@ -1233,7 +1233,7 @@ JD-TC-UpdateWaitlistSettings-UH3
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${resp}=   Get Queue ById   ${qid6}
     Log   ${resp}
     Should Be Equal As Strings  ${resp.status_code}  200

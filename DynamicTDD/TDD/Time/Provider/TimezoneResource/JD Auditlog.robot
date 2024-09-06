@@ -32,7 +32,7 @@ JD-TC-GetAuditLog -1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${aid}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${time}=   db.get_time_by_timezone  ${tz}

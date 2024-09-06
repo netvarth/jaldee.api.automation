@@ -95,7 +95,7 @@ JD-TC-Apply ProviderCoupon-1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${name}=   FakerLibrary.word
     ${resp}=  CreateVendorCategory  ${name}  
@@ -560,7 +560,7 @@ JD-TC-ProviderCouponBill-3
     ${resp}=   Get Location ById  ${lid_appt}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME185}
     
@@ -730,7 +730,7 @@ JD-TC-ProviderCouponBill-3
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -905,7 +905,7 @@ JD-TC-ProviderCouponBill-4
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -1043,7 +1043,7 @@ JD-TC-ProviderCouponBill-5
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -1178,7 +1178,7 @@ JD-TC-ProviderCouponBill-6
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -1317,7 +1317,7 @@ JD-TC-ProviderCouponBill-7
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -1525,7 +1525,7 @@ JD-TC-ProviderCouponBill-8
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -1733,7 +1733,7 @@ JD-TC-ProviderCouponBill-9
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -2167,7 +2167,7 @@ JD-TC-ProviderCouponBill-11
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME185}
     
@@ -2303,7 +2303,7 @@ JD-TC-ProviderCouponBill-12
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME185}
     
@@ -2472,7 +2472,7 @@ JD-TC-ProviderCouponBill-UH1
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -2609,7 +2609,7 @@ JD-TC-ProviderCouponBill-UH2
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -2751,7 +2751,7 @@ JD-TC-ProviderCouponBill-UH3
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -2899,7 +2899,7 @@ JD-TC-ProviderCouponBill-UH4
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -3026,7 +3026,7 @@ JD-TC-ProviderCouponBill-UH5
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -3152,7 +3152,7 @@ JD-TC-ProviderCouponBill-UH6
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -3289,7 +3289,7 @@ JD-TC-ProviderCouponBill-UH7
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -3444,7 +3444,7 @@ JD-TC-ProviderCouponBill-UH8
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -3556,7 +3556,7 @@ JD-TC-ProviderCouponBill-UH9
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME185}
     

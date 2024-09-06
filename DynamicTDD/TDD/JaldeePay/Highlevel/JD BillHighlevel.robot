@@ -1222,7 +1222,7 @@ JD-TC-Bill Highlevel-16
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${resp}=   Get Active License
     Log  ${resp.json()}
@@ -1294,7 +1294,7 @@ JD-TC-Bill Highlevel-16
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
-    # Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    # Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}

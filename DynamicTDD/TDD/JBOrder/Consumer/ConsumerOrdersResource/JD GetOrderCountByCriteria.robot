@@ -86,7 +86,7 @@ JD-TC-GetOrderCountByCriteria-1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${startDate}=  db.subtract_timezone_date  ${tz}    5
     ${endDate}=  db.add_timezone_date  ${tz}  10        

@@ -97,7 +97,7 @@ JD-TC-DeleteFamilymemberofprovidercustomer-UH5
       ${resp}=   Get Location ById  ${lid}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
       ${firstname1}=  FakerLibrary.first_name
       ${lastname1}=  FakerLibrary.last_name
       ${dob1}=  FakerLibrary.Date
@@ -156,7 +156,7 @@ JD-TC-DeleteFamilymemberofprovidercustomer-UH6
       ${resp}=   Get Location ById  ${lid}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
       ${firstname1}=  FakerLibrary.first_name
       ${lastname1}=  FakerLibrary.last_name
       ${dob1}=  FakerLibrary.Date
@@ -209,7 +209,7 @@ JD-TC-DeleteFamilymemberofprovidercustomer-UH7
       ${resp}=   Get Location ById  ${lid}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
       
       ${resp}=   ProviderLogout
       Should Be Equal As Strings    ${resp.status_code}   200

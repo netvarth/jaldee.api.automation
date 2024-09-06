@@ -60,7 +60,7 @@ JD-TC-GetWaitlistAttachment-1
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${SERVICE1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1}    ${resp}  
@@ -146,7 +146,7 @@ JD-TC-GetWaitlistAttachment-2
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${SERVICE1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1}    ${resp}  
@@ -232,7 +232,7 @@ JD-TC-GetWaitlistAttachment-3
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${SERVICE1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1}    ${resp}  
@@ -319,7 +319,7 @@ JD-TC-GetWaitlistAttachment-4
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${SERVICE1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1}    ${resp}  
@@ -406,7 +406,7 @@ JD-TC-GetWaitlistAttachment-5
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${SERVICE1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1}    ${resp}  
@@ -492,7 +492,7 @@ JD-TC-GetWaitlistAttachment-6
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${SERVICE1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1}    ${resp}  
@@ -579,7 +579,7 @@ JD-TC-GetWaitlistAttachment-7
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${SERVICE1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1}    ${resp}  

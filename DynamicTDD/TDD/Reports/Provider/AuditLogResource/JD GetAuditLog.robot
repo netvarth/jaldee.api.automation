@@ -49,7 +49,7 @@ JD-TC-GetAuditLog -1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
@@ -284,7 +284,7 @@ JD-TC-GetAuditLog -7
     ${resp}=   Get Location ById  ${loc_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${time}=   db.get_time_by_timezone  ${tz}
     ${converted_time1}=  db.timeto24hr   ${time}
 
@@ -313,7 +313,7 @@ JD-TC-GetAuditLog -8
     ${resp}=   Get Location ById  ${loc_id3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable  ${list}
     ${q_name2}=    FakerLibrary.name
@@ -406,7 +406,7 @@ JD-TC-GetAuditLog -11
     ${resp}=   Get Location ById  ${loc_id4}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${q_name1}=    FakerLibrary.name
     Set Suite Variable      ${q_name1}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -467,7 +467,7 @@ JD-TC-GetAuditLog -12
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     ${desc1}=    FakerLibrary.word
     Set Test Variable      ${desc1}  
     ${turn_arund_time}=   Random Int   min=1   max=14
@@ -496,7 +496,7 @@ JD-TC-GetAuditLog -13
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     ${turn_arund_time}=   Random Int   min=1   max=30 
     ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${turn_arund_time}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
     Log   ${resp.json()}
@@ -531,7 +531,7 @@ JD-TC-GetAuditLog -14
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${ctime}=  add_timezone_time  ${tz}  0  50
     ${etime}=  add_timezone_time  ${tz}  0  55  
     ${desc1}=    FakerLibrary.name
@@ -788,7 +788,7 @@ JD-TC-GetAuditLog -26
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -969,7 +969,7 @@ JD-TC-GetAuditLog -31
     ${resp}=  Get Location By Id  ${p1_l1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
     
     # ${Time}=  db.get_time_by_timezone  ${tz}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1017,7 +1017,7 @@ JD-TC-GetAuditLog -32
     ${resp}=  Get Location By Id  ${p1_l1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
     
     # ${Time}=  db.get_time_by_timezone  ${tz}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1274,7 +1274,7 @@ JD-TC-GetAuditLog-40
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     clear_appt_schedule   ${PUSERNAME149}
     

@@ -75,7 +75,7 @@ JD-TC-AddSubServicesToAppt-1
         ${resp}=   Get Location ById  ${locId}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
@@ -494,7 +494,7 @@ JD-TC-AddSubServicesToAppt-3
         ${resp}=   Get Location ById  ${locId}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
@@ -770,7 +770,7 @@ JD-TC-AddSubServicesToAppt-4
         ${resp}=   Get Location ById  ${locId}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
@@ -1357,7 +1357,7 @@ JD-TC-AddSubServicesToAppt-7
         ${resp}=   Get Location ById  ${locId}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
@@ -1661,7 +1661,7 @@ JD-TC-AddSubServicesToAppt-8
         ${resp}=   Get Location ById  ${locId}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
@@ -2039,7 +2039,7 @@ JD-TC-AddSubServicesToAppt-11
         ${resp}=   Get Location ById  ${locId}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
@@ -2300,7 +2300,7 @@ JD-TC-AddSubServicesToAppt-12
         ${resp}=   Get Location ById  ${locId}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}

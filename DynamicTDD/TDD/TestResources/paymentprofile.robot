@@ -204,7 +204,7 @@ JD-TC-Add To WaitlistByConsumer-25
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
-    # Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    # Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${fields}=   Get subDomain level Fields  ${d1}  ${sd1}
     Log  ${fields.json()}
@@ -276,7 +276,7 @@ JD-TC-Add To WaitlistByConsumer-25
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${loc1}  ${resp.json()[0]['id']} 
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${DAY}=  db.add_timezone_date  ${tz}  3
 
@@ -599,7 +599,7 @@ JD-TC-NBFC Account Creation-1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${min_pre1}=   FakerLibrary.pyfloat   left_digits=2   right_digits=2   positive=True
     ${Total1}=   FakerLibrary.pyfloat   left_digits=3   right_digits=2   positive=True

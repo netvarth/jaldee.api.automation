@@ -140,7 +140,7 @@ JD-TC-Update_Report_Criteria-1
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_l1}  ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${eTime1}=  add_timezone_time  ${tz}  4  45  

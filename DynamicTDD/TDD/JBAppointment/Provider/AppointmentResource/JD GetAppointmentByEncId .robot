@@ -45,7 +45,7 @@ JD-TC-GetAppointmentByEncId -1
     
     ${resp}=  Get Location By Id   ${lid} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ${SERVICE1}=   FakerLibrary.name
     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -148,7 +148,7 @@ JD-TC-GetAppointmentByEncId -2
     ${lid}=  Create Sample Location
     ${resp}=  Get Location By Id   ${lid} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ${SERVICE1}=   FakerLibrary.name
     Set Suite Variable   ${SERVICE1}

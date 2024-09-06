@@ -103,7 +103,7 @@ JD-TC-Apply Service to Finance-1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
@@ -398,7 +398,7 @@ JD-TC-Apply Service To Finance-2
     # ${resp}=   Get Location ById  ${lid}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     # Set Suite Variable  ${CUR_DAY}
@@ -634,7 +634,7 @@ JD-TC-Apply Services to Invoice-3
     # ${resp}=   Get Location ById  ${lid}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     clear_appt_schedule   ${PUSERPH0}
 
     ${SERVICE1}=    FakerLibrary.word
@@ -838,7 +838,7 @@ JD-TC-Apply Services to Invoice-4
     # ${resp}=   Get Location ById  ${loc_id1}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
       ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
       Set Suite Variable  ${CUR_DAY} 
@@ -1079,7 +1079,7 @@ JD-TC-Apply Services to Invoice-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=   Get License UsageInfo 
     Log  ${resp.content}
@@ -1396,7 +1396,7 @@ JD-TC-Apply Service To Finance-6
     # ${resp}=   Get Location ById  ${lid}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     # Set Suite Variable  ${CUR_DAY}

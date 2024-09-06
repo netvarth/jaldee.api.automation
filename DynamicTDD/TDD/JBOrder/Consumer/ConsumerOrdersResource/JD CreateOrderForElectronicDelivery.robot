@@ -79,7 +79,7 @@ JD-TC-CreateOrderForElectronicDelivery-1
     ${resp}=   Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${promoLabel1}=   FakerLibrary.word 
     ${exp_date}=   db.add_timezone_date  ${tz}   16

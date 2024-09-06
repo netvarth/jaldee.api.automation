@@ -110,7 +110,7 @@ JD-TC-Payment_Report-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_lid}  ${resp.json()['id']} 
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
@@ -454,7 +454,7 @@ JD-TC-Payment_Report-2
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
     ${SERVICE1}=    FakerLibrary.word
     ${description}=  FakerLibrary.sentence
