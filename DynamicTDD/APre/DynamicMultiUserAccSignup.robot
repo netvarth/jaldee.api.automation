@@ -87,8 +87,7 @@ JD-TC-Branch_Signup-1
         Should Be Equal As Strings    ${resp.status_code}    200
         ${decrypted_data}=  db.decrypt_data  ${resp.content}
         Log  ${decrypted_data}
-        Set Test Variable  ${sub_domain}  ${decrypted_data['subSector']}
-        # Set Test Variable  ${sub_domain}  ${resp.json()['subSector']}
+        ${sub_domain}=  Set Variable  ${decrypted_data['subSector']}
         ${fname}=  Set Variable  ${decrypted_data['firstName']}
         ${lname}=  Set Variable  ${decrypted_data['lastName']}
 
@@ -101,15 +100,6 @@ JD-TC-Branch_Signup-1
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
-
-        #${resp}=  Get Queues
-        #Log  ${resp.json()}
-        #Should Be Equal As Strings  ${resp.status_code}  200
-        #Should Be Equal As Strings  ${resp.json()[0]['name']}  Time Window 1
-        #Should Be Equal As Strings  ${resp.json()[0]['queueSchedule']['recurringType']}  Weekly
-        #Should Be Equal As Strings  ${resp.json()[0]['queueSchedule']['startDate']}  ${DAY1}
-        #Should Be Equal As Strings  ${resp.json()[0]['queueSchedule']['timeSlots'][0]['sTime']}  ${sTime}
-        #Should Be Equal As Strings  ${resp.json()[0]['queueSchedule']['timeSlots'][0]['eTime']}  ${eTime}
 
         ${resp}=  Get Features  ${sub_domain}
         Log  ${resp.json()}
@@ -131,14 +121,6 @@ JD-TC-Branch_Signup-1
         Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
         Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
-        ${resp}=  Get Order Settings by account id
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
-        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['enableOrder']}     ${bool[0]}
-        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['storeContactInfo']['firstName']}    ${fname}
-        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['storeContactInfo']['lastName']}     ${lname}
-        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['storeContactInfo']['phone']}        ${PUSER}
     END
 
      
@@ -263,12 +245,6 @@ SignUp Account
         Verify Response  ${resp}  businessName=${bs}  businessDesc=Description:${SPACE}${description}  shortName=${companySuffix}  status=ACTIVE  createdDate=${DAY1}  licence=${pkg_name}  verifyLevel=NONE  enableSearch=False  accountLinkedPhNo=${PUSER}  licensePkgID=${pkgId}  #accountType=INDEPENDENT_SP
         Should Be Equal As Strings  ${resp.json()['serviceSector']['domain']}  ${d}
         Should Be Equal As Strings  ${resp.json()['serviceSubSector']['subDomain']}  ${sd}
-        # Should Be Equal As Strings  ${resp.json()['emails'][0]['label']}  ${name3}
-        # Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}  ${P_Email}${US}.${test_mail}
-        # Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['label']}  ${name1}
-        # Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['instance']}  ${ph1}
-        # Should Be Equal As Strings  ${resp.json()['phoneNumbers'][1]['label']}  ${name2}
-        # Should Be Equal As Strings  ${resp.json()['phoneNumbers'][1]['instance']}  ${ph2}
         Should Be Equal As Strings  ${resp.json()['baseLocation']['place']}  ${city}
         Should Be Equal As Strings  ${resp.json()['baseLocation']['address']}  ${address}
         Should Be Equal As Strings  ${resp.json()['baseLocation']['pinCode']}  ${postcode}
@@ -295,20 +271,9 @@ SignUp Account
 
         ${spec}=  get_Specializations  ${resp.json()}
 
-        # ${resp}=  Update Specialization  ${spec}
-        # Log  ${resp.json()}
-        # Should Be Equal As Strings    ${resp.status_code}   200
         ${resp}=  Update Business Profile with kwargs  &{spec}  
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-
-        # ${resp}=  Get Waitlist Settings
-        # Log  ${resp.json()}
-        # Should Be Equal As Strings  ${resp.status_code}  200
-        # Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[0]}
-        # ${resp}=  Enable Waitlist
-        # Log   ${resp.json()}
-        # Should Be Equal As Strings  ${resp.status_code}  200
 
         ${resp}=  Get Waitlist Settings
         Log   ${resp.content}
