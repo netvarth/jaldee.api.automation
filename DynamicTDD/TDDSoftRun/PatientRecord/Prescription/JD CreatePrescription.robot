@@ -557,10 +557,15 @@ JD-TC-Create Prescription-UH7
     ${whpnum}=  Evaluate  ${PUSERPH0}+336245
     ${tlgnum}=  Evaluate  ${PUSERPH0}+336345
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.${test_mail}   ${userType[1]}  ${pin}  ${countryCodes[0]}  ${PUSERPH0}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
-    Log  ${resp.content}
+    ${resp}=  Create User  ${firstname}  ${lastname}     ${countryCodes[0]}  ${PUSERPH0}    ${userType[1]}   dob=${dob}  gender=${Genderlist[0]}  email=${P_Email}${PUSERPH0}.${test_mail}   pincode=${pin}    deptId=${dep_id}  
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
+
+    # ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.${test_mail}   ${userType[1]}  ${pin}  ${countryCodes[0]}  ${PUSERPH0}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${u_id}  ${resp.json()}
 
     ${resp}=    Create Prescription    ${cid}    ${u_id}    ${caseId}       ${EMPTY}    ${html}      ${mrPrescriptions}
     Log   ${resp.content}
