@@ -16,6 +16,7 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 ${withsym}      *#147erd
 ${onlyspl}      !@#$%^&
 ${alph_digits}  D3r52A
+${real_num}     9995805992
 
 *** Test Cases ***
 
@@ -764,6 +765,99 @@ JD-TC-Link_With_Other_Login-UH8
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings    ${resp.json()}   ${USER_DISABLED}
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Link_With_Other_Login-9
+
+    [Documentation]    Link With other login - 555 account trying to link with real number account
+
+    ${555num}    Random Number 	digits=5 
+    ${555num}=    Evaluate    f'{${555num}:0>5d}'
+    Log  ${555num}
+    Set Suite Variable  ${555num}  55555${555num} 
+
+    ${firstname_555}=  FakerLibrary.first_name
+    ${lastname_555}=  FakerLibrary.last_name
+
+    ${highest_package}=  get_highest_license_pkg
+
+    ${resp}=  Account SignUp  ${firstname_555}  ${lastname_555}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${555num}   ${highest_package[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Account Activation  ${555num}  ${OtpPurpose['ProviderSignUp']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${loginId_555}=     Random Int  min=111111  max=999999
+    Set Suite Variable      ${loginId_555}
+    
+    ${resp}=  Account Set Credential  ${555num}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId_555}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Provider Login  ${loginId_555}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}    200
+    Set Suite Variable          ${username}    ${resp.json()['userName']}
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${firstname_RN}=  FakerLibrary.first_name
+    ${lastname_RN}=  FakerLibrary.last_name
+
+    ${highest_package}=  get_highest_license_pkg
+
+    ${resp}=  Account SignUp  ${firstname_RN}  ${lastname_RN}  ${None}  ${domain_list[0]}  ${subdomain_list[0]}  ${real_num}   ${highest_package[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Account Activation  ${real_num}  ${OtpPurpose['ProviderSignUp']}  JSESSIONYNW=${jsessionynw_value}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${loginId_RN}=     Random Int  min=111111  max=999999
+    Set Suite Variable      ${loginId_RN}
+    
+    ${resp}=  Account Set Credential  ${real_num}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${loginId_RN}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Provider Login  ${loginId_RN}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}    200
+
+    ${resp}=    Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    # 555 account linking real number
+
+    ${resp}=  Provider Login  ${loginId_555}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Connect with other login  ${loginId_RN}  password=${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation      ${real_num}  ${OtpPurpose['LinkLogin']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${otp} =   db.Verify Accnt   ${real_num}    ${OtpPurpose['LinkLogin']}
+    Set Suite Variable   ${otp}
+
+    ${resp}=    Connect with other login  ${loginId_RN}   otp=${otp}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Provider Logout
     Log   ${resp.content}
