@@ -334,7 +334,7 @@ JD-TC-Update schedule-4
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${REDUCE_SCHEDULE_TIME}"
 
-    ${resp}=  Disable Appointment Schedule  ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -360,7 +360,7 @@ JD-TC-Update schedule-4
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${converted_eTime2}
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id} 
 
-    ${resp}=   Enable Appointment Schedule   ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -452,7 +452,7 @@ JD-TC-Update schedule-5
     # Should Be Equal As Strings  ${resp.status_code}  422
     # Should Be Equal As Strings  "${resp.json()}"   "${SCHEDULE_PARALLE_CAPACITY}"
 
-    # ${resp}=  Disable Appointment Schedule  ${sch_id}
+    # ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[1]}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -478,7 +478,7 @@ JD-TC-Update schedule-5
     # Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${converted_eTime1}
     # Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
 
-    # ${resp}=   Enable Appointment Schedule   ${sch_id}
+    # ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[0]}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -613,7 +613,7 @@ JD-TC-Update schedule-6
     # Should Be Equal As Strings  ${resp.status_code}  422
     # Should Be Equal As Strings  "${resp.json()}"   "${SCHEDULE_PARALLE_CAPACITY}"
 
-    # ${resp}=  Disable Appointment Schedule  ${sch_id}
+    # ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[1]}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -813,7 +813,7 @@ JD-TC-Update schedule-8
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${SCHEDULE_SLOTDURATION}"
 
-    ${resp}=  Disable Appointment Schedule  ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -839,7 +839,7 @@ JD-TC-Update schedule-8
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${converted_eTime2}
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
 
-    ${resp}=   Enable Appointment Schedule   ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1621,7 +1621,7 @@ JD-TC-Update schedule-15
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${REDUCE_SCHEDULE_TIME}"
 
-    ${resp}=  Disable Appointment Schedule  ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1647,7 +1647,7 @@ JD-TC-Update schedule-15
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${converted_eTime2}
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
 
-    ${resp}=   Enable Appointment Schedule   ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1795,7 +1795,7 @@ JD-TC-Update schedule-16
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${SCHEDULE_SLOTDURATION}"
 
-    ${resp}=  Disable Appointment Schedule  ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1821,7 +1821,7 @@ JD-TC-Update schedule-16
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${converted_eTime1}
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
 
-    ${resp}=   Enable Appointment Schedule   ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2708,7 +2708,7 @@ JD-TC-Update schedule-23
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${REDUCE_SCHEDULE_TIME}"
 
-    ${resp}=  Disable Appointment Schedule  ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2734,7 +2734,7 @@ JD-TC-Update schedule-23
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${converted_eTime2}
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
 
-    ${resp}=   Enable Appointment Schedule   ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2860,7 +2860,7 @@ JD-TC-Update schedule-24
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${SCHEDULE_SLOTDURATION}"
 
-    ${resp}=  Disable Appointment Schedule  ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2886,7 +2886,7 @@ JD-TC-Update schedule-24
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${converted_eTime1}
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
 
-    ${resp}=   Enable Appointment Schedule   ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3011,7 +3011,7 @@ JD-TC-Update schedule-25
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${SCHEDULE_SLOTDURATION}"
 
-    ${resp}=  Disable Appointment Schedule  ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3037,7 +3037,7 @@ JD-TC-Update schedule-25
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${converted_eTime2}
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
 
-    ${resp}=   Enable Appointment Schedule   ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3220,7 +3220,7 @@ JD-TC-Update schedule-27
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${REDUCE_SCHEDULE_TIME}"
 
-    ${resp}=  Disable Appointment Schedule  ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3233,7 +3233,7 @@ JD-TC-Update schedule-27
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Enable Appointment Schedule   ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -3419,7 +3419,7 @@ JD-TC-Update schedule-29
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${REDUCE_SCHEDULE_TIME}"
 
-    ${resp}=  Disable Appointment Schedule  ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3432,7 +3432,7 @@ JD-TC-Update schedule-29
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Enable Appointment Schedule   ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -3533,7 +3533,7 @@ JD-TC-Update schedule-30
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  "${resp.json()}"   "${REDUCE_SCHEDULE_TIME}"
 
-    ${resp}=  Disable Appointment Schedule  ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3559,7 +3559,7 @@ JD-TC-Update schedule-30
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${converted_eTime2}
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
 
-    ${resp}=   Enable Appointment Schedule   ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3644,7 +3644,7 @@ JD-TC-Update schedule-31
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${SCHEDULE_SLOTDURATION}"
 
-    ${resp}=  Disable Appointment Schedule  ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3670,7 +3670,7 @@ JD-TC-Update schedule-31
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${converted_eTime1}
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
 
-    ${resp}=   Enable Appointment Schedule   ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -5581,7 +5581,7 @@ JD-TC-Update schedule-UH9
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${converted_eTime1}
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
 
-    ${resp}=  Disable Appointment Schedule  ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -5655,7 +5655,7 @@ JD-TC-Update schedule-UH10
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${converted_eTime1}
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
 
-    ${resp}=  Disable Appointment Schedule  ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -5741,7 +5741,7 @@ JD-TC-Update schedule-UH11
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${converted_eTime1}
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
 
-    ${resp}=  Disable Appointment Schedule  ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -6457,7 +6457,7 @@ JD-TC-Update schedule-UH24
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${SCHEDULE_PARALLE_CAPACITY}"
 
-    ${resp}=  Disable Appointment Schedule  ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -6483,7 +6483,7 @@ JD-TC-Update schedule-UH24
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${converted_eTime1}
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
 
-    ${resp}=   Enable Appointment Schedule   ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -6614,7 +6614,7 @@ JD-TC-Update schedule-UH25
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${SCHEDULE_PARALLE_CAPACITY}"
 
-    ${resp}=  Disable Appointment Schedule  ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422  
     Should Be Equal As Strings  "${resp.json()}"   "${APPT_SCHEDULE_CANNOT_DISABLE}"
@@ -6624,7 +6624,7 @@ JD-TC-Update schedule-UH25
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Disable Appointment Schedule  ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -6651,7 +6651,7 @@ JD-TC-Update schedule-UH25
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${converted_eTime1}
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
 
-    ${resp}=   Enable Appointment Schedule   ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -7104,7 +7104,7 @@ JD-TC-Update schedule-42
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${PLEASE_DISABLE_SCHEDULE}
 
-    ${resp}=  Disable Appointment Schedule  ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -7112,7 +7112,7 @@ JD-TC-Update schedule-42
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Enable Appointment Schedule  ${sch_id}
+    ${resp}=  Enable Disable Appointment Schedule  ${sch_id}  ${Qstate[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -7306,7 +7306,7 @@ JD-TC-Update schedule-43
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Disable Appointment Schedule  ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -7382,8 +7382,8 @@ JD-TC-Update schedule-44
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
-    ${parallel}=  FakerLibrary.Random Int  min=5  max=10
-    ${consumerparallelserving}=  FakerLibrary.Random Int  min=1  max=${parallel}
+    ${parallel}=  FakerLibrary.Random Int  min=8  max=10
+    ${consumerparallelserving}=  FakerLibrary.Random Int  min=1  max=2
     ${duration}=  FakerLibrary.Random Int  min=5  max=${delta}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${consumerparallelserving}  ${lid}  ${duration}  ${bool1}  ${s_id}
@@ -7404,7 +7404,7 @@ JD-TC-Update schedule-44
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
 
     ${schedule_name1}=  FakerLibrary.bs
-    ${consumerparallelserving1}=  FakerLibrary.Random Int  min=1    max=${parallel}
+    ${consumerparallelserving1}=  FakerLibrary.Random Int  min=3   max=5
     ${resp}=  Update Appointment Schedule  ${sch_id}  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${consumerparallelserving1}  ${lid}  ${duration}  ${bool[1]}  ${s_id}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -7595,7 +7595,7 @@ JD-TC-Update schedule-45
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${PLEASE_DISABLE_SCHEDULE}
 
-    ${resp}=  Disable Appointment Schedule  ${sch_id}
+    ${resp}=    Enable Disable Appointment Schedule   ${sch_id}   ${Qstate[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -7603,7 +7603,7 @@ JD-TC-Update schedule-45
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Enable Appointment Schedule  ${sch_id}
+    ${resp}=  Enable Disable Appointment Schedule  ${sch_id}   ${Qstate[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
