@@ -1,4 +1,4 @@
-# !/bin/bash
+#!/bin/bash
 # set -vx      # uncomment to enable debugging
 # OR
 # set -x      # uncomment to enable debugging
@@ -37,11 +37,11 @@ usage()
     echo -e "\n[-c | --container-count] - sets the number of parallel containers.\nExample usage: $0  --TDD -c 2"
     echo -e "\n[-i | --interactive] - enables setting the env, input location, and output location interactively. This option overrides the environment set using -env option. \nExample usage: $0 -i"
     echo -e "\n[-na | --noAPre] - sets the APre flag to false. Give this option with the -env option if you don't want to run APre. \nExample usage: $0 -env dev -na"
-    echo -e "\n[--APre] - Runs APre. Example usage: $0 --APre"
+    echo -e "\n[--APre | --apre] - Runs APre. Example usage: $0 --APre"
     echo -e "\n[--TDD] - Runs TDD. Example usage: $0 --TDD"
-    echo -e "\n[--TDDSE] - Runs TDDSE. Example usage: $0 --TDDSE"
-    echo -e "\n[--SA] - Runs SA. Example usage: $0 --SA"
-    echo -e "\n[--Time] - Runs Time. Example usage: $0 --Time"
+    echo -e "\n[--TDDSE | --tddse] - Runs TDDSE. Example usage: $0 --TDDSE"
+    echo -e "\n[--SA | --sa] - Runs SA. Example usage: $0 --SA"
+    echo -e "\n[--Time | --time] - Runs Time. Example usage: $0 --Time"
     echo -e "\n[--Basics | --basics] - Runs Basic functionalities Resources like login and signup. Example usage: $0 --Basics"
     echo -e "\n[ --JBQueue | --jbqueue] - Runs Queue and Waitlist based resources. Example usage: $0 --JBQueue"
     echo -e "\n[ --TDDSoftRun | --tddsoftrun] - Runs Queue and Waitlist based resources. Example usage: $0 --TDDSoftRun"
@@ -134,7 +134,7 @@ checkSysType()
 setEnvironment()
 {
     local i=1 
-    if [ "$1" = "-env" ] || ["$1" = "--environment"]; then
+    if [ "$1" = "-env" ] || [ "$1" = "--environment" ]; then
         local j=$((i+1))
         env=${!j}
     fi
@@ -742,21 +742,21 @@ while [ "$1" != "" ]; do
                 shift
                 echo "Run APre."
             ;;
-        "--TDDSE")
+        "--TDDSE" | "--tddse")
                 suite="TDDSE"
                 setPaths
                 setPathVariables
                 shift
                 echo "Run TDDSE."
             ;;
-        "--SA")
+        "--SA" | "--sa")
                 suite="SA"
                 setPaths
                 setPathVariables
                 shift
                 echo "Run SA."
             ;;
-        "--Time")
+        "--Time" | "--Time")
                 suite="Time"
                 setPaths
                 setPathVariables

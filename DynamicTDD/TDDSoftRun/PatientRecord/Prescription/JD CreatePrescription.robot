@@ -36,28 +36,28 @@ JD-TC-Create Prescription-1
     [Documentation]    Create Prescription with valid details.
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
-     Log  ${iscorp_subdomains}
-     Set Suite Variable  ${iscorp_subdomains}
-     Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
-     Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
-     Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
-     ${firstname_A}=  FakerLibrary.first_name
-     Set Suite Variable  ${firstname_A}
-     ${lastname_A}=  FakerLibrary.last_name
-     Set Suite Variable  ${lastname_A}
-     ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+9778812
-     ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
-     Log  ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    202
-     ${resp}=  Account Activation  ${PUSERNAME_E}  0
-     Log   ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E}
-     Should Be Equal As Strings    ${resp.status_code}    200
+    Log  ${iscorp_subdomains}
+    Set Suite Variable  ${iscorp_subdomains}
+    Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
+    Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
+    Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
+    ${firstname_E}=  FakerLibrary.first_name
+    Set Suite Variable  ${firstname_E}
+    ${lastname_E}=  FakerLibrary.last_name
+    Set Suite Variable  ${lastname_E}
+    ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+9778812
+    ${highest_package}=  get_highest_license_pkg
+    ${resp}=  Account SignUp  ${firstname_E}  ${lastname_E}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    ${highest_package[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+    ${resp}=  Account Activation  ${PUSERNAME_E}  0
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
+    Log  ${resp.content}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -65,36 +65,33 @@ JD-TC-Create Prescription-1
 
     Set Suite Variable  ${pid}  ${decrypted_data['id']}
     Set Suite Variable    ${pdrname}    ${decrypted_data['userName']}
-    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
-    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
+    # Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    # Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
-     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
     Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
-     Set Suite Variable  ${PUSERNAME_E}
-     ${id}=  get_id  ${PUSERNAME_E}
-     Set Suite Variable  ${id}
-     ${bs}=  FakerLibrary.bs
-     Set Suite Variable  ${bs}
+    Set Suite Variable  ${PUSERNAME_E}
+    ${id}=  get_id  ${PUSERNAME_E}
+    Set Suite Variable  ${id}
+    ${bs}=  FakerLibrary.bs
+    Set Suite Variable  ${bs}
 
-     ${resp}=  Toggle Department Enable
-     Log   ${resp.json()}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     sleep  2s
-     ${resp}=  Get Departments
-     Log   ${resp.json()}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    ${resp}=  Get Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-     ${resp}=  Get Waitlist Settings
-     Log  ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
-
-     ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-     Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-     Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
     # ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
-    # Log  ${resp.json()}         
+    # Log  ${resp.content}         
     # Should Be Equal As Strings            ${resp.status_code}    200
 
     # ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -105,17 +102,66 @@ JD-TC-Create Prescription-1
     # Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
     # Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
-    ${lid}=  Create Sample Location
+    ${bs}=  FakerLibrary.company
+    ${companySuffix}=  FakerLibrary.companySuffix
+    ${parking}   Random Element   ${parkingType}
+    ${24hours}    Random Element    ['True','False']
+    ${desc}=   FakerLibrary.sentence
+    ${url}=   FakerLibrary.url
+    ${name3}=  FakerLibrary.word
+    # ${emails1}=  Emails  ${name3}  Email  ${email_id}  ${views}
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Test Variable  ${tz}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${description}=  FakerLibrary.sentence
+
+    ${b_loc}=  Create Dictionary  place=${city}   longitude=${longi}   lattitude=${latti}    googleMapUrl=${url}   pinCode=${postcode}  address=${address}  parkingType=${parking}  open24hours=${24hours}
+    # ${emails}=  Create List  ${emails1}
+    ${resp}=  Update Business Profile with kwargs   businessName=${bs}   businessUserName=${firstname_E}${SPACE}${lastname_E}   businessDesc=Description:${SPACE}${description}  shortName=${companySuffix}  baseLocation=${b_loc}   #emails=${emails}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${lid}=  Create Sample Location
 
     ${resp}=    Get Business Profile
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${accountId}        ${resp.json()['id']}
     # Set Suite Variable    ${accountName}      ${resp.json()['businessName']}
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
+    ${fields}=   Get subDomain level Fields  ${domains}  ${sub_domains}
+    Log  ${fields.json()}
+    Should Be Equal As Strings    ${fields.status_code}   200
+
+    ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+
+    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sub_domains}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get specializations Sub Domain  ${domains}  ${sub_domains}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${spec}=  get_Specializations  ${resp.json()}
+
+    ${resp}=  Update Business Profile with kwargs  &{spec}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get jaldeeIntegration Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[0]}  ${boolean[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get jaldeeIntegration Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]} 
 
     ${name}=  FakerLibrary.name
     Set Suite Variable    ${name}
@@ -155,43 +201,52 @@ JD-TC-Create Prescription-1
     Set Suite Variable    ${primaryMobileNo}
     Set Suite Variable  ${email}  ${lastName}${primaryMobileNo}.${test_mail}
 
-    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
+    ${resp}=  AddCustomer  ${primaryMobileNo}    firstName=${firstName}   lastName=${lastName}  countryCode=${countryCodes[1]}  email=${email}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable    ${cid}  ${resp.json()}
 
-    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token}  ${resp.json()['token']}
+    ${resp}=  GetCustomer ById  ${cid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Consumer Logout 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${accountId}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200    
+    # ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    # ${resp}=    Consumer Logout 
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+
+    # ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${accountId}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200    
    
-    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
-    Log   ${resp.content}
-    Should Be Equal As Strings              ${resp.status_code}   200
-    Set Suite Variable    ${cid}            ${resp.json()['providerConsumer']}
-    Set Suite Variable    ${jconid}         ${resp.json()['id']}
-    Set Suite Variable    ${proconfname}    ${resp.json()['firstName']}    
-    Set Suite Variable    ${proconlname}    ${resp.json()['lastName']} 
-    Set Suite Variable    ${fullname}       ${proconfname}${space}${proconlname}
+    # ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    # Log   ${resp.content}
+    # Should Be Equal As Strings              ${resp.status_code}   200
+    # Set Suite Variable    ${cid}            ${resp.json()['providerConsumer']}
+    # Set Suite Variable    ${jconid}         ${resp.json()['id']}
+    # # Set Suite Variable    ${cid}         ${resp.json()['id']}
+    # Set Suite Variable    ${firstName}    ${resp.json()['firstName']}    
+    # Set Suite Variable    ${lastName}    ${resp.json()['lastName']} 
+    # Set Suite Variable    ${fullname}       ${resp.json()['userName']} 
 
-    
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
+    # ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
+    # Log  ${resp.content}         
+    # Should Be Equal As Strings            ${resp.status_code}    200
 
     ${consumer}=  Create Dictionary  id=${cid} 
     Set Suite Variable    ${consumer} 
 
-     ${resp}=    Create MR Case    ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  
-    Log   ${resp.json()}
+    ${resp}=    Create MR Case    ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  
+    Log  ${resp.content}
     Should Be Equal As Strings              ${resp.status_code}   200
     Set Suite Variable    ${caseId}        ${resp.json()['id']}
     Set Suite Variable    ${caseUId}    ${resp.json()['uid']}
@@ -200,11 +255,11 @@ JD-TC-Create Prescription-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['consumer']['id']}     ${cid} 
-    Should Be Equal As Strings    ${resp.json()['consumer']['firstName']}     ${proconfname} 
-    Should Be Equal As Strings    ${resp.json()['consumer']['lastName']}     ${proconlname} 
+    Should Be Equal As Strings    ${resp.json()['consumer']['firstName']}     ${firstName} 
+    Should Be Equal As Strings    ${resp.json()['consumer']['lastName']}     ${lastName} 
     Should Be Equal As Strings    ${resp.json()['doctor']['id']}     ${pid} 
-    Should Be Equal As Strings    ${resp.json()['doctor']['firstName']}     ${pdrfname} 
-    Should Be Equal As Strings    ${resp.json()['doctor']['lastName']}     ${pdrlname}
+    Should Be Equal As Strings    ${resp.json()['doctor']['firstName']}     ${firstname_E} 
+    Should Be Equal As Strings    ${resp.json()['doctor']['lastName']}     ${lastname_E}
     Should Be Equal As Strings    ${resp.json()['type']['id']}     ${type_id} 
     Should Be Equal As Strings    ${resp.json()['category']['id']}     ${category_id} 
     Should Be Equal As Strings    ${resp.json()['createdDate']}     ${DAY1}
@@ -215,7 +270,7 @@ JD-TC-Create Prescription-1
     ${toothSurfaces}=    Create List   ${toothSurfaces[0]}
 
     ${resp}=    Create DentalRecord    ${toothNo}  ${toothType[0]}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces}
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings              ${resp.status_code}   200
     Set Suite Variable      ${id1}           ${resp.json()}
 
@@ -308,7 +363,7 @@ JD-TC-Create Prescription-2
     [Documentation]    Create Prescription with Empty dentalRecordId.
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
+    Log  ${resp.content}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${EMPTY}    ${html}      ${mrPrescriptions}
@@ -338,7 +393,7 @@ JD-TC-Create Prescription-3
     [Documentation]    upload paper Prescription with Empty html.
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
+    Log  ${resp.content}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}    prescriptionAttachments=${prescriptionAttachments}   
@@ -371,7 +426,7 @@ JD-TC-Create Prescription-4
     [Documentation]    Create Two Prescription with same details.
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
+    Log  ${resp.content}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}       ${mrPrescriptions}
@@ -387,7 +442,7 @@ JD-TC-Create Prescription-5
     [Documentation]    upload paper Prescription with Empty prescriptionNotes.
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
+    Log  ${resp.content}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${note}=  FakerLibrary.Text  max_nb_chars=42 
@@ -426,7 +481,7 @@ JD-TC-Create Prescription-UH1
     [Documentation]    Create Prescription with Empty ProviderConsumer id.
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
+    Log  ${resp.content}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=    Create Prescription    ${EMPTY}    ${pid}    ${caseId}       ${id1}    ${EMPTY}    prescriptionAttachments=${prescriptionAttachments}   
@@ -439,7 +494,7 @@ JD-TC-Create Prescription-UH2
     [Documentation]    Create Prescription with Empty userId.
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
+    Log  ${resp.content}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=    Create Prescription    ${cid}    ${EMPTY}    ${caseId}       ${id1}    ${html}    prescriptionAttachments=${prescriptionAttachments}   
@@ -452,7 +507,7 @@ JD-TC-Create Prescription-UH3
     [Documentation]    Create Prescription with another provider login
 
     ${resp}=  Encrypted Provider Login    ${HLPUSERNAME4}  ${PASSWORD}
-    Log  ${resp.json()}         
+    Log  ${resp.content}         
     Should Be Equal As Strings            ${resp.status_code}    200
    
 
@@ -466,7 +521,7 @@ JD-TC-Create Prescription-UH4
     [Documentation]    Create Two Prescription methods at same time.
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
+    Log  ${resp.content}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}      ${mrPrescriptions}   prescriptionAttachments=${prescriptionAttachments}
@@ -479,7 +534,7 @@ JD-TC-Create Prescription-UH5
     [Documentation]    Create Prescription with Empty caseId.
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
+    Log  ${resp.content}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=    Create Prescription    ${cid}    ${pid}    ${EMPTY}       ${id1}    ${html}     ${mrPrescriptions}
@@ -509,7 +564,7 @@ JD-TC-Create Prescription-UH6
     [Documentation]    Manual Prescription with Empty html.
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
+    Log  ${resp.content}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}     ${mrPrescriptions}   
@@ -522,7 +577,7 @@ JD-TC-Create Prescription-UH7
     [Documentation]    create prescription using usertype as assistant
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
+    Log  ${resp.content}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
 
@@ -558,7 +613,7 @@ JD-TC-Create Prescription-UH7
     ${tlgnum}=  Evaluate  ${PUSERPH0}+336345
 
     ${resp}=  Create User  ${firstname}  ${lastname}     ${countryCodes[0]}  ${PUSERPH0}    ${userType[1]}   dob=${dob}  gender=${Genderlist[0]}  email=${P_Email}${PUSERPH0}.${test_mail}   pincode=${pin}    deptId=${dep_id}  
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
 
@@ -577,7 +632,7 @@ JD-TC-Create Prescription-UH8
     [Documentation]    create precription with empty drive id.
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
+    Log  ${resp.content}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${prescriptionAttachments1}=    Create Dictionary   action=${LoanAction[0]}  owner=${pid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}  
@@ -595,7 +650,7 @@ JD-TC-Create Prescription-UH9
     [Documentation]    create Manual precription with empty medicineName .
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
+    Log  ${resp.content}         
     Should Be Equal As Strings            ${resp.status_code}    200
    
     ${mrPrescriptions}=  Create Dictionary  medicineName=${EMPTY}  frequency=${frequency}  duration=${duration}  instructions=${instrn}  dosage=${dosage}

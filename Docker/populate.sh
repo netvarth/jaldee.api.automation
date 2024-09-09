@@ -227,7 +227,8 @@ clearfiles()
 {
     # for file in "${TDD_CustomLogs_Path%/}/"*; do echo "Clearing file $(basename $file)"; >$file; done
     for file in "${TDD_CustomLogs_Path%/}/"*; do
-        if [ -s $file ]; then
+        # if [ -s $file ]; then
+        if [ "$(basename "$file")" != "aprenumbers.txt" ] && [ -s "$file" ]; then
             echo "Clearing file $(basename $file)"
             >$file
         fi
