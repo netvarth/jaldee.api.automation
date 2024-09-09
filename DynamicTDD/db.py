@@ -135,7 +135,7 @@ def log_request(response):
 
 def verify_accnt(email,purpose,sessionID=''):
     if str(email).isdigit() and str(email).startswith('55'):
-        print ("if:")
+        print ("if: ", email)
         return 55555
     else:
         print ("else:")

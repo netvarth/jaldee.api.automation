@@ -190,6 +190,7 @@ JD-TC-ConsentFormVerifySign-UH1
     ${resp}=    Consent Form Verify Sign  ${fake}  ${consumerId}  ${jpgfile}    ${fileSize}    ${caption1}    ${fileType1}  ${file_action[0]}  ${order}  ${driveId}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings     ${resp.json()}         ${INVALID_UNIQUE_ID}
 
 JD-TC-ConsentFormVerifySign-UH3
 
@@ -202,6 +203,7 @@ JD-TC-ConsentFormVerifySign-UH3
     ${resp}=    Consent Form Verify Sign  ${cf_uid}  ${empty}  ${jpgfile}    ${fileSize}    ${caption1}    ${fileType1}  ${file_action[0]}  ${order}  ${driveId}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    422
+    
 
 JD-TC-ConsentFormVerifySign-UH4
 

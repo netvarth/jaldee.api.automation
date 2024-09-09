@@ -94,11 +94,12 @@ JD-TC-ConsentFormVerifyOtp-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableConsentForm']}     ${bool[1]}
 
-    ${PH_Number}    Random Number 	       digits=5 
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    Log  ${PH_Number}
-    Set Suite Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    # ${PH_Number}    Random Number 	       digits=5 
+    # ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    # Log  ${PH_Number}
+    # Set Suite Variable    ${consumerPhone}  555${PH_Number}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    ${consumerPhone}=  Set Variable  ${CUSERNAME14}
     ${consumerFirstName}=   FakerLibrary.first_name
     Set Suite Variable  ${consumerFirstName}
     ${consumerLastName}=    FakerLibrary.last_name  
