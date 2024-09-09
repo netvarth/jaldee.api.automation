@@ -1225,6 +1225,7 @@ SCHEDULE_ACTIVE_APPT= "This schedule contain a active appointment so you can not
 SCHEDULE_RECURRING_TYPE="Cannot update recurring type to {}"
 SCHEDULE_NOT_AVAILABLE= "Choose a time slot to confirm"
 ONLINE_APPT_NOT_AVAILABLE="Online appointment not available in this location"
+SCHEDULE_PARALLE_CAPACITY_OF_CONSUMER = "Max online bookings per slot can not be greater than the resources available"
 
 	
 SLOT_DURATION_IS_MORE= "Given slot duration is more than the schedule duration"
