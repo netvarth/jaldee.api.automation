@@ -6361,18 +6361,11 @@ Get Appointment Schedule Count
     Check Deprication  ${resp}  Get Appointment Schedule Count
     RETURN  ${resp}    
 
-Enable Future Appointment By Schedule Id
-    [Arguments]   ${schedule_id}
+Enable Disable Future Appointment By Schedule Id
+    [Arguments]   ${schedule_id}   ${status}
     Check And Create YNW Session
-    ${resp}=  PATCH On Session  ynw  /provider/appointment/schedule/futureAppt/true/${schedule_id}   expected_status=any
+    ${resp}=  PATCH On Session  ynw  /provider/appointment/schedule/futureAppt/${status}/${schedule_id}   expected_status=any
     Check Deprication  ${resp}  Enable Future Appointment By Schedule Id
-    RETURN  ${resp}
-
-Disable Future Appointment By Schedule Ids
-    [Arguments]   ${schedule_id}
-    Check And Create YNW Session
-    ${resp}=  PATCH On Session  ynw  /provider/appointment/schedule/futureAppt/false/${schedule_id}   expected_status=any
-    Check Deprication  ${resp}  Disable Future Appointment By Schedule Ids
     RETURN  ${resp}
 
 Enable Disable Today Appointment By Schedule Id
