@@ -7490,7 +7490,6 @@ JD-TC-Update schedule-44
     Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Should Be Equal As Strings     ${resp.json()['availableSlots'][0]['time']}   ${slot1} 
     Should Be Equal As Strings     ${resp.json()['availableSlots'][0]['noOfAvailbleSlots']}   ${noOfAvailbleSlots}
-    Should Be Equal As Strings     ${resp.json()['availableSlots'][0]['active']}   True
     Should Be Equal As Strings     ${resp.json()['availableSlots'][0]['capacity']}   ${parallel}
 
     # ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${pid}

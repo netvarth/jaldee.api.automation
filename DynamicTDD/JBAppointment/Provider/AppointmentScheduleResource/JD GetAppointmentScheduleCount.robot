@@ -251,6 +251,10 @@ JD-TC-Get Appointment Schedule Count-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id}  ${resp.json()['id']} 
 
+    ${resp}=  AddCustomer  ${CUSERNAME38}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
