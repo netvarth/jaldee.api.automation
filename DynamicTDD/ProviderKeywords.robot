@@ -5924,21 +5924,12 @@ Waitlist Status
     Check Deprication  ${resp}  Waitlist Status
     RETURN  ${resp}
 
-Enable Appointment Schedule
-    [Arguments]   ${schId}
+Enable Disable Appointment Schedule
+    [Arguments]   ${schId}  ${chstatus}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/appointment/schedule/${schId}/ENABLED   expected_status=any
+    ${resp}=  PUT On Session  ynw  /provider/appointment/schedule/${schId}/${chstatus}   expected_status=any
     Check Deprication  ${resp}  Enable Appointment Schedule
     RETURN  ${resp}
-
-Disable Appointment Schedule
-    [Arguments]   ${schId}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/appointment/schedule/${schId}/DISABLED   expected_status=any
-    Check Deprication  ${resp}  Disable Appointment Schedule
-    RETURN  ${resp}
-    
-
 
 Get Next Available Appointment Slot
     [Arguments]   ${schId}
