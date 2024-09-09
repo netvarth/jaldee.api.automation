@@ -301,7 +301,7 @@ JD-TC-Get SalesOrder Catalog By Encid-6
     Set Test Variable  ${sa_catlog_id3}  ${resp.json()}
 
 
-    # ${resp}= Get Waitlist Settings
+    # ${resp}=  Get Waitlist Settings
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
     # IF  ${resp.json()['filterByDept']}==${bool[0]}

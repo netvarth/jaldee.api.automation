@@ -341,7 +341,7 @@ Billable
         ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
         # ${domain}=   Set Variable    ${resp.json()['sector']}
         # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
-        ${resp}= Get Waitlist Settings
+        ${resp}=  Get Waitlist Settings
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         IF  ${resp.json()['filterByDept']}==${bool[1]}
@@ -377,7 +377,7 @@ Non Billable
         ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
         # ${domain}=   Set Variable    ${resp.json()['sector']}
         # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
-        ${resp}= Get Waitlist Settings
+        ${resp}=  Get Waitlist Settings
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         IF  ${resp.json()['filterByDept']}==${bool[1]}

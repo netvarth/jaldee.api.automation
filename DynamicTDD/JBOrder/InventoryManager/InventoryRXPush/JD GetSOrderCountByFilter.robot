@@ -84,7 +84,7 @@ JD-TC-GetOrderCountByFilter-1
     Set Suite Variable  ${Docfname}  ${resp.json()['firstName']}
     Set Suite Variable  ${Doclname}  ${resp.json()['lastName']}
      
-    ${resp}= Get Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}

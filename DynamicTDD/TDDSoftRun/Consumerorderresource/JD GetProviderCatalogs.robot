@@ -526,7 +526,7 @@ JD-TC-Get Provider Catalogs-7
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}= Get Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
