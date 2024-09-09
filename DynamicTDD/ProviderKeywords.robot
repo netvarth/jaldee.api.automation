@@ -6375,18 +6375,11 @@ Disable Future Appointment By Schedule Ids
     Check Deprication  ${resp}  Disable Future Appointment By Schedule Ids
     RETURN  ${resp}
 
-Enable Today Appointment By Schedule Id
-    [Arguments]   ${schedule_id}
+Enable Disable Today Appointment By Schedule Id
+    [Arguments]   ${schedule_id}  ${status}
     Check And Create YNW Session
-    ${resp}=  PATCH On Session  ynw  /provider/appointment/schedule/todayAppt/true/${schedule_id}   expected_status=any
-    Check Deprication  ${resp}  Enable Today Appointment By Schedule Id
-    RETURN  ${resp}
-
-Disable Today Appointment By Schedule Id
-    [Arguments]   ${schedule_id}
-    Check And Create YNW Session
-    ${resp}=  PATCH On Session  ynw  /provider/appointment/schedule/todayAppt/false/${schedule_id}   expected_status=any
-    Check Deprication  ${resp}  Disable Today Appointment By Schedule Id
+    ${resp}=  PATCH On Session  ynw  /provider/appointment/schedule/todayAppt/${status}/${schedule_id}   expected_status=any
+    Check Deprication  ${resp}  Enable Disable Today Appointment By Schedule Id
     RETURN  ${resp}
 
 Consumer Mass Communication for Appt
