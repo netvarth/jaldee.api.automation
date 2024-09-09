@@ -34,7 +34,7 @@ JD-TC-UpdateQueue-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${HLPUSERNAME4}
-    clear_location  ${HLPUSERNAME4}
+    # clear_location  ${HLPUSERNAME4}
     clear_queue  ${HLPUSERNAME4}
 
     ${lid}=  Create Sample Location
@@ -150,7 +150,7 @@ JD-TC-UpdateQueue-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${HLPUSERNAME4}
-    clear_location  ${HLPUSERNAME4}
+    # clear_location  ${HLPUSERNAME4}
     clear_queue  ${HLPUSERNAME4}
     
     ${lid1}=  Create Sample Location
@@ -268,7 +268,7 @@ JD-TC-UpdateQueue-UH3
     END
     Set Suite Variable  ${a}
     clear_service   ${PUSERNAME${a}}
-    clear_location  ${PUSERNAME${a}}
+    # clear_location  ${PUSERNAME${a}}
     clear_queue  ${PUSERNAME${a}}
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}
@@ -449,7 +449,7 @@ JD-TC-Update Queue with timeinterval-7
     ${resp}=  Encrypted Provider Login  ${PUSERNAME173}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME173}
-    clear_location  ${PUSERNAME173}
+    # clear_location  ${PUSERNAME173}
     clear_queue  ${PUSERNAME173}
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}
@@ -514,7 +514,7 @@ JD-TC-Update Queue with timeinterval-8
     ${resp}=  Encrypted Provider Login  ${PUSERNAME177}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME177}
-    clear_location  ${PUSERNAME177}
+    # clear_location  ${PUSERNAME177}
     clear_queue  ${PUSERNAME177}
     
     ${lid}=  Create Sample Location
@@ -582,7 +582,7 @@ JD-TC-Update Queue with timeinterval-9
     ${resp}=  Encrypted Provider Login  ${PUSERNAME174}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME174}
-    clear_location  ${PUSERNAME174}
+    # clear_location  ${PUSERNAME174}
     clear_queue  ${PUSERNAME174}
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}
@@ -648,7 +648,7 @@ JD-TC-Update Queue with timeinterval-10
     ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME175}
-    clear_location  ${PUSERNAME175}
+    # clear_location  ${PUSERNAME175}
     clear_queue  ${PUSERNAME175}
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}
@@ -716,7 +716,7 @@ JD-TC-Update Queue with timeinterval-11
     ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME171}
-    clear_location  ${PUSERNAME171}
+    # clear_location  ${PUSERNAME171}
     clear_queue  ${PUSERNAME171}
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}
@@ -784,7 +784,7 @@ JD-TC-Update Queue with timeinterval-12
     ${resp}=  Encrypted Provider Login  ${PUSERNAME181}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME181}
-    clear_location  ${PUSERNAME181}
+    # clear_location  ${PUSERNAME181}
     clear_queue  ${PUSERNAME181}
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}
@@ -850,7 +850,7 @@ JD-TC-Update Queue with timeinterval-13
     ${resp}=  Encrypted Provider Login  ${PUSERNAME189}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME189}
-    clear_location  ${PUSERNAME189}
+    # clear_location  ${PUSERNAME189}
     clear_queue  ${PUSERNAME189}
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}

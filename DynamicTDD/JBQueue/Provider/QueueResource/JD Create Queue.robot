@@ -35,7 +35,7 @@ JD-TC-CreateQueue-1
     Should Be Equal As Strings    ${resp.status_code}    200
 
     clear_service   ${HLPUSERNAME1}
-    clear_location  ${HLPUSERNAME1}
+    # clear_location  ${HLPUSERNAME1}
     clear_queue  ${HLPUSERNAME1}
 
     ${lid}=  Create Sample Location
@@ -475,7 +475,7 @@ JD-TC-CreateQueue-8
     Should Be Equal As Strings  ${resp.status_code}  200
 
     clear_service   ${PUSERNAME_B}
-    clear_location  ${PUSERNAME_B}
+    # clear_location  ${PUSERNAME_B}
     clear_queue  ${PUSERNAME_B}
     
     ${lid1}=  Create Sample Location
@@ -919,7 +919,7 @@ JD-TC-Create Queue with timeinterval-13
     ${resp}=  Encrypted Provider Login  ${PUSERNAME85}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME85}
-    clear_location  ${PUSERNAME85}
+    # clear_location  ${PUSERNAME85}
     clear_queue  ${PUSERNAME85}
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}  
@@ -974,7 +974,7 @@ JD-TC-Create Queue with timeinterval-UH1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME80}
-    clear_location  ${PUSERNAME80}
+    # clear_location  ${PUSERNAME80}
     clear_queue  ${PUSERNAME80}
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}  
@@ -1029,7 +1029,7 @@ JD-TC-Create Queue with timeinterval-UH2
     ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME120}
-    clear_location  ${PUSERNAME120}
+    # clear_location  ${PUSERNAME120}
     clear_queue  ${PUSERNAME120}
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}  
@@ -1068,7 +1068,7 @@ JD-TC-Create Queue with timeinterval-UH3
     ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200  
     clear_service   ${PUSERNAME120}
-    clear_location  ${PUSERNAME120}
+    # clear_location  ${PUSERNAME120}
     clear_queue  ${PUSERNAME120}  
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}  
@@ -1123,7 +1123,7 @@ JD-TC-Create Queue with timeinterval-UH4
     ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200 
     clear_service   ${PUSERNAME120}
-    clear_location  ${PUSERNAME120}
+    # clear_location  ${PUSERNAME120}
     clear_queue  ${PUSERNAME120}   
     ${resp}=  Update Waitlist Settings  ${calc_mode[2]}  0  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}    
     Should Be Equal As Strings  ${resp.status_code}  200

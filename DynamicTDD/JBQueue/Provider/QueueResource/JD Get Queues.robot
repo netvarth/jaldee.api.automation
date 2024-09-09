@@ -27,7 +27,7 @@ JD-TC-Get Queues-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${HLPUSERNAME3}
-    clear_location  ${HLPUSERNAME3}
+    # clear_location  ${HLPUSERNAME3}
     clear_queue  ${HLPUSERNAME3}
     
     ${list}=  Create List  1  2  3  4  5  6  7

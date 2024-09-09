@@ -22,7 +22,7 @@ JD-TC-Enable Disable Queue-1
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service  ${HLPUSERNAME6}
-    clear_location  ${HLPUSERNAME6}
+    # clear_location  ${HLPUSERNAME6}
     clear_queue  ${HLPUSERNAME6}
     ${resp}=  Create Sample Queue
     Set Suite Variable  ${qid}   ${resp['queue_id']}

@@ -13,7 +13,7 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
-Suite Setup     Run Keywords  clear_queue  ${HLPUSERNAME7}  AND  clear_location  ${HLPUSERNAME7}  AND  clear_service  ${HLPUSERNAME7}  
+# Suite Setup     Run Keywords  clear_queue  ${HLPUSERNAME7}  AND  clear_location  ${HLPUSERNAME7}  AND  clear_service  ${HLPUSERNAME7}  
 
 *** Variables ***
 ${SERVICE1}  Makeup  
@@ -28,7 +28,7 @@ JD-TC-Available Queues-1
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${HLPUSERNAME7}
-    clear_location  ${HLPUSERNAME7}
+    # clear_location  ${HLPUSERNAME7}
     clear_queue  ${HLPUSERNAME7}
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -78,7 +78,7 @@ JD-TC-Available Queues-2
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${HLPUSERNAME7}
-    clear_location  ${HLPUSERNAME7}
+    # clear_location  ${HLPUSERNAME7}
     clear_queue  ${HLPUSERNAME7}
     # ${city}=   get_place
     # Set Suite Variable  ${city}
@@ -124,7 +124,7 @@ JD-TC-Available Queues-3
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${HLPUSERNAME7}
-    clear_location  ${HLPUSERNAME7}
+    # clear_location  ${HLPUSERNAME7}
     clear_queue  ${HLPUSERNAME7}
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}

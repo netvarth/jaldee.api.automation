@@ -26,7 +26,7 @@ JD-TC-Get Queue By Id-1
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${HLPUSERNAME2}
-    clear_location  ${HLPUSERNAME2}
+    # clear_location  ${HLPUSERNAME2}
     clear_queue  ${HLPUSERNAME2}
 
     ${lid}=  Create Sample Location
@@ -72,7 +72,7 @@ JD-TC-Get Queue By Id-2
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${HLPUSERNAME2}
-    clear_location  ${HLPUSERNAME2}
+    # clear_location  ${HLPUSERNAME2}
     clear_queue  ${HLPUSERNAME2}
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
