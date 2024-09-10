@@ -78,13 +78,20 @@ JD-TC-EnableDisable Appointment Schedule-1
     # clear_service   ${PUSERNAME${a}}
     # clear_location  ${PUSERNAME${a}}
     clear_service   ${PUSERNAME${a}}
-    clear_location  ${PUSERNAME${a}}
 
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     clear_appt_schedule   ${PUSERNAME${a}}
 
@@ -144,13 +151,20 @@ JD-TC-EnableDisable Appointment Schedule-2
     # clear_service   ${PUSERNAME${a}}
     # clear_location  ${PUSERNAME${a}}
     clear_service   ${PUSERNAME${a}}
-    clear_location  ${PUSERNAME${a}}
 
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     clear_appt_schedule   ${PUSERNAME${a}}
 
@@ -201,13 +215,20 @@ JD-TC-EnableDisable Appointment Schedule-UH1
     # clear_service   ${PUSERNAME${a}}
     # clear_location  ${PUSERNAME${a}}
     clear_service   ${PUSERNAME${a}}
-    clear_location  ${PUSERNAME${a}}
 
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     clear_appt_schedule   ${PUSERNAME${a}}
 
@@ -255,13 +276,20 @@ JD-TC-EnableDisable Appointment Schedule-UH2
     # clear_service   ${PUSERNAME${a}}
     # clear_location  ${PUSERNAME${a}}
     clear_service   ${PUSERNAME${a}}
-    clear_location  ${PUSERNAME${a}}
 
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     clear_appt_schedule   ${PUSERNAME${a}}
 

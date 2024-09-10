@@ -25,15 +25,16 @@ ${SERVICE3}     Radio Repdca222
 
 *** Test Cases ***
 
-JD-TC-GetAppointmenStatusBoardSetById-1
+JD-TC-DeleteAppointmentQueueSet-1
 
-	[Documentation]  Get the appoinment status board by id
-    
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD} 
+
+    [Documentation]   Delete a Appointment QueueSet by provider
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME14}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    clear_service   ${HLPUSERNAME40}
-    clear_location  ${HLPUSERNAME40}
-    clear_Addon  ${HLPUSERNAME40}
+    clear_service   ${HLPUSERNAME14}
+    clear_location  ${HLPUSERNAME14}
+    clear_Addon  ${HLPUSERNAME14}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
     ${lid1}=  Create Sample Location  
@@ -65,8 +66,6 @@ JD-TC-GetAppointmenStatusBoardSetById-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id}  ${resp.json()}
-
-    
     ${Addon_id}=  get_statusboard_addonId
     ${resp}=  Add addon  ${Addon_id}
     Log  ${resp.json()}
@@ -77,68 +76,52 @@ JD-TC-GetAppointmenStatusBoardSetById-1
 
     ${fieldList}=  Create Fieldlist For QueueSet  ${Values[0]}  ${Values[1]}  ${Values[2]}  ${bool[0]}  ${order1}
     Log  ${fieldList}
-    Set Suite Variable   ${fieldList}
-    ${service_list}=  Create list  ${s_id1}
-    Set Suite Variable  ${service_list}  
     ${s_name}=  FakerLibrary.Words  nb=2
     ${s_desc}=  FakerLibrary.Sentence
-    ${serr}=   Create Dictionary  id=${s_id1}
-    ${ser}=  Create List   ${serr} 
-
-    # ${dept1}=   Create Dictionary  departmentId=${depid1}
-    ${dep}=  Create List   
+   
+    ${service_list}=  Create list  ${s_id1}
+    
+    ${ss}=   Create Dictionary  id=${s_id1} 
+    ${ser}=  Create List  ${ss}
+    ${dep}=  Create List
     ${appt_sh}=   Create Dictionary  id=${sch_id}
     ${appt_shd}=    Create List   ${appt_sh}
     ${app_status}=    Create List   ${apptStatus[2]}
-    ${resp}=  Create Appointment QueueSet for Provider   ${s_name[0]}  ${s_name[1]}   ${s_desc}   ${fieldList}    ${ser}     ${EMPTY}   ${EMPTY}    ${appt_shd}    ${app_status}         ${statusboard_type[0]}   ${service_list}
+    ${resp}=  Create Appointment QueueSet for Provider   ${s_name[0]}  ${s_name[1]}   ${s_desc}   ${fieldList}     ${ser}     ${EMPTY}   ${EMPTY}    ${appt_shd}    ${app_status}       ${statusboard_type[0]}   ${service_list}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sba_id1}  ${resp.json()}
 
-    ${Positions}=  FakerLibrary.Words  	nb=3
-    ${matric_list}=  Create Metric For Status Board  ${Positions[0]}  ${sba_id1}  
-    Log  ${matric_list}
-    ${Data}=  FakerLibrary.Words  	nb=3
-    
-    ${resp}=   Create Status Board Appointment    ${Data[0]}  ${Data[1]}  ${Data[2]}  ${matric_list}
+    ${resp}=  Delete AppointmentQueue By id   ${sba_id1}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get AppointmentQueueSet By Id   ${sba_id1} 
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"  "${QUEUE_SET_NOT_EXIST}"
+    ${resp}=  Get AppointmentQueueSet
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${sb_id}  ${resp.json()}
-    ${resp}=  Get Appoinment StatusBoard By Id   ${sb_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['id']}  ${sb_id}
-    Should Be Equal As Strings  ${resp.json()['name']}  ${Data[0]}
-    Should Be Equal As Strings  ${resp.json()['displayName']}  ${Data[1]}
-    Should Be Equal As Strings  ${resp.json()['layout']}  ${Data[2]}
-    Should Be Equal As Strings  ${resp.json()['metric'][0]['sbId']}  ${sba_id1}  
-    Should Be Equal As Strings  ${resp.json()['metric'][0]['position']}  ${Positions[0]} 
-    Should Be Equal As Strings  ${resp.json()['metric'][0]['queueSet']['name']}   ${s_name[0]} 
-    Should Be Equal As Strings  ${resp.json()['metric'][0]['queueSet']['displayName']}   ${s_name[1]}  
-    Should Be Equal As Strings  ${resp.json()['metric'][0]['queueSet']['queueSetFor'][0]['type']}   ${statusboard_type[0]}
-    Should Be Equal As Strings  ${resp.json()['metric'][0]['queueSet']['qBoardConditions']['services'][0]['id']}    ${s_id1}
-    Should Be Equal As Strings  ${resp.json()['metric'][0]['queueSet']['qBoardConditions']['apptSchedule'][0]['id']}    ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['metric'][0]['queueSet']['queryString']}   service-eq=${s_id1}&schedule-eq=${sch_id}&apptStatus-eq=Arrived&label-eq=::
-        
-JD-TC-GetAppointmenStatusBoardSetById-2
+    Should Be Equal As Strings  ${resp.json()}  []
 
-    [Documentation]   Provider get a Appoinment Status Board by id without login  
+JD-TC-DeleteAppointmentQueueSet-UH1
 
-    ${resp}=  Get Appoinment StatusBoard By Id  ${sb_id}
+    [Documentation]   Provider Delete a Appointment QueueSet without login  
+
+    ${resp}=  Delete AppointmentQueue By id  ${sba_id1}
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings   "${resp.json()}"   "${SESSION_EXPIRED}"
- 
-JD-TC-GetStatusBoardById -UH2
 
-    [Documentation]   Consumer get a Status Board
+JD-TC-DeleteAppointmentQueueSet-UH2
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD}
+    [Documentation]   Consumer delete a Appointment QueueSet
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME14}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${pid}=  get_acc_id  ${HLPUSERNAME40}
+    ${pid}=  get_acc_id  ${HLPUSERNAME14}
 
-    ${resp}=  AddCustomer  ${CUSERNAME21}  
+    ${resp}=  AddCustomer  ${CUSERNAME14}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
@@ -146,48 +129,68 @@ JD-TC-GetStatusBoardById -UH2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME21}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME14}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME21}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME14}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME21}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME14}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Get Appoinment StatusBoard By Id  ${sb_id}
+    ${resp}=  Delete AppointmentQueue By id   ${sba_id1}
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}"
 
-JD-TC-GetStatusBoardById-UH3
+JD-TC-DeleteAppointmentQueueSet-UH3
 
-    [Documentation]  Get a Status Board by id which is not exist
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    [Documentation]    Delete a Appoinment QueueSet by id which is not exist
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${invalid_id}=   Random Int   min=-10   max=0
-    ${resp}=  Get Appoinment StatusBoard By Id  ${invalid_id}
+    ${resp}=  Delete AppointmentQueue By id  ${invalid_id}
     Should Be Equal As Strings  ${resp.status_code}  422
     Log  ${resp.json()}
-    Should Be Equal As Strings  "${resp.json()}"  "${STATUS_BOARD_DIMENSION_NOT_EXIST}"
+    Should Be Equal As Strings  "${resp.json()}"  "${QUEUE_SET_NOT_EXIST}"
 
-JD-TC-GetStatusBoardById-UH4
 
-    [Documentation]  Get a Status Board by id of another provider
+JD-TC-DeleteAppointmentQueueSet-UH4
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    [Documentation]  Delete a Appointment QueueSet by id of another provider
+    
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME14}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Get Appoinment StatusBoard By Id  ${sb_id}
+    ${order1}=   Random Int   min=0   max=1
+    ${Values}=  FakerLibrary.Words  	nb=3
+
+    ${fieldList}=  Create Fieldlist For QueueSet  ${Values[0]}  ${Values[1]}  ${Values[2]}  ${bool[0]}  ${order1}
+    Log  ${fieldList}
+    ${s_name}=  FakerLibrary.Words  nb=2
+    ${s_desc}=  FakerLibrary.Sentence
+   
+    ${service_list}=  Create list  ${s_id1}
+    
+    ${ss}=   Create Dictionary  id=${s_id1} 
+    ${ser}=  Create List  ${ss}
+    ${dep}=  Create List
+    ${appt_sh}=   Create Dictionary  id=${sch_id}
+    ${appt_shd}=    Create List   ${appt_sh}
+    ${app_status}=    Create List   ${apptStatus[2]}
+    ${resp}=  Create Appointment QueueSet for Provider   ${s_name[0]}  ${s_name[1]}   ${s_desc}   ${fieldList}    ${ser}     ${EMPTY}   ${EMPTY}    ${appt_shd}    ${app_status}       ${statusboard_type[0]}   ${service_list}
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${sba_id}  ${resp.json()}
+    ${resp}=  Provider Logout
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=   Delete AppointmentQueue By id   ${sba_id1}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"  "${STATUS_BOARD_DIMENSION_NOT_EXIST}" 
-
-
-
-
+    Should Be Equal As Strings  "${resp.json()}"  "${QUEUE_SET_NOT_EXIST}"
