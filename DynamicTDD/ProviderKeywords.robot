@@ -15904,7 +15904,7 @@ Provider with license
         Log  ${decrypted_data}
         ${active_lic_name}=  Set Variable  ${decrypted_data['accountLicenseDetails']['accountLicense']['name']}
         
-        IF  ${active_lic_name.lower()}==${licensename.lower()}
+        IF  '${active_lic_name.lower()}'=='${licensename.lower()}'
             RETURN  ${PUSERNAME${a}}
         END
     END
