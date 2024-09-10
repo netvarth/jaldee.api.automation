@@ -16,69 +16,73 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 
 *** Variables ***
-${SERVICE1}   Bleach
-${SERVICE3}   Makeup
-${SERVICE4}   FacialBody6
-${SERVICE2}   MakeupHair6
+${SERVICE1}   Bleach1
+${SERVICE3}   Makeup1
+${SERVICE4}   FacialBody7
+${SERVICE2}   MakeupHair7
 ${self}       0
 
 *** Test Cases ***
-JD-TC-Waitlist Rating By Consumer-1
-
+JD-TC-Update Rating Consumer-1    
 	[Documentation]    Rating Added By Consumer by login of a consumer
 	
-    clear_queue    ${HLPUSERNAME8}
-    clear_service  ${HLPUSERNAME8}
-    clear_rating    ${HLPUSERNAME8}
-    
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
-    Log   ${resp.json()}
+    clear_queue    ${HLPUSERNAME18}
+    clear_service  ${HLPUSERNAME18}
+    clear_rating    ${HLPUSERNAME18}
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    ${pid}=  get_acc_id  ${HLPUSERNAME18}
+    Set Suite Variable  ${pid}  
     
-    ${pid}=  get_acc_id  ${HLPUSERNAME8}
-    Set Suite Variable  ${pid} 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
+    
     ${resp}=  Get Locations
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid1}  ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']} 
-
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}    
+    
     ${DAY}=  db.get_date_by_timezone  ${tz}  
     Set Suite Variable  ${DAY} 
     ${desc}=  FakerLibrary.word
     ${ser_durtn}=   Random Int  min=2   max=10
     ${total_amount}=   FakerLibrary.pyfloat   left_digits=3   right_digits=2   positive=True
+    
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifyType[1]}  ${EMPTY}  ${total_amount}  ${bool[0]}  ${bool[0]}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sId_1}  ${resp.json()}
-
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
     ${resp}=  Create Service  ${SERVICE2}  ${desc}   ${ser_durtn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifyType[1]}  ${EMPTY}  ${total_amount}  ${bool[0]}  ${bool[0]}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sId_2}  ${resp.json()}
-
+    
     ${resp}=  Create Service  ${SERVICE3}  ${desc}   ${ser_durtn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifyType[1]}  ${EMPTY}  ${total_amount}  ${bool[0]}  ${bool[0]}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sId_3}  ${resp.json()}
-
+    
     ${resp}=  Create Service  ${SERVICE4}  ${desc}   ${ser_durtn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifyType[1]}  ${EMPTY}  ${total_amount}  ${bool[0]}  ${bool[0]}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sId_4}  ${resp.json()}
-
+    
     ${qname}=   FakerLibrary.word
     ${sTime1}=  db.subtract_timezone_time  ${tz}   1  00
     ${eTime1}=   add_timezone_time  ${tz}    5   00
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
-    ${resp}=  Create Queue  ${qname}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}   ${parallel}    ${capacity}    ${lid1}  ${sId_1}  ${sId_2}  ${sId_3}  ${sId_4} 
-    Log   ${resp.json()}
+    
+    ${resp}=  Create Queue  ${qname}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}   ${parallel}   ${capacity}   ${lid1}  ${sId_1}  ${sId_2}  ${sId_3}  ${sId_4} 
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${q1_l1}  ${resp.json()}
-
+    
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
    
@@ -106,110 +110,108 @@ JD-TC-Waitlist Rating By Consumer-1
 
     ${cnote}=  FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${q1_l1}  ${DAY}  ${sId_1}  ${cnote}   ${bool[0]}  ${self}
-    Log   ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
     ${rating1}=  Random Int  min=1   max=5
-    ${comment}=   FakerLibrary.word
-    ${resp}=  Add Rating  ${pid}  ${wid}   ${rating1}   ${comment}
+    ${comment1}=   FakerLibrary.word
+    
+    ${resp}=  Add Rating  ${pid}  ${wid}   ${rating1}   ${comment1}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    
     ${resp}=  Get consumer Waitlist By Id  ${wid}  ${pid}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['ynwUuid']}  ${wid}  
     Should Be Equal As Strings  ${resp.json()['rating']['stars']}  ${rating1}
-    Should Be Equal As Strings  ${resp.json()['rating']['feedback'][0]['comments']}  ${comment}
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${q1_l1}  ${DAY}  ${sId_2}  ${cnote}  ${bool[0]}  ${self}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    Should Be Equal As Strings  ${resp.json()['rating']['feedback'][0]['comments']}  ${comment1}
     
-    ${wid}=  Get Dictionary Values  ${resp.json()}
-    Set Suite Variable  ${wid}  ${wid[0]}
     ${rating2}=  Random Int  min=1   max=5
-    ${comment}=   FakerLibrary.word
-    ${resp}=  Add Rating  ${pid}  ${wid}  ${rating2}  ${comment}
+    ${comment2}=   FakerLibrary.word
+    ${resp}=  Update Rating Waitlist  ${pid}  ${wid}  ${rating2}  ${comment2}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    
     ${resp}=  Get consumer Waitlist By Id  ${wid}  ${pid}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['ynwUuid']}  ${wid}  
     Should Be Equal As Strings  ${resp.json()['rating']['stars']}  ${rating2}
-    Should Be Equal As Strings  ${resp.json()['rating']['feedback'][0]['comments']}  ${comment}    
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${q1_l1}  ${DAY}  ${sId_3}  ${cnote}  ${bool[0]}  ${self}
-    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.json()['rating']['feedback'][0]['comments']}  ${comment1}
+    Should Be Equal As Strings  ${resp.json()['rating']['feedback'][1]['comments']}  ${comment2}    
+
+    ${resp}=  Add To Waitlist Consumers  ${pid}  ${q1_l1}  ${DAY}  ${sId_2}  ${cnote}  ${bool[0]}  ${self}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
     ${rating3}=  Random Int  min=1   max=5
-    ${comment}=   FakerLibrary.word
-    ${resp}=  Add Rating  ${pid}  ${wid}  ${rating3}  ${comment}
+    ${comment3}=   FakerLibrary.word
+    
+    ${resp}=  Add Rating  ${pid}  ${wid}  ${rating3}  ${comment3}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    
     ${resp}=  Get consumer Waitlist By Id  ${wid}  ${pid}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['ynwUuid']}  ${wid}  
     Should Be Equal As Strings  ${resp.json()['rating']['stars']}  ${rating3}
-    Should Be Equal As Strings  ${resp.json()['rating']['feedback'][0]['comments']}  ${comment}   
-    ${rating}=   Evaluate   ${rating1}.0 + ${rating2}.0 + ${rating3}.0
-    ${avg_rating}=   Evaluate   ${rating}/3.0
+    Should Be Equal As Strings  ${resp.json()['rating']['feedback'][0]['comments']}  ${comment3}
+    
+    ${rating4}=  Random Int  min=1   max=5
+    ${comment4}=   FakerLibrary.word
+    
+    ${resp}=  Update Rating Waitlist  ${pid}  ${wid}  ${rating4}  ${comment4}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  Get consumer Waitlist By Id  ${wid}  ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['ynwUuid']}  ${wid}  
+    Should Be Equal As Strings  ${resp.json()['rating']['stars']}  ${rating4}
+    Should Be Equal As Strings  ${resp.json()['rating']['feedback'][0]['comments']}  ${comment3}
+    Should Be Equal As Strings  ${resp.json()['rating']['feedback'][1]['comments']}  ${comment4}
+    
+    ${rating}=   Evaluate   ${rating2}.0 + ${rating4}.0 
+    ${avg_rating}=   Evaluate   ${rating}/2.0
     ${avg_round}=     roundoff    ${avg_rating}   2
     Set Suite Variable   ${avg_round}   
 
-JD-TC-Rating Added By Consumer-UH1
-	[Documentation]   Rating Added By Consumer without login  
-
-	${rating}=  Random Int  min=1   max=5
+JD-TC-Update Rating Consumer -UH1
+    [Documentation]  without login and try for rating
+    
+    ${rating}=  Random Int  min=1   max=5
     ${comment}=   FakerLibrary.word
-    ${resp}=  Add Rating  ${pid}  ${wid}  ${rating}   ${comment}
+    ${resp}=   Update Rating  ${wid}   ${rating}  ${comment}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}"
-       
-JD-TC-Rating Added By Consumer-UH2
-	[Documentation]   Rating Added By Consumer by another provider's account id
-	
+    
+JD-TC-Update Rating Consumer -UH2
+    [Documentation]  comsumer try for rating providers url
+    
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME13}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${cnote}=  FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${q1_l1}  ${DAY}  ${sId_4}  ${cnote}  ${bool[0]}  ${self}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${wid}=  Get Dictionary Values  ${resp.json()}
-    Set Suite Variable  ${wid}  ${wid[0]}
-
-    ${pid}=  get_acc_id  ${PUSERNAME2}
-
+    
     ${rating}=  Random Int  min=1   max=5
     ${comment}=   FakerLibrary.word
+    ${resp}=   Update Rating  ${wid}   ${rating}  ${comment}
+    Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings  "${resp.json()}"    "${LOGIN_NO_ACCESS_FOR_URL}"      
 
-    ${resp}=  Add Rating  ${pid}  ${wid}  ${rating}  ${comment}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  404
-    Should Be Equal As Strings  "${resp.json()}"  "${INVALID_WAITLIST}"
-
-# JD-TC-Rating Added By Consumer-UH3
-
-# 	[Documentation]   Rating Added By Consumer by another provider's account id
-	
-#     ${resp}=  Consumer Login  ${CUSERNAME1}  ${PASSWORD}
-#     Should Be Equal As Strings  ${resp.status_code}  200 
-
-#     ${pid}=  get_acc_id  ${HLPUSERNAME8}
-#     ${rating}=  Random Int  min=1   max=5
-#     ${comment}=   FakerLibrary.word     
-
-#     ${resp}=  Add Rating  ${pid}  ${wid}  ${rating}  ${comment}
-#     Should Be Equal As Strings  ${resp.status_code}  401  
-#     Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION}"
-
-    # sleep  2s      
-JD-TC-Verify Waitlist Rating By Consumer-1
+    # sleep  2s
+JD-TC-Verify Update Rating Consumer-1    
 	[Documentation]    Verify Rating Added By Consumer by login of a consumer
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
+    comment  value is corretly updating in db
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['avgRating']}  ${avg_round}   
+    Should Be Equal As Strings  ${resp.json()['avgRating']}  ${avg_round}    

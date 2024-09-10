@@ -32,18 +32,18 @@ ${maxQueue}   30
 
 *** Test Cases ***
 
-JD-TC-GetQueueAvaliability-1
+JD-TC-GETQueueAvailabilityByLocation,ServiceAndDate-1
 
-    [Documentation]    Get Queue Avaliability - difference between start and end date is 90 ( the max number of queue is 30 )
+    [Documentation]    Get Queue Avaliability
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=    get_acc_id       ${HLPUSERNAME11}
+    ${accountId}=    get_acc_id       ${HLPUSERNAME12}
     Set Suite Variable  ${accountId}
-    clear_service   ${HLPUSERNAME11}
-    # clear_location  ${HLPUSERNAME11}
-    clear_queue  ${HLPUSERNAME11}
+    clear_service   ${HLPUSERNAME12}
+    # clear_location  ${HLPUSERNAME12}
+    clear_queue  ${HLPUSERNAME12}
 
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -84,10 +84,11 @@ JD-TC-GetQueueAvaliability-1
     ${DAY22}=  db.add_timezone_date  ${tz}  20       
     Set Suite Variable  ${DAY22}
     ${sTime11}=  add_timezone_time  ${tz}  0  35 
-    Set Suite Variable   ${sTime1}
+    Set Suite Variable   ${sTime11}
     ${eTime11}=  add_timezone_time  ${tz}  0  50  
-    Set Suite Variable   ${eTime1}
+    Set Suite Variable   ${eTime11}
     ${queue_name2}=  FakerLibrary.bs
+    Set Suite Variable      ${queue_name2}
     ${resp}=  Create Queue  ${queue_name2}  ${recurringtype[1]}  ${list}  ${DAY11}  ${DAY22}  ${EMPTY}  ${sTime11}  ${eTime11}  1  5  ${lid2}  ${s_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -123,51 +124,72 @@ JD-TC-GetQueueAvaliability-1
     Should Be Equal As Strings  ${resp.json()['queueState']}  ${Qstate[0]}
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id1}
 
-    ${resp}=    GET Queue Availability By Location AND Service  ${lid}  ${s_id}
+    ${Date}=  db.add_timezone_date  ${tz}  15      
+    Set Suite Variable  ${Date}
+
+    ${resp}=    GET Queue Availability By Location, Service and Date  ${lid}  ${s_id}  ${Date} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${count}=   Get Length  ${resp.json()}
-    Should Be Equal As Strings      ${count}     ${maxQueue}
+    Should Be Equal As Strings  ${resp.json()[0]['name']}   ${queue_name} 
+    Should Be Equal As Strings  ${resp.json()[0]['queueSchedule']['terminator']['endDate']}   ${DAY2} 
+    Should Be Equal As Strings  ${resp.json()[0]['queueSchedule']['timeSlots'][0]['sTime']}   ${sTime1} 
+    Should Be Equal As Strings  ${resp.json()[0]['queueSchedule']['timeSlots'][0]['eTime']}   ${eTime1}  
+    Should Be Equal As Strings  ${resp.json()[0]['queueSchedule']['startDate']}   ${DAY1} 
 
+    
 
-JD-TC-GetQueueAvaliability-2
+JD-TC-GETQueueAvailabilityByLocation,ServiceAndDate-2
 
-    [Documentation]    Get Queue Avaliability - difference between start and end date is 10
+    [Documentation]    Get Queue Avaliability - second queue
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    GET Queue Availability By Location AND Service  ${lid2}  ${s_id1}
+    ${Date}=  db.add_timezone_date  ${tz}  15      
+    Set Suite Variable  ${Date}
+
+    ${resp}=    GET Queue Availability By Location, Service and Date  ${lid2}  ${s_id1}    ${Date}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['name']}   ${queue_name2} 
+    Should Be Equal As Strings  ${resp.json()[0]['queueSchedule']['terminator']['endDate']}   ${DAY22} 
+    Should Be Equal As Strings  ${resp.json()[0]['queueSchedule']['timeSlots'][0]['sTime']}   ${sTime11} 
+    Should Be Equal As Strings  ${resp.json()[0]['queueSchedule']['timeSlots'][0]['eTime']}   ${eTime11}  
+    Should Be Equal As Strings  ${resp.json()[0]['queueSchedule']['startDate']}   ${DAY11} 
 
-JD-TC-GetQueueAvaliability-3
+JD-TC-GETQueueAvailabilityByLocation,ServiceAndDate-3
 
     [Documentation]    Get Queue Avaliability - where location id and service is different queues
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    GET Queue Availability By Location AND Service  ${lid}  ${s_id1}
+    ${Date}=  db.add_timezone_date  ${tz}  15      
+    Set Suite Variable  ${Date}
+
+    ${resp}=    GET Queue Availability By Location, Service and Date  ${lid}  ${s_id1}  ${Date}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Empty  ${resp.json()}
 
-JD-TC-GetQueueAvaliability-4
+JD-TC-GETQueueAvailabilityByLocation,ServiceAndDate-4
 
     [Documentation]    Get Queue Avaliability - where queue is disabled
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Enable Disable Queue  ${qid}   ${toggleButton[1]} 
+    ${resp}=  Enable Disable Queue  ${qid}   ${toggleButton[1]} 
     Log     ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    GET Queue Availability By Location AND Service  ${lid}  ${s_id}
+    ${Date}=  db.add_timezone_date  ${tz}  15      
+    Set Suite Variable  ${Date}
+
+    ${resp}=    GET Queue Availability By Location, Service and Date  ${lid}  ${s_id}  ${Date}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Empty  ${resp.json()}
@@ -176,41 +198,47 @@ JD-TC-GetQueueAvaliability-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-GetQueueAvaliability-UH1
+JD-TC-GETQueueAvailabilityByLocation,ServiceAndDate-UH1
 
     [Documentation]    Get Queue Avaliability - where location id is invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${inv}=     FakerLibrary.Random Int     
 
-    ${resp}=    GET Queue Availability By Location AND Service  ${inv}  ${s_id}
+    ${Date}=  db.add_timezone_date  ${tz}  15      
+    Set Suite Variable  ${Date}
+
+    ${resp}=    GET Queue Availability By Location, Service and Date  ${inv}  ${s_id}  ${Date}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  404
     Should Be Equal As Strings  ${resp.json()}  ${LOCATION_NOT_FOUND}
 
-JD-TC-GetQueueAvaliability-UH2
+JD-TC-GETQueueAvailabilityByLocation,ServiceAndDate-UH2
 
     [Documentation]    Get Queue Avaliability - where service id is invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${inv}=     FakerLibrary.Random Int     
 
-    ${resp}=    GET Queue Availability By Location AND Service  ${lid}  ${inv}
+    ${Date}=  db.add_timezone_date  ${tz}  15      
+    Set Suite Variable  ${Date}
+
+    ${resp}=    GET Queue Availability By Location, Service and Date  ${lid}  ${inv}  ${Date}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  404
     Should Be Equal As Strings  ${resp.json()}  ${INVALID_SERVICE}
 
-JD-TC-GetQueueAvaliability-UH3
+JD-TC-GETQueueAvailabilityByLocation,ServiceAndDate-UH3
 
     [Documentation]    Get Queue Avaliability - where location is disabled
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
  
@@ -218,7 +246,10 @@ JD-TC-GetQueueAvaliability-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    GET Queue Availability By Location AND Service  ${lid2}  ${s_id1}
+    ${Date}=  db.add_timezone_date  ${tz}  15      
+    Set Suite Variable  ${Date}
+
+    ${resp}=    GET Queue Availability By Location, Service and Date  ${lid2}  ${s_id1}  ${Date}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${LOCATION_DISABLED}
@@ -228,11 +259,11 @@ JD-TC-GetQueueAvaliability-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-JD-TC-GetQueueAvaliability-UH4
+JD-TC-GETQueueAvailabilityByLocation,ServiceAndDate-UH4
 
     [Documentation]    Get Queue Avaliability - where service is disabled
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
  
@@ -240,7 +271,10 @@ JD-TC-GetQueueAvaliability-UH4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    GET Queue Availability By Location AND Service  ${lid2}  ${s_id1}
+    ${Date}=  db.add_timezone_date  ${tz}  15      
+    Set Suite Variable  ${Date}
+
+    ${resp}=    GET Queue Availability By Location, Service and Date  ${lid2}  ${s_id1}  ${Date}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${INVALID_SERVICE}
@@ -249,19 +283,21 @@ JD-TC-GetQueueAvaliability-UH4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
-JD-TC-GetQueueAvaliability-UH5
+JD-TC-GETQueueAvailabilityByLocation,ServiceAndDate-UH5
 
     [Documentation]    Get Queue Avaliability - without login
 
-    ${resp}=    GET Queue Availability By Location AND Service  ${lid2}  ${s_id1}
+    ${Date}=  db.add_timezone_date  ${tz}  15      
+    Set Suite Variable  ${Date}
+
+    ${resp}=    GET Queue Availability By Location, Service and Date  ${lid2}  ${s_id1}  ${Date}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  ${resp.json()}  ${SESSION_EXPIRED}
 
-JD-TC-GetQueueAvaliability-UH6
+JD-TC-GETQueueAvailabilityByLocation,ServiceAndDate-UH6
 
-    [Documentation]    Get Queue Avaliability - with Provider consumer login
+    [Documentation]    Get Queue Avaliability - with consumer login
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log  ${resp.json()}
@@ -299,13 +335,16 @@ JD-TC-GetQueueAvaliability-UH6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    GET Queue Availability By Location AND Service  ${lid2}  ${s_id1}
+    ${Date}=  db.add_timezone_date  ${tz}  15      
+    Set Suite Variable  ${Date}
+
+    ${resp}=    GET Queue Availability By Location, Service and Date  ${lid2}  ${s_id1}  ${Date}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  ${resp.json()}  ${NoAccess}
 
 
-JD-TC-GetQueueAvaliability-UH7
+JD-TC-GETQueueAvailabilityByLocation,ServiceAndDate-UH7
 
     [Documentation]    Get Queue Avaliability - with another provider login
 
@@ -313,7 +352,26 @@ JD-TC-GetQueueAvaliability-UH7
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    GET Queue Availability By Location AND Service  ${lid2}  ${s_id1}
+    ${Date}=  db.add_timezone_date  ${tz}  15      
+    Set Suite Variable  ${Date}
+
+    ${resp}=    GET Queue Availability By Location, Service and Date  ${lid2}  ${s_id1}  ${Date}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  404
     Should Be Equal As Strings  ${resp.json()}  ${LOCATION_NOT_FOUND}
+
+JD-TC-GETQueueAvailabilityByLocation,ServiceAndDate-UH8
+
+    [Documentation]    Get Queue Avaliability - where date is past date
+
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${Date}=  db.add_timezone_date  ${tz}  -15      
+    Set Suite Variable  ${Date}
+
+    ${resp}=    GET Queue Availability By Location, Service and Date  ${lid}  ${s_id}  ${Date}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Empty  ${resp.json()}
