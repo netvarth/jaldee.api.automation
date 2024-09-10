@@ -4,6 +4,7 @@ Library           String
 Library           OperatingSystem
 Library           json
 Library           DateTime
+Library           random
 Library           db.py
 Resource          Keywords.robot
 Library	          Imageupload.py
@@ -251,6 +252,177 @@ Get Account Settings
     ${resp}=  GET On Session  ynw  /provider/account/settings  expected_status=any
     Check Deprication  ${resp}  Get Account Settings
     RETURN  ${resp}
+
+Select Random Specializations
+    [Arguments]    ${resp}
+    ${spec_len}=  Get Length  ${resp.json()}
+    IF   ${spec_len} > 1
+        ${no_of_specs}=   Random Int   min=0   max=${spec_len}
+        # ${specs}=  random.choices  ${resp.json()}  k=${no_of_specs}
+        ${test}=   random.sample  ${resp.json()}  ${no_of_specs}
+        ${specs_json}=  Evaluate    random.sample(${resp.json()}, ${no_of_specs})    random
+        ${specs}=  Create List
+        FOR    ${spec_dict}    IN    @{specs_json}
+            Append To List    ${specs}    ${spec_dict['displayName']}
+        END
+        Log  ${specs}
+    ELSE
+        ${specs}=  Create List   ${resp.json()[0]['displayName']}
+    END
+
+    RETURN  ${specs}
+
+Select Random Domain and Subdomain
+    ${domresp}=  Get BusinessDomainsConf
+    Log   ${domresp.content}
+    Should Be Equal As Strings  ${domresp.status_code}  200
+    ${dlen}=  Get Length  ${domresp.json()}
+    ${d1}=  Random Int   min=0  max=${dlen-1}
+    Set Test Variable  ${Domain}  ${domresp.json()[${d1}]['domain']}
+    ${sdlen}=  Get Length  ${domresp.json()[${d1}]['subDomains']}
+    ${sdom}=  Random Int   min=0  max=${sdlen-1}
+    Set Test Variable  ${SubDomain}  ${domresp.json()[${d1}]['subDomains'][${sdom}]['subDomain']}
+    RETURN  ${Domain}  ${SubDomain}
+
+Select Random License
+    ${licresp}=   Get Licensable Packages
+    Log  ${licresp.content}
+    Should Be Equal As Strings  ${licresp.status_code}  200
+    ${liclen}=  Get Length  ${licresp.json()}
+    ${lic_index}=  random.randint  ${0}  ${liclen-1}
+    Set Test Variable  ${licid}  ${licresp.json()[${lic_index}]['pkgId']}
+    Set Test Variable  ${licname}  ${licresp.json()[${lic_index}]['displayName']}
+    RETURN  ${licid}  ${licname}
+
+Select Domain Subdomain
+    [Arguments]   ${Domain}=${EMPTY}  ${SubDomain}=${EMPTY}
+    IF  '''${Domain}''' == '''${EMPTY}'''
+        ${domresp}=  Get BusinessDomainsConf
+        Log   ${domresp.content}
+        Should Be Equal As Strings  ${domresp.status_code}  200
+        ${dlen}=  Get Length  ${domresp.json()}
+        IF  '''${SubDomain}''' == '''${EMPTY}'''
+            ${Domain}  ${SubDomain}=  Select Random Domain and Subdomain
+        ELSE
+            FOR  ${domindex}  IN RANGE  ${dlen}
+                ${sdom_len}=  Get Length  ${domresp.json()[${domindex}]['subDomains']}
+                FOR  ${subindex}  IN RANGE  ${sdom_len}
+                    Set Test Variable  ${subdom}  ${domresp.json()[${domindex}]['subDomains'][${subindex}]['subDomain']}
+                    Exit For Loop If  "${subdom}" == "${SubDomain}"
+                END
+                IF  "${subdom}" == "${SubDomain}"
+                    Set Test Variable  ${Domain}  ${domresp.json()[${domindex}]['domain']}
+                    Exit For Loop
+                END
+            END
+        END
+    ELSE
+        ${domresp}=  Get BusinessDomainsConf
+        Log   ${domresp.content}
+        Should Be Equal As Strings  ${domresp.status_code}  200
+        ${dlen}=  Get Length  ${domresp.json()}
+        IF  '''${SubDomain}''' == '''${EMPTY}'''
+            FOR  ${domindex}  IN RANGE  ${dlen}
+                Set Test Variable  ${dom}  ${domresp.json()[${domindex}]['domain']}
+                IF  "${dom}" == "${Domain}"
+                    ${sdom_len}=  Get Length  ${domresp.json()[${domindex}]['subDomains']}
+                    ${sdomindex}=  random.randint  ${0}  ${sdom_len-1}
+                    Set Test Variable  ${SubDomain}  ${domresp.json()[${domindex}]['subDomains'][${sdomindex}]['subDomain']}
+                    Exit For Loop
+                END
+            END
+        END
+    END
+    RETURN  ${Domain}  ${SubDomain}
+
+Provider Signup
+    [Arguments]  ${PhoneNumber}=${EMPTY}  ${LicenseId}=${EMPTY}  ${Domain}=${EMPTY}  ${SubDomain}=${EMPTY}  ${LoginId}=${EMPTY}   &{kwargs}
+    IF  '''${PhoneNumber}''' == '''${EMPTY}'''
+        IF  "${ENVIRONMENT}" == "local"
+            ${PO_Number}=  FakerLibrary.Numerify  %#####
+            ${PhoneNumber}=  Evaluate  ${PUSERNAME}+${PO_Number}
+        ELSE
+            ${PhoneNumber}=    Generate Random 555 Number
+        END
+    END
+
+    IF  '''${LicenseId}''' == '''${EMPTY}'''
+        ${LicenseId}  ${licname}=  get_highest_license_pkg
+    END
+
+    ${Domain}  ${SubDomain}=  Select Domain Subdomain  ${Domain}  ${SubDomain}
+
+    IF  '''${LoginId}''' == '''${EMPTY}'''
+        Set Test Variable  ${LoginId}  ${PhoneNumber}
+    END
+
+    ${firstname}=  FakerLibrary.first_name
+    ${lastname}=  FakerLibrary.last_name
+    ${address}=  FakerLibrary.address
+    ${dob}=  FakerLibrary.Date
+    ${gender}    Random Element    ['Male', 'Female']
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${Domain}  ${SubDomain}  ${PhoneNumber}  ${LicenseId}
+    Should Be Equal As Strings    ${resp.status_code}    202
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+    ${resp}=  Account Activation   ${PhoneNumber}  0  JSESSIONYNW=${jsessionynw_value}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Account Set Credential   ${PhoneNumber}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${LoginId}  JSESSIONYNW=${jsessionynw_value}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login   ${LoginId}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+
+    Set Test Variable  ${email_id}  ${P_Email}${PhoneNumber}.${test_mail}
+    ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${bs}=  FakerLibrary.company
+    ${companySuffix}=  FakerLibrary.companySuffix
+    ${parking}   Random Element   ${parkingType}
+    ${24hours}    Random Element    ['True','False']
+    ${desc}=   FakerLibrary.sentence
+    ${url}=   FakerLibrary.url
+    ${name3}=  FakerLibrary.word
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Test Variable  ${tz}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${description}=  FakerLibrary.sentence
+
+    ${b_loc}=  Create Dictionary  place=${city}   longitude=${longi}   lattitude=${latti}    googleMapUrl=${url}   pinCode=${postcode}  address=${address}  parkingType=${parking}  open24hours=${24hours}
+    ${resp}=  Update Business Profile with kwargs   businessName=${bs}   businessUserName=${firstname}${SPACE}${lastname}   businessDesc=Description:${SPACE}${description}  shortName=${companySuffix}  baseLocation=${b_loc} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${fields}=   Get subDomain level Fields  ${domain}  ${subdomain}
+    Log  ${fields.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+
+    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${subdomain}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get specializations Sub Domain  ${domain}  ${subdomain}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${spec}=  Select Random Specializations   ${resp}
+
+    ${resp}=  Update Business Profile with kwargs  specialization=${spec}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    RETURN  ${firstname}  ${lastname}  ${PhoneNumber}  ${LoginId}
+
+
+
 
     
 ######### BASICS #########
