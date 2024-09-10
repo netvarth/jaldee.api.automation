@@ -93,30 +93,37 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 *** Test Cases ***
 Example Test Case
     
-    ${Domain}  ${SubDomain}=  Select Domain Subdomain
+    # ${Domain}  ${SubDomain}=  Select Domain Subdomain
 
-    ${Domain}  ${SubDomain}=  Select Random Domain and Subdomain
-    ${Domain}  ${SubDomain}=  Select Domain Subdomain  Domain=${Domain}
+    # ${Domain}  ${SubDomain}=  Select Random Domain and Subdomain
+    # ${Domain}  ${SubDomain}=  Select Domain Subdomain  Domain=${Domain}
 
-    ${Domain}  ${SubDomain}=  Select Random Domain and Subdomain
-    ${Domain}  ${SubDomain}=  Select Domain Subdomain  SubDomain=${SubDomain}
+    # ${Domain}  ${SubDomain}=  Select Random Domain and Subdomain
+    # ${Domain}  ${SubDomain}=  Select Domain Subdomain  SubDomain=${SubDomain}
 
     
-    ${provider1}=    Provider Signup
+    # ${provider1}=    Provider Signup
+
+    # ${PO_Number}=  FakerLibrary.Numerify  %#####
+    # ${PhoneNumber}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    # ${provider2}=    Provider Signup  PhoneNumber=${PhoneNumber}
+
+    # ${Domain}  ${SubDomain}=  Select Random Domain and Subdomain
+    # ${provider3}=    Provider Signup  Domain=${Domain}  SubDomain=${SubDomain}  
+
+    # ${licid}  ${licname}=  Select Random License
+    # ${provider4}=    Provider Signup  LicenseId=${licid}
+
+    # # FakerLibrary.user_name
+    # ${LoginID}=    FakerLibrary.user_name
+    # ${provider4}=    Provider Signup  LoginId=${LoginID}
 
     ${PO_Number}=  FakerLibrary.Numerify  %#####
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    ${provider2}=    Provider Signup  PhoneNumber=${PhoneNumber}
-
     ${Domain}  ${SubDomain}=  Select Random Domain and Subdomain
-    ${provider3}=    Provider Signup  Domain=${Domain}  SubDomain=${SubDomain}  
-
     ${licid}  ${licname}=  Select Random License
-    ${provider4}=    Provider Signup  LicenseId=${licid}
-
-    FakerLibrary.user_name
     ${LoginID}=    FakerLibrary.user_name
-    ${provider4}=    Provider Signup  LoginId=${LoginID}
+    ${provider5}=    Provider Signup  PhoneNumber=${PhoneNumber}  LicenseId=${licid}  Domain=${Domain}  SubDomain=${SubDomain}  LoginId=${LoginID}
     
 
     
