@@ -377,6 +377,7 @@ Provider Signup
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PhoneNumber}${\n}
 
     Set Test Variable  ${email_id}  ${P_Email}${PhoneNumber}.${test_mail}
     ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
@@ -421,6 +422,54 @@ Provider Signup
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    RETURN  ${firstname}  ${lastname}  ${PhoneNumber}  ${LoginId}
+
+
+Provider Signup without Profile
+    [Arguments]  ${PhoneNumber}=${EMPTY}  ${LicenseId}=${EMPTY}  ${Domain}=${EMPTY}  ${SubDomain}=${EMPTY}  ${LoginId}=${EMPTY}   &{kwargs}
+    IF  '''${PhoneNumber}''' == '''${EMPTY}'''
+        IF  "${ENVIRONMENT}" == "local"
+            ${PO_Number}=  FakerLibrary.Numerify  %#####
+            ${PhoneNumber}=  Evaluate  ${PUSERNAME}+${PO_Number}
+        ELSE
+            ${PhoneNumber}=    Generate Random 555 Number
+        END
+    END
+
+    IF  '''${LicenseId}''' == '''${EMPTY}'''
+        ${LicenseId}  ${licname}=  get_highest_license_pkg
+    END
+
+    ${Domain}  ${SubDomain}=  Select Domain Subdomain  ${Domain}  ${SubDomain}
+
+    IF  '''${LoginId}''' == '''${EMPTY}'''
+        Set Test Variable  ${LoginId}  ${PhoneNumber}
+    END
+
+    ${firstname}=  FakerLibrary.first_name
+    ${lastname}=  FakerLibrary.last_name
+    ${address}=  FakerLibrary.address
+    ${dob}=  FakerLibrary.Date
+    ${gender}    Random Element    ['Male', 'Female']
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${Domain}  ${SubDomain}  ${PhoneNumber}  ${LicenseId}
+    Should Be Equal As Strings    ${resp.status_code}    202
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+    ${resp}=  Account Activation   ${PhoneNumber}  0  JSESSIONYNW=${jsessionynw_value}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Account Set Credential   ${PhoneNumber}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${LoginId}  JSESSIONYNW=${jsessionynw_value}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login   ${LoginId}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PhoneNumber}${\n}
+
+    Set Test Variable  ${email_id}  ${P_Email}${PhoneNumber}.${test_mail}
+    ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     RETURN  ${firstname}  ${lastname}  ${PhoneNumber}  ${LoginId}
 
