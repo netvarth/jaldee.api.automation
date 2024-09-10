@@ -180,7 +180,7 @@ JD-TC-CreateStatusBoardAppoinment -UH2
 
     ${pid}=  get_acc_id  ${HLPUSERNAME45}
 
-    ${resp}=  AddCustomer  ${CUSERNAME22}  
+    ${resp}=  AddCustomer  ${CUSERNAME17}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
@@ -188,16 +188,18 @@ JD-TC-CreateStatusBoardAppoinment -UH2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME22}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME17}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME22}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME17}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME22}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME17}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -267,7 +269,7 @@ JD-TC-CreateStatusBoardAppoinment-UH4
 
 JD-TC-CreateStatusBoardAppoinment-UH6
 
-    ${required_lic}    Random Element    ['Basic' , 'Premium' , 'Team' , 'Enterprise']
+    ${required_lic}    Random Element     ['Basic','Premium','Team','Enterprise','jaldee_lite']
 
     ${PUSERNAMEA}=  Provider with license  ${required_lic}
     
@@ -356,7 +358,7 @@ JD-TC-CreateStatusBoardAppoinment-UH7
 
     [Documentation]    Create a StatusBoard with empty status board layout
     
-    ${required_lic}    Random Element    ['Basic' , 'Premium' , 'Team' , 'Enterprise']
+    ${required_lic}    Random Element    ['Basic','Premium','Team','Enterprise','jaldee_lite']
 
     ${PUSERNAMEA}=  Provider with license  ${required_lic}
     
@@ -435,9 +437,10 @@ JD-TC-CreateStatusBoardAppoinment-UH7
     Should Be Equal As Strings  "${resp.json()}"  "${STATUS_BOARD_LAYOUT_NOT_EMPTY}"
 
 JD-TC-CreateStatusBoardAppoinment-UH8
+
     [Documentation]  Create a StatusBoard with empty status board display name
     
-    ${required_lic}    Random Element    ['Basic' , 'Premium' , 'Team' , 'Enterprise']
+    ${required_lic}    Random Element    ['Basic','Premium','Team','Enterprise','jaldee_lite']
 
     ${PUSERNAMEA}=  Provider with license  ${required_lic}
     
