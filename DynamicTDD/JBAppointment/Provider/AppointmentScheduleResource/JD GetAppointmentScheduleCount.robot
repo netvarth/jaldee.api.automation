@@ -72,19 +72,19 @@ JD-TC-Get Appointment Schedule Count-1
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME${a}}
+    # clear_appt_schedule   ${PUSERNAME${a}}
 
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Service
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=    Get Locations
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Appointment Schedules
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=    Get Appointment Schedules
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}

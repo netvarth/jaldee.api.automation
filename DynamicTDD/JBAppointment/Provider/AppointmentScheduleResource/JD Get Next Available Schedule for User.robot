@@ -284,7 +284,7 @@ JD-TC-NextAvailableSchedule for User-2
     ${maxval1}=  Convert To Integer   ${delta1/5}
     ${duration1}=  FakerLibrary.Random Int  min=1  max=${maxval1}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule For User  ${u_id}  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel1}  ${parallel1}  ${lid}  ${duration1}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule   ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel1}  ${parallel1}  ${lid}  ${duration1}  ${bool1}  ${s_id}  provider=${u_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id1}  ${resp.json()}
@@ -300,7 +300,7 @@ JD-TC-NextAvailableSchedule for User-2
     ${maxval2}=  Convert To Integer   ${delta2/5}
     ${duration2}=  FakerLibrary.Random Int  min=1  max=${maxval2}
     ${bool2}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule For User  ${u_id}  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel2}  ${parallel2}  ${lid}  ${duration2}  ${bool2}  ${s_id}
+    ${resp}=  Create Appointment Schedule    ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel2}  ${parallel2}  ${lid}  ${duration2}  ${bool2}  ${s_id}   provider=${u_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id2}  ${resp.json()}
@@ -386,7 +386,7 @@ JD-TC-NextAvailableSchedule for User-3
     ${maxval1}=  Convert To Integer   ${delta1/5}
         ${duration1}=  FakerLibrary.Random Int  min=1  max=${maxval1}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule For User  ${u_id}  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel1}      ${parallel1}  ${lid}  ${duration1}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule   ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel1}      ${parallel1}  ${lid}  ${duration1}  ${bool1}  ${s_id}   provider=${u_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id1}  ${resp.json()}
@@ -402,7 +402,7 @@ JD-TC-NextAvailableSchedule for User-3
     ${maxval2}=  Convert To Integer   ${delta2/5}
         ${duration2}=  FakerLibrary.Random Int  min=1  max=${maxval2}
     ${bool2}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule For User  ${u_id}  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel2}  ${parallel2}  ${lid}  ${duration2}  ${bool2}  ${s_id}
+    ${resp}=  Create Appointment Schedule   ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel2}  ${parallel2}  ${lid}  ${duration2}  ${bool2}  ${s_id}   provider=${u_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id2}  ${resp.json()}
