@@ -9,17 +9,17 @@ Library           FakerLibrary
 #Library           ExcellentLibrary
 Library           OperatingSystem
 # Library           /ebs/TDD/excelfuncs.py
-Library           /ebs/TDD/CustomKeywords.py
+# Library           /ebs/TDD/CustomKeywords.py
 # Library           /ebs/TDD/KeywordNameLogger.py
 # Resource          /ebs/TDD/SuperAdminKeywords.robot
-# Resource          /ebs/TDD/ProviderKeywords.robot
+Resource          /ebs/TDD/ProviderKeywords.robot
 # Resource          /ebs/TDD/ConsumerKeywords.robot
 # Variables       /ebs/TDD/varfiles/providers.py
 # Variables       /ebs/TDD/varfiles/consumerlist.py 
 # Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
-# *** Keywords ***
+*** Keywords ***
 # Check Deprication
 #     [Arguments]    ${response}  ${keyword_name}
 #     IF  'Deprecated-Url' in &{response.headers}
@@ -37,21 +37,87 @@ Library           /ebs/TDD/CustomKeywords.py
 #     Check Deprication  ${resp}  Get BusinessDomainsConf
 #     RETURN  ${resp}
 
-*** Keywords ***
-My Keyword
-    ${keyword_name}=    Get Current Keyword Name
-    Log    Keyword inside My Keyword is ${keyword_name}
+# *** Keywords ***
+# My Keyword
+#     ${keyword_name}=    Get Current Keyword Name
+#     Log    Keyword inside My Keyword is ${keyword_name}
+
+
+
+# Select Domain Subdomain
+#     [Arguments]   ${Domain}=${EMPTY}  ${SubDomain}=${EMPTY}
+#     IF  ${Domain} == ${EMPTY} 
+#         ${domresp}=  Get BusinessDomainsConf
+#         Log   ${domresp.content}
+#         Should Be Equal As Strings  ${domresp.status_code}  200
+#         ${dlen}=  Get Length  ${domresp.json()}
+#         IF  ${SubDomain} == ${EMPTY}
+#             ${dlen}=  Get Length  ${domresp.json()}
+#             ${d1}=  Random Int   min=0  max=${dlen-1}
+#             Set Test Variable  ${Domain}  ${domresp.json()[${d1}]['domain']}
+#             ${sdlen}=  Get Length  ${domresp.json()[${d1}]['subDomains']}
+#             ${sdom}=  Random Int   min=0  max=${sdlen-1}
+#             Set Test Variable  ${SubDomain}  ${domresp.json()[${d1}]['subDomains'][${sdom}]['subDomain']}
+#         ELSE
+#             FOR  ${domindex}  IN RANGE  ${dlen}
+#                 ${sdom_len}=  Get Length  ${resp.json()[${domindex}]['subDomains']}
+#                 FOR  ${subindex}  IN RANGE  ${sdom_len}
+#                     Set Test Variable  ${subdom}  ${resp.json()[${domindex}]['subDomains'][${subindex}]['subDomain']}
+#                     Exit For Loop If  '${subdom}' == '${SubDomain}'
+#                 END
+#                 IF  '${subdom}' == '${SubDomain}'
+#                     Set Test Variable  ${Domain}  ${domresp.json()[${domindex}]['domain']}
+#                     Exit For Loop
+#                 END
+#             END
+#         END
+#     ELSE
+#         IF  ${SubDomain} == ${EMPTY}
+#             FOR  ${domindex}  IN RANGE  ${dlen}
+#                 Set Test Variable  ${dom}  ${resp.json()[${dom}]['domain']}
+#                 IF  '${dom}' == '${Domain}'
+#                     ${sdom_len}=  Get Length  ${resp.json()[${domindex}]['subDomains']}
+#                     ${sdom}=  random.randint  ${0}  ${sdom_len-1}
+#                     Set Test Variable  ${SubDomain}  ${resp.json()[${dom}]['subDomains'][${sdom}]['subDomain']}
+#                     Exit For Loop
+#                 END
+#             END
+#         END
+#     END
+#     RETURN  ${Domain}  ${SubDomain}
+
 
 
 
 
 *** Test Cases ***
 Example Test Case
-    ${keyword_name}=    Get Current Keyword Name
-    Log    Current keyword name is ${keyword_name}
-    My Keyword
-    ${keyword_name}=    Get Current Keyword Name
-    Log    Current keyword name after calling My Keyword is ${keyword_name}
+    
+    ${Domain}  ${SubDomain}=  Select Domain Subdomain
+
+    ${Domain}  ${SubDomain}=  Select Random Domain and Subdomain
+    ${Domain}  ${SubDomain}=  Select Domain Subdomain  Domain=${Domain}
+
+    ${Domain}  ${SubDomain}=  Select Random Domain and Subdomain
+    ${Domain}  ${SubDomain}=  Select Domain Subdomain  SubDomain=${SubDomain}
+
+    
+    ${provider1}=    Provider Signup
+
+    ${PO_Number}=  FakerLibrary.Numerify  %#####
+    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    ${provider2}=    Provider Signup  PhoneNumber=${PhoneNumber}
+
+    ${Domain}  ${SubDomain}=  Select Random Domain and Subdomain
+    ${provider3}=    Provider Signup  Domain=${Domain}  SubDomain=${SubDomain}  
+
+    ${licid}  ${licname}=  Select Random License
+    ${provider4}=    Provider Signup  LicenseId=${licid}
+
+    FakerLibrary.user_name
+    ${LoginID}=    FakerLibrary.user_name
+    ${provider4}=    Provider Signup  LoginId=${LoginID}
+    
 
     
 

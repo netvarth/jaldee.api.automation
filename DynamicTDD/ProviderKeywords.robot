@@ -253,6 +253,8 @@ Get Account Settings
     Check Deprication  ${resp}  Get Account Settings
     RETURN  ${resp}
 
+############# Keywords for Provider signup ###############################
+
 Select Random Specializations
     [Arguments]    ${resp}
     ${spec_len}=  Get Length  ${resp.json()}
@@ -283,6 +285,7 @@ Select Random Domain and Subdomain
     ${sdom}=  Random Int   min=0  max=${sdlen-1}
     Set Test Variable  ${SubDomain}  ${domresp.json()[${d1}]['subDomains'][${sdom}]['subDomain']}
     RETURN  ${Domain}  ${SubDomain}
+
 
 Select Random License
     ${licresp}=   Get Licensable Packages
@@ -421,7 +424,7 @@ Provider Signup
 
     RETURN  ${firstname}  ${lastname}  ${PhoneNumber}  ${LoginId}
 
-
+############# Keywords for Provider signup ends here ###############################
 
 
     
@@ -5062,9 +5065,6 @@ Update HS Settings
     RETURN  ${resp}
 
 
-
-
-
 Get Labels
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/label  expected_status=any
@@ -5110,6 +5110,7 @@ Create Fieldlist For QueueSet
         Append To List  ${field_list}  ${values}
     END
     RETURN  ${field_list}
+
 
 Create Appointment QueueSet for Provider
     [Arguments]   ${s_name}  ${display_name}  ${desc}  ${field_list}   ${service}   ${label1}   ${label2}   ${apptSchdl}   ${appt_status}    @{queueSetFor}  &{kwargs}

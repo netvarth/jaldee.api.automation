@@ -1,6 +1,6 @@
 *** Settings ***
-Suite Teardown    Delete All Sessions
-Test Teardown     Delete All Sessions
+# Suite Teardown    Delete All Sessions
+# Test Teardown     Delete All Sessions
 Force Tags  NextAvailableSchedule
 Library     Collections
 Library     String
@@ -13,34 +13,80 @@ Library     FakerLibrary
 Library     /ebs/TDD/Keywordspy.py
 # Library      /ebs/TDD/test.py
 Resource    /ebs/TDD/ProviderKeywords.robot
-Resource    /ebs/TDD/ConsumerKeywords.robot
-Resource    /ebs/TDD/SuperAdminKeywords.robot
+# Resource    /ebs/TDD/ConsumerKeywords.robot
+# Resource    /ebs/TDD/SuperAdminKeywords.robot
 Variables   /ebs/TDD/varfiles/providers.py
-Variables   /ebs/TDD/varfiles/hl_providers.py
-Variables   /ebs/TDD/varfiles/consumerlist.py
-Variables   /ebs/TDD/varfiles/consumermail.py
+# Variables   /ebs/TDD/varfiles/hl_providers.py
+# Variables   /ebs/TDD/varfiles/consumerlist.py
+# Variables   /ebs/TDD/varfiles/consumermail.py
 
 *** Variables ***
 @{langs}   assamese  bengali  english  gujarati  hindi  kannada  Konkani  malayalam  Marathi  manipuri  oriya  punjabi  rajasthani  sanskrit  tamil  telugu  urdu  arabic
 ${CC1}      +44 7911
 ${US_CC}   +1
+@{MY_LIST}        apple    banana    cherry    date    elderberry    fig    grape
+@{test_list}        apple
 
 *** Keywords ***
 
-Get Date Time via Timezone
-    [Arguments]    ${timezone}
-    ${zone}  @{loc}=  Split String    ${timezone}  /
-    ${type}=    Evaluate     type($loc).__name__
-    ${loc}=  Random Element    ${loc}
-    # IF  type($loc).__name__ == 'list'
-    #     ${loc}=  Random Element    ${loc}
-    # END
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  provider/location/date/${zone}/${loc}  expected_status=any
-    RETURN  ${resp}
+# Get Date Time via Timezone
+#     [Arguments]    ${timezone}
+#     ${zone}  @{loc}=  Split String    ${timezone}  /
+#     ${type}=    Evaluate     type($loc).__name__
+#     ${loc}=  Random Element    ${loc}
+#     # IF  type($loc).__name__ == 'list'
+#     #     ${loc}=  Random Element    ${loc}
+#     # END
+#     Check And Create YNW Session
+#     ${resp}=  GET On Session  ynw  provider/location/date/${zone}/${loc}  expected_status=any
+#     RETURN  ${resp}
+
+select random specializations
+    [Arguments]    ${resp}
+    ${spec_len}=  Get Length  ${resp.json()}
+    IF   ${spec_len} > 1
+        ${no_of_specs}=   Random Int   min=0   max=${spec_len}
+        # ${specs}=  random.choices  ${resp.json()}  k=${no_of_specs}
+        ${test}=   random.sample  ${resp.json()}  ${no_of_specs}
+        ${specs_json}=  Evaluate    random.sample(${resp.json()}, ${no_of_specs})    random
+        ${specs}=  Create List
+        FOR    ${spec_dict}    IN    @{specs_json}
+            Append To List    ${specs}    ${spec_dict['displayName']}
+        END
+        Log  ${specs}
+    ELSE
+        ${specs}=  Create List   ${resp.json()[0]['displayName']}
+    END
+
+    RETURN  ${specs}
+#         # ${spec}=  Create List    ${specs[0]['displayName']}   ${specs[1]['displayName']}
 
 
 *** Test Cases ***  
+Testing multiple list values
+    # ${value1}=  random.choices(test_list, k=4)
+    Log  ${test_list}
+    ${value2}=  random.choices  ${test_list}  k=2
+
+    ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
+    ${len}=   Split to lines  ${resp}
+    ${length}=  Get Length   ${len}
+    ${a}=  FakerLibrary.Random Int  min=0  max=${length}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    ${domain}=   Set Variable    ${decrypted_data['sector']}
+    ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+
+    ${resp}=  Get specializations Sub Domain  ${domain}  ${subdomain}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${spec}=  select random specializations   ${resp}
+    # ${spec_len}=  Get Length  ${resp.json()}
+    # ${specs}=  random.choices  ${resp.json()}  k=2
+    # ${spec}=  Create List    ${specs[0]['displayName']}   ${specs[1]['displayName']}
+
+*** Comments ***
 Testing timezones
 
 
