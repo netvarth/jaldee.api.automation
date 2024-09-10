@@ -4939,35 +4939,6 @@ Create Fieldlist For QueueSet
     END
     RETURN  ${field_list}
 
-
-Create Appointment QueueSet for Branch
-    [Arguments]   ${s_name}  ${display_name}  ${desc}  ${field_list}   ${dept}   ${service}     ${label1}   ${label2}   ${apptSchdl}   ${appt_status}    @{queueSetFor}  &{kwargs}
-    ${pro_headers}=  Create Dictionary  &{headers}
-    ${pro_params}=   Create Dictionary
-    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
-    Log  ${kwargs}
-    Set To Dictionary  ${pro_headers}   &{tzheaders}
-    Set To Dictionary  ${pro_params}   &{locparam}
-    ${len}=  Get Length  ${queueSetFor}
-    ${len}=  Evaluate  ${len}-1
-    ${list}=  Create List
-    FOR    ${index}   IN RANGE   0  ${len}  2
-        ${index2}=  Evaluate  ${index}+1
-        ${ids}=  Create Dictionary   type=${queueSetFor[${index}]}  id=${queueSetFor[${index2}]}
-        Append To List  ${list}  ${ids}
-    END
-
-    ${label}=   Create Dictionary   ${label1}=${label2}
-
-    ${dic}=   Create Dictionary      departments=${dept}    services=${service}     labels=${label}    apptSchedule=${apptSchdl}    apptStatus=${appt_status}
-
-    ${data}=  Create Dictionary  name=${s_name}  displayName=${display_name}  description=${desc}  fieldList=${field_list}   qBoardConditions=${dic}        queueSetFor=${list}   
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/appointment/statusBoard/queueSet  params=${pro_params}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Create Appointment QueueSet for Branch
-    RETURN  ${resp}
-
 Create Appointment QueueSet for Provider
     [Arguments]   ${s_name}  ${display_name}  ${desc}  ${field_list}   ${service}   ${label1}   ${label2}   ${apptSchdl}   ${appt_status}    @{queueSetFor}  &{kwargs}
     
