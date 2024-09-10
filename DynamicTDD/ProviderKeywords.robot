@@ -8113,18 +8113,6 @@ Un Assign provider waitlist
     Check Deprication  ${resp}  Un Assign provider waitlist
     RETURN  ${resp}
 
-
-Make Available
-   [Arguments]  ${name}   ${rt}   ${ri}   ${sDate}   ${eDate}   ${stime}   ${etime}  ${loc}  ${id}
-   ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
-   ${provider}=  Create Dictionary  id=${id}
-   ${data}=  Create Dictionary  name=${name}  queueSchedule=${bs}  location=${loc}  provider=${provider}
-   ${data}=  json.dumps  ${data}
-   Check And Create YNW Session
-   ${resp}=  PUT On Session  ynw  /provider/waitlist/queues/available  data=${data}  expected_status=any
-   Check Deprication  ${resp}  Make Available
-    RETURN  ${resp}
-
 Terminate Availability Queue
     [Arguments]  ${queueId}  
     Check And Create YNW Session
