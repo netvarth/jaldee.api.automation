@@ -129,6 +129,46 @@ Get stores Count filter
     Check Deprication  ${resp}  Get stores Count filter
     RETURN  ${resp} 
 
+
+Create Sample Customer
+    [Arguments]  ${accountId}  ${primaryMobileNo}=${EMPTY}
+
+    IF  '''${primaryMobileNo}''' == '''${EMPTY}'''
+        IF  "${ENVIRONMENT}" == "local"
+            ${PO_Number}=  FakerLibrary.Numerify  %#####
+            ${primaryMobileNo}=  Evaluate  ${CUSERNAME}+${PO_Number}
+        ELSE
+            ${primaryMobileNo}=    Generate Random 555 Number
+        END
+    END
+
+    ${firstName}=  FakerLibrary.first_name
+    ${lastName}=  FakerLibrary.last_name
+    ${email}  Set Variable  ${firstName}${C_Email}.${test_mail}
+
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Consumer Logout 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}  ${primaryMobileNo}  ${accountId}  Authorization=${token}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200    
+   
+    # ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}  ${accountId}  ${token} 
+    # Log   ${resp.content}
+    # Should Be Equal As Strings              ${resp.status_code}   200
+
+    RETURN  ${primaryMobileNo}  ${token}
+
 #----------- CONSUMER ORDER ---------
 
 Get Provider Catalog Item Filter

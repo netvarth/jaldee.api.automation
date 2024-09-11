@@ -408,27 +408,6 @@ JD-TC-Get Prescription Count By Filter-UH1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    #... linking user to the provider 1 and get linked lists
-
-    # ${resp}=    Connect with other login  ${PUSERNAME_U1}  ${PASSWORD}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Connect with other login  ${PUSERNAME_U1}  password=${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    202
-
-    ${resp}=    Account Activation      ${PUSERNAME_U1}  ${OtpPurpose['LinkLogin']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${key2} =   db.Verify Accnt   ${PUSERNAME_U1}    ${OtpPurpose['LinkLogin']}
-    Set Suite Variable   ${key2}
-
-    ${resp}=    Connect with other login  ${PUSERNAME_U1}   otp=${key2}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
     ${resp}=    Provider Logout
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200

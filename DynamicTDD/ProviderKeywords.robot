@@ -492,12 +492,36 @@ TimeSpec
     ${ts}=  Create Dictionary  recurringType=${rectype}  repeatIntervals=${rint}  startDate=${startDate}  terminator=${terminator}  timeSlots=${timeslot}
     RETURN  ${ts}
 
-Create Location
-    [Arguments]  ${place}  ${longi}  ${latti}  ${g_url}  ${pin}  ${add}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  &{kwargs}
+BusinessSchedule
+    [Arguments]  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
     ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
     ${bs}=  Create List  ${bs}
     ${bs}=  Create Dictionary  timespec=${bs}
-    ${data}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  pinCode=${pin}  address=${add}  parkingType=${pt}  open24hours=${oh}  bSchedule=${bs}
+    RETURN  ${bs}
+
+# Create Location
+#     [Arguments]  ${place}  ${longi}  ${latti}  ${g_url}  ${pin}  ${add}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  &{kwargs}
+#     ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
+#     ${bs}=  Create List  ${bs}
+#     ${bs}=  Create Dictionary  timespec=${bs}
+#     ${data}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  pinCode=${pin}  address=${add}  parkingType=${pt}  open24hours=${oh}  bSchedule=${bs}
+#     FOR    ${key}    ${value}    IN    &{kwargs}
+#         Set To Dictionary 	${data} 	${key}=${value}
+#     END
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session
+#     ${resp}=  POST On Session  ynw  /provider/locations  data=${data}  expected_status=any
+#     Check Deprication  ${resp}  Create Location
+#     RETURN  ${resp} 
+
+Create Location
+    # [Arguments]  ${place}  ${longi}  ${latti}  ${g_url}  ${pin}  ${add}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  &{kwargs}
+    [Arguments]   ${place}  ${longi}  ${latti}  ${pin}  ${add}  &{kwargs}
+    # ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
+    # ${bs}=  Create List  ${bs}
+    # ${bs}=  Create Dictionary  timespec=${bs}
+    # ${data}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  pinCode=${pin}  address=${add}  parkingType=${pt}  open24hours=${oh}  bSchedule=${bs}
+    ${data}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  pinCode=${pin}  address=${add}  
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
     END
@@ -519,14 +543,7 @@ Create Sample Location
     END
     ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
     Set Suite Variable  ${tz}
-    ${parking_type}    Random Element  ${parkingType}
-    ${24hours}    Random Element  ${bool}
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY}=  get_date_by_timezone  ${tz}
-    ${sTime}=  add_timezone_time  ${tz}  0  30  
-    ${eTime}=  add_timezone_time  ${tz}  0  45  
-    ${url}=   FakerLibrary.url
-    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking_type}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
+    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${postcode}  ${address}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     RETURN  ${resp.json()}
@@ -2777,14 +2794,14 @@ Create Sample Item
     RETURN  ${resp}
 
 
-Create Location without schedule
-    [Arguments]  ${place}  ${longi}  ${latti}  ${g_url}  ${pin}  ${add}  ${pt}  ${oh}
-    ${data}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  pinCode=${pin}  address=${add}  parkingType=${pt}  open24hours=${oh}  bSchedule=${None}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/locations  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Create Location without schedule
-    RETURN  ${resp} 
+# Create Location without schedule
+#     [Arguments]  ${place}  ${longi}  ${latti}  ${g_url}  ${pin}  ${add}  ${pt}  ${oh}
+#     ${data}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  pinCode=${pin}  address=${add}  parkingType=${pt}  open24hours=${oh}  bSchedule=${None}
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session
+#     ${resp}=  POST On Session  ynw  /provider/locations  data=${data}  expected_status=any
+#     Check Deprication  ${resp}  Create Location without schedule
+#     RETURN  ${resp} 
     
 
 Update Location with schedule
