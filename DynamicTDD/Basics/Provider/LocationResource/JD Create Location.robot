@@ -20,7 +20,7 @@ JD-TC-CreateLocation-1
       ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       
-      ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+      ${latti}  ${longi}  ${postcode}  ${city}  ${address}=  get_random_location_data
       ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
       ${url}=   FakerLibrary.url
       ${resp}=  Create Location   ${city}  ${longi}  ${latti}  ${postcode}  ${address}
@@ -52,7 +52,7 @@ JD-TC-CreateLocation-2
       Should Be Equal As Strings    ${resp.status_code}    200
       Set Suite Variable  ${PUSERNAME_A}
 
-      ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+      ${latti}  ${longi}  ${postcode}  ${city}  ${address}=  get_random_location_data
       ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}      
       ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${postcode}  ${address}  
       Log  ${resp.content}
@@ -68,13 +68,13 @@ JD-TC-CreateLocation-3
       Should Be Equal As Strings    ${resp.status_code}    200
       Set Suite Variable  ${PUSERNAME_B}
       
-      ${latti1}  ${longi1}  ${postcode1}  ${city1}  ${district}  ${state}  ${address1}=  get_loc_details
+      ${latti1}  ${longi1}  ${postcode1}  ${city1}  ${address1}=  get_random_location_data
       ${tz1}=   db.get_Timezone_by_lat_long   ${latti1}  ${longi1}
       ${resp}=  Create Location  ${city1}  ${longi1}  ${latti1}  ${postcode1}  ${address1}  
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
       
-      ${latti2}  ${longi2}  ${postcode2}  ${city2}  ${district}  ${state}  ${address2}=  get_loc_details
+      ${latti2}  ${longi2}  ${postcode2}  ${city2}  ${address2}=  get_random_location_data
       ${tz2}=   db.get_Timezone_by_lat_long   ${latti2}  ${longi2}
       ${resp}=  Create Location  ${city2}  ${longi2}  ${latti2}  ${postcode2}  ${address2}
       Log  ${resp.content}
@@ -90,7 +90,7 @@ JD-TC-CreateLocation-4
       Should Be Equal As Strings    ${resp.status_code}    200
       Set Suite Variable  ${PUSERNAME_C}
 
-      ${latti3}  ${longi3}  ${postcode3}  ${city3}  ${district}  ${state}  ${address3}=  get_loc_details
+      ${latti3}  ${longi3}  ${postcode3}  ${city3}  ${address3}=  get_random_location_data
       ${tz3}=   db.get_Timezone_by_lat_long   ${latti3}  ${longi3}
       ${resp}=  Create Location  ${city3}  ${longi3}  ${latti3}  ${postcode3}  ${address3} 
       Log  ${resp.content}
@@ -114,13 +114,13 @@ JD-TC-CreateLocation-5
       Should Be Equal As Strings    ${resp.status_code}    200
       Set Suite Variable  ${PUSERNAME_D}
       
-      ${latti5}  ${longi5}  ${postcode5}  ${city5}  ${district}  ${state}  ${address5}=  get_loc_details
+      ${latti5}  ${longi5}  ${postcode5}  ${city5}  ${address5}=  get_random_location_data
       ${tz5}=   db.get_Timezone_by_lat_long   ${latti5}  ${longi5}
       ${resp}=  Create Location  ${city5}  ${longi5}  ${latti5}  ${postcode5}  ${address5}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${latti6}  ${longi6}  ${postcode6}  ${city6}  ${district}  ${state}  ${address6}=  get_loc_details
+      ${latti6}  ${longi6}  ${postcode6}  ${city6}  ${address6}=  get_random_location_data
       Set Suite Variable  ${city6}
       ${resp}=  Create Location  ${city6}  ${longi6}  ${latti6}  ${postcode5}  ${address6}
       Log  ${resp.content}
@@ -136,7 +136,7 @@ JD-TC-CreateLocation-6
       Should Be Equal As Strings    ${resp.status_code}    200
       Set Suite Variable  ${PUSERNAME_E}
       
-      ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+      ${latti}  ${longi}  ${postcode}  ${city}  ${address}=  get_random_location_data
       ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
       ${parking}    Random Element     ${parkingType} 
       ${24hours}    Random Element    ${bool}
@@ -157,7 +157,7 @@ JD-TC-CreateLocation-7
       Should Be Equal As Strings    ${resp.status_code}    200
       Set Suite Variable  ${PUSERNAME_F}
       
-      ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+      ${latti}  ${longi}  ${postcode}  ${city}  ${address}=  get_random_location_data
       ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
       ${list}=  Create List  1  2  3  4  5  6  7
       ${sTime1}=  db.get_time_by_timezone  ${tz}
@@ -179,7 +179,7 @@ JD-TC-CreateLocation-8
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${PUSERNAME_U1}=  Create and Configure Sample User
+      ${PUSERNAME_U1}  ${u_id} =  Create and Configure Sample User
 
       ${resp}=    Provider Logout
       Log   ${resp.content}
@@ -202,7 +202,7 @@ JD-TC-CreateLocation-8
 
 JD-TC-CreateLocation -UH1
       [Documentation]   Provider create a location without login 
-      ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details 
+      ${latti}  ${longi}  ${postcode}  ${city}  ${address}=  get_random_location_data 
       ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${postcode}  ${address}
       Should Be Equal As Strings    ${resp.status_code}   419
       Should Be Equal As Strings   "${resp.json()}"   "${SESSION_EXPIRED}"
@@ -225,7 +225,7 @@ JD-TC-CreateLocation -UH2
       Log  ${resp.content}
       Should Be Equal As Strings    ${resp.status_code}    200
 
-      ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details 
+      ${latti}  ${longi}  ${postcode}  ${city}  ${address}=  get_random_location_data 
       ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${postcode}  ${address}
       Should Be Equal As Strings    ${resp.status_code}   401
       Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}"
@@ -248,54 +248,52 @@ JD-TC-CreateLocation-UH3
       Should Be Equal As Strings  ${resp.status_code}  422
       Should Be Equal As Strings  "${resp.json()}"  "${LOCATION_EXISTS}"
 
-*** COMMENTS ***
 
-
-
-JD-TC-CreateLocation-UH4
-      [Documentation]  Check location limit(only 5 locations can create under each account)
-      ${PUSERNAME_G}=  Evaluate  ${PUSERNAME}+4400044
-      ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_G}=  Provider Signup without Profile  PhoneNumber=${PUSERNAME_G}
+# JD-TC-CreateLocation-UH4
+#       [Documentation]  Check location limit(only 5 locations can create under each account)
+#       ${PUSERNAME_G}=  Evaluate  ${PUSERNAME}+4400044
+#       ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_G}=  Provider Signup without Profile  PhoneNumber=${PUSERNAME_G}
       
+#       ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
+#       Log  ${resp.content}
+#       Should Be Equal As Strings    ${resp.status_code}    200
       
-      ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
-      Log  ${resp.content}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      
-      ${sTime3}=  add_timezone_time  ${tz}  1  05  
-      Set Suite Variable   ${sTime3}
-      ${eTime3}=  add_timezone_time  ${tz}  1  50  
-      Set Suite Variable   ${eTime3}
-      ${sTime4}=  add_timezone_time  ${tz}  2  05  
-      Set Suite Variable   ${sTime4}
-      ${eTime4}=  add_timezone_time  ${tz}  2  50  
-      Set Suite Variable   ${eTime4}
-      ${sTime5}=  add_timezone_time  ${tz}  3  05  
-      Set Suite Variable   ${sTime5}
-      ${eTime5}=  add_timezone_time  ${tz}  3  50  
-      Set Suite Variable   ${eTime5}
+#       ${sTime3}=  add_timezone_time  ${tz}  1  05  
+#       Set Suite Variable   ${sTime3}
+#       ${eTime3}=  add_timezone_time  ${tz}  1  50  
+#       Set Suite Variable   ${eTime3}
+#       ${sTime4}=  add_timezone_time  ${tz}  2  05  
+#       Set Suite Variable   ${sTime4}
+#       ${eTime4}=  add_timezone_time  ${tz}  2  50  
+#       Set Suite Variable   ${eTime4}
+#       ${sTime5}=  add_timezone_time  ${tz}  3  05  
+#       Set Suite Variable   ${sTime5}
+#       ${eTime5}=  add_timezone_time  ${tz}  3  50  
+#       Set Suite Variable   ${eTime5}
 
-      ${resp}=  Create Location without schedule  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking}  ${24hours}
-      Log  ${resp.content}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      ${resp}=  Create Location without schedule  ${city1}  ${longi1}  ${latti1}  www.${city1}.com  ${postcode1}  ${address1}  ${parking_type1}  ${24hours1}
-      Log  ${resp.content}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      ${resp}=  Create Location without schedule  ${city2}  ${longi2}  ${latti2}  www.${city2}.com  ${postcode2}  ${address2}  ${parking_type2}  ${24hours2}
-      Log  ${resp.content}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      ${resp}=  Create Location without schedule  ${city3}  ${longi3}  ${latti3}  www.${city3}.com  ${postcode3}  ${address3}  ${parking_type3}  ${24hours3}
-      Log  ${resp.content}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      ${resp}=  Create Location without schedule  ${city4}  ${longi3}  ${latti3}  www.${city4}.com  ${postcode4}  ${address4}  ${parking_type3}  ${24hours3}
-      Log  ${resp.content}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      ${resp}=  Create Location without schedule  ${city5}  ${longi5}  ${latti5}  www.${city5}.com  ${postcode5}  ${address5}  ${parking_type5}  ${24hours5}
-      Log  ${resp.content}
-      Log     ${resp.status_code}
-      Log     ${resp.content}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      # Should Be Equal As Strings  "${resp.json()}"  "${LOCATION_LIMIT_REACHED}"
+#       ${resp}=  Create Location without schedule  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking}  ${24hours}
+#       Log  ${resp.content}
+#       Should Be Equal As Strings  ${resp.status_code}  200
+#       ${resp}=  Create Location without schedule  ${city1}  ${longi1}  ${latti1}  www.${city1}.com  ${postcode1}  ${address1}  ${parking_type1}  ${24hours1}
+#       Log  ${resp.content}
+#       Should Be Equal As Strings  ${resp.status_code}  200
+#       ${resp}=  Create Location without schedule  ${city2}  ${longi2}  ${latti2}  www.${city2}.com  ${postcode2}  ${address2}  ${parking_type2}  ${24hours2}
+#       Log  ${resp.content}
+#       Should Be Equal As Strings  ${resp.status_code}  200
+#       ${resp}=  Create Location without schedule  ${city3}  ${longi3}  ${latti3}  www.${city3}.com  ${postcode3}  ${address3}  ${parking_type3}  ${24hours3}
+#       Log  ${resp.content}
+#       Should Be Equal As Strings  ${resp.status_code}  200
+#       ${resp}=  Create Location without schedule  ${city4}  ${longi3}  ${latti3}  www.${city4}.com  ${postcode4}  ${address4}  ${parking_type3}  ${24hours3}
+#       Log  ${resp.content}
+#       Should Be Equal As Strings  ${resp.status_code}  200
+#       ${resp}=  Create Location without schedule  ${city5}  ${longi5}  ${latti5}  www.${city5}.com  ${postcode5}  ${address5}  ${parking_type5}  ${24hours5}
+#       Log  ${resp.content}
+#       Log     ${resp.status_code}
+#       Log     ${resp.content}
+#       Should Be Equal As Strings  ${resp.status_code}  200
+#       # Should Be Equal As Strings  "${resp.json()}"  "${LOCATION_LIMIT_REACHED}"
+
+
 
 # JD-TC-CreateLocation-UH5
 #       [Documentation]   Try to Create more than one location in multipleLocation false domain 
@@ -364,6 +362,8 @@ JD-TC-CreateLocation-7
       ${resp}=  Get Location ById  ${lid9}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
+
+*** COMMENTS ***
 
 JD-TC-CreateLocation-UH5
 	[Documentation]  Create a location with empty  longitude
