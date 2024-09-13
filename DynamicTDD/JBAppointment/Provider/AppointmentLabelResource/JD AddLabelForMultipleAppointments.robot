@@ -2904,8 +2904,8 @@ JD-TC-AddMultipleAppointmentLabel-UH1
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}  ${SESSION_EXPIRED}
 
-
 JD-TC-AddMultipleAppointmentLabel-UH2
+
     [Documentation]  Add label by consumer login
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
@@ -2970,7 +2970,6 @@ JD-TC-AddMultipleAppointmentLabel-UH3
 
     [Documentation]  Add label without creating one
 
-    
     ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
