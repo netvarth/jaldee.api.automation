@@ -821,7 +821,7 @@ Create and Configure Sample User
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    RETURN  ${P_User}, ${u_id}
+    RETURN  ${P_User}  ${u_id}
 
 
 
