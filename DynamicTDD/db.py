@@ -1783,7 +1783,7 @@ def get_lat_long_add_pin() :
         add = random_row['Place'] + ',' + random_row['District'] + ',' + random_row['State']+ '-' + str(random_row['Pincode'])
     return lat,lon,str(pin),add.strip()
 
-def basic_loc_details() :
+def get_random_location_data() :
     # with open(pfile,'r', encoding="utf-8") as data:
     with open(addressfile,'r', encoding="utf-8") as data:
         csv_reader=csv.DictReader(data)

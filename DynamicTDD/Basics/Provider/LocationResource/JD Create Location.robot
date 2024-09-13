@@ -188,7 +188,7 @@ JD-TC-CreateLocation-8
       ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
       Should Be Equal As Strings             ${resp.status_code}   200
 
-      ${latti8}  ${longi8}  ${postcode8}  ${city8}  ${address}=  basic_loc_details
+      ${latti8}  ${longi8}  ${postcode8}  ${city8}  ${address}=  get_random_location_data
       ${tz8}=   db.get_Timezone_by_lat_long   ${latti8}  ${longi8}
       ${resp}=  Create Location  ${city8}  ${longi8}  ${latti8}  ${postcode8}  ${address}
       Log  ${resp.content}
