@@ -3138,7 +3138,7 @@ JD-TC-AddMultipleAppointmentLabel-UH4
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
 
     ${fname}=  FakerLibrary.name    
