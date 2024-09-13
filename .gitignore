@@ -6,6 +6,7 @@
 /DynamicTDD/Output/*
 /DynamicTDD/varfiles/*
 /DynamicTDD/varfiles/__pycache__/*
+DynamicTDD/varfiles-bk/*
 /DynamicTDD/numbers.txt
 /DynamicTDD/time.txt
 /DynamicTDD/pan.txt

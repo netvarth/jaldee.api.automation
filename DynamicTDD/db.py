@@ -1783,6 +1783,19 @@ def get_lat_long_add_pin() :
         add = random_row['Place'] + ',' + random_row['District'] + ',' + random_row['State']+ '-' + str(random_row['Pincode'])
     return lat,lon,str(pin),add.strip()
 
+def basic_loc_details() :
+    # with open(pfile,'r', encoding="utf-8") as data:
+    with open(addressfile,'r', encoding="utf-8") as data:
+        csv_reader=csv.DictReader(data)
+        k=list(csv_reader)
+        random_row = random.choice(k)
+        place = random_row['Place']
+        lat = random_row['Latitude']
+        lon = random_row['Longitude']
+        pin = random_row['Pincode']
+        add = random_row['Place'] + ',' + random_row['District'] + ',' + random_row['State']+ '-' + str(random_row['Pincode'])
+    return lat,lon,str(pin),place,add.strip()
+
 def get_Subdomainfields(datas) :
     fake = Faker()
     # data= json.loads(datas)

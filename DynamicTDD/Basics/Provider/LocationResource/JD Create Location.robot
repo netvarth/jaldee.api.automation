@@ -9,6 +9,7 @@ Library         json
 Library         FakerLibrary
 Resource        /ebs/TDD/ProviderKeywords.robot
 Resource        /ebs/TDD/ConsumerKeywords.robot
+Resource        /ebs/TDD/ProviderConsumerKeywords.robot
 Variables       /ebs/TDD/varfiles/providers.py
 Variables       /ebs/TDD/varfiles/consumerlist.py 
 
@@ -175,33 +176,10 @@ JD-TC-CreateLocation-7
 
 JD-TC-CreateLocation-8
       [Documentation]  Create a location by a user login
-      ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${u_id}=  Create Sample User
-
-      ${resp}=  Get User By Id      ${u_id}
-      Log   ${resp.json()}
-      Should Be Equal As Strings      ${resp.status_code}  200
-      Set Suite Variable      ${PUSERNAME_U1}     ${resp.json()['mobileNo']}
-
-      ${resp}=    Reset LoginId  ${u_id}  ${PUSERNAME_U1}
-      Log   ${resp.content}
-      Should Be Equal As Strings    ${resp.status_code}    200
-
-      ${resp}=    Forgot Password   loginId=${PUSERNAME_U1}  password=${PASSWORD}
-      Log   ${resp.content}
-      Should Be Equal As Strings    ${resp.status_code}    202
-
-      ${resp}=    Account Activation  ${PUSERNAME_U1}  ${OtpPurpose['ProviderResetPassword']}
-      Log   ${resp.content}
-      Should Be Equal As Strings    ${resp.status_code}    200
-
-      ${key} =   db.Verify Accnt   ${PUSERNAME_U1}    ${OtpPurpose['ProviderResetPassword']}
-
-      ${resp}=    Forgot Password     otp=${key}
-      Log   ${resp.content}
-      Should Be Equal As Strings    ${resp.status_code}    200
+      ${PUSERNAME_U1}=  Create and Configure Sample User
 
       ${resp}=    Provider Logout
       Log   ${resp.content}
@@ -210,7 +188,7 @@ JD-TC-CreateLocation-8
       ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
       Should Be Equal As Strings             ${resp.status_code}   200
 
-      ${latti8}  ${longi8}  ${city8}  ${postcode8}=  get_lat_long_city_pin
+      ${latti8}  ${longi8}  ${postcode8}  ${city8}  ${address}=  basic_loc_details
       ${tz8}=   db.get_Timezone_by_lat_long   ${latti8}  ${longi8}
       ${resp}=  Create Location  ${city8}  ${longi8}  ${latti8}  ${postcode8}  ${address}
       Log  ${resp.content}

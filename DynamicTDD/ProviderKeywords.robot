@@ -745,18 +745,85 @@ Create Sample Service with Prepayment
     RETURN  ${resp.json()}
 
 Create Sample User
-    [Arguments]    ${admin}=${bool[0]}   &{kwargs}
+    [Arguments]    ${admin}=${bool[0]}   ${primaryMobileNo}=${EMPTY}  &{kwargs}
 
-    ${random_ph}=   Random Int   min=10000   max=20000
-    ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+${random_ph}
+    IF  '''${primaryMobileNo}''' == '''${EMPTY}'''
+        IF  "${ENVIRONMENT}" == "local"
+            ${PO_Number}=  FakerLibrary.Numerify  %#####
+            ${PUSERNAME_U1}=  Evaluate  ${CUSERNAME}+${PO_Number}
+        ELSE
+            ${PUSERNAME_U1}=  Generate Random 555 Number
+        END
+    ELSE
+        ${PUSERNAME_U1}=  Set Variable  ${primaryMobileNo}
+    END
+    
+    # ${random_ph}=   Random Int   min=10000   max=20000
+    # ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+${random_ph}
     clear_users  ${PUSERNAME_U1}
-    # Set Test Variable  ${PUSERNAME_U1}
+
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${countryCodes[1]}  ${PUSERNAME_U1}   ${userType[0]}  &{kwargs}
     Should Be Equal As Strings  ${resp.status_code}  200
     RETURN  ${resp.json()}
+
+
+Configure Sample User
+    [Arguments]    ${P_User}
+    ${resp}=    Reset LoginId  ${u_id}  ${P_User}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Forgot Password   loginId=${P_User}  password=${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${P_User}  ${OtpPurpose['ProviderResetPassword']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key} =   db.Verify Accnt   ${P_User}    ${OtpPurpose['ProviderResetPassword']}
+
+    ${resp}=    Forgot Password  otp=${key}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    RETURN  ${P_User}
+
+
+Create and Configure Sample User
+    [Arguments]    ${admin}=${bool[0]}   ${primaryMobileNo}=${EMPTY}   &{kwargs}
+
+    ${u_id}=  Create Sample User  ${admin}=${bool[0]}   ${primaryMobileNo}=${EMPTY}  &{kwargs}
+
+    ${resp}=  Get User By Id  ${u_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${P_User}  ${resp.json()['mobileNo']}
+
+    ${resp}=    Reset LoginId  ${u_id}  ${P_User}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Forgot Password   loginId=${P_User}  password=${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    202
+
+    ${resp}=    Account Activation  ${P_User}  ${OtpPurpose['ProviderResetPassword']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${key} =   db.Verify Accnt   ${P_User}    ${OtpPurpose['ProviderResetPassword']}
+
+    ${resp}=    Forgot Password  otp=${key}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    RETURN  ${P_User}
+
+
 
 Update User
     [Arguments]  ${id}   ${countryCode}  ${mob_no}  ${user_type}  &{kwargs}
