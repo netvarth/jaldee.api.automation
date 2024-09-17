@@ -172,7 +172,7 @@ JD-TC-UpdateLabel -UH3
     Should Be Equal As Strings   "${resp.json()}"   "${SESSION_EXPIRED}"
  
 JD-TC-UpdateLabel -UH4
-    [Documentation]   Consumer trying to update a label
+    [Documentation]   Provider Consumer trying to update a label
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
