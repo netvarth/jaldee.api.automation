@@ -1178,7 +1178,7 @@ Send Message With Appointment
     Check Deprication  ${resp}  Send Message With Appointment
     RETURN  ${resp}
 
-Send Attachment From Appointmnent 
+Send Attachment From Appointment 
     [Arguments]  ${uid}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  @{attachments}
 
     ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
@@ -1187,7 +1187,7 @@ Send Attachment From Appointmnent
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment/share/attachments/${uid}   data=${data}  expected_status=any
-    Check Deprication  ${resp}  Send Attachment From Appointmnent
+    Check Deprication  ${resp}  Send Attachment From Appointment
     RETURN  ${resp}
 
 GetFollowUpDetailsofAppmt
