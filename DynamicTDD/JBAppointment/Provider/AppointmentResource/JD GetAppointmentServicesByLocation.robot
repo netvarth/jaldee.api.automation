@@ -23,23 +23,10 @@ ${self}     0
 JD-TC-GetAppointmentServicesByLocation-1
 
     [Documentation]  Provider get Service By LocationId.  
-
-    ${multilocdoms}=  get_mutilocation_domains
-    Log  ${multilocdoms}
-    Set Suite Variable  ${dom}  ${multilocdoms[0]['domain']}
-    Set Suite Variable  ${sub_dom}  ${multilocdoms[0]['subdomains'][0]}
-
-    ${firstname}=  FakerLibrary.first_name
-    ${lastname}=  FakerLibrary.last_name
+  
     ${PUSERNAME_R}=  Evaluate  ${PUSERNAME}+5566011
-    ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_R}    ${highest_package[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    202
-    ${resp}=  Account Activation  ${PUSERNAME_R}  0
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_R}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_R}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_R}=  Provider Signup without Profile  PhoneNumber=${PUSERNAME_R}
+    
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -59,49 +46,27 @@ JD-TC-GetAppointmentServicesByLocation-1
     ${pid}=  get_acc_id  ${PUSERNAME_R}
     Set Suite Variable   ${pid}
 
-    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${latti}  ${longi}  ${postcode}  ${city}  ${address}=  get_random_location_data
     ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    Set Suite Variable  ${tz}
-
-    ${sTime}=  db.get_time_by_timezone  ${tz}
-    ${eTime}=  add_timezone_time  ${tz}  0  30  
-    ${parking}    Random Element     ${parkingType} 
-    ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
-    ${DAY}=  db.get_date_by_timezone  ${tz}   
-    Set Suite Variable  ${DAY} 
-    ${list}=  Create List  1  2  3  4  5  6  7
-    Set Suite Variable  ${list}
-    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
-    Log  ${resp.json()}
+    ${resp}=  Create Location   ${city}  ${longi}  ${latti}  ${postcode}  ${address}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_l1}  ${resp.json()}
 
-    ${sTime1}=  add_timezone_time  ${tz}  1  30  
-    ${eTime1}=  add_timezone_time  ${tz}  3  00  
-    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${latti}  ${longi}  ${postcode}  ${city}  ${address}=  get_random_location_data
     ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    Set Suite Variable  ${tz}
-    ${parking}    Random Element     ${parkingType} 
-    ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
-    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
-    Log  ${resp.json()}
+    ${resp}=  Create Location   ${city}  ${longi}  ${latti}  ${postcode}  ${address}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_l2}  ${resp.json()}
 
-    ${sTime1}=  add_timezone_time  ${tz}  0  30  
-    ${eTime1}=  add_timezone_time  ${tz}  1  00  
-    ${city}=   FakerLibrary.word
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${parking}    Random Element     ${parkingType} 
-    ${24hours}    Random Element    ['True','False']
+    ${latti}  ${longi}  ${postcode}  ${city}  ${address}=  get_random_location_data
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
     ${url}=   FakerLibrary.url
-    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
-    Log  ${resp.json()}
+    ${resp}=  Create Location   ${city}  ${longi}  ${latti}  ${postcode}  ${address}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_l3}  ${resp.json()}
 
@@ -151,6 +116,7 @@ JD-TC-GetAppointmentServicesByLocation-1
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
+    ${list}=  Create List  1  2  3  4  5  6  7
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=30
@@ -445,25 +411,12 @@ JD-TC-GetAppointmentServicesByLocation-8
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id1}=   Create Sample Service  ${SERVICE1}
 
-    ${latti}  ${longi}  ${city}  ${country_abbr}  ${US_tz}=  FakerLibrary.Local Latlng  country_code=US  coords_only=False
-
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  db.subtract_timezone_time  ${US_tz}  2  00
-    # ${sTime}=  db.get_time_by_timezone   ${tz}
-    ${sTime1}=  add_timezone_time  ${US_tz}  1  30  
-    ${eTime}=  add_timezone_time  ${US_tz}  3  00  
-
-    ${sTime1}  ${eTime1}=  db.endtime_conversion  ${sTime}  ${eTime}
-
-    ${DAY}=  db.get_date_by_timezone  ${US_tz}
-    ${DAY1}=  db.add_timezone_date  ${US_tz}  10       
     ${address} =  FakerLibrary.address
     ${postcode}=  FakerLibrary.postcode
-    ${parking}    Random Element     ${parkingType} 
-    ${24hours}    Random Element    ['True','False']
-    ${url}=   FakerLibrary.url
-    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
-    Log  ${resp.json()}
+
+    ${latti}  ${longi}  ${city}  ${country_abbr}  ${US_tz}=  FakerLibrary.Local Latlng  country_code=US  coords_only=False
+    ${resp}=  Create Location   ${city}  ${longi}  ${latti}  ${postcode}  ${address}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${loc_id1}  ${resp.json()}
 
@@ -471,7 +424,15 @@ JD-TC-GetAppointmentServicesByLocation-8
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${DAY}=  db.get_date_by_timezone  ${US_tz}
+    ${DAY1}=  db.add_timezone_date  ${US_tz}  10
+
+    ${sTime}=  db.subtract_timezone_time  ${US_tz}  2  00
+    ${eTime}=  add_timezone_time  ${US_tz}  3  00  
+    ${sTime1}  ${eTime1}=  db.endtime_conversion  ${sTime}  ${eTime}
+    
     ${schedule_name}=  FakerLibrary.bs
+    ${list}=  Create List  1  2  3  4  5  6  7
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=5
     ${bool1}=  Random Element  ${bool}
