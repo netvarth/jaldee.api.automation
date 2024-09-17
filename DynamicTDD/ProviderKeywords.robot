@@ -3691,12 +3691,12 @@ Create Sample Service with Prepayment For User
     RETURN  ${resp.json()}
 
 
-Create Sample Service For User
-    [Arguments]   ${Service_name}   ${depid}   ${u_id}
-    ${resp}=  Create Service For User  ${Service_name}  Description   2  ACTIVE  Waitlist  True  email  45  500  False  False  ${depid}   ${u_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    RETURN  ${resp.json()}
+# Create Sample Service For User
+#     [Arguments]   ${Service_name}   ${depid}   ${u_id}
+#     ${resp}=  Create Service For User  ${Service_name}  Description   2  ACTIVE  Waitlist  True  email  45  500  False  False  ${depid}   ${u_id}
+#     Log  ${resp.content}
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     RETURN  ${resp.json()}
 
 Create Service Department
     [Arguments]  ${name}  ${desc}  ${durtn}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}  ${depid}  
