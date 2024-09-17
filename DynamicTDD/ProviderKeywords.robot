@@ -6390,18 +6390,11 @@ Enable Disable Appointment
     Check Deprication  ${resp}  Enable Disable Appointment
     RETURN  ${resp}
     
-Enable Calling Status
-    [Arguments]   ${uid}   
+Enable Disable Calling Status
+    [Arguments]   ${uid}   ${status}  
     Check And Create YNW Session
-    ${resp}=  PUT On Session   ynw  /provider/appointment/callingStatus/${uid}/Enable  expected_status=any
+    ${resp}=  PUT On Session   ynw  /provider/appointment/callingStatus/${uid}/${status}  expected_status=any
     Check Deprication  ${resp}  Enable Calling Status
-    RETURN  ${resp}
-
-Disable Calling Status
-    [Arguments]   ${uid}   
-    Check And Create YNW Session
-    ${resp}=  PUT On Session   ynw  /provider/appointment/callingStatus/${uid}/Disable  expected_status=any
-    Check Deprication  ${resp}  Disable Calling Status
     RETURN  ${resp}
 
 Appointment Action for Batch
