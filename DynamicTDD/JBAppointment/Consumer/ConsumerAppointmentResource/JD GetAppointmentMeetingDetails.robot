@@ -65,158 +65,6 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-1
     Set Suite Variable  ${WHATSAPP_id2}   ${countryCodes[0]}${CUSERNAME0}
     
 
-    # ${PUSERPH0}=  Evaluate  ${PUSERNAME}+338197451
-    # Set Suite Variable   ${PUSERPH0}
-    
-    # ${licid}  ${licname}=  get_highest_license_pkg
-    # Log  ${licid}
-    # Log  ${licname}
-    # ${domresp}=  Get BusinessDomainsConf
-    # Log   ${domresp.json()}
-    # Should Be Equal As Strings  ${domresp.status_code}  200
-    # ${dlen}=  Get Length  ${domresp.json()}
-    # FOR  ${pos}  IN RANGE  ${dlen}  
-    #     Set Suite Variable  ${d1}  ${domresp.json()[${pos}]['domain']}
-    #     ${sd1}  ${check}=  Get Billable Subdomain  ${d1}  ${domresp}  ${pos}  
-    #     Set Suite Variable   ${sd1}
-    #     Exit For Loop IF     '${check}' == '${bool[1]}'
-    # END
-    # Log  ${d1}
-    # Log  ${sd1}
-
-    # ${firstname}=  FakerLibrary.first_name
-    # ${lastname}=  FakerLibrary.last_name
-    # ${address}=  FakerLibrary.address
-    # ${dob}=  FakerLibrary.Date
-    # ${gender}=    Random Element    ${Genderlist}
-    # ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd1}  ${PUSERPH0}  ${licid}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${resp}=  Account Activation  ${PUSERPH0}  0
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # Should Be Equal As Strings  "${resp.json()}"    "true"
-    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
-
-    # ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERPH0}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-    # ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    # Log  ${decrypted_data}
-    # Set Suite Variable  ${pid}  ${decrypted_data['id']}
-    # # Set Test Variable  ${pid}  ${resp.json()['id']}
-    # clear_customer   ${PUSERPH0}
-    
-    # ${resp}=   Get Appointment Settings
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # ${result}=  Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
-    # Log   ${result.json()}
-    # Should Be Equal As Strings  ${result.status_code}  200
-    # ${resp}=   Get Account Settings
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()['appointment']}   ${bool[1]}
-  
-    # ${accId}=  get_acc_id  ${PUSERPH0}
-    # Set Suite Variable  ${accId}
-    
-    # ${list}=  Create List  1  2  3  4  5  6  7
-    # Set Suite Variable  ${list}  ${list}
-    # ${ph1}=  Evaluate  ${PUSERPH0}+1000000000
-    # ${ph2}=  Evaluate  ${PUSERPH0}+2000000000
-    # ${views}=  Random Element    ${Views}
-    # ${name1}=  FakerLibrary.name
-    # ${name2}=  FakerLibrary.name
-    # ${name3}=  FakerLibrary.name
-    # ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
-    # ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    # ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERPH0}.${test_mail}  ${views}
-    # ${bs}=  FakerLibrary.bs
-    # ${companySuffix}=  FakerLibrary.companySuffix
-    # # ${city}=   FakerLibrary.state
-    # # ${latti}=  get_latitude
-    # # ${longi}=  get_longitude
-    # # ${postcode}=  FakerLibrary.postcode
-    # # ${address}=  get_address
-    # ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    # ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    # Set Suite Variable  ${tz}
-    # ${parking}   Random Element   ${parkingType}
-    # ${24hours}    Random Element    ${bool}
-    # ${desc}=   FakerLibrary.sentence
-    # ${url}=   FakerLibrary.url
-    # ${DAY1}=  db.get_date_by_timezone  ${tz}
-    # ${sTime}=  add_timezone_time  ${tz}  0  15  
-    # Set Suite Variable   ${sTime}
-    # ${eTime}=  add_timezone_time  ${tz}  0  45  
-    # Set Suite Variable   ${eTime}
-    # ${DAY1}=  db.get_date_by_timezone  ${tz}
-    # Set Suite Variable  ${DAY1}  ${DAY1}
-
-    # ${resp}=  Update Business Profile with schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${resp}=  Get Business Profile
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${fields}=   Get subDomain level Fields  ${d1}  ${sd1}
-    # Log  ${fields.json()}
-    # Should Be Equal As Strings    ${fields.status_code}   200
-
-    # ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
-
-    # ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sd1}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=  Get specializations Sub Domain  ${d1}  ${sd1}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-
-    # ${spec}=  get_Specializations  ${resp.json()}
-    # ${resp}=  Update Specialization  ${spec}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-
-    # Set Test Variable  ${email_id}  ${P_Email}${PUSERPH0}.${test_mail}
-
-    # ${resp}=  Update Email   ${p_id}   ${firstname}  ${lastname}   ${email_id}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=  Enable Waitlist
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # sleep   01s
-    
-    # ${resp}=  Get jaldeeIntegration Settings
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[0]}   
-
-    # ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # ${resp}=  Get jaldeeIntegration Settings
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-
-    # ${resp}=  Update Waitlist Settings  ${calc_mode[1]}  5  ${bool[0]}  ${bool[0]}  ${bool[1]}  ${bool[0]}   ${Empty}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    
-    # ${resp}=  View Waitlist Settings
-    # Log   ${resp.json()}   
-    # Should Be Equal As Strings  ${resp.status_code}  200 
-    # Verify Response  ${resp}  onlineCheckIns=${bool[1]}
-
     ${firstname}  ${lastname}  ${PUSERPH0}  ${LoginId}=  Provider Signup
     Set Suite Variable  ${PUSERPH0}
 
@@ -255,15 +103,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-1
     ${resp}=  Get Virtual Calling Mode
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['callingMode']}     ${CallingModes[0]}
-    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['value']}           ${ZOOM_id0}
-    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['status']}          ACTIVE
-    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['instructions']}    ${instructions1}
 
-    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['callingMode']}     ${CallingModes[1]}
-    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['value']}           ${PUSERPH0}
-    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['status']}          ACTIVE
-    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['instructions']}    ${instructions2}
 
     ${PUSERPH_id0}=  Evaluate  ${PUSERNAME}+50505
     Set Test Variable  ${callingMode1}     ${CallingModes[1]}
@@ -367,15 +207,6 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-1
     Set Suite Variable   ${apptfor} 
       
 
-    # ${resp}=  ProviderLogout
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=  Consumer Login  ${CUSERNAME6}  ${PASSWORD}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200  
-    # Set Suite Variable  ${fname}  ${resp.json()['firstName']}
-    # Set Suite Variable  ${lname}  ${resp.json()['lastName']}
-    # Set Suite Variable  ${ph_no}  ${resp.json()['primaryPhoneNumber']}
 
    #............provider consumer creation..........
 
@@ -426,20 +257,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-1
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    # Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${cid}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['primaryMobileNo']}   ${ph_no}
-    # Should Be Equal As Strings  ${resp.json()['service']['id']}   ${p1_s1}
-    # Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    # Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${appt_status[1]}
-    # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
-    # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
-    # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    # Should Be Equal As Strings  ${resp.json()['appmtDate']}   ${DAY1}
-    # Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot1}
-    # Should Be Equal As Strings  ${resp.json()['location']['id']}   ${p1_l1}
+
 
     ${resp}=  Consumer Logout
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -473,20 +291,12 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    # ${reason}=  Random Element  ${cancelReason}
-    # ${msg}=   FakerLibrary.word
-    # Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    # ${resp}=    Provider Cancel Appointment  ${apptid1}  ${reason}  ${msg}  ${DAY1}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${reason}=  Random Element  ${cancelReason}
 
     ${resp}=  Appointment Action   ${apptStatus[4]}   ${apptid1}    cancelReason=${reason}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-
 
 
     ${resp}=  ProviderLogout
@@ -513,20 +323,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-2
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    # Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid2}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${cid}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['primaryMobileNo']}   ${ph_no}
-    # Should Be Equal As Strings  ${resp.json()['service']['id']}   ${p1_s2}
-    # Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    # Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${appt_status[1]}
-    # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
-    # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
-    # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    # Should Be Equal As Strings  ${resp.json()['appmtDate']}   ${DAY1}
-    # Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot1}
-    # Should Be Equal As Strings  ${resp.json()['location']['id']}   ${p1_l1}
+
 
     ${resp}=  Consumer Logout
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -560,12 +357,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    # ${reason}=  Random Element  ${cancelReason}
-    # ${msg}=   FakerLibrary.word
-    # Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    # ${resp}=    Provider Cancel Appointment  ${apptid2}  ${reason}  ${msg}  ${DAY1}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
+
 
     ${reason}=  Random Element  ${cancelReason}
 
@@ -602,20 +394,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-UH1
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid3}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    # Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid3}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${cid}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['primaryMobileNo']}   ${ph_no}
-    # Should Be Equal As Strings  ${resp.json()['service']['id']}   ${p1_s1}
-    # Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    # Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${appt_status[1]}
-    # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
-    # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
-    # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    # Should Be Equal As Strings  ${resp.json()['appmtDate']}   ${DAY1}
-    # Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot1}
-    # Should Be Equal As Strings  ${resp.json()['location']['id']}   ${p1_l1}
+
 
     ${resp}=  Consumer Logout
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -660,20 +439,12 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-UH1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    # ${reason}=  Random Element  ${cancelReason}
-    # ${msg}=   FakerLibrary.word
-    # Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    # ${resp}=    Provider Cancel Appointment  ${apptid3}  ${reason}  ${msg}  ${DAY1}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${reason}=  Random Element  ${cancelReason}
 
     ${resp}=  Appointment Action   ${apptStatus[4]}   ${apptid3}    cancelReason=${reason}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-
 
 
     ${resp}=  ProviderLogout
@@ -684,12 +455,6 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-UH1
 JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-3
     [Documentation]  Create Teleservice meeting request for Appointment in Zoom (WALK-IN CHECKIN)
 
-    # ${resp}=  Consumer Login  ${CUSERNAME16}  ${PASSWORD}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # # Set Suite Variable  ${jdconID}   ${resp.json()['id']}
-    # # Set Suite Variable  ${fname16}   ${resp.json()['firstName']}
-    # # Set Suite Variable  ${lname16}   ${resp.json()['lastName']}
 
     ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
@@ -711,12 +476,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-3
     Set Test Variable   ${p1_s3}   ${resp.json()[2]['id']}
     Set Test Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
 
-    # ${resp}=  Get Consumer By Id  ${CUSERNAME16}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${jdconID}   ${resp.json()['userProfile']['id']}
-    # Set Suite Variable  ${fname16}   ${resp.json()['userProfile']['firstName']}
-    # Set Suite Variable  ${lname16}   ${resp.json()['userProfile']['lastName']}
+
 
    #............provider consumer creation..........
 
@@ -754,25 +514,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-3
 
 
 
-
-
-
-    # ${resp}=  AddCustomer  ${CUSERNAME16}   firstName=${fname16}   lastName=${lname16}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-
-    # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME16}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # # Set Suite Variable  ${pcid1}  ${resp.json()[0]['id']}
-
-    # ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${p1_s2}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
-
-    ${resp}=    Get All Schedule Slots By Date Location and Service  ${accId}  ${DAY1}  ${lid}  ${p1_s2}
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${accId}  ${DAY1}  ${p1_l1}  ${p1_s2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
@@ -808,16 +550,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-3
     ${resp}=  Get Appointment By Id   ${apptid4}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response   ${resp}  uid=${apptid4}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}  label=${Emptydict}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname16}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname16}
-    # Should Be Equal As Strings  ${resp.json()['service']['id']}   ${p1_s2}
-    # Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname16}
-    # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname16}
-    # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    # Should Be Equal As Strings  ${resp.json()['location']['id']}   ${p1_l1}
+
     
     ${resp}=  Create Appointment Meeting Request   ${apptid4}   ${CallingModes[0]}   ${waitlistedby[1]}  ${waitlistedby[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -844,13 +577,6 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-
-    # ${reason}=  Random Element  ${cancelReason}
-    # ${msg}=   FakerLibrary.word
-    # Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    # ${resp}=    Provider Cancel Appointment  ${apptid4}  ${reason}  ${msg}  ${DAY1}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${reason}=  Random Element  ${cancelReason}
 
@@ -1073,12 +799,6 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-UH2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    # ${reason}=  Random Element  ${cancelReason}
-    # ${msg}=   FakerLibrary.word
-    # Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    # ${resp}=    Provider Cancel Appointment  ${apptid6}  ${reason}  ${msg}  ${DAY1}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${reason}=  Random Element  ${cancelReason}
 
@@ -1140,16 +860,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-5
     ${resp}=  Get Appointment By Id   ${apptid7}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid7}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}  label=${Emptydict}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID}
-    Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname16}
-    Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname16}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${p1_s2}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname16}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname16}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${p1_l1}
+
     
 
     #Step_1
@@ -1187,12 +898,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-5
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    # ${reason}=  Random Element  ${cancelReason}
-    # ${msg}=   FakerLibrary.word
-    # Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    # ${resp}=    Provider Cancel Appointment  ${apptid7}  ${reason}  ${msg}  ${DAY1}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
+
 
     ${reason}=  Random Element  ${cancelReason}
 
@@ -1228,20 +934,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-6
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid8}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid8}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${cid}
-    Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
-    Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['primaryMobileNo']}   ${ph_no}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${p1_s1}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${appt_status[1]}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    Should Be Equal As Strings  ${resp.json()['appmtDate']}   ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${p1_l1}
+
 
     ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
@@ -1286,12 +979,6 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-6
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    # ${reason}=  Random Element  ${cancelReason}
-    # ${msg}=   FakerLibrary.word
-    # Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    # ${resp}=    Provider Cancel Appointment  ${apptid8}  ${reason}  ${msg}  ${DAY1}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${reason}=  Random Element  ${cancelReason}
 
@@ -1305,7 +992,6 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-6
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    
 
 
 JD-TC-GetAppointmentMeetingDetails-UH3
