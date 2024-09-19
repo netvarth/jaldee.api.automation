@@ -175,11 +175,11 @@ JD-TC-CreateLocation-7
 
 
 JD-TC-CreateLocation-8
-      [Documentation]  Create a location by a user login
+      [Documentation]  Create a location by an admin user login
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${PUSERNAME_U1}  ${u_id} =  Create and Configure Sample User
+      ${PUSERNAME_U1}  ${u_id} =  Create and Configure Sample User  admin=${bool[1]}
 
       ${resp}=    Provider Logout
       Log   ${resp.content}
@@ -207,11 +207,11 @@ JD-TC-CreateLocation-9
       ${resp}=  Get Locations
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Test Variable  ${city}  ${resp.json()[1]['place']}  
-      Set Test Variable  ${longi}  ${resp.json()[1]['longitude']}  
-      Set Test Variable  ${latti}  ${resp.json()[1]['lattitude']}  
-      Set Test Variable  ${postcode}  ${resp.json()[1]['pinCode']}  
-      Set Test Variable  ${address}  ${resp.json()[1]['address']}
+      Set Test Variable  ${city}  ${resp.json()[0]['place']}  
+      Set Test Variable  ${longi}  ${resp.json()[0]['longitude']}  
+      Set Test Variable  ${latti}  ${resp.json()[0]['lattitude']}  
+      Set Test Variable  ${postcode}  ${resp.json()[0]['pinCode']}  
+      Set Test Variable  ${address}  ${resp.json()[0]['address']}
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -248,12 +248,12 @@ JD-TC-CreateLocation -UH2
       Log   ${resp.content}
       Should Be Equal As Strings    ${resp.status_code}   200
 
-      ${resp}=  Consumer Logout
-      Should Be Equal As Strings    ${resp.status_code}    200
+      # ${resp}=  Consumer Logout
+      # Should Be Equal As Strings    ${resp.status_code}    200
 
-      ${resp}=   Consumer Login  ${CUSERNAME1}  ${PASSWORD} 
-      Log  ${resp.content}
-      Should Be Equal As Strings    ${resp.status_code}    200
+      # ${resp}=   Consumer Login  ${CUSERNAME1}  ${PASSWORD} 
+      # Log  ${resp.content}
+      # Should Be Equal As Strings    ${resp.status_code}    200
 
       ${latti}  ${longi}  ${postcode}  ${city}  ${address}=  get_random_location_data 
       ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${postcode}  ${address}

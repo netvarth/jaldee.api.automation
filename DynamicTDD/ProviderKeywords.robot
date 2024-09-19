@@ -765,7 +765,7 @@ Create Sample User
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${countryCodes[1]}  ${PUSERNAME_U1}   ${userType[0]}  &{kwargs}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${countryCodes[1]}  ${PUSERNAME_U1}   ${userType[0]}  admin=${admin}  &{kwargs}
     Should Be Equal As Strings  ${resp.status_code}  200
     RETURN  ${resp.json()}
 
@@ -796,10 +796,10 @@ Configure Sample User
 Create and Configure Sample User
     [Arguments]    ${admin}=${bool[0]}   ${primaryMobileNo}=${EMPTY}   &{kwargs}
 
-    ${u_id}=  Create Sample User  ${admin}=${bool[0]}   ${primaryMobileNo}=${EMPTY}  &{kwargs}
+    ${u_id}=  Create Sample User  admin=${admin}   primaryMobileNo=${primaryMobileNo}  &{kwargs}
 
     ${resp}=  Get User By Id  ${u_id}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${P_User}  ${resp.json()['mobileNo']}
 
