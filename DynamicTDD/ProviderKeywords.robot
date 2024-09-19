@@ -548,6 +548,20 @@ Create Sample Location
     Should Be Equal As Strings  ${resp.status_code}  200
     RETURN  ${resp.json()}
 
+Update Location
+    # [Arguments]   ${place}  ${longi}  ${latti}  ${g_url}  ${pin}  ${add}  ${pt}  ${oh}  ${lid}
+    [Arguments]   ${locationId}  &{kwargs}
+    # ${data}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  pinCode=${pin}  address=${add}  parkingType=${pt}  open24hours=${oh}  id=${lid}
+    ${data}=  Create Dictionary   id=${locationId}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/locations  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Update Location
+    RETURN  ${resp}
+
 Get Location ById
     [Arguments]  ${id}
     Check And Create YNW Session
@@ -1080,7 +1094,7 @@ Get Appointment Settings
 
 Create Appointment Schedule
     [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}   ${consumerParallelServing}    ${loc}  ${timeduration}  ${batch}  @{vargs}  &{kwargs}
-    ${data}=  Appointment Schedule  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}    ${consumerParallelServing}   ${loc}  ${timeduration}  ${batch}  @{vargs}
+    ${data}=  Appointment Schedule  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}  ${parallel}    ${consumerParallelServing}   ${loc}  ${timeduration}  ${batch}  @{vargs}
     
     ${items}=  Get Dictionary items  ${kwargs}
     FOR  ${key}  ${value}  IN  @{items}
@@ -2871,26 +2885,26 @@ Create Sample Item
 #     RETURN  ${resp} 
     
 
-Update Location with schedule
-    [Arguments]   ${place}  ${longi}  ${latti}  ${g_url}  ${pin}  ${add}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${lid}
-    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
-    ${bs}=  Create List  ${bs}
-    ${bs}=  Create Dictionary  timespec=${bs}
-    ${data}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  pinCode=${pin}  address=${add}  parkingType=${pt}  open24hours=${oh}  bSchedule=${bs}  id=${lid}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/locations  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Update Location with schedule
-    RETURN  ${resp}
+# Update Location with schedule
+#     [Arguments]   ${place}  ${longi}  ${latti}  ${g_url}  ${pin}  ${add}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${lid}
+#     ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
+#     ${bs}=  Create List  ${bs}
+#     ${bs}=  Create Dictionary  timespec=${bs}
+#     ${data}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  pinCode=${pin}  address=${add}  parkingType=${pt}  open24hours=${oh}  bSchedule=${bs}  id=${lid}
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session
+#     ${resp}=  PUT On Session  ynw  /provider/locations  data=${data}  expected_status=any
+#     Check Deprication  ${resp}  Update Location with schedule
+#     RETURN  ${resp}
 
-Update Location
-    [Arguments]   ${place}  ${longi}  ${latti}  ${g_url}  ${pin}  ${add}  ${pt}  ${oh}  ${lid}
-    ${data}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  pinCode=${pin}  address=${add}  parkingType=${pt}  open24hours=${oh}  id=${lid}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/locations  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Update Location
-    RETURN  ${resp}
+# Update Location
+#     [Arguments]   ${place}  ${longi}  ${latti}  ${g_url}  ${pin}  ${add}  ${pt}  ${oh}  ${lid}
+#     ${data}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  pinCode=${pin}  address=${add}  parkingType=${pt}  open24hours=${oh}  id=${lid}
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session
+#     ${resp}=  PUT On Session  ynw  /provider/locations  data=${data}  expected_status=any
+#     Check Deprication  ${resp}  Update Location
+#     RETURN  ${resp}
     
 UpdateBaseLocation
     [Arguments]   ${lid}
