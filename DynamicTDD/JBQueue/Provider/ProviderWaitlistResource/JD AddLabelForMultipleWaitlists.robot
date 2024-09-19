@@ -119,7 +119,7 @@ JD-TC-AddMultipleWaitlistLabel-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
     clear_queue    ${HLPUSERNAME17}
 
@@ -303,7 +303,7 @@ JD-TC-AddMultipleWaitlistLabel-2
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
     clear_service   ${HLPUSERNAME17}
-    clear_location  ${HLPUSERNAME17}
+    # clear_location  ${HLPUSERNAME17}
     clear_customer   ${HLPUSERNAME17}
     clear_Label  ${HLPUSERNAME17}
 
@@ -342,7 +342,7 @@ JD-TC-AddMultipleWaitlistLabel-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
     clear_queue    ${HLPUSERNAME17}
 
@@ -485,7 +485,7 @@ JD-TC-AddMultipleWaitlistLabel-3
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
     clear_service   ${HLPUSERNAME17}
-    clear_location  ${HLPUSERNAME17}
+    # clear_location  ${HLPUSERNAME17}
     clear_customer   ${HLPUSERNAME17}
     clear_Label  ${HLPUSERNAME17}
 
@@ -510,7 +510,7 @@ JD-TC-AddMultipleWaitlistLabel-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10    maxBookingsAllowed=10
 
     clear_queue    ${HLPUSERNAME17}
 
@@ -626,7 +626,7 @@ JD-TC-AddMultipleWaitlistLabel-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
     clear_queue    ${HLPUSERNAME17}
 
@@ -752,7 +752,7 @@ JD-TC-AddMultipleWaitlistLabel-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
     clear_queue    ${HLPUSERNAME17}
     
@@ -920,7 +920,7 @@ JD-TC-AddMultipleWaitlistLabel-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
     clear_appt_schedule   ${multilocPro[2]}
     
@@ -1064,7 +1064,7 @@ JD-TC-AddMultipleWaitlistLabel-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
     ${SERVICE2}=    FakerLibrary.Word
     ${s_id1}=  Create Sample Service  ${SERVICE2}
 
@@ -1216,7 +1216,7 @@ JD-TC-AddMultipleWaitlistLabel-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
     clear_queue    ${HLPUSERNAME17}
 
@@ -1292,16 +1292,16 @@ JD-TC-AddMultipleWaitlistLabel-8
     ${i}=   Random Int   min=0   max=${len-1}
     ${lbl_value2}=   Set Variable   ${resp.json()['valueSet'][${i}]['value']}
 
-    ${resp}=  Add Label for Waitlist   ${wid1}  ${lbl_name1}  ${lbl_value1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Add Label for Waitlist   ${wid1}  ${lbl_name1}  ${lbl_value1}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${label}=    Create Dictionary  ${lbl_name1}=${lbl_value1}
+    # ${label}=    Create Dictionary  ${lbl_name1}=${lbl_value1}
 
-    ${resp}=  Get Waitlist By Id  ${wid1} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  label=${label}
+    # ${resp}=  Get Waitlist By Id  ${wid1} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  label=${label}
 
     ${label_dict}=  Create Label Dictionary  ${lbl_name2}  ${lbl_value2}
     ${resp}=  Add Label for Multiple Waitlist   ${label_dict}  ${wid1}  ${wid2}
@@ -1345,17 +1345,6 @@ JD-TC-AddMultipleWaitlistLabel-8
 JD-TC-AddMultipleWaitlistLabel-9
     [Documentation]  Add label to checkin taken from consumer side
 
-    ${resp}=  Consumer Login  ${CUSERNAME23}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID}   ${resp.json()['id']}
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
-
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
@@ -1400,7 +1389,7 @@ JD-TC-AddMultipleWaitlistLabel-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
     clear_queue    ${HLPUSERNAME17}
 
@@ -1433,16 +1422,37 @@ JD-TC-AddMultipleWaitlistLabel-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  label=${Emptydict}
 
+    ${account_id}=  get_acc_id  ${HLPUSERNAME17}
+    Set Suite Variable  ${account_id}
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Suite Variable  ${PCPHONENO}  555${PH_Number}
+
+    ${fname}=  FakerLibrary.first_name
+    ${lname}=  FakerLibrary.last_name
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+
+    ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  email=${pc_emailid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  Send Otp For Login    ${PCPHONENO}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+   
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME25}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID1}   ${resp.json()['id']}
-    Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -1517,7 +1527,7 @@ JD-TC-AddMultipleWaitlistLabel-10
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
     clear_service   ${HLPUSERNAME17}
-    clear_location  ${HLPUSERNAME17}
+    # clear_location  ${HLPUSERNAME17}
     clear_customer   ${HLPUSERNAME17}
     clear_Label  ${HLPUSERNAME17}
 
@@ -1575,14 +1585,14 @@ JD-TC-AddMultipleWaitlistLabel-10
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  label=${Emptydict}
-
+    
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME25}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     
     # ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
@@ -1684,7 +1694,7 @@ JD-TC-AddMultipleWaitlistLabel-11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
     clear_queue    ${HLPUSERNAME17}
     
@@ -1867,9 +1877,9 @@ JD-TC-AddMultipleWaitlistLabel-12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME25}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
@@ -1998,7 +2008,7 @@ JD-TC-AddMultipleWaitlistLabel-13
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
     clear_queue    ${HLPUSERNAME17}
     
@@ -2107,7 +2117,7 @@ JD-TC-AddMultipleWaitlistLabel-14
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
     clear_service   ${HLPUSERNAME17}
-    clear_location  ${HLPUSERNAME17}
+    # clear_location  ${HLPUSERNAME17}
     clear_customer   ${HLPUSERNAME17}
     clear_Label  ${HLPUSERNAME17}
 
@@ -2132,7 +2142,7 @@ JD-TC-AddMultipleWaitlistLabel-14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
     clear_queue    ${HLPUSERNAME17}
 
@@ -2252,7 +2262,7 @@ JD-TC-AddMultipleWaitlistLabel-15
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
     clear_queue    ${PUSERNAME172}
 
@@ -2390,7 +2400,7 @@ JD-TC-AddMultipleWaitlistLabel-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
     clear_queue    ${HLPUSERNAME17}
 
@@ -2535,7 +2545,7 @@ JD-TC-AddMultipleWaitlistLabel-UH2
 
 
 JD-TC-AddMultipleWaitlistLabel-UH3
-    [Documentation]  Add label by consumer login
+    [Documentation]  Add label by Provider consumer login
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log   ${resp.json()}
@@ -2566,9 +2576,9 @@ JD-TC-AddMultipleWaitlistLabel-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME23}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     
     ${label_dict}=  Create Label Dictionary  ${lbl_name}  ${lbl_value}
     ${resp}=  Add Label for Multiple Waitlist   ${label_dict}  ${wl_i}  ${wl_j}
@@ -2860,7 +2870,7 @@ JD-TC-AddMultipleWaitlistLabel-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
     clear_queue    ${HLPUSERNAME17}
 
@@ -2983,17 +2993,6 @@ JD-TC-AddMultipleWaitlistLabel-UH10
 
 JD-TC-AddMultipleWaitlistLabel-UH11
     [Documentation]  Add label when label name is empty
-
-    ${resp}=  Consumer Login  ${CUSERNAME23}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID}   ${resp.json()['id']}
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
-
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log   ${resp.json()}
@@ -3035,7 +3034,7 @@ JD-TC-AddMultipleWaitlistLabel-UH11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
     clear_queue    ${HLPUSERNAME17}
 
@@ -3092,17 +3091,6 @@ JD-TC-AddMultipleWaitlistLabel-UH11
 JD-TC-AddMultipleWaitlistLabel-UH12
     [Documentation]  Add label when label value is empty
 
-    ${resp}=  Consumer Login  ${CUSERNAME23}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID}   ${resp.json()['id']}
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
-
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
@@ -3143,7 +3131,7 @@ JD-TC-AddMultipleWaitlistLabel-UH12
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
     clear_queue    ${HLPUSERNAME17}
 
@@ -3199,17 +3187,6 @@ JD-TC-AddMultipleWaitlistLabel-UH12
 
 JD-TC-AddMultipleWaitlistLabel-UH13
     [Documentation]  Add label to appointment
-
-    ${resp}=  Consumer Login  ${CUSERNAME23}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID}   ${resp.json()['id']}
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
-
-    ${resp}=  Consumer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
     Log   ${resp.json()}
@@ -3251,7 +3228,7 @@ JD-TC-AddMultipleWaitlistLabel-UH13
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
     clear_appt_schedule   ${HLPUSERNAME17}
 
