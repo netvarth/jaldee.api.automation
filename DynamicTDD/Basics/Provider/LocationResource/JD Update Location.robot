@@ -193,7 +193,7 @@ JD-TC-UpdateLocation-UH4
 
       ${city}=   get_place
       ${resp}=  Update Location  ${lid1}  place=${city}
-      Should Be Equal As Strings    ${resp.status_code}   200
+      Should Be Equal As Strings    ${resp.status_code}   422
 
       ${resp}=  Get Locations
       Log  ${resp.content}
@@ -225,7 +225,7 @@ JD-TC-UpdateLocation-UH5
 
       ${city}=   get_place
       ${resp}=  Update Location  ${lid1}  place=${city}
-      Should Be Equal As Strings    ${resp.status_code}   200
+      Should Be Equal As Strings    ${resp.status_code}   422
 
       ${resp}=  Get Locations
       Log  ${resp.content}
