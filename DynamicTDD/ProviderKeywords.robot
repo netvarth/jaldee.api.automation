@@ -1147,7 +1147,7 @@ Take Appointment For Consumer
     RETURN  ${resp}
 
 Appointment Schedule
-    [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}   ${consumerParallelServing}   ${loc}  ${timeduration}  ${batch}  @{vargs}
+    [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}  ${parallel}   ${consumerParallelServing}   ${loc}  ${timeduration}  ${batch}  @{vargs}
     ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${stime}  ${etime}
     ${location}=  Create Dictionary  id=${loc}
     ${data}=  Create Dictionary  name=${name}  apptSchedule=${bs}   parallelServing=${parallel}    consumerParallelServing=${consumerParallelServing}  location=${location}  timeDuration=${timeduration}  batchEnable=${batch}

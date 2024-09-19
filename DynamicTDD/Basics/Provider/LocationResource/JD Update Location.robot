@@ -180,6 +180,10 @@ JD-TC-UpdateLocation-UH4
 
       ${PUSERNAME_U1}  ${u_id} =  Create and Configure Sample User
 
+      ${resp}=  Get User
+      Log   ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
       ${resp}=    Provider Logout
       Log   ${resp.content}
       Should Be Equal As Strings    ${resp.status_code}    200
@@ -222,6 +226,11 @@ JD-TC-UpdateLocation-UH5
       ${city}=   get_place
       ${resp}=  Update Location  ${lid1}  place=${city}
       Should Be Equal As Strings    ${resp.status_code}   200
+
+      ${resp}=  Get Locations
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Should Be Equal As Strings  ${resp.json()[1]['place']}  ${city}
 
 
 ***COMMENTS***
