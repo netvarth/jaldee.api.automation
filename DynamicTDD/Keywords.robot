@@ -259,7 +259,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{migrationType}                    Patients   Appointments  Notes
 @{printTemplateStatus}              active   inactive
 @{printTemplateType}                Prescription    Case    Finance
-@{storeNature}                      PHARMACY   LAB    RADIOLOGY
+@{storeNature}                      PHARMACY   LAB    RADIOLOGY   WAREHOUSE  BAKERY  OTHERS
 @{taxtypeenum}                      GST  CESS  VAT
 @{customertitle}                    Mr.  Ms.  Mrs.  Master.
 @{InventoryCatalogStatus}           Active   Inactive
