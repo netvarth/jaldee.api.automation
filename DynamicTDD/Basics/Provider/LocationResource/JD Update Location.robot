@@ -16,93 +16,27 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-UpdateLocation-1
       [Documentation]  Update a location by provider login without schedule and verify location updated with previous schedule
-      ${domresp}=  Get BusinessDomainsConf
-      Should Be Equal As Strings  ${domresp.status_code}  200
-      ${len}=  Get Length  ${domresp.json()}
-      FOR  ${domindex}  IN RANGE  ${len}
-            Set Test Variable  ${multi}  ${domresp.json()[${domindex}]['multipleLocation']}
-            Run Keyword If  '${multi}'=='True'  Multiple Location  ${domindex}  ${domresp.json()}
-      END
-      ${firstname}=  FakerLibrary.first_name
-      ${lastname}=  FakerLibrary.last_name
       ${PUSERNAME_D}=  Evaluate  ${PUSERNAME}+4500115
-      ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_D}    1
-      Log  ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Activation  ${PUSERNAME_D}  0
-      Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Set Credential  ${PUSERNAME_D}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_D}
-      Should Be Equal As Strings    ${resp.status_code}    200
+      ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup without Profile  PhoneNumber=${PUSERNAME_A}
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
-      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_D}${\n}
-      Set Suite Variable  ${PUSERNAME_D}
-      # ${city}=   get_place
-      # Set Suite Variable  ${city}
-      # ${latti}=  get_latitude
-      # Set Suite Variable  ${latti}
-      # ${longi}=  get_longitude
-      # Set Suite Variable  ${longi}
-      # ${postcode}=  FakerLibrary.postcode
-      # Set Suite Variable  ${postcode}
-      # ${address}=  get_address
-      # Set Suite Variable  ${address}
-      ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+      
+      ${latti}  ${longi}  ${postcode}  ${city}  ${address}=  get_random_location_data
       ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-      Set Suite Variable  ${tz}
-      Set Suite Variable  ${city}
-      Set Suite Variable  ${latti}
-      Set Suite Variable  ${longi}
-      Set Suite Variable  ${postcode}
-      Set Suite Variable  ${address}
-      ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
-      Set Suite Variable  ${parking_type}
-      ${24hours}    Random Element    ['True','False']
-      Set Suite Variable  ${24hours}
-      ${DAY}=  db.get_date_by_timezone  ${tz}
-    	Set Suite Variable  ${DAY}
-	${list}=  Create List  1  2  3  4  5  6  7
-    	Set Suite Variable  ${list}
-      ${sTime}=  add_timezone_time  ${tz}  0  15  
-      Set Suite Variable   ${sTime}
-      ${eTime0}=  add_timezone_time  ${tz}  0  30  
-      Set Suite Variable   ${eTime0}
-      ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime0}
+      
+      ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${postcode}  ${address}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${lid1}  ${resp.json()}
-      sleep  02s
-      ${resp}=  UpdateBaseLocation  ${lid1}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      # ${city1}=   get_place
-      # Set Suite Variable  ${city1}
-      # # ${latti1}=  get_latitude
-      # Set Suite Variable  ${latti1}
-      # # ${longi1}=  get_longitude
-      # Set Suite Variable  ${longi1}
-      # # ${postcode1}=  FakerLibrary.postcode
-      # Set Suite Variable  ${postcode1}
-      # ${address1}=  get_address
       
-      ${latti1}  ${longi1}  ${postcode1}  ${city1}  ${district}  ${state}  ${address1}=  get_loc_details
+      ${latti1}  ${longi1}  ${postcode1}  ${city1}  ${address1}=  get_random_location_data
       ${tz}=   db.get_Timezone_by_lat_long   ${latti1}  ${longi1}
 
-      # Set Suite Variable  ${city1}
-      Set Suite Variable  ${latti1}
-      Set Suite Variable  ${longi1}
-      Set Suite Variable  ${postcode1}
-
-      Set Suite Variable  ${tz}
-      Set Suite Variable  ${address1}
-      Set Suite Variable  ${city1}
-      ${parking_type1}    Random Element     ['none','free','street','privatelot','valet','paid']
-      Set Suite Variable  ${parking_type1}
-      ${24hours1}    Random Element    ['True','False']
-      Set Suite Variable  ${24hours1}
       ${resp}=  Update Location  ${city1}  ${longi1}  ${latti1}  www.${city1}.com  ${postcode1}  ${address1}  ${parking_type1}  ${24hours1}  ${lid1} 
       Should Be Equal As Strings  ${resp.status_code}  200
-      
+
+***COMMENT***
 JD-TC-UpdateLocation-2
       [Documentation]  Update a base location by provider login  with schedule details (Base location has no schedule details)
       ${domresp}=  Get BusinessDomainsConf
@@ -296,7 +230,7 @@ JD-TC-UpdateLocation-4
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
       Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+      Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
       Set Suite Variable  ${PUSERNAME_E}
       ${uid}=  get_uid  ${PUSERNAME_E}
       # ${city8}=   get_place

@@ -175,7 +175,7 @@ JD-TC-GetStoreTypeByFilter-5
 
 JD-TC-GetStoreTypeByFilter-6
 
-    [Documentation]   Update store type storenature to PHARMACY andGet Store Type Filter(storeNature).
+    [Documentation]   Update store type storenature to PHARMACY and Get Store Type Filter(storeNature).
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log   ${resp.content}

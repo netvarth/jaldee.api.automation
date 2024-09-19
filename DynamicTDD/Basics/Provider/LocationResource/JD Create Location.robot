@@ -313,7 +313,7 @@ JD-TC-CreateLocation-UH5
 	[Documentation]  Create a location with empty lattitude 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      clear_location   ${PUSERNAME9}
+      # clear_location   ${PUSERNAME9}
 
       ${latti12}  ${longi12}  ${postcode12}  ${city12}  ${address12}=  get_random_location_data
       
