@@ -26,75 +26,40 @@ JD-TC-DisableLocation-1
 
       [Documentation]  Disable a location by provider login and check the corresponding queues are disabled
 
-      ${domresp}=  Get BusinessDomainsConf
-      Should Be Equal As Strings  ${domresp.status_code}  200
-      ${len}=  Get Length  ${domresp.json()}
-      FOR  ${domindex}  IN RANGE  ${len}
-            Set Test Variable  ${multi}  ${domresp.json()[${domindex}]['multipleLocation']}
-            Run Keyword If  '${multi}'=='True'  Multiple Location  ${domindex}  ${domresp.json()}
-      END
-      ${firstname}=  FakerLibrary.first_name
-      ${lastname}=  FakerLibrary.last_name
       ${PUSERNAME_D}=  Evaluate  ${PUSERNAME}+450001
-      ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_D}    1
-      Log  ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    202
-      ${resp}=  Account Activation  ${PUSERNAME_D}  0
-      Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Set Credential  ${PUSERNAME_D}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_D}
-      Should Be Equal As Strings    ${resp.status_code}    200
+      
+      ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_D}=  Provider Signup without Profile  PhoneNumber=${PUSERNAME_D}
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
-      Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
-      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_D}${\n}
       Set Suite Variable  ${PUSERNAME_D}
-      ${lid1}=  Create Sample Location
-      ${resp}=   Get Location ById  ${lid1}
-      Log  ${resp.content}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-      ${DAY}=  db.get_date_by_timezone  ${tz}
-    	Set Suite Variable  ${DAY}
-      ${DAY2}=  db.add_timezone_date  ${tz}  10  
-    	Set Suite Variable  ${DAY2}
-	${list1}=  Create List  1  2  3  4
-    	Set Suite Variable  ${list1}
-      ${latti2}  ${longi2}  ${postcode2}  ${city2}  ${district}  ${state}  ${address2}=  get_loc_details
-      ${tz2}=   db.get_Timezone_by_lat_long   ${latti2}  ${longi2}
-      Set Suite Variable  ${tz2}
-      ${parking_type2}    Random Element     ['none','free','street','privatelot','valet','paid']
-      Set Suite Variable  ${parking_type2}
-      ${24hours2}    Random Element    ['True','False']
-      Set Suite Variable   ${24hours2}
-      ${sTime2}=  add_timezone_time  ${tz}  2  15  
-      Set Suite Variable  ${sTime2}
-      ${eTime2}=  add_timezone_time  ${tz}  2  45  
-      Set Suite Variable  ${eTime2}
-      ${resp}=  Create Location  ${city2}  ${longi2}  ${latti2}  www.${city2}.com  ${postcode2}  ${address2}  ${parking_type2}  ${24hours2}  Weekly  ${list1}  ${DAY}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}
-      Log  ${resp.json()}
+      ${latti}  ${longi}  ${postcode}  ${city}  ${address}=  get_random_location_data
+      ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}      
+      ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${postcode}  ${address}  
+      Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${lid}  ${resp.json()}
 
       ${resp}=   Get Service
-      Log   ${resp.json()}
+      Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-
       Set Suite Variable   ${p1_s1}   ${resp.json()[0]['id']}
       Set Suite Variable   ${P1SERVICE1}   ${resp.json()[0]['name']}
 
-      ${sTime1}=  add_timezone_time  ${tz}  2  15  
-      Set Suite Variable  ${sTime1}
-      ${eTime1}=  add_timezone_time  ${tz}  2  30  
-      Set Suite Variable  ${eTime1}
-      ${queue_name1}=  FakerLibrary.bs
-      Set Suite Variable  ${queue_name1}
-      ${resp}=  Create Queue  ${queue_name1}  Weekly  ${list1}  ${DAY}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${p1_s1}
+      ${resp}=  Sample Queue  ${lid}   ${p1_s1}
+      Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${q_id1}  ${resp.json()}
+      Set Test Variable  ${q_id}  ${resp.json()}
+
+      ${resp}=  Get Queue ById  ${q_id}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
 
       ${resp}=  Disable Location  ${lid}
-      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${resp}=  Get Queue ById  ${q_id}
+      Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-DisableLocation-2

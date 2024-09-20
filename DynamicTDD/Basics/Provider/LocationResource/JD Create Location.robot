@@ -365,7 +365,7 @@ JD-TC-CreateLocation-UH7
       Should Be Equal As Strings  "${resp.json()}"  "${LOCATION_EXISTS}"
 
 
-JD-TC-CreateLocation-8
+JD-TC-CreateLocation-12
 	[Documentation]   Auto detect your location then create location using that data.
       ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
