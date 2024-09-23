@@ -8,6 +8,7 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource        /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/providers.py
@@ -34,11 +35,11 @@ JD-TC-GetLocationById-1
 
       ${resp}=  Get Location ById  ${lid}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Should Be Equal As Strings  ${resp.json()['place']}  ${city1}
-      Should Be Equal As Strings  ${resp.json()['longitude']}  ${longi1}
-      Should Be Equal As Strings  ${resp.json()['lattitude']}  ${latti1}
-      Should Be Equal As Strings  ${resp.json()['pinCode']}  ${postcode1}
-      Should Be Equal As Strings  ${resp.json()['address']}  ${address1}
+      Should Be Equal As Strings  ${resp.json()['place']}  ${city}
+      Should Be Equal As Strings  ${resp.json()['longitude']}  ${longi}
+      Should Be Equal As Strings  ${resp.json()['lattitude']}  ${latti}
+      Should Be Equal As Strings  ${resp.json()['pinCode']}  ${postcode}
+      Should Be Equal As Strings  ${resp.json()['address']}  ${address}
       Should Be Equal As Strings  ${resp.json()['googleMapUrl']}  ${g_url}
       Should Be Equal As Strings  ${resp.json()['status']}  ${status[0]}
       Should Be Equal As Strings  ${resp.json()['baseLocation']}  ${bool[0]}

@@ -576,11 +576,18 @@ Get Locations
     Check Deprication  ${resp}  Get Locations
     RETURN  ${resp}
 
+Enable Location
+    [Arguments]   ${id}
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw  /provider/locations/${id}/enable  expected_status=any
+    Check Deprication  ${resp}  Enable Location
+    RETURN  ${resp}
+
 Disable Location
     [Arguments]   ${id}  
     Check And Create YNW Session
     ${resp}=    DELETE On Session    ynw  /provider/locations/${id}/disable  expected_status=any
-    Check Deprication  ${resp}  Enable Disable Location
+    Check Deprication  ${resp}  Disable Location
     RETURN  ${resp}
 
 AddCustomer
@@ -2944,12 +2951,7 @@ UpdateBaseLocation
     Check Deprication  ${resp}  UpdateBaseLocation
     RETURN  ${resp}
     
-Enable Location
-    [Arguments]   ${id}
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw  /provider/locations/${id}/enable  expected_status=any
-    Check Deprication  ${resp}  Enable Location
-    RETURN  ${resp}
+
 
 Get Location Suggester
    [Arguments]  &{kwargs}
