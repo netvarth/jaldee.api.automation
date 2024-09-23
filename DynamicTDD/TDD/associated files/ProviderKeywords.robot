@@ -4032,11 +4032,11 @@ Get Appointment Schedules
     ${resp}=    GET On Session     ynw   /provider/appointment/schedule  params=${kwargs}  expected_status=any
     RETURN  ${resp}
 
-Get Appointment Schedule Slots By Date
-    [Arguments]   ${schId}   ${date}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/appointment/schedule/${schId}/date/${date}   expected_status=any
-    Check Deprication  ${resp}  Get Appointment Schedule By Date
+Get Appointment Schedule By Location service Date
+	[Arguments]	 ${locationId}	${serviceId}   ${date}
+	Check And Create YNW Session
+	${resp}=  GET On Session  ynw  /provider/appointment/schedule/location/${locationId}/service/${serviceId}/date/${date}  expected_status=any
+    Check Deprication  ${resp}  Get Appointment Schedule By Location service Date
     RETURN  ${resp}
 
 Get Appointment Slots By Date Schedule
