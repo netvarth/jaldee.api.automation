@@ -18,7 +18,90 @@ ${queue2}   Evening queue
 ${SERVICE1}	   Bridal MakeupW1
 
 *** Test Cases ***
+JD-TC-EnableLocation-1
+      [Documentation]  Disable and Enable a location
+      ${PUSERNAME_D}=  Evaluate  ${PUSERNAME}+450015
+      ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_D}=  Provider Signup  PhoneNumber=${PUSERNAME_D}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+      Should Be Equal As Strings    ${resp.status_code}    200
+      Set Suite Variable  ${PUSERNAME_D}
 
+      ${latti}  ${longi}  ${postcode}  ${city}  ${address}=  get_random_location_data    
+      ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${postcode}  ${address}  
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable  ${lid}  ${resp.json()}
+
+      ${resp}=  Disable Location  ${lid}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${resp}=  Get Location ById  ${lid}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Should Be Equal As Strings  ${resp.json()['status']}  ${status[1]}
+
+      ${resp}=  Enable Location  ${lid}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${resp}=  Get Location ById  ${lid}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Should Be Equal As Strings  ${resp.json()['status']}  ${status[0]}
+
+
+JD-TC-EnableLocation-2
+      [Documentation]  Enable a location by provider login and check the corresponding queues are still in disabled state (gets disabled on disabling location)
+
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+      Should Be Equal As Strings    ${resp.status_code}    200
+
+      ${latti}  ${longi}  ${postcode}  ${city}  ${address}=  get_random_location_data    
+      ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${postcode}  ${address}  
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable  ${lid}  ${resp.json()}
+
+      ${resp}=   Get Service
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable   ${p1_s1}   ${resp.json()[0]['id']}
+
+      ${resp}=  Sample Queue  ${lid}   ${p1_s1}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable  ${q_id}  ${resp.json()}
+
+      ${resp}=  Get Queue ById  ${q_id}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Should Be Equal As Strings  ${resp.json()['queueState']}  ${Qstate[0]}
+
+      ${resp}=  Disable Location  ${lid}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${resp}=  Get Location ById  ${lid}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Should Be Equal As Strings  ${resp.json()['status']}  ${status[1]}
+
+      ${resp}=  Get Queue ById  ${q_id}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Should Be Equal As Strings  ${resp.json()['queueState']}  ${Qstate[1]}
+
+      ${resp}=  Enable Location  ${lid}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${resp}=  Get Location ById  ${lid}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Should Be Equal As Strings  ${resp.json()['status']}  ${status[0]}
+
+      ${resp}=  Get Queue ById  ${q_id}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Should Be Equal As Strings  ${resp.json()['queueState']}  ${Qstate[1]}
+
+*** COMMENTS ***
 JD-TC-EnableLocation-1
       [Documentation]  Enable a location by provider login and check the corresponding queues are exist in same state
       ${domresp}=  Get BusinessDomainsConf
@@ -84,7 +167,6 @@ JD-TC-EnableLocation-1
       ${resp}=   Get Service
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-
       Set Suite Variable   ${p1_s1}   ${resp.json()[0]['id']}
       Set Suite Variable   ${P1SERVICE1}   ${resp.json()[0]['name']}
 
@@ -104,7 +186,6 @@ JD-TC-EnableLocation-1
       Should Be Equal As Strings  ${resp.status_code}  200
       Verify Response  ${resp}  status=INACTIVE
 
-     
 JD-TC-EnableLocation-2
       [Documentation]  Create more queues on a location and enable the location and check the corresponding queues are enabled
        ${domresp}=  Get BusinessDomainsConf
@@ -184,7 +265,7 @@ JD-TC-EnableLocation-2
 #       Log  ${resp.json()}
 #       Should Be Equal As Strings    ${resp.status_code}    200
 #       Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+#       Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
 #       Set Suite Variable  ${PUSERNAME_E}
 #       ${uid}=  get_uid  ${PUSERNAME_E}
 #       ${city8}=   get_place
