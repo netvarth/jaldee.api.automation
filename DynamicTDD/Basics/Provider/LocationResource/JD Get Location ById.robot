@@ -5,11 +5,11 @@ Force Tags        Location
 Library           Collections
 Library           String
 Library           json
-Library         FakerLibrary
-Resource        /ebs/TDD/ProviderKeywords.robot
-Resource        /ebs/TDD/ConsumerKeywords.robot
-Variables       /ebs/TDD/varfiles/providers.py
-Variables       /ebs/TDD/varfiles/consumerlist.py 
+Library           FakerLibrary
+Resource          /ebs/TDD/ProviderKeywords.robot
+Resource          /ebs/TDD/ConsumerKeywords.robot
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 # Suite Setup       Run Keyword  clear_location  ${PUSERNAME7}
@@ -30,6 +30,7 @@ JD-TC-GetLocationById-1
       ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${postcode}  ${address}  googleMapUrl=${url}  parkingType=${parking}  open24hours=${24hours}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable  ${lid}  ${resp.json()}
 
       ${resp}=  Get Location ById  ${lid}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -51,74 +52,31 @@ JD-TC-GetLocationById-1
 JD-TC-GetLocationById-2
 	[Documentation]  Get a location by user login
 
-      ${multiusers}=    Multiple Users branches
+      ${multiusers}=    Multiple Users Accounts
       Log   ${multiusers}
-      ${BUSER}=  Random Element    ${multiusers}
-      Set Suite Variable  ${BUSER}
+      ${PUSER}=  Random Element    ${multiusers}
+      Set Suite Variable  ${PUSER}
 
-      ${resp}=   Encrypted Provider Login  ${BUSER}  ${PASSWORD} 
-      Log  ${resp.content}
+      ${resp}=   Encrypted Provider Login  ${PUSER}  ${PASSWORD} 
       Should Be Equal As Strings    ${resp.status_code}   200
 
-
-      ${iscorp_subdomains}=  get_iscorp_subdomains  1
-      Log  ${iscorp_subdomains}
-      Set Test Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
-      Set Test Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
-      ${firstname}=  FakerLibrary.first_name
-      ${lastname}=  FakerLibrary.last_name
-      ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+450027
-      ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    2
-      Log  ${resp.content}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Activation  ${PUSERNAME_E}  0
-      Log  ${resp.content}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
-      Log  ${resp.content}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
-      Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
-      Set Suite Variable  ${PUSERNAME_E}
-      ${uid}=  get_uid  ${PUSERNAME_E}
-      # ${city8}=   get_place
-      # Set Suite Variable  ${city8}
-      # ${latti8}=  get_latitude
-      # Set Suite Variable  ${latti8}
-      # ${longi8}=  get_longitude
-      # Set Suite Variable  ${longi8}
-      # ${postcode8}=  FakerLibrary.postcode
-      # Set Suite Variable  ${postcode8}
-      ${latti8}  ${longi8}  ${city8}  ${postcode8}=  get_lat_long_city_pin
-      ${tz8}=   db.get_Timezone_by_lat_long   ${latti8}  ${longi8}
-      Set Suite Variable  ${tz8}
-      Set Suite Variable  ${city8}
-      Set Suite Variable  ${latti8}
-      Set Suite Variable  ${longi8}
-      Set Suite Variable  ${postcode8}
-      ${24hours8}    Random Element    ${bool}
-      Set Suite Variable  ${24hours8}
-      ${DAY}=  db.get_date_by_timezone  ${tz}
-      Set Suite Variable  ${DAY}
-      ${DAY2}=  db.add_timezone_date  ${tz}  10  
-      Set Suite Variable  ${DAY2}
-	${list}=  Create List  1  2  3  4  5  6  7
-      Set Suite Variable  ${list}
-      ${sTime2}=  add_timezone_time  ${tz}  0  35  
-      Set Suite Variable   ${sTime2}
-      ${eTime2}=  add_timezone_time  ${tz}  0  60  
-      Set Suite Variable   ${eTime2}
-
-      ${lid8}=  Create Sample Location
-      Set Suite Variable  ${lid8}
-      ${resp}=  Get Locations
+      ${latti}  ${longi}  ${postcode}  ${city}  ${address}=  get_random_location_data
+      ${resp}=  Create Location   ${city}  ${longi}  ${latti}  ${postcode}  ${address}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      # ${resp}=  Create Location  ${city8}  ${longi8}  ${latti8}  www.${city8}.com  ${postcode8}  ${address}  ${parking_type}  ${24hours8}  Weekly  ${list}  ${DAY}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}
-      # Log  ${resp.content}
-      # Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${lid}  ${resp.json()}
+
+      ${PUSERNAME_U1}  ${u_id} =  Create and Configure Sample User
+
+      ${resp}=    Provider Logout
+      Should Be Equal As Strings    ${resp.status_code}    200
+
+      ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
+      Should Be Equal As Strings             ${resp.status_code}   200
+
+      ${resp}=  Get Location ById  ${lid}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
       
 
 
@@ -138,12 +96,19 @@ JD-TC-GetLocationById -UH2
  
 JD-TC-GetLocationById -UH3
       [Documentation]   Consumer Get a Location by id
-      ${resp}=   Consumer Login  ${CUSERNAME1}  ${PASSWORD} 
-      Should Be Equal As Strings    ${resp.status_code}    200
+      ${account_id}=    get_acc_id       ${PUSER}
+
+      ${primaryMobileNo}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME3}
+
+      ${resp}=    ProviderConsumer Login with token   ${CUSERNAME3}  ${account_id}  ${token} 
+      Log   ${resp.content}
+      Should Be Equal As Strings    ${resp.status_code}   200
+
       ${resp}=  Get Location ById  ${lid}
       Should Be Equal As Strings    ${resp.status_code}   401
       Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}"
 
+*** COMMENTS ***
       sleep  01s                                  
 JD-TC-VerifyGetLocationById-1
 	[Documentation]  Verify location details by provider login ${PUSERNAME5}

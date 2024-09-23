@@ -48,7 +48,6 @@ JD-TC-CreateLocation-2
       ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup without Profile  PhoneNumber=${PUSERNAME_A}
       
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
-      Log  ${resp.content}
       Should Be Equal As Strings    ${resp.status_code}    200
       Set Suite Variable  ${PUSERNAME_A}
 
@@ -64,7 +63,6 @@ JD-TC-CreateLocation-3
       ${PUSERNAME_B}=  Evaluate  ${PUSERNAME}+4400001
       ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_B}=  Provider Signup without Profile  PhoneNumber=${PUSERNAME_B}
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
-      Log  ${resp.content}
       Should Be Equal As Strings    ${resp.status_code}    200
       Set Suite Variable  ${PUSERNAME_B}
       
@@ -86,7 +84,6 @@ JD-TC-CreateLocation-4
       ${PUSERNAME_C}=  Evaluate  ${PUSERNAME}+4400012
       ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_C}=  Provider Signup without Profile  PhoneNumber=${PUSERNAME_C}
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
-      Log  ${resp.content}
       Should Be Equal As Strings    ${resp.status_code}    200
       Set Suite Variable  ${PUSERNAME_C}
 
@@ -110,7 +107,6 @@ JD-TC-CreateLocation-5
       ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_D}=  Provider Signup without Profile  PhoneNumber=${PUSERNAME_D}
       
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
-      Log  ${resp.content}
       Should Be Equal As Strings    ${resp.status_code}    200
       Set Suite Variable  ${PUSERNAME_D}
       
@@ -132,7 +128,6 @@ JD-TC-CreateLocation-6
       ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_E}=  Provider Signup without Profile
       
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
-      Log  ${resp.content}
       Should Be Equal As Strings    ${resp.status_code}    200
       Set Suite Variable  ${PUSERNAME_E}
       
@@ -308,6 +303,7 @@ JD-TC-CreateLocation-UH4
       Should Be Equal As Strings  ${resp.status_code}  422
       Should Be Equal As Strings  ${resp.json()}  ${INVALID_LOGITUDE}
 
+
 JD-TC-CreateLocation-UH5
 	[Documentation]  Create a location with empty lattitude 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
@@ -320,6 +316,7 @@ JD-TC-CreateLocation-UH5
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  422
       Should Be Equal As Strings  "${resp.json()}"  "${INVALID_LATTITUDE}"
+
 
 JD-TC-CreateLocation-UH6
 	[Documentation]  User without admin privilege try to create location

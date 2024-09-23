@@ -16,95 +16,49 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-GetLocations-1
       [Documentation]  Get Locations by provider login
-      ${domresp}=  Get BusinessDomainsConf
-      Should Be Equal As Strings  ${domresp.status_code}  200
-      ${len}=  Get Length  ${domresp.json()}
-      FOR  ${domindex}  IN RANGE  ${len}
-            Set Test Variable  ${multi}  ${domresp.json()[${domindex}]['multipleLocation']}
-            Run Keyword If  '${multi}'=='True'  Multiple Location  ${domindex}  ${domresp.json()}
-      END
-      ${firstname}=  FakerLibrary.first_name
-      ${lastname}=  FakerLibrary.last_name
-      ${PUSERNAME_D}=  Evaluate  ${PUSERNAME}+440010
-      ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_D}    2
-      Log  ${resp.json()}
+      ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+440010
+      ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup without Profile  PhoneNumber=${PUSERNAME_A}
+      
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Activation  ${PUSERNAME_D}  0
-      Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Set Credential  ${PUSERNAME_D}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_D}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
-      Log  ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_D}${\n}
-      Set Suite Variable  ${PUSERNAME_D}
-      # ${city1}=   get_place
-      # Set Suite Variable  ${city1}
-      # ${latti1}=  get_latitude
-      # Set Suite Variable  ${latti1}
-      # ${longi1}=  get_longitude
-      # Set Suite Variable  ${longi1}
-      # ${postcode1}=  FakerLibrary.postcode
-      # Set Suite Variable  ${postcode1}
-      # ${address1}=  get_address
-      # Set Suite Variable  ${address1}
-      ${latti1}  ${longi1}  ${postcode1}  ${city1}  ${district}  ${state}  ${address1}=  get_loc_details
-      ${tz}=   db.get_Timezone_by_lat_long   ${latti1}  ${longi1}
-      Set Suite Variable  ${tz}
-      Set Suite Variable  ${address1}
-      Set Suite Variable  ${city1}
-      Set Suite Variable  ${latti1}
-      Set Suite Variable  ${longi1}
-      Set Suite Variable  ${postcode1}
-      Set Suite Variable  ${address1}
-      ${parking_type1}    Random Element     ['none','free','street','privatelot','valet','paid']
-      Set Suite Variable  ${parking_type1}
-      ${24hours1}    Random Element    ['True','False']
-      Set Suite Variable  ${24hours1}
-      ${sTime1}=  add_timezone_time  ${tz}  0  35  
-      Set Suite Variable   ${sTime1}
-      ${eTime1}=  add_timezone_time  ${tz}  0  30  
-      Set Suite Variable   ${eTime1}
-      ${list}=  Create List  1  2  3  4  5  6  7
-    	Set Suite Variable  ${list}
-      ${DAY}=  db.get_date_by_timezone  ${tz}
-    	Set Suite Variable  ${DAY}
-      ${resp}=  Create Location  ${city1}  ${longi1}  ${latti1}  www.${city1}.com  ${postcode1}  ${address1}  ${parking_type1}  ${24hours1}  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
-      Log  ${resp.json()}
+      Set Suite Variable  ${PUSERNAME_A}
+
+      ${latti1}  ${longi1}  ${postcode1}  ${city1}  ${address1}=  get_random_location_data
+      ${tz1}=   db.get_Timezone_by_lat_long   ${latti1}  ${longi1}      
+      ${resp}=  Create Location  ${city1}  ${longi1}  ${latti1}  ${postcode1}  ${address1}  
+      Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      # ${city2}=   get_place
-      # Set Suite Variable  ${city2}
-      # ${latti2}=  get_latitude
-      # Set Suite Variable  ${latti2}
-      # ${longi2}=  get_longitude
-      # Set Suite Variable  ${longi2}
-      # ${postcode2}=  FakerLibrary.postcode
-      # Set Suite Variable  ${postcode2}
-      # ${address2}=  get_address
-      # Set Suite Variable  ${address2}
-      ${latti2}  ${longi2}  ${postcode2}  ${city2}  ${district}  ${state}  ${address2}=  get_loc_details
-      ${tz2}=   db.get_Timezone_by_lat_long   ${latti2}  ${longi2}
-      Set Suite Variable  ${tz2}
-      Set Suite Variable  ${city2}
-      Set Suite Variable  ${latti2}
-      Set Suite Variable  ${longi2}
-      Set Suite Variable  ${postcode2}
-      Set Suite Variable  ${address2}
-      ${parking_type2}    Random Element     ['none','free','street','privatelot','valet','paid']
-      Set Suite Variable  ${parking_type2}
-      ${24hours2}    Random Element    ['True','False']
-      Set Suite Variable   ${24hours2}
-      ${d1}=  get_timezone_weekday  ${tz2} 
-      ${d1}=  Create List  ${d1}
-      Set Suite Variable  ${d1} 
-      ${sTime2}=  add_timezone_time  ${tz2}  0  45  
-      Set Suite Variable   ${sTime2}
-      ${eTime2}=  add_timezone_time  ${tz2}  0  50  
-      Set Suite Variable   ${eTime2}
-      ${resp}=  Create Location  ${city2}  ${longi2}  ${latti2}  www.${city2}.com  ${postcode2}  ${address2}  ${parking_type2}  ${24hours2}  Once  ${d1}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}
-      Log  ${resp.json()}
+      Set Test Variable  ${lid1}  ${resp.json()}
+
+      ${latti2}  ${longi2}  ${postcode2}  ${city2}  ${address2}=  get_random_location_data
+      ${tz2}=   db.get_Timezone_by_lat_long   ${latti2}  ${longi2}      
+      ${resp}=  Create Location  ${city2}  ${longi2}  ${latti2}  ${postcode2}  ${address2}  
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable  ${lid2}  ${resp.json()}
+
+      ${resp}=  Get Locations
+      Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
 
+      Should Be Equal As Strings  ${resp.json()[0]['place']}  ${city1}
+      Should Be Equal As Strings  ${resp.json()[0]['longitude']}  ${longi1}
+      Should Be Equal As Strings  ${resp.json()[0]['lattitude']}  ${latti1}
+      Should Be Equal As Strings  ${resp.json()[0]['pinCode']}  ${postcode1}
+      Should Be Equal As Strings  ${resp.json()[0]['address']}  ${address1}
+      Should Be Equal As Strings  ${resp.json()[0]['status']}  ${status[0]}
+      Should Be Equal As Strings  ${resp.json()[0]['baseLocation']}  ${bool[0]}
+      Should Be Equal As Strings  ${resp.json()[0]['open24hours']}  ${bool[0]}
+      Should Be Equal As Strings  ${resp.json()[0]['searchable']}  ${bool[1]}
+      Should Be Equal As Strings  ${resp.json()[0]['timezone']}  ${tz}
+
+      Should Be Equal As Strings  ${resp.json()[1]['place']}  ${city2}
+      Should Be Equal As Strings  ${resp.json()[1]['longitude']}  ${longi2}
+      Should Be Equal As Strings  ${resp.json()[1]['lattitude']}  ${latti2}
+      Should Be Equal As Strings  ${resp.json()[1]['pinCode']}  ${postcode2}
+      Should Be Equal As Strings  ${resp.json()[1]['address']}  ${address2}
+
+*** COMMENTS ***
 JD-TC-GetLocations-2
 	[Documentation]  Get locations by a branch login
       ${iscorp_subdomains}=  get_iscorp_subdomains  1
@@ -125,7 +79,7 @@ JD-TC-GetLocations-2
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
       Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+      Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
       Set Suite Variable  ${PUSERNAME_E}
       ${uid}=  get_uid  ${PUSERNAME_E}
       # ${city8}=   get_place

@@ -29,7 +29,7 @@ JD-TC-EnableLocation-1
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${lid}  ${resp.json()}
 
-      ${resp}=  Enable Disable Location  ${lid}  ${toggleButton[1]}
+      ${resp}=  Disable Location  ${lid}
       Should Be Equal As Strings  ${resp.status_code}  200
 
       ${resp}=  Get Location ById  ${lid}
@@ -37,7 +37,7 @@ JD-TC-EnableLocation-1
       Should Be Equal As Strings  ${resp.status_code}  200
       Should Be Equal As Strings  ${resp.json()['status']}  ${status[1]}
 
-      ${resp}=  Enable Disable Location  ${lid}  ${toggleButton[0]}
+      ${resp}=  Enable Location  ${lid} 
       Should Be Equal As Strings  ${resp.status_code}  200
 
       ${resp}=  Get Location ById  ${lid}
@@ -73,7 +73,7 @@ JD-TC-EnableLocation-2
       Should Be Equal As Strings  ${resp.status_code}  200
       Should Be Equal As Strings  ${resp.json()['queueState']}  ${Qstate[0]}
 
-      ${resp}=  Enable Disable Location  ${lid}  ${toggleButton[1]}
+      ${resp}=   Disable Location  ${lid}  
       Should Be Equal As Strings  ${resp.status_code}  200
 
       ${resp}=  Get Location ById  ${lid}
@@ -85,7 +85,7 @@ JD-TC-EnableLocation-2
       Should Be Equal As Strings  ${resp.status_code}  200
       Should Be Equal As Strings  ${resp.json()['queueState']}  ${Qstate[1]}
 
-      ${resp}=  Enable Disable Location  ${lid}  ${toggleButton[0]}
+      ${resp}=  Enable Location  ${lid}  
       Should Be Equal As Strings  ${resp.status_code}  200
 
       ${resp}=  Get Location ById  ${lid}
@@ -115,7 +115,7 @@ JD-TC-EnableLocation-UH1
       Should Be Equal As Strings  ${resp.status_code}  200
       Should Be Equal As Strings  ${resp.json()['status']}  ${status[0]}
 
-      ${resp}=  Enable Disable Location  ${lid}  ${toggleButton[0]}
+      ${resp}=  Enable Location  ${lid}  
       Should Be Equal As Strings  ${resp.status_code}  422
       Should Be Equal As Strings  ${resp.json()}  ${LOCATION_ALREADY_ENABLED}
 
@@ -132,7 +132,7 @@ JD-TC-EnableLocation-UH2
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${lid}  ${resp.json()}
 
-      ${resp}=  Enable Disable Location  ${lid}  ${toggleButton[1]}
+      ${resp}=  Disable Location  ${lid}  
       Should Be Equal As Strings  ${resp.status_code}  200
 
       ${resp}=    Provider Logout
@@ -141,12 +141,13 @@ JD-TC-EnableLocation-UH2
       ${resp}=  Encrypted Provider Login     ${PUSERNAME73}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}   200
 
+      ${resp}=  Enable Location  ${lid}  
       Should Be Equal As Strings  ${resp.status_code}  401
       Should Be Equal As Strings  ${resp.json()}  ${NO_PERMISSION}
 
 JD-TC-EnableLocation -UH3
       [Documentation]   Provider enable a location without login  
-      ${resp}=  Enable Disable Location  ${lid}  ${toggleButton[0]}
+      ${resp}=  Enable Location  ${lid}  
       Should Be Equal As Strings    ${resp.status_code}   419
       Should Be Equal As Strings   "${resp.json()}"   "${SESSION_EXPIRED}"
 
@@ -159,7 +160,7 @@ JD-TC-EnableLocation -UH4
       Log   ${resp.content}
       Should Be Equal As Strings    ${resp.status_code}   200
 
-      ${resp}=  Enable Disable Location  ${lid}  ${toggleButton[0]}
+      ${resp}=  Enable Location  ${lid}
       Should Be Equal As Strings    ${resp.status_code}   401
       Should Be Equal As Strings  ${resp.json()}  ${LOGIN_NO_ACCESS_FOR_URL}
 

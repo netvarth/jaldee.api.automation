@@ -30,7 +30,7 @@ JD-TC-DisableLocation-1
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${lid}  ${resp.json()}
 
-      ${resp}=  Enable Disable Location  ${lid}  ${toggleButton[1]}
+      ${resp}=  Disable Location  ${lid}
       Should Be Equal As Strings  ${resp.status_code}  200
 
       ${resp}=  Get Location ById  ${lid}
@@ -70,7 +70,7 @@ JD-TC-DisableLocation-2
       Should Be Equal As Strings  ${resp.status_code}  200
       Should Be Equal As Strings  ${resp.json()['queueState']}  ${Qstate[0]}
 
-      ${resp}=  Enable Disable Location  ${lid}  ${toggleButton[1]}
+      ${resp}=  Disable Location  ${lid}
       Should Be Equal As Strings  ${resp.status_code}  200
 
       ${resp}=  Get Location ById  ${lid}
@@ -112,7 +112,7 @@ JD-TC-DisableLocation-3
       Should Be Equal As Strings  ${resp.status_code}  200
       Should Be Equal As Strings  ${resp.json()['apptState']}  ${Qstate[0]}
 
-      ${resp}=  Enable Disable Location  ${lid}  ${toggleButton[1]}
+      ${resp}=  Disable Location  ${lid}
       Should Be Equal As Strings  ${resp.status_code}  200
 
       ${resp}=  Get Appointment Schedule ById  ${sch_id}
@@ -141,7 +141,7 @@ JD-TC-DisableLocation-4
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${lid}  ${resp.json()}
 
-      ${resp}=  Enable Disable Location  ${lid}  ${toggleButton[1]}
+      ${resp}=  Disable Location  ${lid}
       Should Be Equal As Strings  ${resp.status_code}  200
 
 
@@ -151,7 +151,7 @@ JD-TC-DisableLocation-UH1
      
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${resp}=  Enable Disable Location  ${lid}  ${toggleButton[1]}
+      ${resp}=  Disable Location  ${lid}
       Should Be Equal As Strings  ${resp.status_code}  422
       Should Be Equal As Strings  ${resp.json()}  ${LOCATION_ALREADY_DISABLED}
 
@@ -173,7 +173,7 @@ JD-TC-DisableLocation-UH2
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${resp}=  Enable Disable Location  ${lid}  ${toggleButton[1]}
+      ${resp}=  Disable Location  ${lid}
       Should Be Equal As Strings  ${resp.status_code}  401
       Should Be Equal As Strings  ${resp.json()}  ${NO_PERMISSION}
 
@@ -182,7 +182,7 @@ JD-TC-DisableLocation -UH3
 
       [Documentation]   Provider disable a location without login  
       
-      ${resp}=  Enable Disable Location  ${lid}  ${toggleButton[1]}
+      ${resp}=  Disable Location  ${lid}
       Should Be Equal As Strings    ${resp.status_code}   419
       Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
@@ -197,7 +197,7 @@ JD-TC-DisableLocation -UH4
       Log   ${resp.content}
       Should Be Equal As Strings    ${resp.status_code}   200
 
-      ${resp}=  Enable Disable Location  ${lid}  ${toggleButton[1]}
+      ${resp}=  Disable Location  ${lid}
       Should Be Equal As Strings    ${resp.status_code}   401
       Should Be Equal As Strings  ${resp.json()}  ${LOGIN_NO_ACCESS_FOR_URL}
 
@@ -213,7 +213,7 @@ JD-TC-DisableLocation-UH5
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${lid1}  ${resp.json()[0]['id']}
 
-      ${resp}=  Enable Disable Location  ${lid1}  ${toggleButton[1]}
+      ${resp}=  Disable Location  ${lid1}
       Should Be Equal As Strings    ${resp.status_code}   422
       Should Be Equal As Strings  ${resp.json()}  ${BASE_LOCATION_CANNOT_BE_DISABLED}
 
@@ -237,7 +237,7 @@ JD-TC-DisableLocation-UH6
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${lid1}  ${resp.json()[1]['id']}
 
-      ${resp}=  Enable Disable Location  ${lid1}  ${toggleButton[1]}
+      ${resp}=  Disable Location  ${lid1}
       Should Be Equal As Strings    ${resp.status_code}   422
       # Should Be Equal As Strings  ${resp.json()}  ${BASE_LOCATION_CANNOT_BE_DISABLED}
 
@@ -249,12 +249,12 @@ JD-TC-DisableLocation-UH7
       Should Be Equal As Strings    ${resp.status_code}    200
 
       ${resp}=   Get Account Settings
-      Log   ${resp.json()}
+      Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
       Should Be Equal As Strings  ${resp.json()['appointment']}   ${bool[0]}
       
       ${resp}=   Get Appointment Settings
-      Log   ${resp.json()}
+      Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
       IF  ${resp.json()['enableAppt']}==${bool[0]}   
       ${resp}=   Enable Disable Appointment   ${toggle[0]}
@@ -262,7 +262,7 @@ JD-TC-DisableLocation-UH7
       END
 
       ${resp}=   Get Account Settings
-      Log   ${resp.json()}
+      Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
       Should Be Equal As Strings  ${resp.json()['appointment']}   ${bool[1]}
 
@@ -314,7 +314,7 @@ JD-TC-DisableLocation-UH7
       ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
       Set Test Variable  ${apptid1}  ${apptid[0]}
 
-      ${resp}=  Enable Disable Location  ${lid}  ${toggleButton[1]}
+      ${resp}=  Disable Location  ${lid}
       Should Be Equal As Strings  ${resp.status_code}  200
 
       ${resp}=  Get Appointment Schedule ById  ${sch_id}
