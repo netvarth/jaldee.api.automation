@@ -57,6 +57,8 @@ JD-TC-DisableLocation-1
       ${resp}=  Disable Location  ${lid}
       Should Be Equal As Strings  ${resp.status_code}  200
 
+      sleep  01s
+
       ${resp}=  Get Queue ById  ${q_id}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -96,7 +98,7 @@ JD-TC-DisableLocation-2
       ${resp}=  Get Appointment Schedule ById  ${sch_id}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Should Be Equal As Strings  ${resp.json()['queueState']}  apptState
+      Should Be Equal As Strings  ${resp.json()['apptState']}  apptState
 
 
 JD-TC-DisableLocation-3
