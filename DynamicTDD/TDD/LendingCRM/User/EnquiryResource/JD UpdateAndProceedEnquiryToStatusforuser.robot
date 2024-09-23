@@ -17,7 +17,7 @@ ${self}      0
 @{emptylist}
 
 *** Keywords ***
-Multiple Users branches
+Multiple Users Accounts
 
     ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
     ${len}=   Split to lines  ${resp}
@@ -60,7 +60,7 @@ JD-TC-UpdateandProceedEnquiry-1
     Should Be Equal As Strings    ${resp.status_code}    200
     
    
-    ${multiusers}=    Multiple Users branches
+    ${multiusers}=    Multiple Users Accounts
     Log   ${multiusers}
     ${pro_len}=  Get Length   ${multiusers}
     ${BUSER}=  Random Element    ${multiusers}
@@ -676,7 +676,7 @@ JD-TC-UpdateandProceedEnquiry-UH4
 JD-TC-UpdateandProceedEnquiry-UH5
     [Documentation]   Proceed enquiry status to another user Ssame branch
    
-    # ${multiusers}=    Multiple Users branches
+    # ${multiusers}=    Multiple Users Accounts
     # Log   ${multiusers}
     # ${pro_len}=  Get Length   ${multiusers}
     # ${BUSER}=  Random Element    ${multiusers}

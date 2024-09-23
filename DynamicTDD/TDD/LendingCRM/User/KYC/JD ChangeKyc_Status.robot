@@ -19,7 +19,7 @@ Library           /ebs/TDD/excelfuncs.py
 
 *** Keywords ***
 
-Multiple Users branches
+Multiple Users Accounts
 
     ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
     ${lines}=   Split to lines  ${resp}

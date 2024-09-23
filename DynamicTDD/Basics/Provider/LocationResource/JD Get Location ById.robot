@@ -12,7 +12,7 @@ Variables       /ebs/TDD/varfiles/providers.py
 Variables       /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
-Suite Setup       Run Keyword  clear_location  ${PUSERNAME7}
+# Suite Setup       Run Keyword  clear_location  ${PUSERNAME7}
 
 
 *** Test Cases ***
@@ -33,20 +33,34 @@ JD-TC-GetLocationById-1
 
       ${resp}=  Get Location ById  ${lid}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Should Be Equal As Strings  ${resp.json()['place']}  ${city}
-      Should Be Equal As Strings  ${resp.json()['longitude']}  ${longi}
-      Should Be Equal As Strings  ${resp.json()['lattitude']}  ${latti}
-      Should Be Equal As Strings  ${resp.json()['pinCode']}  ${postcode}
-      Should Be Equal As Strings  ${resp.json()['address']}  ${address}
-      Should Be Equal As Strings  ${resp.json()['status']}  ACTIVE
+      Should Be Equal As Strings  ${resp.json()['place']}  ${city1}
+      Should Be Equal As Strings  ${resp.json()['longitude']}  ${longi1}
+      Should Be Equal As Strings  ${resp.json()['lattitude']}  ${latti1}
+      Should Be Equal As Strings  ${resp.json()['pinCode']}  ${postcode1}
+      Should Be Equal As Strings  ${resp.json()['address']}  ${address1}
+      Should Be Equal As Strings  ${resp.json()['googleMapUrl']}  ${g_url}
+      Should Be Equal As Strings  ${resp.json()['status']}  ${status[0]}
       Should Be Equal As Strings  ${resp.json()['baseLocation']}  ${bool[0]}
-      Should Be Equal As Strings  ${resp.json()['open24hours']}  ${bool[0]}
+      Should Be Equal As Strings  ${resp.json()['open24hours']}  ${24hours}
+      Should Be Equal As Strings  ${resp.json()['parkingType']}  ${parking}
       Should Be Equal As Strings  ${resp.json()['searchable']}  ${bool[1]}
       Should Be Equal As Strings  ${resp.json()['timezone']}  ${tz}
+      Should Be Equal As Strings  ${resp.json()['locationType']}  ${locationType[0]}
 
 
 JD-TC-GetLocationById-2
-	[Documentation]  Get a location by a branch login
+	[Documentation]  Get a location by user login
+
+      ${multiusers}=    Multiple Users branches
+      Log   ${multiusers}
+      ${BUSER}=  Random Element    ${multiusers}
+      Set Suite Variable  ${BUSER}
+
+      ${resp}=   Encrypted Provider Login  ${BUSER}  ${PASSWORD} 
+      Log  ${resp.content}
+      Should Be Equal As Strings    ${resp.status_code}   200
+
+
       ${iscorp_subdomains}=  get_iscorp_subdomains  1
       Log  ${iscorp_subdomains}
       Set Test Variable  ${domains}  ${iscorp_subdomains[0]['domain']}

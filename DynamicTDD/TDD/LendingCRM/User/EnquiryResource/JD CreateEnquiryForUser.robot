@@ -20,7 +20,7 @@ ${en_temp_name}   EnquiryName
 
 
 *** Keywords ***
-Multiple Users branches
+Multiple Users Accounts
 
     ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
     ${len}=   Split to lines  ${resp}
@@ -54,7 +54,7 @@ Multiple Users branches
 JD-TC-Create Enquiry For User-1
     [Documentation]   Create Enquiry for a User.
 
-    ${multiusers}=    Multiple Users branches
+    ${multiusers}=    Multiple Users Accounts
     Log   ${multiusers}
     ${pro_len}=  Get Length   ${multiusers}
     ${BUSER}=  Random Element    ${multiusers}

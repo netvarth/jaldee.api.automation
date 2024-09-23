@@ -853,6 +853,35 @@ Update User
     RETURN  ${resp} 
 
 
+Multiple Users Accounts
+
+    ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
+    ${len}=   Split to lines  ${resp}
+    ${length}=  Get Length   ${len}
+    ${multiuser_list}=  Create List
+    &{License_total}=  Create Dictionary
+    
+    FOR   ${a}  IN RANGE   ${length}   
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        Should Be Equal As Strings    ${resp.status_code}    200
+        
+        ${resp1}=   Get Active License
+        Log  ${resp1.content}
+        Should Be Equal As Strings    ${resp1.status_code}   200
+        ${name}=  Set Variable  ${resp1.json()['accountLicense']['displayName']}
+
+        ${resp}=   Get License UsageInfo 
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        IF  ${resp.json()['metricUsageInfo'][8]['total']} > 1 and ${resp.json()['metricUsageInfo'][8]['used']} < ${resp.json()['metricUsageInfo'][8]['total']}
+            Append To List  ${multiuser_list}  ${PUSERNAME${a}}
+            Set To Dictionary 	${License_total} 	${name}=${resp.json()['metricUsageInfo'][8]['total']}
+        END
+    END
+
+    RETURN  ${multiuser_list}
+
+
 Get Store Type By Filter
     [Arguments]   &{param}
     Check And Create YNW Session

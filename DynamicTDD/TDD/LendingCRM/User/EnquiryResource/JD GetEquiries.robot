@@ -16,7 +16,7 @@ ${self}      0
 @{emptylist}
 
 *** Keywords ***
-Multiple Users branches
+Multiple Users Accounts
 
     ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
     ${len}=   Split to lines  ${resp}
@@ -573,7 +573,7 @@ JD-TC-Get Enquiries For Branch-5
 JD-TC-Get Enquiries For Branch-6
     [Documentation]   Get Enquiries for a branch by generatedBy filter.
 
-    ${multiusers}=    Multiple Users branches
+    ${multiusers}=    Multiple Users Accounts
     Log   ${multiusers}
     ${pro_len}=  Get Length   ${multiusers}
     ${BUSER}=  Random Element    ${multiusers}
