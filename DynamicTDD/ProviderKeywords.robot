@@ -6243,7 +6243,13 @@ Get Appointment Schedule by date
     Check Deprication  ${resp}  Get Appointment Schedule by date
 	RETURN   ${resp}
 
-
+Get Appointment Schedule By Location service Date
+	[Arguments]	 ${locationId}	${serviceId}   ${date}
+	Check And Create YNW Session
+	${resp}=  GET On Session  ynw  /provider/appointment/schedule/location/${locationId}/service/${serviceId}/date/${date}  expected_status=any
+    Check Deprication  ${resp}  Get Appointment Schedule By Location service Date
+    RETURN  ${resp}
+    
 Individual Schedule
     [Arguments]  ${name}   ${parallel}   ${consumerParallelServing}   ${loc}   ${batch}  @{vargs}   &{kwargs}
 
