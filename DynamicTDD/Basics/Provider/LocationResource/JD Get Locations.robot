@@ -48,7 +48,7 @@ JD-TC-GetLocations-1
       Should Be Equal As Strings  ${resp.json()[0]['pinCode']}  ${postcode1}
       Should Be Equal As Strings  ${resp.json()[0]['address']}  ${address1}
       Should Be Equal As Strings  ${resp.json()[0]['status']}  ${status[0]}
-      Should Be Equal As Strings  ${resp.json()[0]['baseLocation']}  ${bool[0]}
+      Should Be Equal As Strings  ${resp.json()[0]['baseLocation']}  ${bool[1]}
       Should Be Equal As Strings  ${resp.json()[0]['open24hours']}  ${bool[0]}
       Should Be Equal As Strings  ${resp.json()[0]['searchable']}  ${bool[1]}
       Should Be Equal As Strings  ${resp.json()[0]['timezone']}  ${tz}
