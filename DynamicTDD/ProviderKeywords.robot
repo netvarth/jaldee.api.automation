@@ -576,10 +576,10 @@ Get Locations
     Check Deprication  ${resp}  Get Locations
     RETURN  ${resp}
 
-Enable Disable Location
-    [Arguments]   ${id}  ${toggle_status}
+Disable Location
+    [Arguments]   ${id}  
     Check And Create YNW Session
-    ${resp}=    DELETE On Session    ynw  /provider/locations/${id}/${toggle_status}  expected_status=any
+    ${resp}=    DELETE On Session    ynw  /provider/locations/${id}/disable  expected_status=any
     Check Deprication  ${resp}  Enable Disable Location
     RETURN  ${resp}
 
@@ -873,7 +873,7 @@ Multiple Users Accounts
         ${resp}=   Get License UsageInfo 
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        IF  ${resp.json()['metricUsageInfo'][8]['total']} > 1 and ${resp.json()['metricUsageInfo'][8]['used']} < ${resp.json()['metricUsageInfo'][8]['total']}
+        IF  ${resp.json()['metricUsageInfo'][8]['total']} > 2 and ${resp.json()['metricUsageInfo'][8]['used']} < ${resp.json()['metricUsageInfo'][8]['total']}
             Append To List  ${multiuser_list}  ${PUSERNAME${a}}
             Set To Dictionary 	${License_total} 	${name}=${resp.json()['metricUsageInfo'][8]['total']}
         END
