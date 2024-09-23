@@ -339,3 +339,13 @@ JD-TC-GetApptScheduleWithLocationServiceDate-UH4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${LOCATION_DISABLED}
+
+JD-TC-GetApptScheduleWithLocationServiceDate-UH5
+
+    [Documentation]   get the schedule without login.
+
+    ${DAY}=  db.add_timezone_date  ${tz}  4     
+    ${resp}=  Get Appointment Schedule By Location service Date   ${lid1}    ${s_id2}   ${DAY}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  419
+	Should Be Equal As Strings  ${resp.json()}   ${SESSION_EXPIRED}
