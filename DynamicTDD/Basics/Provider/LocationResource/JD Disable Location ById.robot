@@ -23,12 +23,11 @@ ${SERVICE1}	   Bridal MakeupW1
 *** Test Cases ***
 
 JD-TC-DisableLocation-1
-
       [Documentation]  Disable a location by provider login and check the corresponding queues are disabled
 
       ${PUSERNAME_D}=  Evaluate  ${PUSERNAME}+450001
       
-      ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_D}=  Provider Signup without Profile  PhoneNumber=${PUSERNAME_D}
+      ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_D}=  Provider Signup  PhoneNumber=${PUSERNAME_D}
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
       Should Be Equal As Strings    ${resp.status_code}    200
       Set Suite Variable  ${PUSERNAME_D}
@@ -38,13 +37,12 @@ JD-TC-DisableLocation-1
       ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${postcode}  ${address}  
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${lid}  ${resp.json()}
+      Set Test Variable  ${lid}  ${resp.json()}
 
       ${resp}=   Get Service
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable   ${p1_s1}   ${resp.json()[0]['id']}
-      Set Suite Variable   ${P1SERVICE1}   ${resp.json()[0]['name']}
+      Set Test Variable   ${p1_s1}   ${resp.json()[0]['id']}
 
       ${resp}=  Sample Queue  ${lid}   ${p1_s1}
       Log  ${resp.content}
@@ -54,6 +52,7 @@ JD-TC-DisableLocation-1
       ${resp}=  Get Queue ById  ${q_id}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
+      Should Be Equal As Strings  ${resp.json()['queueState']}  ENABLED
 
       ${resp}=  Disable Location  ${lid}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -61,64 +60,69 @@ JD-TC-DisableLocation-1
       ${resp}=  Get Queue ById  ${q_id}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
+      Should Be Equal As Strings  ${resp.json()['queueState']}  DISABLED
+
 
 JD-TC-DisableLocation-2
+      [Documentation]  Disable a location by provider login and check the corresponding schedules are disabled
 
-      [Documentation]  Create more queues on a location and disable the location and check the corresponding queues are disabled
-      
-      ${domresp}=  Get BusinessDomainsConf
-      Should Be Equal As Strings  ${domresp.status_code}  200
-      ${len}=  Get Length  ${domresp.json()}
-      FOR  ${domindex}  IN RANGE  ${len}
-            Set Test Variable  ${multi}  ${domresp.json()[${domindex}]['multipleLocation']}
-            Run Keyword If  '${multi}'=='True'  Multiple Location  ${domindex}  ${domresp.json()}
-      END
-      ${firstname}=  FakerLibrary.first_name
-      ${lastname}=  FakerLibrary.last_name
-      ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+450002
-      ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_E}    3
-      Log  ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    202
-      ${resp}=  Account Activation  ${PUSERNAME_E}  0
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      
-      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
-      Log  ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
-      Set Suite Variable  ${PUSERNAME_E}
-      ${uid}=  get_uid  ${PUSERNAME_E}
-      ${lid}=  Create Sample Location
-      ${resp}=   Get Location ById  ${lid}
+
+      ${latti}  ${longi}  ${postcode}  ${city}  ${address}=  get_random_location_data
+      ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${postcode}  ${address}  
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+      Set Test Variable  ${lid}  ${resp.json()}
 
-      ${DAY}=  db.get_date_by_timezone  ${tz}
-    	Set Suite Variable  ${DAY}
-      ${DAY2}=  db.add_timezone_date  ${tz}  10  
-    	Set Suite Variable  ${DAY2}
-	${list1}=  Create List  1  2  3  4
-    	Set Suite Variable  ${list1}
-      ${latti2}  ${longi2}  ${postcode2}  ${city2}  ${district}  ${state}  ${address2}=  get_loc_details
-      ${tz2}=   db.get_Timezone_by_lat_long   ${latti2}  ${longi2}
-      Set Suite Variable  ${tz2}
-      Set Suite Variable  ${city2}
-      Set Suite Variable  ${latti2}
-      Set Suite Variable  ${longi2}
-      Set Suite Variable  ${postcode2}
-      Set Suite Variable  ${address2}
-      ${parking_type2}    Random Element     ['none','free','street','privatelot','valet','paid']
-      Set Suite Variable  ${parking_type2}
-      ${24hours2}    Random Element    ['True','False']
-      Set Suite Variable   ${24hours2}
-      ${resp}=  Create Location  ${city2}  ${longi2}  ${latti2}  www.${city2}.com  ${postcode2}  ${address2}  ${parking_type2}  ${24hours2}  Weekly  ${list1}  ${DAY}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}
-      Log  ${resp.json()}
+      ${resp}=   Get Service
+      Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${lid2}  ${resp.json()}
-      
+      Set Test Variable   ${p1_s1}   ${resp.json()[0]['id']}
+
+      ${resp}=  Create Sample Schedule   ${lid}   ${p1_s1}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable  ${sch_id}  ${resp.json()}
+
+      ${resp}=  Get Appointment Schedule ById  ${sch_id}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Should Be Equal As Strings  ${resp.json()['apptState']}  ENABLED
+
+      ${resp}=  Disable Location  ${lid}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${resp}=  Get Appointment Schedule ById  ${sch_id}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Should Be Equal As Strings  ${resp.json()['queueState']}  apptState
+
+
+JD-TC-DisableLocation-3
+      [Documentation]  Disable a location by admin user login
+
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+      Should Be Equal As Strings    ${resp.status_code}    200
+
+      ${PUSERNAME_U1}  ${u_id} =  Create and Configure Sample User  admin=${bool[1]}
+
+      ${resp}=    Provider Logout
+      Should Be Equal As Strings    ${resp.status_code}    200
+
+      ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
+      Should Be Equal As Strings  ${resp.status_code}   200
+
+      ${latti}  ${longi}  ${postcode}  ${city}  ${address}=  get_random_location_data     
+      ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${postcode}  ${address}  
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${lid}  ${resp.json()}
+
+      ${resp}=  Disable Location  ${lid}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
+
 JD-TC-DisableLocation-UH1
 
       [Documentation]  Disable a location which is already disabled
@@ -127,257 +131,91 @@ JD-TC-DisableLocation-UH1
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Disable Location  ${lid}
       Should Be Equal As Strings  ${resp.status_code}  422
-      Should Be Equal As Strings  "${resp.json()}"  "${LOCATION_ALREADY_DISABLED}"
-   
+      Should Be Equal As Strings  ${resp.json()}  ${LOCATION_ALREADY_DISABLED}
+
 JD-TC-DisableLocation-UH2
 
       [Documentation]  Disable a location of another provider
-     
-      ${domresp}=  Get BusinessDomainsConf
-      Should Be Equal As Strings  ${domresp.status_code}  200
-
-      ${len}=  Get Length  ${domresp.json()}
-      FOR  ${domindex}  IN RANGE  ${len}
-            Set Test Variable  ${multi}  ${domresp.json()[${domindex}]['multipleLocation']}
-            Run Keyword If  '${multi}'=='True'  Multiple Location  ${domindex}  ${domresp.json()}
-      END
-      ${firstname}=  FakerLibrary.first_name
-      ${lastname}=  FakerLibrary.last_name
       ${PUSERNAME_G}=  Evaluate  ${PUSERNAME}+450003
-      Set Suite Variable   ${PUSERNAME_G}
-      ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_G}    1
-      Log  ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    202
-      ${resp}=  Account Activation  ${PUSERNAME_G}  0
-      Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Set Credential  ${PUSERNAME_G}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_G}
-      Should Be Equal As Strings    ${resp.status_code}    200
+      ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_G}=  Provider Signup  PhoneNumber=${PUSERNAME_G}
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
-      Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
-      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_G}${\n}
-      ${lid3}=  Create Sample Location
-      Set Suite Variable  ${lid3}
-      ${resp}=   Get Location ById  ${lid3}
+      Set Suite Variable  ${PUSERNAME_G}
+
+      ${latti}  ${longi}  ${postcode}  ${city}  ${address}=  get_random_location_data     
+      ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${postcode}  ${address}  
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz3}  ${resp.json()['timezone']}
-      ${resp}=   ProviderLogout
-      Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
+      Set Suite Variable  ${lid}  ${resp.json()}
+
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${resp}=  Disable Location  ${lid3}
+
+      ${resp}=  Disable Location  ${lid}
       Should Be Equal As Strings  ${resp.status_code}  401
-      Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION}"
-      
+      Should Be Equal As Strings  ${resp.json()}  ${NO_PERMISSION}
+
+
 JD-TC-DisableLocation -UH3
 
       [Documentation]   Provider disable a location without login  
       
-      ${resp}=  Disable Location  ${lid3}
+      ${resp}=  Disable Location  ${lid}
       Should Be Equal As Strings    ${resp.status_code}   419
-      Should Be Equal As Strings   "${resp.json()}"   "${SESSION_EXPIRED}"
+      Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-DisableLocation -UH4
 
       [Documentation]   Consumer disable a location
-      
-      ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
-      Log   ${resp.content}
-      Should Be Equal As Strings    ${resp.status_code}    200
 
-      ${resp}=  Get Business Profile
-      Log  ${resp.content}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Test Variable  ${account_id}  ${resp.json()['id']}
+      ${account_id}=    get_acc_id       ${PUSERNAME_G}
+      ${NewCustomer}  ${token}  Create Sample Customer  ${account_id}
 
-      #............provider consumer creation..........
-
-      ${NewCustomer}    Generate random string    10    123456789
-      ${NewCustomer}    Convert To Integer  ${NewCustomer}
-
-      ${custf_name}=  FakerLibrary.name    
-      ${custl_name}=  FakerLibrary.last_name
-      ${resp}=  AddCustomer  ${NewCustomer}    firstName=${custf_name}   lastName=${custl_name}
-      Log   ${resp.content}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      
-      ${resp}=    Send Otp For Login    ${NewCustomer}    ${account_id}
+      ${resp}=    ProviderConsumer Login with token   ${NewCustomer}  ${account_id}  ${token} 
       Log   ${resp.content}
       Should Be Equal As Strings    ${resp.status_code}   200
 
-      ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}
-      Log   ${resp.content}
-      Should Be Equal As Strings    ${resp.status_code}   200
-      Set Test Variable  ${token}  ${resp.json()['token']}
-
-      ${resp}=    Consumer Logout
-      Log   ${resp.content}
-      Should Be Equal As Strings    ${resp.status_code}    200
-
-      ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${account_id}  ${token} 
-      Log   ${resp.content}
-      Should Be Equal As Strings    ${resp.status_code}   200
-
-      ${resp}=  Disable Location  ${lid3}
+      ${resp}=  Disable Location  ${lid}
       Should Be Equal As Strings    ${resp.status_code}   401
-      Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}"
+      Should Be Equal As Strings  ${resp.json()}  ${LOGIN_NO_ACCESS_FOR_URL}
 
 JD-TC-DisableLocation-UH5
 
       [Documentation]  Disable base location
-     
-      ${domresp}=  Get BusinessDomainsConf
-      Should Be Equal As Strings  ${domresp.status_code}  200
-      ${len}=  Get Length  ${domresp.json()}
-      FOR  ${domindex}  IN RANGE  ${len}
-            Set Test Variable  ${multi}  ${domresp.json()[${domindex}]['multipleLocation']}
-            Run Keyword If  '${multi}'=='True'  Multiple Location  ${domindex}  ${domresp.json()}
-      END
-      ${firstname}=  FakerLibrary.first_name
-      ${lastname}=  FakerLibrary.last_name
-      ${PUSERNAME_F}=  Evaluate  ${PUSERNAME}+450004
-      ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_F}    1
-      Log  ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    202
-      ${resp}=  Account Activation  ${PUSERNAME_F}  0
+
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Set Credential  ${PUSERNAME_F}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_F}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
-      Log  ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_F}${\n}
-      Set Suite Variable  ${PUSERNAME_F}
-      ${lid4}=  Create Sample Location
-      ${resp}=   Get Location ById  ${lid4}
+
+      ${resp}=  Get Locations
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz4}  ${resp.json()['timezone']}
-      ${resp}=  Disable Location  ${lid4}
-      Should Be Equal As Strings  ${resp.status_code}  422
-      Should Be Equal As Strings  "${resp.json()}"  "${BASE_LOCATION_CANNOT_BE_DISABLED}"
+      Set Test Variable  ${lid1}  ${resp.json()[0]['id']}
+
+      ${resp}=  Disable Location  ${lid1}
+      Should Be Equal As Strings    ${resp.status_code}   422
+      Should Be Equal As Strings  ${resp.json()}  ${BASE_LOCATION_CANNOT_BE_DISABLED}
+
 
 JD-TC-DisableLocation-UH6
+      [Documentation]  Disable a location by non-admin user login
 
-	[Documentation]  Disable base location by a branch login
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
+      Should Be Equal As Strings    ${resp.status_code}    200
 
-      ${iscorp_subdomains}=  get_iscorp_subdomains  1
-      Log  ${iscorp_subdomains}
-      Set Test Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
-      Set Test Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
-      ${firstname}=  FakerLibrary.first_name
-      ${lastname}=  FakerLibrary.last_name
-      ${PUSERNAME_E}=  Evaluate  ${PUSERNAME}+450005
-      ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domains}  ${sub_domains}  ${PUSERNAME_E}    2
-      Log  ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    202
-      ${resp}=  Account Activation  ${PUSERNAME_E}  0
+      ${PUSERNAME_U1}  ${u_id} =  Create and Configure Sample User
+
+      ${resp}=    Provider Logout
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_E}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
-      Log  ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
-      Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
-      Set Suite Variable  ${PUSERNAME_E}
-      ${uid}=  get_uid  ${PUSERNAME_E}
-     
-      ${latti8}  ${longi8}  ${city8}  ${postcode8}=  get_lat_long_city_pin
-      ${tz8}=   db.get_Timezone_by_lat_long   ${latti8}  ${longi8}
-      Set Suite Variable  ${tz8}
-      Set Suite Variable  ${city8}
-      Set Suite Variable  ${latti8}
-      Set Suite Variable  ${longi8}
-      Set Suite Variable  ${postcode8}
-      ${parking8}    Random Element   ${parkingType}
-      Set Suite Variable  ${parking8}
-      ${24hours8}    Random Element    ${bool}
-      Set Suite Variable  ${24hours8}
-      ${DAY}=  db.get_date_by_timezone  ${tz}
-    	Set Suite Variable  ${DAY}
-	${list}=  Create List  1  2  3  4  5  6  7
-    	Set Suite Variable  ${list}
-      ${sTime}=  add_timezone_time  ${tz}  0  15  
-      Set Suite Variable   ${sTime}
-      ${eTime}=  add_timezone_time  ${tz}  0  30  
-      Set Suite Variable   ${eTime}
-      ${lid_A}=  Create Sample Location
-      Set Suite Variable   ${lid_A}
-      ${resp}=   Get Location ById  ${lid_A}
+
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+      Should Be Equal As Strings  ${resp.status_code}   200
+
+      ${resp}=  Get Locations
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-     
-      ${resp}=  Disable Location  ${lid_A}
-      Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  422
-      Should Be Equal As Strings  "${resp.json()}"  "${BASE_LOCATION_CANNOT_BE_DISABLED}"
+      Set Test Variable  ${lid1}  ${resp.json()[1]['id']}
 
-JD-TC-VerifyDisableLocation-1
-
-      [Documentation]  Verification of Disable location
-      
-      ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      ${resp}=  Get queues
-      Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Should Be Equal As Strings  ${resp.json()[0]['queueState']}  DISABLED
-      ${resp}=  Get Location ById  ${lid}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Verify Response  ${resp}  status=INACTIVE
-
-JD-TC-VerifyDisableLocation-2
-
-      [Documentation]  Verification of Disable location
-
-      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
-      Should Be Equal As Strings  ${resp.status_code}  200
-
-      ${lid1}=  Create Sample Location
-      ${s_id}=  Create Sample Service  ${SERVICE1}
-      ${sTime3}=  add_timezone_time  ${tz}  0  55  
-      ${eTime3}=  add_timezone_time  ${tz}  0  60  
-      ${resp}=  Create Queue  ${queue1}  Weekly  ${list1}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  1  5  ${lid1}  ${s_id}
-      Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${q1}  ${resp.json()}
-      ${resp}=  Create Queue  ${queue2}  Weekly  ${list1}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime3}  ${eTime3}  1  5  ${lid1}  ${s_id}
-      Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${q2}  ${resp.json()}
       ${resp}=  Disable Location  ${lid1}
-      Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      sleep  02s
-      ${resp}=  Get Queue ById  ${q1}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Should Be Equal As Strings  ${resp.json()['queueState']}  DISABLED
-      ${resp}=  Get Queue ById  ${q2}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Should Be Equal As Strings  ${resp.json()['queueState']}  DISABLED
-      ${resp}=  Get Location ById  ${lid1}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Verify Response  ${resp}  status=INACTIVE
+      Should Be Equal As Strings    ${resp.status_code}   422
+      # Should Be Equal As Strings  ${resp.json()}  ${BASE_LOCATION_CANNOT_BE_DISABLED}
 
-JD-TC-VerifyDisableLocation-3
-
-      [Documentation]  Verification of Disable location
-
-      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
-      Should Be Equal As Strings  ${resp.status_code}  200
-
-      ${resp}=  Get Location ById  ${lid_A}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Verify Response  ${resp}  status=ACTIVE
-
-                                                
-*** Keywords ***
-
-Multiple Location
-      [Arguments]  ${index}  ${business_conf}
-      # ${business_conf}=  json.loads  ${business_conf}
-      Set Suite Variable  ${dom}  ${business_conf[${index}]['domain']}
-      Set Suite Variable  ${sub_dom}  ${business_conf[${index}]['subDomains'][0]['subDomain']}
-      RETURN  ${dom}  ${sub_dom}

@@ -182,7 +182,6 @@ JD-TC-CreateLocation-8
       ${PUSERNAME_U1}  ${u_id} =  Create and Configure Sample User  admin=${bool[1]}
 
       ${resp}=    Provider Logout
-      Log   ${resp.content}
       Should Be Equal As Strings    ${resp.status_code}    200
 
       ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
@@ -330,7 +329,6 @@ JD-TC-CreateLocation-UH6
       ${PUSERNAME_U1}  ${u_id} =  Create and Configure Sample User
 
       ${resp}=    Provider Logout
-      Log   ${resp.content}
       Should Be Equal As Strings    ${resp.status_code}    200
 
       ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
