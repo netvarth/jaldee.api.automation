@@ -576,11 +576,11 @@ Get Locations
     Check Deprication  ${resp}  Get Locations
     RETURN  ${resp}
 
-Disable Location
-    [Arguments]   ${id}
+Enable Disable Location
+    [Arguments]   ${id}  ${toggle_status}
     Check And Create YNW Session
-    ${resp}=    DELETE On Session    ynw  /provider/locations/${id}/disable  expected_status=any
-    Check Deprication  ${resp}  Disable Location
+    ${resp}=    DELETE On Session    ynw  /provider/locations/${id}/${toggle_status}  expected_status=any
+    Check Deprication  ${resp}  Enable Disable Location
     RETURN  ${resp}
 
 AddCustomer
@@ -2916,10 +2916,10 @@ UpdateBaseLocation
     RETURN  ${resp}
     
 Enable Location
-   [Arguments]   ${id}
-   Check And Create YNW Session
-   ${resp}=    PUT On Session    ynw  /provider/locations/${id}/enable  expected_status=any
-   Check Deprication  ${resp}  Enable Location
+    [Arguments]   ${id}
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw  /provider/locations/${id}/enable  expected_status=any
+    Check Deprication  ${resp}  Enable Location
     RETURN  ${resp}
 
 Get Location Suggester
@@ -3067,7 +3067,7 @@ Sample Queue
     # ${Time}=  db.get_time_by_timezone   ${tz}
     ${DAY1}=  get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10
-    ${delta}=  FakerLibrary.Random Int  min=20  max=60
+    ${delta}=  FakerLibrary.Random Int  min=30  max=60
     ${Time}=  db.get_time_by_timezone  ${tz}
     ${sTime}=  add_two   ${Time}  ${delta}
     ${eTime}=  add_two   ${sTime}  ${delta}

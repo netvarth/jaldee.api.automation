@@ -21,40 +21,29 @@ JD-TC-GetLocationById-1
       [Documentation]  Get a Location by provider login
       ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      # ${city}=   get_place
-      # Set Suite Variable  ${city}
-      # ${latti}=  get_latitude
-      # Set Suite Variable  ${latti}
-      # ${longi}=  get_longitude
-      # Set Suite Variable  ${longi}
-      # ${postcode}=  FakerLibrary.postcode
-      # Set Suite Variable  ${postcode}
-      # ${address}=  get_address
-      # Set Suite Variable  ${address}
-      ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+
+      ${latti}  ${longi}  ${postcode}  ${city}  ${address}=  get_random_location_data
       ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-      Set Suite Variable  ${tz}
-      Set Suite Variable  ${city}
-      Set Suite Variable  ${latti}
-      Set Suite Variable  ${longi}
-      Set Suite Variable  ${postcode}
-      Set Suite Variable  ${address}
-      ${park_type}    Random Element     ['none','free','street','privatelot','valet','paid']
-      Set Suite Variable  ${park_type}
-      ${24hours}    Random Element    ['True','False']
-      Set Suite Variable  ${24hours}
-      ${DAY}=  db.get_date_by_timezone  ${tz}
-    	Set Suite Variable  ${DAY}
-	${list}=  Create List  1  2  3  4  5  6  7
-    	Set Suite Variable  ${list}
-      ${sTime}=  add_timezone_time  ${tz}  0  15  
-      Set Suite Variable   ${sTime}
-      ${eTime}=  add_timezone_time  ${tz}  0  30  
-      Set Suite Variable   ${eTime}
-      ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${park_type}  ${24hours}  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
+      ${parking}    Random Element     ${parkingType} 
+      ${24hours}    Random Element    ${bool}
+      ${url}=   FakerLibrary.url
+      ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${postcode}  ${address}  googleMapUrl=${url}  parkingType=${parking}  open24hours=${24hours}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${lid}  ${resp.json()}
+
+      ${resp}=  Get Location ById  ${lid}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Should Be Equal As Strings  ${resp.json()['place']}  ${city}
+      Should Be Equal As Strings  ${resp.json()['longitude']}  ${longi}
+      Should Be Equal As Strings  ${resp.json()['lattitude']}  ${latti}
+      Should Be Equal As Strings  ${resp.json()['pinCode']}  ${postcode}
+      Should Be Equal As Strings  ${resp.json()['address']}  ${address}
+      Should Be Equal As Strings  ${resp.json()['status']}  ACTIVE
+      Should Be Equal As Strings  ${resp.json()['baseLocation']}  ${bool[0]}
+      Should Be Equal As Strings  ${resp.json()['open24hours']}  ${bool[0]}
+      Should Be Equal As Strings  ${resp.json()['searchable']}  ${bool[1]}
+      Should Be Equal As Strings  ${resp.json()['timezone']}  ${tz}
+
 
 JD-TC-GetLocationById-2
 	[Documentation]  Get a location by a branch login
@@ -77,7 +66,7 @@ JD-TC-GetLocationById-2
       Log  ${resp.content}
       Should Be Equal As Strings    ${resp.status_code}    200
       Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
+      Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERNAME_E}${\n}
       Set Suite Variable  ${PUSERNAME_E}
       ${uid}=  get_uid  ${PUSERNAME_E}
       # ${city8}=   get_place
