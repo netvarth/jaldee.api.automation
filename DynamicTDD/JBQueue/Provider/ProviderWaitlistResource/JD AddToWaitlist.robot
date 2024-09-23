@@ -435,79 +435,14 @@ JD-TC-AddToWaitlist-10
 JD-TC-AddToWaitlist-11
       [Documentation]   Add family members to the waitlist
 
-      ${f_name}=  FakerLibrary.first_name
-      ${l_name}=  FakerLibrary.last_name
-      ${resp}=    get_maxpartysize_subdomain
-      Set Test Variable   ${sector}        ${resp['domain']}
-      Set Test Variable   ${sub_sector}    ${resp['subdomain']}
-      ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+8706
-      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}   
-      ${pkg_id}=   get_highest_license_pkg
-      ${resp}=   Account SignUp  ${f_name}  ${l_name}  ${None}   ${sector}   ${sub_sector}  ${PUSERNAME_A}  ${pkg_id[0]}
-      Log   ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    202
-      ${resp}=  Account Activation  ${PUSERNAME_A}  0
-      Log   ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_A}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+      ${f_name}  ${l_name}  ${PUSERNAME_R}  ${LoginId}=  Provider Signup
+      Set Suite Variable  ${PUSERNAME_R}
+
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
       Log  ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    200  
-      Set Suite Variable   ${PUSERNAME_A}
+      Should Be Equal As Strings    ${resp.status_code}    200 
 
-      ${PUSERPH1}=  Evaluate  ${PUSERNAME}+342
-      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH1}${\n}
-
-      ${PUSERPH2}=  Evaluate  ${PUSERNAME}+343
-      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
-
-      ${PUSERMAIL0}=   Set Variable  ${P_Email}${PUSERNAME_A}.${test_mail}
-      ${views}=  Evaluate  random.choice($Views)  random
-      Log   ${views}
-      ${name1}=  FakerLibrary.name
-      ${name2}=  FakerLibrary.name
-      ${name3}=  FakerLibrary.name
-      ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${PUSERPH1}  ${views}
-      ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH2}  ${views}
-      ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL0}  ${views}
-      ${bs}=  FakerLibrary.bs
-      ${companySuffix}=  FakerLibrary.companySuffix
-
-      ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-      ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-      Set Suite Variable  ${tz}
-      ${sTime}=  db.subtract_timezone_time   ${tz}  3  25
-      ${eTime}=  db.add_timezone_time  ${tz}   0  30 
-      ${desc}=   FakerLibrary.sentence
-      ${url}=   FakerLibrary.url
-      ${parking}   Random Element   ${parkingType}
-      ${24hours}    Random Element    ['True','False']
-      ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
-      Log   ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      sleep   1s
-    
-      ${fields}=   Get subDomain level Fields  ${sector}  ${sub_sector}
-      Log  ${fields.json()}
-      Should Be Equal As Strings    ${fields.status_code}   200
-
-      ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
-
-      ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sub_sector}
-      Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-
-      ${resp}=  Get specializations Sub Domain  ${sector}  ${sub_sector}
-      Should Be Equal As Strings    ${resp.status_code}   200
-
-      ${spec}=  get_Specializations  ${resp.json()}
-      ${resp}=  Update Specialization  ${spec}
-      Log  ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}   200
-
-
-      ${resp}=  Update Waitlist Settings  ${calc_mode[2]}   ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
+      ${resp}=  Update Waitlist Settings  ${calc_mode[2]}   ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  50
       Should Be Equal As Strings  ${resp.status_code}  200
      
       ${resp}=  Enable Waitlist
@@ -550,13 +485,19 @@ JD-TC-AddToWaitlist-11
       ${end_time1}=    db.add_timezone_time  ${tz}  2  20 
       Set Suite Variable    ${end_time1}  
       ${capacity}=  Random Int  min=8   max=20
-      ${parallel}=  Random Int   min=1   max=1
+      ${parallel}=  Random Int   min=50   max=52
       Set Suite Variable   ${parallel}
       Set Suite Variable   ${capacity}
-      ${resp}=  Create Queue    ${q_name1}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time1}  ${end_time1}   ${parallel}   ${capacity}    ${loc_id3}  ${ser_id7}  
+      ${partysize}=  Create Dictionary  maxPartySize=${parallel}
+      ${resp}=  Create Queue    ${q_name1}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time1}  ${end_time1}   ${parallel}   ${capacity}    ${loc_id3}  ${ser_id7}     ${partysize} 
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${que_id4}   ${resp.json()}
+
+      ${resp}=    Get Queue ById    ${que_id4}
+      Log   ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
       ${f_name}=   FakerLibrary.first_name
       ${l_name}=   FakerLibrary.last_name
       ${dob}=      FakerLibrary.date
@@ -592,7 +533,7 @@ JD-TC-AddToWaitlist-11
       Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id7}
       Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${id}
       Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${mem_id1}
-
+*** Comments ***
 JD-TC-AddToWaitlist-12
       [Documentation]   Add again to the same queue and service after cancelling the waitlist
 
@@ -1032,7 +973,7 @@ JD-TC-AddToWaitlist-UH15
       ${lastname}=  FakerLibrary.last_name
       ${dob}=  FakerLibrary.Date
       ${gender}=  Random Element    ${Genderlist}
-      ${resp}=  AddCustomer without email   ${firstname}  ${lastname}  ${EMPTY}  ${gender}  ${dob}  ${PUSERNAME2}  ${EMPTY}
+      ${resp}=  AddCustomer   ${PUSERNAME2}  
       Should Be Equal As Strings  ${resp.status_code}  200
       Log  ${resp.json()}
       Set Suite Variable  ${coid3}  ${resp.json()}
@@ -1057,7 +998,7 @@ JD-TC-AddToWaitlist-UH16
       ${lastname}=  FakerLibrary.last_name
       ${dob}=  FakerLibrary.Date
       ${gender}=  Random Element    ${Genderlist}
-      ${resp}=  AddCustomer without email   ${firstname}  ${lastname}  ${EMPTY}  ${gender}  ${dob}  ${PUSERNAME3}  ${EMPTY}
+      ${resp}=  AddCustomer   ${PUSERNAME3} 
       Should Be Equal As Strings  ${resp.status_code}  200
       Log  ${resp.json()}
       Set Test Variable  ${cid4}  ${resp.json()}
@@ -1069,7 +1010,7 @@ JD-TC-AddToWaitlist-UH16
 
       ${dob}=  FakerLibrary.Date
       ${gender}=  Random Element    ${Genderlist}
-      ${resp}=  AddCustomer without email   ${firstname}  ${lastname}  ${EMPTY}  ${gender}  ${dob}  ${PUSERNAME4}  ${EMPTY}
+      ${resp}=  AddCustomer   ${PUSERNAME4} 
       Should Be Equal As Strings  ${resp.status_code}  200
       Log  ${resp.json()}
       Set Test Variable  ${cid5}  ${resp.json()}
@@ -1097,7 +1038,7 @@ JD-TC-AddToWaitlist-UH17
       ${lastname}=  FakerLibrary.last_name
       ${dob}=  FakerLibrary.Date
       ${gender}=  Random Element    ${Genderlist}
-      ${resp}=  AddCustomer without email   ${firstname}  ${lastname}  ${EMPTY}  ${gender}  ${dob}  ${PUSERNAME1}  ${EMPTY}
+      ${resp}=  AddCustomer   ${PUSERNAME1}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${cid0}  ${resp.json()}
@@ -1115,7 +1056,7 @@ JD-TC-AddToWaitlist-UH17
       
       ${dob}=  FakerLibrary.Date
       ${gender}=  Random Element    ${Genderlist}
-      ${resp}=  AddCustomer without email   ${firstname}  ${lastname}  ${EMPTY}  ${gender}  ${dob}  ${PUSERNAME7}  ${EMPTY}
+      ${resp}=  AddCustomer   ${PUSERNAME7}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${cid1}  ${resp.json()}
@@ -1133,7 +1074,7 @@ JD-TC-AddToWaitlist-UH17
       
       ${dob}=  FakerLibrary.Date
       ${gender}=  Random Element    ${Genderlist}
-      ${resp}=  AddCustomer without email   ${firstname}  ${lastname}  ${EMPTY}  ${gender}  ${dob}  ${PUSERNAME6}  ${EMPTY}
+      ${resp}=  AddCustomer   ${PUSERNAME6}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${cid2}  ${resp.json()}

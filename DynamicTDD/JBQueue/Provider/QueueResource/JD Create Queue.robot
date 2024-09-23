@@ -23,6 +23,7 @@ ${SERVICE6}  Bleach
 ${SERVICE7}  Hair cut
 ${SERVICE8}  Threading
 ${SERVICE9}  Threading12
+${SERVICE10}  Threading13
 @{appointment}            Enable  Disable
 ${start}    10
 *** Test Cases ***
@@ -910,6 +911,38 @@ JD-TC-CreateQueue-UH10
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${QUEUE_SCHEDULE_OVERLAPS_CREATE}"
+
+JD-TC-CreateQueue-UH11
+    [Documentation]    Create a queue on a disabled location.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${lid1}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Disable Location  ${lid1}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${description}=  FakerLibrary.sentence
+    ${notifytype}    Random Element     ['none','pushMsg','email']
+    ${notify}    Random Element     ['True','False'] 
+    ${resp}=  Create Service  ${SERVICE10}  ${description}   5  ACTIVE  Waitlist  ${notify}   ${notifytype}  0  500  False  True
+    Should Be Equal As Strings  ${resp.status_code}  200    
+    Set Suite Variable  ${s_id1}  ${resp.json()} 
+    ${sTime9}=  add_timezone_time  ${tz}  4  15  
+    ${eTime9}=  add_timezone_time  ${tz}  4  30  
+    ${queue_name}=  FakerLibrary.bs
+    ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime9}  ${eTime9}  1  5  ${lid1}  ${s_id1}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"   
 
 *** Comments ***
 

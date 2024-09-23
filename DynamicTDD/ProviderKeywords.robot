@@ -6278,6 +6278,14 @@ Get Appointment Schedule By Location service Date
 	${resp}=  GET On Session  ynw  /provider/appointment/schedule/location/${locationId}/service/${serviceId}/date/${date}  expected_status=any
     Check Deprication  ${resp}  Get Appointment Schedule By Location service Date
     RETURN  ${resp}
+
+Get Appointment Schedule By Location service Date For Reschedule
+	[Arguments]	 ${locationId}	${serviceId}   ${date}  ${acc_id}
+    ${param}=  Create Dictionary  account=${acc_id}
+	Check And Create YNW Session
+	${resp}=  GET On Session  ynw  /provider/appointment/schedule/location/${locationId}/service/${serviceId}/date/${date}  params=${param}  expected_status=any
+    Check Deprication  ${resp}  Get Appointment Schedule By Location service Date For Reschedule
+    RETURN  ${resp}
     
 Individual Schedule
     [Arguments]  ${name}   ${parallel}   ${consumerParallelServing}   ${loc}   ${batch}  @{vargs}   &{kwargs}
