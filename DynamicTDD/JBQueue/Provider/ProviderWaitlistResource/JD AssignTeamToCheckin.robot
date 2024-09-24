@@ -424,7 +424,9 @@ JD-TC-AssignTeamToWaitlist-UH3
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
     ${amt}=  Convert To Number  ${amt}  1
     ${SERVICE1}=  FakerLibrary.word
-    ${resp}=  Create Service For User  ${SERVICE1}  ${description}   ${dur}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  0  ${amt}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${u_id1}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}   ${dur}   ${status[0]}  ${btype}   ${bool[0]}  ${notifytype[0]}   ${EMPTY}  ${amt}  ${bool[0]}  ${bool[0]}     provider=${u_id1}
+
+    # ${resp}=  Create Service For User  ${SERVICE1}  ${description}   ${dur}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  0  ${amt}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${u_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${s_id1}  ${resp.json()}
@@ -784,7 +786,7 @@ JD-TC-AssignTeamToWaitlist-UH6
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${QUEUE_CANNOT_BE_DISABLED}=  Replace String    ${QUEUE_CANNOT_BE_DISABLED}  {}  ${q_name}
-    ${resp}=  Disable Queue  ${q_id1}
+    ${resp}=  Enable Disable Queue  ${q_id1}    ${toggleButton[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${QUEUE_CANNOT_BE_DISABLED}
