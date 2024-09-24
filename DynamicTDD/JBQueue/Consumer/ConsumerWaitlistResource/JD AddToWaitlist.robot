@@ -14,6 +14,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 # Variables         /ebs/TDD/varfiles/consumermail.py
 
 *** Variables ***
+
 ${service_duration}   20   
 ${self}         0
 ${parallel}     1
@@ -21,8 +22,9 @@ ${capacity}     5
 
 *** Test Cases ***
 
-JD-TC-Get Waitlist By Id Consumer-1  
-	[Documentation]  Add To Waitlist By Consumer valid  provider
+JD-TC-Add To Waitlist By Consumer-1  
+
+	[Documentation]  Add To Waitlist By Consumer
     
     [Setup]  Run Keywords  clear_queue  ${PUSERNAME193}  AND  clear_location  ${PUSERNAME193}  AND  clear_service  ${PUSERNAME192}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME193}  ${PASSWORD}
@@ -124,44 +126,3 @@ JD-TC-Get Waitlist By Id Consumer-1
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q1}  ${DAY}  ${p1_s1}  ${cnote}  ${bool[0]}  ${cid}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    
-    ${wid}=  Get Dictionary Values  ${resp.json()}
-    Set Suite Variable  ${uuid1}  ${wid[0]}
-    # sleep  04s   
-
-    ${resp}=  Get consumer Waitlist By Id  ${uuid1}  ${pid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['service']['name']}  ${P1SERVICE1} 
-    Should Be Equal As Strings  ${resp.json()['service']['id']}  ${p1_s1} 
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
-    Should Be Equal As Strings  ${resp.json()['consumer']['firstName']}   ${fname}
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}  
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['firstName']}  ${fname}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['lastName']}  ${lname}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['phoneNo']}  ${CUSERNAME20}
-    
-
-JD-TC-Get Waitlist By Id Consumer-UH2
-	[Documentation]  get waitlist by id consumer side without login  
-
-    ${pid}=  get_acc_id  ${PUSERNAME}
-    ${resp}=  Get consumer Waitlist By Id  ${uuid1}  ${pid}
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  419 
-    Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}"
-
-
-JD-TC-Get Waitlist By Id Consumer-UH3
-	[Documentation]  get waitlist By id  using provider
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${pid}=  get_acc_id  ${PUSERNAME193}
-    ${resp}=  Get consumer Waitlist By Id  ${uuid1}  ${pid}
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  401
-    Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION}" 
-        
