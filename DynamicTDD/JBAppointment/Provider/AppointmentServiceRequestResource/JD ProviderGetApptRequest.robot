@@ -387,7 +387,6 @@ JD-TC-ProviderGetApptRequest-6
     ${resp}=  Provider Get Appt Service Request  schedule-eq=${sch_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
     Should Be Equal As Strings  ${resp.json()[0]['uid']}                     ${appt_reqid5}
     
     ${resp}=  Provider Get Appt Service Request  schedule-eq=${sch_id1}
