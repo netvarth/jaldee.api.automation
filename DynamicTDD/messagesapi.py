@@ -169,7 +169,7 @@ WAITLIST_FUTURE_CANNOT_BE_STARTED="Service can be started only in your working h
 WAITLIST_SERVICE_READY_COMMUNICATION= "Your [{}] with [{}] is completed" 
 WAITLIST_STARTED= "Already [started]"
 
-QUEUE_CANNOT_BE_DISABLED="{} cannot be disabled as there are active check ins in it"
+QUEUE_CANNOT_BE_DISABLED="{} cannot be disabled as there are active bookings in it"
 WAITLIST_INTERNAL_NOTE= "Note can only be added on today's [waitlist]"
 WAITLIST_NOT_ENABLED= "The waitlist functionality has not yet been enabled by the provider. Please contact your service provider for support."
 WAITLIST_PARTY_SIZE_SETTINGS= "Party size settings can be changed only when the [waitlist] is empty"
