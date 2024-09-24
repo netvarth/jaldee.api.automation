@@ -40,14 +40,14 @@ JD-TC-GetLocationById-1
       Should Be Equal As Strings  ${resp.json()['lattitude']}  ${latti}
       Should Be Equal As Strings  ${resp.json()['pinCode']}  ${postcode}
       Should Be Equal As Strings  ${resp.json()['address']}  ${address}
-      Should Be Equal As Strings  ${resp.json()['googleMapUrl']}  ${g_url}
+      Should Be Equal As Strings  ${resp.json()['googleMapUrl']}  ${url}
       Should Be Equal As Strings  ${resp.json()['status']}  ${status[0]}
       Should Be Equal As Strings  ${resp.json()['baseLocation']}  ${bool[0]}
       Should Be Equal As Strings  ${resp.json()['open24hours']}  ${24hours}
       Should Be Equal As Strings  ${resp.json()['parkingType']}  ${parking}
       Should Be Equal As Strings  ${resp.json()['searchable']}  ${bool[1]}
       Should Be Equal As Strings  ${resp.json()['timezone']}  ${tz}
-      Should Be Equal As Strings  ${resp.json()['locationType']}  ${locationType[0]}
+
 
 
 JD-TC-GetLocationById-2

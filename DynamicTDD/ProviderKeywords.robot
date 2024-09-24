@@ -590,6 +590,15 @@ Disable Location
     Check Deprication  ${resp}  Disable Location
     RETURN  ${resp}
 
+UpdateBaseLocation
+    [Arguments]   ${lid}
+    ${data}=  Create Dictionary  locationId=${lid}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/bProfile/baseLocation/${lid}  data=${data}  expected_status=any
+    Check Deprication  ${resp}  UpdateBaseLocation
+    RETURN  ${resp}
+
 AddCustomer
     [Arguments]    ${primaryNo}  ${countryCode}=91   &{kwargs}
     ${items}=  Get Dictionary items  ${kwargs}
@@ -2942,14 +2951,7 @@ Create Sample Item
 #     Check Deprication  ${resp}  Update Location
 #     RETURN  ${resp}
     
-UpdateBaseLocation
-    [Arguments]   ${lid}
-    ${data}=  Create Dictionary  locationId=${lid}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/bProfile/baseLocation/${lid}  data=${data}  expected_status=any
-    Check Deprication  ${resp}  UpdateBaseLocation
-    RETURN  ${resp}
+
     
 
 

@@ -177,10 +177,10 @@ JD-TC-CreateLocation-8
       ${PUSERNAME_U1}  ${u_id} =  Create and Configure Sample User  admin=${bool[1]}
 
       ${resp}=    Provider Logout
-      Should Be Equal As Strings    ${resp.status_code}    200
+      Should Be Equal As Strings  ${resp.status_code}    200
 
-      ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
-      Should Be Equal As Strings             ${resp.status_code}   200
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+      Should Be Equal As Strings  ${resp.status_code}   200
 
       ${latti8}  ${longi8}  ${postcode8}  ${city8}  ${address}=  get_random_location_data
       ${tz8}=   db.get_Timezone_by_lat_long   ${latti8}  ${longi8}
