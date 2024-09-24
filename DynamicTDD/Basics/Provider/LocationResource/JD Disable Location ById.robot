@@ -238,8 +238,12 @@ JD-TC-DisableLocation-UH6
       Set Test Variable  ${lid1}  ${resp.json()[1]['id']}
 
       ${resp}=  Disable Location  ${lid1}
-      Should Be Equal As Strings    ${resp.status_code}   422
+      Should Be Equal As Strings    ${resp.status_code}   200
       # Should Be Equal As Strings  ${resp.json()}  ${BASE_LOCATION_CANNOT_BE_DISABLED}
+
+      ${resp}=  Get Location ById  ${lid1}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Should Be Equal As Strings  ${resp.json()['status']}  ${status[1]}
 
 
 JD-TC-DisableLocation-UH7

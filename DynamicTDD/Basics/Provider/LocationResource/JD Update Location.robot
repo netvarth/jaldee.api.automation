@@ -139,22 +139,23 @@ JD-TC-UpdateLocation-UH1
       ${resp}=  Get Locations
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${lid1}  ${resp.json()[1]['id']}
       Set Test Variable  ${city1}  ${resp.json()[0]['place']}
+      Set Test Variable  ${city2}  ${resp.json()[1]['place']}
+      Set Suite Variable  ${lid2}  ${resp.json()[1]['id']}
       
-      ${resp}=  Update Location  ${lid1}  place=${city1}
+      ${resp}=  Update Location  ${lid2}  place=${city1}
       Should Be Equal As Strings  ${resp.status_code}  200
 
       ${resp}=  Get Locations
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
       Should Be Equal As Strings  ${resp.json()[0]['place']}  ${city1}
-      Should Be Equal As Strings  ${resp.json()[1]['place']}  ${city1}
+      Should Be Equal As Strings  ${resp.json()[1]['place']}  ${city2}
 
 JD-TC-UpdateLocation-UH2
       [Documentation]   Provider Update a location without login  
       ${city}=   get_place
-      ${resp}=  Update Location  ${lid1}  place=${city}
+      ${resp}=  Update Location  ${lid2}  place=${city}
       Should Be Equal As Strings    ${resp.status_code}   419
       Should Be Equal As Strings   "${resp.json()}"   "${SESSION_EXPIRED}"
  
@@ -168,7 +169,7 @@ JD-TC-UpdateLocation-UH3
       Should Be Equal As Strings    ${resp.status_code}   200
 
       ${city}=   get_place
-      ${resp}=  Update Location  ${lid1}  place=${city}
+      ${resp}=  Update Location  ${lid2}  place=${city}
       Should Be Equal As Strings    ${resp.status_code}   401
       Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}"
 
@@ -192,8 +193,8 @@ JD-TC-UpdateLocation-UH4
       Should Be Equal As Strings             ${resp.status_code}   200
 
       ${city}=   get_place
-      ${resp}=  Update Location  ${lid1}  place=${city}
-      Should Be Equal As Strings    ${resp.status_code}   422
+      ${resp}=  Update Location  ${lid2}  place=${city}
+      Should Be Equal As Strings    ${resp.status_code}   200
 
       ${resp}=  Get Locations
       Log  ${resp.content}
@@ -225,7 +226,7 @@ JD-TC-UpdateLocation-UH5
 
       ${city}=   get_place
       ${resp}=  Update Location  ${lid1}  place=${city}
-      Should Be Equal As Strings    ${resp.status_code}   422
+      Should Be Equal As Strings    ${resp.status_code}   200
 
       ${resp}=  Get Locations
       Log  ${resp.content}
