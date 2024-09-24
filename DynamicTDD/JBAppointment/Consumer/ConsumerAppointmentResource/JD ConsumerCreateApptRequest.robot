@@ -205,7 +205,6 @@ JD-TC-ConsumerCreateApptRequest-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${acc_id1}  ${DAY1}  ${lid}  ${sid2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
