@@ -951,7 +951,7 @@ General Communication with User
 
     
 Add To Waitlist Consumers
-    [Arguments]  ${accId}  ${queueId}  ${date}  ${serviceId}  ${consumerNote}  ${revealPhone}  ${consumer}  @{vargs}  &{kwargs}
+    [Arguments]   ${consumer}  ${accId}  ${queueId}  ${date}  ${serviceId}  ${consumerNote}  ${revealPhone}  @{vargs}  &{kwargs}
     ${cons_headers}=  Create Dictionary  &{headers} 
     ${cons_params}=  Create Dictionary  account=${accId}
     ${queueId}=  Create Dictionary  id=${queueId}

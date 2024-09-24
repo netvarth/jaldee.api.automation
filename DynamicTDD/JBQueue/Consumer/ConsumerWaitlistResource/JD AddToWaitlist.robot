@@ -27,6 +27,7 @@ JD-TC-Add To Waitlist By Consumer-1
 	[Documentation]  Add To Waitlist By Consumer
     
     [Setup]  Run Keywords  clear_queue  ${PUSERNAME193}  AND  clear_location  ${PUSERNAME193}  AND  clear_service  ${PUSERNAME192}
+    
     ${resp}=  Encrypted Provider Login  ${PUSERNAME193}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -119,10 +120,76 @@ JD-TC-Add To Waitlist By Consumer-1
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable   ${fname}   ${resp.json()['firstName']}
-    Set Test Variable   ${cid}   ${resp.json()['id']}
+    Set Suite Variable   ${fname}   ${resp.json()['firstName']}
+    Set Suite Variable   ${cid}   ${resp.json()['id']}
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q1}  ${DAY}  ${p1_s1}  ${cnote}  ${bool[0]}  ${cid}  ${self}
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${p1_q1}  ${DAY}  ${p1_s1}  ${cnote}  ${bool[0]}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
+
+JD-TC-Add To Waitlist By Consumer-2
+
+	[Documentation]  Add To Waitlist By Consumer - same provider consumer add waitilist again
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${cnote}=   FakerLibrary.word
+    Set Suite Variable  ${cnote}
+
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${p1_q1}  ${DAY}  ${p1_s1}  ${cnote}  ${bool[0]}  ${self}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}     422
+    Should Be Equal As Strings  ${resp.json()}          ${WAITLIST_CUSTOMER_ALREADY_IN}
+
+JD-TC-Add To Waitlist By Consumer-3
+
+	[Documentation]  Add To Waitlist By Consumer - invalid provider consumer id
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME193}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${fname}=  FakerLibrary.first_name
+    ${lname}=  FakerLibrary.last_name
+   
+    ${resp}=  AddCustomer  ${CUSERNAME25}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME25}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME25}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME25}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${fake}=    Random Int  min=111  max=999
+
+    # ${resp}=  Add To Waitlist Consumers  ${fake}  ${pid}  ${p1_q1}  ${DAY}  ${p1_s1}  ${cnote}  ${bool[0]}  ${self}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  422
+
+JD-TC-Add To Waitlist By Consumer-3
+
+	[Documentation]  Add To Waitlist By Consumer - provider consumer id is empty
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME25}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Add To Waitlist Consumers  ${empty}  ${pid}  ${p1_q1}  ${DAY}  ${p1_s1}  ${cnote}  ${bool[0]}  ${self}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422

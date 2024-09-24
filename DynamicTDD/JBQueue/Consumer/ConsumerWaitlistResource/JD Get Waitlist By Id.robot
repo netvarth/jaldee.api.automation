@@ -121,7 +121,7 @@ JD-TC-Get Waitlist By Id Consumer-1
     Set Test Variable   ${cid}   ${resp.json()['id']}
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q1}  ${DAY}  ${p1_s1}  ${cnote}  ${bool[0]}  ${cid}  ${self}
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${p1_q1}  ${DAY}  ${p1_s1}  ${cnote}  ${bool[0]}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
