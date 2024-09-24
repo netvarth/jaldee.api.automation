@@ -10,7 +10,6 @@ Resource        /ebs/TDD/ProviderKeywords.robot
 Resource        /ebs/TDD/ConsumerKeywords.robot
 Variables       /ebs/TDD/varfiles/providers.py
 Variables       /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 Suite Setup       Run Keyword  clear_location  ${PUSERNAME7}
 

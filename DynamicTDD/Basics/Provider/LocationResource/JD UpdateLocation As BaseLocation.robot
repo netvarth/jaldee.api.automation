@@ -5,11 +5,12 @@ Force Tags        Location
 Library           Collections
 Library           String
 Library           json
-Library         FakerLibrary
-Resource        /ebs/TDD/ProviderKeywords.robot
-Resource        /ebs/TDD/ConsumerKeywords.robot
-Variables       /ebs/TDD/varfiles/providers.py
-Variables       /ebs/TDD/varfiles/consumerlist.py 
+Library           FakerLibrary
+Resource          /ebs/TDD/ProviderKeywords.robot
+Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/consumerlist.py 
 # Suite Setup     Run Keyword  clear_location  ${PUSERNAME8}
 
 *** Test Cases ***
@@ -26,8 +27,15 @@ JD-TC-UpdateBaseLocation-1
       
       ${latti}  ${longi}  ${postcode}  ${city}  ${address}=  get_random_location_data
       ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+      ${DAY}=  db.get_date_by_timezone  ${tz}
+      ${list}=  Create List  1  2  3  4  5  6  7
+      ${stime}=  add_timezone_time  ${tz}  0  15  
+      ${etime}=  add_timezone_time  ${tz}  0  30  
+      ${bs}=  TimeSpec  Weekly  ${list}  ${DAY}  ${EMPTY}  ${stime}  ${etime}
+      ${bs}=  Create List  ${bs}
+      ${bs}=  Create Dictionary  timespec=${bs}
       ${url}=   FakerLibrary.url
-      ${resp}=  Create Location   ${city}  ${longi}  ${latti}  ${postcode}  ${address}
+      ${resp}=  Create Location   ${city}  ${longi}  ${latti}  ${postcode}  ${address}  bSchedule=${bs}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${lid1}  ${resp.json()}
@@ -54,8 +62,15 @@ JD-TC-UpdateBaseLocation-2
       
       ${latti}  ${longi}  ${postcode}  ${city}  ${address}=  get_random_location_data
       ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+      ${DAY}=  db.get_date_by_timezone  ${tz}
+      ${list}=  Create List  1  2  3  4  5  6  7
+      ${stime}=  add_timezone_time  ${tz}  0  15  
+      ${etime}=  add_timezone_time  ${tz}  0  30  
+      ${bs}=  TimeSpec  Weekly  ${list}  ${DAY}  ${EMPTY}  ${stime}  ${etime}
+      ${bs}=  Create List  ${bs}
+      ${bs}=  Create Dictionary  timespec=${bs}
       ${url}=   FakerLibrary.url
-      ${resp}=  Create Location   ${city}  ${longi}  ${latti}  ${postcode}  ${address}
+      ${resp}=  Create Location   ${city}  ${longi}  ${latti}  ${postcode}  ${address}  bSchedule=${bs}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${lid2}  ${resp.json()}
