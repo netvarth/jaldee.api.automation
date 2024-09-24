@@ -103,6 +103,16 @@ JD-TC-UpdateWaitlistSettings-4
     Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  onlineCheckIns=${bool[1]}
 
+
+JD-TC-UpdateWaitlistSettings-UH1
+    [Documentation]  Update wailist settings without login
+
+    ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  30  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}"
+
+
+*** Comments ***
 JD-TC-UpdateWaitlistSettings-5
     [Documentation]  Set maxPartySize and verify
 
@@ -118,10 +128,3 @@ JD-TC-UpdateWaitlistSettings-5
     Log   ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  maxPartySize=100
-
-JD-TC-UpdateWaitlistSettings-UH1
-    [Documentation]  Update wailist settings without login
-    Log   ${resp.content}
-    ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  30  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
-    Should Be Equal As Strings  ${resp.status_code}  419
-    Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}"

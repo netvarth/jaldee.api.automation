@@ -42,8 +42,7 @@ JD-TC-Get Queue By Location Id-1
     Set Suite Variable  ${sTime}
     ${eTime}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable  ${eTime}
-    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
-    Log  ${resp.json()}
+    ${resp}=  Create Location  ${city}  ${longi}  ${latti}    ${postcode}  ${address}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid1}  ${resp.json()}
 
@@ -72,7 +71,7 @@ JD-TC-Get Queue By Location Id-1
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
     ${24hours}    Random Element    ['True','False']
 
-    ${resp}=  Create Location  ${city1}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}
+    ${resp}=  Create Location  ${city1}  ${longi}  ${latti}   ${postcode}  ${address}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid2}  ${resp.json()}

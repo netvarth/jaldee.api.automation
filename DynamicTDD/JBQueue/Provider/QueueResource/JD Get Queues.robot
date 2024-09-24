@@ -46,7 +46,7 @@ JD-TC-Get Queues-1
     Set Suite Variable  ${sTime}
     ${eTime}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable  ${eTime}
-    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
+    ${resp}=  Create Location  ${city}  ${longi}  ${latti}   ${postcode}  ${address}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid1}  ${resp.json()}
@@ -64,7 +64,7 @@ JD-TC-Get Queues-1
     Set Suite Variable  ${tz}
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
     ${24hours}    Random Element    ['True','False']
-    ${resp}=  Create Location  ${city1}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime3}  ${eTime3}
+    ${resp}=  Create Location  ${city1}  ${longi}  ${latti}  ${postcode}  ${address}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid2}  ${resp.json()}
@@ -176,7 +176,7 @@ JD-TC-Get Queues-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Enable Disable Queue  ${q_id1}    ${toggleButton[0]}
+    ${resp}=  Enable Disable Queue  ${q_id1}    ${toggleButton[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

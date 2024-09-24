@@ -550,7 +550,7 @@ JD-TC-CreateQueue-9
     ${24hours}    Random Element    ['True','False']
     ${sTime}=  add_timezone_time  ${tz}  3  15  
     ${eTime}=  add_timezone_time  ${tz}  3  30  
-    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
+    ${resp}=  Create Location  ${city}  ${longi}  ${latti}   ${postcode}  ${address}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid2}  ${resp.json()}

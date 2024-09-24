@@ -46,7 +46,7 @@ JD-TC-EnableDisableOnlineCheckin-1
     Set Suite Variable   ${eTime}
     ${city}=   get_place
     Set Suite Variable   ${city}
-    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${companySuffix}.com  ${postcode}  ${address}  free  True  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
+    ${resp}=  Create Location  ${city}  ${longi}  ${latti}   ${postcode}  ${address}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep  2 sec

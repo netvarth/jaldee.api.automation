@@ -46,7 +46,7 @@ JD-TC-Enable Disable Queue-1
     Verify Response  ${resp}  queueState=ENABLED
 
 JD-TC-Enable Disable Queue-UH1
-    [Documentation]  Enable Queue by consumer
+    [Documentation]  Enable Queue by provider consumer
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
     Log  ${resp.json()}

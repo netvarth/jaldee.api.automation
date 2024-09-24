@@ -801,7 +801,7 @@ Create Sample User
 
 
 Configure Sample User
-    [Arguments]    ${P_User}
+    [Arguments]   ${u_id}    ${P_User}
     ${resp}=    Reset LoginId  ${u_id}  ${P_User}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200

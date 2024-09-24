@@ -311,7 +311,7 @@ JD-TC-UpdateQueue-UH3
 	${list}=  Create List  1  2  3  4  5  6  7
     ${sTime3}=  add_timezone_time  ${tz}  3  15  
     ${eTime3}=  add_timezone_time  ${tz}  3  30  
-    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime3}  ${eTime3}
+    ${resp}=  Create Location  ${city}  ${longi}  ${latti}   ${postcode}  ${address}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid3}  ${resp.json()}
