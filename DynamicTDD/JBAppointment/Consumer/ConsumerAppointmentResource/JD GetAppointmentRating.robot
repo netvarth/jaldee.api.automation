@@ -187,9 +187,15 @@ JD-TC-GetAppointmentRating-1
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
-    Log  ${resp.json()}
+    # ${cnote}=   FakerLibrary.name
+    # ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=   Customer Take Appointment  ${account_id}   ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -244,9 +250,14 @@ JD-TC-GetAppointmentRating-2
     ${apptfor}=   Create List  ${apptfor1} 
 
     ${DAY2}=  db.add_timezone_date  ${tz}  6  
-    ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id2}  ${sch_id}  ${DAY2}  ${cnote}   ${apptfor}
-    Log  ${resp.json()}
+    # ${cnote}=   FakerLibrary.name
+    # ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id2}  ${sch_id}  ${DAY2}  ${cnote}   ${apptfor}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=   Customer Take Appointment  ${account_id}   ${s_id2}  ${sch_id}  ${DAY2}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -280,9 +291,14 @@ JD-TC-GetAppointmentRating-2
     
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot2}
     ${apptfor}=   Create List  ${apptfor1}
-    ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id3}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor}
-    Log  ${resp.json()}
+    # ${cnote}=   FakerLibrary.name
+    # ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id3}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=   Customer Take Appointment  ${account_id}   ${s_id3}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -490,9 +506,14 @@ JD-TC-GetAppointmentRating-3
     ${apptfor}=   Create List  ${apptfor1}
 
     ${DAY2}=  db.add_timezone_date  ${tz}  2  
-    ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${account_id1}  ${ser_id}  ${schedule_id}  ${DAY2}  ${cnote}   ${apptfor}
-    Log  ${resp.json()}
+    # ${cnote}=   FakerLibrary.name
+    # ${resp}=   Take Appointment For Provider   ${account_id1}  ${ser_id}  ${schedule_id}  ${DAY2}  ${cnote}   ${apptfor}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=   Customer Take Appointment  ${account_id}   ${ser_id}  ${schedule_id}  ${DAY2}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -522,7 +543,7 @@ JD-TC-GetAppointmentRating-3
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${account_id1}  ${ser_id3}  ${schedule_id1}  ${DAY2}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${account_id1}  ${ser_id3}  ${schedule_id1}  ${DAY2}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -583,7 +604,7 @@ JD-TC-GetAppointmentRating-4
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${account_id1}  ${ser_id}  ${schedule_id}  ${DAY4}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${account_id1}  ${ser_id}  ${schedule_id}  ${DAY4}  ${cnote}   ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           

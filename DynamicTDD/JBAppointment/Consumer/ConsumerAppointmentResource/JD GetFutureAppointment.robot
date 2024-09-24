@@ -308,7 +308,7 @@ JD-TC-GetFutureAppointment-1
     # ${apptfor}=   Create List  ${apptfor1}
     
     # ${cnote}=   FakerLibrary.name
-    # ${resp}=   Take Appointment For Provider   ${pid1}  ${s_id1}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor}
+    # ${resp}=   Customer Take Appointment   ${pid1}  ${s_id1}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -320,7 +320,7 @@ JD-TC-GetFutureAppointment-1
     ${DAY2}=  db.add_timezone_date  ${tz}  2  
     Set Suite Variable   ${DAY2}
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid1}  ${s_id1}  ${sch_id1}  ${DAY2}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid1}  ${s_id1}  ${sch_id1}  ${DAY2}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -386,7 +386,7 @@ JD-TC-GetFutureAppointment-1
     # ${apptfor}=   Create List  ${apptfor1}
     
     # ${cnote}=   FakerLibrary.name
-    # ${resp}=   Take Appointment For Provider   ${pid1}  ${s_id2}  ${sch_id2}  ${DAY1}  ${cnote}   ${apptfor}
+    # ${resp}=   Customer Take Appointment   ${pid1}  ${s_id2}  ${sch_id2}  ${DAY1}  ${cnote}   ${apptfor}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
     ${apptfor1}=  Create Dictionary  id=${cidfor2}   apptTime=${slot2}   firstName=${family_fname2}
@@ -395,7 +395,7 @@ JD-TC-GetFutureAppointment-1
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     Set Suite Variable   ${DAY3}
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid1}  ${s_id2}  ${sch_id2}  ${DAY3}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid1}  ${s_id2}  ${sch_id2}  ${DAY3}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -462,7 +462,7 @@ JD-TC-GetFutureAppointment-1
     # ${apptfor}=   Create List  ${apptfor}
    
     # ${cnote}=   FakerLibrary.name
-    # ${resp}=   Take Appointment For Provider   ${pid1}  ${s_id2}  ${sch_id3}  ${DAY1}  ${cnote}   ${apptfor}
+    # ${resp}=   Customer Take Appointment   ${pid1}  ${s_id2}  ${sch_id3}  ${DAY1}  ${cnote}   ${apptfor}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
     ${apptfor}=  Create Dictionary  id=${cidfor3}   apptTime=${slot3}   firstName=${family_fname3}
@@ -471,7 +471,7 @@ JD-TC-GetFutureAppointment-1
     ${DAY4}=  db.add_timezone_date  ${tz}  4  
     Set Suite Variable   ${DAY4}
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid1}  ${s_id2}  ${sch_id3}  ${DAY4}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${pid1}  ${s_id2}  ${sch_id3}  ${DAY4}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -509,14 +509,14 @@ JD-TC-GetFutureAppointment-1
     # ${DAY5}=  db.add_timezone_date  ${tz}   5
     # Set Suite Variable   ${DAY5}
     # ${cnote}=   FakerLibrary.name
-    # ${resp}=   Take Appointment For Provider   ${pid1}  ${s_id2}  ${sch_id3}  ${DAY5}  ${cnote}   ${apptfor}
+    # ${resp}=   Customer Take Appointment   ${pid1}  ${s_id2}  ${sch_id3}  ${DAY5}  ${cnote}   ${apptfor}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
     ${apptfor}=  Create Dictionary  id=${self}   apptTime=${slot4}
     ${apptfor4}=   Create List  ${apptfor}
   
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid1}  ${s_id2}  ${sch_id3}  ${DAY1}  ${cnote}   ${apptfor4}
+    ${resp}=   Customer Take Appointment   ${pid1}  ${s_id2}  ${sch_id3}  ${DAY1}  ${cnote}   ${apptfor4}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           

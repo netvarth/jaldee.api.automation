@@ -169,7 +169,7 @@ JD-TC-SendMessageWithAppmt-1
     ${DAY6}=  db.add_timezone_date  ${tz}   6
     Set Suite Variable   ${DAY6}
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${prov_id}  ${ser_id1}  ${schedule_id1}  ${DAY6}  ${cnote}   ${apptfor}
+    ${resp}=   Customer Take Appointment   ${prov_id}  ${ser_id1}  ${schedule_id1}  ${DAY6}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

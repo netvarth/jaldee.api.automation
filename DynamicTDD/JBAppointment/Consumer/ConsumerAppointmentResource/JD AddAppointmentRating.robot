@@ -170,9 +170,11 @@ JD-TC-AddAppointmentRating-1
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
-    Log  ${resp.json()}
+
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=   Customer Take Appointment  ${account_id}   ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -227,9 +229,10 @@ JD-TC-AddAppointmentRating-2
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot11}
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id2}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
-    Log  ${resp.json()}
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=   Customer Take Appointment  ${account_id}   ${s_id2}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${apptid2}  ${apptid[0]}
@@ -264,9 +267,10 @@ JD-TC-AddAppointmentRating-2
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot2}
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id3}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor}
-    Log  ${resp.json()}
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=   Customer Take Appointment  ${account_id}   ${s_id3}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -351,9 +355,10 @@ JD-TC-AddAppointmentRating-3
     ${apptfor1}=  Create Dictionary  id=${cidfor}   apptTime=${slot21}   firstName=${family_fname}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id4}  ${sch_id1}  ${DAY2}  ${cnote}   ${apptfor}
-    Log  ${resp.json()}
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=   Customer Take Appointment  ${account_id}   ${s_id4}  ${sch_id1}  ${DAY2}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${apptid}  ${apptid[0]}
@@ -420,9 +425,11 @@ JD-TC-AddAppointmentRating-4
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot3}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id2}  ${sch_id}  ${DAY3}  ${cnote}   ${apptfor}
-    Log  ${resp.json()}
+
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=   Customer Take Appointment  ${account_id}   ${s_id2}  ${sch_id}  ${DAY3}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -534,9 +541,10 @@ JD-TC-AddAppointmentRating-UH1
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot4}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id2}  ${sch_id}  ${DAY3}  ${cnote}   ${apptfor}
-    Log  ${resp.json()}
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=   Customer Take Appointment  ${account_id}   ${s_id2}  ${sch_id}  ${DAY3}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -585,9 +593,10 @@ JD-TC-AddAppointmentRating-UH2
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot5}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id2}  ${sch_id}  ${DAY3}  ${cnote}   ${apptfor}
-    Log  ${resp.json()}
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=   Customer Take Appointment  ${account_id}   ${s_id2}  ${sch_id}  ${DAY3}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -637,9 +646,10 @@ JD-TC-AddAppointmentRating-UH3
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot6}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id2}  ${sch_id}  ${DAY3}  ${cnote}   ${apptfor}
-    Log  ${resp.json()}
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=   Customer Take Appointment  ${account_id}   ${s_id2}  ${sch_id}  ${DAY3}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
     ${apptid}=  Get Dictionary Values  ${resp.json()}

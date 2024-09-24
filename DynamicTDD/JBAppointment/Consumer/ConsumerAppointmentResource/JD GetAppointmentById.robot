@@ -110,9 +110,10 @@ JD-TC-GetConsumerAppointmentById-1
     ${apptfor}=   Create List  ${apptfor1}
     
 
-    ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid1}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
-    Log  ${resp.json()}
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=   Customer Take Appointment  ${pid1}   ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
     ${apptid}=  Get Dictionary Values  ${resp.json()}
