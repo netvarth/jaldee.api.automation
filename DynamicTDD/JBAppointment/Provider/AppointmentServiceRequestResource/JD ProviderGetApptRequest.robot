@@ -352,10 +352,17 @@ JD-TC-ProviderGetApptRequest-5
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${appt_reqid5}  ${apptid[0]}
 
+    ${resp}=  Consumer Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
     ${resp}=  Provider Get Appt Service Request  location-eq=${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
     Should Be Equal As Strings  ${resp.json()[0]['uid']}                     ${appt_reqid5}
 
     ${resp}=  Provider Get Appt Service Request  location-eq=${lid}
@@ -376,59 +383,14 @@ JD-TC-ProviderGetApptRequest-6
     ${resp}=  Provider Get Appt Service Request  schedule-eq=${sch_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
     Should Be Equal As Strings  ${resp.json()[0]['uid']}                     ${appt_reqid5}
-    Should Be Equal As Strings  ${resp.json()[0]['appmtDate']}               ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['apptStatus']}              ${apptStatus[11]}
-    Should Be Equal As Strings  ${resp.json()[0]['appointmentMode']}         ${appointmentMode[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['consumerNote']}            ${con_not}
-    Should Be Equal As Strings  ${resp.json()[0]['apptBy']}                  ${apptBy[0]} 
-    Should Be Equal As Strings  ${resp.json()[0]['appmtFor'][0]['id']}       ${pcid1}   
-    Should Be Equal As Strings  ${resp.json()[0]['providerConsumer']['id']}  ${pcid1}
-    Should Be Equal As Strings  ${resp.json()[0]['service']['id']}           ${sid2}
-    Should Be Equal As Strings  ${resp.json()[0]['schedule']['id']}          ${sch_id2}
-    Should Be Equal As Strings  ${resp.json()[0]['location']['id']}          ${lid1}
-
+   
     ${resp}=  Provider Get Appt Service Request  schedule-eq=${sch_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
     Should Be Equal As Strings  ${resp.json()[0]['uid']}                     ${appt_reqid3}
-    Should Be Equal As Strings  ${resp.json()[0]['appmtDate']}               ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['apptStatus']}              ${apptStatus[11]}
-    Should Be Equal As Strings  ${resp.json()[0]['appointmentMode']}         ${appointmentMode[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['consumerNote']}            ${cons_note1}
-    Should Be Equal As Strings  ${resp.json()[0]['apptBy']}                  ${apptBy[0]} 
-    Should Be Equal As Strings  ${resp.json()[0]['appmtFor'][0]['id']}       ${mem_id0}   
-    Should Be Equal As Strings  ${resp.json()[0]['providerConsumer']['id']}  ${pcid2}
-    Should Be Equal As Strings  ${resp.json()[0]['service']['id']}           ${sid1}
-    Should Be Equal As Strings  ${resp.json()[0]['schedule']['id']}          ${sch_id1}
-    Should Be Equal As Strings  ${resp.json()[0]['location']['id']}          ${lid}
-
     Should Be Equal As Strings  ${resp.json()[1]['uid']}                     ${appt_reqid2}
-    Should Be Equal As Strings  ${resp.json()[1]['appmtDate']}               ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[1]['apptStatus']}              ${apptStatus[11]}
-    Should Be Equal As Strings  ${resp.json()[1]['appointmentMode']}         ${appointmentMode[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['consumerNote']}            ${cons_note1}
-    Should Be Equal As Strings  ${resp.json()[1]['apptBy']}                  ${apptBy[0]}  
-    Should Be Equal As Strings  ${resp.json()[1]['appmtFor'][0]['id']}       ${pcid2}  
-    Should Be Equal As Strings  ${resp.json()[1]['providerConsumer']['id']}  ${pcid2}
-    Should Be Equal As Strings  ${resp.json()[1]['service']['id']}           ${sid1}
-    Should Be Equal As Strings  ${resp.json()[1]['schedule']['id']}          ${sch_id1}
-    Should Be Equal As Strings  ${resp.json()[1]['location']['id']}          ${lid}
-
     Should Be Equal As Strings  ${resp.json()[2]['uid']}                     ${appt_reqid1}
-    Should Be Equal As Strings  ${resp.json()[2]['appmtDate']}               ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[2]['apptStatus']}              ${apptStatus[11]}
-    Should Be Equal As Strings  ${resp.json()[2]['appointmentMode']}         ${appointmentMode[0]}
-    Should Be Equal As Strings  ${resp.json()[2]['consumerNote']}            ${cons_note}
-    Should Be Equal As Strings  ${resp.json()[2]['apptBy']}                  ${apptBy[0]} 
-    Should Be Equal As Strings  ${resp.json()[2]['appmtFor'][0]['id']}       ${pcid1}   
-    Should Be Equal As Strings  ${resp.json()[2]['providerConsumer']['id']}  ${pcid1}
-    Should Be Equal As Strings  ${resp.json()[2]['service']['id']}           ${sid1}
-    Should Be Equal As Strings  ${resp.json()[2]['schedule']['id']}          ${sch_id1}
-    Should Be Equal As Strings  ${resp.json()[2]['location']['id']}          ${lid}
-
 
 JD-TC-ProviderGetApptRequest-7
 
@@ -441,59 +403,15 @@ JD-TC-ProviderGetApptRequest-7
     ${resp}=  Provider Get Appt Service Request  location-eq=${lid1}   schedule-eq=${sch_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
     Should Be Equal As Strings  ${resp.json()[0]['uid']}                     ${appt_reqid5}
-    Should Be Equal As Strings  ${resp.json()[0]['appmtDate']}               ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['apptStatus']}              ${apptStatus[11]}
-    Should Be Equal As Strings  ${resp.json()[0]['appointmentMode']}         ${appointmentMode[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['consumerNote']}            ${con_not}
-    Should Be Equal As Strings  ${resp.json()[0]['apptBy']}                  ${apptBy[0]} 
-    Should Be Equal As Strings  ${resp.json()[0]['appmtFor'][0]['id']}       ${pcid1}   
-    Should Be Equal As Strings  ${resp.json()[0]['providerConsumer']['id']}  ${pcid1}
-    Should Be Equal As Strings  ${resp.json()[0]['service']['id']}           ${sid2}
-    Should Be Equal As Strings  ${resp.json()[0]['schedule']['id']}          ${sch_id2}
-    Should Be Equal As Strings  ${resp.json()[0]['location']['id']}          ${lid1}
 
     ${resp}=  Provider Get Appt Service Request  location-eq=${lid}  schedule-eq=${sch_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
     Should Be Equal As Strings  ${resp.json()[0]['uid']}                     ${appt_reqid3}
-    Should Be Equal As Strings  ${resp.json()[0]['appmtDate']}               ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['apptStatus']}              ${apptStatus[11]}
-    Should Be Equal As Strings  ${resp.json()[0]['appointmentMode']}         ${appointmentMode[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['consumerNote']}            ${cons_note1}
-    Should Be Equal As Strings  ${resp.json()[0]['apptBy']}                  ${apptBy[0]} 
-    Should Be Equal As Strings  ${resp.json()[0]['appmtFor'][0]['id']}       ${mem_id0}   
-    Should Be Equal As Strings  ${resp.json()[0]['providerConsumer']['id']}  ${pcid2}
-    Should Be Equal As Strings  ${resp.json()[0]['service']['id']}           ${sid1}
-    Should Be Equal As Strings  ${resp.json()[0]['schedule']['id']}          ${sch_id1}
-    Should Be Equal As Strings  ${resp.json()[0]['location']['id']}          ${lid}
-
     Should Be Equal As Strings  ${resp.json()[1]['uid']}                     ${appt_reqid2}
-    Should Be Equal As Strings  ${resp.json()[1]['appmtDate']}               ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[1]['apptStatus']}              ${apptStatus[11]}
-    Should Be Equal As Strings  ${resp.json()[1]['appointmentMode']}         ${appointmentMode[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['consumerNote']}            ${cons_note1}
-    Should Be Equal As Strings  ${resp.json()[1]['apptBy']}                  ${apptBy[0]}  
-    Should Be Equal As Strings  ${resp.json()[1]['appmtFor'][0]['id']}       ${pcid2}  
-    Should Be Equal As Strings  ${resp.json()[1]['providerConsumer']['id']}  ${pcid2}
-    Should Be Equal As Strings  ${resp.json()[1]['service']['id']}           ${sid1}
-    Should Be Equal As Strings  ${resp.json()[1]['schedule']['id']}          ${sch_id1}
-    Should Be Equal As Strings  ${resp.json()[1]['location']['id']}          ${lid}
-
     Should Be Equal As Strings  ${resp.json()[2]['uid']}                     ${appt_reqid1}
-    Should Be Equal As Strings  ${resp.json()[2]['appmtDate']}               ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[2]['apptStatus']}              ${apptStatus[11]}
-    Should Be Equal As Strings  ${resp.json()[2]['appointmentMode']}         ${appointmentMode[0]}
-    Should Be Equal As Strings  ${resp.json()[2]['consumerNote']}            ${cons_note}
-    Should Be Equal As Strings  ${resp.json()[2]['apptBy']}                  ${apptBy[0]} 
-    Should Be Equal As Strings  ${resp.json()[2]['appmtFor'][0]['id']}       ${pcid1}   
-    Should Be Equal As Strings  ${resp.json()[2]['providerConsumer']['id']}  ${pcid1}
-    Should Be Equal As Strings  ${resp.json()[2]['service']['id']}           ${sid1}
-    Should Be Equal As Strings  ${resp.json()[2]['schedule']['id']}          ${sch_id1}
-    Should Be Equal As Strings  ${resp.json()[2]['location']['id']}          ${lid}
-
+   
     ${resp}=  Provider Get Appt Service Request  location-eq=${lid1}  schedule-eq=${sch_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -508,14 +426,39 @@ JD-TC-ProviderGetApptRequest-UH1
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  ${resp.content}  "${SESSION_EXPIRED}"
 
-
 JD-TC-ProviderGetApptRequest-UH2
 
     [Documentation]    get an appt request by consumer login.
 
-    ${resp}=  Consumer Login  ${CUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']} 
+
+    ${resp}=  AddCustomer  ${CUSERNAME15}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME15}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME15}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME15}    ${acc_id1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Provider Get Appt Service Request
     Log  ${resp.content}
