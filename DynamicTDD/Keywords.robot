@@ -75,7 +75,8 @@ ${bType}                  Waitlist
 @{HowDoYouHear}             Jaldee  Facebook  Friend  GoogleSearch  SalesReps  Twitter  Other 
 @{toggle}                   Enable  Disable
 @{customerseries}           AUTO  MANUAL  PATTERN
-@{service_type}             donationService   virtualService   physicalService   billingService
+# @{service_type}             donationService   virtualService   physicalService   billingService
+@{ServiceType}              virtualService  physicalService  donationService  billingService  serviceRequest
 @{vservicetype}             audioService   videoService
 @{apptStatus}               prepaymentPending  Confirmed  Arrived  Started  Cancelled  Rejected  Completed  failed  calling  blocked  Rescheduled  Requested  RequestRejected
 @{cancelReason}             noshowup  blocked  closingSoon  tooFull  self  prePaymentPending  QueueDisabled  holiday

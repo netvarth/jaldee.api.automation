@@ -4566,7 +4566,7 @@ JD-TC-Take Appointment-21
     Set Test Variable  ${pid}  ${resp.json()['id']}
     # Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
     
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}

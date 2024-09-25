@@ -19,6 +19,14 @@ ${hl_US}        0
 
 *** Test Cases ***
 
+Remove Files
+   
+    Remove File   ${pro_var_file}
+    Create File   ${pro_var_file}
+
+    Remove File   ${hlpro_var_file}
+    Create File   ${hlpro_var_file}
+
 JD-TC-Enable OnlinePresence
     [Documentation]  Update a base location by provider login
 
