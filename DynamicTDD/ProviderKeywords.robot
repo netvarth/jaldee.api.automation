@@ -1271,7 +1271,24 @@ Reject Appt Service Request
     Check Deprication  ${resp}  Reject Appt Service Request
     RETURN  ${resp}
 
-    
+Confirm Appt Service Request
+    [Arguments]    ${uid}  ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${countryCode}  ${phoneNumber}  ${coupons}  ${appmtFor}  &{kwargs}
+    ${sid}=  Create Dictionary  id=${service_id} 
+    ${cid}=  Create Dictionary  id=${consid}
+    ${schedule}=  Create Dictionary  id=${schedule}
+    ${data}=    Create Dictionary   appmtDate=${appmtDate}  service=${sid}  schedule=${schedule}
+    ...   appmtFor=${appmtFor}    consumerNote=${consumerNote}  phoneNumber=${phoneNumber}   coupons=${coupons}
+    ...   countryCode=${countryCode}   consumer=${cid}  uid=${uid}
+    ${items}=  Get Dictionary items  ${kwargs}
+        FOR  ${key}  ${value}  IN  @{items}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END 
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/appointment/service/request/changestatus/confirmed  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Confirm Appt Service Request
+    RETURN  ${resp}
+
 Get Appointment Slots By Date Schedule
     [Arguments]    ${scheduleId}   ${date}   ${service}
     Check And Create YNW Session
@@ -17581,23 +17598,6 @@ Reset Password LoginId
 
 
 
-Confirm Appt Service Request
-    [Arguments]    ${uid}  ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${countryCode}  ${phoneNumber}  ${coupons}  ${appmtFor}  &{kwargs}
-    ${sid}=  Create Dictionary  id=${service_id} 
-    ${cid}=  Create Dictionary  id=${consid}
-    ${schedule}=  Create Dictionary  id=${schedule}
-    ${data}=    Create Dictionary   appmtDate=${appmtDate}  service=${sid}  schedule=${schedule}
-    ...   appmtFor=${appmtFor}    consumerNote=${consumerNote}  phoneNumber=${phoneNumber}   coupons=${coupons}
-    ...   countryCode=${countryCode}   consumer=${cid}  uid=${uid}
-    ${items}=  Get Dictionary items  ${kwargs}
-        FOR  ${key}  ${value}  IN  @{items}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END 
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/appointment/service/request/changestatus/confirmed  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Confirm Appt Service Request
-    RETURN  ${resp}
 
 User Take Virtual Service Appointment For Consumer
     [Arguments]   ${userid}  ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${CallingModes}  ${CallingModes_id1}  ${appmtFor}
