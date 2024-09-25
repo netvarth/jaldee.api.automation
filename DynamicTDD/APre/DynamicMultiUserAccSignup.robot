@@ -155,10 +155,12 @@ SignUp Account
         Should Be Equal As Strings    ${resp.status_code}    200
         ${highest_pkg}=  get_highest_license_pkg
         IF  '${pkgId}' == '${highest_pkg[0]}'
-        Append To File  ${EXECDIR}/TDD/varfiles/hl_providers.py  HLPUSERNAME${BR}= ${PUSER}${\n}
+            Append To File  ${EXECDIR}/TDD/varfiles/hl_providers.py  HLPUSERNAME${BR}= ${PUSER}${\n}
+            ${BR} =  Evaluate  ${BR}+1
+            Set Global Variable  ${BR}
         END
-        ${BR} =	Set Variable If	 '${pkgId}' == '${highest_pkg[0]}'	${BR+1}	 ${BR}
-        Set Global Variable  ${BR}
+        # ${BR} =	Set Variable If	 '${pkgId}' == '${highest_pkg[0]}'	${BR+1}	 ${BR}
+        # Set Global Variable  ${BR}
 
         sleep  01s
 
