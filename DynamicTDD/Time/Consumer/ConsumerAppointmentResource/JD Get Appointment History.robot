@@ -59,7 +59,7 @@ JD-TC-Get Appointment history-1
     Set Suite Variable  ${DAY1}
     ${DAY2}=  db.add_timezone_date  ${tz}  10   
     Set Suite Variable  ${DAY2}
-    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
+    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${postcode}  ${address}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Suite Variable  ${lid}  ${resp.json()} 
@@ -72,7 +72,7 @@ JD-TC-Get Appointment history-1
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
-    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
+    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${postcode}  ${address}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Suite Variable  ${lid1}  ${resp.json()}

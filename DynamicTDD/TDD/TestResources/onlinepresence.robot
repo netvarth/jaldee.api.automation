@@ -17,23 +17,23 @@ JD-TC-Enable OnlinePresence
     [Documentation]  Update a base location by provider login
 
     ${licresp}=   Get Licensable Packages
-    Log  ${resp.content}
+    Log  ${licresp.content}
     Should Be Equal As Strings   ${licresp.status_code}   200
     ${liclen}=  Get Length  ${licresp.json()}
     
-    ${resp}=  Get BusinessDomainsConf
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${len}=  Get Length  ${resp.json()}
+    ${busresp}=  Get BusinessDomainsConf
+    Log  ${busresp.content}
+    Should Be Equal As Strings  ${busresp.status_code}  200
+    ${len}=  Get Length  ${busresp.json()}
 
     FOR  ${licindex}  IN RANGE  ${liclen}
         Set Test Variable  ${licid}  ${licresp.json()[${licindex}]['pkgId']}
         Set Test Variable  ${licname}  ${licresp.json()[${licindex}]['displayName']}
         FOR  ${domindex}  IN RANGE  ${len}
-            Set Test Variable  ${dom}  ${resp.json()[${dom_index}]['domain']}
-            ${sublen}=  Get Length  ${resp.json()[${dom_index}]['subDomains']}
+            Set Test Variable  ${dom}  ${busresp.json()[${dom_index}]['domain']}
+            ${sublen}=  Get Length  ${busresp.json()[${dom_index}]['subDomains']}
             FOR  ${subindex}  IN RANGE  ${sublen}
-                Set Test Variable  ${sdom}  ${resp.json()[${dom_index}]['subDomains'][${subindex}]['subDomain']}
+                Set Test Variable  ${sdom}  ${busresp.json()[${dom_index}]['subDomains'][${subindex}]['subDomain']}
 
                 ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=    Provider Signup  LicenseId=${licid}  Domain=${dom}  SubDomain=${sdom}
         
