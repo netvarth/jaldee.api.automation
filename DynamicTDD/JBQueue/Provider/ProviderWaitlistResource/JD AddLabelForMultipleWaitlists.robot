@@ -336,11 +336,25 @@ JD-TC-AddMultipleWaitlistLabel-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${label_id3}
     
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    # ${lid}=  Create Sample Location
+    # ${resp}=   Get Location ById  ${lid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 

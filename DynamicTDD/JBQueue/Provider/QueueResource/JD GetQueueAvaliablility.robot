@@ -51,13 +51,28 @@ JD-TC-GetQueueAvaliability-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}
 
-    ${lid2}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid2}
+    # ${lid2}=  Create Sample Location
+    # ${resp}=   Get Location ById  ${lid2}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${lid2}
+
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${lid2}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid2}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid2}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Suite Variable  ${lid2}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable  ${s_id}

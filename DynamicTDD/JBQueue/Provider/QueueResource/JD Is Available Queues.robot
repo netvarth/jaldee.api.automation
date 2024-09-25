@@ -110,7 +110,7 @@ JD-TC-Available Queues-2
     Set Suite Variable   ${sTime}
     ${eTime}=  db.subtract_timezone_time  ${tz}   0  30
     Set Suite Variable   ${eTime}
-    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type1}  ${24hours}  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
+    ${resp}=  Create Location  ${city}  ${longi}  ${latti}   ${postcode}  ${address}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()}
