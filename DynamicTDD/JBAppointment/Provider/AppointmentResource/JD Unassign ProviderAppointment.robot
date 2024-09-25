@@ -68,7 +68,7 @@ JD-TC-UnAssignproviderAppointment-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[1]}
@@ -152,7 +152,7 @@ JD-TC-UnAssignproviderAppointment-1
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
@@ -364,7 +364,7 @@ JD-TC-UnAssignproviderAppointment-2
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
@@ -598,7 +598,7 @@ JD-TC-UnAssignproviderAppointment-3
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
    
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
@@ -872,7 +872,7 @@ JD-TC-UnAssignproviderAppointment-UH1
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
@@ -1090,7 +1090,7 @@ JD-TC-UnAssignproviderAppointment-UH2
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}

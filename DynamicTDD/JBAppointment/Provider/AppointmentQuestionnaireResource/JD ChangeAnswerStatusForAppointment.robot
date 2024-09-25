@@ -101,9 +101,9 @@ JD-TC-ChangeAnsStatusForAppt-1
     ${s_len}=  Get Length  ${resp.json()}
     @{snames}=  Create List
     FOR  ${i}  IN RANGE   ${s_len}
-        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${service_type[2]}'
+        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
             ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
-        ELSE IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${service_type[0]}'
+        ELSE IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[2]}'
             ${d_id}=  Set Variable   ${resp.json()[${i}]['id']}
         ELSE
             Append To List  ${snames}  ${resp.json()[${i}]['name']}
@@ -299,7 +299,7 @@ JD-TC-ChangeAnsStatusForAppt-2
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${s_len}
-        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${service_type[2]}'
+        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
             ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
         END
     END
@@ -550,7 +550,7 @@ JD-TC-ChangeAnsStatusForAppt-4
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${s_len}
-        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${service_type[2]}'
+        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
             ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
         END
     END
@@ -729,7 +729,7 @@ JD-TC-ChangeAnsStatusForAppt-5
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${s_len}
-        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${service_type[2]}'
+        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
             ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
         END
     END
@@ -879,7 +879,7 @@ JD-TC-ChangeAnsStatusForAppt-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${s_len}
-        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${service_type[2]}'
+        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
             ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
         END
     END
@@ -1026,7 +1026,7 @@ JD-TC-ChangeAnsStatusForAppt-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${s_len}
-        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${service_type[2]}'
+        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
             ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
         END
     END
@@ -1181,7 +1181,7 @@ JD-TC-ChangeAnsStatusForAppt-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${s_len}
-        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${service_type[2]}'
+        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
             ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
         END
     END
@@ -1331,7 +1331,7 @@ JD-TC-ChangeAnsStatusForAppt-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${s_len}
-        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${service_type[2]}'
+        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
             ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
         END
     END
@@ -1482,7 +1482,7 @@ JD-TC-ChangeAnsStatusForAppt-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${s_len}
-        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${service_type[2]}'
+        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
             ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
         END
     END
@@ -2002,7 +2002,7 @@ JD-TC-ChangeAnsStatusForAppt-6
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${s_len}
-        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${service_type[2]}'
+        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
             ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
         END
     END

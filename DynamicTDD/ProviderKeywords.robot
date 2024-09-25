@@ -3082,7 +3082,7 @@ Create Sample Queue
     IF   '${resp.content}' == '${emptylist}'
         ${SERVICE1}=    FakerLibrary.Word
         ${s_id}=  Create Sample Service  ${SERVICE1}
-    ELSE IF  '${resp.json()[0]['serviceType']}' == '${service_type[0]}'
+    ELSE IF  '${resp.json()[0]['serviceType']}' == '${ServiceType[2]}'
         ${SERVICE1}=    FakerLibrary.Word
         ${s_id}=  Create Sample Service  ${SERVICE1}
     ELSE
@@ -8508,7 +8508,7 @@ Create Sample Donation
     ${min_don_amt}=  Convert To Number  ${min_don_amt}  1
     ${max_don_amt}=  Convert To Number  ${max_don_amt}  1
     ${service_duration}=   Random Int   min=1   max=10
-    ${resp}=  Create Donation Service  ${Service_name}   ${description}   ${0}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${bool[0]}   ${bool[0]}  ${service_type[0]}  ${min_don_amt}  ${max_don_amt}  ${multiples[0]}
+    ${resp}=  Create Donation Service  ${Service_name}   ${description}   ${0}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${bool[0]}   ${bool[0]}  ${ServiceType[2]}  ${min_don_amt}  ${max_don_amt}  ${multiples[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
     RETURN  ${resp.json()}
