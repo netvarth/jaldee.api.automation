@@ -1264,6 +1264,14 @@ Provider Get Appt Service Request Count
     Check Deprication  ${resp}  Provider Get Appt Service Request Count
     RETURN  ${resp}
 
+Reject Appt Service Request
+    [Arguments]    ${appmntId}  
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/appointment/service/request/reject/${appmntId}   expected_status=any
+    Check Deprication  ${resp}  Reject Appt Service Request
+    RETURN  ${resp}
+
+    
 Get Appointment Slots By Date Schedule
     [Arguments]    ${scheduleId}   ${date}   ${service}
     Check And Create YNW Session
@@ -17571,12 +17579,6 @@ Reset Password LoginId
 *** Comments ***
 
 
-Reject Appt Service Request
-    [Arguments]    ${appmntId}  
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/appointment/service/request/reject/${appmntId}   expected_status=any
-    Check Deprication  ${resp}  Reject Appt Service Request
-    RETURN  ${resp}
 
 
 Confirm Appt Service Request
