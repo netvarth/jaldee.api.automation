@@ -259,7 +259,7 @@ Select Random Specializations
     [Arguments]    ${resp}
     ${spec_len}=  Get Length  ${resp.json()}
     IF   ${spec_len} > 1
-        ${no_of_specs}=   Random Int   min=0   max=${spec_len}
+        ${no_of_specs}=   Random Int   min=1   max=${spec_len}
         # ${specs}=  random.choices  ${resp.json()}  k=${no_of_specs}
         ${test}=   random.sample  ${resp.json()}  ${no_of_specs}
         ${specs_json}=  Evaluate    random.sample(${resp.json()}, ${no_of_specs})    random
