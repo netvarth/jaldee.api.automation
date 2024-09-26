@@ -66,7 +66,7 @@ JD-TC-CreateService-1
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${Total}=  Convert To Number  ${Total}  1
     ${SERVICE1}=    FakerLibrary.job
-    # ${resp}=  Create Service  ${SERVICE1}  ${description}   {service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
+    # ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[1]}  minPrePaymentAmount=${min_pre}  notificationType=${notifytype[2]}  taxable=${bool[1]}  serviceType=${serviceType[1]}  prePaymentType=${advancepaymenttype[1]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -87,7 +87,7 @@ JD-TC-CreateService-2
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${Total}=  Convert To Number  ${Total}  1
     ${SERVICE1}=    FakerLibrary.job
-    # ${resp}=  Create Service  ${SERVICE1}  ${description}   {service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
+    # ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${Total}  ${bool[0]}  ${bool[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -105,7 +105,7 @@ JD-TC-CreateService-2
         clear_service      ${resp}
         ${description}=  FakerLibrary.sentence
         # ${time}=  FakerLibrary.pyfloat   left_digits=2   right_digits=2   positive=True
-        ${resp}=  Create Service  ${SERVICE1}  ${description}   {service_duration[1]}  ${bool[0]}  ${EMPTY}  ${bool[0]}
+        ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${EMPTY}  ${bool[0]}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp}=   Get Service By Id  ${resp.json()}
@@ -125,23 +125,23 @@ JD-TC-CreateService-3
         clear_service      ${resp}
         #${min_pre1}=   FakerLibrary.pyfloat   left_digits=2   right_digits=2   positive=True
         #${Total1}=   FakerLibrary.pyfloat   left_digits=3   right_digits=2   positive=True
-        ${resp}=  Create Service  ${SERVICE1}  ${description}   {service_duration[1]}  ${bool[1]}  ${Total1}  ${bool[0]}  minPrePaymentAmount=${min_pre1}
+        ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total1}  ${bool[0]}  minPrePaymentAmount=${min_pre1}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200 
         ${resp}=   Get Service By Id  ${resp.json()}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}   notification=${bool[1]}  notificationType=${notifytype[1]}  minPrePaymentAmount=${min_pre1}  totalAmount=${Total1}  status=${status[0]}   bType=${btype}  isPrePayment=${bool[1]}
+        Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}  notification=${bool[1]}  notificationType=${notifytype[1]}  minPrePaymentAmount=${min_pre1}  totalAmount=${Total1}  status=${status[0]}   bType=${btype}  isPrePayment=${bool[1]}
         ${resp}=   Billable  ${start3}
         clear_service      ${resp}
-        ${resp}=  Create Service  ${SERVICE1}  ${description}   {service_duration[1]}  ${bool[1]}  ${Total1}  ${bool[0]}  minPrePaymentAmount=${min_pre1}
+        ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total1}  ${bool[0]}  minPrePaymentAmount=${min_pre1}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${id1}  ${resp.json()}
         ${resp}=   Get Service By Id  ${id1}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Verify Response  ${resp}  name=${SERVICE1}  description=${description}   serviceDuration=${service_duration[1]}    notification=${bool[1]}  notificationType=${notifytype[1]}   minPrePaymentAmount=${min_pre1}  totalAmount=${Total1}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
+        Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}  notification=${bool[1]}  notificationType=${notifytype[1]}   minPrePaymentAmount=${min_pre1}  totalAmount=${Total1}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
 
 JD-TC-CreateService-4
 
@@ -1165,7 +1165,7 @@ JD-TC-CreateService-15
 
         ${description}=  FakerLibrary.sentence
         # ${time}=  FakerLibrary.pyfloat   left_digits=2   right_digits=2   positive=True
-        ${resp}=  Create Service  ${SERVICE2}  ${description}   {service_duration[1]}  ${bool[0]}  300.0  ${bool[0]}
+        ${resp}=  Create Service  ${SERVICE2}  ${description}  ${service_duration[1]}  ${bool[0]}  300.0  ${bool[0]}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp}=   Get Service By Id  ${resp.json()}
