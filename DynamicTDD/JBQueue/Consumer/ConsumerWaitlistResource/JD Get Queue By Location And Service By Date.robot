@@ -23,23 +23,9 @@ JD-TC-Get Queue By Location and Service By Date-1
 
 	[Documentation]  Get Queue By Location and Service By Date
 
-    ${f_name}=  FakerLibrary.first_name
-    ${l_name}=  FakerLibrary.last_name
-    ${resp}=    get_mutilocation_domains
-    Log   ${resp}
-    Set Test Variable   ${sector}        ${resp[0]['domain']}
-    Set Test Variable   ${sub_sector}    ${resp[0]['subdomains'][0]}
     ${PUSERNAME_P}=  Evaluate  ${PUSERNAME}+91234
-    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_P}${\n}   
-    ${pkg_id}=   get_highest_license_pkg
-    ${resp}=   Account SignUp  ${f_name}  ${l_name}  ${None}   ${sector}   ${sub_sector}  ${PUSERNAME_P}  ${pkg_id[0]}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    202
-    ${resp}=  Account Activation  ${PUSERNAME_P}  0
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_P}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_P}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable   ${PUSERNAME_P}
+    
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_P}=  Provider Signup  PhoneNumber=${PUSERNAME_P}
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
     Log  ${resp.json()}
@@ -47,29 +33,10 @@ JD-TC-Get Queue By Location and Service By Date-1
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable  ${pid}  ${decrypted_data['id']}
-    
-    ${bs}=  FakerLibrary.bs
-    ${companySuffix}=  FakerLibrary.companySuffix
-    ${parking}   Random Element   ${parkingType}
-    ${24hours}    Random Element    ['True','False']
-    ${desc}=   FakerLibrary.sentence
-    ${url}=   FakerLibrary.url
-    ${name3}=  FakerLibrary.word
-    ${emails1}=  Emails  ${name3}  Email  ${PUSERNAME_P}${P_Email}.${test_mail}  ${views}
-    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    Set Test Variable  ${tz}
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-
-    ${b_loc}=  Create Dictionary  place=${city}   longitude=${longi}   lattitude=${latti}    googleMapUrl=${url}   pinCode=${postcode}  address=${address}
-    ${emails}=  Create List  ${emails1}
-    ${resp}=  Update Business Profile with kwargs   businessName=${bs}   shortName=${bs}   businessDesc=Description baseLocation=${b_loc}   emails=${emails}  
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
 
     Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_P}.${test_mail}
 
-    ${resp}=  Update Email   ${p_id}   ${f_name}   ${l_name}   ${email_id}
+    ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -108,7 +75,7 @@ JD-TC-Get Queue By Location and Service By Date-1
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
-    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${stime}  ${etime}
+    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${postcode}  ${address}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${loc_result} = 	Convert To Integer 	 ${resp.json()}
@@ -130,8 +97,7 @@ JD-TC-Get Queue By Location and Service By Date-1
     ${eTime1}=  add_timezone_time  ${tz2}  1  00
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
-    ${url}=   FakerLibrary.url
-    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${stime}  ${etime}
+    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${postcode}  ${address}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${loc_result} = 	Convert To Integer 	 ${resp.json()}
@@ -198,7 +164,7 @@ JD-TC-Get Queue By Location and Service By Date-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_q3}  ${resp.json()}
 
-    ${resp}=  Disable Queue  ${p1_q3}
+    ${resp}=  Enable Disable Queue  ${p1_q3}  ${toggleButton[1]} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${accId}=  get_acc_id  ${PUSERNAME_P}

@@ -111,7 +111,7 @@ JD-TC-WaitlistAttachment-1
     Set Test Variable    ${cid}   ${resp.json()['id']} 
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${acc_id}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self} 
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${acc_id}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200   
     
@@ -223,7 +223,7 @@ JD-TC-WaitlistAttachment-2
     Set Test Variable    ${cid}   ${resp.json()['id']} 
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${acc_id}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self} 
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${acc_id}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200   
     
@@ -332,7 +332,7 @@ JD-TC-WaitlistAttachment-3
     Set Test Variable    ${cid}   ${resp.json()['id']} 
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${acc_id}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self} 
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${acc_id}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200   
     
@@ -442,7 +442,7 @@ JD-TC-WaitlistAttachment-4
     Set Test Variable    ${cid}   ${resp.json()['id']} 
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${acc_id}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self} 
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${acc_id}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200   
     
@@ -551,7 +551,7 @@ JD-TC-WaitlistAttachment-5
     # Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
     Set Test Variable    ${cid}   ${resp.json()['id']} 
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${acc_id}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self} 
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${acc_id}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200   
     
@@ -664,7 +664,7 @@ JD-TC-WaitlistAttachment-6
     Set Test Variable    ${cid}   ${resp.json()['id']} 
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${acc_id}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self} 
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${acc_id}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200   
     
@@ -776,7 +776,7 @@ JD-TC-WaitlistAttachment-7
     Set Test Variable    ${cid}   ${resp.json()['id']} 
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${acc_id}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self} 
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${acc_id}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200   
     
@@ -944,7 +944,7 @@ JD-TC-WaitlistAttachment-8
     Set Test Variable  ${cidfor}   ${resp.json()}
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${acc_id}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${cidfor} 
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${acc_id}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${cidfor} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200   
     
@@ -1123,7 +1123,7 @@ JD-TC-WaitlistAttachment-UH4
     Set Test Variable    ${cid}   ${resp.json()['id']} 
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${acc_id}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self} 
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${acc_id}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200   
     
@@ -1235,7 +1235,7 @@ JD-TC-WaitlistAttachment-UH5
     Set Test Variable    ${cid}   ${resp.json()['id']} 
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${acc_id}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self} 
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${acc_id}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200   
     
@@ -1335,7 +1335,7 @@ JD-TC-WaitlistAttachment-UH6
     Set Test Variable    ${cid}   ${resp.json()['id']} 
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${acc_id}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self} 
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${acc_id}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200   
     

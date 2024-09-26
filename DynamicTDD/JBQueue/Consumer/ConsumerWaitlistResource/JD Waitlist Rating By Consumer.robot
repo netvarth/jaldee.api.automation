@@ -105,7 +105,7 @@ JD-TC-Waitlist Rating By Consumer-1
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${cnote}=  FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${q1_l1}  ${DAY}  ${sId_1}  ${cnote}   ${bool[0]}  ${self}
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q1_l1}  ${DAY}  ${sId_1}  ${cnote}   ${bool[0]}  ${self}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -120,7 +120,7 @@ JD-TC-Waitlist Rating By Consumer-1
     Should Be Equal As Strings  ${resp.json()['ynwUuid']}  ${wid}  
     Should Be Equal As Strings  ${resp.json()['rating']['stars']}  ${rating1}
     Should Be Equal As Strings  ${resp.json()['rating']['feedback'][0]['comments']}  ${comment}
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${q1_l1}  ${DAY}  ${sId_2}  ${cnote}  ${bool[0]}  ${self}
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q1_l1}  ${DAY}  ${sId_2}  ${cnote}  ${bool[0]}  ${self}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -135,7 +135,7 @@ JD-TC-Waitlist Rating By Consumer-1
     Should Be Equal As Strings  ${resp.json()['ynwUuid']}  ${wid}  
     Should Be Equal As Strings  ${resp.json()['rating']['stars']}  ${rating2}
     Should Be Equal As Strings  ${resp.json()['rating']['feedback'][0]['comments']}  ${comment}    
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${q1_l1}  ${DAY}  ${sId_3}  ${cnote}  ${bool[0]}  ${self}
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q1_l1}  ${DAY}  ${sId_3}  ${cnote}  ${bool[0]}  ${self}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -172,7 +172,7 @@ JD-TC-Rating Added By Consumer-UH2
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${cnote}=  FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${q1_l1}  ${DAY}  ${sId_4}  ${cnote}  ${bool[0]}  ${self}
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q1_l1}  ${DAY}  ${sId_4}  ${cnote}  ${bool[0]}  ${self}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

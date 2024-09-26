@@ -27,58 +27,19 @@ JD-TC-Get Service By Location -1
 
 	[Documentation]  get service  location id
 
-    ${multilocdoms}=  get_mutilocation_domains
-    Log  ${multilocdoms}
-    Set Suite Variable  ${domain}  ${multilocdoms[0]['domain']}
-    Set Suite Variable  ${subdomain}  ${multilocdoms[0]['subdomains'][0]}
-
-    ${firstname}=  FakerLibrary.first_name
-    ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_G}=  Evaluate  ${PUSERNAME}+55102088
-    ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain}  ${subdomain}  ${PUSERNAME_G}    ${highest_package[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    202
-
-    ${resp}=  Account Activation  ${PUSERNAME_G}  0
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Account Set Credential  ${PUSERNAME_G}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_G}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_G}=  Provider Signup  PhoneNumber=${PUSERNAME_G}
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable  ${pid}  ${decrypted_data['id']}
-    # Set Test Variable  ${pid}  ${resp.json()['id']}
+    Set Test Variable   ${domain}  ${decrypted_data['sector']}
+    Set Test Variable   ${subdomain}  ${decrypted_data['subSector']}
     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_G}${\n}
     Set Suite Variable  ${PUSERNAME_G}
-
-    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${bs}=  FakerLibrary.bs
-    ${companySuffix}=  FakerLibrary.companySuffix
-    ${parking}   Random Element   ${parkingType}
-    ${24hours}    Random Element    ['True','False']
-    ${desc}=   FakerLibrary.sentence
-    ${url}=   FakerLibrary.url
-    ${name3}=  FakerLibrary.word
-    ${emails1}=  Emails  ${name3}  Email  ${PUSERNAME_G}${P_Email}.${test_mail}  ${views}
-    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    Set Test Variable  ${tz}
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-
-    ${b_loc}=  Create Dictionary  place=${city}   longitude=${longi}   lattitude=${latti}    googleMapUrl=${url}   pinCode=${postcode}  address=${address}
-    ${emails}=  Create List  ${emails1}
-    ${resp}=  Update Business Profile with kwargs   businessName=${bs}   shortName=${bs}   businessDesc=Description baseLocation=${b_loc}   emails=${emails}  
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
@@ -140,8 +101,7 @@ JD-TC-Get Service By Location -1
     ${eTime}=  add_timezone_time  ${tz1}  0  30
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
-    ${url}=   FakerLibrary.url
-    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
+    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${postcode}  ${address}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_l1}  ${resp.json()}
@@ -158,8 +118,7 @@ JD-TC-Get Service By Location -1
     # ${address}=  get_address
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
-    ${url}=   FakerLibrary.url
-    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
+    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${postcode}  ${address}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_l2}  ${resp.json()}
@@ -213,11 +172,30 @@ JD-TC-Get Service By Location -1
     Set Suite Variable  ${p1_q2}  ${resp.json()}
     
 
-    ${resp}=  ProviderLogout
+    ${fname}=  FakerLibrary.first_name
+    ${lname}=  FakerLibrary.last_name
+   
+    ${resp}=  AddCustomer  ${CUSERNAME2}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${cid}  ${resp.json()}
 
-    ${resp}=  Consumer Login  ${CUSERNAME2}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME2}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME2}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME2}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     
 
     ${resp}=   Get Service By Location  ${p1_l1}
@@ -239,8 +217,9 @@ JD-TC-Get Service By Location -2
 
 	[Documentation]  get service  location id 
 
-    ${resp}=  Consumer Login  ${CUSERNAME2}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME2}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Service By Location  ${p1_l2}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -270,8 +249,9 @@ JD-TC-Get Service By Location -3
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME2}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME2}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Service By Location  ${p1_l1}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -299,8 +279,9 @@ JD-TC-Get Queue By Location and Service-UH2
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME2}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME2}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Service By Location  ${p1_l2}  
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -353,83 +334,28 @@ JD-TC-Get Service By Location-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME17}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Service By Location   ${locId}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()}        []
-
-
-JD-TC-GetAppmtServicesByLocation-UH4
-    
-    [Documentation]   Try to get a waitlist service(not added in queue) by a provider consumer.
-
-    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME114}  ${PASSWORD}
+    ${fname}=  FakerLibrary.first_name
+    ${lname}=  FakerLibrary.last_name
+   
+    ${resp}=  AddCustomer  ${CUSERNAME17}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
     Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${cid}  ${resp.json()}
+
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Business Profile
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${account_id1}  ${resp.json()['id']}
-   
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${locId}=  Create Sample Location
-        Set Test Variable  ${locId}
-        ${resp}=   Get Location ById  ${locId}
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
-    END
-
-    ${service_duration}=   Random Int   min=5   max=10
-    ${P1SERVICE1}=    FakerLibrary.word
-    ${desc}=   FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=1   max=50
-    ${servicecharge}=   Random Int  min=100  max=500
-    ${resp}=  Create Service  ${P1SERVICE1}  ${desc}   ${service_duration}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${ser_id1}  ${resp.json()}    
-
-    ${resp}=   Get Service By Id  ${ser_id1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${firstName}=  FakerLibrary.name
-    ${lastName}=  FakerLibrary.last_name
-    ${primaryMobileNo}    Generate random string    10    123456789
-    ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
-    ${email}=    FakerLibrary.Email
-   
-    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${account_id1}
+    ${resp}=    Send Otp For Login    ${CUSERNAME17}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME17}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
+    Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${account_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200    
-   
-    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${account_id1}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME17}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -437,3 +363,4 @@ JD-TC-GetAppmtServicesByLocation-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}        []
+

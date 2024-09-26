@@ -126,8 +126,7 @@ JD-TC-Get Waitlist By Id Consumer-1
     Should Be Equal As Strings  ${resp.status_code}  200 
     
     ${wid}=  Get Dictionary Values  ${resp.json()}
-    Set Suite Variable  ${uuid1}  ${wid[0]}
-    # sleep  04s   
+    Set Suite Variable  ${uuid1}  ${wid[0]} 
 
     ${resp}=  Get consumer Waitlist By Id  ${uuid1}  ${pid}
     Log  ${resp.json()}

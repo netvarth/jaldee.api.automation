@@ -193,3 +193,53 @@ JD-TC-Add To Waitlist By Consumer-3
     ${resp}=  Add To Waitlist Consumers  ${empty}  ${pid}  ${p1_q1}  ${DAY}  ${p1_s1}  ${cnote}  ${bool[0]}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
+
+
+JD-TC-Add To Waitlist By Consumer-4
+
+	[Documentation]  Add To Waitlist By Consumer - Queue id is empty
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME25}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${empty}  ${DAY}  ${p1_s1}  ${cnote}  ${bool[0]}  ${self}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}     422
+
+JD-TC-Add To Waitlist By Consumer-5
+
+	[Documentation]  Add To Waitlist By Consumer - date is empty
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME25}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${p1_q1}  ${empty}  ${p1_s1}  ${cnote}  ${bool[0]}  ${self}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}     422
+
+JD-TC-Add To Waitlist By Consumer-6
+
+	[Documentation]  Add To Waitlist By Consumer - service id is empty
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME25}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${p1_q1}  ${DAY}  ${empty}  ${cnote}  ${bool[0]}  ${self}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}     422
+
+JD-TC-Add To Waitlist By Consumer-7
+
+	[Documentation]  Add To Waitlist By Consumer - Consumer note is empty
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME25}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${p1_q1}  ${DAY}  ${p1_s1}  ${empty}  ${bool[0]}  ${self}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}     422
+

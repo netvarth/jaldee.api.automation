@@ -150,19 +150,19 @@ JD-TC-Get Future Waitlist Consumer-1
     # Set Suite Variable   ${cid}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q1}  ${TOMORROW}  ${p1_s1}  ${cnote}  ${bool[0]}  ${self}
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${p1_q1}  ${TOMORROW}  ${p1_s1}  ${cnote}  ${bool[0]}  ${self}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${uuid1}  ${wid[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q1}  ${TOMORROW}  ${p1_s2}  ${cnote}  ${bool[0]}  ${self}
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${p1_q1}  ${TOMORROW}  ${p1_s2}  ${cnote}  ${bool[0]}  ${self}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${uuid2}  ${wid[0]}
 
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q2}  ${TOMORROW}  ${p1_s1}  ${cnote}  ${bool[0]}  ${self}
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${p1_q2}  ${TOMORROW}  ${p1_s1}  ${cnote}  ${bool[0]}  ${self}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${firstname}=  FakerLibrary.firstname
@@ -176,13 +176,13 @@ JD-TC-Get Future Waitlist Consumer-1
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${f1}   ${resp.json()}
 
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q1}  ${TOMORROW}  ${p1_s2}  ${cnote}  ${bool[0]}  ${f1} 
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${p1_q1}  ${TOMORROW}  ${p1_s2}  ${cnote}  ${bool[0]}  ${f1} 
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q3}  ${TOMORROW}  ${p1_s2}  ${cnote}  ${bool[0]}  ${self} 
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${p1_q3}  ${TOMORROW}  ${p1_s2}  ${cnote}  ${bool[0]}  ${self} 
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q1}  ${TestDate}  ${p1_s2}  ${cnote}  ${bool[0]}  ${self}
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${p1_q1}  ${TestDate}  ${p1_s2}  ${cnote}  ${bool[0]}  ${self}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME204}  ${PASSWORD}

@@ -23,22 +23,9 @@ JD-TC-Get Queue By Location and Service-1
 
 	[Documentation]  get queue by service id and location id
 
-    ${multilocdoms}=  get_mutilocation_domains
-    Log  ${multilocdoms}
-    Set Suite Variable  ${dom}  ${multilocdoms[0]['domain']}
-    Set Suite Variable  ${sub_dom}  ${multilocdoms[0]['subdomains'][0]}
-
-    ${firstname}=  FakerLibrary.first_name
-    ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_G}=  Evaluate  ${PUSERNAME}+55102040
-    ${highest_package}=  get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_G}    ${highest_package[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    202
-    ${resp}=  Account Activation  ${PUSERNAME_G}  0
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_G}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_G}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_G}=  Provider Signup  PhoneNumber=${PUSERNAME_G}
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Log   ${resp.json()}
@@ -47,8 +34,6 @@ JD-TC-Get Queue By Location and Service-1
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable  ${pid}  ${decrypted_data['id']}
-    Set Test Variable  ${firstname}  ${decrypted_data['firstName']}
-    Set Test Variable  ${lastname}  ${decrypted_data['lastName']}
     Set Test Variable   ${domain}  ${decrypted_data['sector']}
     Set Test Variable   ${subdomain}  ${decrypted_data['subSector']}
     Set Suite Variable    ${username}    ${decrypted_data['userName']}
@@ -57,39 +42,6 @@ JD-TC-Get Queue By Location and Service-1
 
     ${accId}=  get_acc_id  ${PUSERNAME_G}
     Set Suite Variable  ${accId}  ${accId}
-
-    ${bs}=  FakerLibrary.bs
-    ${companySuffix}=  FakerLibrary.companySuffix
-    ${parking}   Random Element   ${parkingType}
-    ${24hours}    Random Element    ['True','False']
-    ${desc}=   FakerLibrary.sentence
-    ${url}=   FakerLibrary.url
-    ${name3}=  FakerLibrary.word
-    ${emails1}=  Emails  ${name3}  Email  ${PUSERNAME_G}${P_Email}.${test_mail}  ${views}
-    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    Set Test Variable  ${tz}
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-
-    ${b_loc}=  Create Dictionary  place=${city}   longitude=${longi}   lattitude=${latti}    googleMapUrl=${url}   pinCode=${postcode}  address=${address}
-    ${emails}=  Create List  ${emails1}
-    ${resp}=  Update Business Profile with kwargs   businessName=${bs}   shortName=${bs}   businessDesc=Description baseLocation=${b_loc}   emails=${emails}  
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get Business Profile
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${fields}=   Get subDomain level Fields  ${dom}  ${sub_dom}
-    Log  ${fields.json()}
-    Should Be Equal As Strings    ${fields.status_code}   200
-
-    ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
-
-    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sub_dom}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get specializations Sub Domain  ${domain}  ${subdomain}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -132,8 +84,7 @@ JD-TC-Get Queue By Location and Service-1
     ${eTime}=  add_timezone_time  ${tz1}  0  30
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
-    ${url}=   FakerLibrary.url
-    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${stime}  ${etime}
+    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${postcode}  ${address}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${loc_result} = 	Convert To Integer 	 ${resp.json()}
@@ -147,8 +98,8 @@ JD-TC-Get Queue By Location and Service-1
     ${eTime1}=  add_timezone_time  ${tz2}  1  00
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
-    ${url}=   FakerLibrary.url
-    ${resp}=  Create Location  ${city1}  ${longi1}  ${latti1}  ${url}  ${postcode1}  ${address1}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${stime}  ${etime}
+
+    ${resp}=  Create Location  ${city1}  ${longi1}  ${latti1}  ${postcode1}  ${address1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${loc_result} = 	Convert To Integer 	 ${resp.json()}

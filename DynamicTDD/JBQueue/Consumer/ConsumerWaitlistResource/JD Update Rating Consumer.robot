@@ -109,7 +109,7 @@ JD-TC-Update Rating Consumer-1
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${cnote}=  FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${q1_l1}  ${DAY}  ${sId_1}  ${cnote}   ${bool[0]}  ${self}
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q1_l1}  ${DAY}  ${sId_1}  ${cnote}   ${bool[0]}  ${self}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -143,7 +143,7 @@ JD-TC-Update Rating Consumer-1
     Should Be Equal As Strings  ${resp.json()['rating']['feedback'][0]['comments']}  ${comment1}
     Should Be Equal As Strings  ${resp.json()['rating']['feedback'][1]['comments']}  ${comment2}    
 
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${q1_l1}  ${DAY}  ${sId_2}  ${cnote}  ${bool[0]}  ${self}
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q1_l1}  ${DAY}  ${sId_2}  ${cnote}  ${bool[0]}  ${self}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     

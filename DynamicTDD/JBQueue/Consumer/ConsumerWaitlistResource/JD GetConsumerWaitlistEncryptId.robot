@@ -92,7 +92,7 @@ JD-TC-GetWaitlistByEncryptedID-1
     Set Suite Variable  ${f1}   ${resp.json()}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${qid}  ${DAY1}  ${s_id1}  ${cnote}  ${bool[0]}  ${f1}
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${qid}  ${DAY1}  ${s_id1}  ${cnote}  ${bool[0]}  ${f1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
