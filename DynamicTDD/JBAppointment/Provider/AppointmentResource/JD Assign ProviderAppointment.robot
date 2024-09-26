@@ -800,39 +800,11 @@ JD-TC-AssignproviderAppointment-5
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Get License UsageInfo 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
     clear_service   ${HLPUSERNAME1}
     clear_appt_schedule   ${HLPUSERNAME1}
     clear_customer   ${HLPUSERNAME1}
     reset_user_metric  ${pid}
 
-    ${resp}=  Get Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-
-    END
-
-    sleep  2s
-    ${resp}=  Get Departments
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
-
-    ${resp}=   Get License UsageInfo 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-   
     ${resp}=    Get Locations
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -843,7 +815,7 @@ JD-TC-AssignproviderAppointment-5
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
     ${ser_duratn}=      Random Int   min=10   max=30
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${ser_duratn}  ${bool[0]}  ${servicecharge}  ${bool[0]}  department=${dep_id} 
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${ser_duratn}  ${bool[0]}  ${servicecharge}  ${bool[0]}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${s_id}  ${resp.json()}
 
