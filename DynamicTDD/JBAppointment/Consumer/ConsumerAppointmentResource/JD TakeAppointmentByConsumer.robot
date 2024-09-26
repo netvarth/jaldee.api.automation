@@ -798,7 +798,7 @@ JD-TC-Take Appointment-9
     Should Be Equal As Strings  ${resp.status_code}  200
     ${pid01}=  get_acc_id  ${PUSERNAME_X}
     Set Suite Variable   ${pid01}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+       
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -818,7 +818,8 @@ JD-TC-Take Appointment-9
     ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
     ${sTime1}=  add_timezone_time  ${tz}  0  30  
     ${eTime1}=  add_timezone_time  ${tz}  5  00  
-    ${DAY1}=  db.get_date_by_timezone  ${tz}   
+    ${DAY1}=  db.get_date_by_timezone  ${tz}  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     ${list}=  Create List  1  2  3  4  5  6  7
 
     ${bs}=  TimeSpec  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}    ${sTime1}  ${eTime1}
@@ -858,8 +859,7 @@ JD-TC-Take Appointment-9
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY2}=  db.add_timezone_date  ${tz}  10       
+    ${list}=  Create List  1  2  3  4  5  6  7    
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${p1_l2}  ${duration}  ${bool1}  ${p1_s2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -4220,13 +4220,17 @@ JD-TC-Take Appointment-18
             Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
         END
     END
-    ${num_slots}=  Get Length  ${slots}
-    FOR   ${i}  IN RANGE   0   ${num_slots}
-        Run Keyword If  '${resp.json()['availableSlots'][${i}]['time']}' == '${slot1}' 
-        ...   Run Keywords  
-        ...   Set Test Variable   ${slot2}    ${resp.json()['availableSlots'][${i}]['time']}   
-        ...   AND  Exit For Loop
-    END
+    ${random slots}=  Evaluate  random.sample(${slots},3)   random
+    Set Test Variable   ${slot1}   ${random slots[0]}
+    Set Test Variable   ${slot2}   ${random slots[1]}
+    Set Test Variable   ${slot3}   ${random slots[2]}
+    # ${num_slots}=  Get Length  ${slots}
+    # FOR   ${i}  IN RANGE   0   ${num_slots}
+    #     Run Keyword If  '${resp.json()['availableSlots'][${i}]['time']}' == '${slot1}' 
+    #     ...   Run Keywords  
+    #     ...   Set Test Variable   ${slot2}    ${resp.json()['availableSlots'][${i}]['time']}   
+    #     ...   AND  Exit For Loop
+    # END
     # ${j}=  Random Int  max=${num_slots-1}
     
     # Set Test Variable   ${slot2}   ${slots[${j}]}
@@ -5239,7 +5243,8 @@ JD-TC-Take Appointment-UH15
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10     
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
+    ${DAY3}=  db.add_timezone_date  ${tz}  4     
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
@@ -5308,7 +5313,7 @@ JD-TC-Take Appointment-UH15
     Should Be Equal As Strings    ${resp.status_code}   200
 
 
-    # ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid01}  ${DAY3}  ${p1_l2}  ${p1_s2}
+    # ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid02}  ${DAY3}  ${p1_l2}  ${p1_s2}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
