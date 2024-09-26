@@ -649,16 +649,30 @@ Get User By Id
     Check Deprication  ${resp}  Get User By Id
     RETURN  ${resp}
 
+# Create Service
+#     #...  merged the following keywords to this
+#     #...  Create Service with info
+#     #...  Create Service With serviceType   serviceType=${serviceType}
+#     #...  Create Service Department
+#     #...  Create Service For User
+#     #...  Create Sample Donation For User, needs depid and user id
+#     [Arguments]  ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}   &{kwargs}
+#     ${items}=  Get Dictionary items  ${kwargs}
+#     ${data}=  Create Dictionary  name=${name}  description=${desc}  serviceDuration=${durtn}  notification=${notfcn}  notificationType=${notiTp}  minPrePaymentAmount=${minPrePaymentAmount}   totalAmount=${totalAmount}   status=${status}  bType=${btype}  isPrePayment=${isPrePayment}  taxable=${taxable}
+#     FOR  ${key}  ${value}  IN  @{items}
+#         Set To Dictionary  ${data}   ${key}=${value}
+#     END
+#     Log  ${data}
+#     ${data}=    json.dumps    ${data}
+#     Check And Create YNW Session  
+#     ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
+#     Check Deprication  ${resp}  Create Service
+#     RETURN  ${resp}
+
 Create Service
-    #...  merged the following keywords to this
-    #...  Create Service with info
-    #...  Create Service With serviceType   serviceType=${serviceType}
-    #...  Create Service Department
-    #...  Create Service For User
-    #...  Create Sample Donation For User, needs depid and user id
-    [Arguments]  ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}   &{kwargs}
+    [Arguments]  ${name}  ${desc}  ${durtn}  ${isPrePayment}  ${totalAmount}  ${notfcn}  &{kwargs}
     ${items}=  Get Dictionary items  ${kwargs}
-    ${data}=  Create Dictionary  name=${name}  description=${desc}  serviceDuration=${durtn}  notification=${notfcn}  notificationType=${notiTp}  minPrePaymentAmount=${minPrePaymentAmount}   totalAmount=${totalAmount}   status=${status}  bType=${btype}  isPrePayment=${isPrePayment}  taxable=${taxable}
+    ${data}=  Create Dictionary  name=${name}  description=${desc}  serviceDuration=${durtn}  isPrePayment=${isPrePayment}  totalAmount=${totalAmount}  notification=${notfcn}  
     FOR  ${key}  ${value}  IN  @{items}
         Set To Dictionary  ${data}   ${key}=${value}
     END
@@ -673,15 +687,24 @@ Create Sample Service
     #...  Create Sample Service with Prepayment
     #...  Create Sample Service with Prepayment For User   
     #...  Create Sample Service For User
-    [Arguments]  ${Service_name}    &{kwargs}
+    [Arguments]  ${Service_name}    ${isPrePayment}=${bool[0]}  ${notfcn}=${bool[0]}  &{kwargs}
     ${desc}=   FakerLibrary.sentence
     ${srv_duration}=   Random Int   min=2   max=2
     ${min_pre}=   Random Int   min=1   max=50
     ${Total}=   Random Int   min=100   max=500
-    ${resp}=  Create Service  ${Service_name}  ${desc}   ${srv_duration}  ${status[0]}  ${btype}  ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[0]}  ${bool[0]}   &{kwargs}
+    ${resp}=  Create Service  ${Service_name}  ${desc}   ${srv_duration}  ${isPrePayment}  ${Total}  ${notfcn}  &{kwargs}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     RETURN  ${resp.json()}
+
+# Create Sample Service with Prepayment
+#     [Arguments]  ${Service_name}  ${prepayment_amt}  ${servicecharge}  &{kwargs}
+#     ${desc}=   FakerLibrary.sentence
+#     ${srv_duration}=   Random Int   min=2   max=2
+#     ${resp}=  Create Service  ${Service_name}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${prepayment_amt}  ${servicecharge}  ${bool[1]}  ${bool[0]}  &{kwargs}
+#     Log  ${resp.content}
+#     Should Be Equal As Strings  ${resp.status_code}   200
+#     RETURN  ${resp.json()}
 
 Get Service Count
     [Arguments]  &{param}
@@ -765,14 +788,6 @@ ListFamilyMemberByProvider
     Check Deprication  ${resp}  ListFamilyMemberByProvider
     RETURN  ${resp}
 
-Create Sample Service with Prepayment
-    [Arguments]  ${Service_name}  ${prepayment_amt}  ${servicecharge}  &{kwargs}
-    ${desc}=   FakerLibrary.sentence
-    ${srv_duration}=   Random Int   min=2   max=2
-    ${resp}=  Create Service  ${Service_name}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${prepayment_amt}  ${servicecharge}  ${bool[1]}  ${bool[0]}  &{kwargs}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}   200
-    RETURN  ${resp.json()}
 
 Create Sample User
     [Arguments]    ${admin}=${bool[0]}   ${primaryMobileNo}=${EMPTY}  &{kwargs}

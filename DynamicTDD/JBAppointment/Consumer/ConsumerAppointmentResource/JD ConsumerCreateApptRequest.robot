@@ -44,53 +44,62 @@ JD-TC-ConsumerCreateApptRequest-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${acc_id1}  ${resp.json()['id']}
 
-    ${SERVICE1}=    FakerLibrary.word
+    # ${SERVICE1}=    FakerLibrary.word
     
-    ${service_duration}=   Random Int   min=5   max=10
-    ${desc}=   FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=1   max=50
-    ${servicecharge}=   Random Int  min=100  max=500
+    # ${service_duration}=   Random Int   min=5   max=10
+    # ${desc}=   FakerLibrary.sentence
+    # ${min_pre}=   Random Int   min=1   max=50
+    # ${servicecharge}=   Random Int  min=100  max=500
 
-    ${resp}=  Create Service  ${SERVICE1}   ${desc}   ${service_duration}   ${status[0]}  
-    ...  ${btype}   ${bool[1]}   ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]} 
-    ...   ${bool[1]}   date=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${sid1}  ${resp.json()}
+    # ${resp}=  Create Service  ${SERVICE1}   ${desc}   ${service_duration}   ${status[0]}  
+    # ...  ${btype}   ${bool[1]}   ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]} 
+    # ...   ${bool[1]}   date=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${sid1}  ${resp.json()}
+
+    ${SERVICE1}=    FakerLibrary.word
+    ${sid1}=  Create Sample Service  ${SERVICE1}  date=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
 
     ${resp}=   Get Service By Id  ${sid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE2}=    FakerLibrary.word
-    ${service_duration}=   Random Int   min=5   max=10
-    ${desc}=   FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=1   max=50
-    ${servicecharge}=   Random Int  min=100  max=500
+    # ${SERVICE2}=    FakerLibrary.word
+    # ${service_duration}=   Random Int   min=5   max=10
+    # ${desc}=   FakerLibrary.sentence
+    # ${min_pre}=   Random Int   min=1   max=50
+    # ${servicecharge}=   Random Int  min=100  max=500
 
-    ${resp}=  Create Service  ${SERVICE2}   ${desc}   ${service_duration}   ${status[0]}  
-    ...  ${btype}   ${bool[1]}   ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]} 
-    ...   ${bool[1]}   dateTime=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${sid2}  ${resp.json()}
+    # ${resp}=  Create Service  ${SERVICE2}   ${desc}   ${service_duration}   ${status[0]}  
+    # ...  ${btype}   ${bool[1]}   ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]} 
+    # ...   ${bool[1]}   dateTime=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${sid2}  ${resp.json()}
+
+    ${SERVICE2}=    FakerLibrary.word
+    ${sid2}=  Create Sample Service  ${SERVICE2}  dateTime=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
 
     ${resp}=   Get Service By Id  ${sid2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${SERVICE3}=    FakerLibrary.word
-    ${service_duration}=   Random Int   min=5   max=10
-    ${desc}=   FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=1   max=50
-    ${servicecharge}=   Random Int  min=100  max=500
+    # ${SERVICE3}=    FakerLibrary.word
+    # ${service_duration}=   Random Int   min=5   max=10
+    # ${desc}=   FakerLibrary.sentence
+    # ${min_pre}=   Random Int   min=1   max=50
+    # ${servicecharge}=   Random Int  min=100  max=500
 
-    ${resp}=  Create Service  ${SERVICE3}   ${desc}   ${service_duration}   ${status[0]}  
-    ...  ${btype}   ${bool[1]}   ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]} 
-    ...   ${bool[1]}   dateTime=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${sid3}  ${resp.json()}
+    # ${resp}=  Create Service  ${SERVICE3}   ${desc}   ${service_duration}   ${status[0]}  
+    # ...  ${btype}   ${bool[1]}   ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]} 
+    # ...   ${bool[1]}   dateTime=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${sid3}  ${resp.json()}
+
+    ${SERVICE3}=    FakerLibrary.word
+    ${sid3}=  Create Sample Service  ${SERVICE3}  dateTime=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
 
     ${resp}=   Get Service By Id  ${sid3}
     Log  ${resp.json()}
@@ -245,9 +254,8 @@ JD-TC-ConsumerCreateApptRequest-4
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500
 
-    ${resp}=  Update Service  ${sid2}  ${SERVICE2}   ${desc}   ${service_duration}   ${status[0]}  
-    ...  ${btype}   ${bool[1]}   ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]} 
-    ...   ${bool[1]}   noDateTime=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
+    ${resp}=  Update Service  ${sid2}  ${SERVICE2}   ${desc}   ${service_duration}   ${bool[0]}  ${servicecharge}  ${bool[0]}
+    ...     noDateTime=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

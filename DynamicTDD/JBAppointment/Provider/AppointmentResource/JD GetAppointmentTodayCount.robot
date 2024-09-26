@@ -283,8 +283,7 @@ JD-TC-GetAppointmentTodayCount-3
     ${ser_amount}=   Random Int   min=100   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
     ${SERVICE1}=    FakerLibrary.word
-    ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${prepay_amt} 
-    ...   ${ser_amount1}  ${bool[1]}   ${bool[0]}   maxBookingsAllowed=10
+    ${resp}=  Create Service  ${SERVICE1}   ${description}  ${ser_durtn}  ${bool[1]}  ${ser_amount1}  ${bool[0]}  minPrePaymentAmount=${prepay_amt}  maxBookingsAllowed=10
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${s_id}  ${resp.json()}
@@ -361,8 +360,7 @@ JD-TC-GetAppointmentTodayCount-4
     ${ser_amount}=   Random Int   min=100   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
     ${SERVICE1}=    FakerLibrary.word
-    ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${prepay_amt} 
-    ...   ${ser_amount1}  ${bool[1]}   ${bool[0]}   maxBookingsAllowed=10
+    ${resp}=  Create Service  ${SERVICE1}   ${description}  ${ser_durtn}  ${bool[1]}  ${ser_amount1}  ${bool[0]}  minPrePaymentAmount=${prepay_amt}  maxBookingsAllowed=10
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${s_id}  ${resp.json()}
@@ -482,8 +480,7 @@ JD-TC-GetAppointmentTodayCount-5
     ${ser_amount}=   Random Int   min=100   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
     ${SERVICE1}=    FakerLibrary.word
-    ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${prepay_amt} 
-    ...   ${ser_amount1}  ${bool[1]}   ${bool[0]}   maxBookingsAllowed=10
+    ${resp}=  Create Service  ${SERVICE1}   ${description}  ${ser_durtn}  ${bool[1]}  ${ser_amount1}  ${bool[0]}  minPrePaymentAmount=${prepay_amt}  maxBookingsAllowed=10
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${s_id}  ${resp.json()}
@@ -1823,8 +1820,7 @@ JD-TC-GetAppointmentTodayCount-19
     ${ser_amount}=   Random Int   min=100   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
     ${SERVICE1}=    FakerLibrary.word
-    ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${prepay_amt} 
-    ...   ${ser_amount1}  ${bool[1]}   ${bool[0]}   maxBookingsAllowed=10
+    ${resp}=  Create Service  ${SERVICE1}   ${description}  ${ser_durtn}  ${bool[1]}  ${ser_amount1}  ${bool[0]}  minPrePaymentAmount=${prepay_amt}  maxBookingsAllowed=10
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${s_id}  ${resp.json()}
@@ -1920,8 +1916,7 @@ JD-TC-GetAppointmentTodayCount-20
     ${ser_amount}=   Random Int   min=100   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
     ${SERVICE1}=    FakerLibrary.word
-    ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${prepay_amt} 
-    ...   ${ser_amount1}  ${bool[1]}   ${bool[0]}   maxBookingsAllowed=10
+    ${resp}=  Create Service  ${SERVICE1}   ${description}  ${ser_durtn}  ${bool[1]}  ${ser_amount1}  ${bool[0]}  minPrePaymentAmount=${prepay_amt}  maxBookingsAllowed=10
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${s_id}  ${resp.json()}
@@ -2018,8 +2013,7 @@ JD-TC-GetAppointmentTodayCount-21
     ${ser_amount}=   Random Int   min=100   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
     ${SERVICE1}=    FakerLibrary.word
-    ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${prepay_amt} 
-    ...   ${ser_amount1}  ${bool[1]}   ${bool[0]}   maxBookingsAllowed=10
+    ${resp}=  Create Service  ${SERVICE1}   ${description}  ${ser_durtn}  ${bool[1]}  ${ser_amount1}  ${bool[0]}  minPrePaymentAmount=${prepay_amt}  maxBookingsAllowed=10
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${s_id}  ${resp.json()}
@@ -2121,8 +2115,7 @@ JD-TC-GetAppointmentTodayCount-22
     ${ser_amount}=   Random Int   min=100   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
     ${SERVICE1}=    FakerLibrary.word
-    ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${prepay_amt} 
-    ...   ${ser_amount1}  ${bool[1]}   ${bool[0]}   maxBookingsAllowed=10
+    ${resp}=  Create Service  ${SERVICE1}   ${description}  ${ser_durtn}  ${bool[1]}  ${ser_amount1}  ${bool[0]}  minPrePaymentAmount=${prepay_amt}  maxBookingsAllowed=10
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${s_id}  ${resp.json()}

@@ -37,7 +37,7 @@ JD-TC-Upload service Image-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME199}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service       ${PUSERNAME199}
-    ${resp}=  Create Service  ${SERVICE3}  ${description}   ${service_duration[2]}  ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[0]} 
+    ${resp}=  Create Service  ${SERVICE3}  ${description}  ${service_duration[2]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Suite Variable  ${id}  ${resp.json()}  
@@ -53,7 +53,7 @@ JD-TC-Upload service Image-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     # Should Be Equal As Strings  ${resp[1]}  200
-    # Set Suite Variable  ${itemId}   ${resp[0]}
+    # Set Suite Variable  ${itemId}  ${resp[0]}
     ${resp}=   Get Service By Id    ${id}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['servicegallery'][0]['caption']}   firstImage
@@ -62,7 +62,7 @@ JD-TC-Upload service Image-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     # Should Be Equal As Strings  ${resp[1]}  200
-    # Set Suite Variable  ${itemId}   ${resp[0]}
+    # Set Suite Variable  ${itemId}  ${resp[0]}
     ${resp}=   Get Service By Id    ${id}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['servicegallery'][1]['caption']}   firstImage
@@ -95,4 +95,4 @@ JD-TC-Upload service Image-UH2
     ${resp}=  uploadServiceImages   0   ${cookie}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${SERVICE_NOT_FOUND}  
+    Should Be Equal As Strings  ${resp.json()}  ${SERVICE_NOT_FOUND}  

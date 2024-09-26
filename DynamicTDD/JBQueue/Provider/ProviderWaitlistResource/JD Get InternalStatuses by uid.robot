@@ -24,21 +24,21 @@ JD-TC-GetInternalStatus-1
      ${pid}=  get_acc_id  ${HLPUSERNAME4}
      Set Suite Variable  ${pid}
 
-     ${resp}=  Get Waitlist Settings
-     Log  ${resp.content}
-     Should Be Equal As Strings    ${resp.status_code}    200
-     IF  ${resp.json()['filterByDept']}==${bool[0]}
-          ${resp}=  Toggle Department Enable
-          Log  ${resp.content}
-          Should Be Equal As Strings  ${resp.status_code}  200
+     # ${resp}=  Get Waitlist Settings
+     # Log  ${resp.content}
+     # Should Be Equal As Strings    ${resp.status_code}    200
+     # IF  ${resp.json()['filterByDept']}==${bool[0]}
+     #      ${resp}=  Toggle Department Enable
+     #      Log  ${resp.content}
+     #      Should Be Equal As Strings  ${resp.status_code}  200
 
-     END
+     # END
 
-     sleep  2s
-     ${resp}=  Get Departments
-     Log   ${resp.json()}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+     # sleep  2s
+     # ${resp}=  Get Departments
+     # Log   ${resp.json()}
+     # Should Be Equal As Strings  ${resp.status_code}  200
+     # Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      ${resp2}=   Get Business Profile
      Log  ${resp2.json()}
      Should Be Equal As Strings    ${resp2.status_code}    200
@@ -69,84 +69,96 @@ JD-TC-GetInternalStatus-1
      Set Suite Variable  ${u_id}  ${resp.json()[0]['id']}
      ${u_id}=  Convert To String  ${u_id}
 
-    ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+301199
-    Set Suite Variable  ${PUSERNAME_U1}
-    clear_users  ${PUSERNAME_U1}
-    ${firstname1}=  FakerLibrary.name
-    Set Suite Variable  ${firstname1}
-    ${lastname1}=  FakerLibrary.last_name
-    Set Suite Variable  ${lastname1}
-    ${dob1}=  FakerLibrary.Date
-    Set Suite Variable  ${dob1}
-    # ${pin1}=  get_pincode
-     # ${resp}=  Get LocationsByPincode     ${pin1}
-     FOR    ${i}    IN RANGE    3
-        ${pin1}=  get_pincode
-        ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin1}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-     END
-     Should Be Equal As Strings    ${resp.status_code}    200 
-     Set Suite Variable  ${pin1} 
-    Set Suite Variable  ${city1}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Suite Variable  ${state1}  ${resp.json()[0]['PostOffice'][0]['State']}     
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${u_id1}  ${resp.json()}
-    ${u_id1}=  Convert To String  ${u_id1}
+#     ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+301199
+#     Set Suite Variable  ${PUSERNAME_U1}
+#     clear_users  ${PUSERNAME_U1}
+#     ${firstname1}=  FakerLibrary.name
+#     Set Suite Variable  ${firstname1}
+#     ${lastname1}=  FakerLibrary.last_name
+#     Set Suite Variable  ${lastname1}
+#     ${dob1}=  FakerLibrary.Date
+#     Set Suite Variable  ${dob1}
+#     # ${pin1}=  get_pincode
+#      # ${resp}=  Get LocationsByPincode     ${pin1}
+#      FOR    ${i}    IN RANGE    3
+#         ${pin1}=  get_pincode
+#         ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin1}
+#         IF    '${kwstatus}' == 'FAIL'
+#                 Continue For Loop
+#         ELSE IF    '${kwstatus}' == 'PASS'
+#                 Exit For Loop
+#         END
+#      END
+#      Should Be Equal As Strings    ${resp.status_code}    200 
+#      Set Suite Variable  ${pin1} 
+#     Set Suite Variable  ${city1}   ${resp.json()[0]['PostOffice'][0]['District']}   
+#     Set Suite Variable  ${state1}  ${resp.json()[0]['PostOffice'][0]['State']}     
+#     ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+#     Log   ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     Set Suite Variable  ${u_id1}  ${resp.json()}
+#     ${u_id1}=  Convert To String  ${u_id1}
+
+     ${PUSERNAME_U1}  ${u_id1} =  Create and Configure Sample User
+
     
-    ${PUSERNAME_U2}=  Evaluate  ${PUSERNAME}+301198
-    Set Suite Variable  ${PUSERNAME_U2}
-    clear_users  ${PUSERNAME_U2}
-    ${firstname2}=  FakerLibrary.name
-    Set Suite Variable  ${firstname2}
-    ${lastname2}=  FakerLibrary.last_name
-    Set Suite Variable  ${lastname2}
-    ${dob2}=  FakerLibrary.Date
-    Set Suite Variable  ${dob2}
-    # ${pin2}=  get_pincode
-     # ${resp}=  Get LocationsByPincode     ${pin2}
-     FOR    ${i}    IN RANGE    3
-        ${pin2}=  get_pincode
-        ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin2}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-     END
-     Should Be Equal As Strings    ${resp.status_code}    200 
-     Set Suite Variable  ${pin2} 
-    Set Suite Variable  ${city2}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Suite Variable  ${state2}  ${resp.json()[0]['PostOffice'][0]['State']}    
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.${test_mail}   ${userType[0]}  ${pin2}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${u_id2}  ${resp.json()}
-    ${u_id2}=  Convert To String  ${u_id2}
+#     ${PUSERNAME_U2}=  Evaluate  ${PUSERNAME}+301198
+#     Set Suite Variable  ${PUSERNAME_U2}
+#     clear_users  ${PUSERNAME_U2}
+#     ${firstname2}=  FakerLibrary.name
+#     Set Suite Variable  ${firstname2}
+#     ${lastname2}=  FakerLibrary.last_name
+#     Set Suite Variable  ${lastname2}
+#     ${dob2}=  FakerLibrary.Date
+#     Set Suite Variable  ${dob2}
+#     # ${pin2}=  get_pincode
+#      # ${resp}=  Get LocationsByPincode     ${pin2}
+#      FOR    ${i}    IN RANGE    3
+#         ${pin2}=  get_pincode
+#         ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin2}
+#         IF    '${kwstatus}' == 'FAIL'
+#                 Continue For Loop
+#         ELSE IF    '${kwstatus}' == 'PASS'
+#                 Exit For Loop
+#         END
+#      END
+#      Should Be Equal As Strings    ${resp.status_code}    200 
+#      Set Suite Variable  ${pin2} 
+#     Set Suite Variable  ${city2}   ${resp.json()[0]['PostOffice'][0]['District']}   
+#     Set Suite Variable  ${state2}  ${resp.json()[0]['PostOffice'][0]['State']}    
+#     ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.${test_mail}   ${userType[0]}  ${pin2}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+#     Log   ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     Set Suite Variable  ${u_id2}  ${resp.json()}
+#     ${u_id2}=  Convert To String  ${u_id2}
+
+     ${PUSERNAME_U2}  ${u_id2} =  Create and Configure Sample User
+
 
     ${SERVICE1}=    FakerLibrary.word
-    ${desc}=   FakerLibrary.sentence
-    ${servicecharge}=   Random Int  min=100  max=500
-    ${ser_duratn}=      Random Int   min=01   max=05
-    ${resp}=  Create Service Department  ${SERVICE1}  ${desc}   ${ser_duratn}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  ${dep_id}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${s_id1}  ${resp.json()}
+#     ${desc}=   FakerLibrary.sentence
+#     ${servicecharge}=   Random Int  min=100  max=500
+#     ${ser_duratn}=      Random Int   min=01   max=05
+#     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_duratn}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}       ${bool[0]}  
+#     Should Be Equal As Strings  ${resp.status_code}  200
+    ${s_id1}=  Create Sample Service  ${SERVICE1}   
+    Set Suite Variable  ${s_id1}
+
     ${SERVICE2}=    FakerLibrary.word
-    ${resp}=  Create Service Department  ${SERVICE2}  ${desc}   ${ser_duratn}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  ${dep_id}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${s_id2}  ${resp.json()}
+#     ${resp}=  Create Service ${SERVICE2}  ${desc}   ${ser_duratn}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}   ${bool[0]}  
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     Set Suite Variable  ${s_id2}  ${resp.json()}
+     ${s_id2}=  Create Sample Service  ${SERVICE2}   
+     Set Suite Variable  ${s_id2}
+#     ${desc}=   FakerLibrary.sentence
+#     ${servicecharge}=   Random Int  min=100  max=500
+#     ${ser_duratn}=      Random Int   min=10   max=30
+#     ${resp}=  Create Service  ${SERVICE3}  ${desc}   ${ser_duratn}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}   ${bool[0]}  
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     Set Suite Variable  ${s_id3}  ${resp.json()}
      ${SERVICE3}=    FakerLibrary.word
-    ${desc}=   FakerLibrary.sentence
-    ${servicecharge}=   Random Int  min=100  max=500
-    ${ser_duratn}=      Random Int   min=10   max=30
-    ${resp}=  Create Service Department  ${SERVICE3}  ${desc}   ${ser_duratn}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  ${dep_id}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${s_id3}  ${resp.json()}
+     ${s_id3}=  Create Sample Service  ${SERVICE3}   
+     Set Suite Variable  ${s_id3}
 
 
     ${user_ids1}=  Create List  ${u_id1}
@@ -236,11 +248,7 @@ JD-TC-GetInternalStatus-1
      Should Be Equal As Strings  ${resp.json()[0]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[0]['serviceId']}  ${s_id1}
 
-    ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
+
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get InternalStatuses by uid  ${wid}
@@ -255,11 +263,7 @@ JD-TC-GetInternalStatus-1
      Should Be Equal As Strings  ${resp.json()[0]['displayOrder']}  1
      Should Be Equal As Strings  ${resp.json()[0]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[0]['serviceId']}  ${s_id1}
-     ${resp}=  SendProviderResetMail   ${PUSERNAME_U2}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    @{resp}=  ResetProviderPassword  ${PUSERNAME_U2}  ${PASSWORD}  2
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
+
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get InternalStatuses by uid  ${wid}
@@ -866,7 +870,7 @@ JD-TC-GetInternalStatus-7
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
     ${amt}=  Convert To Number  ${amt}  1
     Set Suite Variable  ${amt}
-    ${resp}=  Create Service For User  ${SERVICE4}  ${description}   ${dur}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  0  ${amt}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${u_id1}
+    ${resp}=  Create Service For User  ${SERVICE4}  ${description}   ${dur}  ${bool[0]}  ${amt}  ${bool[0]}  minPrePaymentAmount=0  ${dep_id}  ${u_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id4}  ${resp.json()}

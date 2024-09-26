@@ -147,8 +147,7 @@ JD-TC-RemoveSubServicesToAppt-1
     ${subser_name}=    FakerLibrary.firstname
     Set Suite Variable   ${subser_name}
 
-    ${resp}=  Create Service    ${subser_name}  ${desc}  ${subser_dur}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${EMPTY}   ${subser_price}
-    ...    ${bool[0]}   ${bool[0]}  serviceCategory=${serviceCategory[0]}
+    ${resp}=  Create Service    ${subser_name}  ${desc}   ${subser_dur}  ${bool[0]}  ${subser_price}  ${bool[0]}  serviceCategory=${serviceCategory[0]}
     Log   ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${subser_id1}  ${resp.json()}

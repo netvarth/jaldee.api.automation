@@ -60,14 +60,14 @@ JD-TC-Create_Provider_Schedule-1
     Set Suite Variable  ${user_id}  ${decrypted_data['id']}
     Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
     Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
-    # Set Suite Variable  ${user_id}   ${resp.json()['id']}
-    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    # Set Suite Variable  ${user_id}  ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}  ${resp.json()['userName']}
+    # Set Test Variable   ${lic_id}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${acc_id}   ${resp.json()['id']}
+    Set Suite Variable  ${acc_id}  ${resp.json()['id']}
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
     Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
@@ -141,7 +141,7 @@ JD-TC-Create_Provider_Schedule-1
 	Set Suite Variable    ${addon_name}      ${resp.json()[6]['addons'][4]['addonName']}
        Log   ${addon_id}
 
-       ${resp}=  Add Addons details  ${acc_id}   ${addon_id}
+       ${resp}=  Add Addons details  ${acc_id}  ${addon_id}
 	Log   ${resp.content}
 	Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -161,7 +161,7 @@ JD-TC-Create_Provider_Schedule-1
 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location
-    Set Suite Variable    ${locId}    ${resp}  
+    Set Suite Variable    ${locId}  ${resp}  
 
     ${ser_name1}=   FakerLibrary.word
     Set Suite Variable    ${ser_name1} 
@@ -174,18 +174,18 @@ JD-TC-Create_Provider_Schedule-1
     ${service_amount}=  Convert To Number  ${service_amount}  0
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${ser_name1}  ${desc}  ${ser_durtn}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${service_amount}  ${bool[1]}  ${bool[0]}  prePaymentType=${advancepaymenttype[0]}  department=${dep_id}
+    ${resp}=  Create Service  ${ser_name1}  ${desc}  ${ser_durtn}  ${status[0]}  ${btype}  ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${service_amount}  ${bool[1]}  ${bool[0]}  prePaymentType=${advancepaymenttype[0]}  department=${dep_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.json()}
 
     # ${resp}=   Create Sample Service  ${ser_name1}
-    # Set Suite Variable    ${ser_id1}    ${resp}  
+    # Set Suite Variable    ${ser_id1}  ${resp}  
     # ${ser_name2}=   FakerLibrary.word
     # Set Suite Variable    ${ser_name2} 
 
     # ${resp}=   Create Sample Service  ${ser_name2}
-    # Set Suite Variable    ${ser_id2}    ${resp}  
+    # Set Suite Variable    ${ser_id2}  ${resp}  
 
     ${q_name}=    FakerLibrary.word
     Set Suite Variable    ${q_name}
@@ -199,10 +199,10 @@ JD-TC-Create_Provider_Schedule-1
     Set Suite Variable   ${parallel}
     ${capacity}=  Random Int   min=10   max=20
     Set Suite Variable   ${capacity}
-    ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${locId}  ${ser_id1}  
+    ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}  ${capacity}  ${locId}  ${ser_id1}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${que_id1}   ${resp.json()}
+    Set Suite Variable  ${que_id1}  ${resp.json()}
 
     ${callWaitingTime}    Generate random string    1    123456789
     ${token}    FakerLibrary.Random Number
@@ -282,11 +282,11 @@ JD-TC-Create_Provider_Schedule-1
     ${waiting_option}    create_ivr_children   ${waiting_option_id}  ${waiting_option_name}  ${ivr_language[0]}  ${waiting_option_node_value}  ${ivr_inputValue[0]}
     ${action_getWaitingTime}    ivr_acion_dict    ${get_Waiting_Time_id}  ${get_Waiting_Time_name}  ${ivr_actions[11]}  ${ivr_language[0]}  ${get_Waiting_Time_node_value}  ${waiting_option}  ${get_User_List}
 
-    ${resp}=    IVR_Config_Json    ${action_token_verify}    ${action_consumerVerfy}    ${action_getlanguage}    ${action_language}    ${action_checkSchedule}    ${action_generateToken_Callback}    ${action_callUsers}    ${action_update_Waiting_Time}    ${action_getWaitingTime} 
+    ${resp}=    IVR_Config_Json    ${action_token_verify}  ${action_consumerVerfy}  ${action_getlanguage}  ${action_language}  ${action_checkSchedule}  ${action_generateToken_Callback}  ${action_callUsers}  ${action_update_Waiting_Time}  ${action_getWaitingTime} 
     Log  ${resp}
-    Set Suite Variable  ${ivr_config_data}   ${resp}
+    Set Suite Variable  ${ivr_config_data}  ${resp}
 
-    ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}   ${bool[1]}   ${bool[1]} 
+    ${resp}=    Create_IVR_Settings    ${acc_id}  ${ivr_callpriority[0]}  ${callWaitingTime}  ${ser_id1}  ${token}  ${secretKey}  ${apiKey}  ${companyId}  ${publicId}  ${languageResetCount}  ${ivr_config_data}  ${bool[1]}  ${bool[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${gender}=  Random Element    ${Genderlist}
@@ -318,7 +318,7 @@ JD-TC-Create_Provider_Schedule-1
         ${clid}=    Evaluate    f'{${clid}:0>9d}'
         Log  ${clid}
         Set Suite Variable  ${clid}  9${clid}
-        Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
+        Set Test Variable     ${clid_row}  ${countryCodes[0]}${clid}
 
       
 
@@ -338,7 +338,7 @@ JD-TC-Create_Provider_Schedule-1
         Log  ${resp.json()}
         Set Test Variable  ${sch_id}  ${resp.json()}
 
-        ${resp}=  IVR Update User Language    ${u_id${i}}    ${ivr_language[0]}
+        ${resp}=  IVR Update User Language    ${u_id${i}}  ${ivr_language[0]}
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 

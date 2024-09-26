@@ -27,7 +27,7 @@ JD-TC-ProviderGetApptRequestCount-1
 
     [Documentation]   Provider get an appt request Count and verify it.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME127}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -41,7 +41,7 @@ JD-TC-ProviderGetApptRequestCount-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${acc_id1}  ${resp.json()['id']}
 
-    clear_appt_schedule   ${PUSERNAME17}
+    clear_appt_schedule   ${PUSERNAME127}
 
     ${SERVICE1}=    FakerLibrary.word
     ${service_duration}=   Random Int   min=5   max=10
@@ -49,9 +49,8 @@ JD-TC-ProviderGetApptRequestCount-1
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500
 
-    ${resp}=  Create Service  ${SERVICE1}   ${desc}   ${service_duration}   ${status[0]}  
-    ...  ${btype}   ${bool[1]}   ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]} 
-    ...   ${bool[1]}   date=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
+    ${resp}=  Create Service  ${SERVICE1}   ${desc}   ${service_duration}   ${bool[0]}  ${servicecharge}  ${bool[0]}
+    ...     date=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid1}   ${resp.json()}
@@ -66,9 +65,8 @@ JD-TC-ProviderGetApptRequestCount-1
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500
 
-    ${resp}=  Create Service  ${SERVICE2}   ${desc}   ${service_duration}   ${status[0]}  
-    ...  ${btype}   ${bool[1]}   ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]} 
-    ...   ${bool[1]}   dateTime=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
+    ${resp}=  Create Service  ${SERVICE2}   ${desc}   ${service_duration}   ${bool[0]}  ${servicecharge}  ${bool[0]}
+    ...     dateTime=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid2}  ${resp.json()}
@@ -161,7 +159,7 @@ JD-TC-ProviderGetApptRequestCount-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME127}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -174,7 +172,7 @@ JD-TC-ProviderGetApptRequestCount-2
 
     [Documentation]   Provider get multiple appt request Count and verify it.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME127}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -226,7 +224,7 @@ JD-TC-ProviderGetApptRequestCount-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME127}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Provider Get Appt Service Request Count
@@ -238,7 +236,7 @@ JD-TC-ProviderGetApptRequestCount-3
 
     [Documentation]   Provider create appt request Count for a provider consumers family member and verify it.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME127}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -278,7 +276,7 @@ JD-TC-ProviderGetApptRequestCount-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME127}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -305,7 +303,7 @@ JD-TC-ProviderGetApptRequestCount-5
 
     [Documentation]   Provider get an appt request Count with location filter.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME127}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -337,7 +335,7 @@ JD-TC-ProviderGetApptRequestCount-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME127}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -350,7 +348,7 @@ JD-TC-ProviderGetApptRequestCount-6
 
     [Documentation]   Provider get an appt request count with schedule filter.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME127}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -369,7 +367,7 @@ JD-TC-ProviderGetApptRequestCount-7
 
     [Documentation]   Provider get an appt request Count with location and schedule filter.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME127}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -402,7 +400,7 @@ JD-TC-ProviderGetApptRequestCount-UH2
 
     [Documentation]    get an appt request Count by consumer login.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME127}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
