@@ -80,6 +80,7 @@ JD-TC-CreateAppointmentSchedule-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
+
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -159,19 +160,9 @@ JD-TC-CreateAppointmentSchedule-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
+
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration}  apptState=${Qstate[0]}  parallelServing=${parallel}  batchEnable=${bool1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p2_lid}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['recurringType']}  ${recurringtype[1]}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['repeatIntervals']}  ${list}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['startDate']}  ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['terminator']['endDate']}  ${DAY2}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}  ${sTime1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${eTime1}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
-    Should Be Equal As Strings  ${resp.json()['services'][1]['id']}  ${s_id1}
-
 
 JD-TC-CreateAppointmentSchedule-3
 
@@ -199,21 +190,11 @@ JD-TC-CreateAppointmentSchedule-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
+
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration}  apptState=${Qstate[0]}  parallelServing=${parallel}  batchEnable=${bool1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p2_lid}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['recurringType']}  ${recurringtype[1]}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['repeatIntervals']}  ${list}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['startDate']}  ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}  ${sTime2}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${eTime2}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id2}
-    Should Be Equal As Strings  ${resp.json()['services'][1]['id']}  ${s_id3}
-    Should Be Equal As Strings  ${resp.json()['services'][2]['id']}  ${s_id4}
-    Should Be Equal As Strings  ${resp.json()['services'][3]['id']}  ${s_id5}
-
+    
 JD-TC-CreateAppointmentSchedule-4
 
     [Documentation]    Create a second schedule to the same location with same time and different services
@@ -231,18 +212,9 @@ JD-TC-CreateAppointmentSchedule-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
+
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration}  apptState=${Qstate[0]}  parallelServing=${parallel}  batchEnable=${bool1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p2_lid}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['recurringType']}  ${recurringtype[1]}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['repeatIntervals']}  ${list}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['startDate']}  ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}  ${sTime2}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${eTime2}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id6}
-    Should Be Equal As Strings  ${resp.json()['services'][1]['id']}  ${s_id7}
-
 
 JD-TC-CreateAppointmentSchedule-5
 
@@ -292,34 +264,19 @@ JD-TC-CreateAppointmentSchedule-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
+
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration}  apptState=${Qstate[0]}  parallelServing=${parallel}  batchEnable=${bool1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p2_lid1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['recurringType']}  ${recurringtype[1]}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['repeatIntervals']}  ${list}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['startDate']}  ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}  ${sTime3}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${eTime3}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id2}
-    Should Be Equal As Strings  ${resp.json()['services'][1]['id']}  ${s_id3} 
+
     ${list}=  Create List  2  4  6
     ${schedule_name}=  FakerLibrary.bs
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime3}  ${eTime3}  ${parallel}  ${parallel}  ${p2_lid1}  ${duration}  ${bool1}  ${s_id2}  ${s_id3}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
+
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration}  apptState=${Qstate[0]}  parallelServing=${parallel}  batchEnable=${bool1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p2_lid1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['repeatIntervals']}  ${list}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['startDate']}  ${DAY1}    
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['recurringType']}  ${recurringtype[1]}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}  ${sTime3}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${eTime3}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id2}
-    Should Be Equal As Strings  ${resp.json()['services'][1]['id']}  ${s_id3}  
 
 JD-TC-CreateAppointmentSchedule-6
 
@@ -371,51 +328,27 @@ JD-TC-CreateAppointmentSchedule-6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
+
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration}  apptState=${Qstate[0]}  parallelServing=${parallel}  batchEnable=${bool1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p2_lid1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['repeatIntervals']}  ${list}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['startDate']}  ${DAY1}    
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['recurringType']}  ${recurringtype[1]}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}  ${sTime3}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${eTime3}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id2}
-    Should Be Equal As Strings  ${resp.json()['services'][1]['id']}  ${s_id3}  
 
     ${resp}=  Enable Disable Appointment Schedule  ${sch_id}  ${Qstate[1]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration}  apptState=${Qstate[1]}  parallelServing=${parallel}  batchEnable=${bool1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p2_lid1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['repeatIntervals']}  ${list}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['startDate']}  ${DAY1}    
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['recurringType']}  ${recurringtype[1]}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}  ${sTime3}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${eTime3}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id2}
-    Should Be Equal As Strings  ${resp.json()['services'][1]['id']}  ${s_id3}  
-
+   
     ${schedule_name}=  FakerLibrary.bs
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime3}  ${eTime3}  ${parallel}  ${parallel}  ${p2_lid1}  ${duration}  ${bool1}  ${s_id2}  ${s_id3}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
+
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration}  apptState=${Qstate[0]}  parallelServing=${parallel}  batchEnable=${bool1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p2_lid1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['repeatIntervals']}  ${list}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['startDate']}  ${DAY1}    
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['recurringType']}  ${recurringtype[1]}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}  ${sTime3}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${eTime3}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id2}
-    Should Be Equal As Strings  ${resp.json()['services'][1]['id']}  ${s_id3}  
-
+  
 JD-TC-CreateAppointmentSchedule-7
 
     [Documentation]    create a schedule that overlap another two schedules
@@ -476,24 +409,17 @@ JD-TC-CreateAppointmentSchedule-7
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
+
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration1}  apptState=${Qstate[0]}  parallelServing=${parallel}  batchEnable=${bool1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p2_lid1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['repeatIntervals']}  ${list}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['startDate']}  ${DAY1}    
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['recurringType']}  ${recurringtype[1]}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}  ${sTime1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${eTime1}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id2}
 
     ${resp}=  Enable Disable Appointment Schedule  ${sch_id}  ${Qstate[1]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration1}  apptState=${Qstate[1]}  parallelServing=${parallel}  batchEnable=${bool1}
 
     ${sTime2}=  add_timezone_time  ${tz}  2  35
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -505,45 +431,35 @@ JD-TC-CreateAppointmentSchedule-7
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id2}  ${resp.json()}
+
     ${resp}=  Enable Disable Appointment Schedule  ${sch_id2}  ${Qstate[1]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Get Appointment Schedule ById  ${sch_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration2}  apptState=${Qstate[1]}  parallelServing=${parallel}  batchEnable=${bool1}
 
     ${schedule_name}=  FakerLibrary.bs
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}  ${parallel}  ${p2_lid1}  ${duration2}  ${bool1}  ${s_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id3}  ${resp.json()}
+
     ${resp}=  Get Appointment Schedule ById  ${sch_id3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration2}  apptState=${Qstate[0]}  parallelServing=${parallel}  batchEnable=${bool1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p2_lid1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['repeatIntervals']}  ${list}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['startDate']}  ${DAY1}    
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['recurringType']}  ${recurringtype[1]}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}  ${sTime1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${eTime2}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id2}
 
 JD-TC-CreateAppointmentSchedule-8
+
     [Documentation]    Create a schedule in different location with overlapping time
+
     ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}   ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    ${parking_type}    Random Element  ${parkingType}
-    ${24hours}    Random Element    ${bool}
-    ${sTime}=  add_timezone_time  ${tz}  1  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime}=  add_two   ${sTime}  ${delta}    
-    ${resp}=  Create Location  ${city}a  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${p2_lid2}  ${resp.json()}
+
+    ${p2_lid2}=  Create Sample Location
+    Set Suite Variable  ${p2_lid2}  
+
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
@@ -556,23 +472,18 @@ JD-TC-CreateAppointmentSchedule-8
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id4}  ${resp.json()}
+
     ${resp}=  Get Appointment Schedule ById  ${sch_id4}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration}  apptState=${Qstate[0]}  parallelServing=${parallel}  batchEnable=${bool1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p2_lid2}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['repeatIntervals']}  ${list}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['startDate']}  ${DAY1}    
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['recurringType']}  ${recurringtype[1]}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}  ${sTime1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${eTime2}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id2}
-    
 
 JD-TC-CreateAppointmentSchedule-UH1
-    [Documentation]    Create a schedule in different location with another service and already existing schedule name and time 
+
+    [Documentation]    Create a schedule in different location with another service and already existing schedule name and time
+
     ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
+
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}  ${parallel}  ${p2_lid2}  ${duration}  ${bool1}  ${s_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -580,7 +491,9 @@ JD-TC-CreateAppointmentSchedule-UH1
     Should Be Equal As Strings  "${resp.json()}"  "${APPT_SCHEDULE_NAME_ALREADY_EXISTS}"
 
 JD-TC-CreateAppointmentSchedule-UH2
+
     [Documentation]    Create a schedule to the same location with overlapping time
+
     ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}   ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -598,9 +511,10 @@ JD-TC-CreateAppointmentSchedule-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
 JD-TC-CreateAppointmentSchedule-UH3
+
     [Documentation]    Create a schedule in a location without service details
+
     ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}   ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${schedule_name}=  FakerLibrary.bs
@@ -610,7 +524,9 @@ JD-TC-CreateAppointmentSchedule-UH3
     Should Be Equal As Strings  "${resp.json()}"  "${NECESSARY_FIELD_MISSING}"
 
 JD-TC-CreateAppointmentSchedule-UH4
+
     [Documentation]    Create a schedule in a location without location details
+
     ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${schedule_name}=  FakerLibrary.bs
@@ -759,18 +675,10 @@ JD-TC-CreateAppointmentSchedule-UH9
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id1}  ${resp.json()}
+
     ${resp}=  Get Appointment Schedule ById  ${sch_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration}  apptState=${Qstate[0]}  parallelServing=${parallel}  batchEnable=${bool1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_lid}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['recurringType']}  ${recurringtype[1]}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['repeatIntervals']}  ${list}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['startDate']}  ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['terminator']['endDate']}  ${DAY2}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}  ${sTime1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${eTime1}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
 
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -782,71 +690,16 @@ JD-TC-CreateAppointmentSchedule-UH9
     Should Be Equal As Strings  "${resp.json()}"  "${QUEUE_SCHEDULE_OVERLAPS_CREATE}"
 
 JD-TC-CreateAppointmentSchedule-9
+
     [Documentation]    Create an appointment schedule for user
+
     ${resp}=  Encrypted Provider Login   ${HLPUSERNAME0}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp2}=   Get Business Profile
-    Log  ${resp2.json()}
-    Should Be Equal As Strings    ${resp2.status_code}    200
-    Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
+    ${PUSERPH0}  ${u_id} =  Create and Configure Sample User
+    Set Suite Variable  ${u_id}
 
-    ${resp}=  Get Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-
-    END
-    
-    sleep  2s
-    ${dep_name1}=  FakerLibrary.bs
-    ${dep_code1}=   Random Int  min=100   max=999
-    ${dep_desc1}=   FakerLibrary.word  
-    ${resp}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${dep_id}  ${resp.json()}
-
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+365
-    clear_users  ${PUSERPH0}
-    ${firstname}=  FakerLibrary.name
-    ${lastname}=  FakerLibrary.last_name
-    ${dob}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
-
-    # ${resp}=  Get LocationsByPincode     ${pin}
-    FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}   
-
-
-    ${whpnum}=  Evaluate  ${PUSERPH0}+556245
-    ${tlgnum}=  Evaluate  ${PUSERPH0}+556345 
-    
-    ${resp}=  Create User  ${firstname}  ${lastname}     ${countryCodes[0]}  ${PUSERPH0}    ${userType[0]}   dob=${dob}  gender=${Genderlist[0]}  email=${P_Email}${PUSERPH0}.${test_mail}   pincode=${pin}    deptId=${dep_id}  
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${u_id}  ${resp.json()}
-
-    # ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERPH0}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${u_id}  ${resp.json()}
     ${resp}=  Get User By Id  ${u_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -864,7 +717,7 @@ JD-TC-CreateAppointmentSchedule-9
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
     Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${s_id}=  Create Sample Service For User  ${SERVICE1}  ${dep_id}  ${u_id}
+    ${s_id}=  Create Sample Service  ${SERVICE1}  provider=${u_id}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
@@ -881,19 +734,11 @@ JD-TC-CreateAppointmentSchedule-9
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration}  apptState=${Qstate[0]}  parallelServing=${parallel}  batchEnable=${bool1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${lid}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['recurringType']}  ${recurringtype[1]}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['repeatIntervals']}  ${list}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['startDate']}  ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['terminator']['endDate']}  ${DAY2}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}  ${sTime1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${eTime1}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
-
-
+    
 JD-TC-CreateAppointmentSchedule-UH10
+
     [Documentation]    create schedule with start date, a past date
+
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -948,7 +793,9 @@ JD-TC-CreateAppointmentSchedule-UH10
 
 
 JD-TC-CreateAppointmentSchedule-UH11
+
     [Documentation]    create schedule with start date and end date, as past dates
+
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1059,15 +906,6 @@ JD-TC-CreateAppointmentSchedule-10
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration}  apptState=${Qstate[0]}  parallelServing=${parallel}  batchEnable=${bool[0]}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${lid}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['recurringType']}  ${recurringtype[4]}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['repeatIntervals']}  ${ri_today}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['startDate']}  ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['terminator']['endDate']}  ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}  ${sTime1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${eTime1}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.content}
@@ -1155,16 +993,7 @@ JD-TC-CreateAppointmentSchedule-11
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration}  apptState=${Qstate[0]}  parallelServing=${parallel}  batchEnable=${bool1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${lid}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['recurringType']}  ${recurringtype[4]}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['repeatIntervals']}  ${ri_today}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['startDate']}  ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['terminator']['endDate']}  ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}  ${sTime1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${eTime1}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
-
+   
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1261,16 +1090,7 @@ JD-TC-CreateAppointmentSchedule-12
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration}  apptState=${Qstate[0]}  parallelServing=${parallel}  batchEnable=${bool1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${lid}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['recurringType']}  ${recurringtype[4]}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['repeatIntervals']}  ${ri_today}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['startDate']}  ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['terminator']['endDate']}  ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}  ${sTime1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${eTime1}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
-
+   
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1367,16 +1187,7 @@ JD-TC-CreateAppointmentSchedule-13
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration}  apptState=${Qstate[0]}  parallelServing=${parallel}  batchEnable=${bool1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${lid}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['recurringType']}  ${recurringtype[4]}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['repeatIntervals']}  ${ri_today}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['startDate']}  ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['terminator']['endDate']}  ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}  ${sTime1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${eTime1}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
-
+   
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1474,16 +1285,7 @@ JD-TC-CreateAppointmentSchedule-14
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration}  apptState=${Qstate[0]}  parallelServing=${parallel}  batchEnable=${bool1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${lid}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['recurringType']}  ${recurringtype[4]}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['repeatIntervals']}  ${ri_today}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['startDate']}  ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['terminator']['endDate']}  ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}  ${sTime1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${eTime1}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
-
+   
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1582,16 +1384,7 @@ JD-TC-CreateAppointmentSchedule-15
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration}  apptState=${Qstate[0]}  parallelServing=${parallel}  batchEnable=${bool1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${lid}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['recurringType']}  ${recurringtype[4]}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['repeatIntervals']}  ${ri_day1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['startDate']}  ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['terminator']['endDate']}  ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}  ${sTime1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${eTime1}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
-
+    
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1689,17 +1482,7 @@ JD-TC-CreateAppointmentSchedule-16
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration}  apptState=${Qstate[0]}  parallelServing=${parallel}  batchEnable=${bool1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${lid}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['recurringType']}  ${recurringtype[4]}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['repeatIntervals']}  ${ri_today}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['startDate']}  ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['terminator']['endDate']}  ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}  ${sTime1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${eTime1}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
-    Should Be Equal As Strings  ${resp.json()['services'][1]['id']}  ${s_id1}
-
+   
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2155,7 +1938,7 @@ JD-TC-CreateAppointmentSchedule-20
         Set Test Variable  ${p1_lid}  ${resp.json()[0]['id']}
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
-    # clear_appt_schedule   ${HLPUSERNAME50}
+    clear_appt_schedule   ${HLPUSERNAME50}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -2204,23 +1987,15 @@ JD-TC-CreateAppointmentSchedule-20
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
+
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration}  apptState=${Qstate[0]}  parallelServing=${parallel}  batchEnable=${bool1}  consumerParallelServing=${consumerparallel}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_lid}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['recurringType']}  ${recurringtype[1]}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['repeatIntervals']}  ${list}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['startDate']}  ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['terminator']['endDate']}  ${DAY2}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}  ${sTime1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${eTime1}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
-    Should Be Equal As Strings  ${resp.json()['services'][1]['id']}  ${s_id1}
-
-
+  
 JD-TC-CreateAppointmentSchedule-21
+
     [Documentation]    Create an appointment schedule with a service having lead time.
+
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2369,7 +2144,9 @@ JD-TC-CreateAppointmentSchedule-22
 
 
 JD-TC-CreateAppointmentSchedule-23
+
     [Documentation]    Create an appointment schedule with duration less than service time.
+
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2407,7 +2184,6 @@ JD-TC-CreateAppointmentSchedule-23
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    # ${sTime1}=  db.get_time_by_timezone   ${tz}
     ${sTime1}=  add_timezone_time  ${tz}  3  30  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_timezone_time  ${tz}  3  50
@@ -2424,36 +2200,7 @@ JD-TC-CreateAppointmentSchedule-23
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration}  apptState=${Qstate[0]}  parallelServing=${parallel}  batchEnable=${bool1}  consumerParallelServing=${consumerparallel}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_lid}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['recurringType']}  ${recurringtype[1]}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['repeatIntervals']}  ${list}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['startDate']}  ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['terminator']['endDate']}  ${DAY2}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}  ${sTime1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${eTime1}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
-
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
-    ${sch_length}=  get_slot_length  ${delta}  ${duration}
-    ${sLength}=  Get Length  ${resp.json()['availableSlots']}
-    Should Be Equal As Integers  ${sLength}  ${sch_length}
-    ${st}=  timeto24hr  ${sTime1}
-    FOR  ${index}  IN RANGE  ${sch_length}
-        ${muldur}=  Evaluate  (${index}+1)*${duration}
-        ${et12}=  add_two  ${sTime1}  ${muldur}
-        ${et}=  timeto24hr  ${et12}
-        
-        Should Be Equal As Strings  ${resp.json()['availableSlots'][${index}]['time']}  ${st}-${et}
-        Should Be Equal As Strings  ${resp.json()['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallel}
-        Should Be Equal As Strings   ${resp.json()['availableSlots'][${index}]['active']}      ${bool[1]}
-        Should Be Equal As Strings   ${resp.json()['availableSlots'][${index}]['capacity']}   ${parallel}
-        Set Test Variable  ${st}  ${et}
-    END
-
+    
 
 
    

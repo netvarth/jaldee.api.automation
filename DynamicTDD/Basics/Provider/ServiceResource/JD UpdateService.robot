@@ -44,14 +44,14 @@ JD-TC-UpdateService-1
         ${Total}=   Random Int   min=100   max=500
         ${min_pre}=  Convert To Number  ${min_pre}  1
         ${Total}=  Convert To Number  ${Total}  1
-        ${resp}=  Create Service  ${SERVICE1}  ${description}   ${service_duration[2]}  ${status[0]}  ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}   ${Total}  ${bool[1]}  ${bool[0]}
+        ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[2]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200 
         Set Suite Variable  ${id1}  ${resp.json()} 
         ${resp}=   Get Service By Id  ${id1}
         Should Be Equal As Strings  ${resp.status_code}  200
         Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[2]}   notification=${bool[1]}   notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
-        ${resp}=  Update Service  ${id1}  ${SERVICE2}  ${description}   ${service_duration[3]}   ${status[0]}    ${btype}   ${bool[0]}  ${notifytype[0]}  ${min_pre}   ${Total}    ${bool[1]}  ${bool[0]}
+        ${resp}=  Update Service  ${id1}  ${SERVICE2}  ${description}  ${service_duration[3]}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[0]}  ${min_pre}  ${Total}  ${bool[1]}  ${bool[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp}=   Get Service By Id  ${id1}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -67,13 +67,13 @@ JD-TC-UpdateService-2
         ${Total}=   Random Int   min=100   max=500
         ${min_pre}=  Convert To Number  ${min_pre}  1
         ${Total}=  Convert To Number  ${Total}  1
-        ${resp}=  Create Service  ${SERVICE5}  ${description}   ${service_duration[2]}   ${status[0]}  ${btype}  ${bool[1]}    ${notifytype[2]}   ${min_pre}  ${Total}  ${bool[1]}  ${bool[0]}
+        ${resp}=  Create Service  ${SERVICE5}  ${description}  ${service_duration[2]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable   ${id}  ${resp.json()}
         ${resp}=   Get Service By Id  ${id}
         Should Be Equal As Strings  ${resp.status_code}  200
         Verify Response  ${resp}  name=${SERVICE5}  description=${description}  serviceDuration=${service_duration[2]}   notification=${bool[1]}   notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}   bType=${btype}  isPrePayment=${bool[1]}
-        ${resp}=  Update Service  ${id}  ${SERVICE5}  ${description}   ${service_duration[3]}  ${status[0]}  ${btype}  ${bool[0]}   ${notifytype[0]}  ${min_pre}  ${Total}  ${bool[1]}  ${bool[0]}
+        ${resp}=  Update Service  ${id}  ${SERVICE5}  ${description}  ${service_duration[3]}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[0]}  ${min_pre}  ${Total}  ${bool[1]}  ${bool[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp}=   Get Service By Id  ${id}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -92,12 +92,12 @@ JD-TC-UpdateService-3
         ${resp}=  Create Service  ${SERVICE4}  ${description}  ${service_duration[1]}  ${status[0]}  ${btype}  ${bool[1]}  ${notifytype[1]}  ${EMPTY}  ${Total}  ${bool[0]}  ${bool[0]}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable   ${id4}   ${resp.json()}
+        Set Suite Variable   ${id4}  ${resp.json()}
         ${resp}=   Get Service By Id  ${id4}
         Verify Response  ${resp}  name=${SERVICE4}  description=${description}   serviceDuration=${service_duration[1]}    notification=${bool[1]}  notificationType=${notifytype[1]}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[0]}
         ${min_pre1}=   FakerLibrary.pyfloat   left_digits=2   right_digits=2   positive=True
         ${Total1}=   FakerLibrary.pyfloat   left_digits=3   right_digits=2   positive=True
-        ${resp}=  Update Service  ${id4}  ${SERVICE14}   ${description}   ${service_duration[3]}  ${status[0]}  ${btype}  ${bool[1]}   ${notifytype[2]}  ${EMPTY}  ${Total1}  ${bool[0]}  ${bool[0]}
+        ${resp}=  Update Service  ${id4}  ${SERVICE14}  ${description}  ${service_duration[3]}  ${status[0]}  ${btype}  ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${Total1}  ${bool[0]}  ${bool[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp}=   Get Service By Id  ${id4}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -114,13 +114,13 @@ JD-TC-UpdateService-4
         ${Total}=   Random Int   min=100   max=500
         ${min_pre}=  Convert To Number  ${min_pre}  1
         ${Total}=  Convert To Number  ${Total}  1
-        ${resp}=  Create Service  ${SERVICE6}  ${description}   ${service_duration[3]}  ${status[0]}  ${btype}  ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[0]}
+        ${resp}=  Create Service  ${SERVICE6}  ${description}  ${service_duration[3]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable   ${id}  ${resp.json()}
         ${resp}=   Get Service By Id  ${id}
         Should Be Equal As Strings  ${resp.status_code}  200
         Verify Response  ${resp}  name=${SERVICE6}  description=${description}   serviceDuration=${service_duration[3]}   notification=${bool[1]}   notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
-        ${resp}=  Update Service  ${id}  ${SERVICE6}  ${description}   ${service_duration[2]}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[0]}  0  ${Total}  ${bool[0]}   ${bool[0]}
+        ${resp}=  Update Service  ${id}  ${SERVICE6}  ${description}  ${service_duration[2]}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[0]}  0  ${Total}  ${bool[0]}  ${bool[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp}=   Get Service By Id  ${id}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -154,7 +154,7 @@ JD-TC-UpdateService-UH1
         [Documentation]  Update a service name to  an already existing name
         ${billable_domains}=  get_billable_domain
         Set Test Variable  ${domains}  ${billable_domains[0]}
-        Set Test Variable  ${sub_domains}   ${billable_domains[1]}
+        Set Test Variable  ${sub_domains}  ${billable_domains[1]}
         ${firstname}=  FakerLibrary.first_name
         ${lastname}=  FakerLibrary.last_name
         ${address}=  FakerLibrary.address
@@ -181,13 +181,13 @@ JD-TC-UpdateService-UH1
         ${Total}=   Random Int   min=100   max=500
         ${min_pre}=  Convert To Number  ${min_pre}  1
         ${Total}=  Convert To Number  ${Total}  1
-        ${resp}=  Create Service  ${SERVICE1}  ${description}   ${service_duration[3]}  ${status[0]}  ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[0]}
+        ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[3]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${id1}  ${resp.json()}
         ${resp}=   Get Service By Id  ${id1}
         Should Be Equal As Strings  ${resp.status_code}  200 
         Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[3]}   notification=${bool[1]}   notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
-        ${resp}=  Create Service  ${SERVICE2}  ${description}   ${service_duration[4]}  ${status[0]}  ${btype}     ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[0]}
+        ${resp}=  Create Service  ${SERVICE2}  ${description}  ${service_duration[4]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${id2}  ${resp.json()} 
         ${resp}=   Get Service By Id  ${id2}
@@ -195,9 +195,9 @@ JD-TC-UpdateService-UH1
         Verify Response  ${resp}  name=${SERVICE2}  description=${description}  serviceDuration=${service_duration[4]}   notification=${bool[1]}   notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
         ${min_pre1}=   FakerLibrary.pyfloat   left_digits=2   right_digits=2   positive=True
         ${Total1}=   FakerLibrary.pyfloat   left_digits=3   right_digits=2   positive=True
-        ${resp}=  Update Service  ${id1}  ${SERVICE2}  ${description}   ${service_duration[4]}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[1]}  ${min_pre1}  ${Total1}  ${bool[1]}   ${bool[0]}
+        ${resp}=  Update Service  ${id1}  ${SERVICE2}  ${description}  ${service_duration[4]}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[1]}  ${min_pre1}  ${Total1}  ${bool[1]}  ${bool[0]}
         Should Be Equal As Strings  ${resp.status_code}  422
-        Should Be Equal As Strings   ${resp.json()}   ${SERVICE_CANT_BE_SAME}
+        Should Be Equal As Strings   ${resp.json()}  ${SERVICE_CANT_BE_SAME}
 
 JD-TC-UpdateService-UH2
 
@@ -207,9 +207,9 @@ JD-TC-UpdateService-UH2
         ${Total}=   Random Int   min=100   max=500
         ${min_pre}=  Convert To Number  ${min_pre}  1
         ${Total}=  Convert To Number  ${Total}  1
-        ${resp}=  Update Service  ${id}  ${SERVICE1}  ${description}  ${service_duration[3]}  ${status[0]}  ${btype}  ${bool[1]}  ${notifytype[2]}   ${min_pre}   ${Total}  ${bool[1]}   ${bool[0]}
+        ${resp}=  Update Service  ${id}  ${SERVICE1}  ${description}  ${service_duration[3]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
         Should Be Equal As Strings  ${resp.status_code}  419
-        Should Be Equal As Strings   ${resp.json()}    ${SESSION_EXPIRED}
+        Should Be Equal As Strings   ${resp.json()}  ${SESSION_EXPIRED}
 
 
 JD-TC-UpdateService-UH3
@@ -222,9 +222,9 @@ JD-TC-UpdateService-UH3
         ${Total}=  Convert To Number  ${Total}  1
         ${resp}=  ConsumerLogin  ${CUSERNAME8}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp}=  Update Service  ${id}  ${SERVICE1}  ${description}  ${service_duration[3]}  ${status[0]}  ${btype}  ${bool[1]}  ${notifytype[2]}  ${min_pre}   ${Total}  ${bool[1]}   ${bool[0]}
+        ${resp}=  Update Service  ${id}  ${SERVICE1}  ${description}  ${service_duration[3]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
         Should Be Equal As Strings  ${resp.status_code}  401
-        Should Be Equal As Strings   ${resp.json()}    ${LOGIN_NO_ACCESS_FOR_URL}
+        Should Be Equal As Strings   ${resp.json()}  ${LOGIN_NO_ACCESS_FOR_URL}
 
 
 JD-TC-UpdateService-UH4
@@ -237,16 +237,16 @@ JD-TC-UpdateService-UH4
         ${resp}=  Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         clear_service       ${PUSERNAME69}
-        ${resp}=  Create Service  ${SERVICE1}  ${description}   ${service_duration[3]}  ${status[0]}  ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}   ${Total}   ${bool[1]}   ${bool[0]}
+        ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[3]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${id123}  ${resp.json()}
         ${resp}=  ProviderLogout
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp}=  Encrypted Provider Login  ${PUSERNAME63}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${resp}=  Update Service  ${id123}  ${SERVICE2}  ${description}  ${service_duration[3]}  ${status[0]}  ${btype}  ${bool[1]}    ${notifytype[2]}  ${min_pre}   ${Total}   ${bool[1]}   ${bool[0]}
+        ${resp}=  Update Service  ${id123}  ${SERVICE2}  ${description}  ${service_duration[3]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
         Should Be Equal As Strings  ${resp.status_code}  401
-        Should Be Equal As Strings   ${resp.json()}    ${NO_PERMISSION}
+        Should Be Equal As Strings   ${resp.json()}  ${NO_PERMISSION}
 
 JD-TC-UpdateService-UH6
 
@@ -260,14 +260,14 @@ JD-TC-UpdateService-UH6
         ${Total}=   Random Int   min=21   max=40
         ${min_pre}=  Convert To Number  ${min_pre}  0
         ${Total}=  Convert To Number  ${Total}  0
-        ${resp}=  Create Service  ${SERVICE8}  ${description}   ${service_duration[2]}  ${status[0]}  ${btype}  ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}  ${bool[0]}
+        ${resp}=  Create Service  ${SERVICE8}  ${description}  ${service_duration[2]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable   ${id}  ${resp.json()}
         ${resp}=   Get Service By Id  ${id}
         Should Be Equal As Strings  ${resp.status_code}  200
         Verify Response  ${resp}  name=${SERVICE8}  description=${description}  serviceDuration=${service_duration[2]}  notification=${bool[1]}  notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
-        ${resp}=  Update Service  ${id}  ${SERVICE8}  ${description}   ${service_duration[3]}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[0]}  ${min_pre}  0  ${bool[1]}  ${bool[0]}
+        ${resp}=  Update Service  ${id}  ${SERVICE8}  ${description}  ${service_duration[3]}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[0]}  ${min_pre}  0  ${bool[1]}  ${bool[0]}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         #Should Be Equal As Strings  "${resp.json()}"  "${PREPAYMENT_AMT_LT_PRICE}"
@@ -283,13 +283,13 @@ JD-TC-UpdateService-UH7
         ${Total}=   Random Int   min=100   max=500
         ${min_pre}=  Convert To Number  ${min_pre}  1
         ${Total}=  Convert To Number  ${Total}  1
-        ${resp}=  Create Service  ${SERVICE9}  ${description}   ${service_duration[2]}   ${status[0]}  ${btype}  ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}  ${bool[0]}
+        ${resp}=  Create Service  ${SERVICE9}  ${description}  ${service_duration[2]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable   ${id}  ${resp.json()}
         ${resp}=   Get Service By Id  ${id}
         Should Be Equal As Strings  ${resp.status_code}  200
         Verify Response  ${resp}  name=${SERVICE9}  description=${description}  serviceDuration=${service_duration[2]}  notification=${bool[1]}  notificationType=${notifytype[2]}  minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
-        ${resp}=  Update Service  ${id}  ${SERVICE10}  ${description}   ${service_duration[3]}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[0]}  0  ${Total}  ${bool[1]}  ${bool[0]}
+        ${resp}=  Update Service  ${id}  ${SERVICE10}  ${description}  ${service_duration[3]}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[0]}  0  ${Total}  ${bool[1]}  ${bool[0]}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  422
         Should Be Equal As Strings  "${resp.json()}"  "${MINIMUM_PREPAYMENT_AMOUNT_SHOULD_BE_PROVIDED}"   
@@ -314,7 +314,7 @@ JD-TC-UpdateService-6
         ${servicecharge}=   Random Int  min=100  max=500
         ${srv_duration}=   Random Int   min=10   max=20
         ${maxbookings}=   Random Int   min=1   max=5
-        ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[0]}  ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  maxBookingsAllowed=${maxbookings}
+        ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  maxBookingsAllowed=${maxbookings}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}   200
         Set Test Variable  ${s_id}  ${resp.json()}
@@ -324,7 +324,7 @@ JD-TC-UpdateService-6
         Verify Response  ${resp}  name=${SERVICE1}  serviceDuration=${srv_duration}  status=${status[0]}  maxBookingsAllowed=${maxbookings}
 
         ${maxbookings}=   Random Int   min=5   max=10
-        ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}   ${srv_duration}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  maxBookingsAllowed=${maxbookings}
+        ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}  ${srv_duration}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  maxBookingsAllowed=${maxbookings}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -352,7 +352,7 @@ JD-TC-UpdateService-7
         ${servicecharge}=   Random Int  min=100  max=500
         ${srv_duration}=   Random Int   min=10   max=20
         # ${maxbookings}=   Random Int   min=1   max=5
-        ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[0]}  ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  priceDynamic=${bool[1]}
+        ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  priceDynamic=${bool[1]}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}   200
         Set Test Variable  ${s_id}  ${resp.json()}
@@ -362,7 +362,7 @@ JD-TC-UpdateService-7
         Verify Response  ${resp}  name=${SERVICE1}  serviceDuration=${srv_duration}  status=${status[0]}  priceDynamic=${bool[1]}
 
         # ${maxbookings}=   Random Int   min=5   max=10
-        ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}   ${srv_duration}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  priceDynamic=${bool[0]}
+        ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}  ${srv_duration}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  priceDynamic=${bool[0]}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -370,7 +370,7 @@ JD-TC-UpdateService-7
         Should Be Equal As Strings  ${resp.status_code}  200
         Verify Response  ${resp}  name=${SERVICE1}  serviceDuration=${srv_duration}  status=${status[0]}  priceDynamic=${bool[0]}
 
-        ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}   ${srv_duration}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  priceDynamic=${bool[1]}
+        ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}  ${srv_duration}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  priceDynamic=${bool[1]}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -397,7 +397,7 @@ JD-TC-UpdateService-8
         ${servicecharge}=   Random Int  min=100  max=500
         ${srv_duration}=   Random Int   min=10   max=20
         ${resoucesRequired}=   Random Int   min=1   max=5
-        ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[0]}  ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  resoucesRequired=${resoucesRequired}
+        ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  resoucesRequired=${resoucesRequired}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}   200
         Set Test Variable  ${s_id}  ${resp.json()}
@@ -407,7 +407,7 @@ JD-TC-UpdateService-8
         Verify Response  ${resp}  name=${SERVICE1}  serviceDuration=${srv_duration}  status=${status[0]}  resoucesRequired=${resoucesRequired}
 
         ${resoucesRequired}=   Random Int   min=5   max=10
-        ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}   ${srv_duration}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  resoucesRequired=${resoucesRequired}
+        ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}  ${srv_duration}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  resoucesRequired=${resoucesRequired}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -434,7 +434,7 @@ JD-TC-UpdateService-9
         ${servicecharge}=   Random Int  min=100  max=500
         ${srv_duration}=   Random Int   min=10   max=20
         ${leadTime}=   Random Int   min=1   max=5
-        ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[0]}  ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  leadTime=${leadTime}
+        ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  leadTime=${leadTime}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}   200
         Set Test Variable  ${s_id}  ${resp.json()}
@@ -444,7 +444,7 @@ JD-TC-UpdateService-9
         Verify Response  ${resp}  name=${SERVICE1}  serviceDuration=${srv_duration}  status=${status[0]}  leadTime=${leadTime}
 
         ${leadTime}=   Random Int   min=5   max=10
-        ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}   ${srv_duration}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  leadTime=${leadTime}
+        ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}  ${srv_duration}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  leadTime=${leadTime}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -472,7 +472,7 @@ JD-TC-UpdateService-10
         ${servicecharge}=   Random Int  min=100  max=500
         ${srv_duration}=   Random Int   min=10   max=20
         
-        ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[0]}  ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}
+        ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}   200
         Set Test Variable  ${s_id}  ${resp.json()}
@@ -484,7 +484,7 @@ JD-TC-UpdateService-10
         ${maxbookings}=   Random Int   min=1   max=10
         ${resoucesRequired}=   Random Int   min=1   max=10
         ${leadTime}=   Random Int   min=1   max=5
-        ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}   ${srv_duration}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  maxBookingsAllowed=${maxbookings}  priceDynamic=${bool[1]}  resoucesRequired=${resoucesRequired}  leadTime=${leadTime}
+        ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}  ${srv_duration}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  maxBookingsAllowed=${maxbookings}  priceDynamic=${bool[1]}  resoucesRequired=${resoucesRequired}  leadTime=${leadTime}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -511,7 +511,7 @@ JD-TC-UpdateService-UH8
         ${servicecharge}=   Random Int  min=100  max=500
         ${srv_duration}=   Random Int   min=10   max=20
         ${maxbookings}=   Random Int   min=1   max=5
-        ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[0]}  ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  maxBookingsAllowed=${maxbookings}
+        ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  maxBookingsAllowed=${maxbookings}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}   200
         Set Test Variable  ${s_id}  ${resp.json()}
@@ -521,7 +521,7 @@ JD-TC-UpdateService-UH8
         Verify Response  ${resp}  name=${SERVICE1}  serviceDuration=${srv_duration}  status=${status[0]}  maxBookingsAllowed=${maxbookings}
 
         ${maxbookings}=   Random Int   min=5   max=10
-        ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}   ${srv_duration}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  maxBookingsAllowed=${EMPTY}
+        ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}  ${srv_duration}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  maxBookingsAllowed=${EMPTY}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -548,7 +548,7 @@ JD-TC-UpdateService-UH9
         ${servicecharge}=   Random Int  min=100  max=500
         ${srv_duration}=   Random Int   min=10   max=20
         ${resoucesRequired}=   Random Int   min=1   max=5
-        ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[0]}  ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  resoucesRequired=${resoucesRequired}
+        ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  resoucesRequired=${resoucesRequired}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}   200
         Set Test Variable  ${s_id}  ${resp.json()}
@@ -558,7 +558,7 @@ JD-TC-UpdateService-UH9
         Verify Response  ${resp}  name=${SERVICE1}  serviceDuration=${srv_duration}  status=${status[0]}  resoucesRequired=${resoucesRequired}
 
         ${resoucesRequired}=   Random Int   min=5   max=10
-        ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}   ${srv_duration}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  resoucesRequired=${EMPTY}
+        ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}  ${srv_duration}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  resoucesRequired=${EMPTY}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -589,7 +589,7 @@ JD-TC-UpdateService-UH10
         ${servicecharge}=   Random Int  min=100  max=500
         ${srv_duration}=   Random Int   min=10   max=20
         ${leadTime}=   Random Int   min=1   max=5
-        ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[0]}  ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  leadTime=${leadTime}
+        ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  leadTime=${leadTime}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}   200
         Set Test Variable  ${s_id}  ${resp.json()}
@@ -599,7 +599,7 @@ JD-TC-UpdateService-UH10
         Verify Response  ${resp}  name=${SERVICE1}  serviceDuration=${srv_duration}  status=${status[0]}  leadTime=${leadTime}
 
         ${leadTime}=   Random Int   min=5   max=10
-        ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}   ${srv_duration}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  leadTime=${EMPTY}
+        ${resp}=  Update Service  ${s_id}  ${SERVICE1}  ${desc}  ${srv_duration}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  leadTime=${EMPTY}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -631,9 +631,9 @@ Billable
 
         # ${domain}=   Set Variable    ${resp.json()['sector']}
         # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
-        ${resp2}=   Get Sub Domain Settings    ${domain}    ${subdomain}
+        ${resp2}=   Get Sub Domain Settings    ${domain}  ${subdomain}
         Should Be Equal As Strings    ${resp.status_code}    200
-        Set Suite Variable  ${check}    ${resp2.json()['serviceBillable']} 
+        Set Suite Variable  ${check}  ${resp2.json()['serviceBillable']} 
         Exit For Loop IF     '${check}' == 'True'
 
     END
@@ -657,9 +657,9 @@ Non Billable
 
         # ${domain}=   Set Variable    ${resp.json()['sector']}
         # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
-        ${resp2}=   Get Sub Domain Settings    ${domain}    ${subdomain}
+        ${resp2}=   Get Sub Domain Settings    ${domain}  ${subdomain}
         Should Be Equal As Strings    ${resp.status_code}    200
-        Set Suite Variable  ${check}    ${resp2.json()['serviceBillable']} 
+        Set Suite Variable  ${check}  ${resp2.json()['serviceBillable']} 
         Exit For Loop IF     '${check}' == 'False'
        
      END

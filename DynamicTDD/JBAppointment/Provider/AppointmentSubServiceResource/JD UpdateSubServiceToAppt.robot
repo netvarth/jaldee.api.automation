@@ -147,8 +147,7 @@ JD-TC-UpdateSubServicesToAppt-1
     ${subser_name}=    FakerLibrary.firstname
     Set Suite Variable   ${subser_name}
 
-    ${resp}=  Create Service    ${subser_name}  ${desc}  ${subser_dur}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${EMPTY}   ${subser_price}
-    ...    ${bool[0]}   ${bool[0]}   serviceCategory=${serviceCategory[0]}
+    ${resp}=  Create Service    ${subser_name}  ${desc}   ${subser_dur}  ${bool[0]}  ${subser_price}  ${bool[0]}   serviceCategory=${serviceCategory[0]}
     Log   ${resp.content}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${subser_id1}  ${resp.json()}
@@ -525,8 +524,7 @@ JD-TC-UpdateSubServicesToAppt-UH5
     ${subser_price}=  Convert To Number  ${subser_price}  1
     ${subser_name}=    FakerLibrary.firstname
    
-    ${resp}=  Create Service    ${subser_name}  ${desc}  ${subser_dur}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${EMPTY}   ${subser_price}
-    ...    ${bool[0]}   ${bool[0]}    serviceCategory=${serviceCategory[0]}
+    ${resp}=  Create Service    ${subser_name}  ${desc}   ${subser_dur}  ${bool[0]}  ${subser_price}  ${bool[0]}    serviceCategory=${serviceCategory[0]}
     Log   ${resp.content}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${subser_id1}  ${resp.json()}
@@ -551,8 +549,7 @@ JD-TC-UpdateSubServicesToAppt-UH5
 
     ${subser_price}=   Random Int   min=0   max=0
 
-    ${resp}=  Update Service    ${subser_id1}  ${subser_name}  ${desc}  ${subser_dur}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${EMPTY}   ${subser_price}
-    ...    ${bool[0]}   ${bool[0]}    serviceCategory=${serviceCategory[0]}
+    ${resp}=  Update Service    ${subser_id1}  ${subser_name}  ${desc}   ${subser_dur}  ${bool[0]}  ${subser_price}  ${bool[0]}    serviceCategory=${serviceCategory[0]}
     Log   ${resp.content}  
     Should Be Equal As Strings  ${resp.status_code}  422
    

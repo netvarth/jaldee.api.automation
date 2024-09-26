@@ -867,7 +867,7 @@ JD-TC-CreateQueue-UH9
     ${description}=  FakerLibrary.sentence
     ${notifytype}    Random Element     ['none','pushMsg','email']
     ${notify}    Random Element     ['True','False'] 
-    ${resp}=  Create Service  ${SERVICE1}  ${description}   60  ACTIVE  Waitlist  ${notify}   ${notifytype}  0  500  False  True
+    ${resp}=  Create Service  ${SERVICE1}  ${description}   60  ${bool[0]}  500  ${bool[0]}  minPrePaymentAmount=0  taxable=${bool[1]}
     Should Be Equal As Strings  ${resp.status_code}  200    
     Set Suite Variable  ${s_id1}  ${resp.json()} 
     ${sTime9}=  add_timezone_time  ${tz}  4  15  
@@ -934,7 +934,7 @@ JD-TC-CreateQueue-UH11
     ${description}=  FakerLibrary.sentence
     ${notifytype}    Random Element     ['none','pushMsg','email']
     ${notify}    Random Element     ['True','False'] 
-    ${resp}=  Create Service  ${SERVICE10}  ${description}   5  ACTIVE  Waitlist  ${notify}   ${notifytype}  0  500  False  True
+    ${resp}=  Create Service  ${SERVICE10}  ${description}   5  ${bool[0]}  500  ${bool[0]}  minPrePaymentAmount=0  taxable=${bool[1]}
     Should Be Equal As Strings  ${resp.status_code}  200    
     Set Suite Variable  ${s_id1}  ${resp.json()} 
     ${sTime9}=  add_timezone_time  ${tz}  4  15  

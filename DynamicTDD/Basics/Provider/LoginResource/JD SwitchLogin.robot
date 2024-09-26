@@ -1059,25 +1059,11 @@ JD-TC-Switch_Login-12
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${description}=  FakerLibrary.sentence
-    ${ser_durtn}=   Random Int   min=2   max=10
-    ${ser_amount}=   Random Int   min=100   max=1000
-    ${ser_amount1}=   Convert To Number   ${ser_amount}
     ${SERVICE1}=    FakerLibrary.word
-    ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[0]}   ${bool[0]} 
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200  
-    Set Test Variable  ${sid1}  ${resp.json()}
-
-    ${description1}=  FakerLibrary.sentence
-    ${ser_durtn1}=   Random Int   min=2   max=10
-    ${ser_amount}=   Random Int   min=100   max=1000
-    ${ser_amount2}=   Convert To Number   ${ser_amount}
+    ${sid1}=  Create Sample Service  ${SERVICE1}
+    
     ${SERVICE2}=    FakerLibrary.word
-    ${resp}=  Create Service  ${SERVICE2}   ${description1}   ${ser_durtn1}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount2}  ${bool[0]}   ${bool[0]} 
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200  
-    Set Test Variable  ${sid2}  ${resp.json()}
+    ${sid2}=  Create Sample Service  ${SERVICE2}
     
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1406,15 +1392,7 @@ JD-TC-Switch_Login-14
 
     ${SERVICE1}=    FakerLibrary.word
     Set Suite Variable  ${SERVICE1}
-    ${desc}=   FakerLibrary.sentence
-    ${servicecharge}=   Random Int  min=100  max=500
-    ${serviceprice}=   Random Int  min=10  max=15
-    ${serviceprice}=  Convert To Number  ${serviceprice}  1
-
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${sid1}  ${resp.json()}
+    ${sid1}=  Create Sample Service  ${SERVICE1}
 
     ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  price=${serviceprice}
     ${serviceList}=    Create List    ${serviceList}

@@ -51,23 +51,23 @@ JD-TC-Update Rating Consumer-1
     ${ser_durtn}=   Random Int  min=2   max=10
     ${total_amount}=   FakerLibrary.pyfloat   left_digits=3   right_digits=2   positive=True
     
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifyType[1]}  ${EMPTY}  ${total_amount}  ${bool[0]}  ${bool[0]}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[0]}  ${total_amount}  ${bool[0]}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sId_1}  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Create Service  ${SERVICE2}  ${desc}   ${ser_durtn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifyType[1]}  ${EMPTY}  ${total_amount}  ${bool[0]}  ${bool[0]}
+    ${resp}=  Create Service  ${SERVICE2}  ${desc}   ${ser_durtn}  ${bool[0]}  ${total_amount}  ${bool[0]}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sId_2}  ${resp.json()}
     
-    ${resp}=  Create Service  ${SERVICE3}  ${desc}   ${ser_durtn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifyType[1]}  ${EMPTY}  ${total_amount}  ${bool[0]}  ${bool[0]}
+    ${resp}=  Create Service  ${SERVICE3}  ${desc}   ${ser_durtn}  ${bool[0]}  ${total_amount}  ${bool[0]}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sId_3}  ${resp.json()}
     
-    ${resp}=  Create Service  ${SERVICE4}  ${desc}   ${ser_durtn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifyType[1]}  ${EMPTY}  ${total_amount}  ${bool[0]}  ${bool[0]}
+    ${resp}=  Create Service  ${SERVICE4}  ${desc}   ${ser_durtn}  ${bool[0]}  ${total_amount}  ${bool[0]}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sId_4}  ${resp.json()}
