@@ -1,25 +1,19 @@
 *** Settings ***
 Suite Teardown    Delete All Sessions
 Test Teardown     Delete All Sessions
-Force Tags        NextAvailableSchedule
+Force Tags        Appointment
 Library           Collections
 Library           String
-Library     json
-Library     requests
-Library     FakerLibrary
-Library     /ebs/TDD/db.py
-Resource    /ebs/TDD/ProviderKeywords.robot
-Resource    /ebs/TDD/ConsumerKeywords.robot
+Library           json
+Library           requests
+Library           FakerLibrary
+Library           /ebs/TDD/db.py
+Resource          /ebs/TDD/ProviderKeywords.robot
+Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
-Variables   /ebs/TDD/varfiles/providers.py
-Variables   /ebs/TDD/varfiles/providers.py
-Variables   /ebs/TDD/varfiles/consumerlist.py
-Variables   /ebs/TDD/varfiles/consumermail.py
-
-*** Variables ***
-
-@{countryCode}   91  +91  48 
-@{emptylist}
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/consumerlist.py
 
 *** Test Cases ***  
 
