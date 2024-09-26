@@ -32,152 +32,12 @@ JD-TC-NextAvailableSchedule for User-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${PUSERNAME57}
 
-    # ${resp}=   Enable Today Appointment
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}    ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]} 
-     
-    ${highest_package}=  get_highest_license_pkg
-    Log  ${highest_package}
-    Set Suite variable  ${lic2}  ${highest_package[0]}
-
-    ${resp}=   Change License Package  ${highest_package[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=   Get License UsageInfo 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     clear_service   ${PUSERNAME57}
     clear_appt_schedule   ${PUSERNAME57}
-    
-    ${resp2}=   Get Business Profile
-    Log  ${resp2.json()}
-    Should Be Equal As Strings    ${resp2.status_code}    200
-    # Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
-
-    ${resp}=  Get Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-
-    END
-    
-    sleep  2s
-    ${dep_name1}=  FakerLibrary.bs
-    ${dep_code1}=   Random Int  min=100   max=999
-    ${dep_desc1}=   FakerLibrary.word  
-    ${resp}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${dep_id}  ${resp.json()}
-
-    ${resp}=  Get User
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    IF   not '${resp.content}' == '${emptylist}'
-        ${len}=  Get Length  ${resp.json()}
-        FOR   ${i}  IN RANGE   0   ${len}
-        
-            Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${PUSERNAME57}'
-                clear_users  ${user_phone}
-            END
-        END
-    END
-
-    FOR  ${p}  IN RANGE  5
-        ${ran int}=    Generate Random String    length=4    chars=[NUMBERS]
-        ${ran int}=    Convert To Integer    ${ran int}
-        ${ran int}=    Convert To Integer    ${ran int}
-        ${ran int}=    Convert To String  ${ran int}
-        ${Status}=   Run Keyword And Return Status   Should Match Regexp	${ran int}	\\d{4}
-        Exit For Loop IF  ${Status}  
-    END
-    ${ran int}=    Convert To Integer    ${ran int}
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${ran int}
-    clear_users  ${PUSERPH0}
-    Set Suite Variable  ${PUSERPH0}
-    ${firstname}=  FakerLibrary.name
-    ${lastname}=  FakerLibrary.last_name
-    ${address}=  get_address
-    ${dob}=  FakerLibrary.Date
-    ${location}=  FakerLibrary.city
-    ${state}=  FakerLibrary.state
-    # ${pin}=  get_pincode
-     # ${resp}=  Get LocationsByPincode     ${pin}
-     FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-     END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
-
-
-    clear_service   ${PUSERPH0}
-    clear_appt_schedule   ${PUSERPH0}
-
-    ${resp}=  Create User  ${firstname}  ${lastname}     ${countryCodes[0]}  ${PUSERPH0}    ${userType[0]}   dob=${dob}  gender=${Genderlist[0]}  email=${P_Email}${PUSERPH0}.${test_mail}   pincode=${pin}    deptId=${dep_id}  
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${u_id}  ${resp.json()}
-
-    ${resp}=  ProviderLogout
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME57}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
   
-    ${resp}=  Get User By Id  ${u_id}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${sub_domain_id}  ${resp.json()['subdomain']}
-   
-    # ${resp}=  SendProviderResetMail   ${PUSERPH0}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # @{resp}=  ResetProviderPassword  ${PUSERPH0}  ${PASSWORD}  2
-    # Should Be Equal As Strings  ${resp[0].status_code}  200
-    # Should Be Equal As Strings  ${resp[1].status_code}  200
-
-    ${resp}=    Reset LoginId  ${u_id}  ${PUSERPH0}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Forgot Password   loginId=${PUSERPH0}  password=${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    202
-
-    ${resp}=    Account Activation  ${PUSERPH0}  ${OtpPurpose['ProviderResetPassword']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${key} =   db.Verify Accnt   ${PUSERPH0}    ${OtpPurpose['ProviderResetPassword']}
-    Set Suite Variable   ${key}
-
-    ${resp}=    Forgot Password     otp=${key}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${PUSERPH0}  ${u_id} =  Create and Configure Sample User
+    Set Suite Variable  ${PUSERPH0}
+    Set Suite Variable  ${u_id}
 
     ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
@@ -190,14 +50,13 @@ JD-TC-NextAvailableSchedule for User-1
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service For User  ${SERVICE1}  ${dep_id}  ${u_id}
+    ${s_id}=  Create Sample Service  ${SERVICE1}    provider=${u_id}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10  
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    # ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${eTime1}=  add_timezone_time  ${tz}  3  15  
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
@@ -208,38 +67,26 @@ JD-TC-NextAvailableSchedule for User-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedules  provider-eq=${u_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-   
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${resp}=    Get NextAvailableSchedule By Provider Location and User    ${pid}   ${lid}  ${u_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['provider']['id']}   ${u_id}
-    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['id']}    ${sch_id}
-    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['name']}  ${schedule_name}
-    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['location']['id']}    ${lid}
-    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['apptSchedule']['startDate']}     ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['provider']['id']}                                                 ${u_id}
+    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['id']}                                        ${sch_id}
+    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['name']}                                      ${schedule_name}
+    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['location']['id']}                            ${lid}
+    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['apptSchedule']['startDate']}                 ${DAY1}
     Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['apptSchedule']['terminator']['endDate']}     ${DAY2}
     Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['apptSchedule']['timeSlots'][0]['sTime']}     ${sTime1}
     Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['apptSchedule']['timeSlots'][0]['eTime']}     ${eTime1}
-    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['apptState']}   ${Qstate[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['services'][0]['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['timeDuration']}   ${duration}
-    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['parallelServing']}   ${parallel}
-    # Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['batchEnable']}   ${bool1}
-    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['todayAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['futureAppt']}  ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['availableDate']}     ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['isCheckinAllowed']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['apptState']}                                 ${Qstate[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['services'][0]['id']}                         ${s_id}
+    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['timeDuration']}                              ${duration}
+    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['parallelServing']}                           ${parallel}
+    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['todayAppt']}                                 ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['futureAppt']}                                ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['availableDate']}                             ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['isCheckinAllowed']}                                               ${bool[1]}
     Should Contain  "${resp.json()}"  availableSlots
-    # ${sch_length}=  get_slot_length  ${delta}  ${duration}
-    # ${sLength}=  Get Length  ${resp.json()[0]['availableSlots']['availableSlots']}
-    # Should Be Equal As Integers  ${sLength}  ${sch_length}
 
 JD-TC-NextAvailableSchedule for User-2
 
@@ -255,28 +102,19 @@ JD-TC-NextAvailableSchedule for User-2
     clear_service   ${PUSERPH0}
     clear_appt_schedule   ${PUSERPH0}
 
-    ${resp}=  Get User By Id  ${u_id}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-  
     ${resp}=    Get Locations
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${resp}=  Get Appointment Schedules  provider-eq=${u_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service For User  ${SERVICE1}  ${dep_id}  ${u_id}
+    ${s_id}=  Create Sample Service   ${SERVICE1}    provider=${u_id}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10  
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  add_timezone_time  ${tz}  0  5  
-    # ${sTime1}=  db.get_time_by_timezone   ${tz}
     ${delta1}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta1}
     ${schedule_name1}=  FakerLibrary.bs
@@ -304,18 +142,6 @@ JD-TC-NextAvailableSchedule for User-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id2}  ${resp.json()}
-
-    ${resp}=  Get Appointment Schedules  provider-eq=${u_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-   
-    ${resp}=  Get Appointment Schedule ById  ${sch_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-  
-    ${resp}=  Get Appointment Schedule ById  ${sch_id2}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=    Get NextAvailableSchedule By Provider Location and User    ${pid}   ${lid}  ${u_id}
     Log  ${resp.json()}
@@ -332,7 +158,6 @@ JD-TC-NextAvailableSchedule for User-2
     Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['services'][0]['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['timeDuration']}   ${duration1}
     Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['parallelServing']}   ${parallel1}
-    # Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['batchEnable']}   ${bool1}
     Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['todayAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['futureAppt']}  ${bool[1]}
     Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['availableDate']}     ${DAY1}
@@ -341,7 +166,6 @@ JD-TC-NextAvailableSchedule for User-2
     ${sch_length}=  get_slot_length  ${delta1}  ${duration1}
     ${sLength}=  Get Length  ${resp.json()[0]['availableSlots']['availableSlots']}
     Should Be Equal As Integers  ${sLength}  ${sch_length}
-
 
 JD-TC-NextAvailableSchedule for User-3
 
@@ -357,22 +181,14 @@ JD-TC-NextAvailableSchedule for User-3
     clear_service   ${PUSERPH0}
     clear_appt_schedule   ${PUSERPH0}
 
-    ${resp}=  Get User By Id  ${u_id}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-   
     ${resp}=    Get Locations
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${resp}=  Get Appointment Schedules  provider-eq=${u_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service For User  ${SERVICE1}  ${dep_id}  ${u_id}
+    ${s_id}=  Create Sample Service   ${SERVICE1}   provider=${u_id}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10  
@@ -384,7 +200,7 @@ JD-TC-NextAvailableSchedule for User-3
     ${schedule_name1}=  FakerLibrary.bs
     ${parallel1}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval1}=  Convert To Integer   ${delta1/5}
-        ${duration1}=  FakerLibrary.Random Int  min=1  max=${maxval1}
+    ${duration1}=  FakerLibrary.Random Int  min=1  max=${maxval1}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule   ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel1}      ${parallel1}  ${lid}  ${duration1}  ${bool1}  ${s_id}   provider=${u_id}
     Log  ${resp.json()}
@@ -400,25 +216,13 @@ JD-TC-NextAvailableSchedule for User-3
     ${schedule_name2}=  FakerLibrary.bs
     ${parallel2}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval2}=  Convert To Integer   ${delta2/5}
-        ${duration2}=  FakerLibrary.Random Int  min=1  max=${maxval2}
+    ${duration2}=  FakerLibrary.Random Int  min=1  max=${maxval2}
     ${bool2}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule   ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel2}  ${parallel2}  ${lid}  ${duration2}  ${bool2}  ${s_id}   provider=${u_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id2}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedules  provider-eq=${u_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
- 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-  
-    ${resp}=  Get Appointment Schedule ById  ${sch_id2}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${resp}=    Get NextAvailableSchedule By Provider Location and User    ${pid}   ${lid}  ${u_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -434,7 +238,6 @@ JD-TC-NextAvailableSchedule for User-3
     Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['services'][0]['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['timeDuration']}   ${duration2}
     Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['parallelServing']}   ${parallel2}
-    # Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['batchEnable']}   ${bool2}
     Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['todayAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['futureAppt']}  ${bool[1]}
     Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['availableDate']}     ${DAY1}
@@ -453,90 +256,12 @@ JD-TC-NextAvailableSchedule for User-4
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid1}=  get_acc_id  ${PUSERNAME53}
     
-    ${highest_package}=  get_highest_license_pkg
-    Log  ${highest_package}
-    Set Suite variable  ${lic2}  ${highest_package[0]}
-
-    ${resp}=   Change License Package  ${highest_package[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=   Get License UsageInfo 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     clear_service   ${PUSERNAME53}
     clear_appt_schedule   ${PUSERNAME53}
     
-    ${resp2}=   Get Business Profile
-    Log  ${resp2.json()}
-    Should Be Equal As Strings    ${resp2.status_code}    200
-    Set Test Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
-
-    ${resp}=  Get Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-
-    END
+    ${PUSERPH1}  ${u_id} =  Create and Configure Sample User
+    Set Suite Variable  ${PUSERPH1}
     
-    sleep  2s
-    ${dep_name1}=  FakerLibrary.bs
-    ${dep_code1}=   Random Int  min=100   max=999
-    ${dep_desc1}=   FakerLibrary.word  
-    ${resp}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${dep_id}  ${resp.json()}
-
-    FOR  ${p}  IN RANGE  5
-        ${ran int}=    Generate Random String    length=4    chars=[NUMBERS]
-        ${ran int}=    Convert To Integer    ${ran int}
-        ${ran int}=    Convert To Integer    ${ran int}
-        ${ran int}=    Convert To String  ${ran int}
-        ${Status}=   Run Keyword And Return Status   Should Match Regexp	${ran int}	\\d{4}
-        Exit For Loop IF  ${Status}  
-    END
-    ${ran int}=    Convert To Integer    ${ran int}
-    ${PUSERPH1}=  Evaluate  ${PUSERNAME}+${ran int}
-    clear_users  ${PUSERPH1}
-    Set Test Variable  ${PUSERPH1}
-    ${firstname}=  FakerLibrary.name
-    ${lastname}=  FakerLibrary.last_name
-    ${dob}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
-     # ${resp}=  Get LocationsByPincode     ${pin}
-     FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-     END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
-
-    clear_service   ${PUSERPH1}
-    clear_appt_schedule   ${PUSERPH1}
-
-    ${resp}=  Create User  ${firstname}  ${lastname}     ${countryCodes[0]}  ${PUSERPH1}    ${userType[0]}   dob=${dob}  gender=${Genderlist[0]}  email=${P_Email}${PUSERPH1}.${test_mail}   pincode=${pin}    deptId=${dep_id}  
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${u_id}  ${resp.json()}
-
-    ${resp}=  Get User By Id  ${u_id}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sub_domain_id}  ${resp.json()['subdomain']}
-   
     ${resp}=    Get Locations
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -544,7 +269,7 @@ JD-TC-NextAvailableSchedule for User-4
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service For User  ${SERVICE1}  ${dep_id}  ${u_id}
+    ${s_id}=  Create Sample Service  ${SERVICE1}  provider=${u_id}
     
     ${DAY1}=  db.add_timezone_date  ${tz}  1
     ${DAY2}=  db.add_timezone_date  ${tz}  10  
@@ -556,29 +281,15 @@ JD-TC-NextAvailableSchedule for User-4
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule For User  ${u_id}  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}  provider=${u_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedules  provider-eq=${u_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List  ${resp}  0  id=${sch_id}   name=${schedule_name}   apptState=${Qstate[0]}
-
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration}  apptState=${Qstate[0]}  parallelServing=${parallel}  batchEnable=${bool1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${lid}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['recurringType']}  ${recurringtype[1]}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['repeatIntervals']}  ${list}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['startDate']}  ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['terminator']['endDate']}  ${DAY2}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}  ${sTime}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${eTime}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
-
+   
     ${resp}=  Provider Logout
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -593,95 +304,8 @@ JD-TC-NextAvailableSchedule for User-4
     clear_service   ${PUSERNAME59}
     clear_appt_schedule   ${PUSERNAME59}
 
-    ${highest_package}=  get_highest_license_pkg
-    Log  ${highest_package}
-    # Set Test variable  ${lic2}  ${highest_package[0]}
-    ${resp}=   Change License Package  ${highest_package[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=   Get Business Profile
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
-
-    ${resp}=  Get Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-
-    END
-
-    ${dep_name1}=  FakerLibrary.bs
-    ${dep_code1}=   Random Int  min=100   max=999
-    ${dep_desc1}=   FakerLibrary.word  
-    ${resp}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${dep_id1}  ${resp.json()}
-
-    FOR  ${p}  IN RANGE  5
-        ${ran int}=    Generate Random String    length=4    chars=[NUMBERS]
-        ${ran int}=    Convert To Integer    ${ran int}
-        ${ran int}=    Convert To Integer    ${ran int}
-        ${ran int}=    Convert To String  ${ran int}
-        ${Status}=   Run Keyword And Return Status   Should Match Regexp	${ran int}	\\d{4}
-        Exit For Loop IF  ${Status}  
-    END
-    ${ran int}=    Convert To Integer    ${ran int}
-    ${PUSERPH2}=  Evaluate  ${PUSERNAME}+${ran int}
-    clear_users  ${PUSERPH2}
-    Set Test Variable  ${PUSERPH2}
-    ${firstname}=  FakerLibrary.name
-    ${lastname}=  FakerLibrary.last_name
-    ${dob}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
-     # ${resp}=  Get LocationsByPincode     ${pin}
-     FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-     END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
-
-    clear_service   ${PUSERPH2}
-    clear_appt_schedule   ${PUSERPH2}
-
-    ${resp}=  Create User  ${firstname}  ${lastname}     ${countryCodes[0]}  ${PUSERPH2}    ${userType[0]}   dob=${dob}  gender=${Genderlist[0]}  email=${P_Email}${PUSERPH2}.${test_mail}   pincode=${pin}    deptId=${dep_id1}  
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${u_id1}  ${resp.json()}
-
-    # sleep  3s
-    # ${resp}=    Get Departments
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${dep_id1}  ${resp.json()['departments'][0]['departmentId']}
-
-    # ${resp}=  Get User
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable   ${u_id1}   ${resp.json()[0]['id']}
-
-    sleep  2s
-    ${resp}=  Get Users By Department  ${dep_id1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
- 
-    ${resp}=  Get User By Id  ${u_id1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${PUSERPH2}  ${u_id1} =  Create and Configure Sample User
+    Set Suite Variable  ${PUSERPH2}
    
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -689,12 +313,8 @@ JD-TC-NextAvailableSchedule for User-4
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${resp}=  Get Appointment Schedules  provider-eq=${u_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${SERVICE2}=    FakerLibrary.Word
-    ${s_id1}=  Create Sample Service For User  ${SERVICE2}  ${dep_id1}  ${u_id1}
+    ${s_id1}=  Create Sample Service   ${SERVICE2}   provider=${u_id1}
     
     ${DAY11}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10  
@@ -709,15 +329,11 @@ JD-TC-NextAvailableSchedule for User-4
     ${maxval1}=  Convert To Integer   ${delta1/5}
         ${duration1}=  FakerLibrary.Random Int  min=1  max=${maxval1}
     ${bool2}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule For User  ${u_id1}  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY11}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel1}  ${parallel1}  ${lid1}  ${duration1}  ${bool1}  ${s_id1}
+    ${resp}=  Create Appointment Schedule    ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY11}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel1}  ${parallel1}  ${lid1}  ${duration1}  ${bool1}  ${s_id1}  provider=${u_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id1}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-   
     ${resp}=  Provider Logout
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -740,7 +356,6 @@ JD-TC-NextAvailableSchedule for User-4
     Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['services'][0]['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['timeDuration']}   ${duration}
     Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['parallelServing']}   ${parallel}
-    # Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['batchEnable']}   ${bool1}
     Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['todayAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['futureAppt']}  ${bool[1]}
     Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['availableDate']}     ${DAY1}
@@ -762,7 +377,6 @@ JD-TC-NextAvailableSchedule for User-4
     Should Be Equal As Strings  ${resp.json()[1]['availableSchedule']['services'][0]['id']}   ${s_id1}
     Should Be Equal As Strings  ${resp.json()[1]['availableSchedule']['timeDuration']}   ${duration1}
     Should Be Equal As Strings  ${resp.json()[1]['availableSchedule']['parallelServing']}   ${parallel1}
-    # Should Be Equal As Strings  ${resp.json()[1]['availableSchedule']['batchEnable']}   ${bool2}
     Should Be Equal As Strings  ${resp.json()[1]['availableSchedule']['todayAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()[1]['availableSchedule']['futureAppt']}  ${bool[1]}
     Should Be Equal As Strings  ${resp.json()[1]['availableSchedule']['availableDate']}     ${DAY11}
@@ -773,7 +387,9 @@ JD-TC-NextAvailableSchedule for User-4
     Should Be Equal As Integers  ${sLength1}  ${sch_length1}
 
 JD-TC-NextAvailableSchedule for User-5
+
     [Documentation]   Get next available schedule without login
+
     ${pid}=  get_acc_id  ${PUSERNAME57}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME57}  ${PASSWORD}
     Log  ${resp.json()}
@@ -789,11 +405,6 @@ JD-TC-NextAvailableSchedule for User-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${s_id}   ${resp.json()[0]['id']}
-
-    # ${resp}=  Get User
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable   ${u_id}   ${resp.json()[0]['id']}
 
     ${resp}=  Get Appointment Schedules  provider-eq=${u_id}
     Log  ${resp.json()}
@@ -814,7 +425,9 @@ JD-TC-NextAvailableSchedule for User-5
     Should Contain  "${resp.json()[0]}"  availableSlots
 
 JD-TC-NextAvailableSchedule for User-6
+
     [Documentation]   Get next available schedule with consumer login
+
     ${pid}=  get_acc_id  ${PUSERNAME57}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME57}  ${PASSWORD}
     Log  ${resp.json()}
@@ -831,23 +444,31 @@ JD-TC-NextAvailableSchedule for User-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${s_id}   ${resp.json()[0]['id']}
 
-    # ${resp}=  Get User
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable   ${u_id}   ${resp.json()[0]['id']}
-
     ${resp}=  Get Appointment Schedules  provider-eq=${u_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${sch_id}   ${resp.json()[0]['id']}
 
-    ${resp}=  Provider Logout
-    Log  ${resp.json()}
+    ${resp}=  AddCustomer  ${CUSERNAME3}   
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME3}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME3}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME3}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME3}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    Get NextAvailableSchedule By Provider Location and User    ${pid}   ${lid}  ${u_id}
     Log  ${resp.json()}
@@ -863,7 +484,9 @@ JD-TC-NextAvailableSchedule for User-6
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-NextAvailableSchedule for User-UH1
+
     [Documentation]   Get next available schedule for user with invalid account id
+
     ${pid}=  get_acc_id  ${PUSERNAME57}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME57}  ${PASSWORD}
     Log  ${resp.json()}
@@ -903,9 +526,10 @@ JD-TC-NextAvailableSchedule for User-UH1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
 JD-TC-NextAvailableSchedule for User-UH2
+
     [Documentation]   Get next available schedule for user with invalid location id
+
     ${pid}=  get_acc_id  ${PUSERNAME57}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME57}  ${PASSWORD}
     Log  ${resp.json()}
@@ -945,9 +569,10 @@ JD-TC-NextAvailableSchedule for User-UH2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
 JD-TC-NextAvailableSchedule for User-UH3
+
     [Documentation]   Get next available schedule for user with invalid user id
+
     ${pid}=  get_acc_id  ${PUSERNAME57}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME57}  ${PASSWORD}
     Log  ${resp.json()}
@@ -989,7 +614,9 @@ JD-TC-NextAvailableSchedule for User-UH3
 
 
 JD-TC-NextAvailableSchedule for User-UH4
+
     [Documentation]   Get next available schedule for user with Empty user id
+
     ${pid}=  get_acc_id  ${PUSERNAME57}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME57}  ${PASSWORD}
     Log  ${resp.json()}
@@ -1027,7 +654,9 @@ JD-TC-NextAvailableSchedule for User-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-NextAvailableSchedule for User-UH5
+
     [Documentation]   Get next available schedule for user with Empty location id
+
     ${pid}=  get_acc_id  ${PUSERNAME57}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME57}  ${PASSWORD}
     Log  ${resp.json()}
@@ -1064,7 +693,9 @@ JD-TC-NextAvailableSchedule for User-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-NextAvailableSchedule for User-UH6
+
     [Documentation]   Get next available schedule for user with Empty account id
+    
     ${pid}=  get_acc_id  ${PUSERNAME57}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME57}  ${PASSWORD}
     Log  ${resp.json()}
