@@ -112,14 +112,14 @@ JD-TC-Create Service With info-1
         # ${vstype}=  Evaluate  random.choice($vservicetype)  random
         Set Suite Variable  ${vstype}  ${vservicetype[1]}
 
-        # ${resp}=  Create Service  ${SERVICE1}   ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[0]} 
+        # ${resp}=  Create Service  ${SERVICE1}  ${description}   {service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
         # Log  ${resp.json()}
         ${consumerNoteTitle}=  FakerLibrary.sentence    
         ${preInfoTitle}=  FakerLibrary.sentence   
         ${preInfoText}=  FakerLibrary.sentence  
         ${postInfoTitle}=  FakerLibrary.sentence  
         ${postInfoText}=  FakerLibrary.sentence
-        ${resp}=  Create Service with info  ${SERVICE1}   ${description}   ${service_duration[1]}   ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}   ${status[0]}   ${btype}  ${bool[1]}   ${bool[0]}   ${serviceType[0]}   ${vstype}   ${virtualCallingModes}   ${NULL}   0    ${consumerNoteMandatory[0]}   ${consumerNoteTitle}   ${preInfoEnabled[0]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[0]}   ${postInfoTitle}   ${postInfoText}
+        ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[1]}  minPrePaymentAmount=${min_pre}  serviceType=${serviceType[0]}  virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}  provider=0  consumerNoteMandatory=${consumerNoteMandatory[0]}  consumerNoteTitle=${consumerNoteTitle}  preInfoEnabled=${preInfoEnabled[0]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${postInfoEnabled[0]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200  
         ${resp}=   Get Service By Id  ${resp.json()}
@@ -141,14 +141,14 @@ JD-TC-Create Service With info-2
         ${SERVICE1}=    FakerLibrary.word
 
         
-        # ${resp}=  Create Service  ${SERVICE1}   ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[0]} 
+        # ${resp}=  Create Service  ${SERVICE1}  ${description}   {service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
         # Log  ${resp.json()}
         ${consumerNoteTitle}=  FakerLibrary.sentence    
         ${preInfoTitle}=  FakerLibrary.sentence   
         ${preInfoText}=  FakerLibrary.sentence  
         ${postInfoTitle}=  FakerLibrary.sentence  
         ${postInfoText}=  FakerLibrary.sentence
-        ${resp}=  Create Service with info  ${SERVICE1}   ${description}   ${service_duration[1]}   ${bool[1]}   ${notifytype[2]}  ${min_pre}  ${Total}   ${status[0]}   ${btype}  ${bool[1]}   ${bool[0]}   ${serviceType[1]}   ${vstype}   ${virtualCallingModes}   ${EMPTY}   0    ${consumerNoteMandatory[0]}   ${consumerNoteTitle}   ${preInfoEnabled[0]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[0]}   ${postInfoTitle}   ${postInfoText}
+        ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[1]}  minPrePaymentAmount=${min_pre}  serviceType=${serviceType[0]}  virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}  provider=0  consumerNoteMandatory=${consumerNoteMandatory[0]}  consumerNoteTitle=${consumerNoteTitle}  preInfoEnabled=${preInfoEnabled[0]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${postInfoEnabled[0]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200  
         ${resp}=   Get Service By Id  ${resp.json()}
@@ -170,7 +170,7 @@ JD-TC-Create Service With info-3
         ${preInfoText}=  FakerLibrary.sentence  
         ${postInfoTitle}=  FakerLibrary.sentence  
         ${postInfoText}=  FakerLibrary.sentence
-        ${resp}=  Create Service with info  ${SERVICE1}  ${description}  ${service_duration[1]}   ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${EMPTY}   ${status[0]}   ${btype}  ${bool[0]}   ${bool[0]}   ${serviceType[0]}   ${vstype}   ${virtualCallingModes}   ${EMPTY}   0    ${consumerNoteMandatory[0]}   ${consumerNoteTitle}   ${preInfoEnabled[0]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[0]}   ${postInfoTitle}   ${postInfoText}
+        ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[1]}  minPrePaymentAmount=${min_pre}  serviceType=${serviceType[0]}  virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}  provider=0  consumerNoteMandatory=${consumerNoteMandatory[0]}  consumerNoteTitle=${consumerNoteTitle}  preInfoEnabled=${preInfoEnabled[0]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${postInfoEnabled[0]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp}=   Get Service By Id  ${resp.json()}
@@ -789,7 +789,7 @@ JD-TC-Create Service With info-10
         ${Total1}=   Random Int   min=100   max=500
         ${Total1}=  Convert To Number  ${Total1}  1
         
-        ${resp}=  Create Service With serviceType    ${SERVICE3}  ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[1]}  ${EMPTY}  ${Total1}  ${bool[0]}  ${bool[0]}   ${serviceType[1]}
+        ${resp}=  Create Service    ${SERVICE3}  ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[1]}  ${EMPTY}  ${Total1}  ${bool[0]}  ${bool[0]}   ${serviceType[1]}
         Should Be Equal As Strings  ${resp.status_code}  200  
         Set Suite Variable    ${s_id1}    ${resp.json()} 
         ${resp}=   Get Service By Id   ${s_id1} 
@@ -989,7 +989,7 @@ JD-TC-Create Service With info-12
         ${preInfoText}=  FakerLibrary.sentence  
         ${postInfoTitle}=  FakerLibrary.sentence  
         ${postInfoText}=  FakerLibrary.sentence
-        ${resp}=  Create Service with info  ${SERVICE1}   ${desc}   ${ser_duratn}   ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${status[0]}   ${btype}  ${bool[0]}  ${bool[0]}  ${serviceType[1]}   ${vstype}   ${virtualCallingModes}   ${depid1}   0    ${consumerNoteMandatory[0]}   ${consumerNoteTitle}   ${preInfoEnabled[0]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[0]}   ${postInfoTitle}   ${postInfoText}
+        ${resp}=  Create Service with info  ${SERVICE1}   ${desc}   ${ser_duratn}   ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${status[0]}   ${btype}  ${bool[0]}  ${bool[0]}  serviceType=${serviceType[1]}   ${vstype}   ${virtualCallingModes}   ${depid1}   0    ${consumerNoteMandatory[0]}   ${consumerNoteTitle}   ${preInfoEnabled[0]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[0]}   ${postInfoTitle}   ${postInfoText}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${sid2}  ${resp.json()}
 
@@ -1033,7 +1033,7 @@ JD-TC-Create Service With info-13
         ${preInfoText}=  FakerLibrary.sentence  
         ${postInfoTitle}=  FakerLibrary.sentence  
         ${postInfoText}=  FakerLibrary.sentence
-        ${resp}=  Create Service with info  ${SERVICE1}  ${desc}   ${ser_duratn}   ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${status[0]}   ${btype}  ${bool[0]}  ${bool[0]}  ${serviceType[1]}   ${vstype}   ${virtualCallingModes}   ${depid1}   0    ${consumerNoteMandatory[0]}   ${consumerNoteTitle}   ${preInfoEnabled[0]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[0]}   ${postInfoTitle}   ${postInfoText}
+        ${resp}=  Create Service with info  ${SERVICE1}  ${desc}   ${ser_duratn}   ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${status[0]}   ${btype}  ${bool[0]}  ${bool[0]}  serviceType=${serviceType[1]}   ${vstype}   ${virtualCallingModes}   ${depid1}   0    ${consumerNoteMandatory[0]}   ${consumerNoteTitle}   ${preInfoEnabled[0]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[0]}   ${postInfoTitle}   ${postInfoText}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${sid1}  ${resp.json()}
 

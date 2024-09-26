@@ -46,7 +46,7 @@ JD-TC-GetServiceId-1
         ${Total}=  Random Int   min=11   max=100
         ${min_pre}=  Convert To Number  ${min_pre}  0
         ${Total}=  Convert To Number  ${Total}  0
-        ${resp}=  Create Service  ${SERVICE1}  ${description}   ${service_duration[2]}  ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[0]} 
+        ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[2]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200 
         Set Suite Variable  ${id}    ${resp.json()}
@@ -61,7 +61,7 @@ JD-TC-GetServiceId-2
         ${description}=  FakerLibrary.sentence
         ${time}=  FakerLibrary.pyfloat   left_digits=2   right_digits=2   positive=True
       
-        ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${EMPTY}  ${bool[0]}  ${bool[0]}
+        ${resp}=  Create Service  ${SERVICE1}  ${description}   {service_duration[1]}  ${bool[0]}  ${EMPTY}  ${bool[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp}=   Get Service By Id  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200

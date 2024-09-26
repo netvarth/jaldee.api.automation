@@ -98,7 +98,7 @@ JD-TC-AdvancePaymentcalculation-1
     ${service_amount}=   Random Int   min=100   max=500
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${ser_durtn}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${service_amount}  ${bool[1]}  ${bool[1]}  prePaymentType=${advancepaymenttype[1]}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[1]}  minPrePaymentAmount=${min_pre}  taxable=${bool[1]}  prePaymentType=${advancepaymenttype[1]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.content}
@@ -125,7 +125,7 @@ JD-TC-AdvancePaymentcalculation-2
     ${ser_amount}=   Random Int   min=100   max=500
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${ser_durtn}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${ser_amount}  ${bool[1]}  ${bool[1]}  prePaymentType=${advancepaymenttype[0]}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${ser_amount}  ${bool[1]}  minPrePaymentAmount=${min_pre}  taxable=${bool[1]}  prePaymentType=${advancepaymenttype[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.content}
@@ -152,7 +152,7 @@ JD-TC-AdvancePaymentcalculation-3
     ${service_amount}=   Random Int   min=100   max=500
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${ser_durtn}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${service_amount}  ${bool[1]}  ${bool[1]}  prePaymentType=${advancepaymenttype[1]}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[1]}  minPrePaymentAmount=${min_pre}  taxable=${bool[1]}  prePaymentType=${advancepaymenttype[1]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.content}
@@ -179,7 +179,7 @@ JD-TC-AdvancePaymentcalculation-4
     ${ser_amount}=   Random Int   min=100   max=500
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${ser_durtn}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${ser_amount}  ${bool[1]}  ${bool[1]}  prePaymentType=${advancepaymenttype[0]}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${ser_amount}  ${bool[1]}  minPrePaymentAmount=${min_pre}  taxable=${bool[1]}  prePaymentType=${advancepaymenttype[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.content}
@@ -207,7 +207,7 @@ JD-TC-AdvancePaymentcalculation-5
     ${service_amount}=   Random Int   min=100   max=500
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${ser_durtn}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${service_amount}  ${bool[1]}  ${bool[1]} 
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[1]}  minPrePaymentAmount=${min_pre}  taxable=${bool[1]} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.content}
@@ -231,7 +231,7 @@ JD-TC-AdvancePaymentcalculation-6
     ${ser_amount}=   Random Int   min=100   max=500
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${ser_durtn}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${ser_amount}  ${bool[0]}  ${bool[1]}  prePaymentType=${advancepaymenttype[1]}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[0]}  ${ser_amount}  ${bool[0]}  taxable=${bool[1]}  prePaymentType=${advancepaymenttype[1]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.content}
@@ -270,7 +270,7 @@ JD-TC-AdvancePaymentcalculation-7
     ${service_amount}=  Convert To Number  ${service_amount}  0
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${ser_durtn}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${service_amount}  ${bool[1]}  ${bool[1]}  prePaymentType=${advancepaymenttype[1]}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[1]}  minPrePaymentAmount=${min_pre}  taxable=${bool[1]}  prePaymentType=${advancepaymenttype[1]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.json()}
@@ -337,7 +337,7 @@ JD-TC-AdvancePaymentcalculation-8
     ${service_amount}=  Convert To Number  ${service_amount}  0
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${ser_durtn}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${service_amount}  ${bool[1]}  ${bool[1]}  prePaymentType=${advancepaymenttype[0]}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[1]}  minPrePaymentAmount=${min_pre}  taxable=${bool[1]}  prePaymentType=${advancepaymenttype[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.json()}
@@ -405,7 +405,7 @@ JD-TC-AdvancePaymentcalculation-9
     ${service_amount}=  Convert To Number  ${service_amount}  0
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${ser_durtn}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${service_amount}  ${bool[1]}  ${bool[1]}  prePaymentType=${advancepaymenttype[1]}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[1]}  minPrePaymentAmount=${min_pre}  taxable=${bool[1]}  prePaymentType=${advancepaymenttype[1]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.json()}
@@ -509,7 +509,7 @@ JD-TC-AdvancePaymentcalculation-10
     ${service_amount}=  Convert To Number  ${service_amount}  0
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${ser_durtn}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${service_amount}  ${bool[1]}  ${bool[0]}  prePaymentType=${advancepaymenttype[0]}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${ser_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.json()}
@@ -597,7 +597,7 @@ JD-TC-AdvancePaymentcalculation-11
     ${service_amount}=   Random Int   min=100   max=500
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${ser_durtn}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${service_amount}  ${bool[0]}  ${bool[1]}  
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[0]}  ${service_amount}  ${bool[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.json()}
@@ -637,7 +637,7 @@ JD-TC-AdvancePaymentcalculation-12
     ${service_amount}=   Random Int   min=100   max=500
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${ser_durtn}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${service_amount}  ${bool[0]}  ${bool[1]}  
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[0]}  ${service_amount}  ${bool[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.json()}
@@ -679,7 +679,7 @@ JD-TC-AdvancePaymentcalculation-13
     ${service_amount}=   Random Int   min=100   max=500
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${ser_durtn}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${service_amount}  ${bool[1]}  ${bool[1]}   prePaymentType=${advancepaymenttype[1]}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[1]}  minPrePaymentAmount=${min_pre}  taxable=${bool[1]}   prePaymentType=${advancepaymenttype[1]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.json()}
@@ -737,7 +737,7 @@ JD-TC-AdvancePaymentcalculation-14
     ${service_amount}=  Convert To Number  ${service_amount}  0
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${ser_durtn}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${service_amount}  ${bool[1]}  ${bool[0]}  prePaymentType=${advancepaymenttype[1]}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${ser_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[1]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.json()}
@@ -869,7 +869,7 @@ JD-TC-AdvancePaymentcalculation-15
     ${service_amount}=  Convert To Number  ${service_amount}  0
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${ser_durtn}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${service_amount}  ${bool[1]}  ${bool[0]}  prePaymentType=${advancepaymenttype[0]}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${ser_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.json()}
@@ -1006,7 +1006,7 @@ JD-TC-AdvancePaymentcalculation-16
     ${service_amount}=  Convert To Number  ${service_amount}  0
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${ser_durtn}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${service_amount}  ${bool[1]}  ${bool[0]}  prePaymentType=${advancepaymenttype[1]}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${ser_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[1]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.json()}
@@ -1178,7 +1178,7 @@ JD-TC-AdvancePaymentcalculation-17
     ${service_amount}=  Convert To Number  ${service_amount}  0
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${ser_durtn}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${service_amount}  ${bool[1]}  ${bool[0]}  prePaymentType=${advancepaymenttype[0]}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${ser_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.json()}
@@ -1353,7 +1353,7 @@ JD-TC-AdvancePaymentcalculation-18
     ${service_amount}=  Convert To Number  ${service_amount}  0
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${ser_durtn}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${service_amount}  ${bool[1]}  ${bool[0]}  prePaymentType=${advancepaymenttype[0]}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${ser_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.json()}
@@ -1512,7 +1512,7 @@ JD-TC-AdvancePaymentcalculation-19
     ${service_amount}=  Convert To Number  ${service_amount}  0
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${ser_durtn}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${service_amount}  ${bool[1]}  ${bool[0]}  prePaymentType=${advancepaymenttype[0]}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${ser_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.json()}
@@ -1680,7 +1680,7 @@ JD-TC-AdvancePaymentcalculation-20
     Log  ${snames}
     ${srv_val}=    Get Variable Value    ${s_id}
     
-    ${resp}=  Create Service  ${unique_snames[${i}]}  ${desc}  ${ser_durtn}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${service_amount}  ${bool[1]}  ${bool[0]}  prePaymentType=${advancepaymenttype[1]}
+    ${resp}=  Create Service  ${unique_snames[${i}]}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[1]}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_id}=  Set Variable  ${resp.json()}
 
@@ -1972,7 +1972,7 @@ JD-TC-AdvancePaymentcalculation-21
     Log  ${snames}
     ${srv_val}=    Get Variable Value    ${s_id}
     
-    ${resp}=  Create Service  ${unique_snames[${i}]}  ${desc}  ${ser_durtn}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${service_amount}  ${bool[1]}  ${bool[0]}  prePaymentType=${advancepaymenttype[0]}
+    ${resp}=  Create Service  ${unique_snames[${i}]}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_id}=  Set Variable  ${resp.json()}
 
@@ -2265,7 +2265,7 @@ JD-TC-AdvancePaymentcalculation-22
     Log  ${snames}
     ${srv_val}=    Get Variable Value    ${s_id}
     
-    ${resp}=  Create Service  ${unique_snames[${i}]}  ${desc}  ${ser_durtn}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${service_amount}  ${bool[1]}  ${bool[0]}  prePaymentType=${advancepaymenttype[1]}
+    ${resp}=  Create Service  ${unique_snames[${i}]}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[1]}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_id}=  Set Variable  ${resp.json()}
 
@@ -2590,7 +2590,7 @@ JD-TC-AdvancePaymentcalculation-23
     Log  ${snames}
     ${srv_val}=    Get Variable Value    ${s_id}
     
-    ${resp}=  Create Service  ${unique_snames[${i}]}  ${desc}  ${ser_durtn}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${service_amount}  ${bool[1]}  ${bool[0]}  prePaymentType=${advancepaymenttype[0]}
+    ${resp}=  Create Service  ${unique_snames[${i}]}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_id}=  Set Variable  ${resp.json()}
 

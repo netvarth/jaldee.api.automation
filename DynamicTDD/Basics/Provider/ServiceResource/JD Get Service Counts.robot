@@ -41,7 +41,7 @@ JD-TC-GetServiceCount-1
     ${Total}=   Random Int  min=600  max=800
     ${Total}=  Convert To Number  ${Total}  1
     ${description}=  FakerLibrary.sentence
-    ${resp}=  Create Service  ${SERVICE1}  ${description}   ${service_duration[2]}  ${status[0]}  ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}   ${Total}  ${bool[0]}   ${bool[0]} 
+    ${resp}=  Create Service  ${SERVICE1}  ${description}   {service_duration[2]}  ${bool[0]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
     ${resp}=   Get Service Count
@@ -60,9 +60,9 @@ JD-TC-GetServiceCount-2
     ${Total}=  Convert To Number  ${Total}  1
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Create Service  ${SERVICE2}  ${description}   ${service_duration[2]}  ${status[0]}  ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}   ${Total}  ${bool[1]}   ${bool[0]} 
+    ${resp}=  Create Service  ${SERVICE2}  ${description}   {service_duration[2]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre} 
     Should Be Equal As Strings  ${resp.status_code}  200  
-    ${resp}=  Create Service  ${SERVICE3}  ${description}   ${service_duration[2]}  ${status[0]}  ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}   ${Total}  ${bool[1]}   ${bool[0]} 
+    ${resp}=  Create Service  ${SERVICE3}  ${description}   {service_duration[2]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre} 
     Should Be Equal As Strings  ${resp.status_code}  200  
     ${resp}=   Get Service Count
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -78,7 +78,7 @@ JD-TC-GetServiceCount-3
     ${Total}=  Convert To Number  ${Total}  1
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Create Service  ${SERVICE4}  ${description}   ${service_duration[2]}  ${status[0]}  ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}   ${Total}  ${bool[1]}   ${bool[0]} 
+    ${resp}=  Create Service  ${SERVICE4}  ${description}   {service_duration[2]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Suite Variable  ${id}  ${resp.json()}  

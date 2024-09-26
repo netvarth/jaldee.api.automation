@@ -133,18 +133,18 @@ JD-TC-GetInternalStatus-1
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
     ${ser_duratn}=      Random Int   min=01   max=05
-    ${resp}=  Create Service Department  ${SERVICE1}  ${desc}   ${ser_duratn}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  ${dep_id}
+    ${resp}=  Create Service Department  ${SERVICE1}  ${desc}   ${ser_duratn}  ${bool[0]}  ${servicecharge}  ${bool[0]}  ${dep_id}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id1}  ${resp.json()}
     ${SERVICE2}=    FakerLibrary.word
-    ${resp}=  Create Service Department  ${SERVICE2}  ${desc}   ${ser_duratn}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  ${dep_id}
+    ${resp}=  Create Service Department  ${SERVICE2}  ${desc}   ${ser_duratn}  ${bool[0]}  ${servicecharge}  ${bool[0]}  ${dep_id}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id2}  ${resp.json()}
      ${SERVICE3}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
     ${ser_duratn}=      Random Int   min=10   max=30
-    ${resp}=  Create Service Department  ${SERVICE3}  ${desc}   ${ser_duratn}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  ${dep_id}
+    ${resp}=  Create Service Department  ${SERVICE3}  ${desc}   ${ser_duratn}  ${bool[0]}  ${servicecharge}  ${bool[0]}  ${dep_id}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id3}  ${resp.json()}
 
@@ -866,7 +866,7 @@ JD-TC-GetInternalStatus-7
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
     ${amt}=  Convert To Number  ${amt}  1
     Set Suite Variable  ${amt}
-    ${resp}=  Create Service For User  ${SERVICE4}  ${description}   ${dur}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  0  ${amt}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${u_id1}
+    ${resp}=  Create Service For User  ${SERVICE4}  ${description}   ${dur}  ${bool[0]}  ${amt}  ${bool[0]}  minPrePaymentAmount=0  ${dep_id}  ${u_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id4}  ${resp.json()}

@@ -131,8 +131,7 @@ JD-TC-AddSubServicesToAppt-1
     ${subser_name}=    FakerLibrary.firstname
     Set Suite Variable   ${subser_name}
 
-    ${resp}=  Create Service    ${subser_name}  ${desc}  ${subser_dur}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${EMPTY}   ${subser_price}
-    ...    ${bool[0]}   ${bool[0]}   serviceCategory=${serviceCategory[0]}
+    ${resp}=  Create Service    ${subser_name}  ${desc}   ${subser_dur}  ${bool[0]}  ${subser_price}  ${bool[0]}   serviceCategory=${serviceCategory[0]}
     Log   ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${subser_id1}  ${resp.json()}
@@ -500,8 +499,7 @@ JD-TC-AddSubServicesToAppt-3
     ${subser_qnty}=   Random Int   min=1   max=5
     ${subser_qnty}=  Convert To Number  ${subser_qnty}  1
    
-    ${resp}=  Create Service    ${subser_name}  ${desc}  ${subser_dur}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${EMPTY}   ${subser_price}
-    ...    ${bool[0]}   ${bool[0]}   department=${dep_id}  serviceCategory=${serviceCategory[0]}
+    ${resp}=  Create Service    ${subser_name}  ${desc}   ${subser_dur}  ${bool[0]}  ${subser_price}  ${bool[0]}   department=${dep_id}  serviceCategory=${serviceCategory[0]}
     Log   ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${subser_id1}  ${resp.json()}
@@ -750,8 +748,7 @@ JD-TC-AddSubServicesToAppt-4
     ${subser_qnty}=   Random Int   min=1   max=5
     ${subser_qnty}=  Convert To Number  ${subser_qnty}  1
    
-    ${resp}=  Create Service    ${subser_name}  ${desc}  ${subser_dur}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${EMPTY}   ${subser_price}
-    ...    ${bool[0]}   ${bool[0]}  serviceCategory=${serviceCategory[0]}
+    ${resp}=  Create Service    ${subser_name}  ${desc}   ${subser_dur}  ${bool[0]}  ${subser_price}  ${bool[0]}  serviceCategory=${serviceCategory[0]}
     Log   ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${subser_id1}  ${resp.json()}
@@ -1362,8 +1359,7 @@ JD-TC-AddSubServicesToAppt-7
     ${subser_qnty}=   Random Int   min=1   max=5
     ${subser_qnty}=  Convert To Number  ${subser_qnty}  1
    
-    ${resp}=  Create Service For User   ${subser_name}  ${desc}  ${subser_dur}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${EMPTY}   ${subser_price}
-    ...    ${bool[0]}   ${bool[0]}  ${dep_id}  ${u_id1}  serviceCategory=${serviceCategory[0]}
+    ${resp}=  Create Service For User   ${subser_name}  ${desc}   ${subser_dur}  ${bool[0]}  ${subser_price}  ${bool[0]}  ${dep_id}  ${u_id1}  serviceCategory=${serviceCategory[0]}
     Log   ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${subser_id1}  ${resp.json()}
@@ -1646,8 +1642,7 @@ JD-TC-AddSubServicesToAppt-8
     ${subser_qnty}=   Random Int   min=1   max=5
     ${subser_qnty}=  Convert To Number  ${subser_qnty}  1
    
-    ${resp}=  Create Service For User   ${subser_name}  ${desc}  ${subser_dur}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${EMPTY}   ${subser_price}
-    ...    ${bool[0]}   ${bool[0]}  ${dep_id}  ${u_id2}  serviceCategory=${serviceCategory[0]}
+    ${resp}=  Create Service For User   ${subser_name}  ${desc}   ${subser_dur}  ${bool[0]}  ${subser_price}  ${bool[0]}  ${dep_id}  ${u_id2}  serviceCategory=${serviceCategory[0]}
     Log   ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${subser_id1}  ${resp.json()}
@@ -1979,8 +1974,7 @@ JD-TC-AddSubServicesToAppt-11
     ${subser_qnty}=   Random Int   min=1   max=5
     ${subser_qnty}=  Convert To Number  ${subser_qnty}  1
    
-    ${resp}=  Create Service    ${subser_name}  ${desc}  ${subser_dur}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${EMPTY}   ${subser_price}
-    ...    ${bool[0]}   ${bool[0]}   department=${dep_id}  serviceCategory=${serviceCategory[0]}
+    ${resp}=  Create Service    ${subser_name}  ${desc}   ${subser_dur}  ${bool[0]}  ${subser_price}  ${bool[0]}   department=${dep_id}  serviceCategory=${serviceCategory[0]}
     Log   ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${subser_id1}  ${resp.json()}
@@ -1999,7 +1993,7 @@ JD-TC-AddSubServicesToAppt-11
     ${subser_qnty1}=   Random Int   min=1   max=5
     ${subser_qnty1}=  Convert To Number  ${subser_qnty1}  1
    
-    ${resp}=  Create Service    ${subser_name1}  ${desc1}  ${subser_dur1}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${EMPTY}   ${subser_price1}
+    ${resp}=  Create Service    ${subser_name1}  ${desc1}   ${subser_dur1}  ${bool[0]}  ${subser_price1}  ${bool[0]}
     ...    ${bool[0]}   ${bool[0]}   department=${dep_id}  serviceCategory=${serviceCategory[0]}
     Log   ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2228,8 +2222,7 @@ JD-TC-AddSubServicesToAppt-12
     ${subser_qnty}=   Random Int   min=1   max=5
     ${subser_qnty}=  Convert To Number  ${subser_qnty}  1
    
-    ${resp}=  Create Service    ${subser_name}  ${desc}  ${subser_dur}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${EMPTY}   ${subser_price}
-    ...    ${bool[0]}   ${bool[0]}   department=${dep_id}  serviceCategory=${serviceCategory[0]}
+    ${resp}=  Create Service    ${subser_name}  ${desc}   ${subser_dur}  ${bool[0]}  ${subser_price}  ${bool[0]}   department=${dep_id}  serviceCategory=${serviceCategory[0]}
     Log   ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${subser_id1}  ${resp.json()}
@@ -2499,8 +2492,7 @@ JD-TC-AddSubServicesToAppt-UH4
     ${subser_qnty}=   Random Int   min=1   max=5
     ${subser_qnty}=  Convert To Number  ${subser_qnty}  1
    
-    ${resp}=  Create Service    ${subser_name}  ${desc}  ${subser_dur}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${EMPTY}   ${subser_price}
-    ...    ${bool[0]}   ${bool[0]}   serviceCategory=${serviceCategory[0]}
+    ${resp}=  Create Service    ${subser_name}  ${desc}   ${subser_dur}  ${bool[0]}  ${subser_price}  ${bool[0]}   serviceCategory=${serviceCategory[0]}
     Log   ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${subser_id1}  ${resp.json()}
@@ -2573,8 +2565,7 @@ JD-TC-AddSubServicesToAppt-UH7
     ${subser_qnty}=   Random Int   min=1   max=5
     ${subser_qnty}=  Convert To Number  ${subser_qnty}  1
    
-    ${resp}=  Create Service    ${subser_name}  ${desc}  ${subser_dur}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${EMPTY}   ${subser_price}
-    ...    ${bool[0]}   ${bool[0]}   serviceCategory=${serviceCategory[0]}
+    ${resp}=  Create Service    ${subser_name}  ${desc}   ${subser_dur}  ${bool[0]}  ${subser_price}  ${bool[0]}   serviceCategory=${serviceCategory[0]}
     Log   ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${subser_id1}  ${resp.json()}

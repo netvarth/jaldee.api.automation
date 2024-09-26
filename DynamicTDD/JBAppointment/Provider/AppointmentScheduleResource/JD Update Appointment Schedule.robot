@@ -2208,7 +2208,7 @@ JD-TC-Update schedule-18
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
     ${srv_duration}=  Random Int  min=1   max=10
-    ${resp}=  Create Service  ${SERVICE2}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}
+    ${resp}=  Create Service  ${SERVICE2}  ${desc}   ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[1]}  notificationType=${notifytype[2]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
@@ -2298,7 +2298,7 @@ JD-TC-Update schedule-18
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${converted_eTime1}
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
     
-    ${resp}=  Create Service  ${SERVICE2}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}
+    ${resp}=  Create Service  ${SERVICE2}  ${desc}   ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[1]}  notificationType=${notifytype[2]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id1}  ${resp.json()}
