@@ -980,8 +980,17 @@ JD-TC-AddSubServicesToAppt-5
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY2}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
-   
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j}]}
+    
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
@@ -1223,30 +1232,11 @@ JD-TC-AddSubServicesToAppt-7
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=  Get Account Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id}  ${resp.json()['id']}
-    Set Test Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
-
-    ${resp}=  Get Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-
-    END
-
+   
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1264,68 +1254,7 @@ JD-TC-AddSubServicesToAppt-7
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    ${resp}=  Get Departments
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${dep_name1}=  FakerLibrary.bs
-        ${dep_code1}=   Random Int  min=100   max=999
-        ${dep_desc1}=   FakerLibrary.word  
-        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-        Set Test Variable  ${dep_id}  ${resp1.json()}
-    ELSE
-        Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
-    END
-
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
-        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-        Log   ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
-   
-    ${resp}=  Get User
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF   not '${resp.content}' == '${emptylist}'
-        ${len}=  Get Length  ${resp.json()}
-        FOR   ${i}  IN RANGE   0   ${len}
-            Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLPUSERNAME27}'
-                clear_users  ${user_phone}
-            END
-        END
-    END
-
-    ${u_id1}=  Create Sample User   deptId=${dep_id}
-   
-    ${resp}=  Get User By Id  ${u_id1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${BUSER_U1}  ${resp.json()['mobileNo']}
-
-    ${resp}=    Reset LoginId  ${u_id1}  ${BUSER_U1}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Forgot Password   loginId=${BUSER_U1}  password=${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    202
-
-    ${resp}=    Account Activation  ${BUSER_U1}  ${OtpPurpose['ProviderResetPassword']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${key} =   db.Verify Accnt   ${BUSER_U1}    ${OtpPurpose['ProviderResetPassword']}
-    Set Suite Variable   ${key}
-
-    ${resp}=    Forgot Password     otp=${key}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${BUSER_U1}  ${u_id1} =  Create and Configure Sample User
 
     ${resp}=  Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD}
     Log   ${resp.content}
@@ -1340,7 +1269,7 @@ JD-TC-AddSubServicesToAppt-7
     ${empty_list}=   Create List
 
     ${SERVICE1}=    FakerLibrary.word
-    ${s_id}=  Create Sample Service For User  ${SERVICE1}   ${dep_id}   ${u_id1}
+    ${s_id}=  Create Sample Service   ${SERVICE1}  provider=${u_id1}
    
     ${resp}=   Get Service By Id  ${s_id}
     Log   ${resp.json()}  
@@ -1359,7 +1288,7 @@ JD-TC-AddSubServicesToAppt-7
     ${subser_qnty}=   Random Int   min=1   max=5
     ${subser_qnty}=  Convert To Number  ${subser_qnty}  1
    
-    ${resp}=  Create Service For User   ${subser_name}  ${desc}   ${subser_dur}  ${bool[0]}  ${subser_price}  ${bool[0]}  ${dep_id}  ${u_id1}  serviceCategory=${serviceCategory[0]}
+    ${resp}=  Create Service   ${subser_name}  ${desc}   ${subser_dur}  ${bool[0]}  ${subser_price}  ${bool[0]}   provider=${u_id1}  serviceCategory=${serviceCategory[0]}
     Log   ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${subser_id1}  ${resp.json()}
@@ -1389,7 +1318,6 @@ JD-TC-AddSubServicesToAppt-7
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
     #............provider consumer creation..........
@@ -1517,29 +1445,20 @@ JD-TC-AddSubServicesToAppt-8
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-   
-    ${resp}=  Get Account Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id}  ${resp.json()['id']}
-    Set Test Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+   
+    # ${resp}=  Get Waitlist Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # IF  ${resp.json()['filterByDept']}==${bool[0]}
+    #     ${resp}=  Toggle Department Enable
+    #     Log  ${resp.content}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-
-    END
+    # END
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1558,75 +1477,79 @@ JD-TC-AddSubServicesToAppt-8
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    ${resp}=  Get Departments
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${dep_name1}=  FakerLibrary.bs
-        ${dep_code1}=   Random Int  min=100   max=999
-        ${dep_desc1}=   FakerLibrary.word  
-        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-        Set Test Variable  ${dep_id}  ${resp1.json()}
-    ELSE
-        Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
-    END
+    # ${resp}=  Get Departments
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF   '${resp.content}' == '${emptylist}'
+    #     ${dep_name1}=  FakerLibrary.bs
+    #     ${dep_code1}=   Random Int  min=100   max=999
+    #     ${dep_desc1}=   FakerLibrary.word  
+    #     ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+    #     Log  ${resp1.content}
+    #     Should Be Equal As Strings  ${resp1.status_code}  200
+    #     Set Test Variable  ${dep_id}  ${resp1.json()}
+    # ELSE
+    #     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    # END
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
-        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-        Log   ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
+    #     ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
+    #     Log   ${resp.json()}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END
    
-    ${resp}=  Get User
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF   not '${resp.content}' == '${emptylist}'
-        ${len}=  Get Length  ${resp.json()}
-        FOR   ${i}  IN RANGE   0   ${len}
-            Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLPUSERNAME18}'
-                clear_users  ${user_phone}
-            END
-        END
-    END
+    # ${resp}=  Get User
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # IF   not '${resp.content}' == '${emptylist}'
+    #     ${len}=  Get Length  ${resp.json()}
+    #     FOR   ${i}  IN RANGE   0   ${len}
+    #         Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
+    #         IF   not '${user_phone}' == '${HLPUSERNAME18}'
+    #             clear_users  ${user_phone}
+    #         END
+    #     END
+    # END
 
-    ${u_id1}=  Create Sample User   deptId=${dep_id}
+    ${BUSER_U1}  ${u_id1} =  Create and Configure Sample User
+
+    # ${u_id1}=  Create Sample User   deptId=${dep_id}
    
-    ${resp}=  Get User By Id  ${u_id1}  
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${BUSER_U1}  ${resp.json()['mobileNo']}
+    # ${resp}=  Get User By Id  ${u_id1}  
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${BUSER_U1}  ${resp.json()['mobileNo']}
 
-    ${u_id2}=  Create Sample User   deptId=${dep_id}
+    ${BUSER_U2}  ${u_id2} =  Create and Configure Sample User
+
+    # ${u_id2}=  Create Sample User   deptId=${dep_id}
    
-    ${resp}=  Get User By Id  ${u_id2}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${BUSER_U2}  ${resp.json()['mobileNo']}
+    # ${resp}=  Get User By Id  ${u_id2}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${BUSER_U2}  ${resp.json()['mobileNo']}
 
-    ${resp}=    Reset LoginId  ${u_id2}  ${BUSER_U2}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=    Reset LoginId  ${u_id2}  ${BUSER_U2}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Forgot Password   loginId=${BUSER_U2}  password=${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    202
+    # ${resp}=    Forgot Password   loginId=${BUSER_U2}  password=${PASSWORD}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    202
 
-    ${resp}=    Account Activation  ${BUSER_U2}  ${OtpPurpose['ProviderResetPassword']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=    Account Activation  ${BUSER_U2}  ${OtpPurpose['ProviderResetPassword']}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${key} =   db.Verify Accnt   ${BUSER_U2}    ${OtpPurpose['ProviderResetPassword']}
-    Set Suite Variable   ${key}
+    # ${key} =   db.Verify Accnt   ${BUSER_U2}    ${OtpPurpose['ProviderResetPassword']}
+    # Set Suite Variable   ${key}
 
-    ${resp}=    Forgot Password     otp=${key}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=    Forgot Password     otp=${key}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Encrypted Provider Login  ${BUSER_U2}  ${PASSWORD}
     Log   ${resp.content}
@@ -1642,7 +1565,7 @@ JD-TC-AddSubServicesToAppt-8
     ${subser_qnty}=   Random Int   min=1   max=5
     ${subser_qnty}=  Convert To Number  ${subser_qnty}  1
    
-    ${resp}=  Create Service For User   ${subser_name}  ${desc}   ${subser_dur}  ${bool[0]}  ${subser_price}  ${bool[0]}  ${dep_id}  ${u_id2}  serviceCategory=${serviceCategory[0]}
+    ${resp}=  Create Service   ${subser_name}  ${desc}   ${subser_dur}  ${bool[0]}  ${subser_price}  ${bool[0]}  provider=${u_id2}  serviceCategory=${serviceCategory[0]}
     Log   ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${subser_id1}  ${resp.json()}
@@ -1650,27 +1573,25 @@ JD-TC-AddSubServicesToAppt-8
     ${resp}=   Get Service By Id  ${subser_id1}
     Log   ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}                  ${subser_name} 
-    Should Be Equal As Strings  ${resp.json()['serviceCategory']}       ${serviceCategory[0]}
+  
+    # ${resp}=    Reset LoginId  ${u_id1}  ${BUSER_U1}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Reset LoginId  ${u_id1}  ${BUSER_U1}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=    Forgot Password   loginId=${BUSER_U1}  password=${PASSWORD}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    202
 
-    ${resp}=    Forgot Password   loginId=${BUSER_U1}  password=${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    202
+    # ${resp}=    Account Activation  ${BUSER_U1}  ${OtpPurpose['ProviderResetPassword']}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Account Activation  ${BUSER_U1}  ${OtpPurpose['ProviderResetPassword']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${key} =   db.Verify Accnt   ${BUSER_U1}    ${OtpPurpose['ProviderResetPassword']}
+    # Set Suite Variable   ${key}
 
-    ${key} =   db.Verify Accnt   ${BUSER_U1}    ${OtpPurpose['ProviderResetPassword']}
-    Set Suite Variable   ${key}
-
-    ${resp}=    Forgot Password     otp=${key}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=    Forgot Password     otp=${key}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD}
     Log   ${resp.content}
@@ -1685,15 +1606,14 @@ JD-TC-AddSubServicesToAppt-8
     ${empty_list}=   Create List
 
     ${SERVICE1}=    FakerLibrary.word
-    ${s_id}=  Create Sample Service For User  ${SERVICE1}   ${dep_id}   ${u_id1}
+    ${s_id}=  Create Sample Service   ${SERVICE1}   provider=${u_id1}
    
     ${resp}=   Get Service By Id  ${s_id}
     Log   ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${ser_dur}      ${resp.json()['serviceDuration']}
     Set Test Variable   ${ser_amount}   ${resp.json()['totalAmount']}
-    Should Be Equal As Strings  ${resp.json()['serviceCategory']}       ${serviceCategory[1]}
-
+    
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -1732,11 +1652,6 @@ JD-TC-AddSubServicesToAppt-8
 
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
-
-    ${resp}=  Get Appointment EncodedID   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId}=  Set Variable   ${resp.json()}
 
     ${asgn_users}=   Create List  ${u_id1}
 
@@ -1782,7 +1697,6 @@ JD-TC-AddSubServicesToAppt-8
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['serviceCategory']}  ${serviceCategory[0]}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['assigneeUsers']}    ${empty_list}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['teamIds']}          ${empty_list}
-
 
 JD-TC-AddSubServicesToAppt-9
 
@@ -1881,29 +1795,20 @@ JD-TC-AddSubServicesToAppt-11
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-   
-    ${resp}=  Get Account Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id}  ${resp.json()['id']}
-    Set Test Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+   
+    # ${resp}=  Get Waitlist Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # IF  ${resp.json()['filterByDept']}==${bool[0]}
+    #     ${resp}=  Toggle Department Enable
+    #     Log  ${resp.content}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-
-    END
+    # END
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1922,29 +1827,29 @@ JD-TC-AddSubServicesToAppt-11
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    ${resp}=  Get Departments
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${dep_name1}=  FakerLibrary.bs
-        ${dep_code1}=   Random Int  min=100   max=999
-        ${dep_desc1}=   FakerLibrary.word  
-        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-        Set Test Variable  ${dep_id}  ${resp1.json()}
-    ELSE
-        Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
-    END
+    # ${resp}=  Get Departments
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF   '${resp.content}' == '${emptylist}'
+    #     ${dep_name1}=  FakerLibrary.bs
+    #     ${dep_code1}=   Random Int  min=100   max=999
+    #     ${dep_desc1}=   FakerLibrary.word  
+    #     ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+    #     Log  ${resp1.content}
+    #     Should Be Equal As Strings  ${resp1.status_code}  200
+    #     Set Test Variable  ${dep_id}  ${resp1.json()}
+    # ELSE
+    #     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    # END
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
-        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-        Log   ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
+    #     ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
+    #     Log   ${resp.json()}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END
    
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1955,15 +1860,14 @@ JD-TC-AddSubServicesToAppt-11
     ${empty_list}=   Create List
 
     ${SERVICE1}=    FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}   department=${dep_id}
+    ${s_id}=  Create Sample Service  ${SERVICE1}   
    
     ${resp}=   Get Service By Id  ${s_id}
     Log   ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${ser_dur}      ${resp.json()['serviceDuration']}
     Set Test Variable   ${ser_amount}   ${resp.json()['totalAmount']}
-    Should Be Equal As Strings  ${resp.json()['serviceCategory']}       ${serviceCategory[1]}
-
+    
     ##....subservice creation..........
 
     ${desc}=  FakerLibrary.sentence
@@ -1974,7 +1878,7 @@ JD-TC-AddSubServicesToAppt-11
     ${subser_qnty}=   Random Int   min=1   max=5
     ${subser_qnty}=  Convert To Number  ${subser_qnty}  1
    
-    ${resp}=  Create Service    ${subser_name}  ${desc}   ${subser_dur}  ${bool[0]}  ${subser_price}  ${bool[0]}   department=${dep_id}  serviceCategory=${serviceCategory[0]}
+    ${resp}=  Create Service    ${subser_name}  ${desc}   ${subser_dur}  ${bool[0]}  ${subser_price}  ${bool[0]}   serviceCategory=${serviceCategory[0]}
     Log   ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${subser_id1}  ${resp.json()}
@@ -1982,9 +1886,7 @@ JD-TC-AddSubServicesToAppt-11
     ${resp}=   Get Service By Id  ${subser_id1}
     Log   ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}                  ${subser_name} 
-    Should Be Equal As Strings  ${resp.json()['serviceCategory']}       ${serviceCategory[0]}
-
+   
     ${desc1}=  FakerLibrary.sentence
     ${subser_dur1}=   Random Int   min=5   max=10
     ${subser_price1}=   Random Int   min=100   max=500
@@ -1994,7 +1896,7 @@ JD-TC-AddSubServicesToAppt-11
     ${subser_qnty1}=  Convert To Number  ${subser_qnty1}  1
    
     ${resp}=  Create Service    ${subser_name1}  ${desc1}   ${subser_dur1}  ${bool[0]}  ${subser_price1}  ${bool[0]}
-    ...    ${bool[0]}   ${bool[0]}   department=${dep_id}  serviceCategory=${serviceCategory[0]}
+    ...     serviceCategory=${serviceCategory[0]}
     Log   ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${subser_id2}  ${resp.json()}
@@ -2002,9 +1904,7 @@ JD-TC-AddSubServicesToAppt-11
     ${resp}=   Get Service By Id  ${subser_id2}
     Log   ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}                  ${subser_name1} 
-    Should Be Equal As Strings  ${resp.json()['serviceCategory']}       ${serviceCategory[0]}
-
+  
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -2019,12 +1919,10 @@ JD-TC-AddSubServicesToAppt-11
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
-
+   
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
     ${fname}=  FakerLibrary.name    

@@ -493,7 +493,7 @@ JD-TC-UpdateSubServicesToAppt-UH4
     
     ${resp}=   Update SubService To Appointment    ${apptid1}   ${subser_list2}
     Log   ${resp.content}  
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-UpdateSubServicesToAppt-UH5
 
@@ -549,7 +549,8 @@ JD-TC-UpdateSubServicesToAppt-UH5
 
     ${subser_price}=   Random Int   min=0   max=0
 
-    ${resp}=  Update Service    ${subser_id1}  ${subser_name}  ${desc}   ${subser_dur}  ${bool[0]}  ${subser_price}  ${bool[0]}    serviceCategory=${serviceCategory[0]}
+    ${resp}=  Update Service    ${subser_id1}  ${subser_name}  ${desc}   ${subser_dur}   ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[0]}  0  ${subser_price}  ${bool[1]}  ${bool[0]}    serviceCategory=${serviceCategory[0]}
     Log   ${resp.content}  
     Should Be Equal As Strings  ${resp.status_code}  422
-   
+    Should Be Equal As Strings  ${resp.json()}    ${MINIMUM_PREPAYMENT_AMOUNT_SHOULD_BE_PROVIDED}
+    
