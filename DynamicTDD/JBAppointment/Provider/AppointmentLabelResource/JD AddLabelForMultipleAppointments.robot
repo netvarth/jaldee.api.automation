@@ -123,7 +123,7 @@ JD-TC-AddMultipleAppointmentLabel-1
     ${lname1}=  FakerLibrary.last_name
     ${fname1}=  FakerLibrary.name    
     ${lname1}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME19}   firstName=${fname1}   lastName=${lname1}
+    ${resp}=  AddCustomer  ${CUSERNAME40}   firstName=${fname1}   lastName=${lname1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid2}  ${resp.json()}
@@ -348,7 +348,7 @@ JD-TC-AddMultipleAppointmentLabel-2
 
     ${fname1}=  FakerLibrary.name    
     ${lname1}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME19}   firstName=${fname1}   lastName=${lname1}
+    ${resp}=  AddCustomer  ${CUSERNAME40}   firstName=${fname1}   lastName=${lname1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid2}  ${resp.json()}
@@ -921,7 +921,7 @@ JD-TC-AddMultipleAppointmentLabel-5
 
     ${fname1}=  FakerLibrary.name    
     ${lname1}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME19}   firstName=${fname1}   lastName=${lname1}
+    ${resp}=  AddCustomer  ${CUSERNAME40}   firstName=${fname1}   lastName=${lname1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid2}  ${resp.json()}
@@ -1109,7 +1109,7 @@ JD-TC-AddMultipleAppointmentLabel-6
 
     ${fname1}=  FakerLibrary.name    
     ${lname1}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME19}   firstName=${fname1}   lastName=${lname1}
+    ${resp}=  AddCustomer  ${CUSERNAME40}   firstName=${fname1}   lastName=${lname1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid2}  ${resp.json()}
@@ -1275,7 +1275,7 @@ JD-TC-AddMultipleAppointmentLabel-7
 
     ${fname1}=  FakerLibrary.name    
     ${lname1}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME19}   firstName=${fname1}   lastName=${lname1}
+    ${resp}=  AddCustomer  ${CUSERNAME40}   firstName=${fname1}   lastName=${lname1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid2}  ${resp.json()}
@@ -1445,7 +1445,7 @@ JD-TC-AddMultipleAppointmentLabel-8
 
     ${fname1}=  FakerLibrary.name    
     ${lname1}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME19}   firstName=${fname1}   lastName=${lname1}
+    ${resp}=  AddCustomer  ${CUSERNAME40}   firstName=${fname1}   lastName=${lname1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid2}  ${resp.json()}
@@ -1713,7 +1713,7 @@ JD-TC-AddMultipleAppointmentLabel-9
 
     ${fname1}=  FakerLibrary.name    
     ${lname1}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME19}   firstName=${fname1}   lastName=${lname1}
+    ${resp}=  AddCustomer  ${CUSERNAME40}   firstName=${fname1}   lastName=${lname1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
@@ -1721,16 +1721,16 @@ JD-TC-AddMultipleAppointmentLabel-9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME19}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME40}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME19}   ${OtpPurpose['Authentication']}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME40}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME40}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2152,7 +2152,7 @@ JD-TC-AddMultipleAppointmentLabel-11
     
     ${fname1}=  FakerLibrary.name    
     ${lname1}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME19}   firstName=${fname1}   lastName=${lname1}
+    ${resp}=  AddCustomer  ${CUSERNAME40}   firstName=${fname1}   lastName=${lname1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid2}  ${resp.json()}
@@ -2323,7 +2323,7 @@ JD-TC-AddMultipleAppointmentLabel-12
     
     ${fname1}=  FakerLibrary.name    
     ${lname1}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME19}   firstName=${fname1}   lastName=${lname1}
+    ${resp}=  AddCustomer  ${CUSERNAME40}   firstName=${fname1}   lastName=${lname1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid2}  ${resp.json()}
@@ -2799,7 +2799,7 @@ JD-TC-AddMultipleAppointmentLabel-15
     
     ${fname1}=  FakerLibrary.name    
     ${lname1}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME19}   firstName=${fname1}   lastName=${lname1}
+    ${resp}=  AddCustomer  ${CUSERNAME40}   firstName=${fname1}   lastName=${lname1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid2}  ${resp.json()}
@@ -3034,7 +3034,7 @@ JD-TC-AddMultipleAppointmentLabel-UH3
 
     ${fname1}=  FakerLibrary.name    
     ${lname1}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME19}   firstName=${fname1}   lastName=${lname1}
+    ${resp}=  AddCustomer  ${CUSERNAME40}   firstName=${fname1}   lastName=${lname1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid2}  ${resp.json()}
@@ -3171,7 +3171,7 @@ JD-TC-AddMultipleAppointmentLabel-UH4
 
     ${fname1}=  FakerLibrary.name    
     ${lname1}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME19}   firstName=${fname1}   lastName=${lname1}
+    ${resp}=  AddCustomer  ${CUSERNAME40}   firstName=${fname1}   lastName=${lname1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid2}  ${resp.json()}
@@ -3329,7 +3329,7 @@ JD-TC-AddMultipleAppointmentLabel-UH5
 
     ${fname1}=  FakerLibrary.name    
     ${lname1}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME19}   firstName=${fname1}   lastName=${lname1}
+    ${resp}=  AddCustomer  ${CUSERNAME40}   firstName=${fname1}   lastName=${lname1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid2}  ${resp.json()}
@@ -3520,7 +3520,7 @@ JD-TC-AddMultipleAppointmentLabel-UH7
 
     ${fname1}=  FakerLibrary.name    
     ${lname1}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME19}   firstName=${fname1}   lastName=${lname1}
+    ${resp}=  AddCustomer  ${CUSERNAME40}   firstName=${fname1}   lastName=${lname1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid2}  ${resp.json()}
@@ -3685,7 +3685,7 @@ JD-TC-AddMultipleAppointmentLabel-UH8
 
     ${fname1}=  FakerLibrary.name    
     ${lname1}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME19}   firstName=${fname1}   lastName=${lname1}
+    ${resp}=  AddCustomer  ${CUSERNAME40}   firstName=${fname1}   lastName=${lname1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid2}  ${resp.json()}
@@ -3808,7 +3808,7 @@ JD-TC-AddMultipleAppointmentLabel-UH10
 
     ${fname1}=  FakerLibrary.name    
     ${lname1}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME19}   firstName=${fname1}   lastName=${lname1}
+    ${resp}=  AddCustomer  ${CUSERNAME40}   firstName=${fname1}   lastName=${lname1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid2}  ${resp.json()}
@@ -3946,7 +3946,7 @@ JD-TC-AddMultipleAppointmentLabel-UH11
 
     ${fname1}=  FakerLibrary.name    
     ${lname1}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME19}   firstName=${fname1}   lastName=${lname1}
+    ${resp}=  AddCustomer  ${CUSERNAME40}   firstName=${fname1}   lastName=${lname1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid2}  ${resp.json()}
@@ -4077,7 +4077,7 @@ JD-TC-AddMultipleAppointmentLabel-UH12
 
     ${fname1}=  FakerLibrary.name    
     ${lname1}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME19}   firstName=${fname1}   lastName=${lname1}
+    ${resp}=  AddCustomer  ${CUSERNAME40}   firstName=${fname1}   lastName=${lname1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid2}  ${resp.json()}
@@ -4232,7 +4232,7 @@ JD-TC-AddMultipleAppointmentLabel-UH13
 
     ${fname1}=  FakerLibrary.name    
     ${lname1}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME19}   firstName=${fname1}   lastName=${lname1}
+    ${resp}=  AddCustomer  ${CUSERNAME40}   firstName=${fname1}   lastName=${lname1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid2}  ${resp.json()}
@@ -4412,7 +4412,7 @@ JD-TC-AddMultipleAppointmentLabel-UH14
 
     ${fname1}=  FakerLibrary.name    
     ${lname1}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME19}   firstName=${fname1}   lastName=${lname1}
+    ${resp}=  AddCustomer  ${CUSERNAME40}   firstName=${fname1}   lastName=${lname1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid2}  ${resp.json()}
