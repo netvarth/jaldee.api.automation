@@ -881,17 +881,14 @@ JD-TC-Create Service With info-11
         clear_service   ${PUSERNAME25}
 
         ${resp}=  Get Waitlist Settings
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp}=  Get Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[1]}
-        ${resp}=  Toggle Department Disable
         Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings    ${resp.status_code}    200
+        IF  ${resp.json()['filterByDept']}==${bool[1]}
+            ${resp}=  Toggle Department Disable
+            Log  ${resp.content}
+            Should Be Equal As Strings  ${resp.status_code}  200
 
-    END
-        Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+        END
 
         ${resp}=  Create Sample Service  ${SERVICE1}
         Set Suite Variable  ${sid1}  ${resp}
@@ -1324,17 +1321,14 @@ JD-TC-Create Service With info-UH5
         clear_service   ${PUSERNAME25}
 
         ${resp}=  Get Waitlist Settings
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp}=  Get Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[1]}
-        ${resp}=  Toggle Department Disable
         Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings    ${resp.status_code}    200
+        IF  ${resp.json()['filterByDept']}==${bool[1]}
+            ${resp}=  Toggle Department Disable
+            Log  ${resp.content}
+            Should Be Equal As Strings  ${resp.status_code}  200
 
-    END
-        Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+        END
 
         ${SERVICE1}=    FakerLibrary.word
         ${resp}=  Create Sample Service  ${SERVICE1}

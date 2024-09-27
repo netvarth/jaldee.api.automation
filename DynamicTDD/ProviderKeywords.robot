@@ -8518,12 +8518,12 @@ Create Sample Donation
     ${mod}=  Evaluate  ${min_don_amt1}%${multiples}
     ${min_don_amt}=  Evaluate  ${min_don_amt1}-${mod}
     ${max_don_amt1}=   Random Int   min=5000   max=10000
-    ${mod1}=  Evaluate  ${max_don_amt1}%${multiples[0]}
+    ${mod1}=  Evaluate  ${max_don_amt1}%${multiples}
     ${max_don_amt}=  Evaluate  ${max_don_amt1}-${mod1}
     ${min_don_amt}=  Convert To Number  ${min_don_amt}  1
     ${max_don_amt}=  Convert To Number  ${max_don_amt}  1
     ${service_duration}=   Random Int   min=1   max=10
-    ${resp}=  Create Donation Service  ${Service_name}   ${description}   ${0}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${bool[0]}   ${bool[0]}  ${ServiceType[2]}  ${min_don_amt}  ${max_don_amt}  ${multiples[0]}
+    ${resp}=  Create Donation Service  ${Service_name}   ${description}   ${0}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${bool[0]}   ${bool[0]}  ${ServiceType[2]}  ${min_don_amt}  ${max_don_amt}  ${multiples}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
     RETURN  ${resp.json()}
