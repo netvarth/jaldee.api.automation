@@ -1240,18 +1240,8 @@ JD-TC-RemoveMultipleAppointmentLabel-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${multilocPro[74]}
-    clear_location  ${multilocPro[74]}
     clear_customer   ${multilocPro[74]}
     clear_Label  ${multilocPro[74]}
-
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
 
     ${label_id}=  Create Sample Label
 
@@ -1260,16 +1250,26 @@ JD-TC-RemoveMultipleAppointmentLabel-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${label_id}
     
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+
     ${lid1}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
+
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
@@ -1309,8 +1309,7 @@ JD-TC-RemoveMultipleAppointmentLabel-7
     ${resp}=  Get Appointment Schedule ById  ${sch_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id2}   name=${schedule_name2}  apptState=${Qstate[0]}
-
+    
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id2}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

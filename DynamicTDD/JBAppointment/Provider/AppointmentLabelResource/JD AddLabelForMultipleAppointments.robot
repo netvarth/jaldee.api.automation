@@ -1209,18 +1209,8 @@ JD-TC-AddMultipleAppointmentLabel-7
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    clear_service   ${PUSERNAME65}
-    clear_location  ${PUSERNAME65}
+
     clear_customer   ${PUSERNAME65}
-
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
 
     clear_Label  ${PUSERNAME65}
     ${label_id}=  Create Sample Label
@@ -1229,11 +1219,20 @@ JD-TC-AddMultipleAppointmentLabel-7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
         
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${SERVICE2}=    FakerLibrary.Word
@@ -1377,8 +1376,6 @@ JD-TC-AddMultipleAppointmentLabel-8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME65}
-    clear_location  ${PUSERNAME65}
     clear_customer   ${PUSERNAME65}
 
     ${resp}=   Get Service
@@ -1403,11 +1400,20 @@ JD-TC-AddMultipleAppointmentLabel-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${label_id1}
     
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
@@ -1870,18 +1876,8 @@ JD-TC-AddMultipleAppointmentLabel-10
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    clear_service   ${PUSERNAME65}
-    clear_location  ${PUSERNAME65}
+
     clear_customer   ${PUSERNAME65}
-
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
 
     clear_Label  ${PUSERNAME65}
     ${label_id}=  Create Sample Label
@@ -1890,11 +1886,20 @@ JD-TC-AddMultipleAppointmentLabel-10
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
         
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
@@ -1902,7 +1907,7 @@ JD-TC-AddMultipleAppointmentLabel-10
     ${min_pre}=   Random Int   min=10   max=50
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${servicecharge}=   Random Int  min=100  max=200
-    ${s_id1}=  Create Sample Service with Prepayment   ${SERVICE2}  ${min_pre}  ${servicecharge}
+    ${s_id1}=  Create Sample Service   ${SERVICE2}   PrePaymentAmount=${min_pre}   
 
     clear_appt_schedule   ${PUSERNAME65}
 
@@ -1965,7 +1970,9 @@ JD-TC-AddMultipleAppointmentLabel-10
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME18}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME18}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
@@ -2979,16 +2986,23 @@ JD-TC-AddMultipleAppointmentLabel-UH3
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME65}
-    clear_location  ${PUSERNAME65}
     clear_customer   ${PUSERNAME65} 
     clear_Label  ${PUSERNAME65}
 
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
@@ -3103,8 +3117,6 @@ JD-TC-AddMultipleAppointmentLabel-UH4
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME65}
-    clear_location  ${PUSERNAME65}
     clear_customer   ${PUSERNAME65} 
     clear_Label  ${PUSERNAME65}
 
@@ -3114,11 +3126,20 @@ JD-TC-AddMultipleAppointmentLabel-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
@@ -3238,8 +3259,6 @@ JD-TC-AddMultipleAppointmentLabel-UH5
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME65}
-    clear_location  ${PUSERNAME65}
     clear_customer   ${PUSERNAME65} 
     clear_Label  ${PUSERNAME65}
 
@@ -3265,11 +3284,20 @@ JD-TC-AddMultipleAppointmentLabel-UH5
     Verify Response  ${resp}  id=${label_id}  label=${labelname[0]}
     ...   displayName=${labelname[1]}
 
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
@@ -3381,8 +3409,8 @@ JD-TC-AddMultipleAppointmentLabel-UH5
     Verify Response   ${resp}  uid=${apptid2}  appmtDate=${DAY1}   appmtTime=${slot2}  
     ...   appointmentEncId=${encId2}  label=${Emptydict}
 
-
 JD-TC-AddMultipleAppointmentLabel-UH6
+
     [Documentation]  Add label with non existant appointment
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
@@ -3864,8 +3892,6 @@ JD-TC-AddMultipleAppointmentLabel-UH11
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME65}
-    clear_location  ${PUSERNAME65}
     clear_customer   ${PUSERNAME65} 
     clear_Label  ${PUSERNAME65}
 
@@ -3875,11 +3901,20 @@ JD-TC-AddMultipleAppointmentLabel-UH11
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
@@ -3899,7 +3934,7 @@ JD-TC-AddMultipleAppointmentLabel-UH11
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
 
     ${fname}=  FakerLibrary.name    
