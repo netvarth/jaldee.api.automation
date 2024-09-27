@@ -11,8 +11,8 @@ Library           Process
 Library           OperatingSystem
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables       /ebs/TDD/varfiles/providers.py
-Variables       /ebs/TDD/varfiles/consumerlist.py 
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/consumerlist.py 
 
 #Suite Setup       Run Keyword    wlsettings
 *** Variables ***
@@ -34,28 +34,28 @@ ${SERVICE2}   S1SERVICE2
 @{empty_list}
 ${zero_amt}  ${0.0}
 
-*** Keywords ***
+# *** Keywords ***
 
-Create Service
-    [Arguments]  ${name}  ${desc}  ${durtn}  ${isPrePayment}  ${totalAmount}  ${notfcn}  &{kwargs}
-    ${items}=  Get Dictionary items  ${kwargs}
-    ${data}=  Create Dictionary  name=${name}  description=${desc}  serviceDuration=${durtn}  isPrePayment=${isPrePayment}  totalAmount=${totalAmount}  notification=${notfcn}  
-    FOR  ${key}  ${value}  IN  @{items}
-        Set To Dictionary  ${data}  ${key}=${value}
-    END
-    Log  ${data}
-    ${data}=    json.dumps    ${data}
-    Check And Create YNW Session  
-    ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
-    Check Deprication  ${resp}  Create Service
-    RETURN  ${resp}
+# Create Service
+#     [Arguments]  ${name}  ${desc}  ${durtn}  ${isPrePayment}  ${totalAmount}  ${notfcn}  &{kwargs}
+#     ${items}=  Get Dictionary items  ${kwargs}
+#     ${data}=  Create Dictionary  name=${name}  description=${desc}  serviceDuration=${durtn}  isPrePayment=${isPrePayment}  totalAmount=${totalAmount}  notification=${notfcn}  
+#     FOR  ${key}  ${value}  IN  @{items}
+#         Set To Dictionary  ${data}  ${key}=${value}
+#     END
+#     Log  ${data}
+#     ${data}=    json.dumps    ${data}
+#     Check And Create YNW Session  
+#     ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
+#     Check Deprication  ${resp}  Create Service
+#     RETURN  ${resp}
 
 
 
 *** Test Cases ***
 
 JD-TC-CreateService-1
-    [Documentation]   Create service for a valid provider with all options
+    [Documentation]   Create service for an account with all options
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME235}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -67,7 +67,75 @@ JD-TC-CreateService-1
     ${Total}=  Convert To Number  ${Total}  1
     ${SERVICE1}=    FakerLibrary.job
     # ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
-    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[1]}  minPrePaymentAmount=${min_pre}  notificationType=${notifytype[2]}  taxable=${bool[1]}  serviceType=${serviceType[1]}  prePaymentType=${advancepaymenttype[1]}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[1]}  minPrePaymentAmount=${min_pre}  notificationType=${notifytype[2]}  taxable=${bool[1]}  serviceType=${serviceType[1]}  #prePaymentType=${advancepaymenttype[1]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+    ${resp}=   Get Service By Id  ${resp.json()}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-CreateService-2
+    [Documentation]   Create service for a user
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME235}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${PUSERNAME_U1}  ${u_id1} =  Create and Configure Sample User  #admin=${bool[1]}
+
+    ${resp}=    Provider Logout
+    Should Be Equal As Strings  ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}   200
+
+    ${description}=  FakerLibrary.sentence
+    ${Total}=   Random Int   min=100   max=500
+    ${Total}=  Convert To Number  ${Total}  1
+    ${SERVICE1}=    FakerLibrary.job
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  provider=${u_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+    ${resp}=   Get Service By Id  ${resp.json()}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+JD-TC-CreateService-3
+    [Documentation]   Create service in a department
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME235}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Waitlist Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+            ${resp1}=  Toggle Department Enable
+            Log   ${resp1.json()}
+            Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+            ${dep_name1}=  FakerLibrary.bs
+            ${dep_code1}=   Random Int  min=100   max=999
+            ${dep_desc1}=   FakerLibrary.word  
+            ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+            Log  ${resp1.content}
+            Should Be Equal As Strings  ${resp1.status_code}  200
+            Set Test Variable  ${dep_id}  ${resp1.json()}
+    ELSE
+            Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    END
+    
+
+    ${description}=  FakerLibrary.sentence
+    ${Total}=   Random Int   min=100   max=500
+    ${Total}=  Convert To Number  ${Total}  1
+    ${SERVICE1}=    FakerLibrary.job
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  department=${dep_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
     ${resp}=   Get Service By Id  ${resp.json()}
@@ -88,7 +156,7 @@ JD-TC-CreateService-2
     ${Total}=  Convert To Number  ${Total}  1
     ${SERVICE1}=    FakerLibrary.job
     # ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
-    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${Total}  ${bool[0]}  ${bool[0]}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
     ${resp}=   Get Service By Id  ${resp.json()}
@@ -1278,159 +1346,159 @@ JD-TC-CreateService-UH8
 
 JD-TC-CreateService-16 
 
-        [Documentation]   Create service with lead time. 
-        ...  (preparation time for provider before next booking. when trying to make a booking in less than 10 mins of start of next slot, when lead time is 10 mins
-        ...  the next slot will not be shown. there should be a time difference of 10 mins from current booking time to next slot.)
+    [Documentation]   Create service with lead time. 
+    ...  (preparation time for provider before next booking. when trying to make a booking in less than 10 mins of start of next slot, when lead time is 10 mins
+    ...  the next slot will not be shown. there should be a time difference of 10 mins from current booking time to next slot.)
 
-        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${PUSERNAME27}
+    clear_service   ${PUSERNAME27}
 
-        
-        ${resp}=  Get Service
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  Get Service
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-        ${desc}=   FakerLibrary.sentence
-        ${min_pre}=   Random Int   min=1   max=50
-        ${servicecharge}=   Random Int  min=100  max=500
-        ${min_pre}=  Convert To Number  ${min_pre}  1
-        ${servicecharge}=  Convert To Number  ${servicecharge}  1
-        ${srv_duration}=   Random Int   min=10   max=20
-        ${leadTime}=   Random Int   min=1   max=5
-        ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}  leadTime=${leadTime}
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}   200
-        Set Test Variable  ${s_id}  ${resp.json()}
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=1   max=50
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${leadTime}=   Random Int   min=1   max=5
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}  leadTime=${leadTime}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Set Test Variable  ${s_id}  ${resp.json()}
 
-        ${resp}=   Get Service By Id  ${s_id}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Verify Response  ${resp}  name=${SERVICE1}  description=${desc}  serviceDuration=${srv_duration}  minPrePaymentAmount=${min_pre}  totalAmount=${servicecharge}  status=${status[0]}  isPrePayment=${bool[1]}  leadTime=${leadTime}
+    ${resp}=   Get Service By Id  ${s_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  name=${SERVICE1}  description=${desc}  serviceDuration=${srv_duration}  minPrePaymentAmount=${min_pre}  totalAmount=${servicecharge}  status=${status[0]}  isPrePayment=${bool[1]}  leadTime=${leadTime}
 
 
 JD-TC-CreateService-17 
 
-        [Documentation]   Create service with max bookings allowed. (one consumer can make as many bookings as specified in max bookings allowed)
+    [Documentation]   Create service with max bookings allowed. (one consumer can make as many bookings as specified in max bookings allowed)
 
-        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${PUSERNAME27}
+    clear_service   ${PUSERNAME27}
 
-        
-        ${resp}=  Get Service
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  Get Service
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-        ${desc}=   FakerLibrary.sentence
-        ${min_pre}=   Random Int   min=1   max=50
-        ${servicecharge}=   Random Int  min=100  max=500
-        ${min_pre}=  Convert To Number  ${min_pre}  1
-        ${servicecharge}=  Convert To Number  ${servicecharge}  1
-        ${srv_duration}=   Random Int   min=10   max=20
-        ${maxbookings}=   Random Int   min=1   max=10
-        ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}  maxBookingsAllowed=${maxbookings}
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}   200
-        Set Test Variable  ${s_id}  ${resp.json()}
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=1   max=50
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${maxbookings}=   Random Int   min=1   max=10
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}  maxBookingsAllowed=${maxbookings}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Set Test Variable  ${s_id}  ${resp.json()}
 
-        ${resp}=   Get Service By Id  ${s_id}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Verify Response  ${resp}  name=${SERVICE1}  description=${desc}  serviceDuration=${srv_duration}  minPrePaymentAmount=${min_pre}  totalAmount=${servicecharge}  status=${status[0]}  isPrePayment=${bool[1]}  maxBookingsAllowed=${maxbookings}
+    ${resp}=   Get Service By Id  ${s_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  name=${SERVICE1}  description=${desc}  serviceDuration=${srv_duration}  minPrePaymentAmount=${min_pre}  totalAmount=${servicecharge}  status=${status[0]}  isPrePayment=${bool[1]}  maxBookingsAllowed=${maxbookings}
 
 
 JD-TC-CreateService-18 
 
-        [Documentation]   Create service with resoucesRequired. 
-        # resoucesRequired defines how many resources we need to complete the said service, eg: say we have 4 resources- 4 beauticians
-        # and we need 2 beauticians 1 for hair styling and the other as henna artist for one service, then the we give resource required for that service as 2.
-        # In which case if parallelServing is set as 4 in a queue/schedule, noOfAvailbleSlots will only be 2, since we need 2 resources per service.
-        # In a queue/Schedule parallelServing cannot be set as less than resoucesRequired.
+    [Documentation]   Create service with resoucesRequired. 
+    # resoucesRequired defines how many resources we need to complete the said service, eg: say we have 4 resources- 4 beauticians
+    # and we need 2 beauticians 1 for hair styling and the other as henna artist for one service, then the we give resource required for that service as 2.
+    # In which case if parallelServing is set as 4 in a queue/schedule, noOfAvailbleSlots will only be 2, since we need 2 resources per service.
+    # In a queue/Schedule parallelServing cannot be set as less than resoucesRequired.
 
-        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${PUSERNAME27}
+    clear_service   ${PUSERNAME27}
 
-        ${resp}=  Get Service
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Service
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-        ${desc}=   FakerLibrary.sentence
-        ${min_pre}=   Random Int   min=1   max=50
-        ${servicecharge}=   Random Int  min=100  max=500
-        ${min_pre}=  Convert To Number  ${min_pre}  1
-        ${servicecharge}=  Convert To Number  ${servicecharge}  1
-        ${srv_duration}=   Random Int   min=10   max=20
-        ${resoucesRequired}=   Random Int   min=1   max=10
-        ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}  resoucesRequired=${resoucesRequired}
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}   200
-        Set Test Variable  ${s_id}  ${resp.json()}
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=1   max=50
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${resoucesRequired}=   Random Int   min=1   max=10
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}  resoucesRequired=${resoucesRequired}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Set Test Variable  ${s_id}  ${resp.json()}
 
-        ${resp}=   Get Service By Id  ${s_id}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Verify Response  ${resp}  name=${SERVICE1}  description=${desc}  serviceDuration=${srv_duration}  minPrePaymentAmount=${min_pre}  totalAmount=${servicecharge}  status=${status[0]}  isPrePayment=${bool[1]}  resoucesRequired=${resoucesRequired}
+    ${resp}=   Get Service By Id  ${s_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  name=${SERVICE1}  description=${desc}  serviceDuration=${srv_duration}  minPrePaymentAmount=${min_pre}  totalAmount=${servicecharge}  status=${status[0]}  isPrePayment=${bool[1]}  resoucesRequired=${resoucesRequired}
 
 
 JD-TC-CreateService-19 
 
-        [Documentation]   Create service with priceDynamic.(allows to set schedule level price rather than service charge)
+    [Documentation]   Create service with priceDynamic.(allows to set schedule level price rather than service charge)
 
-        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${PUSERNAME27}
+    clear_service   ${PUSERNAME27}
 
-        ${resp}=  Get Service
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Service
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-        ${desc}=   FakerLibrary.sentence
-        ${min_pre}=   Random Int   min=1   max=50
-        ${servicecharge}=   Random Int  min=100  max=500
-        ${min_pre}=  Convert To Number  ${min_pre}  1
-        ${servicecharge}=  Convert To Number  ${servicecharge}  1
-        ${srv_duration}=   Random Int   min=10   max=20
-        ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}  priceDynamic=${bool[1]}
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}   200
-        Set Test Variable  ${s_id}  ${resp.json()}
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=1   max=50
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}  priceDynamic=${bool[1]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Set Test Variable  ${s_id}  ${resp.json()}
 
-        ${resp}=   Get Service By Id  ${s_id}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Verify Response  ${resp}  name=${SERVICE1}  description=${desc}  serviceDuration=${srv_duration}  minPrePaymentAmount=${min_pre}  totalAmount=${servicecharge}  status=${status[0]}  isPrePayment=${bool[1]}  priceDynamic=${bool[1]}
+    ${resp}=   Get Service By Id  ${s_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  name=${SERVICE1}  description=${desc}  serviceDuration=${srv_duration}  minPrePaymentAmount=${min_pre}  totalAmount=${servicecharge}  status=${status[0]}  isPrePayment=${bool[1]}  priceDynamic=${bool[1]}
 
 
 JD-TC-CreateService-UH9 
 
-        [Documentation]   Create Service with maxBookingsAllowed as empty
+    [Documentation]   Create Service with maxBookingsAllowed as empty
 
-        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${PUSERNAME27}
+    clear_service   ${PUSERNAME27}
 
-        ${resp}=  Get Service
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Service
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-        ${desc}=   FakerLibrary.sentence
-        ${min_pre}=   Random Int   min=1   max=50
-        ${servicecharge}=   Random Int  min=100  max=500
-        ${min_pre}=  Convert To Number  ${min_pre}  1
-        ${servicecharge}=  Convert To Number  ${servicecharge}  1
-        ${srv_duration}=   Random Int   min=10   max=20
-        # ${maxbookings}=   Random Int   min=1   max=10
-        ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  maxBookingsAllowed=${EMPTY}
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}   200
-        Set Test Variable  ${s_id}  ${resp.json()}
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=1   max=50
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    ${srv_duration}=   Random Int   min=10   max=20
+    # ${maxbookings}=   Random Int   min=1   max=10
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  maxBookingsAllowed=${EMPTY}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Set Test Variable  ${s_id}  ${resp.json()}
 
-        ${resp}=   Get Service By Id  ${s_id}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Verify Response  ${resp}  name=${SERVICE1}  description=${desc}  serviceDuration=${srv_duration}  totalAmount=${servicecharge}  status=${status[0]}  isPrePayment=${bool[0]}  # maxBookingsAllowed=${maxbookings}
+    ${resp}=   Get Service By Id  ${s_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  name=${SERVICE1}  description=${desc}  serviceDuration=${srv_duration}  totalAmount=${servicecharge}  status=${status[0]}  isPrePayment=${bool[0]}  # maxBookingsAllowed=${maxbookings}
 
 
 JD-TC-CreateService-UH10 

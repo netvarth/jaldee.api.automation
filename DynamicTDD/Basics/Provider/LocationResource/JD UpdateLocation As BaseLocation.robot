@@ -124,7 +124,7 @@ JD-TC-UpdateBaseLocation-UH4
       [Documentation]  Update a base location by provider login invalid location id
       ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200   
-      ${invalid_lid}=     Random Int  min=100   max=999
+      ${invalid_lid}=     Random Int  min=1000   max=9999
       ${resp}=  UpdateBaseLocation  ${invalid_lid}   
       Should Be Equal As Strings    ${resp.status_code}   422
       Should Be Equal As Strings   ${resp.json()}   ${NO_LOCATION_FOUND}  

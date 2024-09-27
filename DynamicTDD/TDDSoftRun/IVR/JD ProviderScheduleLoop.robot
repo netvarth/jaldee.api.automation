@@ -174,7 +174,7 @@ JD-TC-Create_Provider_Schedule-1
     ${service_amount}=  Convert To Number  ${service_amount}  0
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${ser_name1}  ${desc}  ${ser_durtn}  ${status[0]}  ${btype}  ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${service_amount}  ${bool[1]}  ${bool[0]}  prePaymentType=${advancepaymenttype[0]}  department=${dep_id}
+    ${resp}=  Create Service  ${ser_name1}  ${desc}  ${ser_durtn}  ${bool[0]}  ${service_amount}  ${bool[0]}  prePaymentType=${advancepaymenttype[0]}  department=${dep_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ser_id1}  ${resp.json()}
