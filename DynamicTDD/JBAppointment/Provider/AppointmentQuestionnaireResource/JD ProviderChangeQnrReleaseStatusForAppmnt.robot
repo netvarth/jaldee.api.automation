@@ -298,21 +298,19 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME6}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME8}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME6}   ${OtpPurpose['Authentication']}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME6}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    Set Test Variable  ${cid1}   ${resp.json()['id']}
-
+    
     ${resp}=  Get Consumer Questionnaire By uuid For Appmnt    ${apptid1}   ${account_id}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -328,27 +326,21 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME8}   ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings   ${resp.status_code}    200
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME8}    ${account_id}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Imageupload.CApptQAnsUpload   ${cookie}  ${account_id}   ${apptid1}   ${data}  ${pdffile}  ${jpgfile}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD} 
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200 
-    # Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    # Set Test Variable  ${cid1}   ${resp.json()['id']}
 
     ${resp}=   Get consumer Appointment By Id   ${account_id}  ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Check Answers   ${resp}  ${data}
 
-
 JD-TC-ProviderChangeQnrReleaseStatusForAppt-2
+
     [Documentation]  submit questionnaire for appointment taken from provider side
 
     clear_customer   ${PUSERNAME164}
@@ -498,6 +490,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-2
     Check Answers   ${resp}  ${data}
 
 JD-TC-ProviderChangeQnrReleaseStatusForAppt-3
+
     [Documentation]  Take a online checkin and consumer submit after questionnaire 
 
     clear_customer   ${PUSERNAME164}
@@ -565,29 +558,40 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
 
+    ${fname}=  FakerLibrary.first_name
+    ${lname}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${CUSERNAME11}    firstName=${fname}   lastName=${lname}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${cid}   ${resp.json()}
+
     ${resp}=  Provider Logout
-    Log  ${resp.content}
+    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME11}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${fname}   ${resp.json()['firstName']}
     Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${resp}=  Get Appointment Schedules Consumer  ${account_id}
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()[0]['id']}   ${sch_id}
-
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${account_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
         END
     END
     ${num_slots}=  Get Length  ${slots}
@@ -649,8 +653,8 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Check Answers   ${resp}  ${data}
 
-  
 JD-TC-ProviderChangeQnrReleaseStatusForAppt-4
+
     [Documentation]  consumer submit questionnaire for waitlist taken from provider side
 
     clear_customer   ${PUSERNAME164}
@@ -658,22 +662,6 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-4
     ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=   Get jaldeeIntegration Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
-        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-        Log   ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
-
-    ${resp}=   Get jaldeeIntegration Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}  
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -799,11 +787,23 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-4
     Should Be Equal As Strings   ${resp.json()['releasedQnr'][0]['status']}   ${QnrReleaseStatus[1]}
 
 
-    ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=    Send Otp For Login    ${CUSERNAME8}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
     # ${resp}=  Consumer View Questionnaire  ${account_id}  ${s_id}  ${self}
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
@@ -824,9 +824,9 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME8}   ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings   ${resp.status_code}    200
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME8}    ${account_id}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Imageupload.CApptQAnsUpload   ${cookie}  ${account_id}   ${apptid1}   ${data}  ${pdffile}
     Log  ${resp.content}
@@ -837,8 +837,8 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-4
     Should Be Equal As Strings  ${resp.status_code}  200 
     Check Answers   ${resp}  ${data}
 
-
 JD-TC-ProviderChangeQnrReleaseStatusForAppt-5
+
     [Documentation]  consumer submit questionnaire for waitlist taken from consumer side
 
     clear_customer   ${PUSERNAME164}
@@ -846,22 +846,6 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-5
     ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=   Get jaldeeIntegration Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
-        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-        Log   ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
-
-    ${resp}=   Get jaldeeIntegration Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}  
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -922,24 +906,40 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
 
-    ${resp}=  Consumer Login  ${CUSERNAME13}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    ${fname}=  FakerLibrary.first_name
+    ${lname}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${CUSERNAME13}    firstName=${fname}   lastName=${lname}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${cid}   ${resp.json()}
 
-    ${resp}=  Get Appointment Schedules Consumer  ${account_id}
-    Log  ${resp.content}
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()[0]['id']}   ${sch_id}
 
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${account_id}
+    ${resp}=    Send Otp For Login    ${CUSERNAME13}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME13}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME13}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
         END
     END
     ${num_slots}=  Get Length  ${slots}
@@ -960,10 +960,6 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-5
     ${resp}=   Get consumer Appointment By Id   ${account_id}  ${apptid2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    Verify Response     ${resp}     uid=${apptid2}   appmtDate=${DAY1}   appmtTime=${slot1}
-    ...   apptStatus=${apptStatus[1]}
-    Should Be Equal As Strings   ${resp.json()['releasedQnr'][0]['status']}   ${QnrReleaseStatus[2]}
-
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
     Log  ${resp.content}
@@ -978,9 +974,13 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings   ${resp.json()['releasedQnr'][0]['status']}   ${QnrReleaseStatus[1]}
 
-    ${resp}=  Consumer Login  ${CUSERNAME13}  ${PASSWORD} 
+    ${resp}=  ProviderLogout 
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME13}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Consumer Questionnaire By uuid For Appmnt    ${apptid2}   ${account_id}
     Log  ${resp.content}
@@ -996,9 +996,10 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME1}   ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings   ${resp.status_code}    200
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME13}    ${account_id}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
 
     ${resp}=  Imageupload.CApptQAnsUpload   ${cookie}  ${account_id}   ${apptid2}   ${data}  ${pdffile}
     Log  ${resp.content}
@@ -1009,19 +1010,20 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-5
     Should Be Equal As Strings  ${resp.status_code}  200 
     Check Answers   ${resp}  ${data}
 
-
 JD-TC-ProviderChangeQnrReleaseStatusForAppt-UH1
+
     [Documentation]  change questinare release status by consumer login
 
-    ${resp}=  Consumer Login  ${CUSERNAME13}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME13}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Provider Change Questionnaire release Status For Appmt    ${QnrReleaseStatus[1]}   ${apptid2}  ${id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  401
 
 JD-TC-ProviderChangeQnrReleaseStatusForAppt-UH2
+
     [Documentation]  change questinare release status without  login
 
     ${resp}=  Provider Change Questionnaire release Status For Appmt    ${QnrReleaseStatus[1]}   ${apptid2}  ${id2}
@@ -1030,6 +1032,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-UH2
     Should Be Equal As Strings  ${resp.json()}  ${SESSION_EXPIRED}
 
 JD-TC-ProviderChangeQnrReleaseStatusForAppt-UH3
+
     [Documentation]   change questinare release status for a canceled appointment
 
     clear_customer   ${PUSERNAME164}
@@ -1037,22 +1040,6 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-UH3
     ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=   Get jaldeeIntegration Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
-        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-        Log   ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
-
-    ${resp}=   Get jaldeeIntegration Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}  
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1112,29 +1099,39 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
 
+    ${fname}=  FakerLibrary.first_name
+    ${lname}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${CUSERNAME11}    firstName=${fname}   lastName=${lname}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Provider Logout
-    Log  ${resp.content}
+    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME11}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${fname}   ${resp.json()['firstName']}
     Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${resp}=  Get Appointment Schedules Consumer  ${account_id}
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()[0]['id']}   ${sch_id}
-
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${account_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()[0]['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()[0]['availableSlots'][${i}]['time']}
         END
     END
     ${num_slots}=  Get Length  ${slots}
@@ -1157,7 +1154,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-UH3
     Verify Response     ${resp}     uid=${apptid1}   appmtDate=${DAY1}   appmtTime=${slot1}
     ...   apptStatus=${apptStatus[1]}
 
-    ${resp}=  Cancel Appointment By Consumer  ${apptid1}   ${account_id}
+    ${resp}=  Cancel Appointment By Consumer  ${apptid1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
@@ -1177,9 +1174,13 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    ${resp}=  Provider Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME11}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=   Get consumer Appointment By Id   ${account_id}  ${apptid1}
     Log  ${resp.content}

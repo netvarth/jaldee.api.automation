@@ -426,11 +426,11 @@ JD-TC-ChangeAnsStatusForAppt-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME23}   ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings   ${resp.status_code}    200
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME23}    ${account_id}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${ans_resp}=  Imageupload.CApptQAnsUpload   ${jsessionynw_value}  ${account_id}   ${apptid1}   ${data}  ${pdffile}  ${jpgfile}
+    ${ans_resp}=  Imageupload.CApptQAnsUpload   ${cookie}  ${account_id}   ${apptid1}   ${data}  ${pdffile}  ${jpgfile}
     Log  ${ans_resp.content}
     Should Be Equal As Strings  ${ans_resp.status_code}  200
 
@@ -469,9 +469,10 @@ JD-TC-ChangeAnsStatusForAppt-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Check Answers   ${resp}  ${data}
 
-
 JD-TC-ChangeAnsStatusForAppt-3
+
     [Documentation]   change status to complete for already completed uploads.
+
     # comment  file gives error, audio/video gives 200.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
@@ -539,6 +540,7 @@ JD-TC-ChangeAnsStatusForAppt-3
 
 
 JD-TC-ChangeAnsStatusForAppt-4
+
     [Documentation]   change answer status to complete after resubmitting the answers.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
