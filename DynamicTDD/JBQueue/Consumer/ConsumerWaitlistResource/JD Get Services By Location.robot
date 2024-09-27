@@ -346,9 +346,6 @@ JD-TC-Get Service By Location-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-<<<<<<< HEAD
-    ${resp}=    Send Otp For Login    ${CUSERNAME17}    ${pid}
-=======
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -390,7 +387,6 @@ JD-TC-Get Service By Location-UH3
     ${email}=    FakerLibrary.Email
    
     ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${account_id1}
->>>>>>> branch 'master' of https://github.com/netvarth/jaldee.api.automation
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
