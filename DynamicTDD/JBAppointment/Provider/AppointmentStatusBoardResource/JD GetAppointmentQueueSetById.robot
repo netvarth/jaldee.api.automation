@@ -18,50 +18,45 @@ Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
+
 ${SERVICE1}     Radio Repdca111
 ${SERVICE2}     Radio Repdca123
 ${SERVICE3}     Radio Repdca222
 
-*** Keywords ***
-check corp
-    [Arguments]   ${domlen}   ${subdomlen}  ${iscorpval}
-    FOR  ${i}  IN RANGE  ${subdomlen}
-        Set Suite Variable  ${sd}  ${domresp.json()[${domlen}]['subDomains'][${i}]['subDomain']} 
-        ${is_corp}=  check_is_corp  ${sd}
-        Log  ${is_corp}
-        Exit For Loop If  '${is_corp}' == '${iscorpval}'
-    END
-    RETURN   ${is_corp}
 
 *** Test Cases ***
 
 JD-TC-GetAppointmentQueueSetById-1
 
     [Documentation]    Create a Appointment QueueSet for Service and appointment schedule for provider
-    ${domresp}=  Get BusinessDomainsConf
-    Should Be Equal As Strings  ${domresp.status_code}  200
-    Set Suite Variable  ${domresp}
-    ${domlen}=  Get Length  ${domresp.json()}
-    ${len}=  Evaluate  ${domlen}-1
-    FOR  ${i}  IN RANGE  ${len}
-        Set Suite Variable  ${d1}  ${domresp.json()[${len}]['domain']}  
-        ${sublen}=    Get Length  ${domresp.json()[${len}]['subDomains']}
-        # Set Suite Variable  ${sd}  ${domresp.json()[${len}]['subDomains'][0]['subDomain']} 
-        ${corp}=  check corp  ${len}   ${sublen}   False
-        Exit For Loop If  '${corp}' == 'False'
-        ${len}=  Evaluate  ${len}-1
-    END 
-    ${firstname}=  FakerLibrary.first_name
-    ${lastname}=  FakerLibrary.last_name
-    ${PUSERNAME_M}=  Evaluate  ${PUSERNAME}+9634
-    ${pkg_id}=   get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd}  ${PUSERNAME_M}   ${pkg_id[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    202
-    ${resp}=  Account Activation  ${PUSERNAME_M}  0
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_M}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_M}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${domresp}=  Get BusinessDomainsConf
+    # Should Be Equal As Strings  ${domresp.status_code}  200
+    # Set Suite Variable  ${domresp}
+    # ${domlen}=  Get Length  ${domresp.json()}
+    # ${len}=  Evaluate  ${domlen}-1
+    # FOR  ${i}  IN RANGE  ${len}
+    #     Set Suite Variable  ${d1}  ${domresp.json()[${len}]['domain']}  
+    #     ${sublen}=    Get Length  ${domresp.json()[${len}]['subDomains']}
+    #     # Set Suite Variable  ${sd}  ${domresp.json()[${len}]['subDomains'][0]['subDomain']} 
+    #     ${corp}=  check corp  ${len}   ${sublen}   False
+    #     Exit For Loop If  '${corp}' == 'False'
+    #     ${len}=  Evaluate  ${len}-1
+    # END 
+    # ${firstname}=  FakerLibrary.first_name
+    # ${lastname}=  FakerLibrary.last_name
+    # ${PUSERNAME_M}=  Evaluate  ${PUSERNAME}+9634
+    # ${pkg_id}=   get_highest_license_pkg
+    # ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd}  ${PUSERNAME_M}   ${pkg_id[0]}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    202
+    # ${resp}=  Account Activation  ${PUSERNAME_M}  0
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Account Set Credential  ${PUSERNAME_M}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_M}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${PUSERNAME_M}=  Evaluate  ${PUSERNAME}+44524684
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_M}=  Provider Signup without Profile  PhoneNumber=${PUSERNAME_M}
+
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_M}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -177,29 +172,10 @@ JD-TC-GetAppointmentQueueSetById-1
 JD-TC-GetAppointmentQueueSetById-2
 
     [Documentation]    Create a Appointment QueueSet for Service ,department and appointment schedule for branch
-    ${domresp}=  Get BusinessDomainsConf
-    Should Be Equal As Strings  ${domresp.status_code}  200
-    ${domlen}=  Get Length  ${domresp.json()}
-    ${len}=  Evaluate  ${domlen}-1
-    FOR  ${i}  IN RANGE  ${len}
-        Set Suite Variable  ${d1}  ${domresp.json()[${len}]['domain']}  
-        ${sublen}=    Get Length  ${domresp.json()[${len}]['subDomains']}
-        # Set Suite Variable  ${sd}  ${domresp.json()[${len}]['subDomains'][0]['subDomain']} 
-        ${corp}=  check corp  ${len}   ${sublen}   True
-        Exit For Loop If  '${corp}' == 'True'
-        ${len}=  Evaluate  ${len}-1
-    END 
-    ${firstname}=  FakerLibrary.first_name
-    ${lastname}=  FakerLibrary.last_name
-    ${PUSERNAME_M}=  Evaluate  ${PUSERNAME}+9638
-    ${pkg_id}=   get_highest_license_pkg
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd}  ${PUSERNAME_M}   ${pkg_id[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    202
-    ${resp}=  Account Activation  ${PUSERNAME_M}  0
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${PUSERNAME_M}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_M}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${PUSERNAME_M}=  Evaluate  ${PUSERNAME}+44524685
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_M}=  Provider Signup without Profile  PhoneNumber=${PUSERNAME_M}
+
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_M}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200

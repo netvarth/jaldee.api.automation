@@ -407,8 +407,7 @@ JD-TC-CreateAppointmentQueueSet-4
     [Documentation]  Create a Appointment QueueSet for department only
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    clear_service   ${HLPUSERNAME10}
-    clear_location  ${HLPUSERNAME10}
+    
     clear_Addon  ${HLPUSERNAME10}
 
     ${resp}=  Get Waitlist Settings
@@ -510,7 +509,7 @@ JD-TC-CreateAppointmentQueueSet-5
 
     [Documentation]  Create a Appointment QueueSet for same service with another Appointment QueueSet details
 
-    ${required_lic}    Random Element     ['Basic','Premium','Team','Enterprise','jaldee_lite']
+    ${required_lic}    Random Element     ['Basic','Premium','Team','Enterprise']
 
     ${PUSERNAME_C}=  Provider with license  ${required_lic}
     Set Suite Variable   ${PUSERNAME_C}

@@ -180,7 +180,7 @@ JD-TC-CreateStatusBoardAppoinment -UH2
 
     ${pid}=  get_acc_id  ${HLPUSERNAME45}
 
-    ${resp}=  AddCustomer  ${CUSERNAME17}  
+    ${resp}=  AddCustomer  ${CUSERNAME21}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
@@ -188,18 +188,18 @@ JD-TC-CreateStatusBoardAppoinment -UH2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME17}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME21}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME17}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME21}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME17}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME21}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
