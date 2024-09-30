@@ -399,6 +399,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid2}
+    Should Be Equal As Strings   ${resp.json()['releasedQnr'][0]['status']}   ${QnrReleaseStatus[2]}
 
     ${resp}=  Provider Change Questionnaire release Status For Appmt    ${QnrReleaseStatus[1]}   ${apptid2}  ${id}
     Log  ${resp.content}
