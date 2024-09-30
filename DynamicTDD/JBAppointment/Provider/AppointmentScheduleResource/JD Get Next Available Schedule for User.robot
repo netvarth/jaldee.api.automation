@@ -21,13 +21,13 @@ JD-TC-NextAvailableSchedule for User-1
 
     [Documentation]   Get next available schedule for user when there is only one schedule
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME57}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${PUSERNAME57}
+    ${pid}=  get_acc_id  ${PUSERNAME68}
 
-    clear_service   ${PUSERNAME57}
-    clear_appt_schedule   ${PUSERNAME57}
+    clear_service   ${PUSERNAME68}
+    clear_appt_schedule   ${PUSERNAME68}
   
     ${PUSERPH0}  ${u_id} =  Create and Configure Sample User
     Set Suite Variable  ${PUSERPH0}
@@ -86,13 +86,13 @@ JD-TC-NextAvailableSchedule for User-2
 
     [Documentation]   Get next available schedule for user when there are more than 1 schedule
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME57}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${PUSERNAME57}
+    ${pid}=  get_acc_id  ${PUSERNAME68}
 
-    clear_service   ${PUSERNAME57}
-    clear_appt_schedule   ${PUSERNAME57}
+    clear_service   ${PUSERNAME68}
+    clear_appt_schedule   ${PUSERNAME68}
     clear_service   ${PUSERPH0}
     clear_appt_schedule   ${PUSERPH0}
 
@@ -165,13 +165,13 @@ JD-TC-NextAvailableSchedule for User-3
 
     [Documentation]   Get next available schedule for user when there are more than 1 schedule and one schedule timings are over
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME57}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${PUSERNAME57}
+    ${pid}=  get_acc_id  ${PUSERNAME68}
 
-    clear_service   ${PUSERNAME57}
-    clear_appt_schedule   ${PUSERNAME57}
+    clear_service   ${PUSERNAME68}
+    clear_appt_schedule   ${PUSERNAME68}
     clear_service   ${PUSERPH0}
     clear_appt_schedule   ${PUSERPH0}
 
@@ -384,8 +384,8 @@ JD-TC-NextAvailableSchedule for User-5
 
     [Documentation]   Get next available schedule without login
 
-    ${pid}=  get_acc_id  ${PUSERNAME57}
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME57}  ${PASSWORD}
+    ${pid}=  get_acc_id  ${PUSERNAME68}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -422,8 +422,8 @@ JD-TC-NextAvailableSchedule for User-6
 
     [Documentation]   Get next available schedule with consumer login
 
-    ${pid}=  get_acc_id  ${PUSERNAME57}
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME57}  ${PASSWORD}
+    ${pid}=  get_acc_id  ${PUSERNAME68}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -481,8 +481,8 @@ JD-TC-NextAvailableSchedule for User-UH1
 
     [Documentation]   Get next available schedule for user with invalid account id
 
-    ${pid}=  get_acc_id  ${PUSERNAME57}
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME57}  ${PASSWORD}
+    ${pid}=  get_acc_id  ${PUSERNAME68}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -524,8 +524,8 @@ JD-TC-NextAvailableSchedule for User-UH2
 
     [Documentation]   Get next available schedule for user with invalid location id
 
-    ${pid}=  get_acc_id  ${PUSERNAME57}
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME57}  ${PASSWORD}
+    ${pid}=  get_acc_id  ${PUSERNAME68}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -567,8 +567,8 @@ JD-TC-NextAvailableSchedule for User-UH3
 
     [Documentation]   Get next available schedule for user with invalid user id
 
-    ${pid}=  get_acc_id  ${PUSERNAME57}
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME57}  ${PASSWORD}
+    ${pid}=  get_acc_id  ${PUSERNAME68}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -611,8 +611,8 @@ JD-TC-NextAvailableSchedule for User-UH4
 
     [Documentation]   Get next available schedule for user with Empty user id
 
-    ${pid}=  get_acc_id  ${PUSERNAME57}
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME57}  ${PASSWORD}
+    ${pid}=  get_acc_id  ${PUSERNAME68}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -651,8 +651,8 @@ JD-TC-NextAvailableSchedule for User-UH5
 
     [Documentation]   Get next available schedule for user with Empty location id
 
-    ${pid}=  get_acc_id  ${PUSERNAME57}
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME57}  ${PASSWORD}
+    ${pid}=  get_acc_id  ${PUSERNAME68}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -690,8 +690,8 @@ JD-TC-NextAvailableSchedule for User-UH6
 
     [Documentation]   Get next available schedule for user with Empty account id
     
-    ${pid}=  get_acc_id  ${PUSERNAME57}
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME57}  ${PASSWORD}
+    ${pid}=  get_acc_id  ${PUSERNAME68}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
