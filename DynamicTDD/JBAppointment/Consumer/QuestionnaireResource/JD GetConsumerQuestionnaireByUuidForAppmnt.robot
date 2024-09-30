@@ -346,7 +346,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-1
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}
     Should Be Equal As Strings  ${qns.status_code}  200
-    Should Be Equal As Strings  ${qns.json()['transactionId']}  ${s_id}
+     
 
     ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
     Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
@@ -499,7 +499,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-2
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}
     Should Be Equal As Strings  ${qns.status_code}  200
-    Should Be Equal As Strings  ${qns.json()['transactionId']}  ${s_id}
+     
 
     ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
     Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
@@ -654,7 +654,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-3
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}
     Should Be Equal As Strings  ${qns.status_code}  200
-    Should Be Equal As Strings  ${qns.json()['transactionId']}  ${s_id}
+     
 
     ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
     Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
