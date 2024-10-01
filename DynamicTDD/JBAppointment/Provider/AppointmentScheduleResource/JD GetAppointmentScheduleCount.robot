@@ -31,32 +31,13 @@ JD-TC-Get Appointment Schedule Count-1
 
     [Documentation]   Get Appointment Schedule Count a valid Provider
 
-    ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
-    ${len}=   Split to lines  ${resp}
-    ${length}=  Get Length   ${len}
-    ${licId}  ${licname}=  get_highest_license_pkg
-    FOR   ${a}  IN RANGE   ${start}  ${length}
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${firstname}  ${lastname}  ${PUSERPH0}  ${login_id}=  Provider Signup  
+    Set Suite Variable    ${PUSERPH0}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable   ${pkgId}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
-    ${domain}=   Set Variable    ${decrypted_data['sector']}
-    ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
-    # ${domain}=   Set Variable    ${resp.json()['sector']}
-    # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
-    ${resp2}=   Get Domain Settings    ${domain}  
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${check}  ${resp2.json()['multipleLocation']}
-    Run Keyword If  "${check}"=="True" and "${pkgId}"=="${licId}"  Exit For Loop
-    END
-    Set Suite Variable  ${a}
-    clear_service   ${PUSERNAME${a}}
-   
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -72,20 +53,6 @@ JD-TC-Get Appointment Schedule Count-1
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    # clear_appt_schedule   ${PUSERNAME${a}}
-
-    # ${resp}=   Get Service
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=    Get Locations
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=    Get Appointment Schedules
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
@@ -98,7 +65,6 @@ JD-TC-Get Appointment Schedule Count-1
     Set Suite Variable   ${DAY1}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    # ${sTime1}=  db.get_time_by_timezone   ${tz}
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${eTime1}=  add_timezone_time  ${tz}  0  30  
     ${schedule_name}=  FakerLibrary.bs
@@ -179,9 +145,10 @@ JD-TC-Get Appointment Schedule Count-1
     Should Be Equal As Strings  ${resp.json()[3]['id']}   ${sch_id1}  
 
 JD-TC-Get Appointment Schedule Count-2
+
     [Documentation]   Get Appointment Schedule Count of Schedule Id
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -191,9 +158,10 @@ JD-TC-Get Appointment Schedule Count-2
     Should Be Equal As Strings  ${resp.json()}      1
 
 JD-TC-Get Appointment Schedule Count-3
+
     [Documentation]   Get Appointment Schedule Count of schedule Name
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -219,7 +187,7 @@ JD-TC-Get Appointment Schedule Count-UH1
 
     [Documentation]   Get Appointment Schedule Count of apptState
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -232,7 +200,7 @@ JD-TC-Get Appointment Schedule Count-UH2
 
     [Documentation]   Get Appointment Schedule Count of parallelServing
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -254,7 +222,7 @@ JD-TC-Get Appointment Schedule Count-UH4
 
     [Documentation]   With Consumer Login
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

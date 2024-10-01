@@ -22,7 +22,10 @@ JD-TC-GetApptScheduleWithLocationServiceDate-1
 
     [Documentation]    Get Appt Schedule for today.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD}
+    ${firstname}  ${lastname}  ${PUSERPH0}  ${login_id}=  Provider Signup  
+    Set Suite Variable    ${PUSERPH0}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.content}    
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -82,7 +85,7 @@ JD-TC-GetApptScheduleWithLocationServiceDate-2
 
     [Documentation]    Get Appt Schedule for future.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -99,7 +102,7 @@ JD-TC-GetApptScheduleWithLocationServiceDate-3
 
     [Documentation]    Get Appt Schedule for future(schedule finished).
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -113,7 +116,7 @@ JD-TC-GetApptScheduleWithLocationServiceDate-4
 
     [Documentation]    Update the schedule with an extanded date then try to get the schedule with the updated date.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -145,7 +148,7 @@ JD-TC-GetApptScheduleWithLocationServiceDate-5
 
     [Documentation]    Update the schedule with another service then try to get the schedule with the updated service.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -177,7 +180,7 @@ JD-TC-GetApptScheduleWithLocationServiceDate-6
 
     [Documentation]    Update the schedule with another location then try to get the schedule with the updated location.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -277,7 +280,7 @@ JD-TC-GetApptScheduleWithLocationServiceDate-UH1
 
     [Documentation]    Disable the schedule then try to get the schedule with the location, service and date.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -313,7 +316,7 @@ JD-TC-GetApptScheduleWithLocationServiceDate-UH3
 
     [Documentation]     get the schedule for a past date.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -327,11 +330,11 @@ JD-TC-GetApptScheduleWithLocationServiceDate-UH4
 
     [Documentation]    Disable the location then try to get the schedule with the disabled location.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Enable Disable Location  ${lid1}  ${toggleButton[1]}
+    ${resp}=  Disable Location  ${lid1}  
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${DAY}=  db.add_timezone_date  ${tz}  4     

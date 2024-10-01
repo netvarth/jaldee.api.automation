@@ -7547,7 +7547,7 @@ JD-TC-Update schedule-42
     Set Suite Variable   ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     Set Suite Variable  ${delta}
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
+    ${eTime1}=  add_timezone_time  ${tz}  3  40 
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location

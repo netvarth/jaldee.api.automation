@@ -211,85 +211,7 @@ JD-TC-Get Appointment schedules-4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-
-    ${domain}=   Set Variable    ${decrypted_data['sector']}
-    ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
-    # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
-    
-    ${resp2}=   Get Business Profile
-    Log  ${resp2.json()}
-    Should Be Equal As Strings    ${resp2.status_code}    200
-    # Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
-
-    ${resp}=  Get Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-
-    END
-    
-    sleep  2s
-    ${dep_name1}=  FakerLibrary.bs
-    ${dep_code1}=   Random Int  min=100   max=999
-    ${dep_desc1}=   FakerLibrary.word  
-    ${resp}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${dep_id}  ${resp.json()}
-
-    ${resp}=  Get User
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF   not '${resp.content}' == '${emptylist}'
-        ${len}=  Get Length  ${resp.json()}
-        FOR   ${i}  IN RANGE   0   ${len}
-            Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLPUSERNAME9}'
-                clear_users  ${user_phone}
-            END
-        END
-    END
-
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+345
-    clear_users  ${PUSERPH0}
-    ${firstname}=  FakerLibrary.name
-    ${lastname}=  FakerLibrary.last_name
-    ${dob}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
-
-    # ${resp}=  Get LocationsByPincode     ${pin}
-    FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Test Variable  ${pin1}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
-
-
-    ${whpnum}=  Evaluate  ${PUSERPH0}+576245
-    ${tlgnum}=  Evaluate  ${PUSERPH0}+576345
-
-    ${resp}=  Create User  ${firstname}  ${lastname}     ${countryCodes[0]}  ${PUSERPH0}    ${userType[0]}   dob=${dob}  gender=${Genderlist[0]}  email=${P_Email}${PUSERPH0}.${test_mail}   pincode=${pin}    deptId=${dep_id}  
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${u_id}  ${resp.json()}
-    
-    ${resp}=  Get User By Id  ${u_id}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${u_id} =  Create Sample User
   
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -304,7 +226,7 @@ JD-TC-Get Appointment schedules-4
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${s_id}=  Create Sample Service For User  ${SERVICE1}  ${dep_id}  ${u_id}
+    ${s_id}=  Create Sample Service   ${SERVICE1}   provider=${u_id}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}

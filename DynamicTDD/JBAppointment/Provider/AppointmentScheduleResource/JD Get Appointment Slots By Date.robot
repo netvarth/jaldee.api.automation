@@ -234,7 +234,7 @@ JD-TC-GetSlots By Date-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']} 
 
-    ${resp}=  AddCustomer  ${CUSERNAME22}  
+    ${resp}=  AddCustomer  ${CUSERNAME35}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
@@ -242,16 +242,18 @@ JD-TC-GetSlots By Date-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME22}    ${pid}
+    ${resp}=    Send Otp For Login    ${CUSERNAME35}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME22}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME35}   ${OtpPurpose['Authentication']}   JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME22}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME35}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

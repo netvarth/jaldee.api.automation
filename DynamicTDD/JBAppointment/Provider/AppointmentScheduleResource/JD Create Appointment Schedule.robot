@@ -56,6 +56,7 @@ JD-TC-CreateAppointmentSchedule-1
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
+    clear_service   ${HLPUSERNAME50}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     
@@ -487,8 +488,7 @@ JD-TC-CreateAppointmentSchedule-UH1
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}  ${parallel}  ${p2_lid2}  ${duration}  ${bool1}  ${s_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
-    
-    Should Be Equal As Strings  "${resp.json()}"  "${APPT_SCHEDULE_NAME_ALREADY_EXISTS}"
+    Should Be Equal As Strings  ${resp.json()}   ${APPT_SCHEDULE_NAME_ALREADY_EXISTS}
 
 JD-TC-CreateAppointmentSchedule-UH2
 
@@ -501,8 +501,15 @@ JD-TC-CreateAppointmentSchedule-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    clear_appt_schedule   ${PUSERNAME${a}}
+
     ${schedule_name}=  FakerLibrary.bs
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}  ${parallel}  ${p2_lid1}  ${duration}  ${bool1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}  ${parallel}  ${p2_lid2}  ${duration}  ${bool1}  ${s_id2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${schedule_name}=  FakerLibrary.bs
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}  ${parallel}  ${p2_lid2}  ${duration}  ${bool1}  ${s_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${QUEUE_SCHEDULE_OVERLAPS_CREATE}"

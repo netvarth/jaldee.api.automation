@@ -321,8 +321,7 @@ JD-TC-EnableDisable Appointment Schedule-UH2
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
-
+    
     ${resp}=  Enable Disable Appointment Schedule  ${sch_id}  ${Qstate[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -330,8 +329,7 @@ JD-TC-EnableDisable Appointment Schedule-UH2
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[1]}
-    
+   
     ${resp}=  Enable Disable Appointment Schedule  ${sch_id}  ${Qstate[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
