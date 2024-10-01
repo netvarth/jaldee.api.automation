@@ -1982,8 +1982,7 @@ JD-TC-GetFutureAppointmentCount-16
     Should Be Equal As Strings  ${resp.status_code}  200
    
     ${slot1_time}=  Get Substring   ${slot1}  0  5
-    ${slot2_time}=  Get Substring   ${slot2}  0  5
-
+   
     ${resp}=  Get Future Appointment Count
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2135,6 +2134,7 @@ JD-TC-GetFutureAppointmentCount-18
     clear_location  ${PUSERNAME179}
     
     ${lid}=  Create Sample Location
+    ${SERVICE1}=    FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}
     clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
