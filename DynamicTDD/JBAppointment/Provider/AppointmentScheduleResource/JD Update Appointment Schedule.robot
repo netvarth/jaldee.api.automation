@@ -550,7 +550,6 @@ JD-TC-Update schedule-6
     # 
     clear_service   ${PUSERNAME208}
     
-
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -583,6 +582,7 @@ JD-TC-Update schedule-6
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}

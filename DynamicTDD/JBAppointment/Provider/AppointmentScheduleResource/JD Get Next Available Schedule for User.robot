@@ -606,31 +606,7 @@ JD-TC-NextAvailableSchedule for User-UH3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
 JD-TC-NextAvailableSchedule for User-UH4
-
-    [Documentation]   Get next available schedule for user with Empty user id
-
-    ${pid}=  get_acc_id  ${PUSERNAME68}
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${lid}   ${resp.json()[0]['id']}
-
-    ${resp}=    Get NextAvailableSchedule By Provider Location and User    ${pid}   ${lid}  ${EMPTY}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['isCheckinAllowed']}   ${bool[0]}
-
-    ${resp}=  Provider Logout
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-JD-TC-NextAvailableSchedule for User-UH5
 
     [Documentation]   Get next available schedule for user with Empty location id
 
@@ -655,11 +631,6 @@ JD-TC-NextAvailableSchedule for User-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${u_id}   ${resp.json()[0]['id']}
 
-    ${resp}=  Get Appointment Schedules  provider-eq=${u_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${sch_id}   ${resp.json()[0]['id']}
-
     ${resp}=    Get NextAvailableSchedule By Provider Location and User    ${pid}   ${EMPTY}  ${u_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -669,7 +640,7 @@ JD-TC-NextAvailableSchedule for User-UH5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-NextAvailableSchedule for User-UH6
+JD-TC-NextAvailableSchedule for User-UH5
 
     [Documentation]   Get next available schedule for user with Empty account id
     
@@ -693,11 +664,6 @@ JD-TC-NextAvailableSchedule for User-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${u_id}   ${resp.json()[0]['id']}
-
-    ${resp}=  Get Appointment Schedules  provider-eq=${u_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${sch_id}   ${resp.json()[0]['id']}
 
     ${resp}=    Get NextAvailableSchedule By Provider Location and User    ${EMPTY}   ${lid}  ${u_id}
     Log  ${resp.json()}

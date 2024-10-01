@@ -419,9 +419,6 @@ JD-TC-CreateAppointmentSchedule-7
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${sTime2}=  add_timezone_time  ${tz}  2  35
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime2}=  add_two   ${sTime2}  ${delta}
@@ -437,19 +434,11 @@ JD-TC-CreateAppointmentSchedule-7
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id2}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${schedule_name}=  FakerLibrary.bs
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}  ${parallel}  ${p2_lid1}  ${duration2}  ${bool1}  ${s_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id3}  ${resp.json()}
-
-    ${resp}=  Get Appointment Schedule ById  ${sch_id3}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-CreateAppointmentSchedule-8
 

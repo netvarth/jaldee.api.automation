@@ -16,10 +16,6 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 
 *** Variables ***
-${SERVICE1}     Consultation
-${SERVICE2}     AvailableNow
-${SERVICE3}     NEWYEAR
-${SERVICE4}     MYBIRTHDAY 
 ${prefix}       serviceBatch
 ${suffix}       serving
 ${Apptstat}     ENABLED  DISABLED
@@ -53,12 +49,16 @@ JD-TC-Get Appointment Schedule Count-1
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
+    ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
+    ${SERVICE2}=  FakerLibrary.word
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${s_id2}
+    ${SERVICE3}=  FakerLibrary.word
     ${s_id3}=  Create Sample Service  ${SERVICE3}
     Set Suite Variable   ${s_id3}
+    ${SERVICE4}=  FakerLibrary.word
     ${s_id4}=  Create Sample Service  ${SERVICE4}
     Set Suite Variable   ${s_id4}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
