@@ -168,7 +168,10 @@ JD-TC-Appointment Schedule FutureAppmt Status-UH4
 
     ${pid}=  get_acc_id  ${PUSERNAME52}
 
-    ${resp}=  AddCustomer  ${CUSERNAME22}  
+    ${NewCustomer}    Generate random string    10    123456789
+    ${NewCustomer}    Convert To Integer  ${NewCustomer}
+
+    ${resp}=  AddCustomer  ${NewCustomer}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
@@ -176,18 +179,18 @@ JD-TC-Appointment Schedule FutureAppmt Status-UH4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME22}    ${pid}
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME22}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME22}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

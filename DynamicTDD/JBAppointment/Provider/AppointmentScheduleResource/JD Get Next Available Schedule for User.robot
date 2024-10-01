@@ -321,7 +321,7 @@ JD-TC-NextAvailableSchedule for User-4
     ${schedule_name1}=  FakerLibrary.bs
     ${parallel1}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval1}=  Convert To Integer   ${delta1/5}
-        ${duration1}=  FakerLibrary.Random Int  min=1  max=${maxval1}
+    ${duration1}=  FakerLibrary.Random Int  min=1  max=${maxval1}
     ${bool2}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule    ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY11}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel1}  ${parallel1}  ${lid1}  ${duration1}  ${bool1}  ${s_id1}  provider=${u_id1}
     Log  ${resp.json()}
@@ -620,25 +620,8 @@ JD-TC-NextAvailableSchedule for User-UH4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
-
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${s_id}   ${resp.json()[0]['id']}
-
-    ${resp}=  Get User
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${u_id}   ${resp.json()[0]['id']}
-
-    ${resp}=  Get Appointment Schedules  provider-eq=${u_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${sch_id}   ${resp.json()[0]['id']}
 
     ${resp}=    Get NextAvailableSchedule By Provider Location and User    ${pid}   ${lid}  ${EMPTY}
-
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['isCheckinAllowed']}   ${bool[0]}
