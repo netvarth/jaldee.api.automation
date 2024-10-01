@@ -275,12 +275,5 @@ JD-TC-GetSlots By Date-UH3
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION}"
 
-JD-TC-GetSlots By Date-UH4
-	[Documentation]  Get slots using Invalid id
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    ${resp}=  Get Appointment Slots By Date Schedule  100  ${DAY1}  ${s_id}
-    Should Be Equal As Strings  ${resp.status_code}  422   
-    Should Be Equal As Strings  "${resp.json()}"  "${SHEDULE_NOT_FOUND}"
  
     

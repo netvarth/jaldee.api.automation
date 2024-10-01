@@ -13,7 +13,6 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
@@ -100,30 +99,11 @@ JD-TC-CreateAppointmentSchedule-2
 
     [Documentation]    Create a schedule with same details of another provider
 
-    ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
-    ${len}=   Split to lines  ${resp}
-    ${length}=  Get Length   ${len}
-    ${licId}  ${licname}=  get_highest_license_pkg
-    FOR   ${a}  IN RANGE   ${start}  ${length}
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${firstname}  ${lastname}  ${PUSERPHONE1}  ${login_id}=  Provider Signup  
+    Set Suite Variable    ${PUSERPHONE1}
+    ${resp}=  Encrypted Provider Login  ${PUSERPHONE1}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-
-    Set Test Variable   ${pkgId}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
-    ${domain}=   Set Variable    ${decrypted_data['sector']}
-    ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
-    # ${domain}=   Set Variable    ${resp.json()['sector']}
-    # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
-    ${resp2}=   Get Domain Settings    ${domain}  
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Log  ${resp.content}
-    Set Test Variable  ${check}  ${resp2.json()['multipleLocation']}
-    Run Keyword If  "${check}"=="True" and "${pkgId}"=="${licId}"  Exit For Loop
-    END
-    Set Suite Variable  ${a}
   
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -169,7 +149,7 @@ JD-TC-CreateAppointmentSchedule-3
 
     [Documentation]    Create a second schedule to the same location with more services
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPHONE1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${s_id2}=  Create Sample Service  ${SERVICE3}
     Set Suite Variable  ${s_id2}
@@ -200,7 +180,7 @@ JD-TC-CreateAppointmentSchedule-4
 
     [Documentation]    Create a second schedule to the same location with same time and different services
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPHONE1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${s_id6}=  Create Sample Service  ${SERVICE7}
     ${s_id7}=  Create Sample Service  ${SERVICE8}
@@ -221,7 +201,7 @@ JD-TC-CreateAppointmentSchedule-5
 
     [Documentation]    Create 2 schedules with same time on different days
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPHONE1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=    Get Locations
@@ -239,7 +219,7 @@ JD-TC-CreateAppointmentSchedule-5
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    # clear_appt_schedule   ${PUSERNAME${a}}
+    # clear_appt_schedule   ${PUSERPHONE1}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -354,7 +334,7 @@ JD-TC-CreateAppointmentSchedule-7
 
     [Documentation]    create a schedule that overlap another two schedules
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPHONE1}   ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=    Get Locations
@@ -444,7 +424,7 @@ JD-TC-CreateAppointmentSchedule-8
 
     [Documentation]    Create a schedule in different location with overlapping time
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPHONE1}   ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${p2_lid2}=  Create Sample Location
@@ -471,7 +451,7 @@ JD-TC-CreateAppointmentSchedule-UH1
 
     [Documentation]    Create a schedule in different location with another service and already existing schedule name and time
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPHONE1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}  ${parallel}  ${p2_lid2}  ${duration}  ${bool1}  ${s_id2}
@@ -483,14 +463,14 @@ JD-TC-CreateAppointmentSchedule-UH2
 
     [Documentation]    Create a schedule to the same location with overlapping time
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPHONE1}   ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_appt_schedule   ${PUSERNAME${a}}
+    clear_appt_schedule   ${PUSERPHONE1}
 
     ${schedule_name}=  FakerLibrary.bs
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}  ${parallel}  ${p2_lid2}  ${duration}  ${bool1}  ${s_id2}
@@ -511,7 +491,7 @@ JD-TC-CreateAppointmentSchedule-UH3
 
     [Documentation]    Create a schedule in a location without service details
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPHONE1}   ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${schedule_name}=  FakerLibrary.bs
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}  ${parallel}  ${p2_lid1}  ${duration}  ${bool1}
@@ -523,7 +503,7 @@ JD-TC-CreateAppointmentSchedule-UH4
 
     [Documentation]    Create a schedule in a location without location details
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPHONE1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${schedule_name}=  FakerLibrary.bs
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}  ${parallel}  ${EMPTY}  ${duration}  ${bool1}  ${s_id2}
@@ -561,7 +541,7 @@ JD-TC-CreateAppointmentSchedule-UH6
     ${s_id6}=  Create Sample Service  ${SERVICE6}
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPHONE1}   ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -584,9 +564,9 @@ JD-TC-CreateAppointmentSchedule-UH6
 
 JD-TC-CreateAppointmentSchedule-UH7
     [Documentation]    Create a schedule with eTime is less than sTime
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPHONE1}   ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_appt_schedule   ${PUSERNAME${a}}
+    # clear_appt_schedule   ${PUSERPHONE1}
     ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -600,7 +580,7 @@ JD-TC-CreateAppointmentSchedule-UH7
 
 JD-TC-CreateAppointmentSchedule-UH8
     [Documentation]    Create a schedule with schedule time is less than  duration
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPHONE1}   ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${sTime9}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
