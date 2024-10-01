@@ -30,14 +30,21 @@ Get Cart Items by provider consumer id
     Check Deprication  ${resp}  Get consumer Appt Bill Details 
     RETURN  ${resp}
 
+Get Count Of Cart Items 
+    [Arguments]  ${providerConsumerId}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/cart/procon/${providerConsumerId}/count   expected_status=any   
+    Check Deprication  ${resp}  Get consumer Appt Bill Details 
+    RETURN  ${resp}
+
 
 *** Test Cases ***
 
-JD-TC-Get Cart Iems of Provider consumer-1
+JD-TC-Get Cart Iems Count -1
 
-    [Documentation]  Create cart and check that from provider side
+    [Documentation]  Create cart and check that  count from   provider side
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -78,10 +85,10 @@ JD-TC-Get Cart Iems of Provider consumer-1
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLPUSERNAME1}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME3}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
@@ -248,7 +255,7 @@ JD-TC-Get Cart Iems of Provider consumer-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -256,87 +263,23 @@ JD-TC-Get Cart Iems of Provider consumer-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Strings    ${len}    3
-
-    FOR  ${i}  IN RANGE   ${len}
-
-        IF  '${resp.json()[${i}]['uid']}' == '${cartItemUid1}'  
-            Should Be Equal As Strings    ${resp.json()[${i}]['accountId']}                                              ${accountId}
-            Should Be Equal As Strings    ${resp.json()[${i}]['locationId']}                                             ${locId1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['encId']}                                         ${store_id}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['name']}                                           ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['providerConsumer']['name']}                               ${firstName} ${lastName}
-            Should Be Equal As Strings    ${resp.json()[${i}]['cart']['uid']}                                            ${cartUid}
-            Should Be Equal As Strings    ${resp.json()[${i}]['uid']}                                                    ${cartItemUid1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['encId']}                                       ${soc_id1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['name']}                                        ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['invMgmt']}                                     ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['spCode']}                                       ${itemEncId1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['name']}                                         ${displayName}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['isInventoryItem']}                                      ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['isBatchApplicable']}                                 ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['price']}                                                  ${price}
-            Should Be Equal As Strings    ${resp.json()[${i}]['netTotal']}                                                  ${item1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['netRate']}                                                  ${item1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalogItem']['encId']}                                    ${SOC_itemEncIds1}
 
 
-
-        ELSE IF     '${resp.json()[${i}]['uid']}' == '${cartItemUid2}'      
-            Should Be Equal As Strings    ${resp.json()[${i}]['accountId']}                                              ${accountId}                                               
-            Should Be Equal As Strings    ${resp.json()[${i}]['locationId']}                                             ${locId1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['encId']}                                         ${store_id}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['name']}                                           ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['providerConsumer']['name']}                               ${firstName} ${lastName}
-            Should Be Equal As Strings    ${resp.json()[${i}]['cart']['uid']}                                            ${cartUid}
-            Should Be Equal As Strings    ${resp.json()[${i}]['uid']}                                                    ${cartItemUid2}                                            
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['name']}                                        ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['invMgmt']}                                     ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['spCode']}                                       ${itemEncId2}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['name']}                                         ${displayName1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['isInventoryItem']}                                      ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['isBatchApplicable']}                                 ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['price']}                                                  ${price1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['netTotal']}                                                  ${item2}
-            Should Be Equal As Strings    ${resp.json()[${i}]['netRate']}                                                  ${item2}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalogItem']['encId']}                                                  ${SOC_itemEncIds2}
-
-
-
-        ELSE IF     '${resp.json()[${i}]['uid']}' == '${cartItemUid3}'      
-            Should Be Equal As Strings    ${resp.json()[${i}]['accountId']}                                              ${accountId}                                               
-            Should Be Equal As Strings    ${resp.json()[${i}]['locationId']}                                             ${locId1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['encId']}                                         ${store_id}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['name']}                                           ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['providerConsumer']['name']}                               ${firstName} ${lastName}
-            Should Be Equal As Strings    ${resp.json()[${i}]['cart']['uid']}                                            ${cartUid}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['encId']}                                       ${soc_id1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['name']}                                        ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['invMgmt']}                                     ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['uid']}                                                    ${cartItemUid3}  
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['spCode']}                                       ${itemEncId3}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['name']}                                         ${displayName2}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['isInventoryItem']}                                      ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['isBatchApplicable']}                                 ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['price']}                                                  ${price2}
-            Should Be Equal As Strings    ${resp.json()[${i}]['netTotal']}                                                  ${item3}
-            Should Be Equal As Strings    ${resp.json()[${i}]['netRate']}                                                  ${item3}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalogItem']['encId']}                                                  ${SOC_itemEncIds3}
-
-
-        END
-    END
+    ${resp}=    Get Count Of Cart Items    ${cid} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings     ${resp.json()}    ${len}    
 
 
 
 
+ 
 
+JD-TC-Get Cart Iems Count -2
 
-JD-TC-Get Cart Iems of Provider consumer-2
+    [Documentation]  Create cart  wwhere item is tax applicable and get that count from provider side
 
-    [Documentation]  Create cart  wwhere item is tax applicable and get that from provider side
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME303}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -362,10 +305,10 @@ JD-TC-Get Cart Iems of Provider consumer-2
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME303}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${PUSERNAME300}
+    ${accountId}=  get_acc_id  ${PUSERNAME303}
     Set Test Variable    ${accountId} 
 
     ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
@@ -561,7 +504,7 @@ JD-TC-Get Cart Iems of Provider consumer-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME303}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -569,65 +512,22 @@ JD-TC-Get Cart Iems of Provider consumer-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Strings    ${len}    3
-
-    FOR  ${i}  IN RANGE   ${len}
-
-        IF  '${resp.json()[${i}]['uid']}' == '${cartItemUid1}'  
-            Should Be Equal As Strings    ${resp.json()[${i}]['accountId']}                                              ${accountId}
-            Should Be Equal As Strings    ${resp.json()[${i}]['locationId']}                                             ${locId1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['encId']}                                         ${store_id}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['name']}                                           ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['providerConsumer']['name']}                               ${firstName} ${lastName}
-            Should Be Equal As Strings    ${resp.json()[${i}]['cart']['uid']}                                            ${cartUid1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['uid']}                                                    ${cartItemUid1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['encId']}                                       ${soc_id1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['name']}                                        ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['invMgmt']}                                     ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['spCode']}                                       ${itemEncId1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['name']}                                         ${displayName}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['isInventoryItem']}                                      ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['isBatchApplicable']}                                 ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['price']}                                                  ${price}
-            Should Be Equal As Strings    ${resp.json()[${i}]['netTotal']}                                                  ${item1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['netRate']}                                                  ${item1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalogItem']['encId']}                                    ${SOC_itemEncIds1}
 
 
 
-        ELSE IF     '${resp.json()[${i}]['uid']}' == '${cartItemUid2}'      
-            Should Be Equal As Strings    ${resp.json()[${i}]['accountId']}                                              ${accountId}                                               
-            Should Be Equal As Strings    ${resp.json()[${i}]['locationId']}                                             ${locId1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['encId']}                                         ${store_id}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['name']}                                           ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['providerConsumer']['name']}                               ${firstName} ${lastName}
-            Should Be Equal As Strings    ${resp.json()[${i}]['cart']['uid']}                                            ${cartUid1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['uid']}                                                    ${cartItemUid2}                                            
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['name']}                                        ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['invMgmt']}                                     ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['spCode']}                                       ${itemEncId2}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['name']}                                         ${displayName1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['isInventoryItem']}                                      ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['isBatchApplicable']}                                 ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['price']}                                                  ${price1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['netTotal']}                                                  ${item2}
-            Should Be Equal As Strings    ${resp.json()[${i}]['netRate']}                                                  ${item2}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalogItem']['encId']}                                                  ${SOC_itemEncIds2}
-        END
-    END
+    ${resp}=    Get Count Of Cart Items    ${cid1} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings     ${resp.json()}    ${len}  
 
 
 
+JD-TC-Get Cart Iems Count -3
+
+    [Documentation]  In the sales order catalog, only home delivery is disable and store pickup is enabled. Then, try to add an item to the cart using home delivery without address. then get that  count from provider side
 
 
-
-
-JD-TC-Get Cart Iems of Provider consumer-3
-
-    [Documentation]  In the sales order catalog, only home delivery is disable and store pickup is enabled. Then, try to add an item to the cart using home delivery without address. then get that from provider side
-
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME301}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME304}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -654,10 +554,10 @@ JD-TC-Get Cart Iems of Provider consumer-3
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME301}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME304}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${PUSERNAME301}
+    ${accountId}=  get_acc_id  ${PUSERNAME304}
     Set Test Variable    ${accountId} 
 
     ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
@@ -776,7 +676,7 @@ JD-TC-Get Cart Iems of Provider consumer-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME301}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME304}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -784,41 +684,20 @@ JD-TC-Get Cart Iems of Provider consumer-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Strings    ${len}    1
-
-    FOR  ${i}  IN RANGE   ${len}
-
-        IF  '${resp.json()[${i}]['uid']}' == '${cartItemUid1}'  
-            Should Be Equal As Strings    ${resp.json()[${i}]['accountId']}                                              ${accountId}
-            Should Be Equal As Strings    ${resp.json()[${i}]['locationId']}                                             ${locId1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['encId']}                                         ${store_id}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['name']}                                           ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['providerConsumer']['name']}                               ${firstName} ${lastName}
-            Should Be Equal As Strings    ${resp.json()[${i}]['cart']['uid']}                                            ${cartUid1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['uid']}                                                    ${cartItemUid1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['encId']}                                       ${soc_id1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['name']}                                        ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['invMgmt']}                                     ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['spCode']}                                       ${itemEncId1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['name']}                                         ${displayName}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['isInventoryItem']}                                      ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['isBatchApplicable']}                                 ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['price']}                                                  ${price}
-            Should Be Equal As Strings    ${resp.json()[${i}]['netTotal']}                                                  ${item1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['netRate']}                                                  ${item1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalogItem']['encId']}                                    ${SOC_itemEncIds1}
-
-        END
-    END
 
 
+    ${resp}=    Get Count Of Cart Items    ${cid2} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings     ${resp.json()}    ${len}  
 
-JD-TC-Get Cart Iems of Provider consumer-4
+
+JD-TC-Get Cart Iems Count -4
 
     [Documentation]  In the sales order catalog where inventory manager is on , only courier delivery is disable and store pickup is enabled. Then, try to add an item to the cart using Courier Service.get that from provider side
 
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME373}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME305}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -845,10 +724,10 @@ JD-TC-Get Cart Iems of Provider consumer-4
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME373}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME305}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${PUSERNAME373}
+    ${accountId}=  get_acc_id  ${PUSERNAME305}
     Set Test Variable    ${accountId} 
 
     ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
@@ -987,7 +866,7 @@ JD-TC-Get Cart Iems of Provider consumer-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME373}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME305}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -995,38 +874,17 @@ JD-TC-Get Cart Iems of Provider consumer-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Strings    ${len}    1
 
-    FOR  ${i}  IN RANGE   ${len}
+    ${resp}=    Get Count Of Cart Items    ${cid2} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings     ${resp.json()}    ${len}  
 
-        IF  '${resp.json()[${i}]['uid']}' == '${cartItemUid1}'  
-            Should Be Equal As Strings    ${resp.json()[${i}]['accountId']}                                              ${accountId}
-            Should Be Equal As Strings    ${resp.json()[${i}]['locationId']}                                             ${locId1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['encId']}                                         ${store_id}
-            Should Be Equal As Strings    ${resp.json()[${i}]['store']['name']}                                           ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['providerConsumer']['name']}                               ${firstName} ${lastName}
-            Should Be Equal As Strings    ${resp.json()[${i}]['cart']['uid']}                                            ${cartUid1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['uid']}                                                    ${cartItemUid1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['encId']}                                       ${soc_id1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['name']}                                        ${Name}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['invMgmt']}                                     ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['spCode']}                                       ${itemEncId1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['name']}                                         ${displayName}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['isInventoryItem']}                                      ${bool[0]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['spItem']['isBatchApplicable']}                                 ${bool[1]}
-            Should Be Equal As Strings    ${resp.json()[${i}]['price']}                                                  ${price}
-            Should Be Equal As Strings    ${resp.json()[${i}]['netTotal']}                                                  ${item1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['netRate']}                                                  ${item1}
-            Should Be Equal As Strings    ${resp.json()[${i}]['catalogItem']['encId']}                                    ${SOC_itemEncIds1}
-
-        END
-    END
-
-JD-TC-Get Cart Iems of Provider consumer-5
+JD-TC-Get Cart Iems Count -5
 
     [Documentation]  Get Cart Iems of Provider consumer
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1067,10 +925,10 @@ JD-TC-Get Cart Iems of Provider consumer-5
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLPUSERNAME2}
+    ${accountId}=  get_acc_id  ${HLPUSERNAME5}
     Set Test Variable    ${accountId} 
 
     ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
@@ -1241,7 +1099,7 @@ JD-TC-Get Cart Iems of Provider consumer-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1249,11 +1107,15 @@ JD-TC-Get Cart Iems of Provider consumer-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Strings    ${len}    3
 
-JD-TC-Get Cart Iems of Provider consumer-UH1
+    ${resp}=    Get Count Of Cart Items    ${cid6} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings     ${resp.json()}    ${len}  
 
-    [Documentation]  Get Cart Iems of Provider consumer without login
+JD-TC-Get Cart Iems Count -UH1
+
+    [Documentation]  Get Cart Iems of count without login
     ${resp}=    Get Cart Items by provider consumer id   ${cid} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    419
