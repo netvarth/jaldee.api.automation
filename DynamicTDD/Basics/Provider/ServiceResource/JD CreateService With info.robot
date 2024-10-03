@@ -75,7 +75,7 @@ ${ZOOM_url}    https://zoom.us/j/{}?pwd=THVLcTBZa2lESFZQbU9DQTQrWUxWZz09
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     IF  ${resp.json()['filterByDept']}==${bool[1]}
-#         ${resp}=  Toggle Department Disable
+#         ${resp}=  Enable Disable Department  ${toggle[1]}
 #         Log  ${resp.content}
 #         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -884,7 +884,7 @@ JD-TC-Create Service With info-11
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         IF  ${resp.json()['filterByDept']}==${bool[1]}
-            ${resp}=  Toggle Department Disable
+            ${resp}=  Enable Disable Department  ${toggle[1]}
             Log  ${resp.content}
             Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -897,7 +897,7 @@ JD-TC-Create Service With info-11
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        ${resp}=  Toggle Department Enable
+        ${resp}=  Enable Disable Department  ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         ${resp}=  Get Departments 
@@ -1324,7 +1324,7 @@ JD-TC-Create Service With info-UH5
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         IF  ${resp.json()['filterByDept']}==${bool[1]}
-            ${resp}=  Toggle Department Disable
+            ${resp}=  Enable Disable Department  ${toggle[1]}
             Log  ${resp.content}
             Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1338,7 +1338,7 @@ JD-TC-Create Service With info-UH5
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        ${resp}=  Toggle Department Enable
+        ${resp}=  Enable Disable Department  ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         ${resp}=  Get Departments 
@@ -1626,7 +1626,7 @@ Billable
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[1]}
-        ${resp}=  Toggle Department Disable
+        ${resp}=  Enable Disable Department  ${toggle[1]}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1664,7 +1664,7 @@ Non Billable
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[1]}
-        ${resp}=  Toggle Department Disable
+        ${resp}=  Enable Disable Department  ${toggle[1]}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
 

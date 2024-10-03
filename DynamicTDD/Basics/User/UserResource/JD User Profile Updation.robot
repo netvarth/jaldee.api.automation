@@ -51,7 +51,7 @@ JD-TC-UpdateUserprofile-1
      Set Suite Variable  ${id}
      ${bs}=  FakerLibrary.bs
      Set Suite Variable  ${bs}
-     ${resp}=  Toggle Department Enable
+     ${resp}=  Enable Disable Department  ${toggle[0]}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      sleep  2s

@@ -301,7 +301,7 @@ JD-TC-GetConsumerAppointments-2
 
     clear_appt_schedule   ${HLPUSERNAME53}
 
-    # ${resp}=  Toggle Department Enable
+    # ${resp}=  Enable Disable Department  ${toggle[0]}
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # sleep  2s

@@ -70,7 +70,7 @@ JD-TC-Unassign_IVR_User-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
+        ${resp}=  Enable Disable Department  ${toggle[0]}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -419,7 +419,7 @@ JD-TC-Unassign_IVR_User-2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
+        ${resp}=  Enable Disable Department  ${toggle[0]}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -792,7 +792,7 @@ JD-TC-Unassign_IVR_User-UH3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
+        ${resp}=  Enable Disable Department  ${toggle[0]}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1123,7 +1123,7 @@ JD-TC-Unassign_IVR_User-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
+        ${resp}=  Enable Disable Department  ${toggle[0]}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1460,7 +1460,7 @@ JD-TC-Unassign_IVR_User-UH5
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
+        ${resp}=  Enable Disable Department  ${toggle[0]}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1796,7 +1796,7 @@ JD-TC-Unassign_IVR_User-UH6
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
+        ${resp}=  Enable Disable Department  ${toggle[0]}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2132,7 +2132,7 @@ JD-TC-Unassign_IVR_User-UH7
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
+        ${resp}=  Enable Disable Department  ${toggle[0]}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 

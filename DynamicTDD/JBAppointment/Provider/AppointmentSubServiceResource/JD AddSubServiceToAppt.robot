@@ -427,7 +427,7 @@ JD-TC-AddSubServicesToAppt-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
+        ${resp}=  Enable Disable Department  ${toggle[0]}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1456,7 +1456,7 @@ JD-TC-AddSubServicesToAppt-8
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
     # IF  ${resp.json()['filterByDept']}==${bool[0]}
-    #     ${resp}=  Toggle Department Enable
+    #     ${resp}=  Enable Disable Department  ${toggle[0]}
     #     Log  ${resp.content}
     #     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1806,7 +1806,7 @@ JD-TC-AddSubServicesToAppt-11
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
     # IF  ${resp.json()['filterByDept']}==${bool[0]}
-    #     ${resp}=  Toggle Department Enable
+    #     ${resp}=  Enable Disable Department  ${toggle[0]}
     #     Log  ${resp.content}
     #     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2056,7 +2056,7 @@ JD-TC-AddSubServicesToAppt-12
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
+        ${resp}=  Enable Disable Department  ${toggle[0]}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
 

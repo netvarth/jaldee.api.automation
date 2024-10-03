@@ -49,7 +49,7 @@ JD-TC-Enable or Disable Department-1
     ${id}=  get_id  ${PUSERNAME_K}
     Set Suite Variable  ${id}
 
-    ${resp}=  Toggle Department Enable
+    ${resp}=  Enable Disable Department  ${toggle[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${dep_name1}=  FakerLibrary.bs
@@ -100,6 +100,8 @@ JD-TC-Enable or Disable Department-2
     Log   ${resp.content} 
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Enable service   ${sid1} 
+    Log   ${resp.content} 
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Services in Department  ${did01}
     Log  ${resp.json()}

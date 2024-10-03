@@ -108,7 +108,7 @@ JD-TC-CreateAppointmentQueueSet-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id}  ${resp.json()}
 
-    # ${resp}=  Toggle Department Enable
+    # ${resp}=  Enable Disable Department  ${toggle[0]}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # ${dep_name1}=  FakerLibrary.bs
     # Set Suite Variable   ${dep_name1}
@@ -251,7 +251,7 @@ JD-TC-CreateAppointmentQueueSet-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Toggle Department Enable
+    ${resp}=  Enable Disable Department  ${toggle[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dep_name1}=  FakerLibrary.bs
     Set Suite Variable   ${dep_name1}
@@ -413,7 +413,7 @@ JD-TC-CreateAppointmentQueueSet-4
     ${resp}=  Get Waitlist Settings
     Should Be Equal As Strings  ${resp.status_code}  200
 	IF  ${resp.json()['filterByDept']}==${bool[1]}
-        ${resp}=  Toggle Department Disable
+        ${resp}=  Enable Disable Department  ${toggle[1]}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -451,7 +451,7 @@ JD-TC-CreateAppointmentQueueSet-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Toggle Department Enable
+    ${resp}=  Enable Disable Department  ${toggle[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dep_name1}=  FakerLibrary.bs
     Set Suite Variable   ${dep_name1}
@@ -752,7 +752,7 @@ JD-TC-CreateAppointmentQueueSet-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id}  ${resp.json()}
 
-    # ${resp}=  Toggle Department Enable
+    # ${resp}=  Enable Disable Department  ${toggle[0]}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # ${dep_name1}=  FakerLibrary.bs
     # Set Suite Variable   ${dep_name1}
@@ -802,7 +802,7 @@ JD-TC-CreateAppointmentQueueSet-UH6
     ${resp}=  Get Waitlist Settings
     Should Be Equal As Strings  ${resp.status_code}  200
 	IF  ${resp.json()['filterByDept']}==${bool[1]}
-        ${resp}=  Toggle Department Disable
+        ${resp}=  Enable Disable Department  ${toggle[1]}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
 

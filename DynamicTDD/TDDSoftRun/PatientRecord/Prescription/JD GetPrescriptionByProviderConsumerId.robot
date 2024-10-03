@@ -74,7 +74,7 @@ JD-TC-Get Prescription By Provider Consumer Id-1
      ${bs}=  FakerLibrary.bs
      Set Suite Variable  ${bs}
 
-     ${resp}=  Toggle Department Enable
+     ${resp}=  Enable Disable Department  ${toggle[0]}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      sleep  2s
@@ -87,7 +87,7 @@ JD-TC-Get Prescription By Provider Consumer Id-1
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
+     ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Enable Disable Department  ${toggle[0]}
      Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
      Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
 
