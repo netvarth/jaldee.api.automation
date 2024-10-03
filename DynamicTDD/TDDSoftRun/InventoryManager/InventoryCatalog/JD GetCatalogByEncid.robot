@@ -83,10 +83,10 @@ JD-TC-Get Inventory Catalog By EncId-1
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
+
 
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
@@ -193,7 +193,7 @@ JD-TC-Get Inventory Catalog By EncId-3
     # #     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
     # # END
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

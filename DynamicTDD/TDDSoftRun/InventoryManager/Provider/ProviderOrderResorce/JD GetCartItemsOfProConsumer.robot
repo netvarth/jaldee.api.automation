@@ -222,12 +222,12 @@ JD-TC-Get Cart Iems of Provider consumer-1
     Set Suite Variable    ${cart_uid}    ${resp.json()['uid']}
 
 
-    ${resp}=    Get ConsumerCart By Uid   ${cartUid} 
+    ${resp}=    Get ConsumerCart By Uid   ${cart_uid} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=    Get ConsumerCart With Items By Uid   ${cartUid} 
+    ${resp}=    Get ConsumerCart With Items By Uid   ${cart_uid} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${cartItemUid1}    ${resp.json()['items'][0]['uid']}      
@@ -258,7 +258,7 @@ JD-TC-Get Cart Iems of Provider consumer-1
             Should Be Equal As Strings    ${resp.json()[${i}]['store']['encId']}                                         ${store_id}
             Should Be Equal As Strings    ${resp.json()[${i}]['store']['name']}                                           ${Name}
             Should Be Equal As Strings    ${resp.json()[${i}]['providerConsumer']['name']}                               ${firstName} ${lastName}
-            Should Be Equal As Strings    ${resp.json()[${i}]['cart']['uid']}                                            ${cartUid}
+            Should Be Equal As Strings    ${resp.json()[${i}]['cart']['uid']}                                            ${cart_uid}
             Should Be Equal As Strings    ${resp.json()[${i}]['uid']}                                                    ${cartItemUid1}
             Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['encId']}                                       ${soc_id1}
             Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['name']}                                        ${Name}
@@ -280,7 +280,7 @@ JD-TC-Get Cart Iems of Provider consumer-1
             Should Be Equal As Strings    ${resp.json()[${i}]['store']['encId']}                                         ${store_id}
             Should Be Equal As Strings    ${resp.json()[${i}]['store']['name']}                                           ${Name}
             Should Be Equal As Strings    ${resp.json()[${i}]['providerConsumer']['name']}                               ${firstName} ${lastName}
-            Should Be Equal As Strings    ${resp.json()[${i}]['cart']['uid']}                                            ${cartUid}
+            Should Be Equal As Strings    ${resp.json()[${i}]['cart']['uid']}                                            ${cart_uid}
             Should Be Equal As Strings    ${resp.json()[${i}]['uid']}                                                    ${cartItemUid2}                                            
             Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['name']}                                        ${Name}
             Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['invMgmt']}                                     ${bool[0]}
@@ -301,7 +301,7 @@ JD-TC-Get Cart Iems of Provider consumer-1
             Should Be Equal As Strings    ${resp.json()[${i}]['store']['encId']}                                         ${store_id}
             Should Be Equal As Strings    ${resp.json()[${i}]['store']['name']}                                           ${Name}
             Should Be Equal As Strings    ${resp.json()[${i}]['providerConsumer']['name']}                               ${firstName} ${lastName}
-            Should Be Equal As Strings    ${resp.json()[${i}]['cart']['uid']}                                            ${cartUid}
+            Should Be Equal As Strings    ${resp.json()[${i}]['cart']['uid']}                                            ${cart_uid}
             Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['encId']}                                       ${soc_id1}
             Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['name']}                                        ${Name}
             Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['invMgmt']}                                     ${bool[0]}
@@ -533,16 +533,16 @@ JD-TC-Get Cart Iems of Provider consumer-2
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${cart_uid1}    ${resp.json()['uid']}
 
-    ${resp}=    Get ConsumerCart With Items By Uid   ${cartUid1} 
+    ${resp}=    Get ConsumerCart With Items By Uid   ${cart_uid1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get ConsumerCart By Uid   ${cartUid1} 
+    ${resp}=    Get ConsumerCart By Uid   ${cart_uid1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=    Get ConsumerCart With Items By Uid   ${cartUid1} 
+    ${resp}=    Get ConsumerCart With Items By Uid   ${cart_uid1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${cartItemUid1}    ${resp.json()['items'][0]['uid']}      
@@ -571,7 +571,7 @@ JD-TC-Get Cart Iems of Provider consumer-2
             Should Be Equal As Strings    ${resp.json()[${i}]['store']['encId']}                                         ${store_id}
             Should Be Equal As Strings    ${resp.json()[${i}]['store']['name']}                                           ${Name}
             Should Be Equal As Strings    ${resp.json()[${i}]['providerConsumer']['name']}                               ${firstName} ${lastName}
-            Should Be Equal As Strings    ${resp.json()[${i}]['cart']['uid']}                                            ${cartUid1}
+            Should Be Equal As Strings    ${resp.json()[${i}]['cart']['uid']}                                            ${cart_uid1}
             Should Be Equal As Strings    ${resp.json()[${i}]['uid']}                                                    ${cartItemUid1}
             Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['encId']}                                       ${soc_id1}
             Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['name']}                                        ${Name}
@@ -593,7 +593,7 @@ JD-TC-Get Cart Iems of Provider consumer-2
             Should Be Equal As Strings    ${resp.json()[${i}]['store']['encId']}                                         ${store_id}
             Should Be Equal As Strings    ${resp.json()[${i}]['store']['name']}                                           ${Name}
             Should Be Equal As Strings    ${resp.json()[${i}]['providerConsumer']['name']}                               ${firstName} ${lastName}
-            Should Be Equal As Strings    ${resp.json()[${i}]['cart']['uid']}                                            ${cartUid1}
+            Should Be Equal As Strings    ${resp.json()[${i}]['cart']['uid']}                                            ${cart_uid1}
             Should Be Equal As Strings    ${resp.json()[${i}]['uid']}                                                    ${cartItemUid2}                                            
             Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['name']}                                        ${Name}
             Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['invMgmt']}                                     ${bool[0]}
@@ -752,12 +752,12 @@ JD-TC-Get Cart Iems of Provider consumer-3
     ${resp}=  Create Cart From Consumerside      ${store_id}    ${cid2}      ${deliveryType[1]}    ${catalogItems}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable    ${cart_uid1}    ${resp.json()['uid']}
+    Set Test Variable    ${cart_uid2}    ${resp.json()['uid']}
     # Should Be Equal As Strings  ${resp.json()}   ${FIELD_REQUIRED_FOR}
 
    
 
-    ${resp}=    Get ConsumerCart With Items By Uid   ${cartUid1} 
+    ${resp}=    Get ConsumerCart With Items By Uid   ${cart_uid2} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${cartItemUid1}    ${resp.json()['items'][0]['uid']}      
@@ -786,7 +786,7 @@ JD-TC-Get Cart Iems of Provider consumer-3
             Should Be Equal As Strings    ${resp.json()[${i}]['store']['encId']}                                         ${store_id}
             Should Be Equal As Strings    ${resp.json()[${i}]['store']['name']}                                           ${Name}
             Should Be Equal As Strings    ${resp.json()[${i}]['providerConsumer']['name']}                               ${firstName} ${lastName}
-            Should Be Equal As Strings    ${resp.json()[${i}]['cart']['uid']}                                            ${cartUid1}
+            Should Be Equal As Strings    ${resp.json()[${i}]['cart']['uid']}                                            ${cart_uid2}
             Should Be Equal As Strings    ${resp.json()[${i}]['uid']}                                                    ${cartItemUid1}
             Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['encId']}                                       ${soc_id1}
             Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['name']}                                        ${Name}
@@ -947,7 +947,7 @@ JD-TC-Get Cart Iems of Provider consumer-4
     ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token2} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable    ${cid2}    ${resp.json()['providerConsumer']}
+    Set Test Variable    ${cid3}    ${resp.json()['providerConsumer']}
 
    ${quantity}=  FakerLibrary.Random Int  min=${minSaleQuantity}   max=${maxSaleQuantity}
     ${quantity}=                    Convert To Number  ${quantity}  1
@@ -958,17 +958,17 @@ JD-TC-Get Cart Iems of Provider consumer-4
 
     ${catalogItems}=  Create Dictionary    catalogItem=${catalogItem}  quantity=${quantity}
 
-    ${resp}=  Create Cart From Consumerside      ${store_id}    ${cid2}      ${deliveryType[0]}    ${catalogItems}   
+    ${resp}=  Create Cart From Consumerside      ${store_id}    ${cid3}      ${deliveryType[0]}    ${catalogItems}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${cart_uid1}    ${resp.json()['uid']}
+    Set Suite Variable    ${cart_uid2}    ${resp.json()['uid']}
 
 
-    ${resp}=    Get ConsumerCart By Uid   ${cartUid1} 
+    ${resp}=    Get ConsumerCart By Uid   ${cart_uid2} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get ConsumerCart With Items By Uid   ${cartUid1} 
+    ${resp}=    Get ConsumerCart With Items By Uid   ${cart_uid2} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${cartItemUid1}    ${resp.json()['items'][0]['uid']}      
@@ -983,7 +983,7 @@ JD-TC-Get Cart Iems of Provider consumer-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Cart Items by provider consumer id   ${cid2} 
+    ${resp}=    Get Cart Items by provider consumer id   ${cid3} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${len}=  Get Length  ${resp.json()}
@@ -997,7 +997,7 @@ JD-TC-Get Cart Iems of Provider consumer-4
             Should Be Equal As Strings    ${resp.json()[${i}]['store']['encId']}                                         ${store_id}
             Should Be Equal As Strings    ${resp.json()[${i}]['store']['name']}                                           ${Name}
             Should Be Equal As Strings    ${resp.json()[${i}]['providerConsumer']['name']}                               ${firstName} ${lastName}
-            Should Be Equal As Strings    ${resp.json()[${i}]['cart']['uid']}                                            ${cartUid1}
+            Should Be Equal As Strings    ${resp.json()[${i}]['cart']['uid']}                                            ${cart_uid2}
             Should Be Equal As Strings    ${resp.json()[${i}]['uid']}                                                    ${cartItemUid1}
             Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['encId']}                                       ${soc_id1}
             Should Be Equal As Strings    ${resp.json()[${i}]['catalog']['name']}                                        ${Name}
@@ -1208,19 +1208,19 @@ JD-TC-Get Cart Iems of Provider consumer-5
     ${resp}=  Create Cart From Consumerside      ${store_id}    ${cid6}      ${deliveryType[0]}    ${catalogItems}   ${catalogItems1}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable    ${cartUid}    ${resp.json()['uid']}
+    Set Test Variable    ${cart_uid4}    ${resp.json()['uid']}
 
-    ${resp}=  Update Cart From Consumerside     ${cartUid}   ${store_id}    ${cid6}      ${deliveryType[0]}      ${catalogItems2}
+    ${resp}=  Update Cart From Consumerside     ${cart_uid4}   ${store_id}    ${cid6}      ${deliveryType[0]}      ${catalogItems2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=    Get ConsumerCart By Uid   ${cartUid} 
+    ${resp}=    Get ConsumerCart By Uid   ${cart_uid4} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-     ${resp}=    Get ConsumerCart With Items By Uid   ${cartUid} 
+     ${resp}=    Get ConsumerCart With Items By Uid   ${cart_uid4} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${cartItemUid1}    ${resp.json()['items'][0]['uid']}      

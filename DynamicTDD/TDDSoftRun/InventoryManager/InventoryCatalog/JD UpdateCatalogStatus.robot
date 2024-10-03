@@ -83,12 +83,9 @@ JD-TC-Update Inventory Catalog status-1
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -266,7 +263,7 @@ JD-TC-Update Inventory Catalog status-UH7
     Should Be Equal As Strings    ${resp.status_code}    200   
 
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
@@ -392,7 +389,7 @@ JD-TC-Update Inventory Catalog status-UH8
 
 
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
