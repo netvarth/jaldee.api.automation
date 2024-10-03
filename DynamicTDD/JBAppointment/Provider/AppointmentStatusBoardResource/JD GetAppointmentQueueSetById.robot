@@ -103,7 +103,7 @@ JD-TC-GetAppointmentQueueSetById-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id}  ${resp.json()}
 
-    # ${resp}=  Toggle Department Enable
+    # ${resp}=  Enable Disable Department  ${toggle[0]}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # ${dep_name1}=  FakerLibrary.bs
     # Set Suite Variable   ${dep_name1}
@@ -222,7 +222,7 @@ JD-TC-GetAppointmentQueueSetById-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Toggle Department Enable
+    ${resp}=  Enable Disable Department  ${toggle[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dep_name1}=  FakerLibrary.bs
     Set Suite Variable   ${dep_name1}

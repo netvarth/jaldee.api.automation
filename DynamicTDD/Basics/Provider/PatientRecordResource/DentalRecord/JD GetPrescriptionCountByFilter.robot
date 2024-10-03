@@ -72,7 +72,7 @@ JD-TC-Get Prescription Count By Filter-1
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
 
-    ${resp}=  Toggle Department Enable
+    ${resp}=  Enable Disable Department  ${toggle[0]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep  2s
@@ -85,7 +85,7 @@ JD-TC-Get Prescription Count By Filter-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
+        ${resp}=  Enable Disable Department  ${toggle[0]}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
     END

@@ -73,7 +73,7 @@ JD-TC-Unassign User-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
+        ${resp}=  Enable Disable Department  ${toggle[0]}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 

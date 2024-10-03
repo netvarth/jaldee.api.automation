@@ -97,7 +97,7 @@ JD-TC-CreateService-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp1}=  Toggle Department Enable
+        ${resp1}=  Enable Disable Department  ${toggle[0]}
         Log   ${resp1.json()}
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
@@ -117,7 +117,6 @@ JD-TC-CreateService-3
             Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
     END
     
-
     ${description}=  FakerLibrary.sentence
     ${Total}=   Random Int   min=100   max=500
     ${Total}=  Convert To Number  ${Total}  1
@@ -143,7 +142,7 @@ JD-TC-CreateService-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[1]}
-        ${resp}=  Toggle Department Disable
+        ${resp}=  Enable Disable Department  ${toggle[1]}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -197,7 +196,8 @@ JD-TC-CreateService-6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${srvs_len}=  Get Length  ${resp.json()}
-    Set Test Variable  ${SERVICE1}  ${resp.json()[${srvs_len-1}]['name']}   
+    # Set Test Variable  ${SERVICE1}  ${resp.json()[${srvs_len-1}]['name']} 
+    Set Test Variable  ${SERVICE1}  ${resp.json()[0]['name']}   
 
     ${resp}=  ProviderLogout   
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -222,6 +222,7 @@ JD-TC-CreateService-6
 
 JD-TC-CreateService-7
     [Documentation]   Create service with prepayment but without enabling isPrePayment flag
+    ...  Prepayment does not show unless isPrePayment flag is enabled.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME235}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -239,9 +240,7 @@ JD-TC-CreateService-7
     ${resp}=   Get Service By Id  ${resp.json()}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}   ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['minPrePaymentAmount']}  ${min_pre}  
-    Should Be Equal As Strings  ${resp.json()['isPrePayment']}  ${bool[0]}
+    Dictionary Should Not Contain Key  ${resp.json()}  minPrePaymentAmount
 
 
 JD-TC-CreateService-8
@@ -266,7 +265,129 @@ JD-TC-CreateService-8
 
 JD-TC-CreateService-9
     [Documentation]   Create a donation service
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME235}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
     
+    ${min_don_amt1}=   Random Int   min=100   max=500
+    ${mod}=  Evaluate  ${min_don_amt1}%${multiples[0]}
+    ${min_don_amt}=  Evaluate  ${min_don_amt1}-${mod}
+    ${max_don_amt1}=   Random Int   min=5000   max=10000
+    ${mod1}=  Evaluate  ${max_don_amt1}%${multiples[0]}
+    ${max_don_amt}=  Evaluate  ${max_don_amt1}-${mod1}
+    ${min_don_amt}=  Convert To Number  ${min_don_amt}  1
+    ${max_don_amt}=  Convert To Number  ${max_don_amt}  1
+    ${description}=  FakerLibrary.sentence
+    ${Total}=   Random Int   min=100   max=500
+    ${Total}=  Convert To Number  ${Total}  1
+    ${SERVICE1}=    FakerLibrary.job
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[2]}  minDonationAmount=${min_don_amt}  maxDonationAmount=${max_don_amt}  multiples=${multiples[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+
+    ${resp}=   Get Service By Id  ${resp.json()}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['serviceType']}   ${ServiceType[2]}
+    
+
+JD-TC-CreateService-10
+    [Documentation]   Create a Virtual service
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME235}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    Set Test Variable  ${callingMode1}     ${CallingModes[1]}
+    Set Test Variable  ${ModeId1}          ${PUSERNAME235}
+    Set Test Variable  ${ModeStatus1}      ACTIVE
+    ${Description1}=    FakerLibrary.sentences
+    ${VScallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   countryCode=${countryCodes[0]}  status=${ModeStatus1}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${virtualCallingModes}=  Create List  ${VScallingMode1}
+    Set Test Variable  ${vstype}  ${vservicetype[1]}
+
+    ${description}=    FakerLibrary.sentence
+    ${Total1}=   Random Int   min=100   max=500
+    ${Total}=  Convert To Number  ${Total1}  1
+    ${SERVICE1}=    FakerLibrary.job
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${resp.json()}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['serviceType']}   ${ServiceType[0]}
+
+
+JD-TC-CreateService-11
+    [Documentation]   Create a Virtual service in a department
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME235}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp1}=  Enable Disable Department  ${toggle[0]}
+        Log   ${resp1.json()}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+            ${dep_name1}=  FakerLibrary.bs
+            ${dep_code1}=   Random Int  min=100   max=999
+            ${dep_desc1}=   FakerLibrary.word  
+            ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+            Log  ${resp1.content}
+            Should Be Equal As Strings  ${resp1.status_code}  200
+            Set Test Variable  ${dep_id}  ${resp1.json()}
+    ELSE
+            Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    END
+
+    ${dep_name1}=  FakerLibrary.bs
+    ${dep_code1}=   Random Int  min=100   max=999
+    ${dep_desc1}=   FakerLibrary.word  
+    ${resp}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${dep_id1}  ${resp.json()}
+    
+    Set Test Variable  ${callingMode1}     ${CallingModes[1]}
+    Set Test Variable  ${ModeId1}          ${PUSERNAME235}
+    Set Test Variable  ${ModeStatus1}      ACTIVE
+    ${Description1}=    FakerLibrary.sentences
+    ${VScallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   countryCode=${countryCodes[0]}  status=${ModeStatus1}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${virtualCallingModes}=  Create List  ${VScallingMode1}
+    Set Test Variable  ${vstype}  ${vservicetype[1]}
+
+    ${description}=    FakerLibrary.sentence
+    ${Total1}=   Random Int   min=100   max=500
+    ${Total}=  Convert To Number  ${Total1}  1
+    ${SERVICE1}=    FakerLibrary.job
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}  department=${dep_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${sid}  ${resp.json()}
+
+    ${resp}=   Get Service By Id  ${sid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['serviceType']}   ${ServiceType[0]}
+
+    ${resp}=  Get Services in Department  ${dep_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}   ${sid}
+    Should Be Equal As Strings  ${resp.json()['services'][0]['serviceType']}  ${ServiceType[0]}
+
+
+JD-TC-CreateService-UH1
+    [Documentation]  Create an already existing service
         
 *** COMMENTS ***
 
@@ -625,7 +746,6 @@ JD-TC-CreateService-7
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep   1s
 
-
     ${ser_durtn}=   Random Int   min=2   max=10
     ${description}=  FakerLibrary.sentence
     ${Total1}=   Random Int   min=100   max=500
@@ -779,7 +899,7 @@ JD-TC-CreateService-7
 
 JD-TC-CreateService-8
 
-    [Documentation]   Checking Service Type  before and after adding in queue
+    [Documentation]   Checking Service Type before and after adding in queue
     ${resp}=  Encrypted Provider Login  ${PUSERNAME121}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -896,7 +1016,7 @@ JD-TC-CreateService-9
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[1]}
-            ${resp}=  Toggle Department Disable
+            ${resp}=  Enable Disable Department  ${toggle[1]}
             Log  ${resp.content}
             Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -910,7 +1030,7 @@ JD-TC-CreateService-9
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Toggle Department Enable
+    ${resp}=  Enable Disable Department  ${toggle[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Departments 
@@ -939,7 +1059,6 @@ JD-TC-CreateService-9
     Verify Response  ${resp}    departmentId=${def_depid}   departmentStatus=${status[0]}
 
         
-
 JD-TC-CreateService-10
     [Documentation]   Create service for a branch in custom department
 
@@ -964,7 +1083,6 @@ JD-TC-CreateService-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${depid1}  ${resp.json()}
 
-    
     ${resp}=  Get Departments 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1169,7 +1287,7 @@ JD-TC-CreateService-UH4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[1]}
-            ${resp}=  Toggle Department Disable
+            ${resp}=  Enable Disable Department  ${toggle[1]}
             Log  ${resp.content}
             Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1183,7 +1301,7 @@ JD-TC-CreateService-UH4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Toggle Department Enable
+    ${resp}=  Enable Disable Department  ${toggle[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Departments 
@@ -1684,7 +1802,7 @@ JD-TC-CreateService-20
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-            ${resp1}=  Toggle Department Enable
+            ${resp1}=  Enable Disable Department  ${toggle[0]}
             Log   ${resp1.json()}
             Should Be Equal As Strings  ${resp1.status_code}  200
     END
@@ -1860,7 +1978,7 @@ JD-TC-CreateService-UH13
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-            ${resp1}=  Toggle Department Enable
+            ${resp1}=  Enable Disable Department  ${toggle[0]}
             Log   ${resp1.json()}
             Should Be Equal As Strings  ${resp1.status_code}  200
     END
@@ -2311,7 +2429,7 @@ Billable
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         IF  ${resp.json()['filterByDept']}==${bool[1]}
-                ${resp}=  Toggle Department Disable
+                ${resp}=  Enable Disable Department  ${toggle[1]}
                 Log  ${resp.content}
                 Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2346,7 +2464,7 @@ Non Billable
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         IF  ${resp.json()['filterByDept']}==${bool[1]}
-                ${resp}=  Toggle Department Disable
+                ${resp}=  Enable Disable Department  ${toggle[1]}
                 Log  ${resp.content}
                 Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2391,7 +2509,7 @@ wlsettings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[1]}
-            ${resp}=  Toggle Department Disable
+            ${resp}=  Enable Disable Department  ${toggle[1]}
             Log  ${resp.content}
             Should Be Equal As Strings  ${resp.status_code}  200
 

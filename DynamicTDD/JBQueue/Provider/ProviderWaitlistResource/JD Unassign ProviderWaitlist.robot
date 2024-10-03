@@ -72,7 +72,7 @@ JD-TC-UnAssignproviderWaitlist-1
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
     # IF  ${resp.json()['filterByDept']}==${bool[1]}
-    #     ${resp}=   Toggle Department Disable
+    #     ${resp}=   Enable Disable Department  ${toggle[1]}
     #     Log  ${resp.content}
     #     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -135,7 +135,7 @@ JD-TC-UnAssignproviderWaitlist-1
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
     # IF  ${resp.json()['filterByDept']}==${bool[0]}
-    #     ${resp}=  Toggle Department Enable
+    #     ${resp}=  Enable Disable Department  ${toggle[0]}
     #     Log  ${resp.content}
     #     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -365,7 +365,7 @@ JD-TC-UnAssignproviderWaitlist-3
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
     # IF  ${resp.json()['filterByDept']}==${bool[1]}
-    #     ${resp}=   Toggle Department Disable
+    #     ${resp}=   Enable Disable Department  ${toggle[1]}
     #     Log  ${resp.content}
     #     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -380,7 +380,7 @@ JD-TC-UnAssignproviderWaitlist-3
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
     # IF  ${resp.json()['filterByDept']}==${bool[0]}
-    #     ${resp}=  Toggle Department Enable
+    #     ${resp}=  Enable Disable Department  ${toggle[0]}
     #     Log  ${resp.content}
     #     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -392,7 +392,7 @@ JD-TC-UnAssignproviderWaitlist-3
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
-    ${resp}=  Toggle Department Enable
+    ${resp}=  Enable Disable Department  ${toggle[0]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep  2s

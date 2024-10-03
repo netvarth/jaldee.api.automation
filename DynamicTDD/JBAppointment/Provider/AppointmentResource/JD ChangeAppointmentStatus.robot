@@ -34,7 +34,7 @@ ${digits}       0123456789
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
     # IF  ${resp.json()['filterByDept']}==${bool[1]}
-    #     ${resp}=  Toggle Department Disable
+    #     ${resp}=  Enable Disable Department  ${toggle[1]}
     #     Log  ${resp.content}
     #     Should Be Equal As Strings  ${resp.status_code}  200
 

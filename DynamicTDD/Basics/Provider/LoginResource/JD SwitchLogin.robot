@@ -622,7 +622,7 @@ JD-TC-Switch_Login-7
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
     # IF  ${resp.json()['filterByDept']}==${bool[0]}
-    #     ${resp}=  Toggle Department Enable
+    #     ${resp}=  Enable Disable Department  ${toggle[0]}
     #     Log  ${resp.content}
     #     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1458,7 +1458,7 @@ JD-TC-Switch_Login-15
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${accountId}  ${resp.json()['id']}
 
-    ${resp}=  Toggle Department Enable
+    ${resp}=  Enable Disable Department  ${toggle[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep  2s
@@ -1776,7 +1776,7 @@ JD-TC-Switch_Login-16
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
+        ${resp}=  Enable Disable Department  ${toggle[0]}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
 
