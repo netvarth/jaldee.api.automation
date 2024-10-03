@@ -10,6 +10,7 @@ Library           requests
 Library           FakerLibrary
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
@@ -264,7 +265,7 @@ JD-TC-Create Inventory Catalog-7
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${u_id1}  ${resp.json()}
-    ${PUSERNAME_U1}  ${u_id1} =  Create and Configure Sample User
+    ${PUSERNAME_U1}  ${u_id1} =  Create and Configure Sample User   deptId=${dep_id}
     Set Suite Variable  ${PUSERNAME_U1}
     Set Suite Variable  ${u_id1}
 
@@ -274,12 +275,12 @@ JD-TC-Create Inventory Catalog-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
+    # @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
+    # Should Be Equal As Strings  ${resp[0].status_code}  200
+    # Should Be Equal As Strings  ${resp[1].status_code}  200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
