@@ -324,10 +324,14 @@ JD-TC-update Inventory Catalog-7
     ${pin1}=  get_pincode
     Set Test Variable  ${pin1}
 
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${EMPTY}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${u_id11}  ${resp.json()}
+    # ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${EMPTY}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${u_id11}  ${resp.json()}
+
+    ${PUSERNAME_U1}  ${u_id11} =  Create and Configure Sample User
+    Set Suite Variable  ${PUSERNAME_U1}
+    Set Suite Variable  ${u_id11}
 
 
     ${resp}=  Get User By Id  ${u_id11}
@@ -549,10 +553,14 @@ JD-TC-update Inventory Catalog-UH10
     ${pin1}=  get_pincode
     Set Test Variable  ${pin1}
 
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${u_id1}  ${resp.json()}
+    # ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${u_id1}  ${resp.json()}
+
+    ${PUSERNAME_U1}  ${u_id1} =  Create and Configure Sample User
+    Set Suite Variable  ${PUSERNAME_U1}
+    Set Suite Variable  ${u_id1}
 
 
     ${resp}=  Get User By Id  ${u_id1}

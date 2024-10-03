@@ -128,6 +128,11 @@ JD-TC-Get Cart Iems of Provider consumer-1
     Set Suite Variable  ${SOC_itemEncIds1}  ${resp.json()[0]}
 
 
+    ${resp}=  Get SalesOrder Catalog Item By Encid     ${SOC_itemEncIds1}      
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
     ${displayName1}=     FakerLibrary.name
     Set Suite Variable  ${displayName1}
     ${resp}=    Create Item Inventory  ${displayName1}    isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
@@ -159,6 +164,10 @@ JD-TC-Get Cart Iems of Provider consumer-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SOC_itemEncIds3}  ${resp.json()[0]}
+
+    ${resp}=  Get SalesOrder Catalog Item By Encid     ${SOC_itemEncIds3}      
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 # -------------------------------- Add a provider Consumer -----------------------------------
@@ -216,7 +225,9 @@ JD-TC-Get Cart Iems of Provider consumer-1
     ${catalogItems1}=  Create Dictionary    catalogItem=${catalogItem1}  quantity=${quantity}
     ${catalogItems2}=  Create Dictionary    catalogItem=${catalogItem2}  quantity=${quantity}
 
-    ${resp}=  Create Cart From Consumerside      ${store_id}    ${cid}      ${deliveryType[0]}    ${catalogItems}   ${catalogItems1}   ${catalogItems2}
+
+
+    ${resp}=  Create Cart From Consumerside      ${store_id}    ${cid}      ${deliveryType[0]}    ${catalogItems}   ${catalogItems1}   ${catalogItems2}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${cart_uid}    ${resp.json()['uid']}
@@ -318,9 +329,6 @@ JD-TC-Get Cart Iems of Provider consumer-1
 
         END
     END
-
-
-
 
 
 
