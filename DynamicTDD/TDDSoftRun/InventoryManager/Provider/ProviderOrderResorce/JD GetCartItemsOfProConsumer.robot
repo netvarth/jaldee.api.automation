@@ -22,14 +22,6 @@ Resource          /ebs/TDD/SuperAdminKeywords.robot
 ${minSaleQuantity}  1
 ${maxSaleQuantity}   50
 
-*** Keywords ***
-Get Cart Items by provider consumer id
-    [Arguments]  ${providerConsumerId}  
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/cart/procon/${providerConsumerId}   expected_status=any   
-    Check Deprication  ${resp}  Get consumer Appt Bill Details 
-    RETURN  ${resp}
-
 
 *** Test Cases ***
 

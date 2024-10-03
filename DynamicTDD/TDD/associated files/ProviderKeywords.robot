@@ -15914,3 +15914,5 @@ Get All Capabilities
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/accessscope/capabilities    expected_status=any
     RETURN  ${resp}
+
+

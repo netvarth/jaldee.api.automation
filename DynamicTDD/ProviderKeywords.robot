@@ -16749,6 +16749,22 @@ Update SOrder Status
     Check Deprication  ${resp}  Update SOrder Status
     RETURN  ${resp}
 
+#................Cart...............
+
+Get Cart Items by provider consumer id
+    [Arguments]  ${providerConsumerId}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/cart/procon/${providerConsumerId}   expected_status=any   
+    Check Deprication  ${resp}  Get consumer Appt Bill Details 
+    RETURN  ${resp}
+
+Get Count Of Cart Items 
+    [Arguments]  ${providerConsumerId}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/cart/procon/${providerConsumerId}/count   expected_status=any   
+    Check Deprication  ${resp}  Get consumer Appt Bill Details 
+    RETURN  ${resp}
+
 #.............subservice..................
 
 
