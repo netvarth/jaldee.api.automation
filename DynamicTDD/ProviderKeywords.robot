@@ -199,18 +199,25 @@ Get specializations Sub Domain
     ${resp}=  GET On Session  ynw  /ynwConf/specializations/${domain}/${subDomain}  expected_status=any
     Check Deprication  ${resp}  Get specializations Sub Domain
     RETURN  ${resp}
-   	
-Toggle Department Enable
-	Check And Create YNW Session
-    ${resp}=  PUT On Session    ynw  /provider/settings/waitlistMgr/department/Enable   expected_status=any
-    Check Deprication  ${resp}  Toggle Department Enable
-    RETURN  ${resp}   
- 
-Toggle Department Disable
-	Check And Create YNW Session
-    ${resp}=  PUT On Session    ynw  /provider/settings/waitlistMgr/department/Disable   expected_status=any
-    Check Deprication  ${resp}  Toggle Department Disable
+
+Enable Disable Department
+    [Arguments]  ${status} 
+    Check And Create YNW Session
+    ${resp}=  PUT On Session    ynw  /provider/settings/waitlistMgr/department/${status}   expected_status=any
+    Check Deprication  ${resp}  Enable Disable Department
     RETURN  ${resp} 
+   	
+# Toggle Department Enable
+# 	Check And Create YNW Session
+#     ${resp}=  PUT On Session    ynw  /provider/settings/waitlistMgr/department/Enable   expected_status=any
+#     Check Deprication  ${resp}  Toggle Department Enable
+#     RETURN  ${resp}   
+ 
+# Toggle Department Disable
+# 	Check And Create YNW Session
+#     ${resp}=  PUT On Session    ynw  /provider/settings/waitlistMgr/department/Disable   expected_status=any
+#     Check Deprication  ${resp}  Toggle Department Disable
+#     RETURN  ${resp} 
 
 Get Waitlist Settings
     Check And Create YNW Session
