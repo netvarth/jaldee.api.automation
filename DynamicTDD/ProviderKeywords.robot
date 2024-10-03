@@ -4661,9 +4661,9 @@ Create provider Note
     RETURN  ${resp}
 
 get provider Note
-    [Arguments]    ${consumerId}
+    [Arguments]    ${uuid}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw  /provider/waitlist/${consumerId}/notes  expected_status=any
+    ${resp}=    GET On Session    ynw  /provider/waitlist/${uuid}/notes  expected_status=any
     Check Deprication  ${resp}  get provider Note
     RETURN  ${resp}
 
