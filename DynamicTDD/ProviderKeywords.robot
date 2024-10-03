@@ -4668,9 +4668,9 @@ Create provider Note
     RETURN  ${resp}
 
 get provider Note
-    [Arguments]    ${consumerId}
+    [Arguments]    ${uuid}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw  /provider/waitlist/${consumerId}/notes  expected_status=any
+    ${resp}=    GET On Session    ynw  /provider/waitlist/${uuid}/notes  expected_status=any
     Check Deprication  ${resp}  get provider Note
     RETURN  ${resp}
 
@@ -16754,6 +16754,22 @@ Update SOrder Status
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/sorder/request/status/${sorq_uid}   data=${data}  expected_status=any
     Check Deprication  ${resp}  Update SOrder Status
+    RETURN  ${resp}
+
+#................Cart...............
+
+Get Cart Items by provider consumer id
+    [Arguments]  ${providerConsumerId}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/cart/procon/${providerConsumerId}   expected_status=any   
+    Check Deprication  ${resp}  Get consumer Appt Bill Details 
+    RETURN  ${resp}
+
+Get Count Of Cart Items 
+    [Arguments]  ${providerConsumerId}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/cart/procon/${providerConsumerId}/count   expected_status=any   
+    Check Deprication  ${resp}  Get consumer Appt Bill Details 
     RETURN  ${resp}
 
 #.............subservice..................
