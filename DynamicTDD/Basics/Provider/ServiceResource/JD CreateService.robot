@@ -330,7 +330,6 @@ JD-TC-CreateService-11
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
         ${resp1}=  Enable Disable Department  ${toggle[0]}
-        Log   ${resp1.json()}
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
 
@@ -388,6 +387,75 @@ JD-TC-CreateService-11
 
 JD-TC-CreateService-UH1
     [Documentation]  Create an already existing service
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME235}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${SERVICE1}  ${resp.json()[0]['name']} 
+
+    ${description}=  FakerLibrary.sentence
+    ${min_pre1}=   Random Int   min=1   max=10
+    ${Total1}=   Random Int   min=100   max=500
+    ${min_pre1}=  Convert To Number  ${min_pre1}  1
+    ${Total1}=  Convert To Number  ${Total1}  1
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total1}  ${bool[0]}  minPrePaymentAmount=${min_pre1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+
+
+
+JD-TC-CreateService-UH2
+    [Documentation]    Create a service without login
+
+    ${description}=  FakerLibrary.sentence
+    ${Total}=   Random Int   min=100   max=500
+    ${Total}=  Convert To Number  ${Total}  1
+    ${SERVICE1}=    FakerLibrary.job
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+
+JD-TC-CreateService-UH3
+    [Documentation]   Create a service using consumer login
+
+    ${account_id}=  get_acc_id  ${PUSERNAME235}
+
+    ${primaryMobileNo}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME5}
+
+    ${resp}=  ProviderConsumer Login with token   ${CUSERNAME5}  ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${description}=  FakerLibrary.sentence
+    ${Total}=   Random Int   min=100   max=500
+    ${Total}=  Convert To Number  ${Total}  1
+    ${SERVICE1}=    FakerLibrary.job
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+JD-TC-CreateService-UH4
+    [Documentation]   Create service in default department & custom department with same service name
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME235}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Departments 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${def_depid}  ${resp.json()['departments'][0]['departmentId']}
+    Set Test Variable  ${depid1}  ${resp.json()['departments'][1]['departmentId']}
+
+    ${resp}=  Get Services in Department  ${def_depid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${SERVICE1}  ${resp.json()['services'][0]['name']}
+    
         
 *** COMMENTS ***
 
@@ -1011,17 +1079,12 @@ JD-TC-CreateService-9
     clear_service   ${PUSERNAME27}
 
     ${resp}=  Get Waitlist Settings
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[1]}
             ${resp}=  Enable Disable Department  ${toggle[1]}
-            Log  ${resp.content}
             Should Be Equal As Strings  ${resp.status_code}  200
-
     END
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
 
     ${resp}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${sid1}  ${resp}
@@ -1281,8 +1344,6 @@ JD-TC-CreateService-UH4
 
     clear_service   ${PUSERNAME27}
 
-    ${resp}=  Get Waitlist Settings
-    Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
