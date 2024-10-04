@@ -24,7 +24,7 @@ JD-TC-GetAppointmentServicesByLocation-1
 
     [Documentation]  Provider get Service By LocationId.  
   
-    ${PUSERNAME_R}=  Evaluate  ${PUSERNAME}+5566011
+    ${PUSERNAME_R}=  Evaluate  ${PUSERNAME}+556601145
     ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_R}=  Provider Signup without Profile  PhoneNumber=${PUSERNAME_R}
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
@@ -79,7 +79,6 @@ JD-TC-GetAppointmentServicesByLocation-1
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500
-    ${desc}  ${service_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  
     ${resp}=  Create Service  ${P1SERVICE1}  ${desc}  ${service_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -163,9 +162,9 @@ JD-TC-GetAppointmentServicesByLocation-1
     Should Be Equal As Integers  ${len}  2
     FOR  ${i}  IN RANGE   ${len}
         IF  '${resp.json()[${i}]['id']}' == '${p1_s1}'
-            Verify Response List  ${resp}   ${i}    id=${p1_s1}   name=${P1SERVICE1}  status=${status[0]}   notificationType=${notifytype[2]}  serviceDuration=${service_duration}
+            Verify Response List  ${resp}   ${i}    id=${p1_s1}   name=${P1SERVICE1}  status=${status[0]}    serviceDuration=${service_duration}
         ELSE IF  '${resp.json()[${i}]['id']}' == '${p1_s3}'
-            Verify Response List  ${resp}   ${i}   id=${p1_s3}   name=${P1SERVICE3}  status=${status[0]}   notificationType=${notifytype[2]}  serviceDuration=${service_duration}
+            Verify Response List  ${resp}   ${i}   id=${p1_s3}   name=${P1SERVICE3}  status=${status[0]}    serviceDuration=${service_duration}
         END
     END
     
@@ -183,9 +182,9 @@ JD-TC-GetAppointmentServicesByLocation-2
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${len}
         IF  ${resp.json()[${i}]['id']} == ${p1_s2}
-            Verify Response List   ${resp}   ${i}    id=${p1_s2}   name=${P1SERVICE2}  status=${status[0]}   notificationType=${notifytype[2]}  serviceDuration=${service_duration}
+            Verify Response List   ${resp}   ${i}    id=${p1_s2}   name=${P1SERVICE2}  status=${status[0]}   serviceDuration=${service_duration}
         ELSE IF   ${resp.json()[${i}]['id']} == ${p1_s3}
-            Verify Response List   ${resp}   ${i}    id=${p1_s3}   name=${P1SERVICE3}  status=${status[0]}   notificationType=${notifytype[2]}  serviceDuration=${service_duration}
+            Verify Response List   ${resp}   ${i}    id=${p1_s3}   name=${P1SERVICE3}  status=${status[0]}   serviceDuration=${service_duration}
         END
     END
 
@@ -203,9 +202,9 @@ JD-TC-GetAppointmentServicesByLocation-3
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${len}
         IF  ${resp.json()[${i}]['id']} == ${p1_s2}
-            Verify Response List   ${resp}   ${i}    id=${p1_s2}   name=${P1SERVICE2}  status=${status[0]}   notificationType=${notifytype[2]}  serviceDuration=${service_duration}
+            Verify Response List   ${resp}   ${i}    id=${p1_s2}   name=${P1SERVICE2}  status=${status[0]}   serviceDuration=${service_duration}
         ELSE IF   ${resp.json()[${i}]['id']} == ${p1_s3}
-            Verify Response List   ${resp}   ${i}    id=${p1_s3}   name=${P1SERVICE3}  status=${status[0]}   notificationType=${notifytype[2]}  serviceDuration=${service_duration}
+            Verify Response List   ${resp}   ${i}    id=${p1_s3}   name=${P1SERVICE3}  status=${status[0]}   serviceDuration=${service_duration}
         END
     END
     Should Not Contain  ${resp.json()}  ${p1_s4}
@@ -215,9 +214,9 @@ JD-TC-GetAppointmentServicesByLocation-3
     Should Be Equal As Strings   ${resp.status_code}   200
     FOR  ${i}  IN RANGE   ${len}
         IF  ${resp.json()[${i}]['id']} == ${p1_s2}
-            Verify Response List   ${resp}   ${i}    id=${p1_s1}   name=${P1SERVICE1}  status=${status[0]}   notificationType=${notifytype[2]}  serviceDuration=${service_duration}
+            Verify Response List   ${resp}   ${i}    id=${p1_s1}   name=${P1SERVICE1}  status=${status[0]}   serviceDuration=${service_duration}
         ELSE IF   ${resp.json()[${i}]['id']} == ${p1_s3}
-            Verify Response List   ${resp}   ${i}    id=${p1_s3}   name=${P1SERVICE3}  status=${status[0]}   notificationType=${notifytype[2]}  serviceDuration=${service_duration}
+            Verify Response List   ${resp}   ${i}    id=${p1_s3}   name=${P1SERVICE3}  status=${status[0]}   serviceDuration=${service_duration}
         END
     END
     Should Not Contain  ${resp.json()}  ${p1_s4}

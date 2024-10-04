@@ -285,9 +285,13 @@ JD-TC-ChangeAppointmentStatus-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
+    ${NewCustomer}    Generate random string    10    123456789
+    ${NewCustomer}    Convert To Integer  ${NewCustomer}
+    Set Suite Variable   ${NewCustomer}
+
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME20}  firstName=${fname}   lastName=${lname}
+    ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
@@ -322,7 +326,7 @@ JD-TC-ChangeAppointmentStatus-4
     clear_service   ${PUSERNAME180}
     clear_location  ${PUSERNAME180}
     ${pid}=  get_acc_id  ${PUSERNAME180}
-    ${cid}=  get_id  ${CUSERNAME20}
+    ${cid}=  get_id  ${NewCustomer}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
@@ -370,16 +374,16 @@ JD-TC-ChangeAppointmentStatus-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME20}    ${pid}
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME20}   ${OtpPurpose['Authentication']}
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -446,7 +450,7 @@ JD-TC-ChangeAppointmentStatus-UH1
     clear_service   ${PUSERNAME180}
     clear_location  ${PUSERNAME180}
     ${pid}=  get_acc_id  ${PUSERNAME180}
-    ${cid}=  get_id  ${CUSERNAME20}
+    ${cid}=  get_id  ${NewCustomer}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
@@ -502,7 +506,7 @@ JD-TC-ChangeAppointmentStatus-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -569,7 +573,7 @@ JD-TC-ChangeAppointmentStatus-7
     clear_service   ${PUSERNAME180}
     clear_location  ${PUSERNAME180}
     ${pid}=  get_acc_id  ${PUSERNAME180}
-    ${cid}=  get_id  ${CUSERNAME20}
+    ${cid}=  get_id  ${NewCustomer}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
@@ -625,7 +629,7 @@ JD-TC-ChangeAppointmentStatus-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -735,7 +739,7 @@ JD-TC-ChangeAppointmentStatus-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()[0]['id']}
@@ -773,7 +777,7 @@ JD-TC-ChangeAppointmentStatus-UH2
     clear_service   ${PUSERNAME180}
     clear_location  ${PUSERNAME180}
     ${pid}=  get_acc_id  ${PUSERNAME180}
-    ${cid}=  get_id  ${CUSERNAME20}
+    ${cid}=  get_id  ${NewCustomer}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
@@ -821,7 +825,7 @@ JD-TC-ChangeAppointmentStatus-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -957,7 +961,7 @@ JD-TC-ChangeAppointmentStatus-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()[0]['id']}
@@ -1040,7 +1044,7 @@ JD-TC-ChangeAppointmentStatus-UH3
     
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()[0]['id']}
@@ -1131,7 +1135,7 @@ JD-TC-ChangeAppointmentStatus-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()[0]['id']}
@@ -1226,7 +1230,7 @@ JD-TC-ChangeAppointmentStatus-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()[0]['id']}
@@ -1317,7 +1321,7 @@ JD-TC-ChangeAppointmentStatus-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()[0]['id']}
@@ -1368,7 +1372,7 @@ JD-TC-ChangeAppointmentStatus-11
     clear_service   ${PUSERNAME180}
     clear_location  ${PUSERNAME180}
     ${pid}=  get_acc_id  ${PUSERNAME180}
-    ${cid}=  get_id  ${CUSERNAME20}
+    ${cid}=  get_id  ${NewCustomer}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
@@ -1411,7 +1415,7 @@ JD-TC-ChangeAppointmentStatus-11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -1495,7 +1499,7 @@ JD-TC-ChangeAppointmentStatus-UH6
     clear_service   ${PUSERNAME180}
     clear_location  ${PUSERNAME180}
     ${pid}=  get_acc_id  ${PUSERNAME180}
-    ${cid}=  get_id  ${CUSERNAME20}
+    ${cid}=  get_id  ${NewCustomer}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
@@ -1543,7 +1547,7 @@ JD-TC-ChangeAppointmentStatus-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -1675,7 +1679,7 @@ JD-TC-ChangeAppointmentStatus-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()[0]['id']}
@@ -1767,7 +1771,7 @@ JD-TC-ChangeAppointmentStatus-UH8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()[0]['id']}
@@ -1865,7 +1869,7 @@ JD-TC-ChangeAppointmentStatus-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()[0]['id']}
@@ -1964,7 +1968,7 @@ JD-TC-ChangeAppointmentStatus-UH10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()[0]['id']}
@@ -2024,7 +2028,7 @@ JD-TC-ChangeAppointmentStatus-UH11
     clear_service   ${PUSERNAME180}
     clear_location  ${PUSERNAME180}
     ${pid}=  get_acc_id  ${PUSERNAME180}
-    ${cid}=  get_id  ${CUSERNAME20}
+    ${cid}=  get_id  ${NewCustomer}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
@@ -2079,7 +2083,7 @@ JD-TC-ChangeAppointmentStatus-UH11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -2144,7 +2148,7 @@ JD-TC-ChangeAppointmentStatus-UH12
     ${pro_len}=  Get Length   ${billable_providers}
     
     ${pid}=  get_acc_id  ${billable_providers[3]}
-    ${cid}=  get_id  ${CUSERNAME20}
+    ${cid}=  get_id  ${NewCustomer}
 
     ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
     Log   ${resp.json()}
@@ -2192,7 +2196,7 @@ JD-TC-ChangeAppointmentStatus-UH12
   
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME20}  firstName=${fname}   lastName=${lname}
+    ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}
@@ -2201,16 +2205,16 @@ JD-TC-ChangeAppointmentStatus-UH12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME20}    ${pid}
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME20}   ${OtpPurpose['Authentication']}
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token1}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid}  ${token1} 
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -2283,7 +2287,7 @@ JD-TC-ChangeAppointmentStatus-UH13
     ${pro_len}=  Get Length   ${billable_providers}
     
     ${pid}=  get_acc_id  ${billable_providers[3]}
-    ${cid}=  get_id  ${CUSERNAME20}
+    ${cid}=  get_id  ${NewCustomer}
 
     ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
     Log   ${resp.json()}
@@ -2327,7 +2331,7 @@ JD-TC-ChangeAppointmentStatus-UH13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid}  ${token1} 
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -2410,7 +2414,7 @@ JD-TC-ChangeAppointmentStatus-UH14
     ${pro_len}=  Get Length   ${billable_providers}
     
     ${pid}=  get_acc_id  ${billable_providers[3]}
-    ${cid}=  get_id  ${CUSERNAME20}
+    ${cid}=  get_id  ${NewCustomer}
 
     ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
     Log   ${resp.json()}
@@ -2454,7 +2458,7 @@ JD-TC-ChangeAppointmentStatus-UH14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid}  ${token1} 
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -2519,7 +2523,7 @@ JD-TC-ChangeAppointmentStatus-UH15
     ${pro_len}=  Get Length   ${billable_providers}
     
     ${pid}=  get_acc_id  ${billable_providers[3]}
-    ${cid}=  get_id  ${CUSERNAME20}
+    ${cid}=  get_id  ${NewCustomer}
 
     ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
     Log   ${resp.json()}
@@ -2563,7 +2567,7 @@ JD-TC-ChangeAppointmentStatus-UH15
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid}  ${token1} 
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -2638,7 +2642,7 @@ JD-TC-ChangeAppointmentStatus-UH16
     ${pro_len}=  Get Length   ${billable_providers}
     
     ${pid}=  get_acc_id  ${billable_providers[3]}
-    ${cid}=  get_id  ${CUSERNAME20}
+    ${cid}=  get_id  ${NewCustomer}
 
     ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
     Log   ${resp.json()}
@@ -2683,7 +2687,7 @@ JD-TC-ChangeAppointmentStatus-UH16
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid}  ${token1} 
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -2757,7 +2761,7 @@ JD-TC-ChangeAppointmentStatus-12
     clear_service   ${PUSERNAME180}
     clear_location  ${PUSERNAME180}
     ${pid}=  get_acc_id  ${PUSERNAME180}
-    ${cid}=  get_id  ${CUSERNAME20}
+    ${cid}=  get_id  ${NewCustomer}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
@@ -2800,7 +2804,7 @@ JD-TC-ChangeAppointmentStatus-12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -2878,7 +2882,7 @@ JD-TC-ChangeAppointmentStatus-UH17
     clear_service   ${PUSERNAME180}
     clear_location  ${PUSERNAME180}
     ${pid}=  get_acc_id  ${PUSERNAME180}
-    ${cid}=  get_id  ${CUSERNAME20}
+    ${cid}=  get_id  ${NewCustomer}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
@@ -2922,7 +2926,7 @@ JD-TC-ChangeAppointmentStatus-UH17
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -2997,7 +3001,7 @@ JD-TC-ChangeAppointmentStatus-UH18
     clear_service   ${PUSERNAME180}
     clear_location  ${PUSERNAME180}
     ${pid}=  get_acc_id  ${PUSERNAME180}
-    ${cid}=  get_id  ${CUSERNAME20}
+    ${cid}=  get_id  ${NewCustomer}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
@@ -3041,7 +3045,7 @@ JD-TC-ChangeAppointmentStatus-UH18
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -3116,7 +3120,7 @@ JD-TC-ChangeAppointmentStatus-13
     clear_service   ${PUSERNAME180}
     clear_location  ${PUSERNAME180}
     ${pid}=  get_acc_id  ${PUSERNAME180}
-    ${cid}=  get_id  ${CUSERNAME20}
+    ${cid}=  get_id  ${NewCustomer}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
@@ -3160,7 +3164,7 @@ JD-TC-ChangeAppointmentStatus-13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -3238,7 +3242,7 @@ JD-TC-ChangeAppointmentStatus-UH19
     clear_service   ${PUSERNAME180}
     clear_location  ${PUSERNAME180}
     ${pid}=  get_acc_id  ${PUSERNAME180}
-    ${cid}=  get_id  ${CUSERNAME20}
+    ${cid}=  get_id  ${NewCustomer}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
@@ -3301,7 +3305,7 @@ JD-TC-ChangeAppointmentStatus-UH19
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -3376,7 +3380,7 @@ JD-TC-ChangeAppointmentStatus-UH20
     clear_service   ${PUSERNAME180}
     clear_location  ${PUSERNAME180}
     ${pid}=  get_acc_id  ${PUSERNAME180}
-    ${cid}=  get_id  ${CUSERNAME20}
+    ${cid}=  get_id  ${NewCustomer}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
@@ -3439,7 +3443,7 @@ JD-TC-ChangeAppointmentStatus-UH20
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -3557,7 +3561,7 @@ JD-TC-ChangeAppointmentStatus-UH21
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()[0]['id']}
@@ -3730,7 +3734,7 @@ JD-TC-ChangeAppointmentStatus-UH25
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()[0]['id']}
@@ -3842,7 +3846,7 @@ JD-TC-ChangeAppointmentStatus-UH26
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()[0]['id']}
@@ -3940,23 +3944,23 @@ JD-TC-ChangeAppointmentStatus-14
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME20}    ${pid}
+    ${resp}=    Send Otp For Login    ${NewCustomer}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME20}   ${OtpPurpose['Authentication']}
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    # ${resp}=    ProviderConsumer SignUp    ${fname}  ${lname}  ${EMPTY}  ${CUSERNAME20}  ${pid}  countryCode=${countryCodes[0]}
+    # ${resp}=    ProviderConsumer SignUp    ${fname}  ${lname}  ${EMPTY}  ${NewCustomer}  ${pid}  countryCode=${countryCodes[0]}
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}   200    
 
     # ${resp}=  Consumer Logout   
     # Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}  ${pid}  ${token}   countryCode=${countryCodes[0]}
+    ${resp}=    ProviderConsumer Login with token   ${NewCustomer}  ${pid}  ${token}   countryCode=${countryCodes[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -3996,12 +4000,12 @@ JD-TC-ChangeAppointmentStatus-14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  GetCustomer  phoneNo-eq=${NewCustomer}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()[0]['id']}
 
-    ${resp}=  Get Appointments Today  phoneNo-eq=${CUSERNAME20}
+    ${resp}=  Get Appointments Today  phoneNo-eq=${NewCustomer}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
