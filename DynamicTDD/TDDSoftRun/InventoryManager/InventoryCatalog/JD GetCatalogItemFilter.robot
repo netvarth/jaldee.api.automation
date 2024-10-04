@@ -234,7 +234,7 @@ JD-TC-GET Inventory Catalog Item Filter-2
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${u_id1}  ${resp.json()}
 
-    ${PUSERNAME_U1}  ${u_id1} =  Create and Configure Sample User
+    ${PUSERNAME_U1}  ${u_id1} =  Create and Configure Sample User   deptId=${dep_id}
     Set Suite Variable  ${PUSERNAME_U1}
     Set Suite Variable  ${u_id1}
 
@@ -242,12 +242,7 @@ JD-TC-GET Inventory Catalog Item Filter-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
-    @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}

@@ -310,7 +310,7 @@ JD-TC-Update Inventory Catalog status-UH7
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${u_id11}  ${resp.json()}
 
-    ${PUSERNAME_U1}  ${u_id11} =  Create and Configure Sample User
+    ${PUSERNAME_U1}  ${u_id11} =  Create and Configure Sample User  deptId=${dep_id}
     Set Suite Variable  ${PUSERNAME_U1}
     Set Suite Variable  ${u_id11}
 
@@ -319,12 +319,7 @@ JD-TC-Update Inventory Catalog status-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
-    @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
@@ -440,7 +435,7 @@ JD-TC-Update Inventory Catalog status-UH8
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${u_id11}  ${resp.json()}
 
-    ${PUSERNAME_U1}  ${u_id11} =  Create and Configure Sample User
+    ${PUSERNAME_U1}  ${u_id11} =  Create and Configure Sample User   deptId=${dep_id}
     Set Suite Variable  ${PUSERNAME_U1}
     Set Suite Variable  ${u_id11}
 
@@ -449,12 +444,6 @@ JD-TC-Update Inventory Catalog status-UH8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}

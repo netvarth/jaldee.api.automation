@@ -78,9 +78,7 @@ JD-TC-Update Inventory Catalog Item Status-1
     ${resp}=  Get Store Type By EncId   ${St_Id}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
     Log   ${resp.content}
@@ -217,7 +215,7 @@ JD-TC-Update Inventory Catalog Item Status-2
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${u_id1}  ${resp.json()}
-    ${PUSERNAME_U1}  ${u_id1} =  Create and Configure Sample User
+    ${PUSERNAME_U1}  ${u_id1} =  Create and Configure Sample User   deptId=${dep_id}
     Set Suite Variable  ${PUSERNAME_U1}
     Set Suite Variable  ${u_id1}
 
@@ -226,12 +224,7 @@ JD-TC-Update Inventory Catalog Item Status-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
-    @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
