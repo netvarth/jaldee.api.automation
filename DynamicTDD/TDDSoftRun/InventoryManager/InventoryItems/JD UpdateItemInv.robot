@@ -399,9 +399,12 @@ JD-TC-UpdateItemInv-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${FIELD_REQUIRED}=  format String   ${FIELD_REQUIRED}   Name is  
+
     ${resp}=    Update Item Inventory  ${spCode}  name=${empty}  
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${FIELD_REQUIRED}
 
 JD-TC-UpdateItemInv-4
 
