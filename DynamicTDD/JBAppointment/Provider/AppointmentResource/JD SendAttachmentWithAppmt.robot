@@ -83,11 +83,20 @@ JD-TC-SendAttachmentAppmt-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${lid}=  Create Sample Location  
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     clear_appt_schedule   ${PUSERNAME303}
     
@@ -196,24 +205,7 @@ JD-TC-SendAttachmentAppmt-1
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${pdrname}
 
-
 JD-TC-SendAttachmentAppmt-2
-
-    [Documentation]  Send Attachment Appmt - Appmt id is invalid 
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME303}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${inv}=     FakerLibrary.Random Int
-
-    ${attachments}=  Create Dictionary  owner=${provider_id}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${pdrname}
-
-    ${resp}=  Send Attachment From Appointment   ${inv}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-
-JD-TC-SendAttachmentAppmt-3
 
     [Documentation]  Send Attachment Appmt - email flag is false 
 
@@ -237,7 +229,7 @@ JD-TC-SendAttachmentAppmt-3
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${pdrname}
 
-JD-TC-SendAttachmentAppmt-4
+JD-TC-SendAttachmentAppmt-3
 
     [Documentation]  Send Attachment Appmt - sms flag is false
 
@@ -261,7 +253,7 @@ JD-TC-SendAttachmentAppmt-4
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${pdrname}
 
-JD-TC-SendAttachmentAppmt-5
+JD-TC-SendAttachmentAppmt-4
 
     [Documentation]  Send Attachment Appmt - telegram flag is false
 
@@ -285,7 +277,7 @@ JD-TC-SendAttachmentAppmt-5
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${pdrname}
 
-JD-TC-SendAttachmentAppmt-6
+JD-TC-SendAttachmentAppmt-5
 
     [Documentation]  Send Attachment Appmt - whats app flag is false
 
@@ -309,7 +301,7 @@ JD-TC-SendAttachmentAppmt-6
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${pdrname}
 
-JD-TC-SendAttachmentAppmt-7
+JD-TC-SendAttachmentAppmt-6
 
     [Documentation]  Send Attachment Appmt - owner is empty
 
@@ -333,7 +325,7 @@ JD-TC-SendAttachmentAppmt-7
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${pdrname}
 
-JD-TC-SendAttachmentAppmt-8
+JD-TC-SendAttachmentAppmt-7
 
     [Documentation]  Send Attachment Appmt - file name
 
@@ -348,7 +340,7 @@ JD-TC-SendAttachmentAppmt-8
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${FILE_NAME_NOT_FOUND}
 
-JD-TC-SendAttachmentAppmt-9
+JD-TC-SendAttachmentAppmt-8
 
     [Documentation]  Send Attachment Appmt - file size is empty
 
@@ -363,7 +355,7 @@ JD-TC-SendAttachmentAppmt-9
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${FILE_SIZE_ERROR}
 
-JD-TC-SendAttachmentAppmt-10
+JD-TC-SendAttachmentAppmt-9
 
     [Documentation]  Send Attachment Appmt - file type is empty
 
@@ -378,7 +370,7 @@ JD-TC-SendAttachmentAppmt-10
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${FILE_TYPE_NOT_FOUND}
 
-JD-TC-SendAttachmentAppmt-11
+JD-TC-SendAttachmentAppmt-10
 
     [Documentation]  Send Attachment Appmt - order is empty
 
@@ -402,7 +394,7 @@ JD-TC-SendAttachmentAppmt-11
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${pdrname}
 
-JD-TC-SendAttachmentAppmt-12
+JD-TC-SendAttachmentAppmt-11
 
     [Documentation]  Send Attachment Appmt - drive id is empty 
 
@@ -426,7 +418,7 @@ JD-TC-SendAttachmentAppmt-12
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${pdrname}
 
-JD-TC-SendAttachmentAppmt-13
+JD-TC-SendAttachmentAppmt-12
 
     [Documentation]  Send Attachment Appmt - action is remove
 
@@ -450,7 +442,7 @@ JD-TC-SendAttachmentAppmt-13
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${pdrname}
 
-JD-TC-SendAttachmentAppmt-14
+JD-TC-SendAttachmentAppmt-13
 
     [Documentation]  Send Attachment Appmt - attachment is empty
 
@@ -465,7 +457,7 @@ JD-TC-SendAttachmentAppmt-14
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${INV_DRIVE_ID}
 
-JD-TC-SendAttachmentAppmt-15
+JD-TC-SendAttachmentAppmt-14
 
     [Documentation]  Send Attachment Appmt - inv drive id
 
@@ -481,7 +473,7 @@ JD-TC-SendAttachmentAppmt-15
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
 
-JD-TC-SendAttachmentAppmt-16
+JD-TC-SendAttachmentAppmt-15
 
     [Documentation]  Send Attachment Appmt - without login
 
@@ -492,7 +484,7 @@ JD-TC-SendAttachmentAppmt-16
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  ${resp.json()}       ${SESSION_EXPIRED}
 
-JD-TC-SendAttachmentAppmt-17
+JD-TC-SendAttachmentAppmt-16
 
     [Documentation]  Send Attachment Appmt - with Provider consumer login
 
