@@ -300,10 +300,11 @@ JD-TC-Create Inventory Catalog Item-UH3
 
     ${Name}=    FakerLibrary.first name
 
+    ${X_NOT_FOUND}=  Format String  ${X_NOT_FOUND}  Sp Rx item      	
     ${resp}=   Create Inventory Catalog Item  ${encid}    ${Name}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings   ${resp.json()}   ${Invalid_Item_encId}
+    Should Be Equal As Strings   ${resp.json()}   ${X_NOT_FOUND}
 
 JD-TC-Create Inventory Catalog Item-UH4
 
