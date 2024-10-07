@@ -111,7 +111,7 @@ populate()
                 if [[ $myversion == 5.7.* ]]; then
                     echo "mysql $myversion"
                     time mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} --compress ${DATABASE_NAME} < ${latest}
-                elif [[ $myversion == 8.0.* ]]; then
+                elif [[ $myversion == 8.* ]]; then
                     echo "mysql $myversion"
                     time mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} --compression-algorithms=zstd --zstd-compression-level=7 --init-command='ALTER INSTANCE DISABLE INNODB REDO_LOG; SET SESSION FOREIGN_KEY_CHECKS=0;SET UNIQUE_CHECKS=0;' ${DATABASE_NAME} < ${latest}
                 fi
