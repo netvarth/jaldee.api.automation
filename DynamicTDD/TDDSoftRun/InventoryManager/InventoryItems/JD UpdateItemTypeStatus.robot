@@ -127,7 +127,7 @@ JD-TC-UpdateItemTypeStatus-UH2
     # Set Suite Variable    ${email}
     ${Name}=    FakerLibrary.last name
     Set Suite Variable    ${Name}
-    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+208187748
+    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+208148877
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
 
     ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
