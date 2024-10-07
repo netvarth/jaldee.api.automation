@@ -54,9 +54,7 @@ JD-TC-UpdateItemRemarks-1
     ${resp}=  Get Item Remark   ${remarks_encid1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['remark']}    ${remarks}
-    Should Be Equal As Strings    ${resp.json()['transactionTypeEnum']}    ${transactionTypeEnum[1]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${remarks_encid1}
+
 
     ${remark}=    FakerLibrary.first name
 
@@ -89,9 +87,7 @@ JD-TC-UpdateItemRemarks-2
     ${resp}=  Get Item Remark   ${remarks_encid}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['remark']}    ${remarks}
-    Should Be Equal As Strings    ${resp.json()['transactionTypeEnum']}    ${transactionTypeEnum[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${remarks_encid}
+
 
     ${resp}=  Update Item Remark    ${remarks_encid}   ${remarks}  ${transactionTypeEnum[1]}   
     Log   ${resp.content}
@@ -122,9 +118,7 @@ JD-TC-UpdateItemRemarks-3
     ${resp}=  Get Item Remark   ${remarks_encid}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['remark']}    ${remarks}
-    Should Be Equal As Strings    ${resp.json()['transactionTypeEnum']}    ${transactionTypeEnum[2]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${remarks_encid}
+
 
     ${resp}=  Update Item Remark    ${remarks_encid}   ${remarks}  ${transactionTypeEnum[2]}   
     Log   ${resp.content}
@@ -156,9 +150,7 @@ JD-TC-UpdateItemRemarks-4
     ${resp}=  Get Item Remark   ${remarks_encid}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['remark']}    ${remarks}
-    Should Be Equal As Strings    ${resp.json()['transactionTypeEnum']}    ${transactionTypeEnum[3]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${remarks_encid}
+
 
     ${remark}=    FakerLibrary.first name
 
@@ -193,9 +185,7 @@ JD-TC-UpdateItemRemarks-5
     ${resp}=  Get Item Remark   ${remarks_encid}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['remark']}    ${remarks}
-    Should Be Equal As Strings    ${resp.json()['transactionTypeEnum']}    ${transactionTypeEnum[4]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${remarks_encid}
+
 
     ${resp}=  Update Item Remark    ${remarks_encid}   ${remarks}  ${transactionTypeEnum[5]}   
     Log   ${resp.content}

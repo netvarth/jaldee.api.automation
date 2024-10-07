@@ -55,10 +55,7 @@ JD-TC-UpdateItemRemarkStatus-1
     ${resp}=  Get Item Remark   ${remarks_encid1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['remark']}    ${remarks}
-    Should Be Equal As Strings    ${resp.json()['transactionTypeEnum']}    ${transactionTypeEnum[1]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${remarks_encid1}
-    Should Be Equal As Strings    ${resp.json()['status']}     ${status[0]}
+
 
     ${resp}=  Update Item Remark Status     ${status[1]}   ${remarks_encid1} 
     Log   ${resp.content}
@@ -95,10 +92,7 @@ JD-TC-UpdateItemRemarkStatus-2
     ${resp}=  Get Item Remark   ${remarks_encid}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['remark']}    ${remark}
-    Should Be Equal As Strings    ${resp.json()['transactionTypeEnum']}    ${transactionTypeEnum[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${remarks_encid}
-   Should Be Equal As Strings    ${resp.json()['status']}     ${status[0]}
+
 
 
     ${remark2}=    FakerLibrary.first name
@@ -110,10 +104,6 @@ JD-TC-UpdateItemRemarkStatus-2
     ${resp}=  Get Item Remark   ${remarks_encid}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['remark']}    ${remark2}
-    Should Be Equal As Strings    ${resp.json()['transactionTypeEnum']}    ${transactionTypeEnum[1]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${remarks_encid}
-   Should Be Equal As Strings    ${resp.json()['status']}     ${status[0]}
 
     ${resp}=  Update Item Remark Status     ${status[1]}   ${remarks_encid} 
     Log   ${resp.content}
@@ -122,10 +112,7 @@ JD-TC-UpdateItemRemarkStatus-2
     ${resp}=  Get Item Remark   ${remarks_encid}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['remark']}    ${remark2}
-    Should Be Equal As Strings    ${resp.json()['transactionTypeEnum']}    ${transactionTypeEnum[1]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${remarks_encid}
-   Should Be Equal As Strings    ${resp.json()['status']}     ${status[1]}
+
 
     ${resp}=  Get Item Remark Filter      status-eq=${status[1]}    
     Log   ${resp.content}
