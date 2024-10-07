@@ -1,18 +1,19 @@
 *** Settings ***
-Suite Teardown    Delete All Sessions
-Test Teardown     Delete All Sessions
-Force Tags        Service
-Library           Collections
-Library           String
-Library           json
-Library           requests
-Library           FakerLibrary
-Library           Process
-Library           OperatingSystem
-Resource          /ebs/TDD/ProviderKeywords.robot
-Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/providers.py
-Variables         /ebs/TDD/varfiles/consumerlist.py 
+Suite Teardown  Delete All Sessions
+Test Teardown   Delete All Sessions
+Force Tags      Service
+Library         Collections
+Library         String
+Library         json
+Library         requests
+Library         FakerLibrary
+Library         Process
+Library         OperatingSystem
+Resource        /ebs/TDD/ProviderKeywords.robot
+Resource        /ebs/TDD/ConsumerKeywords.robot
+Resource        /ebs/TDD/ProviderConsumerKeywords.robot
+Variables       /ebs/TDD/varfiles/providers.py
+Variables       /ebs/TDD/varfiles/consumerlist.py 
 
 #Suite Setup       Run Keyword    wlsettings
 *** Variables ***
@@ -66,6 +67,7 @@ JD-TC-CreateService-2
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${PUSERNAME_U1}  ${u_id1} =  Create and Configure Sample User  #admin=${bool[1]}
+    Set Suite Variable  ${PUSERNAME_U1}
 
     ${resp}=    Provider Logout
     Should Be Equal As Strings  ${resp.status_code}    200
@@ -98,7 +100,7 @@ JD-TC-CreateService-3
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
         ${resp1}=  Enable Disable Department  ${toggle[0]}
-        Log   ${resp1.json()}
+        Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
 
@@ -385,10 +387,488 @@ JD-TC-CreateService-11
     Should Be Equal As Strings  ${resp.json()['services'][0]['serviceType']}  ${ServiceType[0]}
 
 
+JD-TC-CreateService-12
+    [Documentation]   Create service with lead time. 
+    ...  (preparation time for provider before next booking. when trying to make a booking in less than 10 mins of start of next slot, when lead time is 10 mins
+    ...  the next slot will not be shown. there should be a time difference of 10 mins from current booking time to next slot.)
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${description}=   FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=1   max=50
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${leadTime}=   Random Int   min=1   max=5
+    ${SERVICE1}=    FakerLibrary.job
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${servicecharge}  ${bool[0]}  leadTime=${leadTime}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Set Test Variable  ${s_id}  ${resp.json()}
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  leadTime=${leadTime}
+
+
+JD-TC-CreateService-13
+
+    [Documentation]   Create service with max bookings allowed. (one consumer can make as many bookings as specified in max bookings allowed)
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+   
+    ${resp}=  Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=1   max=50
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${maxbookings}=   Random Int   min=1   max=10
+    ${SERVICE1}=    FakerLibrary.job
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}  maxBookingsAllowed=${maxbookings}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Set Test Variable  ${s_id}  ${resp.json()}
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  maxBookingsAllowed=${maxbookings}
+
+
+JD-TC-CreateService-14
+    [Documentation]   Create service with resoucesRequired. 
+    # resoucesRequired defines how many resources we need to complete the said service, eg: say we have 4 resources- 4 beauticians
+    # and we need 2 beauticians 1 for hair styling and the other as henna artist for one service, then the we give resource required for that service as 2.
+    # In which case if parallelServing is set as 4 in a queue/schedule, noOfAvailbleSlots will only be 2, since we need 2 resources per service.
+    # In a queue/Schedule parallelServing cannot be set as less than resoucesRequired.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=1   max=50
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${resoucesRequired}=   Random Int   min=1   max=10
+    ${SERVICE1}=    FakerLibrary.job
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}  resoucesRequired=${resoucesRequired}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Set Test Variable  ${s_id}  ${resp.json()}
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  resoucesRequired=${resoucesRequired}
+
+
+JD-TC-CreateService-15
+    [Documentation]   Create service with priceDynamic.(allows to set schedule level price rather than service charge)
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${SERVICE1}=    FakerLibrary.job
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=1   max=50
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}  priceDynamic=${bool[1]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Set Test Variable  ${s_id}  ${resp.json()}
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  priceDynamic=${bool[1]}
+
+
+JD-TC-CreateService-16
+    [Documentation]   Create service without service description
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${description}=  FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=10   max=50
+    ${Total}=   Random Int   min=100   max=500
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${Total}=  Convert To Number  ${Total}  1
+    ${SERVICE1}=    FakerLibrary.job
+    ${resp}=  Create Service  ${SERVICE1}  ${EMPTY}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+
+    ${resp}=   Get Service By Id  ${resp.json()}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['description']}   ${EMPTY}
+
+
+JD-TC-CreateService-17
+    [Documentation]   Create service with service charge of 0
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${description}=  FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=10   max=50
+    ${Total}=   Random Int   min=100   max=500
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${Total}=  Convert To Number  ${Total}  1
+    ${SERVICE1}=    FakerLibrary.job
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${0.0}  ${bool[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+
+    ${resp}=   Get Service By Id  ${resp.json()}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['totalAmount']}   0.0
+
+
+JD-TC-CreateService-18
+    [Documentation]   Create multiple Services for a user
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${u_id1}  ${decrypted_data['id']}
+
+    ${resp}=  Get Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp1}=  Enable Disable Department  ${toggle[0]}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+            ${dep_name1}=  FakerLibrary.bs
+            ${dep_code1}=   Random Int  min=100   max=999
+            ${dep_desc1}=   FakerLibrary.word  
+            ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+            Log  ${resp1.content}
+            Should Be Equal As Strings  ${resp1.status_code}  200
+            Set Test Variable  ${dep_id}  ${resp1.json()}
+    ELSE
+            Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    END
+
+    ${description}=  FakerLibrary.sentence
+    ${Total}=   Random Int   min=100   max=500
+    ${Total}=  Convert To Number  ${Total}  1
+    ${SERVICE1}=    FakerLibrary.job
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  provider=${u_id1}  department=${dep_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${s_id}  ${resp.json()}
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  name=${SERVICE1}  description=${desc}  serviceDuration=${service_duration[1]}
+
+    ${SERVICE2}=    FakerLibrary.job
+    ${description2}=   FakerLibrary.sentence
+    ${servicecharge2}=   Pyfloat  right_digits=1  min_value=100  max_value=500
+    ${srv_duration2}=   Random Int   min=10   max=20
+    ${resp}=  ${resp}=  Create Service  ${SERVICE2}  ${description2}  ${srv_duration2}  ${bool[0]}  ${servicecharge2}  ${bool[0]}  provider=${u_id1}  department=${dep_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${s_id2}  ${resp.json()}
+
+    ${resp}=   Get Service By Id  ${s_id2}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  name=${SERVICE2}  description=${desc2}  serviceDuration=${srv_duration2}
+
+
+JD-TC-CreateService-19
+    [Documentation]   Create Service with user id as empty
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME235}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${u_id1}  ${decrypted_data['id']}
+
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+
+    ${SERVICE1}=    FakerLibrary.job
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=500
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  department=${dep_id}   provider=${NULL}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+JD-TC-CreateService-20
+    [Documentation]   Create service with supportInternationalConsumer as true and set internationalAmount with prepayment. (service charge for international consumers)
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${SERVICE1}=    FakerLibrary.job
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=250
+    ${intlamt}=  Pyfloat  right_digits=1  min_value=250  max_value=500
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}  supportInternationalConsumer=${bool[1]}  internationalAmount=${intlamt}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Set Test Variable  ${s_id}  ${resp.json()}
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  minPrePaymentAmount=${min_pre}  totalAmount=${servicecharge}  isPrePayment=${bool[1]}  supportInternationalConsumer=${bool[1]}  internationalAmount=${intlamt}
+
+
+JD-TC-CreateService-21
+    [Documentation]   Create service with supportInternationalConsumer as true and set internationalAmount without prepayment. (service charge for international consumers)
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${SERVICE1}=    FakerLibrary.job
+    ${desc}=   FakerLibrary.sentence
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=250
+    ${intlamt}=  Pyfloat  right_digits=1  min_value=250  max_value=500
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  supportInternationalConsumer=${bool[1]}  internationalAmount=${intlamt}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Set Test Variable  ${s_id}  ${resp.json()}
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  totalAmount=${servicecharge}  isPrePayment=${bool[0]}  supportInternationalConsumer=${bool[1]}  internationalAmount=${intlamt}
+
+
+JD-TC-CreateService-22
+    [Documentation]   Create service with supportInternationalConsumer as true but without internationalAmount. (service charge for international consumers)
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${SERVICE1}=    FakerLibrary.job
+    ${desc}=   FakerLibrary.sentence
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=250
+    ${intlamt}=  Pyfloat  right_digits=1  min_value=250  max_value=500
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  supportInternationalConsumer=${bool[1]}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Set Test Variable  ${s_id}  ${resp.json()}
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  totalAmount=${servicecharge}  supportInternationalConsumer=${bool[1]}  internationalAmount=${zero_amt}
+
+
+
+JD-TC-CreateService-23
+    [Documentation]   Create service with supportInternationalConsumer as false but with internationalAmount. (cannot set internationalAmount when supportInternationalConsumer is false)
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${SERVICE1}=    FakerLibrary.job
+    ${desc}=   FakerLibrary.sentence
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=250
+    ${intlamt}=  Pyfloat  right_digits=1  min_value=250  max_value=500
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  supportInternationalConsumer=${bool[0]}  internationalAmount=${intlamt}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Set Test Variable  ${s_id}  ${resp.json()}
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  totalAmount=${servicecharge}  supportInternationalConsumer=${bool[0]}  internationalAmount=${zero_amt}
+
+
+JD-TC-CreateService-24
+    [Documentation]   Create service with supportInternationalConsumer as true but with internationalAmount as empty. (service charge for international consumers)
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${SERVICE1}=    FakerLibrary.job
+    ${desc}=   FakerLibrary.sentence
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=250
+    ${intlamt}=  Pyfloat  right_digits=1  min_value=250  max_value=500
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  supportInternationalConsumer=${bool[1]}  internationalAmount=${EMPTY}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Set Test Variable  ${s_id}  ${resp.json()}
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  totalAmount=${servicecharge}  supportInternationalConsumer=${bool[1]}  internationalAmount=${zero_amt}
+
+
+JD-TC-CreateService-25
+    [Documentation]   Create service with supportInternationalConsumer as true but with internationalAmount as less than service charge. (service charge for international consumers)
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${SERVICE1}=    FakerLibrary.job
+    ${desc}=   FakerLibrary.sentence
+    ${intlamt}=   Pyfloat  right_digits=1  min_value=100  max_value=250
+    ${servicecharge}=  Pyfloat  right_digits=1  min_value=250  max_value=500
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  supportInternationalConsumer=${bool[1]}  internationalAmount=${intlamt}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Set Test Variable  ${s_id}  ${resp.json()}
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  totalAmount=${servicecharge}  internationalAmount=${intlamt}
+
+
+JD-TC-CreateService-26
+    [Documentation]   Create service with supportInternationalConsumer and prePaymentType as percentage
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${SERVICE1}=    FakerLibrary.job
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=250
+    ${intlamt}=  Pyfloat  right_digits=1  min_value=250  max_value=500
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}  supportInternationalConsumer=${bool[1]}  internationalAmount=${intlamt}  prePaymentType=${advancepaymenttype[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Set Test Variable  ${s_id}  ${resp.json()}
+
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${servicecharge}  supportInternationalConsumer=${bool[1]}  internationalAmount=${intlamt}
+
+
+JD-TC-CreateService-27
+    [Documentation]   Create service with prePaymentType as percentage and prepayment set as a percentage value
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${SERVICE1}=    FakerLibrary.job
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre_percent}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=250
+    ${intlamt}=  Pyfloat  right_digits=1  min_value=250  max_value=500
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre_percent}  prePaymentType=${advancepaymenttype[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Set Test Variable  ${s_id}  ${resp.json()}
+
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre_percent}  totalAmount=${servicecharge} 
+
+
+JD-TC-CreateService-28
+    [Documentation]   Create service with prePaymentType as percentage and prepayment set as 100 percentage value
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${SERVICE1}=    FakerLibrary.job
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre_percent}=   Convert To Number  100  1
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=250
+    ${intlamt}=  Pyfloat  right_digits=1  min_value=250  max_value=500
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre_percent}  prePaymentType=${advancepaymenttype[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Set Test Variable  ${s_id}  ${resp.json()}
+
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre_percent}  totalAmount=${servicecharge}
+
+
 JD-TC-CreateService-UH1
     [Documentation]  Create an already existing service
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME235}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service
@@ -403,8 +883,8 @@ JD-TC-CreateService-UH1
     ${Total1}=  Convert To Number  ${Total1}  1
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total1}  ${bool[0]}  minPrePaymentAmount=${min_pre1}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-
+    Should Be Equal As Strings  ${resp.status_code}  422 
+    Should Be Equal As Strings   ${resp.json()}  ${SERVICE_CANT_BE_SAME}
 
 
 JD-TC-CreateService-UH2
@@ -416,13 +896,14 @@ JD-TC-CreateService-UH2
     ${SERVICE1}=    FakerLibrary.job
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings   ${resp.json()}  ${SESSION_EXPIRED}
     
 
 JD-TC-CreateService-UH3
     [Documentation]   Create a service using consumer login
 
-    ${account_id}=  get_acc_id  ${PUSERNAME235}
+    ${account_id}=  get_acc_id  ${PUSERNAME236}
 
     ${primaryMobileNo}  ${token}  Create Sample Customer  ${account_id}  primaryMobileNo=${CUSERNAME5}
 
@@ -436,7 +917,8 @@ JD-TC-CreateService-UH3
     ${SERVICE1}=    FakerLibrary.job
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings   ${resp.json()}  ${LOGIN_NO_ACCESS_FOR_URL}
 
 
 JD-TC-CreateService-UH4
@@ -454,7 +936,391 @@ JD-TC-CreateService-UH4
     ${resp}=  Get Services in Department  ${def_depid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${SERVICE1}  ${resp.json()['services'][0]['name']}
+    # Set Test Variable  ${SERVICE1}  ${resp.json()['services'][0]['name']}
+
+    ${resp}=  Get Services in Department  ${depid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${description}=  FakerLibrary.sentence
+    ${Total}=   Random Int   min=100   max=500
+    ${Total}=  Convert To Number  ${Total}  1
+    ${SERVICE1}=    FakerLibrary.job
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  department=${depid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+    Set Test Variable  ${sid}  ${resp.json()}
+
+    ${resp}=   Get Service By Id  ${sid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['name']}   ${SERVICE1}
+
+    ${description}=  FakerLibrary.sentence
+    ${Total}=   Random Int   min=100   max=500
+    ${Total}=  Convert To Number  ${Total}  1
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  department=${def_depid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422  
+    Should Be Equal As Strings   ${resp.json()}  ${SERVICE_CANT_BE_SAME}
+
+
+JD-TC-CreateService-UH5
+    [Documentation]   Create service without service name
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${description}=  FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=10   max=50
+    ${Total}=   Random Int   min=100   max=500
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${Total}=  Convert To Number  ${Total}  1
+    ${SERVICE1}=    FakerLibrary.job
+    ${resp}=  Create Service  ${EMPTY}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   422
+    Should Be Equal As Strings   ${resp.json()}   ${SERVICE_NAME_REQUIRED}
+
+
+JD-TC-CreateService-UH6
+    [Documentation]   Create service without service duration
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${description}=  FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=10   max=50
+    ${Total}=   Random Int   min=100   max=500
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${Total}=  Convert To Number  ${Total}  1
+    ${SERVICE1}=    FakerLibrary.job
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${EMPTY}  ${bool[0]}  ${Total}  ${bool[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   422
+    Should Be Equal As Strings   ${resp.json()}   ${SERVICE_DURATION_CANT_BE_ZERO}
+
+
+JD-TC-CreateService-UH7
+    [Documentation]   Create service without notificationType
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${description}=  FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=10   max=50
+    ${Total}=   Random Int   min=100   max=500
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${Total}=  Convert To Number  ${Total}  1
+    ${SERVICE1}=    FakerLibrary.job
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${EMPTY}  ${bool[0]}  ${Total}  ${bool[1]}  notificationType=${EMPTY}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   422
+
+
+JD-TC-CreateService-UH8
+    [Documentation]   Create service without prepayment amount
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${description}=  FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=10   max=50
+    ${Total}=   Random Int   min=100   max=500
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${Total}=  Convert To Number  ${Total}  1
+    ${SERVICE1}=    FakerLibrary.job
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${EMPTY}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   422
+    Should Be Equal As Strings   ${resp.json()}   ${MINIMUM_PREPAYMENT_AMOUNT_SHOULD_BE_PROVIDED}
+
+
+JD-TC-CreateService-UH9
+    [Documentation]   Create service without total amount
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${description}=  FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=10   max=50
+    ${Total}=   Random Int   min=100   max=500
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${Total}=  Convert To Number  ${Total}  1
+    ${SERVICE1}=    FakerLibrary.job
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${EMPTY}  ${bool[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   422
+    Should Be Equal As Strings   ${resp.json()}   ${SERVICE_AMOUNT_CANT_BE_NULL}
+
+
+JD-TC-CreateService-UH10
+    [Documentation]   Create Service with maxBookingsAllowed as empty
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=1   max=50
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${SERVICE1}=    FakerLibrary.job
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  maxBookingsAllowed=${EMPTY}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Set Test Variable  ${s_id}  ${resp.json()}
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  maxBookingsAllowed=1
+
+
+JD-TC-CreateService-UH11
+    [Documentation]   Create Service with resoucesRequired as empty
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=1   max=50
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${SERVICE1}=    FakerLibrary.job
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  resoucesRequired=${EMPTY}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Set Test Variable  ${s_id}  ${resp.json()}
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  resoucesRequired=1
+
+
+JD-TC-CreateService-UH12
+    [Documentation]   Create Service with leadTime as empty
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=1   max=50
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${SERVICE1}=    FakerLibrary.job
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  leadTime=${EMPTY}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Set Test Variable  ${s_id}  ${resp.json()}
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  leadTime=0
+
+
+JD-TC-CreateService-UH13
+    [Documentation]   Create service with prepayment amount of 0
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${description}=  FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=10   max=50
+    ${Total}=   Random Int   min=100   max=500
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${Total}=  Convert To Number  ${Total}  1
+    ${SERVICE1}=    FakerLibrary.job
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${0.0}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   422
+    Should Be Equal As Strings   ${resp.json()}   ${MINIMUM_PREPAYMENT_AMOUNT_SHOULD_BE_PROVIDED}
+
+
+JD-TC-CreateService-UH14
+    [Documentation]   Create Service for an invalid user id
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${u_id1}  ${decrypted_data['id']}
+
+    # Set Test Variable  ${u_id1}  ${resp.json()['id']}
+
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+
+    ${SERVICE1}=    FakerLibrary.Word
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=500
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${inv_userid}    FakerLibrary.Random Number   digits=10  fix_len=True
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  department=${dep_id}   provider=${inv_userid}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}  ${NO_PERMISSION_TO_CREATE_SERVICE}
+
+
+JD-TC-CreateService-UH15
+    [Documentation]   Create Service for a user from another account 
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${PUSERNAME_U2}  ${u_id2} =  Create and Configure Sample User
+
+    ${resp}=    Provider Logout
+    Should Be Equal As Strings  ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME235}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+            ${resp1}=  Enable Disable Department  ${toggle[0]}
+            Log  ${resp1.content}
+            Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+    
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF   '${resp.content}' == '${emptylist}'
+            ${dep_name1}=  FakerLibrary.bs
+            ${dep_code1}=   Random Int  min=100   max=999
+            ${dep_desc1}=   FakerLibrary.word  
+            ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+            Log  ${resp1.content}
+            Should Be Equal As Strings  ${resp1.status_code}  200
+            Set Test Variable  ${dep_id}  ${resp1.json()}
+    ELSE
+            Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    END
+
+    ${SERVICE1}=    FakerLibrary.Word
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=500
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  department=${dep_id}   provider=${u_id2}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}  ${NO_PERMISSION}
+
+
+JD-TC-CreateService-UH16
+    [Documentation]   Create Service for an invalid department id 
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME235}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${u_id1}  ${decrypted_data['id']}
+
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+
+    ${SERVICE1}=    FakerLibrary.Word
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=500
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${inv_depid}    FakerLibrary.Random Number   digits=10  fix_len=True
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  department=${inv_depid}   provider=${u_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    404
+    Should Be Equal As Strings    ${resp.json()}  ${INVALID_DEPARTMENT}
+
+
+JD-TC-CreateService-UH17
+    [Documentation]   Create Service with department id as empty
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME235}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${u_id1}  ${decrypted_data['id']}
+
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+
+    ${SERVICE1}=    FakerLibrary.Word
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=500
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  department=${EMPTY}   provider=${u_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}  ${DEPT_ID}
+
+
+JD-TC-CreateService-UH18
+    [Documentation]   Create Service for user without department when department is enabled.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${u_id1}  ${decrypted_data['id']}
+
+    ${resp}=  Get Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+            ${resp1}=  Enable Disable Department  ${toggle[0]}
+            Log  ${resp1.content}
+            Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+
+    ${SERVICE1}=    FakerLibrary.Word
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=500
+    ${srv_duration}=   Random Int   min=10   max=20
+    # ${inv_depid}    FakerLibrary.Random Number   digits=10  fix_len=True
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}   provider=${u_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}  ${DEPT_ID}
+
+
+
+
+
     
         
 *** COMMENTS ***
@@ -694,7 +1560,7 @@ JD-TC-CreateService-6
     Set Suite Variable  ${qid1}  ${resp.json()}
 
     ${resp}=  AddCustomer  ${CUSERNAME9}
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid}  ${resp.json()}
 
@@ -749,7 +1615,7 @@ JD-TC-CreateService-7
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Activation  ${PUSERNAME_Y}  0
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_Y}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_Y}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -791,7 +1657,7 @@ JD-TC-CreateService-7
     ${url}=   FakerLibrary.url
     ${parking}   Random Element   ${parkingType}
     ${resp}=  Update Business Profile with schedule   ${bs}  ${desc}  ${companySuffix}  ${city}  ${longi}  ${latti}  ${url}  ${parking}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${fields}=   Get subDomain level Fields  ${domain}  ${subdomain}
     Should Be Equal As Strings    ${fields.status_code}   200
@@ -875,7 +1741,7 @@ JD-TC-CreateService-7
     Set Suite Variable  ${qid1}  ${resp.json()}
 
     ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}  ${bool[1]}
 
@@ -935,12 +1801,12 @@ JD-TC-CreateService-7
     Set Test Variable   ${slot1}  ${resp.json()['availableSlots'][0]['time']}
 
     ${resp}=  AddCustomer  ${CUSERNAME8}
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}
 
     # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME8}
-    # Log   ${resp.json()}
+    # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${cid}  ${resp.json()[0]['id']}
 
@@ -955,7 +1821,7 @@ JD-TC-CreateService-7
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
     ${resp}=  Get Bill By UUId  ${apptid1}
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['uuid']}  ${apptid1}
 
@@ -1864,19 +2730,19 @@ JD-TC-CreateService-20
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
             ${resp1}=  Enable Disable Department  ${toggle[0]}
-            Log   ${resp1.json()}
+            Log  ${resp1.content}
             Should Be Equal As Strings  ${resp1.status_code}  200
     END
 
     ${resp}=    Get Locations
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}  ${resp.json()[0]['id']}
 
     sleep  02s
 
     # ${resp}=  Get Departments
-    # Log   ${resp.json()}
+    # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
     ${resp}=  Get Departments
@@ -1898,7 +2764,7 @@ JD-TC-CreateService-20
     Set Test Variable  ${u_id1}
 
     ${resp}=  Get User By Id  ${u_id1}
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${PUSERNAME4_U1}  ${resp.json()['mobileNo']}
 
@@ -1945,7 +2811,7 @@ JD-TC-CreateService-21
     # Set Test Variable  ${u_id1}  ${resp.json()['id']}
 
     ${resp}=  Get Departments
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
@@ -1998,7 +2864,7 @@ JD-TC-CreateService-UH12
     # Set Test Variable  ${u_id1}  ${resp.json()['id']}
 
     ${resp}=  Get Departments
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
@@ -2040,12 +2906,12 @@ JD-TC-CreateService-UH13
     Should Be Equal As Strings    ${resp.status_code}    200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
             ${resp1}=  Enable Disable Department  ${toggle[0]}
-            Log   ${resp1.json()}
+            Log  ${resp1.content}
             Should Be Equal As Strings  ${resp1.status_code}  200
     END
     
     ${resp}=  Get Departments
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     IF   '${resp.content}' == '${emptylist}'
@@ -2088,7 +2954,7 @@ JD-TC-CreateService-UH14
     # Set Test Variable  ${u_id1}  ${resp.json()['id']}
 
     ${resp}=  Get Departments
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
@@ -2118,7 +2984,7 @@ JD-TC-CreateService-UH15
     # Set Test Variable  ${u_id1}  ${resp.json()['id']}
 
     ${resp}=  Get Departments
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
@@ -2148,7 +3014,7 @@ JD-TC-CreateService-UH16
     # Set Test Variable  ${u_id1}  ${resp.json()['id']}
 
     ${resp}=  Get Departments
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
@@ -2179,7 +3045,7 @@ JD-TC-CreateService-UH17
     # Set Test Variable  ${u_id1}  ${resp.json()['id']}
 
     ${resp}=  Get Departments
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
@@ -2482,7 +3348,7 @@ Billable
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}   200
         ${resp}=   Get Service
-        Log   ${resp.json()}
+        Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         Disable Services
         # ${resp}=  Get Waitlist Settings
@@ -2543,7 +3409,7 @@ Non Billable
 Disable Services
 
     ${resp}=   Get Service  status-eq=ACTIVE
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
     FOR   ${i}   IN RANGE   ${len}
@@ -2555,7 +3421,7 @@ Disable Services
             ${resp}=   Disable service  ${sid${i}}
     END
     ${resp}=   Get Service  status-eq=ACTIVE
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
