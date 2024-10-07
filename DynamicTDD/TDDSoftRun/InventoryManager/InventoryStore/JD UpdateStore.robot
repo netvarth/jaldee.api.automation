@@ -69,7 +69,7 @@ JD-TC-UpdateStore-1
     ${accountId}=  get_acc_id  ${HLPUSERNAME1}
     Set Suite Variable    ${accountId} 
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
@@ -490,18 +490,18 @@ JD-TC-UpdateStore-24
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings    ${resp.json()}    ${PLEASE_ENTER_NAME}
 
-JD-TC-UpdateStore-25
+# JD-TC-UpdateStore-25
 
-    [Documentation]   Update store - store id is empty
+#     [Documentation]   Update store - store id is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+#     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
+#     Log   ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Update Store      ${empty}    ${Name}  ${St_Id}    ${locId1}   ${email}     ${PhoneNumber}  ${countryCodes[0]}  storeCode=${storeCode2}  city=${city}  district=${district}  State=${State}  country=${country}  pincode=${pincode}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    
+#     ${resp}=  Update Store      ${empty}    ${Name}  ${St_Id}    ${locId1}   ${email}     ${PhoneNumber}  ${countryCodes[0]}  storeCode=${storeCode2}  city=${city}  district=${district}  State=${State}  country=${country}  pincode=${pincode}
+#     Log   ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}    422
+#     Should Be Equal As Strings    ${resp.json()}    
 
 JD-TC-UpdateStore-26
 

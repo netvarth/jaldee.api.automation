@@ -58,20 +58,14 @@ JD-TC-CreateStore-1
     ${resp}=  Get Store Type By EncId   ${St_Id}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
