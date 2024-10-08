@@ -64,6 +64,14 @@ Get Consumer Appointments Today
     Check Deprication  ${resp}  Get Consumer Appointments Today
     RETURN  ${resp}
 
+Get Availability Of Appointment Using Location And Service
+    [Arguments]  ${locationId}  ${serviceId}  &{kwargs}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/appointment/availability/location/${locationId}/service/${serviceId}    expected_status=any   
+    Check Deprication  ${resp}  Get Availability Of Appointment Using Location And Service
+    RETURN  ${resp}
+
+
 ####### PAYMENTS  #########
 
 Make Payment Consumer Mock
