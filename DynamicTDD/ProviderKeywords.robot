@@ -10,6 +10,7 @@ Resource          Keywords.robot
 Library	          Imageupload.py
 Library           FakerLibrary
 Library           RequestsLibrary
+Library	          CustomKeywords.py
 
 # *** Variables ***
 # @{emptylist}

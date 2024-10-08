@@ -367,8 +367,8 @@ JD-TC-CreateDonationService-UH9
 
         ${MULTIPLES_DOES_NOT_MATCH}=  Format String  ${MULTIPLES_DOES_NOT_MATCH}  ${multiples[1]}
         ${resp}=  Create Donation Service  ${SERVICE1}  ${description}   ${service_duration}  ${btype}    ${bool[1]}    ${notifytype[1]}  ${EMPTY}  ${bool[0]}  ${bool[0]}  ${service_type[0]}  ${min_don_amt}  ${max_don_amt}  ${multiples[1]}
-        Should Be Equal As Strings  ${resp.status_code}  422  
         Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  422  
         Should Be Equal As Strings  "${resp.json()}"  "${MULTIPLES_DOES_NOT_MATCH}"
         
 
