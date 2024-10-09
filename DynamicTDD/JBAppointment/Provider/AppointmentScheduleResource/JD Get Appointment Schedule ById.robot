@@ -88,7 +88,12 @@ JD-TC-Get Schedule By Id-UH1
 
     ${pid}=  get_acc_id  ${PUSERNAME100}
 
-    ${resp}=  AddCustomer  ${CUSERNAME22}  
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable  ${PCPHONENO}  555${PH_Number}
+
+    ${resp}=  AddCustomer  ${PCPHONENO}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
@@ -96,16 +101,16 @@ JD-TC-Get Schedule By Id-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME22}    ${pid}
+    ${resp}=    Send Otp For Login    ${PCPHONENO}    ${pid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME22}   ${OtpPurpose['Authentication']}
+    ${resp}=    Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME22}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

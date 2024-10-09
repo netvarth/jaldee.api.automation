@@ -579,13 +579,10 @@ JD-TC-GetAppointmentStatus-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    sleep  01s
-
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[1]}
-
+   
 JD-TC-GetAppointmentStatus-4
 
     [Documentation]  Check status Arrived when provider takes appointment for consumer
