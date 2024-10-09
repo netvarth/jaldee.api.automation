@@ -108,6 +108,7 @@ populate()
                 # mysql --compress --max_allowed_packet=32M ${DATABASE_NAME} < ${latest}
                 # mysql --compress --max_allowed_packet=1G < ${latest}
                 # time mysql --compression-algorithms=zstd --zstd-compression-level=7 ${DATABASE_NAME} < ${latest}
+                mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} -e 'ALTER INSTANCE DISABLE INNODB REDO_LOG;'
                 if [[ $myversion == 5.7.* ]]; then
                     echo "mysql $myversion"
                     time mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} --compress ${DATABASE_NAME} < ${latest}

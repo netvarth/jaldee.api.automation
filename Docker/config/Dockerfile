@@ -1,9 +1,9 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 LABEL Author="Suvaj S Parathanam" \
 Co-Author="Archana Gopi" \
 Application="Robot Framework" \
-Description="Docker Configurations for JTA"
-MAINTAINER Archana Gopi 
+Description="Docker Configurations for Jaldee JTA" \
+Maintainer="Archana Gopi"
 
 ARG USER_ID=1000
 ARG GROUP_ID=1000
@@ -14,17 +14,14 @@ ENV TZ "Asia/Kolkata"
 
 RUN set -ex; \ 
 apt update && apt upgrade -y; \
-# apt install -y --no-install-recommends ;\
 apt install -y \
 apt-utils \
-# python3 \
 python3-pip \
 build-essential \
 libssl-dev \
 libcurl4-openssl-dev \
 python3-dev \
 default-libmysqlclient-dev \
-# python-requests \
 openssh-client \
 sshpass \
 python3-setuptools \
@@ -40,33 +37,37 @@ debconf-set-selections /tmp/preseed.txt \
 && apt autoremove \
 && apt clean \
 && rm -r /var/lib/apt/lists/* \
-&& python3 -m pip install pip setuptools \
-setuptools-rust \
+&& python3 -m pip install --ignore-installed --break-system-packages --trusted-host pypi.python.org \
+# pip \
+# setuptools \
+# setuptools-rust \
 robotframework \
 requests \
 robotframework-requests \
-# pymysql \
 mysqlclient \
 robotframework-faker \
 robotframework-pabot \
-# pycurl \
 openpyxl \
 robotframework-jsonlibrary \ 
-cryptography \
-&& mkdir -p /ebs/TDD /ebs/TDD_Output /ebs/TDD_Output/signuplog /ebs/TDD_Output/tddreport /ebs/ynwconf /home/user/.ssh/ \
-&& useradd -lm -u ${USER_ID} user \
-&& chown --changes --silent --no-dereference --recursive \
+cryptography 
+
+# RUN userdel -r ubuntu
+# RUN mkdir -p /ebs/TDD /ebs/TDD_Output /ebs/TDD_Output/signuplog /ebs/TDD_Output/tddreport /ebs/ynwconf /home/user/.ssh/
+# RUN useradd -lm -u ${USER_ID} user 
+# RUN chown --changes --silent --no-dereference --recursive \
+#         ${USER_ID}:${GROUP_ID} \
+#         /ebs \
+#         /home/user
+
+RUN mkdir -p /ebs/TDD /ebs/TDD_Output /ebs/TDD_Output/signuplog /ebs/TDD_Output/tddreport /ebs/ynwconf /home/ubuntu/.ssh/
+RUN chown --changes --silent --no-dereference --recursive \
         ${USER_ID}:${GROUP_ID} \
-        /ebs \
-        /home/user
+        /ebs
 
 VOLUME /ebs/ /ebs/TDD /ebs/conf
 WORKDIR /ebs
 
-USER user  
+# USER user  
+USER ubuntu  
 
-#RUN chmod a+x /ebs/conf/runrobot.sh
-
-# CMD ["chmod", "a+x", "/ebs/conf/runrobot.sh", ";", "sh", "-c", "/ebs/conf/runrobot.sh"]
-# CMD ["/bin/bash", "-c", "chmod a+x /ebs/conf/runrobot.sh; /ebs/conf/runrobot.sh"]
 CMD ["/bin/bash", "-c", "/ebs/conf/runrobot.sh"]
