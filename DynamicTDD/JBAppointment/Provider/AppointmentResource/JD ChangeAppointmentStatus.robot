@@ -3852,23 +3852,10 @@ JD-TC-ChangeAppointmentStatus-UH26
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    sleep  01s
-
-    # ${resp}=  Get Appointment Status   ${apptid1}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[2]}
-
     ${reason}=  Random Element  ${cancelReason}
-    ${msg}=   FakerLibrary.word
-    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    # ${resp}=    Provider Cancel Appointment  ${apptid1}  ${reason}  ${msg}  ${DAY1}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Appointment Action   ${apptStatus[6]}   ${apptid1}  cancelReason=${reason}  communicationMessage=${msg}   date=${DAY1}
-    Log   ${resp.json()}
+    ${resp}=  Appointment Action   ${apptStatus[4]}   ${apptid1}    cancelReason=${reason}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  "${resp.json()}"  "${APPOINTMET_AlREADY_TAKEN}"
 
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
