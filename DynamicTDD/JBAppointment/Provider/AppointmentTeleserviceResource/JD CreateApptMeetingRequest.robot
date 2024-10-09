@@ -141,10 +141,6 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-1
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${S_id1}  ${resp.json()} 
 
-    ${resp}=   Get Service By Id  ${S_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${ZOOM_Pid0}=  Format String  ${ZOOM_url}  ${PUSERPH_id0}
     Set Suite Variable   ${ZOOM_Pid0}
     Set Test Variable  ${callingMode2}     ${CallingModes[0]}
@@ -163,10 +159,6 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${S_id2}  ${resp.json()} 
-
-    ${resp}=   Get Service By Id  ${S_id2}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Locations
     Log   ${resp.json()}

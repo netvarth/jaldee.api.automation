@@ -83,11 +83,6 @@ JD-TC-ChangeAppointmentStatus-1
 
     ${lid}=  Create Sample Location
 
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500
@@ -98,6 +93,11 @@ JD-TC-ChangeAppointmentStatus-1
     Set Test Variable  ${s_id}  ${resp.json()}
 
     clear_appt_schedule   ${billable_providers[3]}
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
