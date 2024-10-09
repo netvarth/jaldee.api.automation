@@ -62,7 +62,8 @@ cryptography
 RUN mkdir -p /ebs/TDD /ebs/TDD_Output /ebs/TDD_Output/signuplog /ebs/TDD_Output/tddreport /ebs/ynwconf /home/ubuntu/.ssh/ \
 && chown --changes --silent --no-dereference --recursive \
         ${USER_ID}:${GROUP_ID} \
-        /ebs
+        /ebs \
+        /home/ubuntu/.ssh/
 
 VOLUME /ebs/ /ebs/TDD /ebs/conf
 WORKDIR /ebs
