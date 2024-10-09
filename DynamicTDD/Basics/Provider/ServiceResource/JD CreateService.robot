@@ -275,72 +275,6 @@ JD-TC-CreateService-8
 
 
 JD-TC-CreateService-9
-    [Documentation]   Create a Virtual service in a department
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp1}=  Enable Disable Department  ${toggle[0]}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    END
-
-    ${resp}=  Get Departments
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-            ${dep_name1}=  FakerLibrary.bs
-            ${dep_code1}=   Random Int  min=100   max=999
-            ${dep_desc1}=   FakerLibrary.word  
-            ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-            Log  ${resp1.content}
-            Should Be Equal As Strings  ${resp1.status_code}  200
-            Set Test Variable  ${dep_id}  ${resp1.json()}
-    ELSE
-            Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
-    END
-
-    ${dep_name1}=  FakerLibrary.bs
-    ${dep_code1}=   Random Int  min=100   max=999
-    ${dep_desc1}=   FakerLibrary.word  
-    ${resp}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${dep_id1}  ${resp.json()}
-    
-    Set Test Variable  ${callingMode1}     ${CallingModes[1]}
-    Set Test Variable  ${ModeId1}          ${PUSERNAME_A}
-    Set Test Variable  ${ModeStatus1}      ACTIVE
-    ${Description1}=    FakerLibrary.sentences
-    ${VScallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   countryCode=${countryCodes[0]}  status=${ModeStatus1}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
-    ${virtualCallingModes}=  Create List  ${VScallingMode1}
-    Set Test Variable  ${vstype}  ${vservicetype[1]}
-
-    ${description}=    FakerLibrary.sentence
-    ${Total1}=   Random Int   min=100   max=500
-    ${Total}=  Convert To Number  ${Total1}  1
-    ${SERVICE1}=    generate_service_name
-    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}  department=${dep_id1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sid}  ${resp.json()}
-
-    ${resp}=   Get Service By Id  ${sid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['serviceType']}   ${ServiceType[0]}
-
-    ${resp}=  Get Services in Department  ${dep_id1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}   ${sid}
-    Should Be Equal As Strings  ${resp.json()['services'][0]['serviceType']}  ${ServiceType[0]}
-
-
-JD-TC-CreateService-10
     [Documentation]   Create service with lead time. 
     ...  (preparation time for provider before next booking. when trying to make a booking in less than 10 mins of start of next slot, when lead time is 10 mins
     ...  the next slot will not be shown. there should be a time difference of 10 mins from current booking time to next slot.)
@@ -370,7 +304,7 @@ JD-TC-CreateService-10
     Verify Response  ${resp}  leadTime=${leadTime}
 
 
-JD-TC-CreateService-11
+JD-TC-CreateService-10
     [Documentation]   Create service with max bookings allowed. (one consumer can make as many bookings as specified in max bookings allowed)
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
@@ -398,7 +332,7 @@ JD-TC-CreateService-11
     Verify Response  ${resp}  maxBookingsAllowed=${maxbookings}
 
 
-JD-TC-CreateService-12
+JD-TC-CreateService-11
     [Documentation]   Create service with resoucesRequired. 
     # resoucesRequired defines how many resources we need to complete the said service, eg: say we have 4 resources- 4 beauticians
     # and we need 2 beauticians 1 for hair styling and the other as henna artist for one service, then the we give resource required for that service as 2.
@@ -430,7 +364,7 @@ JD-TC-CreateService-12
     Verify Response  ${resp}  resoucesRequired=${resoucesRequired}
 
 
-JD-TC-CreateService-13
+JD-TC-CreateService-12
     [Documentation]   Create service with priceDynamic.(allows to set schedule level price rather than service charge)
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
@@ -457,7 +391,7 @@ JD-TC-CreateService-13
     Verify Response  ${resp}  priceDynamic=${bool[1]}
 
 
-JD-TC-CreateService-14
+JD-TC-CreateService-13
     [Documentation]   Create service without service description
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
@@ -479,7 +413,7 @@ JD-TC-CreateService-14
     Should Be Equal As Strings  ${resp.json()['description']}   ${EMPTY}
 
 
-JD-TC-CreateService-15
+JD-TC-CreateService-14
     [Documentation]   Create service with service charge of 0
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
@@ -501,7 +435,7 @@ JD-TC-CreateService-15
     Should Be Equal As Strings  ${resp.json()['totalAmount']}   0.0
 
 
-JD-TC-CreateService-16
+JD-TC-CreateService-15
     [Documentation]   Create multiple Services for a user
     
     ${resp}=  Encrypted Provider Login  ${PUSER_A_U1}  ${PASSWORD}
@@ -560,7 +494,7 @@ JD-TC-CreateService-16
     Verify Response  ${resp}  name=${SERVICE2}  description=${description2}  serviceDuration=${srv_duration2}
 
 
-JD-TC-CreateService-17
+JD-TC-CreateService-16
     [Documentation]   Create Service with user id as empty
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
@@ -584,7 +518,7 @@ JD-TC-CreateService-17
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-JD-TC-CreateService-18
+JD-TC-CreateService-17
     [Documentation]   Create service with supportInternationalConsumer as true and set internationalAmount with prepayment. (service charge for international consumers)
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
@@ -610,7 +544,7 @@ JD-TC-CreateService-18
     Verify Response  ${resp}  minPrePaymentAmount=${min_pre}  totalAmount=${servicecharge}  isPrePayment=${bool[1]}  supportInternationalConsumer=${bool[1]}  internationalAmount=${intlamt}
 
 
-JD-TC-CreateService-19
+JD-TC-CreateService-18
     [Documentation]   Create service with supportInternationalConsumer as true and set internationalAmount without prepayment. (service charge for international consumers)
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
@@ -635,7 +569,7 @@ JD-TC-CreateService-19
     Verify Response  ${resp}  totalAmount=${servicecharge}  isPrePayment=${bool[0]}  supportInternationalConsumer=${bool[1]}  internationalAmount=${intlamt}
 
 
-JD-TC-CreateService-20
+JD-TC-CreateService-19
     [Documentation]   Create service with supportInternationalConsumer as true but without internationalAmount. (service charge for international consumers)
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
@@ -661,7 +595,7 @@ JD-TC-CreateService-20
 
 
 
-JD-TC-CreateService-21
+JD-TC-CreateService-20
     [Documentation]   Create service with supportInternationalConsumer as false but with internationalAmount. (cannot set internationalAmount when supportInternationalConsumer is false)
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
@@ -686,7 +620,7 @@ JD-TC-CreateService-21
     Verify Response  ${resp}  totalAmount=${servicecharge}  supportInternationalConsumer=${bool[0]}  internationalAmount=${zero_amt}
 
 
-JD-TC-CreateService-22
+JD-TC-CreateService-21
     [Documentation]   Create service with supportInternationalConsumer as true but with internationalAmount as empty. (service charge for international consumers)
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
@@ -711,7 +645,7 @@ JD-TC-CreateService-22
     Verify Response  ${resp}  totalAmount=${servicecharge}  supportInternationalConsumer=${bool[1]}  internationalAmount=${zero_amt}
 
 
-JD-TC-CreateService-23
+JD-TC-CreateService-22
     [Documentation]   Create service with supportInternationalConsumer as true but with internationalAmount as less than service charge. (service charge for international consumers)
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
@@ -750,7 +684,7 @@ JD-TC-CreateService-23
     Verify Response  ${resp}  totalAmount=${servicecharge}  internationalAmount=${intlamt}
 
 
-JD-TC-CreateService-24
+JD-TC-CreateService-23
     [Documentation]   Create service with supportInternationalConsumer and prePaymentType as percentage
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
@@ -777,7 +711,7 @@ JD-TC-CreateService-24
     Verify Response  ${resp}  isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}  totalAmount=${servicecharge}  supportInternationalConsumer=${bool[1]}  internationalAmount=${intlamt}
 
 
-JD-TC-CreateService-25
+JD-TC-CreateService-24
     [Documentation]   Create service with prePaymentType as percentage and prepayment set as a percentage value
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
@@ -804,7 +738,7 @@ JD-TC-CreateService-25
     Verify Response  ${resp}  isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre_percent}  totalAmount=${servicecharge} 
 
 
-JD-TC-CreateService-26
+JD-TC-CreateService-25
     [Documentation]   Create service with prePaymentType as percentage and prepayment set as 100 percentage value
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
@@ -832,7 +766,7 @@ JD-TC-CreateService-26
 
 
 # ................Donation................... #
-JD-TC-CreateService-27
+JD-TC-CreateService-26
     [Documentation]   Create a donation service
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
@@ -860,7 +794,7 @@ JD-TC-CreateService-27
     Should Be Equal As Strings  ${resp.json()['serviceType']}   ${ServiceType[2]}
 
 
-JD-TC-CreateService-28
+JD-TC-CreateService-27
     [Documentation]   Create  a donation service(Non billable domain)
     ${resp}=   Non Billable
 
@@ -884,7 +818,7 @@ JD-TC-CreateService-28
 
     
 # ................................ Virtual Service .......................... #
-JD-TC-CreateService-29
+JD-TC-CreateService-28
     [Documentation]   Create a Virtual service
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
@@ -899,11 +833,8 @@ JD-TC-CreateService-29
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
     
-    Set Test Variable  ${callingMode1}     ${CallingModes[1]}
-    Set Test Variable  ${ModeId1}          ${PUSERNAME_A}
-    Set Test Variable  ${ModeStatus1}      ACTIVE
     ${Description1}=    FakerLibrary.sentences
-    ${VScallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   countryCode=${countryCodes[0]}  status=${ModeStatus1}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_A}   countryCode=${countryCodes[0]}  status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
     ${virtualCallingModes}=  Create List  ${VScallingMode1}
     Set Test Variable  ${vstype}  ${vservicetype[1]}
 
@@ -920,17 +851,87 @@ JD-TC-CreateService-29
     Should Be Equal As Strings  ${resp.json()['serviceType']}   ${ServiceType[0]}
 
 
+JD-TC-CreateService-29
+    [Documentation]   Create a Virtual service in a department
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp1}=  Enable Disable Department  ${toggle[0]}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+            ${dep_name1}=  FakerLibrary.bs
+            ${dep_code1}=   Random Int  min=100   max=999
+            ${dep_desc1}=   FakerLibrary.word  
+            ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+            Log  ${resp1.content}
+            Should Be Equal As Strings  ${resp1.status_code}  200
+            Set Test Variable  ${dep_id}  ${resp1.json()}
+    ELSE
+            Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    END
+
+    ${dep_name1}=  FakerLibrary.bs
+    ${dep_code1}=   Random Int  min=100   max=999
+    ${dep_desc1}=   FakerLibrary.word  
+    ${resp}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${dep_id1}  ${resp.json()}
+    
+    ${Description1}=    FakerLibrary.sentences
+    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_A}   countryCode=${countryCodes[0]}  status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${virtualCallingModes}=  Create List  ${VScallingMode1}
+    Set Test Variable  ${vstype}  ${vservicetype[1]}
+
+    ${description}=    FakerLibrary.sentence
+    ${Total1}=   Random Int   min=100   max=500
+    ${Total}=  Convert To Number  ${Total1}  1
+    ${SERVICE1}=    generate_service_name
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}  department=${dep_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${sid}  ${resp.json()}
+
+    ${resp}=   Get Service By Id  ${sid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['serviceType']}   ${ServiceType[0]}
+
+    ${resp}=  Get Services in Department  ${dep_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}   ${sid}
+    Should Be Equal As Strings  ${resp.json()['services'][0]['serviceType']}  ${ServiceType[0]}
+
+
+
 JD-TC-CreateService-30
     [Documentation]   Create a Virtual service with prepayment
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp1}=  Enable Disable Department  ${toggle[1]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
     
-    Set Test Variable  ${callingMode1}     ${CallingModes[1]}
-    Set Test Variable  ${ModeId1}          ${PUSERNAME_A}
-    Set Test Variable  ${ModeStatus1}      ACTIVE
     ${Description1}=    FakerLibrary.sentences
-    ${VScallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   countryCode=${countryCodes[0]}  status=${ModeStatus1}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_A}   countryCode=${countryCodes[0]}  status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
     ${virtualCallingModes}=  Create List  ${VScallingMode1}
     Set Test Variable  ${vstype}  ${vservicetype[1]}
 
@@ -947,17 +948,15 @@ JD-TC-CreateService-30
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['serviceType']}   ${ServiceType[0]}
 
+
 JD-TC-CreateService-31
-    [Documentation]   Create a Virtual service with skype only active in Global level
+    [Documentation]   Create a Virtual service with whatsapp only active in Global level
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    Set Test Variable  ${callingMode1}     ${CallingModes[1]}
-    Set Test Variable  ${ModeId1}          ${PUSERNAME_A}
-    Set Test Variable  ${ModeStatus1}      ACTIVE
     ${Description1}=    FakerLibrary.sentences
-    ${VScallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   countryCode=${countryCodes[0]}  status=${ModeStatus1}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_A}   countryCode=${countryCodes[0]}  status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
     ${virtualCallingModes}=  Create List  ${VScallingMode1}
     Set Test Variable  ${vstype}  ${vservicetype[1]}
 

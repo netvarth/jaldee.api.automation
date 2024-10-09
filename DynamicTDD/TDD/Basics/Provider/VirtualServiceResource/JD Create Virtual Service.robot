@@ -18,6 +18,7 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 ${ZOOM_url}    https://zoom.us/j/{}?pwd=THVLcTBZa2lESFZQbU9DQTQrWUxWZz09
 ${GoogleMeet_url}    https://meet.google.com/gif-pqrs-abc
 @{emptylist}
+# https://meet.google.com/smg-xvtu-nbc
 
 # ${JDN_AMT_INVALID}= Format String ${JDN_AMT_INVALID} ${jdn_disc_max[0]}
 
