@@ -93,8 +93,8 @@ Account Set Credential
     RETURN  ${resp}
 
 Encrypted Provider Login
-    [Arguments]    ${usname}  ${passwrd}   ${countryCode}=91
-    ${data}=  Login  ${usname}  ${passwrd}   countryCode=${countryCode}
+    [Arguments]    ${usname}  ${passwrd}
+    ${data}=  Login  ${usname}  ${passwrd}
     ${encrypted_data}=  db.encrypt_data  ${data}
     ${data}=    json.dumps    ${encrypted_data}
     ${resp}=    POST On Session    ynw    /provider/login/encrypt    data=${data}  expected_status=any

@@ -908,10 +908,64 @@ JD-TC-CreateService-29
     Set Test Variable  ${vstype}  ${vservicetype[1]}
 
     ${description}=    FakerLibrary.sentence
-    ${Total1}=   Random Int   min=100   max=500
-    ${Total}=  Convert To Number  ${Total1}  1
+    ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
     ${SERVICE1}=    generate_service_name
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${resp.json()}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['serviceType']}   ${ServiceType[0]}
+
+
+JD-TC-CreateService-30
+    [Documentation]   Create a Virtual service with prepayment
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    Set Test Variable  ${callingMode1}     ${CallingModes[1]}
+    Set Test Variable  ${ModeId1}          ${PUSERNAME_A}
+    Set Test Variable  ${ModeStatus1}      ACTIVE
+    ${Description1}=    FakerLibrary.sentences
+    ${VScallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   countryCode=${countryCodes[0]}  status=${ModeStatus1}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${virtualCallingModes}=  Create List  ${VScallingMode1}
+    Set Test Variable  ${vstype}  ${vservicetype[1]}
+
+    ${description}=    FakerLibrary.sentence
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
+    ${SERVICE1}=    generate_service_name
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}  minPrePaymentAmount=${min_pre}  virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${resp.json()}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['serviceType']}   ${ServiceType[0]}
+
+JD-TC-CreateService-31
+    [Documentation]   Create a Virtual service with skype only active in Global level
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    Set Test Variable  ${callingMode1}     ${CallingModes[1]}
+    Set Test Variable  ${ModeId1}          ${PUSERNAME_A}
+    Set Test Variable  ${ModeStatus1}      ACTIVE
+    ${Description1}=    FakerLibrary.sentences
+    ${VScallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   countryCode=${countryCodes[0]}  status=${ModeStatus1}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${virtualCallingModes}=  Create List  ${VScallingMode1}
+    Set Test Variable  ${vstype}  ${vservicetype[1]}
+
+    ${description}=    FakerLibrary.sentence
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
+    ${SERVICE1}=    generate_service_name
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}  minPrePaymentAmount=${min_pre}  virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
