@@ -107,7 +107,6 @@ JD-TC-CreateDonationService-3
         Verify Response  ${resp}  name=${SERVICE1}  description=${description}   serviceDuration=${service_duration}    notification=${bool[1]}  notificationType=${notifytype[1]}   totalAmount=${total_amnt}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[0]}  serviceType=${service_type[0]}  minDonationAmount=${min_don_amt}  maxDonationAmount=${max_don_amt}  multiples=${multiples[0]}
 
 JD-TC-CreateDonationService-UH1
-
         [Documentation]  Create  service for a valid provider when isPrePayment is true
         ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
@@ -130,7 +129,6 @@ JD-TC-CreateDonationService-UH1
         Should Be Equal As Strings  "${resp.json()}"  "Prepayment is not allowed for donation services"
         
 JD-TC-CreateDonationService-4
-
         [Documentation]   Create Donation Service in Non Billable Domain 
         ${description}=  FakerLibrary.sentence
         ${resp}=   Non Billable
@@ -322,7 +320,6 @@ JD-TC-CreateDonationService-UH8
         Should Be Equal As Strings   "${resp.json()}"   "${DONATION_SERVICE_QUEUE}"
 
 JD-TC-CreateDonationService-5
-
         [Documentation]  Create  service for a valid provider without service price.
         ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
@@ -345,7 +342,6 @@ JD-TC-CreateDonationService-5
         # Should Be Equal As Strings  "${resp.json()}"  "${SERVICE_AMOUNT_CANT_BE_NULL}"
         
 JD-TC-CreateDonationService-UH9
-
         [Documentation]  Create  service for a valid provider without giving proper multiples
         ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200

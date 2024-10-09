@@ -60,7 +60,6 @@ Get Non Billable Subdomain
 *** Test Cases ***
 
 JD-TC-CreateVirtualService-(Billable Subdomain)-1
-
     [Documentation]   Create virtual service for a provider in billable domain with prepayment.
 
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+11810045
@@ -1061,7 +1060,6 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-9
 
 
 JD-TC-CreateVirtualService-(Non-Billable Subdomain)-10
-
     [Documentation]   Create virtual service for a provider in Non-billable domain.
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+1582
     Set Suite Variable   ${PUSERPH2}

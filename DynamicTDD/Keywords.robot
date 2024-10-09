@@ -77,7 +77,7 @@ ${bType}                  Waitlist
 @{customerseries}           AUTO  MANUAL  PATTERN
 # @{service_type}             donationService   virtualService   physicalService   billingService
 @{ServiceType}              virtualService  physicalService  donationService  billingService  serviceRequest
-@{multiples}                10  20  30   40   50
+@{multiples}                10  20  30  40  50
 @{vservicetype}             audioService   videoService
 @{apptStatus}               prepaymentPending  Confirmed  Arrived  Started  Cancelled  Rejected  Completed  failed  calling  blocked  Rescheduled  Requested  RequestRejected
 @{cancelReason}             noshowup  blocked  closingSoon  tooFull  self  prePaymentPending  QueueDisabled  holiday
