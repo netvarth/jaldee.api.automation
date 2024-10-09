@@ -59,8 +59,8 @@ cryptography
 #         /ebs \
 #         /home/user
 
-RUN mkdir -p /ebs/TDD /ebs/TDD_Output /ebs/TDD_Output/signuplog /ebs/TDD_Output/tddreport /ebs/ynwconf /home/ubuntu/.ssh/
-RUN chown --changes --silent --no-dereference --recursive \
+RUN mkdir -p /ebs/TDD /ebs/TDD_Output /ebs/TDD_Output/signuplog /ebs/TDD_Output/tddreport /ebs/ynwconf /home/ubuntu/.ssh/ \
+&& chown --changes --silent --no-dereference --recursive \
         ${USER_ID}:${GROUP_ID} \
         /ebs
 

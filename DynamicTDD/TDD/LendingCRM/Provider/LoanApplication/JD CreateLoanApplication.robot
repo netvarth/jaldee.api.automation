@@ -97,7 +97,7 @@ JD-TC-CreateLoanApplication-1
 
     ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCPUSERNAME1}    ${highest_package[0]}
     Log  ${resp.json()}
-    Should Be Equal As Strings            ${resp.status_code}    200
+    Should Be Equal As Strings            ${resp.status_code}    202
     
     ${resp}=  Account Activation          ${NBFCPUSERNAME1}  0
     Log   ${resp.json()}
@@ -119,6 +119,12 @@ JD-TC-CreateLoanApplication-1
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings            ${resp.status_code}  200
+
+    IF  ${resp.json()['enableRbac']}==${bool[0]}
+        ${resp1}=  Enable Disable Main RBAC  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     IF  ${resp.json()['enableRbac']}==${bool[0]}
         ${resp1}=  Enable Disable CDL RBAC  ${toggle[0]}
@@ -204,11 +210,11 @@ JD-TC-CreateLoanApplication-1
     Set Suite Variable                    ${account_id1}       ${resp.json()['id']}
     Set Suite Variable                    ${sub_domain_id}     ${resp.json()['serviceSubSector']['id']}
 
-    ${resp}=  View Waitlist Settings
+    ${resp}=  Get Waitlist Settings
     Log  ${resp.json()}
     Should Be Equal As Strings            ${resp.status_code}  200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
+        ${resp}=  Enable Disable Department  ${toggle[0]}
         Log  ${resp.json()}
         Should Be Equal As Strings        ${resp.status_code}  200
 
@@ -228,6 +234,7 @@ JD-TC-CreateLoanApplication-1
     ELSE
         Set Test Variable  ${dep_id}      ${resp.json()['departments'][0]['departmentId']}
     END
+
 
 # ..... Default Status Updation for loan creation....
 
