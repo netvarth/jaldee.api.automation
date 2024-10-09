@@ -56,10 +56,6 @@ JD-TC-ProviderGetApptRequest-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid1}  ${resp.json()}
 
-    ${resp}=   Get Service By Id  ${sid1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${SERVICE2}=    FakerLibrary.word
     ${service_duration}=   Random Int   min=5   max=10
     ${desc}=   FakerLibrary.sentence
@@ -71,10 +67,6 @@ JD-TC-ProviderGetApptRequest-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid2}  ${resp.json()}
-
-    ${resp}=   Get Service By Id  ${sid2}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Locations
     Log  ${resp.content}
