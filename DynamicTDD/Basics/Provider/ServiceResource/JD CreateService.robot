@@ -52,10 +52,8 @@ JD-TC-CreateService-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${description}=  FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=10   max=50
-    ${Total}=   Random Int   min=100   max=500
-    ${min_pre}=  Convert To Number  ${min_pre}  1
-    ${Total}=  Convert To Number  ${Total}  1
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${SERVICE1}=    generate_service_name
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[1]}  minPrePaymentAmount=${min_pre}  notificationType=${notifytype[2]}  taxable=${bool[1]}  serviceType=${serviceType[1]}  #prePaymentType=${advancepaymenttype[1]}
     Log  ${resp.content}
@@ -83,8 +81,7 @@ JD-TC-CreateService-2
     Should Be Equal As Strings  ${resp.status_code}   200
 
     ${description}=  FakerLibrary.sentence
-    ${Total}=   Random Int   min=100   max=500
-    ${Total}=  Convert To Number  ${Total}  1
+    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${SERVICE1}=    generate_service_name
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  provider=${u_id1}
     Log  ${resp.content}
@@ -127,8 +124,7 @@ JD-TC-CreateService-3
     END
     
     ${description}=  FakerLibrary.sentence
-    ${Total}=   Random Int   min=100   max=500
-    ${Total}=  Convert To Number  ${Total}  1
+    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${SERVICE1}=    generate_service_name
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  department=${dep_id}
     Log  ${resp.content}
@@ -158,10 +154,8 @@ JD-TC-CreateService-4
     END
 
     ${description}=  FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=10   max=50
-    ${Total}=   Random Int   min=100   max=500
-    ${min_pre}=  Convert To Number  ${min_pre}  1
-    ${Total}=  Convert To Number  ${Total}  1
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${SERVICE1}=    generate_service_name
     # ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}
@@ -180,10 +174,8 @@ JD-TC-CreateService-4
 JD-TC-CreateService-5
     [Documentation]   Create service in Non Billable domain
     ${resp}=   Non Billable
-    # clear_service      ${resp}
     ${description}=  FakerLibrary.sentence
-    ${Total}=   Random Int   min=100   max=500
-    ${Total}=  Convert To Number  ${Total}  1
+    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -217,10 +209,8 @@ JD-TC-CreateService-6
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${description}=  FakerLibrary.sentence
-    ${min_pre1}=   Random Int   min=1   max=10
-    ${Total1}=   Random Int   min=100   max=500
-    ${min_pre1}=  Convert To Number  ${min_pre1}  1
-    ${Total1}=  Convert To Number  ${Total1}  1
+    ${min_pre1}=   Pyfloat  right_digits=1  min_value=1  max_value=10
+    ${Total1}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total1}  ${bool[0]}  minPrePaymentAmount=${min_pre1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -239,10 +229,8 @@ JD-TC-CreateService-7
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${description}=  FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=10   max=50
-    ${Total}=   Random Int   min=100   max=500
-    ${min_pre}=  Convert To Number  ${min_pre}  1
-    ${Total}=  Convert To Number  ${Total}  1
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${SERVICE1}=    generate_service_name
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}  
     Log  ${resp.content}
@@ -261,8 +249,7 @@ JD-TC-CreateService-8
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${description}=  FakerLibrary.sentence
-    ${Total}=   Random Int   min=100   max=500
-    ${Total}=  Convert To Number  ${Total}  1
+    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${SERVICE1}=    generate_service_name
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  
     Log  ${resp.content}
@@ -287,10 +274,8 @@ JD-TC-CreateService-9
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${description}=   FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=1   max=50
-    ${servicecharge}=   Random Int  min=100  max=500
-    ${min_pre}=  Convert To Number  ${min_pre}  1
-    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${srv_duration}=   Random Int   min=10   max=20
     ${leadTime}=   Random Int   min=1   max=5
     ${SERVICE1}=    generate_service_name
@@ -315,10 +300,8 @@ JD-TC-CreateService-10
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${desc}=   FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=1   max=50
-    ${servicecharge}=   Random Int  min=100  max=500
-    ${min_pre}=  Convert To Number  ${min_pre}  1
-    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${srv_duration}=   Random Int   min=10   max=20
     ${maxbookings}=   Random Int   min=1   max=10
     ${SERVICE1}=    generate_service_name
@@ -347,10 +330,8 @@ JD-TC-CreateService-11
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${desc}=   FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=1   max=50
-    ${servicecharge}=   Random Int  min=100  max=500
-    ${min_pre}=  Convert To Number  ${min_pre}  1
-    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${srv_duration}=   Random Int   min=10   max=20
     ${resoucesRequired}=   Random Int   min=1   max=10
     ${SERVICE1}=    generate_service_name
@@ -376,10 +357,8 @@ JD-TC-CreateService-12
 
     ${SERVICE1}=    generate_service_name
     ${desc}=   FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=1   max=50
-    ${servicecharge}=   Random Int  min=100  max=500
-    ${min_pre}=  Convert To Number  ${min_pre}  1
-    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${srv_duration}=   Random Int   min=10   max=20
     ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}  priceDynamic=${bool[1]}
     Log  ${resp.content}
@@ -398,10 +377,8 @@ JD-TC-CreateService-13
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${description}=  FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=10   max=50
-    ${Total}=   Random Int   min=100   max=500
-    ${min_pre}=  Convert To Number  ${min_pre}  1
-    ${Total}=  Convert To Number  ${Total}  1
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${SERVICE1}=    generate_service_name
     ${resp}=  Create Service  ${SERVICE1}  ${EMPTY}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}
     Log  ${resp.content}
@@ -420,10 +397,8 @@ JD-TC-CreateService-14
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${description}=  FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=10   max=50
-    ${Total}=   Random Int   min=100   max=500
-    ${min_pre}=  Convert To Number  ${min_pre}  1
-    ${Total}=  Convert To Number  ${Total}  1
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${SERVICE1}=    generate_service_name
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${0.0}  ${bool[0]}
     Log  ${resp.content}
@@ -468,8 +443,7 @@ JD-TC-CreateService-15
     END
 
     ${desc}=  FakerLibrary.sentence
-    ${Total}=   Random Int   min=100   max=500
-    ${Total}=  Convert To Number  ${Total}  1
+    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${SERVICE1}=    generate_service_name
     ${resp}=  Create Service  ${SERVICE1}  Description is "${desc}"  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  provider=${u_id1}  department=${dep_id}
     Log  ${resp.content}
@@ -781,8 +755,7 @@ JD-TC-CreateService-26
     ${min_don_amt}=  Convert To Number  ${min_don_amt}  1
     ${max_don_amt}=  Convert To Number  ${max_don_amt}  1
     ${description}=  FakerLibrary.sentence
-    ${Total}=   Random Int   min=100   max=500
-    ${Total}=  Convert To Number  ${Total}  1
+    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${SERVICE1}=    generate_service_name
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[2]}  minDonationAmount=${min_don_amt}  maxDonationAmount=${max_don_amt}  multiples=${multiples[0]}
     Log  ${resp.content}
@@ -988,10 +961,8 @@ JD-TC-CreateService-UH1
     Set Test Variable  ${SERVICE1}  ${resp.json()[0]['name']} 
 
     ${description}=  FakerLibrary.sentence
-    ${min_pre1}=   Random Int   min=1   max=10
-    ${Total1}=   Random Int   min=100   max=500
-    ${min_pre1}=  Convert To Number  ${min_pre1}  1
-    ${Total1}=  Convert To Number  ${Total1}  1
+    ${min_pre1}=   Pyfloat  right_digits=1  min_value=1  max_value=10
+    ${Total1}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total1}  ${bool[0]}  minPrePaymentAmount=${min_pre1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422 
@@ -1002,8 +973,7 @@ JD-TC-CreateService-UH2
     [Documentation]    Create a service without login
 
     ${description}=  FakerLibrary.sentence
-    ${Total}=   Random Int   min=100   max=500
-    ${Total}=  Convert To Number  ${Total}  1
+    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${SERVICE1}=    generate_service_name
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  
     Log  ${resp.content}
@@ -1023,8 +993,7 @@ JD-TC-CreateService-UH3
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${description}=  FakerLibrary.sentence
-    ${Total}=   Random Int   min=100   max=500
-    ${Total}=  Convert To Number  ${Total}  1
+    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${SERVICE1}=    generate_service_name
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  
     Log  ${resp.content}
@@ -1054,8 +1023,7 @@ JD-TC-CreateService-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${description}=  FakerLibrary.sentence
-    ${Total}=   Random Int   min=100   max=500
-    ${Total}=  Convert To Number  ${Total}  1
+    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${SERVICE1}=    generate_service_name
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  department=${depid1}
     Log  ${resp.content}
@@ -1068,8 +1036,7 @@ JD-TC-CreateService-UH4
     Should Be Equal As Strings  ${resp.json()['name']}   ${SERVICE1}
 
     ${description}=  FakerLibrary.sentence
-    ${Total}=   Random Int   min=100   max=500
-    ${Total}=  Convert To Number  ${Total}  1
+    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  department=${def_depid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422  
@@ -1083,10 +1050,8 @@ JD-TC-CreateService-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${description}=  FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=10   max=50
-    ${Total}=   Random Int   min=100   max=500
-    ${min_pre}=  Convert To Number  ${min_pre}  1
-    ${Total}=  Convert To Number  ${Total}  1
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${SERVICE1}=    generate_service_name
     ${resp}=  Create Service  ${EMPTY}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}
     Log  ${resp.content}
@@ -1101,10 +1066,8 @@ JD-TC-CreateService-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${description}=  FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=10   max=50
-    ${Total}=   Random Int   min=100   max=500
-    ${min_pre}=  Convert To Number  ${min_pre}  1
-    ${Total}=  Convert To Number  ${Total}  1
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${SERVICE1}=    generate_service_name
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${EMPTY}  ${bool[0]}  ${Total}  ${bool[0]}
     Log  ${resp.content}
@@ -1119,10 +1082,8 @@ JD-TC-CreateService-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${description}=  FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=10   max=50
-    ${Total}=   Random Int   min=100   max=500
-    ${min_pre}=  Convert To Number  ${min_pre}  1
-    ${Total}=  Convert To Number  ${Total}  1
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${SERVICE1}=    generate_service_name
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${EMPTY}  ${bool[0]}  ${Total}  ${bool[1]}  notificationType=${EMPTY}
     Log  ${resp.content}
@@ -1136,10 +1097,8 @@ JD-TC-CreateService-UH8
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${description}=  FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=10   max=50
-    ${Total}=   Random Int   min=100   max=500
-    ${min_pre}=  Convert To Number  ${min_pre}  1
-    ${Total}=  Convert To Number  ${Total}  1
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${SERVICE1}=    generate_service_name
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${EMPTY}
     Log  ${resp.content}
@@ -1154,10 +1113,8 @@ JD-TC-CreateService-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${description}=  FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=10   max=50
-    ${Total}=   Random Int   min=100   max=500
-    ${min_pre}=  Convert To Number  ${min_pre}  1
-    ${Total}=  Convert To Number  ${Total}  1
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${SERVICE1}=    generate_service_name
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${EMPTY}  ${bool[0]}
     Log  ${resp.content}
@@ -1176,10 +1133,8 @@ JD-TC-CreateService-UH10
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${desc}=   FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=1   max=50
-    ${servicecharge}=   Random Int  min=100  max=500
-    ${min_pre}=  Convert To Number  ${min_pre}  1
-    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${srv_duration}=   Random Int   min=10   max=20
     ${SERVICE1}=    generate_service_name
     ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  maxBookingsAllowed=${EMPTY}
@@ -1203,10 +1158,8 @@ JD-TC-CreateService-UH11
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${desc}=   FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=1   max=50
-    ${servicecharge}=   Random Int  min=100  max=500
-    ${min_pre}=  Convert To Number  ${min_pre}  1
-    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${srv_duration}=   Random Int   min=10   max=20
     ${SERVICE1}=    generate_service_name
     ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  resoucesRequired=${EMPTY}
@@ -1230,10 +1183,8 @@ JD-TC-CreateService-UH12
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${desc}=   FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=1   max=50
-    ${servicecharge}=   Random Int  min=100  max=500
-    ${min_pre}=  Convert To Number  ${min_pre}  1
-    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${srv_duration}=   Random Int   min=10   max=20
     ${SERVICE1}=    generate_service_name
     ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  leadTime=${EMPTY}
@@ -1253,10 +1204,8 @@ JD-TC-CreateService-UH13
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${description}=  FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=10   max=50
-    ${Total}=   Random Int   min=100   max=500
-    ${min_pre}=  Convert To Number  ${min_pre}  1
-    ${Total}=  Convert To Number  ${Total}  1
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${SERVICE1}=    generate_service_name
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${0.0}
     Log  ${resp.content}
@@ -1460,14 +1409,12 @@ JD-TC-CreateService-UH20
     Should Be Equal As Strings  ${resp.status_code}  200 
     # Should Be Equal As Strings   ${resp.json()}  ${SERVICE_CANT_BE_SAME}
 
-    ${min_don_amt1}=   Random Int   min=100   max=500
+    ${min_don_amt1}=   Pyfloat  right_digits=1  min_value=100  max_value=500
     ${mod}=  Evaluate  ${min_don_amt1}%${multiples[0]}
     ${min_don_amt}=  Evaluate  ${min_don_amt1}-${mod}
-    ${max_don_amt1}=   Random Int   min=5000   max=10000
+    ${max_don_amt1}=   Pyfloat  right_digits=1  min_value=${min_don_amt1+1}  max_value=1000
     ${mod1}=  Evaluate  ${max_don_amt1}%${multiples[0]}
     ${max_don_amt}=  Evaluate  ${max_don_amt1}-${mod1}
-    ${min_don_amt}=  Convert To Number  ${min_don_amt}  1
-    ${max_don_amt}=  Convert To Number  ${max_don_amt}  1
     ${description}=  FakerLibrary.sentence
     ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=500
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${servicecharge}  ${bool[0]}  serviceType=${ServiceType[2]}  minDonationAmount=${min_don_amt}  maxDonationAmount=${max_don_amt}  multiples=${multiples[0]}
@@ -1625,10 +1572,8 @@ JD-TC-CreateService-3
     [Documentation]     Create a service for a valid provider with service name same as another provider
     
     ${description}=  FakerLibrary.sentence
-    ${min_pre1}=   Random Int   min=1   max=10
-    ${Total1}=   Random Int   min=100   max=500
-    ${min_pre1}=  Convert To Number  ${min_pre1}  1
-    ${Total1}=  Convert To Number  ${Total1}  1
+    ${min_pre1}=   Pyfloat  right_digits=1  min_value=1  max_value=10
+    ${Total1}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${resp}=   Billable  ${start2}
     clear_service      ${resp}
     #${min_pre1}=   FakerLibrary.pyfloat   left_digits=2   right_digits=2   positive=True
@@ -2791,10 +2736,8 @@ JD-TC-CreateService-16
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${desc}=   FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=1   max=50
-    ${servicecharge}=   Random Int  min=100  max=500
-    ${min_pre}=  Convert To Number  ${min_pre}  1
-    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${srv_duration}=   Random Int   min=10   max=20
     ${leadTime}=   Random Int   min=1   max=5
     ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}  leadTime=${leadTime}
@@ -2822,10 +2765,8 @@ JD-TC-CreateService-17
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${desc}=   FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=1   max=50
-    ${servicecharge}=   Random Int  min=100  max=500
-    ${min_pre}=  Convert To Number  ${min_pre}  1
-    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${srv_duration}=   Random Int   min=10   max=20
     ${maxbookings}=   Random Int   min=1   max=10
     ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}  maxBookingsAllowed=${maxbookings}
@@ -2856,10 +2797,8 @@ JD-TC-CreateService-18
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${desc}=   FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=1   max=50
-    ${servicecharge}=   Random Int  min=100  max=500
-    ${min_pre}=  Convert To Number  ${min_pre}  1
-    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${srv_duration}=   Random Int   min=10   max=20
     ${resoucesRequired}=   Random Int   min=1   max=10
     ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}  resoucesRequired=${resoucesRequired}
@@ -2886,10 +2825,8 @@ JD-TC-CreateService-19
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${desc}=   FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=1   max=50
-    ${servicecharge}=   Random Int  min=100  max=500
-    ${min_pre}=  Convert To Number  ${min_pre}  1
-    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${srv_duration}=   Random Int   min=10   max=20
     ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}  priceDynamic=${bool[1]}
     Log  ${resp.content}
@@ -2915,10 +2852,8 @@ JD-TC-CreateService-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${desc}=   FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=1   max=50
-    ${servicecharge}=   Random Int  min=100  max=500
-    ${min_pre}=  Convert To Number  ${min_pre}  1
-    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${srv_duration}=   Random Int   min=10   max=20
     # ${maxbookings}=   Random Int   min=1   max=10
     ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  maxBookingsAllowed=${EMPTY}
@@ -2945,10 +2880,8 @@ JD-TC-CreateService-UH10
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${desc}=   FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=1   max=50
-    ${servicecharge}=   Random Int  min=100  max=500
-    ${min_pre}=  Convert To Number  ${min_pre}  1
-    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${srv_duration}=   Random Int   min=10   max=20
     # ${resoucesRequired}=   Random Int   min=1   max=10
     ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  resoucesRequired=${EMPTY}
@@ -2975,10 +2908,8 @@ JD-TC-CreateService-UH11
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${desc}=   FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=1   max=50
-    ${servicecharge}=   Random Int  min=100  max=500
-    ${min_pre}=  Convert To Number  ${min_pre}  1
-    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${srv_duration}=   Random Int   min=10   max=20
     # ${leadTime}=   Random Int   min=1   max=10
     ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  leadTime=${EMPTY}

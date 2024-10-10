@@ -857,6 +857,8 @@ Create and Configure Sample User
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
     ${resp}=    Account Activation  ${P_User}  ${OtpPurpose['ProviderResetPassword']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
