@@ -698,9 +698,8 @@ Create Sample Service
     [Arguments]  ${Service_name}    ${isPrePayment}=${bool[0]}  ${notification}=${bool[0]}  &{kwargs}
     ${desc}=   FakerLibrary.sentence
     ${srv_duration}=   Random Int   min=2   max=2
-    ${min_pre}=   Random Int   min=1   max=50
-    ${Total}=   Random Int   min=100   max=500
-    ${resp}=  Create Service  ${Service_name}  ${desc}   ${srv_duration}  ${isPrePayment}  ${Total}  ${notification}  &{kwargs}
+    ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=250
+    ${resp}=  Create Service  ${Service_name}  ${desc}   ${srv_duration}  ${isPrePayment}  ${servicecharge}  ${notification}  &{kwargs}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     RETURN  ${resp.json()}
