@@ -24,6 +24,17 @@ TC-1
 
     ${nonbillable_domains}=  get_nonbillable_domain
     ${domain}  ${subdomain}   Get Dictionary Items   ${nonbillable_domains}
+    ${domain}  ${subdomain_list}   Get Dictionary Items   ${nonbillable_domains}
+    ${subdomain}=    Evaluate    random.choice(${subdomain_list})    modules=random
+    ${resp}=   Get Sub Domain Settings    ${domain}  ${subdomain}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${domresp}=  Get BusinessDomainsConf
+    Log   ${domresp.content}
+    Should Be Equal As Strings  ${domresp.status_code}  200
+
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup without Profile
+
 
 *** Comments ***
     ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}

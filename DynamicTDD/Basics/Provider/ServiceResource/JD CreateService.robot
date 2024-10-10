@@ -168,6 +168,7 @@ JD-TC-CreateService-5
     ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_C}=  Provider Signup without Profile  Domain=${domain}  SubDomain=${subdomain}
     Set Suite Variable  ${PUSERNAME_C}
 
+    ${SERVICE1}=    generate_service_name
     ${description}=  FakerLibrary.sentence
     ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}
@@ -260,7 +261,7 @@ JD-TC-CreateService-9
     ...  (preparation time for provider before next booking. when trying to make a booking in less than 10 mins of start of next slot, when lead time is 10 mins
     ...  the next slot will not be shown. there should be a time difference of 10 mins from current booking time to next slot.)
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Service
@@ -286,7 +287,7 @@ JD-TC-CreateService-9
 JD-TC-CreateService-10
     [Documentation]   Create service with max bookings allowed. (one consumer can make as many bookings as specified in max bookings allowed)
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
    
     ${resp}=  Get Service
@@ -316,7 +317,7 @@ JD-TC-CreateService-11
     # In which case if parallelServing is set as 4 in a queue/schedule, noOfAvailbleSlots will only be 2, since we need 2 resources per service.
     # In a queue/Schedule parallelServing cannot be set as less than resoucesRequired.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Service
@@ -342,7 +343,7 @@ JD-TC-CreateService-11
 JD-TC-CreateService-12
     [Documentation]   Create service with priceDynamic.(allows to set schedule level price rather than service charge)
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Service
@@ -3569,7 +3570,7 @@ Billable
 
         END  
         ${resp2}=   Get Sub Domain Settings    ${domain}  ${subdomain}
-        Should Be Equal As Strings    ${resp.status_code}    200
+        Should Be Equal As Strings    ${resp2.status_code}    200
         Set Suite Variable  ${check}  ${resp2.json()['serviceBillable']} 
         Run Keyword IF   '${check}' == 'True'   Disable Services
         Exit For Loop IF     '${check}' == 'True'
@@ -3604,7 +3605,7 @@ Non Billable
 
         END  
         ${resp2}=   Get Sub Domain Settings    ${domain}  ${subdomain}
-        Should Be Equal As Strings    ${resp.status_code}    200
+        Should Be Equal As Strings    ${resp2.status_code}    200
         Set Suite Variable  ${check}  ${resp2.json()['serviceBillable']} 
         Run Keyword IF   '${check}' == 'False'   Disable Services
         Exit For Loop IF     '${check}' == 'False'
@@ -3672,7 +3673,7 @@ wlsettings
 # #         ${domain}=   Set Variable    ${resp.json()['sector']}
 # #         ${subdomain}=    Set Variable      ${resp.json()['subSector']}
 # #         ${resp2}=   Get Sub Domain Settings    ${domain}  ${subdomain}
-# #         Should Be Equal As Strings    ${resp.status_code}    200
+# #         Should Be Equal As Strings    ${resp2.status_code}    200
 # #         ${check}=   Run Keyword If   '${resp2.json()['serviceBillable']}' == 'False'   nonbillablewithtotalamtandpre 
 # #         Exit For Loop IF     '${check}' == 'False'
        

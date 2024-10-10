@@ -283,9 +283,10 @@ Select Random Specializations
     RETURN  ${specs}
 
 Select Random Domain and Subdomain
-    ${domresp}=  Get BusinessDomainsConf
-    Log   ${domresp.content}
-    Should Be Equal As Strings  ${domresp.status_code}  200
+    [Arguments]    ${domresp}
+    # ${domresp}=  Get BusinessDomainsConf
+    # Log   ${domresp.content}
+    # Should Be Equal As Strings  ${domresp.status_code}  200
     ${dlen}=  Get Length  ${domresp.json()}
     ${d1}=  Random Int   min=0  max=${dlen-1}
     Set Test Variable  ${Domain}  ${domresp.json()[${d1}]['domain']}
@@ -293,6 +294,19 @@ Select Random Domain and Subdomain
     ${sdom}=  Random Int   min=0  max=${sdlen-1}
     Set Test Variable  ${SubDomain}  ${domresp.json()[${d1}]['subDomains'][${sdom}]['subDomain']}
     RETURN  ${Domain}  ${SubDomain}
+
+Random Billable Domain and Subdomain
+    [Arguments]    ${domresp}
+    FOR    ${tries}    IN RANGE    5
+        ${Domain}  ${SubDomain}=  Select Random Domain and Subdomain  ${domresp}
+        ${resp}=   Get Sub Domain Settings    ${Domain}  ${SubDomain}
+        Should Be Equal As Strings    ${resp.status_code}    200
+        IF  '${resp.json()['serviceBillable']}' == '${bool[1]}'
+            # BREAK
+            RETURN  ${Domain}  ${SubDomain}
+        END
+    END
+    # RETURN  ${Domain}  ${SubDomain}
 
 
 Select Random License
@@ -313,7 +327,7 @@ Select Domain Subdomain
         Should Be Equal As Strings  ${domresp.status_code}  200
         ${dlen}=  Get Length  ${domresp.json()}
         IF  '''${SubDomain}''' == '''${EMPTY}'''
-            ${Domain}  ${SubDomain}=  Select Random Domain and Subdomain
+            ${Domain}  ${SubDomain}=  Random Billable Domain and Subdomain  ${domresp}
         ELSE
             FOR  ${domindex}  IN RANGE  ${dlen}
                 ${sdom_len}=  Get Length  ${domresp.json()[${domindex}]['subDomains']}
