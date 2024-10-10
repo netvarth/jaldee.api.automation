@@ -452,6 +452,7 @@ JD-TC-GetAppointmentTodayCount-1
     ${A_uuid4}=  Set Variable   ${resp.json()}
     Set Suite Variable   ${A_uuid4} 
 
+
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -464,6 +465,10 @@ JD-TC-GetAppointmentTodayCount-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  3
+
+    ${resp}=  Get consumer Appt Bill Details   ${apptid4}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-GetAppointmentTodayCount-2
 
