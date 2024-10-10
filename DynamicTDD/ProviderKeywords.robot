@@ -833,11 +833,13 @@ Configure Sample User
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
-    ${resp}=    Account Activation  ${P_User}  ${OtpPurpose['ProviderResetPassword']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Account Activation  ${P_User}  ${OtpPurpose['ProviderResetPassword']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${key} =   db.Verify Accnt   ${P_User}    ${OtpPurpose['ProviderResetPassword']}
+    ${key} =   db.Verify Accnt   ${P_User}    ${OtpPurpose['ProviderResetPassword']}  JSESSIONYNW=${jsessionynw_value}
 
     ${resp}=    Forgot Password  otp=${key}
     Log   ${resp.content}
@@ -864,11 +866,11 @@ Create and Configure Sample User
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    202
 
-    ${resp}=    Account Activation  ${P_User}  ${OtpPurpose['ProviderResetPassword']}
+    ${resp}=    Account Activation  ${P_User}  ${OtpPurpose['ProviderResetPassword']}  JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${key} =   db.Verify Accnt   ${P_User}    ${OtpPurpose['ProviderResetPassword']}
+    ${key} =   db.Verify Accnt   ${P_User}    ${OtpPurpose['ProviderResetPassword']}  JSESSIONYNW=${jsessionynw_value}
 
     ${resp}=    Forgot Password  otp=${key}
     Log   ${resp.content}
