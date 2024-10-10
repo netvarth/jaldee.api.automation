@@ -22,6 +22,10 @@ ${count}  ${50}
 TC-1
     [Documentation]   Checking if condition
 
+    ${nonbillable_domains}=  get_nonbillable_domain
+    ${domain}  ${subdomain}   Get Dictionary Items   ${nonbillable_domains}
+
+*** Comments ***
     ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200

@@ -19,20 +19,8 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 #Suite Setup       Run Keyword    wlsettings
 *** Variables ***
 @{service_duration}  10  20  30   40   50
-${SERVICE1}   S1SERVICE1 
-${SERVICE10}   S1SERVICE10 
-${start1}         20
-${start2}         50
-${start3}         80
-${loc}          TGR 
-${queue1}     QUEUE1
 ${ZOOM_url}    https://zoom.us/j/{}?pwd=THVLcTBZa2lESFZQbU9DQTQrWUxWZz09
 ${self}     0
-@{provider_list}
-@{dom_list}
-@{multiloc_providers}
-${SERVICE11}   S1SERVICE11
-${SERVICE2}   S1SERVICE2
 @{empty_list}
 ${zero_amt}  ${0.0}
 
@@ -173,7 +161,13 @@ JD-TC-CreateService-4
 
 JD-TC-CreateService-5
     [Documentation]   Create service in Non Billable domain
-    ${resp}=   Non Billable
+    ${nonbillable_domains}=  get_nonbillable_domain
+    ${domain}  ${subdomain_list}   Get Dictionary Items   ${nonbillable_domains}
+    ${subdomain}=    Evaluate    random.choice(${subdomain_list})    modules=random
+
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_C}=  Provider Signup without Profile  Domain=${domain}  SubDomain=${subdomain}
+    Set Suite Variable  ${PUSERNAME_C}
+
     ${description}=  FakerLibrary.sentence
     ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}
@@ -769,7 +763,8 @@ JD-TC-CreateService-26
 
 JD-TC-CreateService-27
     [Documentation]   Create  a donation service(Non billable domain)
-    ${resp}=   Non Billable
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${min_don_amt1}=   Pyfloat  right_digits=1  min_value=100  max_value=500
     ${mod}=  Evaluate  ${min_don_amt1}%${multiples[0]}

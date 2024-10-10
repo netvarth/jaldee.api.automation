@@ -2185,6 +2185,29 @@ def get_billable_domain():
             subdomlist.append(data['businessDomains'][i]['subDomains'][0]['subDomain'])
     return [domlist, subdomlist]
 
+def get_nonbillable_domain():
+    try:
+        with open(bizjson, 'r', encoding="utf-8") as f:
+            data = json.load(f)
+    except IOError:
+        print('File', bizjson, 'not accessible')
+        return {}
+
+    domain_dict = {}
+
+    for domain_info in data['businessDomains']:
+        domain = domain_info['domain']
+        # Loop through all subdomains for the current domain
+        for subdomain_info in domain_info['subDomains']:
+            if not subdomain_info['serviceBillable']:
+                subdomain = subdomain_info['subDomain']
+                # Add the subdomain to the domain in the dictionary
+                if domain not in domain_dict:
+                    domain_dict[domain] = []
+                domain_dict[domain].append(subdomain)
+
+    return domain_dict
+
 def get_mutilocation_domains():
     try:
         with open(bizjson,'r', encoding="utf-8") as f:
