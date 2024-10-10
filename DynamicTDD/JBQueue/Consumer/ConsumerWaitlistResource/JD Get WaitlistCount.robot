@@ -35,7 +35,7 @@ JD-TC-Get waitlist Today count-1
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     
     ${sId_1}=   Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${sId_1}
@@ -109,21 +109,22 @@ JD-TC-Get waitlist Today count-1
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME20}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${cid}   ${resp.json()['id']}
 
     ${cnote}=   FakerLibrary.word
     Set Suite Variable   ${cnote}
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${q1_l1}  ${DAY}  ${sId_1}  ${cnote}  ${bool[0]}  ${self}
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q1_l1}  ${DAY}  ${sId_1}  ${cnote}  ${bool[0]}  ${self}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${uuid1}  ${wid[0]}
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${q1_l1}  ${DAY}  ${sId_2}  ${cnote}  ${bool[0]}  ${self}
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q1_l1}  ${DAY}  ${sId_2}  ${cnote}  ${bool[0]}  ${self}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${uuid2}  ${wid[0]}
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${q2_l1}  ${DAY}  ${sId_1}  ${cnote}  ${bool[0]}  ${self}
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${q2_l1}  ${DAY}  ${sId_1}  ${cnote}  ${bool[0]}  ${self}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${wid}=  Get Dictionary Values  ${resp.json()}
@@ -138,7 +139,7 @@ JD-TC-Get waitlist Today count-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Suite Variable  ${f1}   ${resp.json()}
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${q1_l1}  ${DAY}  ${sId_2}  ${cnote}  ${bool[0]}  ${f1} 
+    ${resp}=  Add To Waitlist Consumers  ${f1}  ${pid}  ${q1_l1}  ${DAY}  ${sId_2}  ${cnote}  ${bool[0]}  ${f1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
