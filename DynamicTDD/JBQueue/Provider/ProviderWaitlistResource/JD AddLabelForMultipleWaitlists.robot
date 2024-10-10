@@ -93,10 +93,10 @@ JD-TC-AddMultipleWaitlistLabel-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME17}
-    clear_location  ${HLPUSERNAME17}
+    # clear_service   ${HLPUSERNAME17}
+    # clear_location  ${HLPUSERNAME17}
     clear_customer   ${HLPUSERNAME17}
-    clear_Label  ${HLPUSERNAME17}
+    # clear_Label  ${HLPUSERNAME17}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -302,10 +302,10 @@ JD-TC-AddMultipleWaitlistLabel-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME17}
-    # clear_location  ${HLPUSERNAME17}
+    # clear_service   ${HLPUSERNAME17}
+    # # clear_location  ${HLPUSERNAME17}
     clear_customer   ${HLPUSERNAME17}
-    clear_Label  ${HLPUSERNAME17}
+    # clear_Label  ${HLPUSERNAME17}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -498,10 +498,10 @@ JD-TC-AddMultipleWaitlistLabel-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME17}
-    # clear_location  ${HLPUSERNAME17}
+    # clear_service   ${HLPUSERNAME17}
+    # # clear_location  ${HLPUSERNAME17}
     clear_customer   ${HLPUSERNAME17}
-    clear_Label  ${HLPUSERNAME17}
+    # clear_Label  ${HLPUSERNAME17}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -600,10 +600,10 @@ JD-TC-AddMultipleWaitlistLabel-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME17}
-    clear_location  ${HLPUSERNAME17}
+    # clear_service   ${HLPUSERNAME17}
+    # clear_location  ${HLPUSERNAME17}
     clear_customer   ${HLPUSERNAME17}
-    clear_Label  ${HLPUSERNAME17}
+    # clear_Label  ${HLPUSERNAME17}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -740,10 +740,10 @@ JD-TC-AddMultipleWaitlistLabel-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME17}
-    clear_location  ${HLPUSERNAME17}
+    # clear_service   ${HLPUSERNAME17}
+    # clear_location  ${HLPUSERNAME17}
     clear_customer   ${HLPUSERNAME17}
-    clear_Label  ${HLPUSERNAME17}
+    # clear_Label  ${HLPUSERNAME17}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1052,10 +1052,10 @@ JD-TC-AddMultipleWaitlistLabel-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME17}
-    clear_location  ${HLPUSERNAME17}
+    # clear_service   ${HLPUSERNAME17}
+    # clear_location  ${HLPUSERNAME17}
     clear_customer   ${HLPUSERNAME17}
-    clear_Label  ${HLPUSERNAME17}
+    # clear_Label  ${HLPUSERNAME17}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1197,10 +1197,10 @@ JD-TC-AddMultipleWaitlistLabel-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME17}
-    clear_location  ${HLPUSERNAME17}
+    # clear_service   ${HLPUSERNAME17}
+    # clear_location  ${HLPUSERNAME17}
     clear_customer   ${HLPUSERNAME17}
-    clear_Label  ${HLPUSERNAME17}
+    # clear_Label  ${HLPUSERNAME17}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1377,10 +1377,10 @@ JD-TC-AddMultipleWaitlistLabel-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME17}
-    clear_location  ${HLPUSERNAME17}
+    # clear_service   ${HLPUSERNAME17}
+    # clear_location  ${HLPUSERNAME17}
     clear_customer   ${HLPUSERNAME17}
-    clear_Label  ${HLPUSERNAME17}
+    # clear_Label  ${HLPUSERNAME17}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1540,10 +1540,10 @@ JD-TC-AddMultipleWaitlistLabel-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME17}
-    # clear_location  ${HLPUSERNAME17}
+    # clear_service   ${HLPUSERNAME17}
+    # # clear_location  ${HLPUSERNAME17}
     clear_customer   ${HLPUSERNAME17}
-    clear_Label  ${HLPUSERNAME17}
+    # clear_Label  ${HLPUSERNAME17}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1682,10 +1682,10 @@ JD-TC-AddMultipleWaitlistLabel-11
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME17}
-    clear_location  ${HLPUSERNAME17}
+    # clear_service   ${HLPUSERNAME17}
+    # clear_location  ${HLPUSERNAME17}
     clear_customer   ${HLPUSERNAME17}
-    clear_Label  ${HLPUSERNAME17}
+    # clear_Label  ${HLPUSERNAME17}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1827,10 +1827,10 @@ JD-TC-AddMultipleWaitlistLabel-12
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME17}
-    clear_location  ${HLPUSERNAME17}
+    # clear_service   ${HLPUSERNAME17}
+    # clear_location  ${HLPUSERNAME17}
     clear_customer   ${HLPUSERNAME17}
-    clear_Label  ${HLPUSERNAME17}
+    # clear_Label  ${HLPUSERNAME17}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1996,10 +1996,10 @@ JD-TC-AddMultipleWaitlistLabel-13
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME17}
-    clear_location  ${HLPUSERNAME17}
+    # clear_service   ${HLPUSERNAME17}
+    # clear_location  ${HLPUSERNAME17}
     clear_customer   ${HLPUSERNAME17}
-    clear_Label  ${HLPUSERNAME17}
+    # clear_Label  ${HLPUSERNAME17}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2130,10 +2130,10 @@ JD-TC-AddMultipleWaitlistLabel-14
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME17}
-    # clear_location  ${HLPUSERNAME17}
+    # clear_service   ${HLPUSERNAME17}
+    # # clear_location  ${HLPUSERNAME17}
     clear_customer   ${HLPUSERNAME17}
-    clear_Label  ${HLPUSERNAME17}
+    # clear_Label  ${HLPUSERNAME17}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2383,10 +2383,10 @@ JD-TC-AddMultipleWaitlistLabel-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME17}
-    clear_location  ${HLPUSERNAME17}
+    # clear_service   ${HLPUSERNAME17}
+    # clear_location  ${HLPUSERNAME17}
     clear_customer   ${HLPUSERNAME17}
-    clear_Label  ${HLPUSERNAME17}
+    # clear_Label  ${HLPUSERNAME17}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2975,10 +2975,10 @@ JD-TC-AddMultipleWaitlistLabel-UH10
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME17}
-    clear_location  ${HLPUSERNAME17}
+    # clear_service   ${HLPUSERNAME17}
+    # clear_location  ${HLPUSERNAME17}
     clear_customer   ${HLPUSERNAME17}
-    clear_Label  ${HLPUSERNAME17}
+    # clear_Label  ${HLPUSERNAME17}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3027,10 +3027,10 @@ JD-TC-AddMultipleWaitlistLabel-UH11
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME17}
-    clear_location  ${HLPUSERNAME17}
+    # clear_service   ${HLPUSERNAME17}
+    # clear_location  ${HLPUSERNAME17}
     clear_customer   ${HLPUSERNAME17}
-    clear_Label  ${HLPUSERNAME17}
+    # clear_Label  ${HLPUSERNAME17}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3124,10 +3124,10 @@ JD-TC-AddMultipleWaitlistLabel-UH12
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME17}
-    clear_location  ${HLPUSERNAME17}
+    # clear_service   ${HLPUSERNAME17}
+    # clear_location  ${HLPUSERNAME17}
     clear_customer   ${HLPUSERNAME17}
-    clear_Label  ${HLPUSERNAME17}
+    # clear_Label  ${HLPUSERNAME17}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3221,10 +3221,10 @@ JD-TC-AddMultipleWaitlistLabel-UH13
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME17}
-    clear_location  ${HLPUSERNAME17}
+    # clear_service   ${HLPUSERNAME17}
+    # clear_location  ${HLPUSERNAME17}
     clear_customer   ${HLPUSERNAME17}
-    clear_Label  ${HLPUSERNAME17}
+    # clear_Label  ${HLPUSERNAME17}
 
     ${resp}=   Get Service
     Log   ${resp.json()}

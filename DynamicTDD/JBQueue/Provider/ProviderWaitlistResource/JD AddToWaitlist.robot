@@ -40,17 +40,23 @@ JD-TC-AddToWaitlist-0
       Log    ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME1}
-      Log   ${resp.json()}
-      Should Be Equal As Strings      ${resp.status_code}  200
-     
-      
-      ${resp}=   Create Sample Location
-      Set Test Variable    ${loc_id1}    ${resp} 
-      ${resp}=   Get Location ById  ${loc_id1}
+      # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME1}
+      # Log   ${resp.json()}
+      # Should Be Equal As Strings      ${resp.status_code}  200
+
+      ${resp}=    Get Locations
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
+      IF   '${resp.content}' == '${emptylist}'
+            ${loc_id1}=  Create Sample Location
+            ${resp}=   Get Location ById  ${loc_id1}
+            Log  ${resp.content}
+            Should Be Equal As Strings  ${resp.status_code}  200
+            Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+      ELSE
+            Set Suite Variable  ${loc_id1}  ${resp.json()[0]['id']}
+            Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+      END
       ${resp}=   Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
       Set Test Variable    ${ser_id1}    ${resp}  
       ${resp}=   Create Sample Service  ${SERVICE2}   maxBookingsAllowed=10
@@ -316,10 +322,10 @@ JD-TC-AddToWaitlist-6
 JD-TC-AddToWaitlist-7
       [Documentation]   Add a consumer to a waitlist who is already added to another provider's waitlist for the current day
 
-      clear_queue      ${HLPUSERNAME17}
-      clear_location   ${HLPUSERNAME17}
-      clear_service    ${HLPUSERNAME17}
-      clear_customer   ${HLPUSERNAME17}
+      # clear_queue      ${HLPUSERNAME17}
+      # clear_location   ${HLPUSERNAME17}
+      # clear_service    ${HLPUSERNAME17}
+      # clear_customer   ${HLPUSERNAME17}
       ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Waitlist Settings
@@ -331,12 +337,19 @@ JD-TC-AddToWaitlist-7
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${cid1}  ${resp.json()}
 
-      ${resp}=   Create Sample Location
-      Set Suite Variable    ${loc_id2}    ${resp} 
-      ${resp}=   Get Location ById  ${loc_id2}
+      ${resp}=    Get Locations
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
+      IF   '${resp.content}' == '${emptylist}'
+            ${loc_id2}=  Create Sample Location
+            ${resp}=   Get Location ById  ${loc_id2}
+            Log  ${resp.content}
+            Should Be Equal As Strings  ${resp.status_code}  200
+            Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+      ELSE
+            Set Suite Variable  ${loc_id2}  ${resp.json()[0]['id']}
+            Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+      END 
       ${resp}=   Create Sample Service  ${SERVICE5}
       Set Suite Variable    ${ser_id5}    ${resp}  
       ${resp}=   Create Sample Service  ${SERVICE6}

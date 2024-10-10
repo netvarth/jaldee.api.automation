@@ -38,8 +38,8 @@ JD-TC-AssignTeamToWaitlist-1
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${HLPUSERNAME20}
-    clear_service    ${HLPUSERNAME20}
+    # clear_queue      ${HLPUSERNAME20}
+    # clear_service    ${HLPUSERNAME20}
     clear_customer   ${HLPUSERNAME20}
 
     ${pid}=  get_acc_id  ${HLPUSERNAME20}
@@ -336,8 +336,8 @@ JD-TC-AssignTeamToWaitlist-UH3
     Set Suite Variable  ${sub_domains}    ${resp2.json()['serviceSubSector']['subDomain']}
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${HLPUSERNAME20}
-    clear_service    ${HLPUSERNAME20}
+    # clear_queue      ${HLPUSERNAME20}
+    # clear_service    ${HLPUSERNAME20}
     clear_customer   ${HLPUSERNAME20}
 
     ${pid}=  get_acc_id  ${HLPUSERNAME20}
@@ -526,8 +526,8 @@ JD-TC-AssignTeamToWaitlist-UH4
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${HLPUSERNAME20}
-    clear_service    ${HLPUSERNAME20}
+    # clear_queue      ${HLPUSERNAME20}
+    # clear_service    ${HLPUSERNAME20}
     clear_customer   ${HLPUSERNAME20}
 
     ${pid}=  get_acc_id  ${HLPUSERNAME20}

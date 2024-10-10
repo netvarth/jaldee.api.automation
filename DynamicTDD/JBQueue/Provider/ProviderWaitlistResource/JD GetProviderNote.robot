@@ -290,12 +290,19 @@ JD-TC-Get Provider Note-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid}  ${resp.json()}
     
-    ${resp}=   Create Sample Location
-    Set Suite Variable    ${loc_id1}    ${resp}  
-    ${resp}=   Get Location ById  ${loc_id1}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
+    IF   '${resp.content}' == '${emptylist}'
+        ${loc_id1}=  Create Sample Location
+        ${resp}=   Get Location ById  ${loc_id1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Suite Variable  ${loc_id1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END 
     ${ser_name1}=   FakerLibrary.word
     Set Suite Variable    ${ser_name1} 
     ${resp}=   Create Sample Service  ${ser_name1}

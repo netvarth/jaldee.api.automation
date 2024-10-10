@@ -710,6 +710,7 @@ JD-TC-GetWaitlistCountToday-57
 
 JD-TC-GetWaitlistCountToday-58
       [Documentation]   Get waitlist count today location-eq=${lid1} from=0  count=10
+      clear_customer   ${HLPUSERNAME22}
 
       ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200

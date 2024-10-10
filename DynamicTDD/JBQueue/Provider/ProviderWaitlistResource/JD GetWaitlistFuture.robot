@@ -21,12 +21,8 @@ ${waitlistedby}           PROVIDER
 JD-TC-GetWaitlistFuture-1
       [Documentation]   View Waitlist by Provider login
 
-      clear_queue      ${HLPUSERNAME22}
-      clear_location   ${HLPUSERNAME22}
-      clear_service    ${HLPUSERNAME22}
-      clear_customer    ${HLPUSERNAME22}
-      clear_waitlist   ${HLPUSERNAME22} 
 
+      clear_customer    ${HLPUSERNAME22}
       ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -34,12 +30,20 @@ JD-TC-GetWaitlistFuture-1
       ${resp}=  Update Waitlist Settings  ${calc_mode[1]}  ${ser_duratn}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
       Should Be Equal As Strings  ${resp.status_code}  200
       
-      ${resp}=   Create Sample Location
-      Set Suite Variable    ${loc_id1}    ${resp}  
-      ${resp}=   Get Location ById  ${loc_id1}
+      ${resp}=    Get Locations
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+      IF   '${resp.content}' == '${emptylist}'
+            ${loc_id1}=  Create Sample Location
+            ${resp}=   Get Location ById  ${loc_id1}
+            Log  ${resp.content}
+            Should Be Equal As Strings  ${resp.status_code}  200
+            Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+      ELSE
+            Set Suite Variable  ${loc_id1}  ${resp.json()[0]['id']}
+            Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+      END
+
       ${ser_name1}=   FakerLibrary.word
       Set Suite Variable    ${ser_name1} 
       ${resp}=   Create Sample Service  ${ser_name1}
@@ -72,13 +76,13 @@ JD-TC-GetWaitlistFuture-1
       ${desc}=   FakerLibrary.word
       Set Suite Variable   ${desc}
 
-      ${resp}=  Get Consumer By Id  ${CUSERNAME0}
+      ${resp}=  Get Consumer By Id  ${CUSERNAME10}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${cname1}   ${resp.json()['userProfile']['firstName']}
       Set Suite Variable  ${lname1}   ${resp.json()['userProfile']['lastName']}
 
-      ${resp}=  AddCustomer  ${CUSERNAME0}   firstName=${cname1}   lastName=${lname1}
+      ${resp}=  AddCustomer  ${CUSERNAME10}   firstName=${cname1}   lastName=${lname1}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${cid1}  ${resp.json()}
@@ -322,7 +326,7 @@ JD-TC-GetWaitlistFuture-10
       ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME0}
+      ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME10}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${cid}  ${resp.json()[0]['id']}
