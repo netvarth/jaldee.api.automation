@@ -705,14 +705,6 @@ Create Sample Service
     Should Be Equal As Strings  ${resp.status_code}  200
     RETURN  ${resp.json()}
 
-# Create Sample Service with Prepayment
-#     [Arguments]  ${Service_name}  ${prepayment_amt}  ${servicecharge}  &{kwargs}
-#     ${desc}=   FakerLibrary.sentence
-#     ${srv_duration}=   Random Int   min=2   max=2
-#     ${resp}=  Create Service  ${Service_name}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${prepayment_amt}  ${servicecharge}  ${bool[1]}  ${bool[0]}  &{kwargs}
-#     Log  ${resp.content}
-#     Should Be Equal As Strings  ${resp.status_code}   200
-#     RETURN  ${resp.json()}
 
 Get Service Count
     [Arguments]  &{param}
