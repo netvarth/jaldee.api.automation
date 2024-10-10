@@ -215,6 +215,7 @@ Check Questions
 *** Test Cases ***
 
 JD-TC-GetConsumerQuestionnaireByUuidForAppointment-1
+
     [Documentation]  Get questionnaire by uuid for appointment
     
     ${wb}=  readWorkbook  ${xlFile}
@@ -399,7 +400,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid2}
-    Should Be Equal As Strings   ${resp.json()['releasedQnr'][0]['status']}   ${QnrReleaseStatus[2]}
+    Should Be Equal As Strings   ${resp.json()['releasedQnr'][0]['status']}   ${QnrReleaseStatus[2]}                    
 
     ${resp}=  Provider Change Questionnaire release Status For Appmt    ${QnrReleaseStatus[1]}   ${apptid2}  ${id}
     Log  ${resp.content}
@@ -417,6 +418,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-1
     Check Questions   ${resp}   ${qnrid}   ${sheet1}
 
 JD-TC-GetConsumerQuestionnaireByUuidForAppointment-2
+
     [Documentation]  Get questionnaire for appointment taken from consumer side
 
     clear_customer   ${PUSERNAME158}
