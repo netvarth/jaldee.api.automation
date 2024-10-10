@@ -14,7 +14,6 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-# Variables         /ebs/TDD/varfiles/consumermail.py
 
 *** Variables ***
 
@@ -46,6 +45,7 @@ JD-TC-GetAppointmentToday-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${lid}=  Create Sample Location
+        sleep   1s
         ${resp}=   Get Location ById  ${lid}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200

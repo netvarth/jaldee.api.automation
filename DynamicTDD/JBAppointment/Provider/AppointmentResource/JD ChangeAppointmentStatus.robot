@@ -1,6 +1,6 @@
 *** Settings ***
 Suite Teardown    Delete All Sessions
-Test Teardown    Delete All Sessions
+Test Teardown     Delete All Sessions
 Force Tags        Appointment
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
@@ -8,44 +8,10 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-# Variables         /ebs/TDD/varfiles/consumermail.py
 
 *** Variables ***
-${SERVICE1}  manicure 
-${SERVICE2}  pedicure
+
 ${self}     0
-${digits}       0123456789
-@{provider_list}
-
-# *** Keywords ***
-# Billable
-
-#     ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
-#     ${len}=   Split to lines  ${resp}
-#     ${length}=  Get Length   ${len}
-     
-#     FOR   ${a}  IN RANGE   ${length-1}    
-#         ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
-#         Should Be Equal As Strings    ${resp.status_code}    200
-#         ${domain}=   Set Variable    ${resp.json()['sector']}
-#         ${subdomain}=    Set Variable      ${resp.json()['subSector']}
-#         ${resp}=  Get Waitlist Settings
-# 	    ${resp}=  Get Waitlist Settings
-    # Log  ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # IF  ${resp.json()['filterByDept']}==${bool[1]}
-    #     ${resp}=  Enable Disable Department  ${toggle[1]}
-    #     Log  ${resp.content}
-    #     Should Be Equal As Strings  ${resp.status_code}  200
-
-    # END  
-#         ${resp2}=   Get Sub Domain Settings    ${domain}    ${subdomain}
-#         Should Be Equal As Strings    ${resp.status_code}    200
-#         Set Suite Variable  ${check}    ${resp2.json()['serviceBillable']} 
-#         Run Keyword If     '${check}' == 'True'   Append To List   ${provider_list}  ${PUSERNAME${a}}
-        
-#     END
-#     RETURN  ${provider_list}
 
 *** Test Cases ***
 
@@ -53,13 +19,9 @@ JD-TC-ChangeAppointmentStatus-1
 
     [Documentation]  Change status to Confirmed from prepaymentpending after doing the payment for services with prepayment
 
-    ${billable_providers}=    Billable Domain Providers   min=80   max=100
-    Log   ${billable_providers}
-    Set Suite Variable  ${billable_providers}
-    ${pro_len}=  Get Length   ${billable_providers}
-    ${pid}=  get_acc_id  ${billable_providers[3]}
+    ${pid}=  get_acc_id  ${PUSERNAME377}
     
-    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -81,47 +43,73 @@ JD-TC-ChangeAppointmentStatus-1
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
 
-    ${lid}=  Create Sample Location
-
-    ${desc}=   FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=1   max=50
-    ${servicecharge}=   Random Int  min=100  max=500
-    ${srv_duration}=   Random Int   min=10   max=20
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}   200
-    Set Test Variable  ${s_id}  ${resp.json()}
-
-    clear_appt_schedule   ${billable_providers[3]}
-
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+
+    ${resp}=    Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+        ${SERVICE1}=    generate_service_name   
+        ${s_id}=  Create Sample Service  ${SERVICE1}  isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre}
+        ${resp}=   Get Service By Id  ${s_id}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
+    ELSE IF   ${resp.json()[0]['isPrePayment']} == ${bool[0]}
+        ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+        ${SERVICE1}=    generate_service_name
+        ${s_id}=  Create Sample Service  ${SERVICE1}   isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}
+        ${resp}=   Get Service By Id  ${s_id}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
+    ELSE
+        Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
+    END
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
+    Set Suite Variable   ${DAY2}    
     ${list}=  Create List  1  2  3  4  5  6  7
-    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    Set Suite Variable   ${list}
     ${sTime1}=  db.get_time_by_timezone  ${tz}
+    Set Suite Variable   ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    Set Suite Variable   ${delta}
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    Set Suite Variable   ${eTime1}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.json()}
+    ${resp}=    Get Appointment Schedules
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
+    IF   '${resp.content}' == '${emptylist}'
+        ${schedule_name}=  FakerLibrary.bs
+        ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+        ${maxval}=  Convert To Integer   ${delta/2}
+        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+        ${bool1}=  Random Element  ${bool}
+        ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${sch_id}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
+    END
+  
     ${fname}=  FakerLibrary.first_name
     Set Suite Variable   ${fname}
     ${lname}=  FakerLibrary.last_name
@@ -168,14 +156,10 @@ JD-TC-ChangeAppointmentStatus-1
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j}]}
-    # ${Keys}=  Get Dictionary Keys  ${resp.json()['slot']}   sort_keys=False 
-    # Set Test Variable   ${slot1}   ${Keys[0]}
-
+   
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
-    
-    # ${apptTime}=  db.get_tz_time_secs  ${tz} 
-    # ${apptTakenTime}=  db.remove_secs   ${apptTime}
+   
     ${apptTakenTime}=  db.get_time_by_timezone  ${tz}
     Set Suite Variable   ${apptTakenTime}
     ${nextMin}=  db.add_timezone_time   ${tz}    0    1
@@ -201,7 +185,7 @@ JD-TC-ChangeAppointmentStatus-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -213,7 +197,7 @@ JD-TC-ChangeAppointmentStatus-2
 
     [Documentation]  change status to Completed from Started
 
-    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -235,7 +219,7 @@ JD-TC-ChangeAppointmentStatus-3
 
     [Documentation]  change status to Completed from Arrived
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
  
@@ -247,39 +231,59 @@ JD-TC-ChangeAppointmentStatus-3
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME180}
-    clear_location  ${PUSERNAME180}
-    clear_customer   ${PUSERNAME180}
-    
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
-    clear_appt_schedule   ${PUSERNAME180}  
-    
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${list}=  Create List  1  2  3  4  5  6  7
-    # ${sTime1}=  db.get_time_by_timezone   ${tz}
-    ${sTime1}=  db.get_time_by_timezone  ${tz}
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${s_id}=  Create Sample Service  ${SERVICE1}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
+    ${resp}=    Get Service
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    IF   '${resp.content}' == '${emptylist}'
+        ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+        ${SERVICE1}=    generate_service_name   
+        ${s_id}=  Create Sample Service  ${SERVICE1}   isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre}
+        ${resp}=   Get Service By Id  ${s_id}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
+    ELSE IF   ${resp.json()[0]['isPrePayment']} == ${bool[0]}
+        ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+        ${SERVICE1}=    generate_service_name
+        ${s_id}=  Create Sample Service  ${SERVICE1}   isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}
+        ${resp}=   Get Service By Id  ${s_id}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
+    ELSE
+        Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
+    END
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.json()}
+    ${resp}=    Get Appointment Schedules
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${schedule_name}=  FakerLibrary.bs
+        ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+        ${maxval}=  Convert To Integer   ${delta/2}
+        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+        ${bool1}=  Random Element  ${bool}
+        ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${sch_id}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
+    END
    
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -324,27 +328,12 @@ JD-TC-ChangeAppointmentStatus-4
 
     [Documentation]  change status to Completed from confirmed
 
-    clear_service   ${PUSERNAME180}
-    clear_location  ${PUSERNAME180}
-    ${pid}=  get_acc_id  ${PUSERNAME180}
+    ${pid}=  get_acc_id  ${PUSERNAME361}
     ${cid}=  get_id  ${NewCustomer}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Disable Appointment   ${toggle[0]}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
-
-    ${lid}=  Create Sample Location
-    ${s_id}=  Create Sample Service  ${SERVICE1}
-
-    clear_appt_schedule   ${PUSERNAME180}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -424,7 +413,7 @@ JD-TC-ChangeAppointmentStatus-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -446,12 +435,12 @@ JD-TC-ChangeAppointmentStatus-UH1
 
     [Documentation]  change status to Started from confirmed
 
-    clear_service   ${PUSERNAME180}
-    clear_location  ${PUSERNAME180}
-    ${pid}=  get_acc_id  ${PUSERNAME180}
+    clear_service   ${PUSERNAME361}
+    clear_location  ${PUSERNAME361}
+    ${pid}=  get_acc_id  ${PUSERNAME361}
     ${cid}=  get_id  ${NewCustomer}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -474,7 +463,7 @@ JD-TC-ChangeAppointmentStatus-UH1
     ${lid}=  Create Sample Location
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME180}
+    clear_appt_schedule   ${PUSERNAME361}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -543,7 +532,7 @@ JD-TC-ChangeAppointmentStatus-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -567,12 +556,12 @@ JD-TC-ChangeAppointmentStatus-7
 
     [Documentation]  change status to Cancelled from confirmed
 
-    clear_service   ${PUSERNAME180}
-    clear_location  ${PUSERNAME180}
-    ${pid}=  get_acc_id  ${PUSERNAME180}
+    clear_service   ${PUSERNAME361}
+    clear_location  ${PUSERNAME361}
+    ${pid}=  get_acc_id  ${PUSERNAME361}
     ${cid}=  get_id  ${NewCustomer}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -595,7 +584,7 @@ JD-TC-ChangeAppointmentStatus-7
     ${lid}=  Create Sample Location
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME180}
+    clear_appt_schedule   ${PUSERNAME361}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -666,7 +655,7 @@ JD-TC-ChangeAppointmentStatus-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -689,7 +678,7 @@ JD-TC-ChangeAppointmentStatus-8
 
     [Documentation]  change status to Cancelled from Arrived
   
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -701,10 +690,10 @@ JD-TC-ChangeAppointmentStatus-8
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    # clear_service   ${PUSERNAME180}
-    # clear_location  ${PUSERNAME180}
-    # clear_appt_schedule   ${PUSERNAME180}
-    clear_location_n_service  ${PUSERNAME180}
+    # clear_service   ${PUSERNAME361}
+    # clear_location  ${PUSERNAME361}
+    # clear_appt_schedule   ${PUSERNAME361}
+    clear_location_n_service  ${PUSERNAME361}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -768,12 +757,12 @@ JD-TC-ChangeAppointmentStatus-UH2
 
     [Documentation]  change status to Cancelled from Started
 
-    clear_service   ${PUSERNAME180}
-    clear_location  ${PUSERNAME180}
-    ${pid}=  get_acc_id  ${PUSERNAME180}
+    clear_service   ${PUSERNAME361}
+    clear_location  ${PUSERNAME361}
+    ${pid}=  get_acc_id  ${PUSERNAME361}
     ${cid}=  get_id  ${NewCustomer}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -788,7 +777,7 @@ JD-TC-ChangeAppointmentStatus-UH2
     ${lid}=  Create Sample Location
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME180}
+    clear_appt_schedule   ${PUSERNAME361}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -859,7 +848,7 @@ JD-TC-ChangeAppointmentStatus-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -903,7 +892,7 @@ JD-TC-ChangeAppointmentStatus-9
 
     [Documentation]  change status to Rejected from Arrived
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -915,8 +904,8 @@ JD-TC-ChangeAppointmentStatus-9
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME180}
-    clear_location  ${PUSERNAME180}
+    clear_service   ${PUSERNAME361}
+    clear_location  ${PUSERNAME361}
     
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -924,7 +913,7 @@ JD-TC-ChangeAppointmentStatus-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME180}
+    clear_appt_schedule   ${PUSERNAME361}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -992,7 +981,7 @@ JD-TC-ChangeAppointmentStatus-UH3
 
     [Documentation]  change status to Rejected from Started
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -1004,7 +993,7 @@ JD-TC-ChangeAppointmentStatus-UH3
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME180}
+    clear_location_n_service  ${PUSERNAME361}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1084,7 +1073,7 @@ JD-TC-ChangeAppointmentStatus-UH4
 
     [Documentation]  change status to Rejected from Cancelled
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1096,7 +1085,7 @@ JD-TC-ChangeAppointmentStatus-UH4
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME180}
+    clear_location_n_service  ${PUSERNAME361}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1176,7 +1165,7 @@ JD-TC-ChangeAppointmentStatus-UH5
 
     [Documentation]  change status to Arrived from Started
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1188,10 +1177,10 @@ JD-TC-ChangeAppointmentStatus-UH5
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    # clear_service   ${PUSERNAME180}
-    # clear_location  ${PUSERNAME180}
-    # clear_appt_schedule   ${PUSERNAME180}
-    clear_location_n_service  ${PUSERNAME180}
+    # clear_service   ${PUSERNAME361}
+    # clear_location  ${PUSERNAME361}
+    # clear_appt_schedule   ${PUSERNAME361}
+    clear_location_n_service  ${PUSERNAME361}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1268,7 +1257,7 @@ JD-TC-ChangeAppointmentStatus-10
 
     [Documentation]  change status to confirmed from Started when appointment taken by provider.
    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1280,7 +1269,7 @@ JD-TC-ChangeAppointmentStatus-10
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME180}
+    clear_location_n_service  ${PUSERNAME361}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1355,12 +1344,12 @@ JD-TC-ChangeAppointmentStatus-11
 
     [Documentation]  change status to confirmed from Started when appointment taken from consumer side
 
-    clear_service   ${PUSERNAME180}
-    clear_location  ${PUSERNAME180}
-    ${pid}=  get_acc_id  ${PUSERNAME180}
+    clear_service   ${PUSERNAME361}
+    clear_location  ${PUSERNAME361}
+    ${pid}=  get_acc_id  ${PUSERNAME361}
     ${cid}=  get_id  ${NewCustomer}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1375,7 +1364,7 @@ JD-TC-ChangeAppointmentStatus-11
     ${lid}=  Create Sample Location
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME180}
+    clear_appt_schedule   ${PUSERNAME361}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1441,7 +1430,7 @@ JD-TC-ChangeAppointmentStatus-11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1482,12 +1471,12 @@ JD-TC-ChangeAppointmentStatus-UH6
 
     [Documentation]  change status to Started from Completed
 
-    clear_service   ${PUSERNAME180}
-    clear_location  ${PUSERNAME180}
-    ${pid}=  get_acc_id  ${PUSERNAME180}
+    clear_service   ${PUSERNAME361}
+    clear_location  ${PUSERNAME361}
+    ${pid}=  get_acc_id  ${PUSERNAME361}
     ${cid}=  get_id  ${NewCustomer}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1502,7 +1491,7 @@ JD-TC-ChangeAppointmentStatus-UH6
     ${lid}=  Create Sample Location
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME180}
+    clear_appt_schedule   ${PUSERNAME361}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -1573,7 +1562,7 @@ JD-TC-ChangeAppointmentStatus-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1623,7 +1612,7 @@ JD-TC-ChangeAppointmentStatus-UH7
 
     [Documentation]  change status to Arrived from Completed
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1635,7 +1624,7 @@ JD-TC-ChangeAppointmentStatus-UH7
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME180}
+    clear_location_n_service  ${PUSERNAME361}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1716,7 +1705,7 @@ JD-TC-ChangeAppointmentStatus-UH8
 
     [Documentation]  change status to confirmed from Completed
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
   
@@ -1728,7 +1717,7 @@ JD-TC-ChangeAppointmentStatus-UH8
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME180}
+    clear_location_n_service  ${PUSERNAME361}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1814,7 +1803,7 @@ JD-TC-ChangeAppointmentStatus-UH9
 
     [Documentation]  change status to Cancelled from Completed
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1826,7 +1815,7 @@ JD-TC-ChangeAppointmentStatus-UH9
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME180}
+    clear_location_n_service  ${PUSERNAME361}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1912,7 +1901,7 @@ JD-TC-ChangeAppointmentStatus-UH10
 
     [Documentation]  change status to Cancelled from Rejected
  
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -1924,7 +1913,7 @@ JD-TC-ChangeAppointmentStatus-UH10
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME180}
+    clear_location_n_service  ${PUSERNAME361}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2011,12 +2000,12 @@ JD-TC-ChangeAppointmentStatus-UH11
 
     [Documentation]  Change status to prepaymentpending from confirmed.
 
-    clear_service   ${PUSERNAME180}
-    clear_location  ${PUSERNAME180}
-    ${pid}=  get_acc_id  ${PUSERNAME180}
+    clear_service   ${PUSERNAME361}
+    clear_location  ${PUSERNAME361}
+    ${pid}=  get_acc_id  ${PUSERNAME361}
     ${cid}=  get_id  ${NewCustomer}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2031,7 +2020,7 @@ JD-TC-ChangeAppointmentStatus-UH11
     ${lid}=  Create Sample Location
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME180}
+    clear_appt_schedule   ${PUSERNAME361}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -2110,7 +2099,7 @@ JD-TC-ChangeAppointmentStatus-UH11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2133,10 +2122,10 @@ JD-TC-ChangeAppointmentStatus-UH12
     Log   ${billable_providers}
     ${pro_len}=  Get Length   ${billable_providers}
     
-    ${pid}=  get_acc_id  ${billable_providers[3]}
+    ${pid}=  get_acc_id  ${PUSERNAME377}
     ${cid}=  get_id  ${NewCustomer}
 
-    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2158,7 +2147,7 @@ JD-TC-ChangeAppointmentStatus-UH12
     ${SERVICE1}=   FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${billable_providers[3]}
+    clear_appt_schedule   ${PUSERNAME377}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2241,7 +2230,7 @@ JD-TC-ChangeAppointmentStatus-UH12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2272,10 +2261,10 @@ JD-TC-ChangeAppointmentStatus-UH13
     Log   ${billable_providers}
     ${pro_len}=  Get Length   ${billable_providers}
     
-    ${pid}=  get_acc_id  ${billable_providers[3]}
+    ${pid}=  get_acc_id  ${PUSERNAME377}
     ${cid}=  get_id  ${NewCustomer}
 
-    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2291,7 +2280,7 @@ JD-TC-ChangeAppointmentStatus-UH13
     ${SERVICE1}=   FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${billable_providers[3]}
+    clear_appt_schedule   ${PUSERNAME377}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2358,7 +2347,7 @@ JD-TC-ChangeAppointmentStatus-UH13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2399,10 +2388,10 @@ JD-TC-ChangeAppointmentStatus-UH14
     Log   ${billable_providers}
     ${pro_len}=  Get Length   ${billable_providers}
     
-    ${pid}=  get_acc_id  ${billable_providers[3]}
+    ${pid}=  get_acc_id  ${PUSERNAME377}
     ${cid}=  get_id  ${NewCustomer}
 
-    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2418,7 +2407,7 @@ JD-TC-ChangeAppointmentStatus-UH14
     ${SERVICE1}=   FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${billable_providers[3]}
+    clear_appt_schedule   ${PUSERNAME377}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2485,7 +2474,7 @@ JD-TC-ChangeAppointmentStatus-UH14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2508,10 +2497,10 @@ JD-TC-ChangeAppointmentStatus-UH15
     Log   ${billable_providers}
     ${pro_len}=  Get Length   ${billable_providers}
     
-    ${pid}=  get_acc_id  ${billable_providers[3]}
+    ${pid}=  get_acc_id  ${PUSERNAME377}
     ${cid}=  get_id  ${NewCustomer}
 
-    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2527,7 +2516,7 @@ JD-TC-ChangeAppointmentStatus-UH15
     ${SERVICE1}=   FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${billable_providers[3]}
+    clear_appt_schedule   ${PUSERNAME377}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2594,7 +2583,7 @@ JD-TC-ChangeAppointmentStatus-UH15
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2627,10 +2616,10 @@ JD-TC-ChangeAppointmentStatus-UH16
     Log   ${billable_providers}
     ${pro_len}=  Get Length   ${billable_providers}
     
-    ${pid}=  get_acc_id  ${billable_providers[3]}
+    ${pid}=  get_acc_id  ${PUSERNAME377}
     ${cid}=  get_id  ${NewCustomer}
 
-    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2646,7 +2635,7 @@ JD-TC-ChangeAppointmentStatus-UH16
     ${SERVICE1}=   FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${billable_providers[3]}
+    clear_appt_schedule   ${PUSERNAME377}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2714,7 +2703,7 @@ JD-TC-ChangeAppointmentStatus-UH16
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2744,12 +2733,12 @@ JD-TC-ChangeAppointmentStatus-12
 
     [Documentation]  Change status to confirmed from Cancelled.
 
-    clear_service   ${PUSERNAME180}
-    clear_location  ${PUSERNAME180}
-    ${pid}=  get_acc_id  ${PUSERNAME180}
+    clear_service   ${PUSERNAME361}
+    clear_location  ${PUSERNAME361}
+    ${pid}=  get_acc_id  ${PUSERNAME361}
     ${cid}=  get_id  ${NewCustomer}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2764,7 +2753,7 @@ JD-TC-ChangeAppointmentStatus-12
     ${lid}=  Create Sample Location
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME180}
+    clear_appt_schedule   ${PUSERNAME361}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2831,7 +2820,7 @@ JD-TC-ChangeAppointmentStatus-12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2865,12 +2854,12 @@ JD-TC-ChangeAppointmentStatus-UH17
 
     [Documentation]  Change status to Arrived from Cancelled.
 
-    clear_service   ${PUSERNAME180}
-    clear_location  ${PUSERNAME180}
-    ${pid}=  get_acc_id  ${PUSERNAME180}
+    clear_service   ${PUSERNAME361}
+    clear_location  ${PUSERNAME361}
+    ${pid}=  get_acc_id  ${PUSERNAME361}
     ${cid}=  get_id  ${NewCustomer}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2885,7 +2874,7 @@ JD-TC-ChangeAppointmentStatus-UH17
     ${lid}=  Create Sample Location
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME180}
+    clear_appt_schedule   ${PUSERNAME361}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2953,7 +2942,7 @@ JD-TC-ChangeAppointmentStatus-UH17
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2984,12 +2973,12 @@ JD-TC-ChangeAppointmentStatus-UH18
 
     [Documentation]  Change status to Started from Cancelled.
 
-    clear_service   ${PUSERNAME180}
-    clear_location  ${PUSERNAME180}
-    ${pid}=  get_acc_id  ${PUSERNAME180}
+    clear_service   ${PUSERNAME361}
+    clear_location  ${PUSERNAME361}
+    ${pid}=  get_acc_id  ${PUSERNAME361}
     ${cid}=  get_id  ${NewCustomer}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3004,7 +2993,7 @@ JD-TC-ChangeAppointmentStatus-UH18
     ${lid}=  Create Sample Location
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME180}
+    clear_appt_schedule   ${PUSERNAME361}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -3072,7 +3061,7 @@ JD-TC-ChangeAppointmentStatus-UH18
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3103,12 +3092,12 @@ JD-TC-ChangeAppointmentStatus-13
 
     [Documentation]  Change status to confirmed from Rejected.
 
-    clear_service   ${PUSERNAME180}
-    clear_location  ${PUSERNAME180}
-    ${pid}=  get_acc_id  ${PUSERNAME180}
+    clear_service   ${PUSERNAME361}
+    clear_location  ${PUSERNAME361}
+    ${pid}=  get_acc_id  ${PUSERNAME361}
     ${cid}=  get_id  ${NewCustomer}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3123,7 +3112,7 @@ JD-TC-ChangeAppointmentStatus-13
     ${lid}=  Create Sample Location
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME180}
+    clear_appt_schedule   ${PUSERNAME361}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -3191,7 +3180,7 @@ JD-TC-ChangeAppointmentStatus-13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3225,12 +3214,12 @@ JD-TC-ChangeAppointmentStatus-UH19
 
     [Documentation]  Change status to Arrived from Rejected.
 
-    clear_service   ${PUSERNAME180}
-    clear_location  ${PUSERNAME180}
-    ${pid}=  get_acc_id  ${PUSERNAME180}
+    clear_service   ${PUSERNAME361}
+    clear_location  ${PUSERNAME361}
+    ${pid}=  get_acc_id  ${PUSERNAME361}
     ${cid}=  get_id  ${NewCustomer}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3253,7 +3242,7 @@ JD-TC-ChangeAppointmentStatus-UH19
     ${lid}=  Create Sample Location
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME180}
+    clear_appt_schedule   ${PUSERNAME361}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -3332,7 +3321,7 @@ JD-TC-ChangeAppointmentStatus-UH19
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3363,22 +3352,16 @@ JD-TC-ChangeAppointmentStatus-UH20
 
     [Documentation]  Change status to Started from Rejected.
 
-    clear_service   ${PUSERNAME180}
-    clear_location  ${PUSERNAME180}
-    ${pid}=  get_acc_id  ${PUSERNAME180}
+    clear_service   ${PUSERNAME361}
+    clear_location  ${PUSERNAME361}
+    clear_appt_schedule   ${PUSERNAME361}
+
+    ${pid}=  get_acc_id  ${PUSERNAME361}
     ${cid}=  get_id  ${NewCustomer}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -3390,18 +3373,6 @@ JD-TC-ChangeAppointmentStatus-UH20
 
     ${lid}=  Create Sample Location
     ${s_id}=  Create Sample Service  ${SERVICE1}
-
-    clear_appt_schedule   ${PUSERNAME180}
-
-    ${resp}=  Get Appointment Schedules
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -3470,7 +3441,7 @@ JD-TC-ChangeAppointmentStatus-UH20
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3502,7 +3473,7 @@ JD-TC-ChangeAppointmentStatus-UH21
 
     [Documentation]  Change status to confirmed from Cancelled and take another appointment on same time slot for another consumer.
    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3514,10 +3485,10 @@ JD-TC-ChangeAppointmentStatus-UH21
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    # clear_service   ${PUSERNAME180}
-    # clear_location  ${PUSERNAME180}
-    # clear_appt_schedule   ${PUSERNAME180}
-    clear_location_n_service  ${PUSERNAME180}
+    # clear_service   ${PUSERNAME361}
+    # clear_location  ${PUSERNAME361}
+    # clear_appt_schedule   ${PUSERNAME361}
+    clear_location_n_service  ${PUSERNAME361}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -3661,7 +3632,7 @@ JD-TC-ChangeAppointmentStatus-UH24
 
     [Documentation]  Change appointment status of invalid appointment
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3674,7 +3645,7 @@ JD-TC-ChangeAppointmentStatus-UH25
 
     [Documentation]  change appointment status from cancelled to confirmed after taking another appointment
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3686,10 +3657,10 @@ JD-TC-ChangeAppointmentStatus-UH25
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    # clear_service   ${PUSERNAME180}
-    # clear_location  ${PUSERNAME180}
-    # clear_appt_schedule   ${PUSERNAME180}
-    clear_location_n_service  ${PUSERNAME180}
+    # clear_service   ${PUSERNAME361}
+    # clear_location  ${PUSERNAME361}
+    # clear_appt_schedule   ${PUSERNAME361}
+    clear_location_n_service  ${PUSERNAME361}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -3786,7 +3757,7 @@ JD-TC-ChangeAppointmentStatus-UH26
 
     [Documentation]  change appointment status with details to cancel appointment
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3798,10 +3769,10 @@ JD-TC-ChangeAppointmentStatus-UH26
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    # clear_service   ${PUSERNAME180}
-    # clear_location  ${PUSERNAME180}
-    # clear_appt_schedule   ${PUSERNAME180}
-    clear_location_n_service  ${PUSERNAME180}
+    # clear_service   ${PUSERNAME361}
+    # clear_location  ${PUSERNAME361}
+    # clear_appt_schedule   ${PUSERNAME361}
+    clear_location_n_service  ${PUSERNAME361}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -3860,17 +3831,17 @@ JD-TC-ChangeAppointmentStatus-UH26
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[6]}
+    Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[4]}
     
 JD-TC-ChangeAppointmentStatus-14
 
     [Documentation]  change appointment status to completed for an appointment taken by provider consumer.
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${pid}=  get_acc_id  ${PUSERNAME180}
+    ${pid}=  get_acc_id  ${PUSERNAME361}
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -3880,10 +3851,10 @@ JD-TC-ChangeAppointmentStatus-14
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    # clear_service   ${PUSERNAME180}
-    # clear_location  ${PUSERNAME180}
-    # clear_appt_schedule   ${PUSERNAME180}
-    clear_location_n_service  ${PUSERNAME180}
+    # clear_service   ${PUSERNAME361}
+    # clear_location  ${PUSERNAME361}
+    # clear_appt_schedule   ${PUSERNAME361}
+    clear_location_n_service  ${PUSERNAME361}
 
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -3969,7 +3940,7 @@ JD-TC-ChangeAppointmentStatus-14
     ${resp}=  Consumer Logout   
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME361}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4007,9 +3978,9 @@ JD-TC-ChangeAppointmentStatus-15
     Log   ${billable_providers}
     Set Suite Variable  ${billable_providers}
     ${pro_len}=  Get Length   ${billable_providers}
-    ${pid}=  get_acc_id  ${billable_providers[3]}
+    ${pid}=  get_acc_id  ${PUSERNAME377}
     
-    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4038,7 +4009,7 @@ JD-TC-ChangeAppointmentStatus-15
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
 
-    clear_appt_schedule   ${billable_providers[3]}
+    clear_appt_schedule   ${PUSERNAME377}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
@@ -4135,7 +4106,7 @@ JD-TC-ChangeAppointmentStatus-15
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME377}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
