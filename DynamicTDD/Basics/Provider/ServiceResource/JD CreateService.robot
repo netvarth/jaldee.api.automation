@@ -161,7 +161,7 @@ JD-TC-CreateService-4
 
 JD-TC-CreateService-5
     [Documentation]   Create service in Non Billable domain
-    ${nonbillable_domains}=  get_nonbillable_domain
+    ${nonbillable_domains}=  get_nonbillable_domains
     ${domain}  ${subdomain_list}   Get Dictionary Items   ${nonbillable_domains}
     ${subdomain}=    Evaluate    random.choice(${subdomain_list})    modules=random
 

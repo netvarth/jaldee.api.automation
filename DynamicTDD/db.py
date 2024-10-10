@@ -2185,7 +2185,7 @@ def get_billable_domain():
             subdomlist.append(data['businessDomains'][i]['subDomains'][0]['subDomain'])
     return [domlist, subdomlist]
 
-def get_nonbillable_domain():
+def get_nonbillable_domains():
     try:
         with open(bizjson, 'r', encoding="utf-8") as f:
             data = json.load(f)
