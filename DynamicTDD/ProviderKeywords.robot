@@ -695,12 +695,12 @@ Create Sample Service
     #...  Create Sample Service with Prepayment
     #...  Create Sample Service with Prepayment For User   
     #...  Create Sample Service For User
-    [Arguments]  ${Service_name}    ${isPrePayment}=${bool[0]}  ${notfcn}=${bool[0]}  &{kwargs}
+    [Arguments]  ${Service_name}    ${isPrePayment}=${bool[0]}  ${notification}=${bool[0]}  &{kwargs}
     ${desc}=   FakerLibrary.sentence
     ${srv_duration}=   Random Int   min=2   max=2
     ${min_pre}=   Random Int   min=1   max=50
     ${Total}=   Random Int   min=100   max=500
-    ${resp}=  Create Service  ${Service_name}  ${desc}   ${srv_duration}  ${isPrePayment}  ${Total}  ${notfcn}  &{kwargs}
+    ${resp}=  Create Service  ${Service_name}  ${desc}   ${srv_duration}  ${isPrePayment}  ${Total}  ${notification}  &{kwargs}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     RETURN  ${resp.json()}

@@ -1910,7 +1910,7 @@ JD-TC-AddMultipleAppointmentLabel-10
     ${min_pre}=   Random Int   min=10   max=50
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${servicecharge}=   Random Int  min=100  max=200
-    ${s_id1}=  Create Sample Service   ${SERVICE2}   PrePaymentAmount=${min_pre}   
+    ${s_id1}=  Create Sample Service   ${SERVICE2}   isPrePayment=${bool[1]}  PrePaymentAmount=${min_pre}   
 
     clear_appt_schedule   ${PUSERNAME65}
 
