@@ -1937,35 +1937,7 @@ Update Consumer apptment latlong
     Check Deprication  ${resp}  Update Consumer apptment latlong
     RETURN  ${resp}
     
-Update Consumer apptment MyLocation
-    [Arguments]   ${pId}  ${appmt_id}  ${lattitude}  ${longitude}   &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${cons_headers}=  Create Dictionary  &{headers} 
-    ${cons_params}=  Create Dictionary  account=${pId}
-    ${data}=  Create Dictionary   latitude=${lattitude}   longitude=${longitude}
-    ${data}=   json.dumps   ${data}
-    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
-    Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${cons_params}   &{locparam}
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw   /consumer/appointment/updateMyLoc/${appmt_id}   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    Check Deprication  ${resp}  Update Consumer apptment MyLocation
-    RETURN  ${resp}
 
-Update consumer apptment tavelmode
-    [Arguments]   ${pId}  ${appmt_id}  ${travelMode}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${cons_headers}=  Create Dictionary  &{headers} 
-    ${cons_params}=  Create Dictionary  account=${pId}
-    ${data}=   Create Dictionary   travelMode=${travelMode}
-    ${data}=   json.dumps   ${data}
-    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
-    Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${cons_params}   &{locparam}
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw  /consumer/appointment/update/travelmode/${appmt_id}   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    Check Deprication  ${resp}  Update consumer apptment tavelmode
-    RETURN  ${resp}
 
 Get Consumer Future Appointments
     [Arguments]    &{kwargs}
