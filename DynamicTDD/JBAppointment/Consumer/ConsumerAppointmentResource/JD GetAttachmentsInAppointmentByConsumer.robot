@@ -25,6 +25,7 @@ ${jpgfile}      /ebs/TDD/uploadimage.jpg
 ${order}        0
 ${fileSize}     0.00458
 
+
 *** Test Cases ***
 
 JD-TC-GetAttachmentFromAppmtByConsumer-1
@@ -249,6 +250,7 @@ JD-TC-GetAttachmentFromAppmtByConsumer-1
     Should Be Equal As Strings  ${resp.json()[0]['fileType']}       ${fileType1}
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${consumerFirstName}
+
 
 
 

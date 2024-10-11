@@ -3664,6 +3664,14 @@ Consumer Get user locations by user id
     RETURN  ${resp}
 
 
+Get Appointment Status From Consumer
+    [Arguments]   ${uuid}
+    Check And Create YNW Session
+    ${resp}=    GET On Session     ynw   /consumer/appointment/state/${uuid}  expected_status=any
+    Check Deprication  ${resp}  Get Appointment Status From Consumer
+    RETURN  ${resp}
+
+
 # ....... CONSENT FORM .................
 
 Consumer Get Consent Form By Uid
