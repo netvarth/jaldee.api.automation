@@ -46,7 +46,7 @@ JD-TC-GetStoreTypeByEncid-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
@@ -80,7 +80,7 @@ JD-TC-GetStoreTypeByEncid-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
@@ -115,7 +115,7 @@ JD-TC-GetStoreTypeByEncid-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
@@ -157,7 +157,7 @@ JD-TC-GetStoreTypeByEncid-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id1}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName1}
@@ -168,7 +168,7 @@ JD-TC-GetStoreTypeByEncid-UH1
 
     [Documentation]  Get Store Type By Encid without Login.
 
-    ${resp}=  Provide Get Store Type By EncId   ${St_Id1}    
+    ${resp}=  Provider Get Store Type By EncId   ${St_Id1}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    419
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 

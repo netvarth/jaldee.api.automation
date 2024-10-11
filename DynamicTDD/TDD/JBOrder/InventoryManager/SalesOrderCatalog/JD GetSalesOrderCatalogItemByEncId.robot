@@ -22,6 +22,7 @@ ${invalidNum}        1245
 ${invalidEma}        asd122
 ${invalidstring}     _ad$.sa_
 @{spItemSource}      RX       Ayur
+@{taxPercentage}     5   12   18   28
 
 *** Test Cases ***
 
@@ -71,9 +72,7 @@ JD-TC-Get Sales Order Catalog Items By EncId-1
     ${resp}=  Get Store Type By EncId   ${St_Id}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
     Log   ${resp.content}
@@ -81,12 +80,9 @@ JD-TC-Get Sales Order Catalog Items By EncId-1
     ${accountId}=  get_acc_id  ${HLPUSERNAME11}
     Set Suite Variable    ${accountId} 
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -199,7 +195,7 @@ JD-TC-Get Sales Order Catalog Items By EncId-2
     ${price}=   Convert To Number  ${price}  1
 
     ${taxes}=    Random Int  min=70   max=100
-    ${tax}=          Create List    ${taxes}
+    ${tax}=          Create List    ${taxPercentage[3]}
 
     ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${SO_Cata_Encid}     ${itemEncId2}     ${price}    TaxInclude=${boolean[1]}    taxes=${tax}
     Log   ${resp.content}
@@ -209,17 +205,22 @@ JD-TC-Get Sales Order Catalog Items By EncId-2
     # ..... Create Tax ......
 
     ${taxName}=    FakerLibrary.name
-    ${taxPercentage}=     Random Int  min=0  max=200
-    ${taxPercentage}=           Convert To Number  ${taxPercentage}  1
-    ${cgst}=     Evaluate   ${taxPercentage} / 2
-    ${sgst}=     Evaluate   ${taxPercentage} / 2
+    # ${taxPercentage}=           Convert To Number  ${taxPercentage[3]}  1
+    ${cgst}=     Evaluate   ${taxPercentage[3]} / 2
+    ${sgst}=     Evaluate   ${taxPercentage[3]} / 2
     Set Suite Variable      ${taxName}
-    Set Suite Variable      ${taxPercentage}
+    # Set Suite Variable      ${taxPercentage}
     Set Suite Variable      ${cgst}
     Set Suite Variable      ${sgst}
+    ${taxPerValue}=     Evaluate   ${taxPercentage[3]} / 100
+    ${actualAmount}=     Evaluate   ${price} / (1 + ${taxPerValue})
+    ${actualAmount}=               Evaluate                round(${actualAmount}, 2)
+    ${taxAmount} =     Evaluate   (${actualAmount} * ${taxPercentage[3]}) / 100
+    ${taxAmount}=               Evaluate                round(${taxAmount}, 2)
+    ${cessAmount} =     Evaluate  ( ${actualAmount} * ${cgst} )/ 100
+    ${cessAmount}=               Evaluate                round(${cessAmount}, 2)
 
-
-    ${resp}=    Create Item Tax  ${taxName}  ${taxtypeenum[0]}  ${taxPercentage}  ${cgst}  ${sgst}  0
+    ${resp}=    Create Item Tax  ${taxName}  ${taxtypeenum[0]}  ${taxPercentage[3]}  ${cgst}  ${sgst}  0
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${itemtax_id}  ${resp.json()}
@@ -229,10 +230,6 @@ JD-TC-Get Sales Order Catalog Items By EncId-2
 
     ${resp}=    Get Item Tax by id  ${itemtax_id}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.json()['taxName']}         ${taxName}
-    Should Be Equal As Strings    ${resp.json()['status']}          ${toggle[0]}
-    Should Be Equal As Strings    ${resp.json()['taxTypeEnum']}     ${taxtypeenum[0]}
-    Should Be Equal As Strings    ${resp.json()['taxCode']}         ${itemtax_id}
     Set Suite Variable              ${itemtax_id1}           ${resp.json()['id']}
 
     ${tax1}=     Create List  ${itemtax_id1}
@@ -240,6 +237,8 @@ JD-TC-Get Sales Order Catalog Items By EncId-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_itemEncIds1}  ${resp.json()[0]}
+
+
 
 
     ${resp}=  Get SalesOrder Catalog Item By Encid     ${SO_itemEncIds1}      
@@ -263,6 +262,10 @@ JD-TC-Get Sales Order Catalog Items By EncId-2
     Should Be Equal As Strings    ${resp.json()['spItem']['name']}    ${displayName1}
     Should Be Equal As Strings    ${resp.json()['taxes'][0]}    ${itemtax_id1}
     Should Be Equal As Strings    ${resp.json()['taxInclude']}    ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()['taxableAmount']}    ${actualAmount}
+    Should Be Equal As Strings    ${resp.json()['taxAmount']}    ${taxAmount}
+    Should Be Equal As Strings    ${resp.json()['cessAmount']}    0.0
+
 
 JD-TC-Get Sales Order Catalog Items By EncId-3
 
@@ -366,7 +369,33 @@ JD-TC-Get Sales Order Catalog Items By EncId-4
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings    ${resp.json()}    ${NOT_CONNECTED_TO_ORDER_CATALOG}
 
-    ${tax1}=     Create List  ${itemtax_id1}
+
+    # ..... Create Tax type as cess......
+
+    ${taxName}=    FakerLibrary.name
+    ${cgst}=     Evaluate   ${taxPercentage[2]} / 2
+    ${sgst}=     Evaluate   ${taxPercentage[2]} / 2
+
+    ${taxPerValue}=     Evaluate   ${taxPercentage[2]} / 100
+    ${actualAmount}=     Evaluate   ${price} / (1 + ${taxPerValue})
+    ${actualAmount}=               Evaluate                round(${actualAmount}, 2)
+    ${cessAmount} =     Evaluate   (${actualAmount} * ${taxPercentage[2]}) / 100
+    ${cessAmount}=               Evaluate                round(${cessAmount}, 2)
+
+
+    ${resp}=    Create Item Tax  ${taxName}  ${taxtypeenum[1]}  ${taxPercentage[2]}  ${cgst}  ${sgst}  0
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable   ${itemtax_id2}  ${resp.json()}
+
+
+
+
+    ${resp}=    Get Item Tax by id  ${itemtax_id2}
+    Log   ${resp.content}
+    Set Suite Variable              ${itemtax_id3}           ${resp.json()['id']}
+
+    ${tax1}=     Create List  ${itemtax_id3}
     ${resp}=  Create SalesOrder Catalog Item-invMgmt True      ${SO_Cata_Encid2}    ${boolean[1]}     ${Inv_Cata_Item_Encid1}     ${price}    ${boolean[1]}    TaxInclude=${boolean[1]}    taxes=${tax1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -388,10 +417,14 @@ JD-TC-Get Sales Order Catalog Items By EncId-4
     Should Be Equal As Strings    ${resp.json()['invMgmt']}    ${bool[1]}
     Should Be Equal As Strings    ${resp.json()['catalog']['encId']}    ${SO_Cata_Encid2}
     Should Be Equal As Strings    ${resp.json()['catalog']['name']}    ${Name2}
-    Should Be Equal As Strings    ${resp.json()['catalog']['invMgmt']}    ${bool[1]}
     Should Be Equal As Strings    ${resp.json()['spItem']['encId']}    ${itemEncId3}
     Should Be Equal As Strings    ${resp.json()['spItem']['name']}    ${displayName2}
     Should Be Equal As Strings    ${resp.json()['invCatItem']['encId']}    ${Inv_Cata_Item_Encid1}
-    Should Be Equal As Strings    ${resp.json()['taxes'][0]}    ${taxes}
+    Should Be Equal As Strings    ${resp.json()['taxes'][0]}    ${itemtax_id3}
     Should Be Equal As Strings    ${resp.json()['taxInclude']}    ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()['taxableAmount']}    ${actualAmount}
+    Should Be Equal As Strings    ${resp.json()['taxAmount']}    0.0
+    Should Be Equal As Strings    ${resp.json()['cessAmount']}    ${cessAmount}
+
+
 

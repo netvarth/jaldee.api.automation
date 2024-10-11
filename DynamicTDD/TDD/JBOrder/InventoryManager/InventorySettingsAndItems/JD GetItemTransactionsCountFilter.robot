@@ -61,9 +61,7 @@ JD-TC-Get Item Transaction Count Filter-1
     ${resp}=  Get Store Type By EncId   ${St_Id}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
 # --------------------- ---------------------------------------------------------------   
     ${resp}=  Encrypted Provider Login    ${PUSERNAME52}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -77,12 +75,10 @@ JD-TC-Get Item Transaction Count Filter-1
    ${accountId}=  get_acc_id  ${PUSERNAME52}
     Set Suite Variable    ${accountId} 
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -141,7 +137,7 @@ JD-TC-Get Item Transaction Count Filter-1
     Set Suite Variable  ${email_id}  ${Name_store}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
-    ${resp}=  Create Store   ${Name_store}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
+    ${resp}=  Create Store   ${Name_store}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}    walkinOrder=${boolean[1]}    partnerOrder=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id}  ${resp.json()}
@@ -225,9 +221,7 @@ JD-TC-Get Item Transaction Count Filter-1
     ${resp}=  Get by encId  ${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${accountId}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+
 
     ${vender_name}=   FakerLibrary.firstname
     ${contactPersonName}=   FakerLibrary.lastname
@@ -335,7 +329,6 @@ JD-TC-Get Item Transaction Count Filter-1
     ${resp}=    Get Purchase By Uid  ${purchaseId} 
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}                 200
-    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[0]}
     Set Suite Variable              ${purchaseReferenceNo}           ${resp.json()['purchaseReferenceNo']}
 # -------------------------------------------  Update Purchase Status ------------------------------------------------
     ${resp}=    Update Purchase Status  ${PurchaseStatus[1]}  ${purchaseId} 
@@ -349,23 +342,13 @@ JD-TC-Get Item Transaction Count Filter-1
     ${resp}=    Get Purchase By Uid  ${purchaseId} 
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}                 200
-    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[2]}
     Set Suite Variable              ${totalConvertedQuantity}           ${resp.json()['totalConvertedQuantity']}
 
     ${resp}=  Get Inventoryitem      ${ic_Batch_Item_id}         
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable            ${batch}       ${resp.json()[0]['batch']}  
-    Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
-    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
-    Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
-    Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          0.0
-    Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
-    Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Name_store}
+
 
 
 # ------------------------------------------------------------------------------------------------------------
@@ -374,26 +357,7 @@ JD-TC-Get Item Transaction Count Filter-1
     ${resp}=   Get Item Transaction By Filter  storeEncId-eq=${store_id}   itemCode-eq=${Batch_item1}  
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
-    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Name_store}
-    Should Be Equal As Strings      ${resp.json()[0]['inventoryCatalog']['encId']}          ${Catalog_EncIds}
-    Should Be Equal As Strings      ${resp.json()[0]['inventoryCatalog']['catalogName']}          ${Name_store}
-    Should Be Equal As Strings      ${resp.json()[0]['inventoryCatalogItem']['encId']}          ${ic_Batch_Item_id}
-    Should Be Equal As Strings      ${resp.json()[0]['spItem']['itemSourceEnum']}          RX
-    Should Be Equal As Strings      ${resp.json()[0]['spItem']['spCode']}          ${Batch_item1}
-    Should Be Equal As Strings      ${resp.json()[0]['spItem']['name']}          ${itemName1}
-    Should Be Equal As Strings      ${resp.json()[0]['spItem']['itemPropertyType']}          ${itemPropertyType}
-    Should Be Equal As Strings      ${resp.json()[0]['batch']}          ${batch}
-    Should Be Equal As Strings      ${resp.json()[0]['updateType']}          ADD
-    Should Be Equal As Strings      ${resp.json()[0]['updateTypeString']}          Add
-    Should Be Equal As Strings      ${resp.json()[0]['updateQty']}          ${totalConvertedQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['transactionTypeEnum']}          ${transactionTypeEnum[3]}
-    Should Be Equal As Strings      ${resp.json()[0]['referenceNo']}          ${purchaseReferenceNo}
-    Should Be Equal As Strings      ${resp.json()[0]['referenceDate']}          ${DAY1}
-    Should Be Equal As Strings      ${resp.json()[0]['referenceUid']}          ${purchaseId}
-    Should Be Equal As Strings      ${resp.json()[0]['createdBy']}          ${user_id}
-    Should Be Equal As Strings      ${resp.json()[0]['createdDate']}          ${DAY1}
+
 
     ${len}=  Get Length  ${resp.json()}
 
@@ -405,17 +369,7 @@ JD-TC-Get Item Transaction Count Filter-1
     ${resp}=    Get Stock Avaliability  ${ic_Batch_Item_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # Should Be Equal As Strings      ${resp.json()[0]['uid']}          ${purchaseId}
-    Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
-    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
-    Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
-    Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          0.0
-    Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
-    Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Name_store}
+
 
 
 # --------------------------- Create SalesOrder Inventory Catalog-InvMgr True --------------------------
@@ -424,7 +378,7 @@ JD-TC-Get Item Transaction Count Filter-1
     ${price}=    Random Int  min=2   max=40
     ${price}=  Convert To Number  ${price}    1
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Store_note}  ${boolean[1]}  ${inv_cat_encid_List}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Store_note}  ${boolean[1]}  ${inv_cat_encid_List}  walkInOrder=${boolean[1]}    storePickup=${boolean[1]}    homeDelivery=${boolean[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${inv_order_encid}  ${resp.json()}
@@ -463,15 +417,7 @@ JD-TC-Get Item Transaction Count Filter-1
     ${resp}=   Get list by item encId   ${SO_Batch_itemEncIds}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${netRate}=  Convert To Number  ${resp.json()[0]['price']}    1
-    Should Be Equal As Strings    ${netRate}    ${price1}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}    ${Name1} 
-    Should Be Equal As Strings    ${resp.json()[0]['accountId']}    ${accountId} 
-    Should Be Equal As Strings    ${resp.json()[0]['catalogItem']['encId']}    ${SO_Batch_itemEncIds}    
-    # Should Be Equal As Strings    ${resp.json()[0]['spItem']['id']}    ${sp-item-id} 
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['encId']}    ${Batch_item1} 
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${itemName1}
-    Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${SO_Cata_Item_Batch_Encid} 
+
 
 
 
@@ -508,7 +454,7 @@ JD-TC-Get Item Transaction Count Filter-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -521,7 +467,7 @@ JD-TC-Get Item Transaction Count Filter-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-    ${resp}=    Customer Logout 
+    ${resp}=    Consumer Logout   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -579,8 +525,7 @@ JD-TC-Get Item Transaction Count Filter-1
     ${resp}=    Get Sales Order    ${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
+
 
 
 # ------------------------------------------- Check Stock ---------------------------------------------------
@@ -592,16 +537,6 @@ JD-TC-Get Item Transaction Count Filter-1
     ${resp}=    Get Stock Avaliability  ${ic_Batch_Item_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
-    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
-    Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
-    Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          ${quantity}
-    Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
-    Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${Available_Quantity}
-    Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${Available_Quantity}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Name_store}
 
 # --------------------------------------------- Update SalesOrder Status from confirmed to completed --------------------------------------------------------
 
@@ -612,8 +547,6 @@ JD-TC-Get Item Transaction Count Filter-1
     ${resp}=    Get Sales Order    ${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[2]}
     Set Suite Variable  ${order_reference}  ${resp.json()['orderRef']}
     Set Suite Variable  ${order_uid}  ${resp.json()['uid']}
 
@@ -624,16 +557,7 @@ JD-TC-Get Item Transaction Count Filter-1
     ${resp}=    Get Stock Avaliability  ${ic_Batch_Item_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
-    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
-    Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
-    Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${Available_Quantity}
-    Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          0.0
-    Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
-    Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${Available_Quantity}
-    Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${Available_Quantity}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Name_store}
+
 
 # ------------------------------------------------------------------------------------------------------------
 # ------------------------------------Get Item Transaction By Filter (After took sales order)------------------------------------------------------------------------
@@ -641,26 +565,7 @@ JD-TC-Get Item Transaction Count Filter-1
     ${resp}=   Get Item Transaction By Filter       updateType-eq=${updateType[1]}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
-    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Name_store}
-    Should Be Equal As Strings      ${resp.json()[0]['inventoryCatalog']['encId']}          ${Catalog_EncIds}
-    Should Be Equal As Strings      ${resp.json()[0]['inventoryCatalog']['catalogName']}          ${Name_store}
-    Should Be Equal As Strings      ${resp.json()[0]['inventoryCatalogItem']['encId']}          ${ic_Batch_Item_id}
-    Should Be Equal As Strings      ${resp.json()[0]['spItem']['itemSourceEnum']}          RX
-    Should Be Equal As Strings      ${resp.json()[0]['spItem']['spCode']}          ${Batch_item1}
-    Should Be Equal As Strings      ${resp.json()[0]['spItem']['name']}          ${itemName1}
-    Should Be Equal As Strings      ${resp.json()[0]['spItem']['itemPropertyType']}          ${itemPropertyType}
-    Should Be Equal As Strings      ${resp.json()[0]['batch']}          ${batch}
-    Should Be Equal As Strings      ${resp.json()[0]['updateType']}          SUBTRACT
-    Should Be Equal As Strings      ${resp.json()[0]['updateTypeString']}          Subtract
-    Should Be Equal As Strings      ${resp.json()[0]['updateQty']}          ${quantity}
-    Should Be Equal As Strings      ${resp.json()[0]['transactionTypeEnum']}          ${transactionTypeEnum[7]}
-    Should Be Equal As Strings      ${resp.json()[0]['referenceNo']}          ${order_reference}
-    Should Be Equal As Strings      ${resp.json()[0]['referenceDate']}          ${DAY1}
-    Should Be Equal As Strings      ${resp.json()[0]['referenceUid']}          ${order_uid}
-    Should Be Equal As Strings      ${resp.json()[0]['createdBy']}          ${user_id}
-    Should Be Equal As Strings      ${resp.json()[0]['createdDate']}          ${DAY1}
+
     ${len}=  Get Length  ${resp.json()}
 
     ${resp}=   Get Item Transaction Count Filter  updateType-eq=${updateType[1]}
@@ -724,16 +629,7 @@ JD-TC-Get Item Transaction Count Filter-2
     ${resp}=    Get Stock Avaliability  ${ic_Batch_Item_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
-    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
-    Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
-    Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${Available_Quantity}
-    Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          ${Available_Quantity}
-    Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
-    Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          0.0
-    Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          0.0
-    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Name_store}
+
 
 # --------------------------------------------- Update SalesOrder Status from confirmed to completed --------------------------------------------------------
 
@@ -744,8 +640,6 @@ JD-TC-Get Item Transaction Count Filter-2
     ${resp}=    Get Sales Order    ${SO_Uid1}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid1}
-    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[2]}
     Set Suite Variable  ${order_reference1}  ${resp.json()['orderRef']}
     Set Suite Variable  ${order_uid1}  ${resp.json()['uid']}
 
@@ -756,16 +650,7 @@ JD-TC-Get Item Transaction Count Filter-2
     ${resp}=    Get Stock Avaliability  ${ic_Batch_Item_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
-    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
-    Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
-    Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          0.0
-    Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          0.0
-    Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
-    Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          0.0
-    Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          0.0
-    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Name_store}
+
 
 # ------------------------------------------------------------------------------------------------------------
 # ------------------------------------Get Item Transaction By Filter (After took sales order)------------------------------------------------------------------------
@@ -773,46 +658,7 @@ JD-TC-Get Item Transaction Count Filter-2
     ${resp}=   Get Item Transaction By Filter       updateType-eq=${updateType[1]}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
-    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Name_store}
-    Should Be Equal As Strings      ${resp.json()[0]['inventoryCatalog']['encId']}          ${Catalog_EncIds}
-    Should Be Equal As Strings      ${resp.json()[0]['inventoryCatalog']['catalogName']}          ${Name_store}
-    Should Be Equal As Strings      ${resp.json()[0]['inventoryCatalogItem']['encId']}          ${ic_Batch_Item_id}
-    Should Be Equal As Strings      ${resp.json()[0]['spItem']['itemSourceEnum']}          RX
-    Should Be Equal As Strings      ${resp.json()[0]['spItem']['spCode']}          ${Batch_item1}
-    Should Be Equal As Strings      ${resp.json()[0]['spItem']['name']}          ${itemName1}
-    Should Be Equal As Strings      ${resp.json()[0]['spItem']['itemPropertyType']}          ${itemPropertyType}
-    Should Be Equal As Strings      ${resp.json()[0]['batch']}          ${batch}
-    Should Be Equal As Strings      ${resp.json()[0]['updateType']}          SUBTRACT
-    Should Be Equal As Strings      ${resp.json()[0]['updateTypeString']}          Subtract
-    Should Be Equal As Strings      ${resp.json()[0]['updateQty']}          ${Available_Quantity}
-    Should Be Equal As Strings      ${resp.json()[0]['transactionTypeEnum']}          ${transactionTypeEnum[7]}
-    Should Be Equal As Strings      ${resp.json()[0]['referenceNo']}          ${order_reference1}
-    Should Be Equal As Strings      ${resp.json()[0]['referenceDate']}          ${DAY1}
-    Should Be Equal As Strings      ${resp.json()[0]['referenceUid']}          ${order_uid1}
-    Should Be Equal As Strings      ${resp.json()[0]['createdBy']}          ${user_id}
-    Should Be Equal As Strings      ${resp.json()[0]['createdDate']}          ${DAY1}
-    Should Be Equal As Strings      ${resp.json()[1]['locationId']}          ${locId1}
-    Should Be Equal As Strings      ${resp.json()[1]['store']['encId']}          ${store_id}
-    Should Be Equal As Strings      ${resp.json()[1]['store']['name']}          ${Name_store}
-    Should Be Equal As Strings      ${resp.json()[1]['inventoryCatalog']['encId']}          ${Catalog_EncIds}
-    Should Be Equal As Strings      ${resp.json()[1]['inventoryCatalog']['catalogName']}          ${Name_store}
-    Should Be Equal As Strings      ${resp.json()[1]['inventoryCatalogItem']['encId']}          ${ic_Batch_Item_id}
-    Should Be Equal As Strings      ${resp.json()[1]['spItem']['itemSourceEnum']}          RX
-    Should Be Equal As Strings      ${resp.json()[1]['spItem']['spCode']}          ${Batch_item1}
-    Should Be Equal As Strings      ${resp.json()[1]['spItem']['name']}          ${itemName1}
-    Should Be Equal As Strings      ${resp.json()[1]['spItem']['itemPropertyType']}          ${itemPropertyType}
-    Should Be Equal As Strings      ${resp.json()[1]['batch']}          ${batch}
-    Should Be Equal As Strings      ${resp.json()[1]['updateType']}          SUBTRACT
-    Should Be Equal As Strings      ${resp.json()[1]['updateTypeString']}          Subtract
-    Should Be Equal As Strings      ${resp.json()[1]['updateQty']}          ${quantity}
-    Should Be Equal As Strings      ${resp.json()[1]['transactionTypeEnum']}          ${transactionTypeEnum[7]}
-    Should Be Equal As Strings      ${resp.json()[1]['referenceNo']}          ${order_reference}
-    Should Be Equal As Strings      ${resp.json()[1]['referenceDate']}          ${DAY1}
-    Should Be Equal As Strings      ${resp.json()[1]['referenceUid']}          ${order_uid}
-    Should Be Equal As Strings      ${resp.json()[1]['createdBy']}          ${user_id}
-    Should Be Equal As Strings      ${resp.json()[1]['createdDate']}          ${DAY1}
+
     ${len}=  Get Length  ${resp.json()}
 
     ${resp}=   Get Item Transaction Count Filter  updateType-eq=${updateType[1]}

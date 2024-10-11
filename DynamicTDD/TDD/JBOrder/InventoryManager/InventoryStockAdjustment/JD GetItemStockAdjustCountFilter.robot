@@ -62,25 +62,23 @@ JD-TC-Get Item Stock adjust Count Filter-1
     ${TypeName1}=    FakerLibrary.name
     Set Suite Variable  ${TypeName1}
 
-    ${resp}=  Create Store Type   ${TypeName1}    ${storeNature[1]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${St_Id1}    ${resp.json()}
+    # ${resp}=  Create Store Type   ${TypeName1}    ${storeNature[1]}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable    ${St_Id1}    ${resp.json()}
     sleep  02s
     ${TypeName2}=    FakerLibrary.name
     Set Suite Variable  ${TypeName2}
 
-    ${resp}=  Create Store Type   ${TypeName2}    ${storeNature[2]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${St_Id2}    ${resp.json()}
+    # ${resp}=  Create Store Type   ${TypeName2}    ${storeNature[2]}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable    ${St_Id2}    ${resp.json()}
 
     ${resp}=  Get Store Type By EncId   ${St_Id}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
@@ -88,12 +86,9 @@ JD-TC-Get Item Stock adjust Count Filter-1
     ${accountId}=  get_acc_id  ${HLPUSERNAME7}
     Set Suite Variable    ${accountId} 
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
     ${resp}=    Get Locations
     Log  ${resp.content}

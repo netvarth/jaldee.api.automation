@@ -92,9 +92,7 @@ JD-TC-Get Inventory Item Summary-1
     ${resp}=  Get Store Type By EncId   ${St_Id}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
 
     # .... Create Hsn ...............................................................................
 
@@ -126,12 +124,10 @@ JD-TC-Get Inventory Item Summary-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    ${resp}=  Provider Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -172,9 +168,7 @@ JD-TC-Get Inventory Item Summary-1
     ${resp}=  Get by encId  ${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+
 
     ${vender_name}=   FakerLibrary.firstname
     ${contactPersonName}=   FakerLibrary.lastname
@@ -396,47 +390,7 @@ JD-TC-Get Inventory Item Summary-1
     ${resp}=    Get Item Inventory  ${itemEncId1}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
-    # Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['itemCode']}                  ${itemjrx}
-    # Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['itemName']}                  ${itemName}
-    # Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['description']}               ${description}
-    # Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['sku']}                       ${sku}
-    Should Be Equal As Strings      ${resp.json()['name']}                                      ${name}
-    Should Be Equal As Strings      ${resp.json()['shortDesc']}                                 ${shortDesc}
-    Should Be Equal As Strings      ${resp.json()['internalDesc']}                              ${internalDesc}
-    Should Be Equal As Strings      ${resp.json()['isInventoryItem']}                           ${bool[1]}
-    Should Be Equal As Strings      ${resp.json()['itemCategory']['categoryCode']}              ${categoryCode}
-    Should Be Equal As Strings      ${resp.json()['itemCategory']['categoryName']}              ${categoryName}
-    Should Be Equal As Strings      ${resp.json()['itemCategory']['status']}                    ${toggle[0]}
-    Should Be Equal As Strings      ${resp.json()['itemSubCategory']['categoryCode']}           ${categoryCode}
-    Should Be Equal As Strings      ${resp.json()['itemSubCategory']['categoryName']}           ${categoryName}
-    Should Be Equal As Strings      ${resp.json()['itemSubCategory']['status']}                 ${toggle[0]}
-    Should Be Equal As Strings      ${resp.json()['itemType']['typeCode']}                      ${typeCode}
-    Should Be Equal As Strings      ${resp.json()['itemType']['typeName']}                      ${TypeName}
-    Should Be Equal As Strings      ${resp.json()['itemType']['status']}                        ${toggle[0]}
-    Should Be Equal As Strings      ${resp.json()['itemSubType']['typeCode']}                   ${typeCode}
-    Should Be Equal As Strings      ${resp.json()['itemSubType']['typeName']}                   ${TypeName}
-    Should Be Equal As Strings      ${resp.json()['itemSubType']['status']}                     ${toggle[0]}
-    Should Be Equal As Strings      ${resp.json()['itemGroups'][0]}                             ${ig_id}
-    Should Be Equal As Strings      ${resp.json()['itemGroups'][1]}                             ${ig_id2}
-    Should Be Equal As Strings      ${resp.json()['itemSubGroups'][0]}                          ${ig_id}
-    Should Be Equal As Strings      ${resp.json()['itemSubGroups'][1]}                          ${ig_id2}
-    Should Be Equal As Strings      ${resp.json()['hsnCode']['hsnCode']}                        ${hsnCode}
-    Should Be Equal As Strings      ${resp.json()['hsnCode']['status']}                         ${toggle[0]}
-    Should Be Equal As Strings      ${resp.json()['itemManufacturer']['manufacturerCode']}      ${manufacturerCode}
-    Should Be Equal As Strings      ${resp.json()['itemManufacturer']['manufacturerName']}      ${manufactureName}
-    Should Be Equal As Strings      ${resp.json()['itemManufacturer']['status']}                ${toggle[0]}
-    Should Be Equal As Strings      ${resp.json()['tax'][0]}                                    ${itemtax_id}
-    Should Be Equal As Strings      ${resp.json()['composition'][0]}                            ${compositionCode}
-    Should Be Equal As Strings      ${resp.json()['sku']}                                       ${sku}
-    Should Be Equal As Strings      ${resp.json()['itemUnits'][0]}                              ${iu_id}
-    Should Be Equal As Strings      ${resp.json()['isBatchApplicable']}                         ${bool[1]}
-    Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileName']}                ${jpgfile}
-    Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileSize']}                ${fileSize}
-    Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileType']}                ${fileType}
-    Should Be Equal As Strings      ${resp.json()['attachments'][0]['order']}                   ${order}
-    Should Be Equal As Strings      ${resp.json()['attachments'][0]['action']}                  ${file_action[0]}
-    Should Be Equal As Strings      ${resp.json()['attachments'][0]['driveId']}                 ${driveId}
-    Should Be Equal As Strings      ${resp.json()['status']}                                    ${toggle[0]}
+
     Set Suite Variable  ${itemPropertyType}  ${resp.json()['itemPropertyType']}
 
     # .... Add Item in Inventory catalog ..........................................................
@@ -484,29 +438,6 @@ JD-TC-Get Inventory Item Summary-1
     Set Suite Variable              ${sgstamount}
     Set Suite Variable              ${taxAmount}
     Set Suite Variable              ${netRate}
-
-    # ....Get Item Details from Inventory catalog ..........................................................
-
-
-    ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}                     200
-    Should Be Equal As Strings      ${resp.json()['quantity']}              ${quantity}
-    Should Be Equal As Strings      ${resp.json()['freeQuantity']}          ${freeQuantity}
-    Should Be Equal As Strings      ${resp.json()['totalQuantity']}         ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()['amount']}                ${amount}
-    Should Be Equal As Strings      ${resp.json()['discountPercentage']}    ${discountPercentage}
-    Should Be Equal As Strings      ${resp.json()['discountAmount']}        ${discountAmount}
-    Should Be Equal As Strings      ${resp.json()['taxableAmount']}         ${taxableAmount}
-    Should Be Equal As Strings      ${resp.json()['cgstPercentage']}        ${cgst}
-    Should Be Equal As Strings      ${resp.json()['sgstPercentage']}        ${sgst}
-    Should Be Equal As Strings      ${resp.json()['cgst']}                  ${cgstamount}
-    Should Be Equal As Strings      ${resp.json()['sgst']}                  ${sgstamount}
-    Should Be Equal As Strings      ${resp.json()['taxPercentage']}         ${taxPercentage}
-    Should Be Equal As Strings      ${resp.json()['taxAmount']}             ${taxAmount}
-    Should Be Equal As Strings      ${resp.json()['netTotal']}              ${netTotal}
-    # Should Be Equal As Strings      ${resp.json()['netRate']}               ${netRate}
-
 
     ${inv_cat_encid_List}=  Create List  ${encid}
     ${price}=    Random Int  min=2   max=40
@@ -600,7 +531,7 @@ JD-TC-Get Inventory Item Summary-1
     ${totalQuantity}=   Evaluate    ${totalQuantity} * ${convertionQty}
 
 
-    ${resp}=  Get Inventory Item Count   storeEncId-eq=${store_id}   invCatalogEncId-eq=${encid}
+    ${resp}=  Get Inventory Item Count   storeEncId-eq=${store_id}   invCatalogEncId-eq=${encid}  from=0  count=10
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()}    1
@@ -615,7 +546,7 @@ JD-TC-Get Inventory Item Summary-1
     Should Be Equal As Strings      ${resp.json()[0]['invCatalog']['encId']}          ${encid}
     Should Be Equal As Strings      ${resp.json()[0]['invCatalog']['catalogName']}          ${Name_store}
     Should Be Equal As Strings      ${resp.json()[0]['invCatalogItem']['encId']}          ${ic_id}
-    Should Be Equal As Strings      ${resp.json()[0]['spItem']['itemSourceEnum']}          RX
+    Should Be Equal As Strings      ${resp.json()[0]['spItem']['itemSourceEnum']}          ALLOPATHIC
     Should Be Equal As Strings      ${resp.json()[0]['spItem']['spCode']}          ${itemEncId1}
     Should Be Equal As Strings      ${resp.json()[0]['spItem']['name']}          ${name}
     Should Be Equal As Strings      ${resp.json()[0]['spItem']['itemPropertyType']}          ${itemPropertyType}

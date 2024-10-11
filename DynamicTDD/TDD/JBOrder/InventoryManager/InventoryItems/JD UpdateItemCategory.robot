@@ -187,9 +187,48 @@ JD-TC-UpdateItemCategory-UH2
 
     [Documentation]  Get Item Category with Consumer Login.
 
-    ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME36}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${accountId}=  get_acc_id  ${HLPUSERNAME36}
+    Set Suite Variable    ${accountId} 
+
+# -------------------------------- Add a provider Consumer -----------------------------------
+
+    ${firstName}=  FakerLibrary.name
+    Set Suite Variable    ${firstName}
+    ${lastName}=  FakerLibrary.last_name
+    Set Suite Variable    ${lastName}
+    ${primaryMobileNo}    Generate random string    10    123456789
+    ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
+    Set Suite Variable    ${primaryMobileNo}
+    # ${email}=    FakerLibrary.Email
+    # Set Suite Variable    ${email}
+    ${Name}=    FakerLibrary.last name
+    Set Suite Variable    ${Name}
+    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+208187748
+    Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
+
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Consumer Logout 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email_id}    ${primaryMobileNo}     ${accountId}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200    
+   
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Update Item Category   ${EMPTY}    ${Ca_Id}
     Log   ${resp.json()}

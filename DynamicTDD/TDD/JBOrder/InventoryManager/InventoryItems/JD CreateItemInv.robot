@@ -10,6 +10,7 @@ Library           requests
 Library           FakerLibrary
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
@@ -289,9 +290,12 @@ JD-TC-CreateItemInv-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${FIELD_REQUIRED}=  format String   ${FIELD_REQUIRED}   Name is  
+
     ${resp}=    Create Item Inventory  ${empty}  
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${FIELD_REQUIRED}
 
 JD-TC-CreateItemInv-3
 
