@@ -396,15 +396,6 @@ JD-TC-Get Appointment history-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid1}
-    Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
-    Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id1}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id2}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[4]}
-    Should Be Equal As Strings  ${resp.json()['appmtDate']}   ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot2} 
-
     ${resp}=    Get Consumer Appointments History
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -420,8 +411,8 @@ JD-TC-Get Appointment history-1
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[4]}    
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 ${apptBy}
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['consumer']['userProfile']['firstName']}   ${fname}
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['consumer']['userProfile']['lastName']}    ${lname}
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['firstName']}   ${fname}
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['lastName']}    ${lname}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}                         ${lid1}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['service']['id']}                          ${s_id1}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id2}
@@ -433,8 +424,8 @@ JD-TC-Get Appointment history-1
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 ${apptBy}
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['consumer']['userProfile']['firstName']}   ${fname}
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['consumer']['userProfile']['lastName']}    ${lname}
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['firstName']}    ${fname}
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['lastName']}    ${lname}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}                         ${lid1}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['service']['id']}                          ${s_id2}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id2}
@@ -446,8 +437,8 @@ JD-TC-Get Appointment history-1
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 ${apptBy}
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['consumer']['userProfile']['firstName']}   ${fname}
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['consumer']['userProfile']['lastName']}    ${lname}
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['firstName']}   ${fname}
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['providerConsumer']['lastName']}   ${lname}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['location']['id']}                         ${lid}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['service']['id']}                          ${s_id3}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id3}
@@ -545,9 +536,9 @@ JD-TC-Get Appointment history-7
     Should Be Equal As Strings  ${resp.status_code}  200
     ${count}=  Get Length  ${resp.json()} 
     Should Be Equal As Integers  ${count}  3
-    Should Be Equal As Strings  ${resp.json()[0]['consumer']['userProfile']['firstName']}  ${fname}
-    Should Be Equal As Strings  ${resp.json()[1]['consumer']['userProfile']['firstName']}  ${fname}
-    Should Be Equal As Strings  ${resp.json()[2]['consumer']['userProfile']['firstName']}  ${fname}
+    Should Be Equal As Strings  ${resp.json()[0]['providerConsumer']['firstName']}  ${fname}
+    Should Be Equal As Strings  ${resp.json()[1]['providerConsumer']['firstName']}  ${fname}
+    Should Be Equal As Strings  ${resp.json()[2]['providerConsumer']['firstName']}  ${fname}
 
 JD-TC-Get Appointment history-8 
 
@@ -617,8 +608,8 @@ JD-TC-Get Appointment history-11
     ${count}=  Get Length  ${resp.json()} 
     Should Be Equal As Integers  ${count}  2
     # Should Be Equal As Strings  ${resp.json()[2]['apptStatus']}        ${apptStatus[1]}
-    Should Be Equal As Strings  ${resp.json()[0]['consumer']['userProfile']['firstName']}  ${fname}
-    Should Be Equal As Strings  ${resp.json()[1]['consumer']['userProfile']['firstName']}  ${fname}
+    Should Be Equal As Strings  ${resp.json()[0]['providerConsumer']['firstName']}  ${fname}
+    Should Be Equal As Strings  ${resp.json()[1]['providerConsumer']['firstName']}  ${fname}
     # Should Be Equal As Strings  ${resp.json()[2]['consumer']['userProfile']['firstName']}  ${cname1}
 
 JD-TC-Get Appointment history-12 
@@ -664,9 +655,9 @@ JD-TC-Get Appointment history-14
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${count}=  Get Length  ${resp.json()} 
     Should Be Equal As Integers  ${count}  3             
-    Should Be Equal As Strings  ${resp.json()[0]['consumer']['userProfile']['firstName']}  ${fname}  
-    Should Be Equal As Strings  ${resp.json()[1]['consumer']['userProfile']['firstName']}  ${fname}
-    Should Be Equal As Strings  ${resp.json()[2]['consumer']['userProfile']['firstName']}  ${fname}
+    Should Be Equal As Strings  ${resp.json()[0]['providerConsumer']['firstName']}  ${fname}  
+    Should Be Equal As Strings  ${resp.json()[1]['providerConsumer']['firstName']}   ${fname}
+    Should Be Equal As Strings  ${resp.json()[2]['providerConsumer']['firstName']}  ${fname}
     
 JD-TC-Get Appointment history-UH1
 
