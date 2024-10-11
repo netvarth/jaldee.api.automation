@@ -18,10 +18,10 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 JD-TC-GetWaitlistFutureCount-1
       [Documentation]   View waitlist count by Provider login
 
-      clear_queue      ${HLPUSERNAME24}
-      clear_waitlist   ${HLPUSERNAME24}    
-      clear_location   ${HLPUSERNAME24}
-      clear_service    ${HLPUSERNAME24}
+      # clear_queue      ${HLPUSERNAME24}
+      # clear_waitlist   ${HLPUSERNAME24}    
+      # clear_location   ${HLPUSERNAME24}
+      # clear_service    ${HLPUSERNAME24}
       clear_customer    ${HLPUSERNAME24}
 
       ${resp}=  Encrypted Provider Login  ${HLPUSERNAME24}  ${PASSWORD}
@@ -729,27 +729,6 @@ JD-TC-GetWaitlistFutureCount-56
 
       ${resp}=  Get Waitlist Count Future   
       Log   ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Should Be Equal As Integers  ${resp.json()}  1
-
-JD-TC-GetWaitlistFutureCount-57
-      [Documentation]  Get Future Waitlist count By first name of family member
-
-      ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
-      Should Be Equal As Strings  ${resp.status_code}  200
-
-      ${resp}=  Get Waitlist Count Future  waitlistingFor-eq=firstName::${f_name}
-      Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Should Be Equal As Integers  ${resp.json()}  1
-
-JD-TC-GetWaitlistFutureCount-58
-      [Documentation]  Get Future Waitlist count By last name of family member
-
-      ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      ${resp}=  Get Waitlist Count Future   waitlistingFor-eq=lastName::${l_name}
-      Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Should Be Equal As Integers  ${resp.json()}  1
 

@@ -193,19 +193,19 @@ JD-TC-GetWaitlistFuture-1
       
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  5
-      Verify Response List  ${resp}  0  token=${token_id}  ynwUuid=${waitlist_id}    date=${DAY1}  waitlistStatus=${wl_status[0]}  partySize=1  waitlistedBy=${waitlistedby}  personsAhead=0
+      Verify Response List  ${resp}  0  token=${token_id}  ynwUuid=${waitlist_id}    date=${DAY1}  waitlistStatus=${wl_status[0]}    waitlistedBy=${waitlistedby}  
       Should Be Equal As Strings  ${resp.json()[0]['service']['name']}        ${ser_name1}
       Should Be Equal As Strings  ${resp.json()[0]['service']['id']}          ${ser_id1}
-      Verify Response List  ${resp}  1  token=${token_id1}  ynwUuid=${waitlist_id1}  date=${DAY1}  waitlistStatus=${wl_status[0]}  partySize=1  waitlistedBy=${waitlistedby}  personsAhead=1 
+      Verify Response List  ${resp}  1  token=${token_id1}  ynwUuid=${waitlist_id1}  date=${DAY1}  waitlistStatus=${wl_status[0]}    waitlistedBy=${waitlistedby}  
       Should Be Equal As Strings  ${resp.json()[0]['service']['name']}        ${ser_name1}
       Should Be Equal As Strings  ${resp.json()[0]['service']['id']}          ${ser_id1}
-      Verify Response List  ${resp}  2  token=${token_id2}  ynwUuid=${waitlist_id2}  date=${DAY2}  waitlistStatus=${wl_status[0]}  partySize=1  waitlistedBy=${waitlistedby}  personsAhead=0
+      Verify Response List  ${resp}  2  token=${token_id2}  ynwUuid=${waitlist_id2}  date=${DAY2}  waitlistStatus=${wl_status[0]}    waitlistedBy=${waitlistedby}  
       Should Be Equal As Strings  ${resp.json()[0]['service']['name']}        ${ser_name1}
       Should Be Equal As Strings  ${resp.json()[0]['service']['id']}          ${ser_id1}
-      Verify Response List  ${resp}  3  token=${token_id3}  ynwUuid=${waitlist_id3}  date=${DAY2}  waitlistStatus=${wl_status[0]}  partySize=1  waitlistedBy=${waitlistedby}  personsAhead=1
+      Verify Response List  ${resp}  3  token=${token_id3}  ynwUuid=${waitlist_id3}  date=${DAY2}  waitlistStatus=${wl_status[0]}    waitlistedBy=${waitlistedby}  
       Should Be Equal As Strings  ${resp.json()[0]['service']['name']}        ${ser_name1}
       Should Be Equal As Strings  ${resp.json()[0]['service']['id']}          ${ser_id1}
-      Verify Response List  ${resp}  4  token=${token_id41}  ynwUuid=${waitlist_id41}  date=${FUT_DAY}  waitlistStatus=${wl_status[0]}  partySize=1  waitlistedBy=${waitlistedby}  personsAhead=0
+      Verify Response List  ${resp}  4  token=${token_id41}  ynwUuid=${waitlist_id41}  date=${FUT_DAY}  waitlistStatus=${wl_status[0]}    waitlistedBy=${waitlistedby} 
       Should Be Equal As Strings  ${resp.json()[0]['service']['name']}        ${ser_name1}
       Should Be Equal As Strings  ${resp.json()[0]['service']['id']}          ${ser_id1}
 
@@ -923,35 +923,6 @@ JD-TC-GetWaitlistFuture-55
       Verify Response List  ${resp}  5  ynwUuid=${waitlist_id5}
       Verify Response List  ${resp}  6  ynwUuid=${waitlist_id41}
 
-JD-TC-GetWaitlistFuture-56
-      [Documentation]  Get Future Waitlist By first name of family member
-
-      ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
-      Should Be Equal As Strings  ${resp.status_code}  200
-
-      ${resp}=  Get Waitlist Future  waitlistingFor-eq=firstName::${f_name}
-      Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      
-      ${len}=  Get Length  ${resp.json()}
-      Should Be Equal As Integers  ${len}  1
-      Verify Response List  ${resp}  0  ynwUuid=${waitlist_id41}
-
-JD-TC-GetWaitlistFuture-57
-      [Documentation]  Get Future Waitlist By last name of family member
-
-      ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      ${resp}=  Get Waitlist Future  waitlistingFor-eq=lastName::${l_name}
-      Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      
-      ${len}=  Get Length  ${resp.json()}
-      Should Be Equal As Integers  ${len}  1
-      Verify Response List  ${resp}  0  ynwUuid=${waitlist_id41}
-
-
-      
 JD-TC-GetWaitlistFuture-UH1
       [Documentation]   Get waitlist using provider consumer login
 

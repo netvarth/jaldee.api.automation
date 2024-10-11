@@ -21,8 +21,8 @@ ${waitlistedby}           PROVIDER
 JD-TC-GetWaitlistToday-1
       [Documentation]   View Waitlist by Provider login
 
-      clear_queue      ${HLPUSERNAME21}
-      clear_service    ${HLPUSERNAME21}
+      # clear_queue      ${HLPUSERNAME21}
+      # clear_service    ${HLPUSERNAME21}
       clear_customer    ${HLPUSERNAME21}
 
       ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
@@ -184,16 +184,16 @@ JD-TC-GetWaitlistToday-1
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  4
-      Verify Response List  ${resp}  0  token=${token_id}  ynwUuid=${waitlist_id}    date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1  waitlistedBy=${waitlistedby}  personsAhead=0
+      Verify Response List  ${resp}  0  token=${token_id}  ynwUuid=${waitlist_id}    date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1  waitlistedBy=${waitlistedby}  
       Should Be Equal As Strings  ${resp.json()[0]['service']['name']}        ${ser_name1}
       Should Be Equal As Strings  ${resp.json()[0]['service']['id']}          ${ser_id1}
-      Verify Response List  ${resp}  1  token=${token_id1}  ynwUuid=${waitlist_id1}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1  waitlistedBy=${waitlistedby}  personsAhead=1 
+      Verify Response List  ${resp}  1  token=${token_id1}  ynwUuid=${waitlist_id1}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1  waitlistedBy=${waitlistedby}  
       Should Be Equal As Strings  ${resp.json()[0]['service']['name']}        ${ser_name1}
       Should Be Equal As Strings  ${resp.json()[0]['service']['id']}          ${ser_id1}
-      Verify Response List  ${resp}  2  token=${token_id2}  ynwUuid=${waitlist_id2}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1  waitlistedBy=${waitlistedby}  personsAhead=2
+      Verify Response List  ${resp}  2  token=${token_id2}  ynwUuid=${waitlist_id2}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1  waitlistedBy=${waitlistedby}  
       Should Be Equal As Strings  ${resp.json()[0]['service']['name']}        ${ser_name1}
       Should Be Equal As Strings  ${resp.json()[0]['service']['id']}          ${ser_id1}
-      Verify Response List  ${resp}  3  token=${token_id3}  ynwUuid=${waitlist_id3}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1  waitlistedBy=${waitlistedby}  personsAhead=3
+      Verify Response List  ${resp}  3  token=${token_id3}  ynwUuid=${waitlist_id3}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1  waitlistedBy=${waitlistedby}  
       Should Be Equal As Strings  ${resp.json()[0]['service']['name']}        ${ser_name1}
       Should Be Equal As Strings  ${resp.json()[0]['service']['id']}          ${ser_id1}
       

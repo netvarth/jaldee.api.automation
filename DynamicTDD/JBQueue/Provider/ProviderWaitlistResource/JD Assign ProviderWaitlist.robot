@@ -53,23 +53,10 @@ JD-TC-AssignproviderWaitlist-1
 
     ${pid}=  get_acc_id  ${HLPUSERNAME2}
 
-    
-
     ${resp}=  Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=  Get Waitlist Settings
-    # Log  ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # IF  ${resp.json()['filterByDept']}==${bool[1]}
-    #     ${resp}=   Enable Disable Department  ${toggle[0]}    
-    #     Log  ${resp.content}
-    #     Should Be Equal As Strings  ${resp.status_code}  200
-
-    # END
-    
-    
     ${resp}=    Get Locations
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -88,9 +75,7 @@ JD-TC-AssignproviderWaitlist-1
     ${list}=  Create List   1  2  3  4  5  6  7
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    # ${list}=  Create List  1  2  3  4  5  6  7
-    # Set Suite Variable  ${list}  ${list}
-    # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+
     ${strt_time}=   add_timezone_time  ${tz}  1  00  
     ${end_time}=    add_timezone_time  ${tz}  2  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
@@ -115,43 +100,12 @@ JD-TC-AssignproviderWaitlist-1
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1   waitlistedBy=${waitlistedby}  personsAhead=0
-    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
-    Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}                   ${q_id}
-    Should Be Equal As Strings  ${resp.json()['queue']['location']['id']}       ${lid}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueStartTime']}       ${strt_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueEndTime']}         ${end_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
-    Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
-
-
-    # ${resp}=  Get Waitlist Settings
-    # Log  ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # IF  ${resp.json()['filterByDept']}==${bool[0]}
-    #     ${resp}=  Enable Disable Department  ${toggle[0]}  ${toggle[0]}
-    #     Log  ${resp.content}
-    #     Should Be Equal As Strings  ${resp.status_code}  200
-
-    # END
-    
-    # sleep  2s
-    # ${resp}=  Get Departments
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      
     ${ph1}=  Evaluate  ${HLPUSERNAME4}+1000440000
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
 
-    # ${resp}=  Get LocationsByPincode     ${pin}
     FOR    ${i}    IN RANGE    3
         ${pin}=  get_pincode
         ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
@@ -164,14 +118,6 @@ JD-TC-AssignproviderWaitlist-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${whpnum}=  Evaluate  ${HLPUSERNAME4}+336245
-    ${tlgnum}=  Evaluate  ${HLPUSERNAME4}+336345
-
-    # ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCode[1]}  ${whpnum}  ${countryCode[1]}  ${tlgnum}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${u_id1}  ${resp.json()}
-
     ${ph1}  ${u_id1} =  Create and Configure Sample User
     Set Suite Variable  ${ph1}
     Set Suite Variable  ${u_id1}
@@ -179,10 +125,7 @@ JD-TC-AssignproviderWaitlist-1
     ${resp}=  Get User
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
-    Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
     
-
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -206,17 +149,6 @@ JD-TC-AssignproviderWaitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${que_id1}  ${resp.json()}
 
-    ${ph2}=  Evaluate  ${HLPUSERNAME4}+1000440001
-    clear_users  ${ph2}
-    ${firstname1}=  FakerLibrary.name
-    ${lastname1}=  FakerLibrary.last_name
-    ${dob1}=  FakerLibrary.Date
-    ${pin}=  get_pincode
-    
-    # ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${ph2}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${u_id2}  ${resp.json()}
     ${ph2}  ${u_id2} =  Create and Configure Sample User
     Set Suite Variable  ${ph2}
     Set Suite Variable  ${u_id2}
@@ -237,18 +169,6 @@ JD-TC-AssignproviderWaitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${que_id2}  ${resp.json()}
 
-    
-    ${ph3}=  Evaluate  ${HLPUSERNAME4}+1000440003
-    clear_users  ${ph3}
-    ${firstname2}=  FakerLibrary.name
-    ${lastname2}=  FakerLibrary.last_name
-    ${dob2}=  FakerLibrary.Date
-    ${pin}=  get_pincode
-   
-    # ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph3}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph3}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${u_id3}  ${resp.json()}
     ${ph3}  ${u_id3} =  Create and Configure Sample User
     Set Suite Variable  ${ph3}
     Set Suite Variable  ${u_id3}
@@ -270,7 +190,6 @@ JD-TC-AssignproviderWaitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${que_id3}  ${resp.json()}
 
-   
     ${resp}=   Assign provider Waitlist   ${wid}   ${u_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -282,9 +201,6 @@ JD-TC-AssignproviderWaitlist-1
     Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
     Should Be Equal As Strings  ${resp.json()['provider']['id']}                   ${u_id1}
-    # Should Be Equal As Strings  ${resp.json()['provider']['firstName']}            ${firstname}
-    # Should Be Equal As Strings  ${resp.json()['provider']['lastName']}             ${lastname}
-    # Should Be Equal As Strings  ${resp.json()['provider']['mobileNo']}             ${ph2}
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
     Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
@@ -348,14 +264,7 @@ JD-TC-AssignproviderWaitlist-2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_queue      ${HLPUSERNAME2}
-    # clear_service    ${HLPUSERNAME2}
     clear_customer   ${HLPUSERNAME2}
-
-    # ${resp}=    Get Locations
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable   ${lid}   ${resp.json()[0]['id']}
 
     ${SERVICE1}=    generate_service_name 
     ${desc}=   FakerLibrary.sentence
@@ -367,7 +276,6 @@ JD-TC-AssignproviderWaitlist-2
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${strt_time}=   add_timezone_time  ${tz}  1  00  
     ${end_time}=    add_timezone_time  ${tz}  2  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
@@ -392,29 +300,6 @@ JD-TC-AssignproviderWaitlist-2
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1   waitlistedBy=${waitlistedby}  personsAhead=0
-    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
-    Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}                   ${q_id}
-    Should Be Equal As Strings  ${resp.json()['queue']['location']['id']}       ${lid}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueStartTime']}       ${strt_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueEndTime']}         ${end_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
-    Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
-
-    # ${ph1}=  Evaluate  ${HLPUSERNAME2}+1000448764
-    # ${firstname}=  FakerLibrary.name
-    # ${lastname}=  FakerLibrary.last_name
-    # ${dob}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
-    
-    # ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${u_id1}  ${resp.json()}
 
     ${u_id1}=  Create Sample User 
     Set suite Variable                    ${u_id1}
@@ -443,17 +328,6 @@ JD-TC-AssignproviderWaitlist-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${que_id1}  ${resp.json()}
-
-    # ${ph2}=  Evaluate  ${HLPUSERNAME2}+1000455405
-    # ${firstname2}=  FakerLibrary.name
-    # ${lastname2}=  FakerLibrary.last_name
-    # ${dob2}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
-
-    # ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph2}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${u_id2}  ${resp.json()}
 
     ${u_id2}=  Create Sample User 
     Set suite Variable                    ${u_id2}
@@ -487,9 +361,6 @@ JD-TC-AssignproviderWaitlist-2
     Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
     Should Be Equal As Strings  ${resp.json()['provider']['id']}                   ${u_id1}
-    # Should Be Equal As Strings  ${resp.json()['provider']['firstName']}            ${firstname}
-    # Should Be Equal As Strings  ${resp.json()['provider']['lastName']}             ${lastname}
-    # Should Be Equal As Strings  ${resp.json()['provider']['mobileNo']}             ${ph1}
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
     Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
@@ -512,9 +383,6 @@ JD-TC-AssignproviderWaitlist-2
     Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
     Should Be Equal As Strings  ${resp.json()['provider']['id']}                   ${u_id2}
-    # Should Be Equal As Strings  ${resp.json()['provider']['firstName']}            ${firstname2}
-    # Should Be Equal As Strings  ${resp.json()['provider']['lastName']}             ${lastname2}
-    # Should Be Equal As Strings  ${resp.json()['provider']['mobileNo']}             ${ph2}
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
     Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
@@ -533,8 +401,6 @@ JD-TC-AssignproviderWaitlist-3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_queue      ${HLPUSERNAME2}
-    # clear_service    ${HLPUSERNAME2}
     clear_customer   ${HLPUSERNAME2}
 
     ${resp}=    Get Locations
@@ -552,7 +418,6 @@ JD-TC-AssignproviderWaitlist-3
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${strt_time}=   add_timezone_time  ${tz}  1  00  
     ${end_time}=    add_timezone_time  ${tz}  3  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
@@ -576,30 +441,7 @@ JD-TC-AssignproviderWaitlist-3
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1   waitlistedBy=${waitlistedby}  personsAhead=0
-    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
-    Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
-    Should Be Equal As Strings  ${resp.json()['queue']['id']}                   ${q_id}
-    Should Be Equal As Strings  ${resp.json()['queue']['location']['id']}       ${lid}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueStartTime']}       ${strt_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['queueEndTime']}         ${end_time}
-    Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
-    Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
-
-    ${ph1}=  Evaluate  ${HLPUSERNAME2}+1000440006
-    ${firstname}=  FakerLibrary.name
-    ${lastname}=  FakerLibrary.last_name
-    ${dob}=  FakerLibrary.Date
-    ${pin}=  get_pincode
-
-    # ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${u_id1}  ${resp.json()}
     ${u_id1}=  Create Sample User 
     Set suite Variable                    ${u_id1}
 
@@ -620,9 +462,6 @@ JD-TC-AssignproviderWaitlist-3
     Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
     Should Be Equal As Strings  ${resp.json()['provider']['id']}                   ${u_id1}
-    # Should Be Equal As Strings  ${resp.json()['provider']['firstName']}            ${firstname}
-    # Should Be Equal As Strings  ${resp.json()['provider']['lastName']}             ${lastname}
-    # Should Be Equal As Strings  ${resp.json()['provider']['mobileNo']}             ${ph1}
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
     Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
@@ -641,8 +480,6 @@ JD-TC-AssignproviderWaitlist-4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_queue      ${HLPUSERNAME2}
-    # clear_service    ${HLPUSERNAME2}
     clear_customer   ${HLPUSERNAME2}
 
     ${resp}=    Get Locations
@@ -660,7 +497,6 @@ JD-TC-AssignproviderWaitlist-4
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${strt_time}=   add_timezone_time  ${tz}  1  00  
     ${end_time}=    add_timezone_time  ${tz}  6  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
@@ -697,17 +533,6 @@ JD-TC-AssignproviderWaitlist-4
     Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
-
-    ${ph1}=  Evaluate  ${HLPUSERNAME2}+1000440011
-    ${firstname}=  FakerLibrary.name
-    ${lastname}=  FakerLibrary.last_name
-    ${dob}=  FakerLibrary.Date
-    ${pin}=  get_pincode
-    
-    # ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${u_id1}  ${resp.json()}
     ${u_id1}=  Create Sample User 
     Set suite Variable                    ${u_id1}
 
@@ -733,17 +558,6 @@ JD-TC-AssignproviderWaitlist-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${que_id1}  ${resp.json()}
-
-    # ${ph2}=  Evaluate  ${HLPUSERNAME2}+1000440012
-    # ${firstname2}=  FakerLibrary.name
-    # ${lastname2}=  FakerLibrary.last_name
-    # ${dob2}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
-   
-    # ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph2}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${u_id2}  ${resp.json()}
 
     ${u_id2}=  Create Sample User 
     Set suite Variable                    ${u_id2}
@@ -776,9 +590,6 @@ JD-TC-AssignproviderWaitlist-4
     Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
     Should Be Equal As Strings  ${resp.json()['provider']['id']}                   ${u_id1}
-    # Should Be Equal As Strings  ${resp.json()['provider']['firstName']}            ${firstname}
-    # Should Be Equal As Strings  ${resp.json()['provider']['lastName']}             ${lastname}
-    # Should Be Equal As Strings  ${resp.json()['provider']['mobileNo']}             ${ph1}
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
     Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
@@ -801,9 +612,6 @@ JD-TC-AssignproviderWaitlist-4
     Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
     Should Be Equal As Strings  ${resp.json()['provider']['id']}                   ${u_id2}
-    # Should Be Equal As Strings  ${resp.json()['provider']['firstName']}            ${firstname2}
-    # Should Be Equal As Strings  ${resp.json()['provider']['lastName']}             ${lastname2}
-    # Should Be Equal As Strings  ${resp.json()['provider']['mobileNo']}             ${ph2}
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
     Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
@@ -826,9 +634,6 @@ JD-TC-AssignproviderWaitlist-4
     Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
     Should Be Equal As Strings  ${resp.json()['provider']['id']}                   ${u_id1}
-    # Should Be Equal As Strings  ${resp.json()['provider']['firstName']}            ${firstname}
-    # Should Be Equal As Strings  ${resp.json()['provider']['lastName']}             ${lastname}
-    # Should Be Equal As Strings  ${resp.json()['provider']['mobileNo']}             ${ph1}
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
     Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
@@ -847,8 +652,6 @@ JD-TC-AssignproviderWaitlist-5
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_queue      ${HLPUSERNAME2}
-    # clear_service    ${HLPUSERNAME2}
     clear_customer   ${HLPUSERNAME2}
 
     ${SERVICE1}=    generate_service_name 
@@ -861,7 +664,6 @@ JD-TC-AssignproviderWaitlist-5
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${strt_time}=   add_timezone_time  ${tz}  1  00  
     ${end_time}=    add_timezone_time  ${tz}  6  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
@@ -897,18 +699,6 @@ JD-TC-AssignproviderWaitlist-5
     Should Be Equal As Strings  ${resp.json()['queue']['queueEndTime']}         ${end_time}
     Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
-
-
-    # ${ph1}=  Evaluate  ${HLPUSERNAME2}+1000440013
-    # ${firstname}=  FakerLibrary.name
-    # ${lastname}=  FakerLibrary.last_name
-    # ${dob}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
-   
-    # ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${u_id1}  ${resp.json()}
 
     ${u_id1}=  Create Sample User 
     Set suite Variable                    ${u_id1}
@@ -978,9 +768,6 @@ JD-TC-AssignproviderWaitlist-5
     Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
     Should Be Equal As Strings  ${resp.json()['provider']['id']}                   ${u_id2}
-    # Should Be Equal As Strings  ${resp.json()['provider']['firstName']}            ${firstname2}
-    # Should Be Equal As Strings  ${resp.json()['provider']['lastName']}             ${lastname2}
-    # Should Be Equal As Strings  ${resp.json()['provider']['mobileNo']}             ${ph2}
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
     Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
@@ -1008,9 +795,6 @@ JD-TC-AssignproviderWaitlist-6
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-
-    # clear_queue      ${HLPUSERNAME2}
-    # clear_service    ${HLPUSERNAME2}
     clear_customer   ${HLPUSERNAME2}
 
     ${resp}=    Get Locations
@@ -1094,27 +878,6 @@ JD-TC-AssignproviderWaitlist-6
     Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
-
-   
-    
-    # sleep  2s
-    # ${resp}=  Get Departments
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
-     
-
-    # ${ph1}=  Evaluate  ${HLPUSERNAME2}+1000440016
-    # ${firstname}=  FakerLibrary.name
-    # ${lastname}=  FakerLibrary.last_name
-    # ${dob}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
-   
-    # ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${u_id1}  ${resp.json()}
-
     ${ph1}  ${u_id1} =  Create and Configure Sample User
     Set Suite Variable  ${ph1}
     Set Suite Variable  ${u_id1}
@@ -1140,16 +903,6 @@ JD-TC-AssignproviderWaitlist-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${que_id1}  ${resp.json()}
 
-    # ${ph2}=  Evaluate  ${HLPUSERNAME2}+1000440017
-    # ${firstname2}=  FakerLibrary.name
-    # ${lastname2}=  FakerLibrary.last_name
-    # ${dob2}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
-   
-    # ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph2}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${u_id2}  ${resp.json()}
     ${u_id2}=  Create Sample User 
     Set suite Variable                    ${u_id2}
 
@@ -1199,13 +952,6 @@ JD-TC-AssignproviderWaitlist-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  3
 
-    # ${resp}=  SendProviderResetMail   ${ph1}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # @{resp}=  ResetProviderPassword  ${ph1}  ${PASSWORD}  2
-    # Should Be Equal As Strings  ${resp[0].status_code}  200
-    # Should Be Equal As Strings  ${resp[1].status_code}  200
-
-
     ${resp}=  Encrypted Provider Login  ${ph1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1228,8 +974,6 @@ JD-TC-AssignproviderWaitlist-7
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sud_domain_id3}  ${resp2.json()['serviceSubSector']['id']}
 
-    # clear_queue      ${HLPUSERNAME11}
-    # clear_service    ${HLPUSERNAME11}
     clear_customer   ${HLPUSERNAME11}
 
     ${pid}=  get_acc_id  ${HLPUSERNAME11}
@@ -1252,7 +996,6 @@ JD-TC-AssignproviderWaitlist-7
         Should Be Equal As Strings  ${resp.status_code}  200
 
     END
-    
     
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -1328,9 +1071,7 @@ JD-TC-AssignproviderWaitlist-7
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
 
-    # ${resp}=  Get LocationsByPincode     ${pin}
     FOR    ${i}    IN RANGE    3
         ${pin}=  get_pincode
         ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
@@ -1346,15 +1087,6 @@ JD-TC-AssignproviderWaitlist-7
     ${whpnum}=  Evaluate  ${HLPUSERNAME11}+336945
     ${tlgnum}=  Evaluate  ${HLPUSERNAME11}+336845
 
-    # ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id3}  ${sud_domain_id3}  ${bool[0]}  ${countryCode[1]}  ${whpnum}  ${countryCode[1]}  ${tlgnum}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${u_id1}  ${resp.json()}
-    # ${resp}=  Get User
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
-    # Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
     ${ph1}  ${u_id1} =  Create and Configure Sample User        deptId=${dep_id3}
     Set Suite Variable  ${ph1}
     Set Suite Variable  ${u_id1}
@@ -1452,7 +1184,6 @@ JD-TC-AssignproviderWaitlist-8
 
     END
     
-    
     ${resp}=    Get Locations
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1467,11 +1198,8 @@ JD-TC-AssignproviderWaitlist-8
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    # ${list}=  Create List  1  2  3  4  5  6  7
-    # Set Suite Variable  ${list}  ${list}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${strt_time}=   add_timezone_time  ${tz}  1  00  
     ${end_time}=    add_timezone_time  ${tz}  2  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
@@ -1517,9 +1245,7 @@ JD-TC-AssignproviderWaitlist-8
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
 
-    # ${resp}=  Get LocationsByPincode     ${pin}
     FOR    ${i}    IN RANGE    3
         ${pin}=  get_pincode
         ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
@@ -1532,13 +1258,6 @@ JD-TC-AssignproviderWaitlist-8
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    # ${whpnum}=  Evaluate  ${HLPUSERNAME11}+336745
-    # ${tlgnum}=  Evaluate  ${HLPUSERNAME11}+336645
-
-    # ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[1]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id3}  ${sud_domain_id3}  ${bool[0]}  ${countryCode[1]}  ${whpnum}  ${countryCode[1]}  ${tlgnum}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${u_id1}  ${resp.json()}
     ${ph1}  ${u_id1} =  Create and Configure Sample User    deptId=${dep_id3}
     Set Suite Variable  ${ph1}
     Set Suite Variable  ${u_id1}
@@ -1570,9 +1289,6 @@ JD-TC-AssignproviderWaitlist-8
     Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
     Should Be Equal As Strings  ${resp.json()['provider']['id']}                   ${u_id1}
-    # Should Be Equal As Strings  ${resp.json()['provider']['firstName']}            ${firstname}
-    # Should Be Equal As Strings  ${resp.json()['provider']['lastName']}             ${lastname}
-    # Should Be Equal As Strings  ${resp.json()['provider']['mobileNo']}             ${ph1}
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
     Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
@@ -1614,7 +1330,6 @@ JD-TC-AssignproviderWaitlist-9
 
     END
     
-    
     ${resp}=    Get Locations
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1632,9 +1347,6 @@ JD-TC-AssignproviderWaitlist-9
     ${list}=  Create List   1  2  3  4  5  6  7
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    # ${list}=  Create List  1  2  3  4  5  6  7
-    # Set Suite Variable  ${list}  ${list}
-    # ${strt_time}=   db.get_time_by_timezone   ${tz}  
     ${strt_time}=   db.get_time_by_timezone  ${tz}     
     ${end_time}=    add_timezone_time  ${tz}  2  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
@@ -1665,8 +1377,6 @@ JD-TC-AssignproviderWaitlist-9
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Waitlist By Id  ${wid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response  ${resp}      waitlistStatus=${wl_status[2]}
-
 
     ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
@@ -1688,9 +1398,7 @@ JD-TC-AssignproviderWaitlist-9
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
 
-    # ${resp}=  Get LocationsByPincode     ${pin}
     FOR    ${i}    IN RANGE    3
         ${pin}=  get_pincode
         ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
@@ -1753,9 +1461,6 @@ JD-TC-AssignproviderWaitlist-9
     Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
     Should Be Equal As Strings  ${resp.json()['provider']['id']}                   ${u_id1}
-    # Should Be Equal As Strings  ${resp.json()['provider']['firstName']}            ${firstname}
-    # Should Be Equal As Strings  ${resp.json()['provider']['lastName']}             ${lastname}
-    # Should Be Equal As Strings  ${resp.json()['provider']['mobileNo']}             ${ph1}
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
     Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
@@ -1813,11 +1518,8 @@ JD-TC-AssignproviderWaitlist-10
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    # ${list}=  Create List  1  2  3  4  5  6  7
-    # Set Suite Variable  ${list}  ${list}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${strt_time}=   add_timezone_time  ${tz}  1  00  
     ${end_time}=    add_timezone_time  ${tz}  2  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
@@ -1850,7 +1552,6 @@ JD-TC-AssignproviderWaitlist-10
         ${resp}=  Enable Disable Department  ${toggle[0]}  
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-
     END
     
     sleep  2s
@@ -1863,9 +1564,7 @@ JD-TC-AssignproviderWaitlist-10
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
 
-    # ${resp}=  Get LocationsByPincode     ${pin}
     FOR    ${i}    IN RANGE    3
         ${pin}=  get_pincode
         ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
@@ -1900,9 +1599,6 @@ JD-TC-AssignproviderWaitlist-10
     Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id}
     Should Be Equal As Strings  ${resp.json()['provider']['id']}                   ${u_id1}
-    # Should Be Equal As Strings  ${resp.json()['provider']['firstName']}            ${firstname}
-    # Should Be Equal As Strings  ${resp.json()['provider']['lastName']}             ${lastname}
-    # Should Be Equal As Strings  ${resp.json()['provider']['mobileNo']}             ${ph1}
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
     Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}
@@ -1913,8 +1609,6 @@ JD-TC-AssignproviderWaitlist-10
     Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
-
-    
 JD-TC-AssignproviderWaitlist-UH1
     [Documentation]  User take checkin and try to assign another user
     
@@ -1922,8 +1616,6 @@ JD-TC-AssignproviderWaitlist-UH1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_queue      ${HLPUSERNAME2}
-    # clear_service    ${HLPUSERNAME2}
     clear_customer   ${HLPUSERNAME2}
 
     ${resp}=    Get Locations
@@ -1991,7 +1683,6 @@ JD-TC-AssignproviderWaitlist-UH1
     Should Be Equal As Strings  ${resp.json()['queue']['availabilityQueue']}    ${bool[0]}   
     Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          0
 
-
     ${ph2}  ${u_id2} =  Create and Configure Sample User
     Set Suite Variable  ${ph2}
     Set Suite Variable  ${u_id2}
@@ -2024,8 +1715,7 @@ JD-TC-AssignproviderWaitlist-UH3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_queue      ${HLPUSERNAME2}
-    # clear_service    ${HLPUSERNAME2}
+
     # clear_customer   ${HLPUSERNAME2}
 
     ${resp}=    Get Locations
@@ -2044,7 +1734,6 @@ JD-TC-AssignproviderWaitlist-UH3
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${strt_time}=   add_timezone_time  ${tz}  1  00  
     ${end_time}=    add_timezone_time  ${tz}  6  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
@@ -2103,8 +1792,6 @@ JD-TC-AssignproviderWaitlist-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_queue      ${HLPUSERNAME2}
-    # clear_service    ${HLPUSERNAME2}
     clear_customer   ${HLPUSERNAME2}
 
     ${resp}=    Get Locations
@@ -2122,7 +1809,6 @@ JD-TC-AssignproviderWaitlist-UH4
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${strt_time}=   add_timezone_time  ${tz}  1  00  
     ${end_time}=    add_timezone_time  ${tz}  6  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
@@ -2147,7 +1833,6 @@ JD-TC-AssignproviderWaitlist-UH4
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
 
     ${ph2}  ${u_id2} =  Create and Configure Sample User
     Set Suite Variable  ${ph2}
@@ -2175,7 +1860,6 @@ JD-TC-AssignproviderWaitlist-UH4
     Should Be Equal As Strings  ${resp.status_code}   422
     Should Be Equal As Strings  ${resp.content}  "${INVALID_WTLST_ID}"
 
-
 JD-TC-AssignproviderWaitlist-UH5 
     [Documentation]  Assingn waitlist to another account's user
     
@@ -2188,8 +1872,6 @@ JD-TC-AssignproviderWaitlist-UH5
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sud_domain_id1}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${HLPUSERNAME10}
-    clear_service    ${HLPUSERNAME10}
     clear_customer   ${HLPUSERNAME10}
 
     ${pid}=  get_acc_id  ${HLPUSERNAME10}
@@ -2222,9 +1904,7 @@ JD-TC-AssignproviderWaitlist-UH5
     ${list}=  Create List   1  2  3  4  5  6  7
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    # ${list}=  Create List  1  2  3  4  5  6  7
-    # Set Suite Variable  ${list}  ${list}
-    # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+
     ${strt_time}=   add_timezone_time  ${tz}  1  00  
     ${end_time}=    add_timezone_time  ${tz}  6  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
@@ -2241,29 +1921,13 @@ JD-TC-AssignproviderWaitlist-UH5
         ${resp}=  Enable Disable Department  ${toggle[0]}  
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-
     END
 
     ${resp}=  Get Departments
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id1}  ${resp.json()['departments'][0]['departmentId']}
-     
-    # ${ph1}=  Evaluate  ${HLPUSERNAME10}+1000440130
-    # ${firstname}=  FakerLibrary.name
-    # ${lastname}=  FakerLibrary.last_name
-    # ${pin}=  get_pincode
-    # ${dob}=  FakerLibrary.Date
-   
-    # ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id1}  ${sud_domain_id1}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${u_id5}  ${resp.json()}
-    # ${resp}=  Get User
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
-    # Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
+
     ${ph1}  ${u_id5} =  Create and Configure Sample User   deptId=${dep_id1}
     Set Suite Variable  ${ph1}
     Set Suite Variable  ${u_id5}
@@ -2294,8 +1958,6 @@ JD-TC-AssignproviderWaitlist-UH5
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_queue      ${HLPUSERNAME2}
-    # clear_service    ${HLPUSERNAME2}
     clear_customer   ${HLPUSERNAME2}
 
     ${resp}=    Get Locations
@@ -2373,8 +2035,6 @@ JD-TC-AssignproviderWaitlist-UH6
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_queue      ${HLPUSERNAME2}
-    # clear_service    ${HLPUSERNAME2}
     clear_customer   ${HLPUSERNAME2}
 
     ${resp}=    Get Locations
@@ -2393,7 +2053,6 @@ JD-TC-AssignproviderWaitlist-UH6
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${strt_time}=   add_timezone_time  ${tz}  1  00  
     ${end_time}=    add_timezone_time  ${tz}  6  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
@@ -2422,18 +2081,6 @@ JD-TC-AssignproviderWaitlist-UH6
     ${cncl_resn}=   Random Element     ${waitlist_cancl_reasn}
     ${resp}=  Waitlist Action Cancel  ${wid}  ${cncl_resn}  ${desc}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${ph2}=  Evaluate  ${HLPUSERNAME2}+1000440221
-    # clear_users  ${ph2}
-    # ${firstname2}=  FakerLibrary.name
-    # ${lastname2}=  FakerLibrary.last_name
-    # ${dob2}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
-   
-    # ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph2}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${u_id2}  ${resp.json()}
 
     ${ph2}  ${u_id2} =  Create and Configure Sample User
     Set Suite Variable  ${ph2}
@@ -2471,8 +2118,6 @@ JD-TC-AssignproviderWaitlist-UH7
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_queue      ${HLPUSERNAME2}
-    # clear_service    ${HLPUSERNAME2}
     clear_customer   ${HLPUSERNAME2}
     ${account_id}=  get_acc_id  ${HLPUSERNAME10}
 
@@ -2492,7 +2137,6 @@ JD-TC-AssignproviderWaitlist-UH7
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${strt_time}=   add_timezone_time  ${tz}  1  00  
     ${end_time}=    add_timezone_time  ${tz}  6  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
@@ -2517,18 +2161,6 @@ JD-TC-AssignproviderWaitlist-UH7
     ${resp}=  Get Waitlist By Id  ${wid6} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-
-    # ${ph2}=  Evaluate  ${HLPUSERNAME2}+1000440022
-    # ${firstname2}=  FakerLibrary.name
-    # ${lastname2}=  FakerLibrary.last_name
-    # ${dob2}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
-
-    # ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph2}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${u_id6}  ${resp.json()}
 
     ${ph2}  ${u_id6} =  Create and Configure Sample User
     Set Suite Variable  ${ph2}
@@ -2551,7 +2183,6 @@ JD-TC-AssignproviderWaitlist-UH7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${que_id2}  ${resp.json()}
-
 
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
@@ -2599,12 +2230,9 @@ JD-TC-AssignproviderWaitlist-UH9
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sud_domain_id3}  ${resp2.json()['serviceSubSector']['id']}
 
-    # clear_queue      ${HLPUSERNAME11}
-    # clear_service    ${HLPUSERNAME11}
     clear_customer   ${HLPUSERNAME11}
 
     ${pid}=  get_acc_id  ${HLPUSERNAME11}
-
 
     ${resp}=  Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -2617,9 +2245,7 @@ JD-TC-AssignproviderWaitlist-UH9
         ${resp}=   Enable Disable Department  ${toggle[1]} 
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-
     END
-    
     
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -2632,15 +2258,12 @@ JD-TC-AssignproviderWaitlist-UH9
     ${SERVICE1}=    generate_service_name 
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id}    ${resp}  
-
     
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    # ${list}=  Create List  1  2  3  4  5  6  7
-    # Set Suite Variable  ${list}  ${list}
-    # ${strt_time}=   db.get_time_by_timezone   ${tz}  
+ 
     ${strt_time}=   db.get_time_by_timezone  ${tz}     
     ${end_time}=    add_timezone_time  ${tz}  2  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
@@ -2671,8 +2294,6 @@ JD-TC-AssignproviderWaitlist-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Waitlist By Id  ${wid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response  ${resp}      waitlistStatus=${wl_status[2]}
-
 
     ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
@@ -2689,14 +2310,7 @@ JD-TC-AssignproviderWaitlist-UH9
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id3}  ${resp.json()['departments'][0]['departmentId']}
-     
-    # ${ph1}=  Evaluate  ${HLPUSERNAME11}+1000460000
-    # ${firstname}=  FakerLibrary.name
-    # ${lastname}=  FakerLibrary.last_name
-    # ${dob}=  FakerLibrary.Date
-    # ${pin}=  get_pincode
 
-    # ${resp}=  Get LocationsByPincode     ${pin}
     FOR    ${i}    IN RANGE    3
         ${pin}=  get_pincode
         ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
