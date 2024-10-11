@@ -69,7 +69,7 @@ runAPre()
     echo "Running $2"
     # mkdir -p "TDD_Output/signuplog/$Log_DIR"
     # robot --outputdir "TDD_Output/signuplog/$Log_DIR" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
-    robot --outputdir "TDD_Output/signuplog" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
+    time robot --outputdir "TDD_Output/signuplog" --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
     # echo "APre Done. Executing Queries from $SQL_FILE"
     echo "APre Done."
 }
