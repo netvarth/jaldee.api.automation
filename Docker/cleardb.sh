@@ -27,14 +27,15 @@ else
 fi
 
 Workspace="$(basename "$(dirname "$(dirname "$PWD")")")"
-default_BACKUP_PATH="$(dirname "${PWD%*/*/*}")/backup/dbbackup/JD/$Workspace"
+DEFAULT_BACKUP_PATH="$(dirname "${PWD%*/*/*}")/backup/dbbackup/JD/$Workspace"
+CUSTOM_BACKUP_PATH="$(dirname "${PWD%*/*/*}")/backup/custbkup/JD/$Workspace"
 # MYSQL_HOST='localhost'
 MYSQL_PORT='3306'
 MYSQL_USER='root'
 DefaultDB_NAME='ynw'
 TODAY=`date +"%d%b%y%H%M"`
 MYSQL_PASSWORD='netvarth'
-readonly  default_BACKUP_PATH MYSQL_HOST MYSQL_PORT MYSQL_USER DefaultDB_NAME MYSQL_PASSWORD
+readonly  DEFAULT_BACKUP_PATH MYSQL_HOST MYSQL_PORT MYSQL_USER DefaultDB_NAME MYSQL_PASSWORD
 INPUT_LOC="$(dirname "$PWD")/DynamicTDD"
 DATA_LOC="$(dirname "$PWD")/Data"
 NUM_FILE='numbers.txt'
@@ -131,19 +132,21 @@ archiveAndDeleteLog()
 
 backup()
 {
-    # read -e -p "Enter Backup Location [$default_BACKUP_PATH]: " outputPath
-    DB_BACKUP_PATH="${outputPath:-$default_BACKUP_PATH}"
+    read -e -p "Enter Backup Location [$CUSTOM_BACKUP_PATH]: " outputPath
+    DB_BACKUP_PATH="${outputPath:-$CUSTOM_BACKUP_PATH}"
     
     if [ ! -d $DB_BACKUP_PATH ]; then
         echo "$DB_BACKUP_PATH does not exist. Creating it."
         mkdir -p ${DB_BACKUP_PATH}/Log/
     fi
-    # read -e -p "Enter Backup Name [$DefaultDB_NAME]: " DB_NAME
+    read -e -p "Enter Backup Archive Name [$DefaultDB_NAME-$TODAY.sql]: " DB_ARCHIVE_NAME
+    DB_ARCHIVE_NAME="${DB_ARCHIVE_NAME:-$DefaultDB_NAME}"
+    read -e -p "Would you like to change the DB? Enter the DB name to backup [$DefaultDB_NAME]: " DB_NAME
     DATABASE_NAME="${DB_NAME:-$DefaultDB_NAME}"
     createconf
-    echo -e "\nBacking up Database to - ${DB_BACKUP_PATH}/${DATABASE_NAME}-${TODAY}.sql"
+    echo -e "\nBacking up Database to - ${DB_BACKUP_PATH}/${DB_ARCHIVE_NAME}-${TODAY}.sql"
     # mysqldump -h ${MYSQL_HOST} -P ${MYSQL_PORT} ${DefaultDB_NAME} > ${DB_BACKUP_PATH}/${DATABASE_NAME}-${TODAY}.sql
-    mysqldump -h ${MYSQL_HOST} -P ${MYSQL_PORT} --opt --databases ${DATABASE_NAME} --result-file=${DB_BACKUP_PATH}/${DATABASE_NAME}-${TODAY}.sql
+    mysqldump -h ${MYSQL_HOST} -P ${MYSQL_PORT} --opt --databases ${DATABASE_NAME} --result-file=${DB_BACKUP_PATH}/${DB_ARCHIVE_NAME}-${TODAY}.sql
     
 }
 
@@ -151,23 +154,23 @@ Logdb()
 {
   # echo "Log File is $1"
   LogFile="$1"
-  echo -e "\nLogging Database Data before restoring db in - ${default_BACKUP_PATH}/Log/$LogFile"
-  echo -e "\n------------------------------------------------------------------------------$logdate------------------------------------------------------------------------------------\n" >> "${default_BACKUP_PATH}/Log/$LogFile"
-  for i in $(mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} ${DefaultDB_NAME} -e 'SHOW TABLES' | grep -v "Tables_in" | awk '{print $1}'); do echo "TABLE: $i"; mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} ynw -e "show create table $i"; done > "${default_BACKUP_PATH}/Log/$LogFile"
-  echo -e "\n------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n" >> "${default_BACKUP_PATH}/Log/$LogFile"
+  echo -e "\nLogging Database Data before restoring db in - ${DEFAULT_BACKUP_PATH}/Log/$LogFile"
+  echo -e "\n------------------------------------------------------------------------------$logdate------------------------------------------------------------------------------------\n" >> "${DEFAULT_BACKUP_PATH}/Log/$LogFile"
+  for i in $(mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} ${DefaultDB_NAME} -e 'SHOW TABLES' | grep -v "Tables_in" | awk '{print $1}'); do echo "TABLE: $i"; mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} ynw -e "show create table $i"; done > "${DEFAULT_BACKUP_PATH}/Log/$LogFile"
+  echo -e "\n------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n" >> "${DEFAULT_BACKUP_PATH}/Log/$LogFile"
 }
 
 clear()
 {
-  if [[ ! -d "${default_BACKUP_PATH}/Log/" ]];then
-     mkdir -p "${default_BACKUP_PATH}/Log/"
+  if [[ ! -d "${DEFAULT_BACKUP_PATH}/Log/" ]];then
+     mkdir -p "${DEFAULT_BACKUP_PATH}/Log/"
   fi
-  touch -a "${default_BACKUP_PATH}/Log/$preLogFileName" "${default_BACKUP_PATH}/Log/$postLogFileName"
+  touch -a "${DEFAULT_BACKUP_PATH}/Log/$preLogFileName" "${DEFAULT_BACKUP_PATH}/Log/$postLogFileName"
 
   createconf
   # Logdb "$preLogFileName"
 
-  for file in "$default_BACKUP_PATH"/*; do
+  for file in "$DEFAULT_BACKUP_PATH"/*; do
     if [ -f "$file" ]; then 
       [[ $file -nt $latest ]] && latest=$file
     fi
@@ -193,7 +196,7 @@ clear()
 
   # Logdb "$postLogFileName"
 
-  # archiveAndDeleteLog ${default_BACKUP_PATH}
+  # archiveAndDeleteLog ${DEFAULT_BACKUP_PATH}
 
   echo "clearing files in TDD_Logs and $VAR_DIR"
   for file in "${DATA_LOC%/}/TDD_Logs/"*; do >$file; done
