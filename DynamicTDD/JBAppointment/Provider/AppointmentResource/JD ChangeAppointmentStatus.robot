@@ -99,7 +99,7 @@ JD-TC-ChangeAppointmentStatus-1
         END
 
         ${schedule_name}=  FakerLibrary.bs
-        ${parallel}=  FakerLibrary.Random Int  min=5  max=10
+        ${parallel}=  FakerLibrary.Random Int  min=10  max=20
         ${maxval}=  Convert To Integer   ${delta/2}
         ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
         ${bool1}=  Random Element  ${bool}

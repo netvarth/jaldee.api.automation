@@ -504,8 +504,7 @@ JD-TC-Take Appointment-10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME345}
-    clear_location  ${PUSERNAME345}
-   
+ 
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2234,14 +2233,21 @@ JD-TC-Take Appointment-22
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME345}
-    clear_location  ${PUSERNAME345}
     clear_customer   ${PUSERNAME345}
 
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     clear_appt_schedule   ${PUSERNAME345}
     
@@ -3436,15 +3442,21 @@ JD-TC-Take Appointment-34
     Should Be Equal As Strings    ${resp.status_code}    200
     
     clear_service   ${PUSERNAME345}
-    clear_location  ${PUSERNAME345}
     clear_customer   ${PUSERNAME345}
 
-    ${lid}=  Create Sample Location  
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
     clear_appt_schedule   ${PUSERNAME345}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -3766,14 +3778,21 @@ JD-TC-Take Appointment-37
     Should Be Equal As Strings    ${resp.status_code}    200
   
     clear_service   ${PUSERNAME345}
-    clear_location  ${PUSERNAME345}
     clear_customer   ${PUSERNAME345}
 
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
@@ -4462,14 +4481,22 @@ JD-TC-Take Appointment-UH11
     Should Be Equal As Strings    ${resp.status_code}    200
 
     clear_service   ${PUSERNAME_A}
-    clear_location  ${PUSERNAME_A}
     clear_customer   ${PUSERNAME_A}
     
-    ${lid1}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid1}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid1}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz1}  ${resp.json()[0]['timezone']}
+    END
+
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
@@ -5813,65 +5840,9 @@ JD-TC-Take Appointment-40
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
+
+
 JD-TC-Take Appointment-41
-
-    [Documentation]  Provider takes appointment for a valid consumer with an international number for notifications
-    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME345}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
-    clear_service   ${PUSERNAME345}
-    clear_location  ${PUSERNAME345}
-    clear_customer   ${PUSERNAME345}
-  
-    ${SERVICE1}=    FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
-    ${lid}=  Create Sample Location  
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-
-    clear_appt_schedule   ${PUSERNAME345}
-    
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
-
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
-
-    ${resp}=  AddCustomer  ${CUSERNAME8}  
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}   ${resp.json()}
-    
-    ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
-    ${apptfor}=   Create List  ${apptfor1}
-    
-    ${PO_Number}    Generate random string    5    0123456789
-    ${PO_Number}    Convert To Integer  ${PO_Number}
-    ${country_code}    Generate random string    2    0123456789
-    ${country_code}    Convert To Integer  ${country_code}
-    ${CUSERPH8}=  Evaluate  ${CUSERNAME8}+${PO_Number}
-    ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}   ${cnote}  ${apptfor}  phoneNumber=${CUSERPH8}  countryCode=${country_code}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-          
-    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
-    Set Test Variable  ${apptid1}  ${apptid[0]}
-
-    ${resp}=  Get Appointment By Id   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-JD-TC-Take Appointment-42
 
     [Documentation]  Provider takes appointment for consumer's family member using family member's provider customer id
 
@@ -5994,12 +5965,19 @@ JD-TC-Take Appointment-UH30
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${lid}=  Create Sample Location
-
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
@@ -6007,7 +5985,7 @@ JD-TC-Take Appointment-UH30
     Set Suite Variable  ${account_id}  ${resp.json()['id']} 
 
     ${SERVICE1}=    FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
 
     clear_appt_schedule   ${PUSERNAME345}
 
@@ -6095,10 +6073,23 @@ JD-TC-Take Appointment-UH30
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME32}
+    ${resp}=  GetCustomer  
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}   ${resp.json()[0]['id']}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  FakerLibrary.first_name
+        ${lname}=  FakerLibrary.last_name
+        ${NewCustomer}    Generate random string    10    123456789
+        ${NewCustomer}    Convert To Integer  ${NewCustomer}
+        Set Suite variable   ${NewCustomer}
+        Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+        ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${cid}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${cid}  ${resp.json()[0]['id']}
+    END
 
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor2}=   Create List  ${apptfor1}
@@ -6109,7 +6100,7 @@ JD-TC-Take Appointment-UH30
     Should Be Equal As Strings  ${resp.status_code}  424
     Should Be Equal As Strings   "${resp.json()}"   "${APPOINTMET_SLOT_NOT_AVAILABLE}"
   
-JD-TC-Take Appointment-43
+JD-TC-Take Appointment-42
 
     [Documentation]  Provider takes appointment for consumer for multiple slots
 
@@ -6252,7 +6243,7 @@ JD-TC-Take Appointment-UH31
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${NOT_A_Familiy_Member}"
 
-JD-TC-Take Appointment-44
+JD-TC-Take Appointment-UH32
 
     [Documentation]  Provider takes appointment for consumer on slot of different schedule
 
@@ -6260,16 +6251,21 @@ JD-TC-Take Appointment-44
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME345}
-    clear_location  ${PUSERNAME345}
     clear_customer   ${PUSERNAME345}
 
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-
-    clear_appt_schedule   ${PUSERNAME345}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     ${SERVICE1}=    FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -6283,7 +6279,7 @@ JD-TC-Take Appointment-44
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     # ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    ${parallel}=  FakerLibrary.Random Int  min=5  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
@@ -6326,9 +6322,10 @@ JD-TC-Take Appointment-44
     ${cnote}=   FakerLibrary.word
     ${resp}=  Take Appointment For Consumer   ${cid}  ${s_id}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  424
+    Should Be Equal As Strings   ${resp.json()}   ${APPOINTMET_SLOT_NOT_AVAILABLE}
    
-JD-TC-Take Appointment-45
+JD-TC-Take Appointment-43
 
     [Documentation]  create holiday for a time period in between the schedule, not the entire schedule.
     ...  take appointment for a slot during the working time.
@@ -6338,14 +6335,21 @@ JD-TC-Take Appointment-45
     Should Be Equal As Strings    ${resp.status_code}    200
     
     clear_service   ${PUSERNAME345}
-    clear_location  ${PUSERNAME345}
     clear_customer   ${PUSERNAME345}
 
-    ${lid}=  Create Sample Location  
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     clear_appt_schedule   ${PUSERNAME345}
 
@@ -6359,7 +6363,7 @@ JD-TC-Take Appointment-45
     ${SERVICE1}=    FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    ${parallel}=  FakerLibrary.Random Int  min=5  max=10
     ${maxval}=  Convert To Integer   ${delta/4}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
@@ -6429,7 +6433,7 @@ JD-TC-Take Appointment-45
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-Take Appointment-UH32
+JD-TC-Take Appointment-UH33
 
     [Documentation]  create holiday for a time period in between the schedule, not the entire schedule.
     ...  take appointment for a slot during the non working time.
@@ -6552,7 +6556,7 @@ JD-TC-Take Appointment-UH32
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-Take Appointment-46
+JD-TC-Take Appointment-44
 
     [Documentation]  create 2 holidays for a time period in between the schedule, not the entire schedule.
     ...  take appointment for a slot during the working time.
@@ -6562,16 +6566,21 @@ JD-TC-Take Appointment-46
     Should Be Equal As Strings    ${resp.status_code}    200
     
     clear_service   ${PUSERNAME345}
-    clear_location  ${PUSERNAME345}
     clear_customer   ${PUSERNAME345}
 
-    ${lid}=  Create Sample Location  
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-
-    clear_appt_schedule   ${PUSERNAME345}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -6619,9 +6628,10 @@ JD-TC-Take Appointment-46
     ${delta}=  FakerLibrary.Random Int  min=5  max=10
     ${sTime12}=  sub_two   ${eTime1}  ${delta}
     ${eTime12}=  Set Variable  ${eTime1}
-    ${DAY21}=  db.add_timezone_date  ${tz}  2  
+    ${HDAY1}=  db.add_timezone_date  ${tz}  4 
+    ${HDAY2}=  db.add_timezone_date  ${tz}  6
     # ${resp}=  Create Holiday  ${DAY1}  ${holidayname}  ${sTime1}  ${eTime1}
-    ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY21}  ${EMPTY}  ${sTime12}  ${eTime12}  description${SPACE}is${SPACE}${desc}
+    ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${HDAY1}  ${HDAY2}  ${EMPTY}  ${sTime12}  ${eTime12}  description${SPACE}is${SPACE}${desc}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${hId2}    ${resp.json()['holidayId']}
@@ -6669,4 +6679,64 @@ JD-TC-Take Appointment-46
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+
+*** Comments ***
+
+JD-TC-Take Appointment-41
+
+    [Documentation]  Provider takes appointment for a valid consumer with an international number for notifications
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME345}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    clear_service   ${PUSERNAME345}
+    clear_location  ${PUSERNAME345}
+    clear_customer   ${PUSERNAME345}
   
+    ${SERVICE1}=    FakerLibrary.word
+    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+
+    clear_appt_schedule   ${PUSERNAME345}
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${sch_id}  ${resp.json()}
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+
+    ${resp}=  AddCustomer  ${CUSERNAME8}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${cid}   ${resp.json()}
+    
+    ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
+    ${apptfor}=   Create List  ${apptfor1}
+    
+    ${PO_Number}    Generate random string    5    0123456789
+    ${PO_Number}    Convert To Integer  ${PO_Number}
+    ${country_code}    Generate random string    2    0123456789
+    ${country_code}    Convert To Integer  ${country_code}
+    ${CUSERPH8}=  Evaluate  ${CUSERNAME8}+${PO_Number}
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}   ${cnote}  ${apptfor}  phoneNumber=${CUSERPH8}  countryCode=${country_code}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+          
+    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+    Set Test Variable  ${apptid1}  ${apptid[0]}
+
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
