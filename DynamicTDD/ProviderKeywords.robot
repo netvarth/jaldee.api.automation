@@ -389,7 +389,7 @@ Provider Signup
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${Domain}  ${SubDomain}  ${PhoneNumber}  ${LicenseId}
     Should Be Equal As Strings    ${resp.status_code}    202
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
-    ${resp}=  Account Activation   ${PhoneNumber}  0  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=  Account Activation   ${PhoneNumber}  ${OtpPurpose['ProviderSignUp']}  JSESSIONYNW=${jsessionynw_value}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential   ${PhoneNumber}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${LoginId}  JSESSIONYNW=${jsessionynw_value}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -477,7 +477,7 @@ Provider Signup without Profile
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${Domain}  ${SubDomain}  ${PhoneNumber}  ${LicenseId}
     Should Be Equal As Strings    ${resp.status_code}    202
     ${jsessionynw_value}=   Get Cookie from Header  ${resp}
-    ${resp}=  Account Activation   ${PhoneNumber}  0  JSESSIONYNW=${jsessionynw_value}
+    ${resp}=  Account Activation   ${PhoneNumber}  ${OtpPurpose['ProviderSignUp']}  JSESSIONYNW=${jsessionynw_value}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential   ${PhoneNumber}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${LoginId}  JSESSIONYNW=${jsessionynw_value}
     Should Be Equal As Strings    ${resp.status_code}    200
