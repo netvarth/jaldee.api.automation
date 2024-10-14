@@ -2580,10 +2580,6 @@ JD-TC-Take Appointment-24
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
-    ${resp}=   Get Consumer Appointments Today
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-
     ${resp}=  Consumer Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -4414,14 +4410,21 @@ JD-TC-Take Appointment-UH10
     Should Be Equal As Strings    ${resp.status_code}    200
 
     clear_service   ${PUSERNAME345}
-    clear_location  ${PUSERNAME345}
     clear_customer   ${PUSERNAME345}
 
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    $${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid1}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz1}  ${resp.json()[0]['timezone']}
+    END
 
     clear_appt_schedule   ${PUSERNAME345}
     
@@ -4556,14 +4559,21 @@ JD-TC-Take Appointment-UH12
     Should Be Equal As Strings    ${resp.status_code}    200
 
     clear_service   ${PUSERNAME345}
-    clear_location  ${PUSERNAME345}
     clear_customer   ${PUSERNAME345}
 
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid1}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz1}  ${resp.json()[0]['timezone']}
+    END
 
     clear_appt_schedule   ${PUSERNAME345}
    
@@ -4590,10 +4600,23 @@ JD-TC-Take Appointment-UH12
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  AddCustomer  ${CUSERNAME8}  
+    ${resp}=  GetCustomer  
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${fname}=  FakerLibrary.first_name
+        ${lname}=  FakerLibrary.last_name
+        ${NewCustomer}    Generate random string    10    123456789
+        ${NewCustomer}    Convert To Integer  ${NewCustomer}
+        Set Suite variable   ${NewCustomer}
+        Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+        ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${cid}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${cid}  ${resp.json()[0]['id']}
+    END
 
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
