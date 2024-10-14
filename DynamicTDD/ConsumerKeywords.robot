@@ -3877,3 +3877,21 @@ Create Membership
     ${resp}=    POST On Session  ynw  /consumer/membership    data=${data}   expected_status=any
     Check Deprication  ${resp}  Create Membership 
     RETURN  ${resp} 
+
+Get Jaldee Coupons By Consumer
+     [Arguments]    ${accid}
+     Check And Create YNW Session
+     ${resp}=  GET On Session  ynw  url=/consumer/jaldee/coupons?account=${accid}  expected_status=any
+     RETURN  ${resp}  
+
+Get coupon list by service and location id for appointment
+    [Arguments]   ${serviceId}    ${locationId}
+    Check And Create YNW Session
+    ${resp}=    GET On Session     ynw   /consumer/appointment/service/${serviceId}/location/${locationId}/coupons  expected_status=any
+    RETURN  ${resp}
+
+Get coupon list by service and location id for waitlist
+    [Arguments]   ${serviceId}    ${locationId}
+    Check And Create YNW Session
+    ${resp}=    GET On Session     ynw   /consumer/waitlist/service/${serviceId}/location/${locationId}/coupons  expected_status=any
+    RETURN  ${resp}
