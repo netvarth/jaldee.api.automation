@@ -41,8 +41,8 @@ JD-TC-GetAppointmentServicesByLocation-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME_R}
-    clear_location  ${PUSERNAME_R}
+    # clear_service   ${PUSERNAME_R}
+    # clear_location  ${PUSERNAME_R}
     ${pid}=  get_acc_id  ${PUSERNAME_R}
     Set Suite Variable   ${pid}
 
@@ -70,7 +70,7 @@ JD-TC-GetAppointmentServicesByLocation-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_l3}  ${resp.json()}
 
-    clear_appt_schedule   ${PUSERNAME_R}
+    # clear_appt_schedule   ${PUSERNAME_R}
         
     ${service_duration}=   Random Int   min=5   max=10
     Set Suite Variable    ${service_duration}
@@ -381,8 +381,8 @@ JD-TC-GetAppointmentServicesByLocation-8
 
     [Documentation]  provider checks get service by location id for location in US
 
-    clear_location_n_service  ${PUSERNAME210}
-    clear_queue     ${PUSERNAME210}
+    # clear_location_n_service  ${PUSERNAME210}
+    # clear_queue     ${PUSERNAME210}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME210}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200

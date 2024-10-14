@@ -31,7 +31,7 @@ JD-TC-Appointment Schedule AvailableNow-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${PUSERNAME39}
+    # clear_service   ${PUSERNAME39}
    
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -50,7 +50,7 @@ JD-TC-Appointment Schedule AvailableNow-1
 
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
-    clear_appt_schedule   ${PUSERNAME39}
+    # clear_appt_schedule   ${PUSERNAME39}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -89,7 +89,7 @@ JD-TC-Appointment Schedule AvailableNow-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${PUSERNAME40}
+    # clear_service   ${PUSERNAME40}
     
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -107,7 +107,7 @@ JD-TC-Appointment Schedule AvailableNow-2
 
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${s_id1}
-    clear_appt_schedule   ${PUSERNAME40}
+    # clear_appt_schedule   ${PUSERNAME40}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -144,7 +144,7 @@ JD-TC-Appointment Schedule AvailableNow-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${PUSERNAME41}
+    # clear_service   ${PUSERNAME41}
     
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -162,7 +162,7 @@ JD-TC-Appointment Schedule AvailableNow-3
 
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${s_id1}
-    clear_appt_schedule   ${PUSERNAME41}     
+    # clear_appt_schedule   ${PUSERNAME41}     
     ${list}=  Create List    1  2  3  4  5  6
 
     ${curr_weekday}=  get_timezone_weekday  ${tz}
@@ -201,7 +201,7 @@ JD-TC-Appointment Schedule AvailableNow-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${PUSERNAME42}
+    # clear_service   ${PUSERNAME42}
    
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -219,7 +219,7 @@ JD-TC-Appointment Schedule AvailableNow-4
     
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${s_id1}
-    clear_appt_schedule   ${PUSERNAME42}
+    # clear_appt_schedule   ${PUSERNAME42}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1} 
     ${list}=  Create List    1  2  3  4  5  6  7

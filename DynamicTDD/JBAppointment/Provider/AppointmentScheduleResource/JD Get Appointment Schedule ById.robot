@@ -31,7 +31,7 @@ JD-TC-Get Schedule By Id-1
     ${resp}=  Get Active License
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${PUSERNAME100}
+    # clear_service   ${PUSERNAME100}
 
     ${resp}=    Get Locations
     Log  ${resp.content}

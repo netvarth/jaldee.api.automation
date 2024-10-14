@@ -45,8 +45,8 @@ JD-TC-EnableDisableCallingStatus-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME253}
-    clear_location  ${PUSERNAME253}
+    # clear_service   ${PUSERNAME253}
+    # clear_location  ${PUSERNAME253}
     clear_customer   ${PUSERNAME253}
 
     ${lid}=  Create Sample Location  
@@ -55,7 +55,7 @@ JD-TC-EnableDisableCallingStatus-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME253}
+    # clear_appt_schedule   ${PUSERNAME253}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -130,8 +130,8 @@ JD-TC-EnableDisableCallingStatus-2
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME252}
-    clear_location  ${PUSERNAME252}
+    # clear_service   ${PUSERNAME252}
+    # clear_location  ${PUSERNAME252}
 
     ${lid}=  Create Sample Location  
     ${resp}=   Get Location ById  ${lid}
@@ -139,7 +139,7 @@ JD-TC-EnableDisableCallingStatus-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME252}
+    # clear_appt_schedule   ${PUSERNAME252}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -244,8 +244,8 @@ JD-TC-EnableDisableCallingStatus-4
     ${resp}=  Encrypted Provider Login  ${PUSERNAME251}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME251}
-    clear_location  ${PUSERNAME251}
+    # clear_service   ${PUSERNAME251}
+    # clear_location  ${PUSERNAME251}
 
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -253,7 +253,7 @@ JD-TC-EnableDisableCallingStatus-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME251}
+    # clear_appt_schedule   ${PUSERNAME251}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        

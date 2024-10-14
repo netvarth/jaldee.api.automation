@@ -44,9 +44,9 @@ JD-TC-Outbound_IVR-1
 
     [Documentation]   Outbound IVR
     
-    clear_queue      ${PUSERNAME175}
+    # clear_queue      ${PUSERNAME175}
     # clear_location   ${PUSERNAME175}
-    clear_service    ${PUSERNAME175}
+    # clear_service    ${PUSERNAME175}
     clear_customer   ${PUSERNAME175}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}
@@ -374,9 +374,9 @@ JD-TC-Outbound_IVR-2
 
     [Documentation]   Outbound IVR User disconnected the call
     
-    clear_queue      ${PUSERNAME175}
-    clear_location   ${PUSERNAME175}
-    clear_service    ${PUSERNAME175}
+    # clear_queue      ${PUSERNAME175}
+    # clear_location   ${PUSERNAME175}
+    # clear_service    ${PUSERNAME175}
     clear_customer   ${PUSERNAME175}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}
@@ -692,9 +692,9 @@ JD-TC-Outbound_IVR-3
 
     [Documentation]   Outbound IVR User disconnected the call
     
-    clear_queue      ${PUSERNAME175}
-    clear_location   ${PUSERNAME175}
-    clear_service    ${PUSERNAME175}
+    # clear_queue      ${PUSERNAME175}
+    # clear_location   ${PUSERNAME175}
+    # clear_service    ${PUSERNAME175}
     clear_customer   ${PUSERNAME175}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}
@@ -1040,9 +1040,9 @@ JD-TC-Outbound_IVR-UH2
 
     [Documentation]   OUtbound IVR with invalid call back request
      
-    clear_queue      ${PUSERNAME175}
-    clear_location   ${PUSERNAME175}
-    clear_service    ${PUSERNAME175}
+    # clear_queue      ${PUSERNAME175}
+    # clear_location   ${PUSERNAME175}
+    # clear_service    ${PUSERNAME175}
     clear_customer   ${PUSERNAME175}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}
@@ -1366,9 +1366,9 @@ JD-TC-Outbound_IVR-UH3
 
     [Documentation]   Outbound IVR Without call back request
     
-    clear_queue      ${PUSERNAME175}
-    clear_location   ${PUSERNAME175}
-    clear_service    ${PUSERNAME175}
+    # clear_queue      ${PUSERNAME175}
+    # clear_location   ${PUSERNAME175}
+    # clear_service    ${PUSERNAME175}
     clear_customer   ${PUSERNAME175}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}
@@ -1698,9 +1698,9 @@ JD-TC-Outbound_IVR-UH5
 
     [Documentation]   Outbound IVR where flow changed
     
-    clear_queue      ${PUSERNAME175}
-    clear_location   ${PUSERNAME175}
-    clear_service    ${PUSERNAME175}
+    # clear_queue      ${PUSERNAME175}
+    # clear_location   ${PUSERNAME175}
+    # clear_service    ${PUSERNAME175}
     clear_customer   ${PUSERNAME175}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}

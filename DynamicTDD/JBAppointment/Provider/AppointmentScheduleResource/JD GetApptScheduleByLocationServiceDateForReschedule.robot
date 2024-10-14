@@ -106,7 +106,7 @@ JD-TC-GetApptScheduleWithLocationServiceDateForReschedule-2
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME67}
+    # clear_location_n_service  ${PUSERNAME67}
     clear_customer   ${PUSERNAME67}
 
     ${resp}=    Get Locations
@@ -123,7 +123,7 @@ JD-TC-GetApptScheduleWithLocationServiceDateForReschedule-2
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME67}
+    # clear_appt_schedule   ${PUSERNAME67}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -202,7 +202,7 @@ JD-TC-GetApptScheduleWithLocationServiceDateForReschedule-3
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME68}
+    # clear_location_n_service  ${PUSERNAME68}
     clear_customer   ${PUSERNAME68}
 
     ${resp}=    Get Locations
@@ -219,7 +219,7 @@ JD-TC-GetApptScheduleWithLocationServiceDateForReschedule-3
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME68}
+    # clear_appt_schedule   ${PUSERNAME68}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -290,7 +290,7 @@ JD-TC-GetApptScheduleWithLocationServiceDateForReschedule-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id}  ${resp.json()['id']}
 
-    clear_location_n_service  ${PUSERNAME67}
+    # clear_location_n_service  ${PUSERNAME67}
     clear_customer   ${PUSERNAME67}
 
     ${resp}=    Get Locations
@@ -314,7 +314,7 @@ JD-TC-GetApptScheduleWithLocationServiceDateForReschedule-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${cid}  ${resp.json()}
 
-    clear_appt_schedule   ${PUSERNAME67}
+    # clear_appt_schedule   ${PUSERNAME67}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -409,7 +409,7 @@ JD-TC-GetApptScheduleWithLocationServiceDateForReschedule-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id}  ${resp.json()['id']}
 
-    clear_location_n_service  ${PUSERNAME67}
+    # clear_location_n_service  ${PUSERNAME67}
     clear_customer   ${PUSERNAME67}
 
     ${resp}=    Get Locations
@@ -433,7 +433,7 @@ JD-TC-GetApptScheduleWithLocationServiceDateForReschedule-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${cid}  ${resp.json()}
 
-    clear_appt_schedule   ${PUSERNAME67}
+    # clear_appt_schedule   ${PUSERNAME67}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -530,7 +530,7 @@ JD-TC-GetApptScheduleWithLocationServiceDateForReschedule-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id}  ${resp.json()['id']}
 
-    clear_location_n_service  ${PUSERNAME67}
+    # clear_location_n_service  ${PUSERNAME67}
     clear_customer   ${PUSERNAME67}
 
     ${resp}=    Get Locations
@@ -554,7 +554,7 @@ JD-TC-GetApptScheduleWithLocationServiceDateForReschedule-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${cid}  ${resp.json()}
 
-    clear_appt_schedule   ${PUSERNAME67}
+    # clear_appt_schedule   ${PUSERNAME67}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        

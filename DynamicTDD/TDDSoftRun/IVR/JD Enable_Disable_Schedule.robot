@@ -25,9 +25,9 @@ JD-Enable_Disable_Schedule-1
 
     [Documentation]  Enable Provider schedule
 
-    clear_queue      ${PUSERNAME157}
+    # clear_queue      ${PUSERNAME157}
     # clear_location   ${PUSERNAME157}
-    clear_service    ${PUSERNAME157}
+    # clear_service    ${PUSERNAME157}
     clear_customer   ${PUSERNAME157}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME157}  ${PASSWORD}

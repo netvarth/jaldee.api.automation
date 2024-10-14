@@ -672,9 +672,9 @@ JD-TC-GetWaitlistFutureCount-55
 
 JD-TC-GetWaitlistFutureCount-56
       [Documentation]   Get Future Waitlist count of a family member. 
-      clear_queue      ${PUSERNAME40}
-      clear_location   ${PUSERNAME40}
-      clear_service    ${PUSERNAME40}
+      # clear_queue      ${PUSERNAME40}
+      # clear_location   ${PUSERNAME40}
+      # clear_service    ${PUSERNAME40}
       ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${ser_duratn}=  Random Int   min=2   max=4

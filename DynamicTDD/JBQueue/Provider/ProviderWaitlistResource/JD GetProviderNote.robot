@@ -30,9 +30,9 @@ ${txtfile}     /ebs/TDD/textsample.txt
 JD-TC-Get Provider Note-1
     [Documentation]   get provider note valid provider
 
-    clear_queue      ${HLPUSERNAME29}
-    clear_location   ${HLPUSERNAME29}
-    clear_service    ${HLPUSERNAME29}
+    # clear_queue      ${HLPUSERNAME29}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
     clear_customer   ${HLPUSERNAME29}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
@@ -208,9 +208,9 @@ JD-TC-Get Provider Note-1
 JD-TC-Get Provider Note-2
     [Documentation]   Get Provider Note by valid provider with attachment as png file.
 
-    clear_queue      ${HLPUSERNAME29}
-    clear_location   ${HLPUSERNAME29}
-    clear_service    ${HLPUSERNAME29}
+    # clear_queue      ${HLPUSERNAME29}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
     clear_customer   ${HLPUSERNAME29}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
@@ -277,9 +277,9 @@ JD-TC-Get Provider Note-2
 JD-TC-Get Provider Note-3
     [Documentation]   Get Provider Note by valid provider with attachment as pdf file.
 
-    clear_queue      ${HLPUSERNAME29}
-    clear_location   ${HLPUSERNAME29}
-    clear_service    ${HLPUSERNAME29}
+    # clear_queue      ${HLPUSERNAME29}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
     clear_customer   ${HLPUSERNAME29}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
@@ -365,9 +365,9 @@ JD-TC-Get Provider Note-3
 JD-TC-Get Provider Note-4
     [Documentation]   Get Provider Note by valid provider with attachment as jpeg file.
 
-    clear_queue      ${HLPUSERNAME29}
-    clear_location   ${HLPUSERNAME29}
-    clear_service    ${HLPUSERNAME29}
+    # clear_queue      ${HLPUSERNAME29}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
     clear_customer   ${HLPUSERNAME29}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
@@ -435,9 +435,9 @@ JD-TC-Get Provider Note-4
 JD-TC-Get Provider Note-5
     [Documentation]   Get Provider Note by valid provider with attachment as gif file.
 
-    clear_queue      ${HLPUSERNAME29}
-    clear_location   ${HLPUSERNAME29}
-    clear_service    ${HLPUSERNAME29}
+    # clear_queue      ${HLPUSERNAME29}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
     clear_customer   ${HLPUSERNAME29}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
@@ -511,9 +511,9 @@ JD-TC-Get Provider Note-5
 JD-TC-Get Provider Note-6
     [Documentation]   Get Provider Note by valid provider with attachment as txt file.
 
-    clear_queue      ${HLPUSERNAME29}
-    clear_location   ${HLPUSERNAME29}
-    clear_service    ${HLPUSERNAME29}
+    # clear_queue      ${HLPUSERNAME29}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
     clear_customer   ${HLPUSERNAME29}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
@@ -575,9 +575,9 @@ JD-TC-Get Provider Note-6
 JD-TC-Get Provider Note-7
     [Documentation]   Get Provider Note by valid provider with attachment as doc file.
 
-    clear_queue      ${HLPUSERNAME29}
-    clear_location   ${HLPUSERNAME29}
-    clear_service    ${HLPUSERNAME29}
+    # clear_queue      ${HLPUSERNAME29}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
     clear_customer   ${HLPUSERNAME29}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
@@ -692,9 +692,9 @@ JD-TC-Get Provider Note-UH3
 JD-TC-Get Provider Note-UH6
     [Documentation]   Get Provider Note by valid provider with attachment as sh file.
 
-    clear_queue      ${HLPUSERNAME29}
-    clear_location   ${HLPUSERNAME29}
-    clear_service    ${HLPUSERNAME29}
+    # clear_queue      ${HLPUSERNAME29}
+    # clear_location   ${HLPUSERNAME29}
+    # clear_service    ${HLPUSERNAME29}
     clear_customer   ${HLPUSERNAME29}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}

@@ -78,7 +78,7 @@ JD-TC-SendMessageWithAppmt-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_appt_schedule   ${HLPUSERNAME50}
+    # clear_appt_schedule   ${HLPUSERNAME50}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}

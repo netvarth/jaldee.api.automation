@@ -45,9 +45,9 @@ JD-TC-Aftercall_IVR-1
 
     [Documentation]   Aftercall IVR
     
-    clear_queue      ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
     # clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -339,9 +339,9 @@ JD-TC-Aftercall_IVR-2
 
     [Documentation]   Aftercall IVR incall id is empty
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -368,9 +368,9 @@ JD-TC-Aftercall_IVR-3
 
     [Documentation]   Aftercall IVR Call Souce is empty
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -397,9 +397,9 @@ JD-TC-Aftercall_IVR-4
 
     [Documentation]   Aftercall IVR Company id is empty
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -426,9 +426,9 @@ JD-TC-Aftercall_IVR-5
 
     [Documentation]   Aftercall IVR Caller number is empty
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -455,9 +455,9 @@ JD-TC-Aftercall_IVR-6
 
     [Documentation]   Aftercall IVR Caller name is empty
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -484,9 +484,9 @@ JD-TC-Aftercall_IVR-7
 
     [Documentation]   Aftercall IVR Caller number(formatted) is empty
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -513,9 +513,9 @@ JD-TC-Aftercall_IVR-8
 
     [Documentation]   Aftercall IVR Country code is empty
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -542,9 +542,9 @@ JD-TC-Aftercall_IVR-9
 
     [Documentation]   Aftercall IVR Call location is empty
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -571,9 +571,9 @@ JD-TC-Aftercall_IVR-10
 
     [Documentation]   Aftercall IVR Log time stamp and start time is empty
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -600,9 +600,9 @@ JD-TC-Aftercall_IVR-11
 
     [Documentation]   Aftercall IVR Log timestamp (unix epoch) in milliseconds is empty
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -629,9 +629,9 @@ JD-TC-Aftercall_IVR-12
 
     [Documentation]   Aftercall IVR diff b/w call end time and start time in seconds is empty
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -658,9 +658,9 @@ JD-TC-Aftercall_IVR-13
 
     [Documentation]   Aftercall IVR Call end time is empty
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -687,9 +687,9 @@ JD-TC-Aftercall_IVR-14
 
     [Documentation]   Aftercall IVR Call duration (hh:mm:ss) is empty
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -716,9 +716,9 @@ JD-TC-Aftercall_IVR-15
 
     [Documentation]   Aftercall IVR Call duration (in minutes) is empty
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -745,9 +745,9 @@ JD-TC-Aftercall_IVR-16
 
     [Documentation]   Aftercall IVR Call Log type is empty
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -774,9 +774,9 @@ JD-TC-Aftercall_IVR-17
 
     [Documentation]   Aftercall IVR Call event type is empty
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -803,9 +803,9 @@ JD-TC-Aftercall_IVR-18
 
     [Documentation]   Aftercall IVR file name and file type is empty
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -832,9 +832,9 @@ JD-TC-Aftercall_IVR-19
 
     [Documentation]   Aftercall IVR Notification Status is empty
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -865,9 +865,9 @@ JD-TC-Aftercall_IVR-UH1
 
     [Documentation]   Aftercall IVR account id is different 
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -895,9 +895,9 @@ JD-TC-Aftercall_IVR-UH2
     [Documentation]   Aftercall IVR Callers number(raw) is given as wrong
     #Callers number(raw) is not considering from dev
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -924,9 +924,9 @@ JD-TC-Aftercall_IVR-UH3
 
     [Documentation]   Aftercall IVR Caller number(formatted) is given as wrong
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -953,9 +953,9 @@ JD-TC-Aftercall_IVR-UH4
 
     [Documentation]   Aftercall IVR Country code is invalid
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -982,9 +982,9 @@ JD-TC-Aftercall_IVR-UH5
 
     [Documentation]   Aftercall IVR Log difference between start time and end time is different
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -1011,9 +1011,9 @@ JD-TC-Aftercall_IVR-UH6
 
     [Documentation]   Aftercall IVR Call Log type is empty
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -1041,9 +1041,9 @@ JD-TC-Aftercall_IVR-UH7
     [Documentation]   Aftercall IVR Call event type is different
     #Aftercall IVR Call event type is different is different
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -1071,9 +1071,9 @@ JD-TC-Aftercall_IVR-UH8
     [Documentation]   Aftercall IVR Notification status is different
     #Notification status is not considering from dev
 
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -1100,9 +1100,9 @@ JD-TC-Aftercall_IVR-UH9
 
     [Documentation]   Aftercall IVR Call log ring start time is empty
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -1132,9 +1132,9 @@ JD-TC-Aftercall_IVR-UH10
 
     [Documentation]   Aftercall IVR call cancelled
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -1164,9 +1164,9 @@ JD-TC-Aftercall_IVR-UH11
 
     [Documentation]   Aftercall IVR agent id is empty
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -1196,9 +1196,9 @@ JD-TC-Aftercall_IVR-UH12
 
     [Documentation]   Aftercall IVR agent name is empty
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -1228,9 +1228,9 @@ JD-TC-Aftercall_IVR-UH13
 
     [Documentation]   Aftercall IVR email is empty
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -1260,9 +1260,9 @@ JD-TC-Aftercall_IVR-UH14
 
     [Documentation]   Aftercall IVR agent contanct number is empty
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -1292,9 +1292,9 @@ JD-TC-Aftercall_IVR-UH15
 
     [Documentation]   Aftercall IVR agent contanct number with country code is empty
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
@@ -1324,9 +1324,9 @@ JD-TC-Aftercall_IVR-UH16
 
     [Documentation]   Aftercall IVR agent call start time and end time is empty
     
-    clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
-    clear_service    ${PUSERNAME151}
+    # clear_queue      ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
+    # clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}

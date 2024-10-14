@@ -2847,7 +2847,7 @@ JD-TC-Add To WaitlistByConsumer-UH10
    
 JD-TC-Add To WaitlistByConsumer-UH11    
     [Documentation]   Add To Waitlist without login
-    ${resp}=   Run Keywords   clear_queue  ${PUSERPH0}  AND  clear waitlist   ${PUSERPH0}
+    # # ${resp}=   Run Keywords   clear_queue  ${PUSERPH0}  AND  clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
    clear Customer  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME4}
@@ -2958,7 +2958,7 @@ JD-TC-Add To WaitlistByConsumer-UH12
 
 JD-TC-Add To WaitlistByConsumer-UH13
     [Documentation]   Add to waitlist on a non scheduled day
-    ${resp}=   Run Keywords   clear_queue  ${PUSERPH0}  AND  clear waitlist   ${PUSERPH0}
+    # ${resp}=   Run Keywords   clear_queue  ${PUSERPH0}  AND  clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME5}
    clear Customer  ${PUSERPH0}
@@ -3051,7 +3051,7 @@ JD-TC-Add To WaitlistByConsumer-UH13
 
 JD-TC-Add To WaitlistByConsumer-UH14   
     [Documentation]   Add to waitlist After Business time
-    ${resp}=   Run Keywords   clear_queue  ${PUSERPH0}  AND  clear waitlist   ${PUSERPH0}
+    # ${resp}=   Run Keywords   clear_queue  ${PUSERPH0}  AND  clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME5}
    clear Customer  ${PUSERPH0}
@@ -3140,7 +3140,7 @@ JD-TC-Add To WaitlistByConsumer-UH14
     
 JD-TC-Add To WaitlistByConsumer-UH15
     [Documentation]  Add consumer to waitlist when service time exceeds queue time.
-    ${resp}=   Run Keywords   clear_queue  ${PUSERPH0}  AND  clear waitlist   ${PUSERPH0}
+    # ${resp}=   Run Keywords   clear_queue  ${PUSERPH0}  AND  clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME30}
     clear Customer  ${PUSERPH0}
@@ -3249,7 +3249,7 @@ JD-TC-Add To WaitlistByConsumer-UH16
     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH3}${\n}
     Set Suite Variable   ${PUSERPH3}
     
-    Run Keywords  clear_queue  ${PUSERPH3}   AND  clear_location  ${PUSERPH3}   AND   clear_service   ${PUSERPH3}  AND  clear waitlist   ${PUSERPH3}
+    # Run Keywords  clear_queue  ${PUSERPH3}   AND  clear_location  ${PUSERPH3}   AND   clear_service   ${PUSERPH3}  AND  clear waitlist   ${PUSERPH3}
 
     ${licid}  ${licname}=  get_highest_license_pkg
     
@@ -3549,7 +3549,7 @@ JD-TC-Add To WaitlistByConsumer-UH16
 
 JD-TC-Add To WaitlistByConsumer-UH17
 	[Documentation]  the consumer add to waitlist for a service with prepayment  , try to change prepaymentPending to STARTED 
-    ${resp}=   Run Keywords   clear_queue  ${PUSERPH3}  AND  clear waitlist   ${PUSERPH3}
+    # ${resp}=   Run Keywords   clear_queue  ${PUSERPH3}  AND  clear waitlist   ${PUSERPH3}
     ${pid1}=  get_acc_id  ${PUSERPH3}
     ${cid}=  get_id  ${CUSERNAME5}
     # ${DAY}=  db.get_date_by_timezone  ${tz}
@@ -3667,7 +3667,7 @@ JD-TC-Add To WaitlistByConsumer-UH17
 
 JD-TC-Add To WaitlistByConsumer-21
 	[Documentation]  the consumer add to waitlist for a service with prepayment  , try to change prepaymentPending to checkedIn 
-    ${resp}=   Run Keyword   clear_queue  ${PUSERPH3}  
+    # ${resp}=   Run Keywords   clear_queue  ${PUSERPH3}  
     # AND  clear waitlist   ${PUSERPH3}
     ${pid1}=  get_acc_id  ${PUSERPH3}
     ${cid}=  get_id  ${CUSERNAME5}
@@ -3774,7 +3774,7 @@ JD-TC-Add To WaitlistByConsumer-21
 
 JD-TC-Add To WaitlistByConsumer-22
 	[Documentation]  checking the waitlistStatus of a consumer 
-    ${resp}=   Run Keyword   clear_queue  ${PUSERPH3}  
+    # ${resp}=   Run Keywords   clear_queue  ${PUSERPH3}  
     # AND  clear waitlist   ${PUSERPH3}
     ${pid1}=  get_acc_id  ${PUSERPH3}
     ${cid}=  get_id  ${CUSERNAME8}
@@ -3860,7 +3860,7 @@ JD-TC-Add To WaitlistByConsumer-22
 
 JD-TC-Add To WaitlistByConsumer-23
 	[Documentation]  the consumer add to waitlist for a service with prepayment , try to change prepaymentPending to Cancel 
-    ${resp}=   Run Keyword  clear_queue  ${PUSERPH3}  
+    # ${resp}=   Run Keywords   clear_queue  ${PUSERPH3}  
     # AND  clear waitlist   ${PUSERPH3}
     ${pid1}=  get_acc_id  ${PUSERPH3}
     ${cid}=  get_id  ${CUSERNAME2}
@@ -4479,7 +4479,7 @@ JD-TC-Add To WaitlistByConsumer-UH18
     [Documentation]  add to waitlist w1 and cancell the waitlist
     Comment  add to waitlist w2  same service again
     Comment  change waitlist status  from canceled to checkedIn
-    ${resp}=   Run Keyword  clear_queue  ${PUSERPH0}  
+    # ${resp}=   Run Keywords   clear_queue  ${PUSERPH0}  
     # AND  clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME4}
@@ -4603,7 +4603,7 @@ JD-TC-Add To WaitlistByConsumer-UH19
     [Documentation]  add to waitlist for future w1 and cancel the waitlist
     Comment  add to waitlist w2 for future same service again
     Comment  change waitlist status  from canceled to checkin
-    ${resp}=   Run Keyword  clear_queue  ${PUSERPH0}  
+    # ${resp}=   Run Keywords   clear_queue  ${PUSERPH0}  
     # AND  clear waitlist   ${PUSERPH0}
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME4}
@@ -4773,8 +4773,8 @@ JD-TC-Add To WaitlistByConsumer-26
     # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
     # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME132}
-    clear_service    ${PUSERNAME132}
+    # clear_location   ${PUSERNAME132}
+    # clear_service    ${PUSERNAME132}
     clear_customer   ${PUSERNAME132}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME132}
@@ -4801,7 +4801,7 @@ JD-TC-Add To WaitlistByConsumer-26
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME132}
+    # clear_queue   ${PUSERNAME132}
 
     # ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -4995,8 +4995,8 @@ JD-TC-Add To WaitlistByConsumer-UH20
 JD-TC-Add To WaitlistByConsumer-18
     [Documentation]  provider login as consumer and waitlist
 
-    ${resp}=   Run Keywords  clear_queue  ${PUSERNAME1}   AND  clear_location  ${PUSERNAME1}
-    ${resp}=   Run Keywords   clear_queue  ${PUSERPH0}  AND  clear waitlist   ${PUSERPH0}
+    # ${resp}=   Run Keywords  clear_queue  ${PUSERNAME1}   AND  clear_location  ${PUSERNAME1}
+    # ${resp}=   Run Keywords   clear_queue  ${PUSERPH0}  AND  clear waitlist   ${PUSERPH0}
     # clear_location   ${PUSERPH0}
     # clear_location    ${PUSERNAME1}
     ${pid0}=  get_acc_id  ${PUSERPH0}

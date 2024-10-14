@@ -51,7 +51,7 @@ JD-TC-SendMessageWithWL-1
     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Suite Variable   ${PUSERPH0}
     
-    ${resp}=   Run Keywords  clear_queue  ${PUSERPH0}   AND  clear_location  ${PUSERPH0}   AND   clear_service   ${PUSERPH0}  AND  clear waitlist   ${PUSERPH0}
+    # ${resp}=   Run Keywords  clear_queue  ${PUSERPH0}   AND  clear_location  ${PUSERPH0}   AND   clear_service   ${PUSERPH0}  AND  clear waitlist   ${PUSERPH0}
 
     ${domresp}=  Get BusinessDomainsConf
     Should Be Equal As Strings  ${domresp.status_code}  200

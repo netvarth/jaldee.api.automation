@@ -89,7 +89,7 @@ ${ZOOM_url}    https://zoom.us/j/{}?pwd=THVLcTBZa2lESFZQbU9DQTQrWUxWZz09
 JD-TC-Create Service With info-1
         [Documentation]   Create  a Virtual service for a valid provider in Billable domain
         ${resp}=   Billable  ${start1}
-        clear_service      ${resp}
+        # clear_service      ${resp}
         ${description}=  FakerLibrary.sentence
         ${min_pre}=   Random Int   min=10   max=50
         ${Total}=   Random Int   min=100   max=500
@@ -132,7 +132,7 @@ JD-TC-Create Service With info-1
 JD-TC-Create Service With info-2
         [Documentation]   Create  Physical service for a valid provider in Billable domain
         ${resp}=   Billable  ${start1}
-        clear_service      ${resp}
+        # clear_service      ${resp}
         ${description}=  FakerLibrary.sentence
         ${min_pre}=   Random Int   min=10   max=50
         ${Total}=   Random Int   min=100   max=500
@@ -162,7 +162,7 @@ JD-TC-Create Service With info-3
 
         [Documentation]   Create  Virtual service for a valid provider in Non Billable domain
         ${resp}=   Non Billable
-        clear_service      ${resp}
+        # clear_service      ${resp}
         ${description}=  FakerLibrary.sentence
         ${time}=  FakerLibrary.pyfloat   left_digits=2   right_digits=2   positive=True
         ${consumerNoteTitle}=  FakerLibrary.sentence    
@@ -183,7 +183,7 @@ JD-TC-Create Service With info-3
 JD-TC-Create Service With info-4
         [Documentation]   Create  Physical service for a valid provider in Non Billable domain
         ${resp}=   Non Billable
-        clear_service      ${resp}
+        # clear_service      ${resp}
         ${description}=  FakerLibrary.sentence
         ${time}=  FakerLibrary.pyfloat   left_digits=2   right_digits=2   positive=True
         ${consumerNoteTitle}=  FakerLibrary.sentence    
@@ -204,7 +204,7 @@ JD-TC-Create Service With info-4
 JD-TC-Create Service With info-5
         [Documentation]     Create  a service for a valid provider with service name same as another provider
         ${resp}=   Billable  ${start2}
-        clear_service      ${resp}
+        # clear_service      ${resp}
         ${consumerNoteTitle}=  FakerLibrary.sentence    
         ${preInfoTitle}=  FakerLibrary.sentence   
         ${preInfoText}=  FakerLibrary.sentence  
@@ -228,7 +228,7 @@ JD-TC-Create Service With info-5
         Verify Response  ${resp}  consumerNoteTitle=${consumerNoteTitle}  preInfoTitle=${preInfoTitle}  preInfoText=${preInfoText}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
 
         ${resp}=   Billable  ${start3}
-        clear_service      ${resp}
+        # clear_service      ${resp}
         ${resp}=  Create Service with info  ${SERVICE1}  ${description}   ${service_duration[1]}    ${bool[1]}    ${notifytype[1]}  ${min_pre1}  ${Total1}   ${status[0]}   ${btype}  ${bool[1]}  ${bool[0]}   ${serviceType[1]}   ${vstype}   ${virtualCallingModes}   ${EMPTY}   0    ${consumerNoteMandatory[0]}   ${consumerNoteTitle}   ${preInfoEnabled[0]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[0]}   ${postInfoTitle}   ${postInfoText}
         Log  ${resp.json()}
         Set Suite Variable  ${id2}  ${resp.json()}
@@ -244,7 +244,7 @@ JD-TC-Create Service With info-5
 JD-TC-Create Service With info-6
         [Documentation]  Create  service for a valid provider in billable Domain without Prepayment amount
         ${resp}=   Billable  ${start3}
-        clear_service      ${resp}
+        # clear_service      ${resp}
         ${consumerNoteTitle}=  FakerLibrary.sentence    
         ${preInfoTitle}=  FakerLibrary.sentence   
         ${preInfoText}=  FakerLibrary.sentence  
@@ -264,8 +264,8 @@ JD-TC-Create Service With info-7
         [Documentation]   create service in Non Billable Domain  and didn't inputs total amount and  prepayment amount
         ${description}=  FakerLibrary.sentence
         ${resp}=   Non Billable
-        clear_service   ${resp}
-        clear_service      ${resp}
+        # clear_service   ${resp}
+        # clear_service      ${resp}
         ${consumerNoteTitle}=  FakerLibrary.sentence    
         ${preInfoTitle}=  FakerLibrary.sentence   
         ${preInfoText}=  FakerLibrary.sentence  
@@ -282,7 +282,7 @@ JD-TC-Create Service With info-7
 JD-TC-Create Service With info-UH1
         [Documentation]  Create an already existing service (Same service type)
         ${resp}=   Billable  ${start1}
-        clear_service      ${resp}
+        # clear_service      ${resp}
         ${description}=  FakerLibrary.sentence
         ${min_pre1}=   Random Int   min=10   max=50
         Set Suite Variable  ${min_pre1}
@@ -309,7 +309,7 @@ JD-TC-Create Service With info-UH1
 JD-TC-Create Service With info-UH2
         [Documentation]  Create an already existing service (Different service type)
         ${resp}=   Billable  ${start1}
-        clear_service      ${resp}
+        # clear_service      ${resp}
         ${description}=  FakerLibrary.sentence
         ${min_pre1}=   Random Int   min=10   max=50
         Set Suite Variable  ${min_pre1}
@@ -878,7 +878,7 @@ JD-TC-Create Service With info-11
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${PUSERNAME25}
+        # clear_service   ${PUSERNAME25}
 
         ${resp}=  Get Waitlist Settings
         Log  ${resp.content}
@@ -939,7 +939,7 @@ JD-TC-Create Service With info-12
         ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        clear_service   ${PUSERNAME25}
+        # clear_service   ${PUSERNAME25}
         ${resp}=  Get Service
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -1001,7 +1001,7 @@ JD-TC-Create Service With info-13
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${PUSERNAME25}
+        # clear_service   ${PUSERNAME25}
 
         @{empty_list}=  Create List
 
@@ -1064,7 +1064,7 @@ JD-TC-Create Service With info-14
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${PUSERNAME25}
+        # clear_service   ${PUSERNAME25}
 
         @{empty_list}=  Create List
 
@@ -1128,7 +1128,7 @@ JD-TC-Create Service With info-15
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${PUSERNAME25}
+        # clear_service   ${PUSERNAME25}
 
         @{empty_list}=  Create List
 
@@ -1186,7 +1186,7 @@ JD-TC-Create Service With info-16
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${PUSERNAME25}
+        # clear_service   ${PUSERNAME25}
 
         @{empty_list}=  Create List
 
@@ -1251,7 +1251,7 @@ JD-TC-Create Service With info-17
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${PUSERNAME25}
+        # clear_service   ${PUSERNAME25}
 
         @{empty_list}=  Create List
 
@@ -1318,7 +1318,7 @@ JD-TC-Create Service With info-UH5
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${PUSERNAME25}
+        # clear_service   ${PUSERNAME25}
 
         ${resp}=  Get Waitlist Settings
         Log  ${resp.content}
@@ -1379,7 +1379,7 @@ JD-TC-Create Service With info-UH6
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${PUSERNAME25}
+        # clear_service   ${PUSERNAME25}
 
         ${resp}=  Get Service
         Log  ${resp.json()}
@@ -1435,7 +1435,7 @@ JD-TC-Create Service With info-18- consumer_Note_Mandatory
         ${len}=  Get Length  ${multilocPro}
         ${resp}=  Encrypted Provider Login  ${multilocPro[0]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        clear_service       ${multilocPro[0]}
+        # clear_service       ${multilocPro[0]}
         ${ser_durtn}=   Random Int   min=2   max=10
         ${description}=  FakerLibrary.sentence
         ${Total1}=   Random Int   min=100   max=500
@@ -1463,7 +1463,7 @@ JD-TC-Create Service With info-UH6- consumer_Note_Mandatory
         [Documentation]    Enable  consumer note mandatory and create service using consumer_note_title as EMPTY
         ${resp}=  Encrypted Provider Login  ${multilocPro[0]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        clear_service       ${multilocPro[0]}
+        # clear_service       ${multilocPro[0]}
         ${ser_durtn}=   Random Int   min=2   max=10
         ${description}=  FakerLibrary.sentence
         ${Total1}=   Random Int   min=100   max=500
@@ -1492,7 +1492,7 @@ JD-TC-Create Service With info-19-Pre_info
         [Documentation]    Enable pre_info status and try to set pre_info text as EMPTY
         ${resp}=  Encrypted Provider Login  ${multilocPro[0]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        clear_service       ${multilocPro[0]}
+        # clear_service       ${multilocPro[0]}
         ${ser_durtn}=   Random Int   min=2   max=10
         ${description}=  FakerLibrary.sentence
         ${Total1}=   Random Int   min=100   max=500
@@ -1521,7 +1521,7 @@ JD-TC-Create Service With info-UH7-Pre_info
         [Documentation]    Enable pre_info status and try to set pre_info title as EMPTY
         ${resp}=  Encrypted Provider Login  ${multilocPro[0]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        clear_service       ${multilocPro[0]}
+        # clear_service       ${multilocPro[0]}
         ${ser_durtn}=   Random Int   min=2   max=10
         ${description}=  FakerLibrary.sentence
         ${Total1}=   Random Int   min=100   max=500
@@ -1544,7 +1544,7 @@ JD-TC-Update Service With info-20-Post_info
         [Documentation]    Enable post_info status and try to set post_info text as EMPTY
         ${resp}=  Encrypted Provider Login  ${multilocPro[0]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        clear_service       ${multilocPro[0]}
+        # clear_service       ${multilocPro[0]}
         ${ser_durtn}=   Random Int   min=2   max=10
         ${description}=  FakerLibrary.sentence
         ${Total1}=   Random Int   min=100   max=500
@@ -1573,7 +1573,7 @@ JD-TC-Create Service With info-UH8-Post_info
         [Documentation]    Enable post_info status and try to set post_info title as EMPTY
         ${resp}=  Encrypted Provider Login  ${multilocPro[0]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        clear_service       ${multilocPro[0]}
+        # clear_service       ${multilocPro[0]}
         ${ser_durtn}=   Random Int   min=2   max=10
         ${description}=  FakerLibrary.sentence
         ${Total1}=   Random Int   min=100   max=500

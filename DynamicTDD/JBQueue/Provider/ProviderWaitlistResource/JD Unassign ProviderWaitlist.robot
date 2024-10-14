@@ -44,8 +44,8 @@ JD-TC-UnAssignproviderWaitlist-1
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${HLPUSERNAME25}
-    clear_service    ${HLPUSERNAME25}
+    # clear_queue      ${HLPUSERNAME25}
+    # clear_service    ${HLPUSERNAME25}
     clear_customer   ${HLPUSERNAME25}
 
     ${pid}=  get_acc_id  ${HLPUSERNAME25}
@@ -281,8 +281,8 @@ JD-TC-UnAssignproviderWaitlist-2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_queue      ${HLPUSERNAME25}
-    clear_service    ${HLPUSERNAME25}
+    # clear_queue      ${HLPUSERNAME25}
+    # clear_service    ${HLPUSERNAME25}
     clear_customer   ${HLPUSERNAME25}
 
     ${resp}=    Get Locations
@@ -577,8 +577,8 @@ JD-TC-UnAssignproviderWaitlist-UH1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_queue      ${HLPUSERNAME25}
-    clear_service    ${HLPUSERNAME25}
+    # clear_queue      ${HLPUSERNAME25}
+    # clear_service    ${HLPUSERNAME25}
     clear_customer   ${HLPUSERNAME25}
 
     ${resp}=    Get Locations
@@ -743,8 +743,8 @@ JD-TC-UnAssignproviderWaitlist-UH2
     Should Be Equal As Strings    ${resp.status_code}    200
     ${account_id}=  get_acc_id  ${HLPUSERNAME25}
 
-    clear_queue      ${HLPUSERNAME25}
-    clear_service    ${HLPUSERNAME25}
+    # clear_queue      ${HLPUSERNAME25}
+    # clear_service    ${HLPUSERNAME25}
     clear_customer   ${HLPUSERNAME25}
 
     ${resp}=    Get Locations

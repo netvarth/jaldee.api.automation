@@ -44,9 +44,9 @@ JD-TC-Outbound_IVR-1
 
     [Documentation]   Outbound IVR
     
-    clear_queue      ${PUSERNAME143}
+    # clear_queue      ${PUSERNAME143}
     # clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
+    # clear_service    ${PUSERNAME143}
     clear_customer   ${PUSERNAME143}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME143}  ${PASSWORD}
@@ -434,9 +434,9 @@ JD-TC-Outbound_IVR-UH1
 
     [Documentation]   Try to delete already deleted records
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
+    # clear_queue      ${PUSERNAME143}
+    # clear_location   ${PUSERNAME143}
+    # clear_service    ${PUSERNAME143}
     clear_customer   ${PUSERNAME143}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME143}  ${PASSWORD}
@@ -813,9 +813,9 @@ JD-TC-Outbound_IVR-UH1
 JD-TC-Outbound_IVR-UH2
 
     [Documentation]   Try to delete ivr record using another login
-    clear_queue      ${PUSERNAME14}
-    clear_location   ${PUSERNAME14}
-    clear_service    ${PUSERNAME14}
+    # clear_queue      ${PUSERNAME14}
+    # clear_location   ${PUSERNAME14}
+    # clear_service    ${PUSERNAME14}
     clear_customer   ${PUSERNAME14}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}

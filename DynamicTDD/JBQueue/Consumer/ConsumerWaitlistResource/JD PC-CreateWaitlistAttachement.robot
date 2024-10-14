@@ -32,9 +32,9 @@ JD-TC-WaitlistAttachment-1
 
     [Documentation]   Add waitlist attachment as jpg file.
     
-    clear_queue      ${HLPUSERNAME12}
-    clear_location   ${HLPUSERNAME12}
-    clear_service    ${HLPUSERNAME12}
+    # clear_queue      ${HLPUSERNAME12}
+    # clear_location   ${HLPUSERNAME12}
+    # clear_service    ${HLPUSERNAME12}
     clear_customer   ${HLPUSERNAME12}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
@@ -153,9 +153,9 @@ JD-TC-WaitlistAttachment-2
 
     [Documentation]   Add waitlist attachment as png file.
     
-    clear_queue      ${HLPUSERNAME12}
-    clear_location   ${HLPUSERNAME12}
-    clear_service    ${HLPUSERNAME12}
+    # clear_queue      ${HLPUSERNAME12}
+    # clear_location   ${HLPUSERNAME12}
+    # clear_service    ${HLPUSERNAME12}
     clear_customer   ${HLPUSERNAME12}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
@@ -261,9 +261,9 @@ JD-TC-WaitlistAttachment-3
 
     [Documentation]   Add waitlist attachment as pdf file.
     
-    clear_queue      ${HLPUSERNAME12}
-    clear_location   ${HLPUSERNAME12}
-    clear_service    ${HLPUSERNAME12}
+    # clear_queue      ${HLPUSERNAME12}
+    # clear_location   ${HLPUSERNAME12}
+    # clear_service    ${HLPUSERNAME12}
     clear_customer   ${HLPUSERNAME12}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
@@ -372,9 +372,9 @@ JD-TC-WaitlistAttachment-4
 
     [Documentation]   Add waitlist attachment by as jpeg file.
     
-    clear_queue      ${HLPUSERNAME12}
-    clear_location   ${HLPUSERNAME12}
-    clear_service    ${HLPUSERNAME12}
+    # clear_queue      ${HLPUSERNAME12}
+    # clear_location   ${HLPUSERNAME12}
+    # clear_service    ${HLPUSERNAME12}
     clear_customer   ${HLPUSERNAME12}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
@@ -481,9 +481,9 @@ JD-TC-WaitlistAttachment-5
 
     [Documentation]   Add waitlist attachment by without caption.
     
-    clear_queue      ${HLPUSERNAME12}
-    clear_location   ${HLPUSERNAME12}
-    clear_service    ${HLPUSERNAME12}
+    # clear_queue      ${HLPUSERNAME12}
+    # clear_location   ${HLPUSERNAME12}
+    # clear_service    ${HLPUSERNAME12}
     clear_customer   ${HLPUSERNAME12}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
@@ -590,9 +590,9 @@ JD-TC-WaitlistAttachment-6
 
     [Documentation]   Add waitlist attachment as gif file.
     
-    clear_queue      ${HLPUSERNAME12}
-    clear_location   ${HLPUSERNAME12}
-    clear_service    ${HLPUSERNAME12}
+    # clear_queue      ${HLPUSERNAME12}
+    # clear_location   ${HLPUSERNAME12}
+    # clear_service    ${HLPUSERNAME12}
     clear_customer   ${HLPUSERNAME12}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
@@ -705,9 +705,9 @@ JD-TC-WaitlistAttachment-7
 
     [Documentation]   Add waitlist attachment for a canceled waitlist.
     
-    clear_queue      ${HLPUSERNAME12}
-    clear_location   ${HLPUSERNAME12}
-    clear_service    ${HLPUSERNAME12}
+    # clear_queue      ${HLPUSERNAME12}
+    # clear_location   ${HLPUSERNAME12}
+    # clear_service    ${HLPUSERNAME12}
     clear_customer   ${HLPUSERNAME12}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
@@ -863,9 +863,9 @@ JD-TC-WaitlistAttachment-8
 
     [Documentation]   Add waitlist attachment for a family member's waitlist.
     
-    clear_queue      ${HLPUSERNAME12}
-    clear_location   ${HLPUSERNAME12}
-    clear_service    ${HLPUSERNAME12}
+    # clear_queue      ${HLPUSERNAME12}
+    # clear_location   ${HLPUSERNAME12}
+    # clear_service    ${HLPUSERNAME12}
     clear_customer   ${HLPUSERNAME12}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
@@ -1051,9 +1051,9 @@ JD-TC-WaitlistAttachment-UH4
 
     [Documentation]   Add waitlist attachment as doc file.
     
-    clear_queue      ${HLPUSERNAME12}
-    clear_location   ${HLPUSERNAME12}
-    clear_service    ${HLPUSERNAME12}
+    # clear_queue      ${HLPUSERNAME12}
+    # clear_location   ${HLPUSERNAME12}
+    # clear_service    ${HLPUSERNAME12}
     clear_customer   ${HLPUSERNAME12}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
@@ -1163,9 +1163,9 @@ JD-TC-WaitlistAttachment-UH5
 
     [Documentation]   Add waitlist attachment as sh file.
     
-    clear_queue      ${HLPUSERNAME12}
-    clear_location   ${HLPUSERNAME12}
-    clear_service    ${HLPUSERNAME12}
+    # clear_queue      ${HLPUSERNAME12}
+    # clear_location   ${HLPUSERNAME12}
+    # clear_service    ${HLPUSERNAME12}
     clear_customer   ${HLPUSERNAME12}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
@@ -1263,9 +1263,9 @@ JD-TC-WaitlistAttachment-UH6
 
     [Documentation]   Add waitlist attachment as txt file.
     
-    clear_queue      ${HLPUSERNAME12}
-    clear_location   ${HLPUSERNAME12}
-    clear_service    ${HLPUSERNAME12}
+    # clear_queue      ${HLPUSERNAME12}
+    # clear_location   ${HLPUSERNAME12}
+    # clear_service    ${HLPUSERNAME12}
     clear_customer   ${HLPUSERNAME12}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}

@@ -42,9 +42,9 @@ JD-TC-Incall_IVR-1
 
     [Documentation]   Incall IVR
     
-    clear_queue      ${PUSERNAME143}
+    # clear_queue      ${PUSERNAME143}
     # clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
+    # clear_service    ${PUSERNAME143}
     clear_customer   ${PUSERNAME143}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME143}  ${PASSWORD}

@@ -198,7 +198,7 @@ JD-TC-CreateBooking_Appmt-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    clear_location   ${HLPUSERNAME1}
+    # clear_location   ${HLPUSERNAME1}
 
     ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}

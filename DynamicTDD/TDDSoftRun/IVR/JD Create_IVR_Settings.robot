@@ -43,9 +43,9 @@ JD-TC-Create_IVR_Settings-1
 
     [Documentation]   Create IVR Settings
     
-    clear_queue      ${PUSERNAME154}
+    # clear_queue      ${PUSERNAME154}
     # clear_location   ${PUSERNAME154}
-    clear_service    ${PUSERNAME154}
+    # clear_service    ${PUSERNAME154}
     clear_customer   ${PUSERNAME154}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}

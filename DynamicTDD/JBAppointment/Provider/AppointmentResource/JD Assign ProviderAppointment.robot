@@ -30,8 +30,8 @@ JD-TC-AssignproviderAppointment-1
     Log  ${decrypted_data}
     Set Suite Variable  ${pid}  ${decrypted_data['id']}
 
-    clear_service   ${HLPUSERNAME1}
-    clear_appt_schedule   ${HLPUSERNAME1}
+    # clear_service   ${HLPUSERNAME1}
+    # clear_appt_schedule   ${HLPUSERNAME1}
     clear_customer   ${HLPUSERNAME1}
 
     ${resp}=    Get Locations
@@ -158,8 +158,8 @@ JD-TC-AssignproviderAppointment-2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${HLPUSERNAME1}
-    clear_appt_schedule   ${HLPUSERNAME1}
+    # clear_service   ${HLPUSERNAME1}
+    # clear_appt_schedule   ${HLPUSERNAME1}
     clear_customer   ${HLPUSERNAME1}
     reset_user_metric  ${pid}
 
@@ -277,8 +277,8 @@ JD-TC-AssignproviderAppointment-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${HLPUSERNAME1}
-    clear_appt_schedule   ${HLPUSERNAME1}
+    # clear_service   ${HLPUSERNAME1}
+    # clear_appt_schedule   ${HLPUSERNAME1}
     clear_customer   ${HLPUSERNAME1}
     reset_user_metric  ${pid}
 
@@ -360,8 +360,8 @@ JD-TC-AssignproviderAppointment-4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${HLPUSERNAME1}
-    clear_appt_schedule   ${HLPUSERNAME1}
+    # clear_service   ${HLPUSERNAME1}
+    # clear_appt_schedule   ${HLPUSERNAME1}
     clear_customer   ${HLPUSERNAME1}
     reset_user_metric  ${pid}
 
@@ -491,8 +491,8 @@ JD-TC-AssignproviderAppointment-5
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${HLPUSERNAME1}
-    clear_appt_schedule   ${HLPUSERNAME1}
+    # clear_service   ${HLPUSERNAME1}
+    # clear_appt_schedule   ${HLPUSERNAME1}
     clear_customer   ${HLPUSERNAME1}
     reset_user_metric  ${pid}
 
@@ -617,8 +617,8 @@ JD-TC-AssignproviderAppointment-6
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${HLPUSERNAME1}
-    clear_appt_schedule   ${HLPUSERNAME1}
+    # clear_service   ${HLPUSERNAME1}
+    # clear_appt_schedule   ${HLPUSERNAME1}
     clear_customer   ${HLPUSERNAME1}
     reset_user_metric  ${pid}
    
@@ -768,8 +768,8 @@ JD-TC-AssignproviderAppointment-7
     Log  ${decrypted_data}
     Set Suite Variable  ${pid1}  ${decrypted_data['id']}
 
-    clear_service   ${HLPUSERNAME17}
-    clear_appt_schedule   ${HLPUSERNAME17}
+    # clear_service   ${HLPUSERNAME17}
+    # clear_appt_schedule   ${HLPUSERNAME17}
     clear_customer   ${HLPUSERNAME17}
     reset_user_metric  ${pid1}
 
@@ -885,8 +885,8 @@ JD-TC-AssignproviderAppointment-8
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${HLPUSERNAME17}
-    clear_appt_schedule   ${HLPUSERNAME17}
+    # clear_service   ${HLPUSERNAME17}
+    # clear_appt_schedule   ${HLPUSERNAME17}
     clear_customer   ${HLPUSERNAME17}
     reset_user_metric  ${pid1}
 
@@ -965,8 +965,8 @@ JD-TC-AssignproviderAppointment-9
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${HLPUSERNAME17}
-    clear_appt_schedule   ${HLPUSERNAME17}
+    # clear_service   ${HLPUSERNAME17}
+    # clear_appt_schedule   ${HLPUSERNAME17}
     clear_customer   ${HLPUSERNAME17}
     reset_user_metric  ${pid1}
 
@@ -1060,8 +1060,8 @@ JD-TC-AssignproviderAppointment-10
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${HLPUSERNAME17}
-    clear_appt_schedule   ${HLPUSERNAME17}
+    # clear_service   ${HLPUSERNAME17}
+    # clear_appt_schedule   ${HLPUSERNAME17}
     clear_customer   ${HLPUSERNAME17}
     reset_user_metric  ${pid1}
 
@@ -1142,8 +1142,8 @@ JD-TC-AssignproviderAppointment-UH1
 
     ${pid}=  get_acc_id  ${HLPUSERNAME1}
 
-    clear_service   ${HLPUSERNAME1}
-    clear_appt_schedule   ${HLPUSERNAME1}
+    # clear_service   ${HLPUSERNAME1}
+    # clear_appt_schedule   ${HLPUSERNAME1}
     clear_customer   ${HLPUSERNAME1}
     reset_user_metric  ${pid}
 
@@ -1260,8 +1260,8 @@ JD-TC-AssignproviderAppointment-UH2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${HLPUSERNAME1}
-    clear_appt_schedule   ${HLPUSERNAME1}
+    # clear_service   ${HLPUSERNAME1}
+    # clear_appt_schedule   ${HLPUSERNAME1}
     clear_customer   ${HLPUSERNAME1}
     reset_user_metric  ${pid}
 
@@ -1347,8 +1347,8 @@ JD-TC-AssignproviderAppointment-UH3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${HLPUSERNAME1}
-    clear_appt_schedule   ${HLPUSERNAME1}
+    # clear_service   ${HLPUSERNAME1}
+    # clear_appt_schedule   ${HLPUSERNAME1}
     clear_customer   ${HLPUSERNAME1}
     reset_user_metric  ${pid}
 
@@ -1439,8 +1439,8 @@ JD-TC-AssignproviderAppointment-UH4
     Log  ${decrypted_data}
     Set Suite Variable  ${pid2}  ${decrypted_data['id']}
 
-    clear_service   ${PUSERNAME1}
-    clear_appt_schedule   ${PUSERNAME1}
+    # clear_service   ${PUSERNAME1}
+    # clear_appt_schedule   ${PUSERNAME1}
     clear_customer   ${PUSERNAME1}
     reset_user_metric  ${pid2}
 
@@ -1474,8 +1474,8 @@ JD-TC-AssignproviderAppointment-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${HLPUSERNAME1}
-    clear_appt_schedule   ${HLPUSERNAME1}
+    # clear_service   ${HLPUSERNAME1}
+    # clear_appt_schedule   ${HLPUSERNAME1}
     clear_customer   ${HLPUSERNAME1}
 
     ${resp}=    Get Locations
@@ -1545,8 +1545,8 @@ JD-TC-AssignproviderAppointment-UH5
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${HLPUSERNAME1}
-    clear_appt_schedule   ${HLPUSERNAME1}
+    # clear_service   ${HLPUSERNAME1}
+    # clear_appt_schedule   ${HLPUSERNAME1}
     clear_customer   ${HLPUSERNAME1}
    
     ${resp}=    Get Locations
@@ -1641,8 +1641,8 @@ JD-TC-AssignproviderAppointment-UH6
 
     ${pid}=  get_acc_id  ${HLPUSERNAME1}
 
-    clear_service   ${HLPUSERNAME1}
-    clear_appt_schedule   ${HLPUSERNAME1}
+    # clear_service   ${HLPUSERNAME1}
+    # clear_appt_schedule   ${HLPUSERNAME1}
     clear_customer   ${HLPUSERNAME1}
    
     ${resp}=    Get Locations

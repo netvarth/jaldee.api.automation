@@ -1032,9 +1032,9 @@ JD-TC-GetWaitlistToday-61
 JD-TC-GetWaitlistToday-62
       [Documentation]   Get waitlist location-eq=${lid1} from=0  count=10
 
-      clear_queue      ${HLPUSERNAME21}
-      clear_location   ${HLPUSERNAME21}
-      clear_service    ${HLPUSERNAME21}
+      # clear_queue      ${HLPUSERNAME21}
+      # clear_location   ${HLPUSERNAME21}
+      # clear_service    ${HLPUSERNAME21}
       clear_customer    ${HLPUSERNAME21}
 
       ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
@@ -1319,9 +1319,9 @@ JD-TC-GetWaitlistToday-79
 
 JD-TC-GetWaitlistToday-80
       [Documentation]   Get Future Waitlist of a family member. 
-      clear_queue      ${HLPUSERNAME21}
-      clear_location   ${HLPUSERNAME21}
-      clear_service    ${HLPUSERNAME21}
+      # clear_queue      ${HLPUSERNAME21}
+      # clear_location   ${HLPUSERNAME21}
+      # clear_service    ${HLPUSERNAME21}
       ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${ser_duratn}=  Random Int   min=2   max=4

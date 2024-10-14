@@ -166,7 +166,7 @@ JD-TC-Create_Provider_Schedule-1
     ${ser_name1}=   FakerLibrary.word
     Set Suite Variable    ${ser_name1} 
 
-    clear_service  ${PUSERNAME101} 
+    # clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
     ${min_pre}=   Random Int   min=100   max=100
     ${min_pre}=  Convert To Number  ${min_pre}  0

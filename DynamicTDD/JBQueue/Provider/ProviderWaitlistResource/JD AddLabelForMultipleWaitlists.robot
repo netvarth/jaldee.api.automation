@@ -121,7 +121,7 @@ JD-TC-AddMultipleWaitlistLabel-1
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
-    clear_queue    ${HLPUSERNAME17}
+    # clear_queue    ${HLPUSERNAME17}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -358,7 +358,7 @@ JD-TC-AddMultipleWaitlistLabel-2
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
-    clear_queue    ${HLPUSERNAME17}
+    # clear_queue    ${HLPUSERNAME17}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -526,7 +526,7 @@ JD-TC-AddMultipleWaitlistLabel-3
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10    maxBookingsAllowed=10
 
-    clear_queue    ${HLPUSERNAME17}
+    # clear_queue    ${HLPUSERNAME17}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -642,7 +642,7 @@ JD-TC-AddMultipleWaitlistLabel-4
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
-    clear_queue    ${HLPUSERNAME17}
+    # clear_queue    ${HLPUSERNAME17}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -768,7 +768,7 @@ JD-TC-AddMultipleWaitlistLabel-5
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
-    clear_queue    ${HLPUSERNAME17}
+    # clear_queue    ${HLPUSERNAME17}
     
     ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.json()}
@@ -903,8 +903,8 @@ JD-TC-AddMultipleWaitlistLabel-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${multilocPro[2]}
-    clear_location  ${multilocPro[2]}
+    # clear_service   ${multilocPro[2]}
+    # clear_location  ${multilocPro[2]}
     clear_customer   ${multilocPro[2]}
     clear_Label  ${multilocPro[2]}
 
@@ -936,7 +936,7 @@ JD-TC-AddMultipleWaitlistLabel-6
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
-    clear_appt_schedule   ${multilocPro[2]}
+    # clear_appt_schedule   ${multilocPro[2]}
     
     ${resp}=  Sample Queue   ${lid}   ${s_id}
     Log  ${resp.json()}
@@ -1082,7 +1082,7 @@ JD-TC-AddMultipleWaitlistLabel-7
     ${SERVICE2}=    FakerLibrary.Word
     ${s_id1}=  Create Sample Service  ${SERVICE2}
 
-    clear_queue    ${HLPUSERNAME17}
+    # clear_queue    ${HLPUSERNAME17}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
@@ -1232,7 +1232,7 @@ JD-TC-AddMultipleWaitlistLabel-8
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
-    clear_queue    ${HLPUSERNAME17}
+    # clear_queue    ${HLPUSERNAME17}
 
     
     ${resp}=  Sample Queue  ${lid}   ${s_id}
@@ -1405,7 +1405,7 @@ JD-TC-AddMultipleWaitlistLabel-9
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
-    clear_queue    ${HLPUSERNAME17}
+    # clear_queue    ${HLPUSERNAME17}
 
     
     ${resp}=  Sample Queue  ${lid}   ${s_id}
@@ -1570,7 +1570,7 @@ JD-TC-AddMultipleWaitlistLabel-10
     ${servicecharge}=   Random Int  min=100  max=200
     ${s_id}=  Create Sample Service with Prepayment   ${SERVICE1}  ${min_pre}  ${servicecharge}
 
-    clear_queue    ${HLPUSERNAME17}
+    # clear_queue    ${HLPUSERNAME17}
     
     ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.json()}
@@ -1710,7 +1710,7 @@ JD-TC-AddMultipleWaitlistLabel-11
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
-    clear_queue    ${HLPUSERNAME17}
+    # clear_queue    ${HLPUSERNAME17}
     
     ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.json()}
@@ -1857,7 +1857,7 @@ JD-TC-AddMultipleWaitlistLabel-12
     ${servicecharge}=   Random Int  min=100  max=200
     ${s_id}=  Create Sample Service with Prepayment   ${SERVICE1}  ${min_pre}  ${servicecharge}
 
-    clear_queue    ${HLPUSERNAME17}
+    # clear_queue    ${HLPUSERNAME17}
     
     ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.json()}
@@ -2024,7 +2024,7 @@ JD-TC-AddMultipleWaitlistLabel-13
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
-    clear_queue    ${HLPUSERNAME17}
+    # clear_queue    ${HLPUSERNAME17}
     
     ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.json()}
@@ -2158,7 +2158,7 @@ JD-TC-AddMultipleWaitlistLabel-14
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
-    clear_queue    ${HLPUSERNAME17}
+    # clear_queue    ${HLPUSERNAME17}
 
     # ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -2250,8 +2250,8 @@ JD-TC-AddMultipleWaitlistLabel-15
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${PUSERNAME172}
-    clear_location  ${PUSERNAME172}
+    # clear_service   ${PUSERNAME172}
+    # clear_location  ${PUSERNAME172}
     clear_customer   ${PUSERNAME172}
     clear_Label  ${PUSERNAME172}
 
@@ -2278,7 +2278,7 @@ JD-TC-AddMultipleWaitlistLabel-15
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
-    clear_queue    ${PUSERNAME172}
+    # clear_queue    ${PUSERNAME172}
 
     ${DAY11}=  db.get_date_by_timezone  ${tz}
     
@@ -2416,7 +2416,7 @@ JD-TC-AddMultipleWaitlistLabel-UH1
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
-    clear_queue    ${HLPUSERNAME17}
+    # clear_queue    ${HLPUSERNAME17}
 
     
     
@@ -2791,8 +2791,8 @@ JD-TC-AddMultipleWaitlistLabel-UH8
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${PUSERNAME73}
-    clear_location  ${PUSERNAME73}
+    # clear_service   ${PUSERNAME73}
+    # clear_location  ${PUSERNAME73}
     clear_customer   ${PUSERNAME73}
     clear_Label  ${PUSERNAME73}
 
@@ -2865,8 +2865,8 @@ JD-TC-AddMultipleWaitlistLabel-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${PUSERNAME73}
-    clear_location  ${PUSERNAME73}
+    # clear_service   ${PUSERNAME73}
+    # clear_location  ${PUSERNAME73}
     clear_customer   ${PUSERNAME73}
     clear_Label  ${PUSERNAME73}
 
@@ -2886,7 +2886,7 @@ JD-TC-AddMultipleWaitlistLabel-UH9
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
-    clear_queue    ${HLPUSERNAME17}
+    # clear_queue    ${HLPUSERNAME17}
 
     
     
@@ -3050,7 +3050,7 @@ JD-TC-AddMultipleWaitlistLabel-UH11
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
-    clear_queue    ${HLPUSERNAME17}
+    # clear_queue    ${HLPUSERNAME17}
 
     
     
@@ -3147,7 +3147,7 @@ JD-TC-AddMultipleWaitlistLabel-UH12
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
-    clear_queue    ${HLPUSERNAME17}
+    # clear_queue    ${HLPUSERNAME17}
 
     
     
@@ -3244,7 +3244,7 @@ JD-TC-AddMultipleWaitlistLabel-UH13
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
-    clear_appt_schedule   ${HLPUSERNAME17}
+    # clear_appt_schedule   ${HLPUSERNAME17}
 
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.json()}

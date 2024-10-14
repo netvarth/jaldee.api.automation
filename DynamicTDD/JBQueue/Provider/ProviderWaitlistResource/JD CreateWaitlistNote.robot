@@ -247,9 +247,9 @@ JD-TC-Provider Note-1
 JD-TC-Provider Note-2
     [Documentation]   create Note by valid provider with attachment as png file.
 
-    clear_queue      ${HLPUSERNAME28}
-    clear_location   ${HLPUSERNAME28}
-    clear_service    ${HLPUSERNAME28}
+    # clear_queue      ${HLPUSERNAME28}
+    # clear_location   ${HLPUSERNAME28}
+    # clear_service    ${HLPUSERNAME28}
     clear_customer   ${HLPUSERNAME28}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
@@ -318,9 +318,9 @@ JD-TC-Provider Note-2
 JD-TC-Provider Note-3
     [Documentation]   create Note by valid provider with attachment as pdf file.
 
-    clear_queue      ${HLPUSERNAME28}
-    clear_location   ${HLPUSERNAME28}
-    clear_service    ${HLPUSERNAME28}
+    # clear_queue      ${HLPUSERNAME28}
+    # clear_location   ${HLPUSERNAME28}
+    # clear_service    ${HLPUSERNAME28}
     clear_customer   ${HLPUSERNAME28}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
@@ -399,9 +399,9 @@ JD-TC-Provider Note-3
 JD-TC-Provider Note-4
     [Documentation]   create Note by valid provider with attachment as jpeg file.
 
-    clear_queue      ${HLPUSERNAME28}
-    clear_location   ${HLPUSERNAME28}
-    clear_service    ${HLPUSERNAME28}
+    # clear_queue      ${HLPUSERNAME28}
+    # clear_location   ${HLPUSERNAME28}
+    # clear_service    ${HLPUSERNAME28}
     clear_customer   ${HLPUSERNAME28}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
@@ -469,9 +469,9 @@ JD-TC-Provider Note-4
 JD-TC-Provider Note-5
     [Documentation]   create Note by valid provider without message.
 
-    clear_queue      ${HLPUSERNAME28}
-    clear_location   ${HLPUSERNAME28}
-    clear_service    ${HLPUSERNAME28}
+    # clear_queue      ${HLPUSERNAME28}
+    # clear_location   ${HLPUSERNAME28}
+    # clear_service    ${HLPUSERNAME28}
     clear_customer   ${HLPUSERNAME28}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
@@ -538,9 +538,9 @@ JD-TC-Provider Note-5
 JD-TC-Provider Note-6
     [Documentation]   create Note by valid provider without caption.
 
-    clear_queue      ${HLPUSERNAME28}
-    clear_location   ${HLPUSERNAME28}
-    clear_service    ${HLPUSERNAME28}
+    # clear_queue      ${HLPUSERNAME28}
+    # clear_location   ${HLPUSERNAME28}
+    # clear_service    ${HLPUSERNAME28}
     clear_customer   ${HLPUSERNAME28}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
@@ -606,9 +606,9 @@ JD-TC-Provider Note-6
 JD-TC-Provider Note-7
     [Documentation]   create Note by valid provider with attachment as gif file.
 
-    clear_queue      ${HLPUSERNAME28}
-    clear_location   ${HLPUSERNAME28}
-    clear_service    ${HLPUSERNAME28}
+    # clear_queue      ${HLPUSERNAME28}
+    # clear_location   ${HLPUSERNAME28}
+    # clear_service    ${HLPUSERNAME28}
     clear_customer   ${HLPUSERNAME28}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
@@ -684,9 +684,9 @@ JD-TC-Provider Note-7
 JD-TC-Provider Note-8
     [Documentation]   create Note by valid provider with attachment as doc file.
 
-    clear_queue      ${HLPUSERNAME28}
-    clear_location   ${HLPUSERNAME28}
-    clear_service    ${HLPUSERNAME28}
+    # clear_queue      ${HLPUSERNAME28}
+    # clear_location   ${HLPUSERNAME28}
+    # clear_service    ${HLPUSERNAME28}
     clear_customer   ${HLPUSERNAME28}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
@@ -748,9 +748,9 @@ JD-TC-Provider Note-8
 JD-TC-Provider Note-9
     [Documentation]   create Note by valid provider with attachment as txt file.
 
-    clear_queue      ${HLPUSERNAME28}
-    clear_location   ${HLPUSERNAME28}
-    clear_service    ${HLPUSERNAME28}
+    # clear_queue      ${HLPUSERNAME28}
+    # clear_location   ${HLPUSERNAME28}
+    # clear_service    ${HLPUSERNAME28}
     clear_customer   ${HLPUSERNAME28}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
@@ -904,9 +904,9 @@ JD-TC-Provider Note-UH4
 JD-TC-Provider Note-UH6
     [Documentation]   create Note by valid provider with attachment as sh file.
 
-    clear_queue      ${HLPUSERNAME28}
-    clear_location   ${HLPUSERNAME28}
-    clear_service    ${HLPUSERNAME28}
+    # clear_queue      ${HLPUSERNAME28}
+    # clear_location   ${HLPUSERNAME28}
+    # clear_service    ${HLPUSERNAME28}
     clear_customer   ${HLPUSERNAME28}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}

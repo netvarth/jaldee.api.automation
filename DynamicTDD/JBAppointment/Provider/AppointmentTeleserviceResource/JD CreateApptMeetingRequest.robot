@@ -174,7 +174,7 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-1
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    clear_appt_schedule   ${PUSERPH0}
+    # clear_appt_schedule   ${PUSERPH0}
    
     ${resp}=  Get Service
     Log  ${resp.json()}
@@ -856,7 +856,7 @@ JD-TC-TeleserviceAppointment-(Non billable Subdomain)-7
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    clear_appt_schedule   ${PUSERPH2}
+    # clear_appt_schedule   ${PUSERPH2}
 
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10

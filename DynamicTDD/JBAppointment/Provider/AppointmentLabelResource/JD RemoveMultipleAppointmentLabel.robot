@@ -50,8 +50,8 @@ JD-TC-RemoveMultipleAppointmentLabel-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME74}
-    clear_location  ${PUSERNAME74}
+    # clear_service   ${PUSERNAME74}
+    # clear_location  ${PUSERNAME74}
     clear_customer   ${PUSERNAME74}
     clear_Label  ${PUSERNAME74}
 
@@ -78,7 +78,7 @@ JD-TC-RemoveMultipleAppointmentLabel-1
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME74}
+    # clear_appt_schedule   ${PUSERNAME74}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -297,8 +297,8 @@ JD-TC-RemoveMultipleAppointmentLabel-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME74}
-    clear_location  ${PUSERNAME74}
+    # clear_service   ${PUSERNAME74}
+    # clear_location  ${PUSERNAME74}
     clear_customer   ${PUSERNAME74}
     clear_Label  ${PUSERNAME74}
 
@@ -339,7 +339,7 @@ JD-TC-RemoveMultipleAppointmentLabel-2
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME74}
+    # clear_appt_schedule   ${PUSERNAME74}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -512,8 +512,8 @@ JD-TC-RemoveMultipleAppointmentLabel-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME74}
-    clear_location  ${PUSERNAME74}
+    # clear_service   ${PUSERNAME74}
+    # clear_location  ${PUSERNAME74}
     clear_customer   ${PUSERNAME74}
     clear_Label  ${PUSERNAME74}
 
@@ -540,7 +540,7 @@ JD-TC-RemoveMultipleAppointmentLabel-3
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME74}
+    # clear_appt_schedule   ${PUSERNAME74}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -643,8 +643,8 @@ JD-TC-RemoveMultipleAppointmentLabel-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME74}
-    clear_location  ${PUSERNAME74}
+    # clear_service   ${PUSERNAME74}
+    # clear_location  ${PUSERNAME74}
     clear_customer   ${PUSERNAME74}
     clear_Label  ${PUSERNAME74}
 
@@ -685,7 +685,7 @@ JD-TC-RemoveMultipleAppointmentLabel-4
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME74}
+    # clear_appt_schedule   ${PUSERNAME74}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -814,8 +814,8 @@ JD-TC-RemoveMultipleAppointmentLabel-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME74}
-    clear_location  ${PUSERNAME74}
+    # clear_service   ${PUSERNAME74}
+    # clear_location  ${PUSERNAME74}
     clear_customer   ${PUSERNAME74}
     clear_Label  ${PUSERNAME74}
 
@@ -856,7 +856,7 @@ JD-TC-RemoveMultipleAppointmentLabel-5
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME74}
+    # clear_appt_schedule   ${PUSERNAME74}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1046,8 +1046,8 @@ JD-TC-RemoveMultipleAppointmentLabel-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME74}
-    clear_location  ${PUSERNAME74}
+    # clear_service   ${PUSERNAME74}
+    # clear_location  ${PUSERNAME74}
     clear_customer   ${PUSERNAME74}
     clear_Label  ${PUSERNAME74}
 
@@ -1074,7 +1074,7 @@ JD-TC-RemoveMultipleAppointmentLabel-6
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME74}
+    # clear_appt_schedule   ${PUSERNAME74}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1276,7 +1276,7 @@ JD-TC-RemoveMultipleAppointmentLabel-7
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${multilocPro[74]}
+    # clear_appt_schedule   ${multilocPro[74]}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1440,8 +1440,8 @@ JD-TC-RemoveMultipleAppointmentLabel-8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME74}
-    clear_location  ${PUSERNAME74}
+    # clear_service   ${PUSERNAME74}
+    # clear_location  ${PUSERNAME74}
     clear_customer   ${PUSERNAME74}
     clear_Label  ${PUSERNAME74}
 
@@ -1470,7 +1470,7 @@ JD-TC-RemoveMultipleAppointmentLabel-8
     ${SERVICE2}=    FakerLibrary.Word
     ${s_id1}=  Create Sample Service  ${SERVICE2}
 
-    clear_appt_schedule   ${PUSERNAME74}
+    # clear_appt_schedule   ${PUSERNAME74}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1619,8 +1619,8 @@ JD-TC-RemoveMultipleAppointmentLabel-9
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME74}
-    clear_location  ${PUSERNAME74}
+    # clear_service   ${PUSERNAME74}
+    # clear_location  ${PUSERNAME74}
     clear_customer   ${PUSERNAME74}
     clear_Label  ${PUSERNAME74}
 
@@ -1647,7 +1647,7 @@ JD-TC-RemoveMultipleAppointmentLabel-9
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME74}
+    # clear_appt_schedule   ${PUSERNAME74}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1872,8 +1872,8 @@ JD-TC-RemoveMultipleAppointmentLabel-10
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME74}
-    clear_location  ${PUSERNAME74}
+    # clear_service   ${PUSERNAME74}
+    # clear_location  ${PUSERNAME74}
     clear_customer   ${PUSERNAME74}
     clear_Label  ${PUSERNAME74}
 
@@ -1900,7 +1900,7 @@ JD-TC-RemoveMultipleAppointmentLabel-10
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME74}
+    # clear_appt_schedule   ${PUSERNAME74}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  4  
@@ -2045,8 +2045,8 @@ JD-TC-RemoveMultipleAppointmentLabel-11
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME74}
-    clear_location  ${PUSERNAME74}
+    # clear_service   ${PUSERNAME74}
+    # clear_location  ${PUSERNAME74}
     clear_customer   ${PUSERNAME74}
     clear_Label  ${PUSERNAME74}
 
@@ -2073,7 +2073,7 @@ JD-TC-RemoveMultipleAppointmentLabel-11
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME74}
+    # clear_appt_schedule   ${PUSERNAME74}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}      
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -2217,8 +2217,8 @@ JD-TC-RemoveMultipleAppointmentLabel-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME74}
-    clear_location  ${PUSERNAME74}
+    # clear_service   ${PUSERNAME74}
+    # clear_location  ${PUSERNAME74}
     clear_customer   ${PUSERNAME74}
     clear_Label  ${PUSERNAME74}
 
@@ -2252,7 +2252,7 @@ JD-TC-RemoveMultipleAppointmentLabel-UH1
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME74}
+    # clear_appt_schedule   ${PUSERNAME74}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -2402,8 +2402,8 @@ JD-TC-RemoveMultipleAppointmentLabel-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME74}
-    clear_location  ${PUSERNAME74}
+    # clear_service   ${PUSERNAME74}
+    # clear_location  ${PUSERNAME74}
     clear_customer   ${PUSERNAME74}
     clear_Label  ${PUSERNAME74}
 
@@ -2430,7 +2430,7 @@ JD-TC-RemoveMultipleAppointmentLabel-UH2
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME74}
+    # clear_appt_schedule   ${PUSERNAME74}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -2587,8 +2587,8 @@ JD-TC-RemoveMultipleAppointmentLabel-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME74}
-    clear_location  ${PUSERNAME74}
+    # clear_service   ${PUSERNAME74}
+    # clear_location  ${PUSERNAME74}
     clear_customer   ${PUSERNAME74}
     clear_Label  ${PUSERNAME74}
 
@@ -2615,7 +2615,7 @@ JD-TC-RemoveMultipleAppointmentLabel-UH3
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME74}
+    # clear_appt_schedule   ${PUSERNAME74}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -3069,8 +3069,8 @@ JD-TC-RemoveMultipleAppointmentLabel-UH11
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME74}
-    clear_location  ${PUSERNAME74}
+    # clear_service   ${PUSERNAME74}
+    # clear_location  ${PUSERNAME74}
     clear_customer   ${PUSERNAME74}
     clear_Label  ${PUSERNAME74}
 
@@ -3097,7 +3097,7 @@ JD-TC-RemoveMultipleAppointmentLabel-UH11
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME74}
+    # clear_appt_schedule   ${PUSERNAME74}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -3213,8 +3213,8 @@ JD-TC-RemoveMultipleAppointmentLabel-UH12
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    clear_service   ${PUSERNAME72}
-    clear_location  ${PUSERNAME72}
+    # clear_service   ${PUSERNAME72}
+    # clear_location  ${PUSERNAME72}
     clear_customer   ${PUSERNAME72}
     clear_Label  ${PUSERNAME72}
 
@@ -3240,7 +3240,7 @@ JD-TC-RemoveMultipleAppointmentLabel-UH12
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME72}
+    # clear_appt_schedule   ${PUSERNAME72}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     

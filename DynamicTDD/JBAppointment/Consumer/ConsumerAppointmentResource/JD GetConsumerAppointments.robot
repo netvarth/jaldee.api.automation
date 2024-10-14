@@ -47,7 +47,7 @@ JD-TC-GetConsumerAppointments-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME100}
+    # clear_location_n_service  ${PUSERNAME100}
     clear_customer   ${PUSERNAME100}
 
     ${resp}=    Get Locations
@@ -254,8 +254,8 @@ JD-TC-GetConsumerAppointments-2
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
 
-    clear_service   ${HLPUSERNAME53}
-    clear_location  ${HLPUSERNAME53}
+    # clear_service   ${HLPUSERNAME53}
+    # clear_location  ${HLPUSERNAME53}
 
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
@@ -299,7 +299,7 @@ JD-TC-GetConsumerAppointments-2
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    clear_appt_schedule   ${HLPUSERNAME53}
+    # clear_appt_schedule   ${HLPUSERNAME53}
 
     # ${resp}=  Enable Disable Department  ${toggle[0]}
     # Log   ${resp.json()}
@@ -1331,7 +1331,7 @@ JD-TC-GetConsumerAppointments-17
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_appt_schedule   ${HLPUSERNAME52}
+    # clear_appt_schedule   ${HLPUSERNAME52}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}

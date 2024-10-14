@@ -25,9 +25,9 @@ JD-TC-GetWaitingTimeOfProviders-1
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME13}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     get_Host_name_IP
-    clear_service   ${HLPUSERNAME13}
-    clear_location  ${HLPUSERNAME13}
-    clear_queue  ${HLPUSERNAME13}
+    # clear_service   ${HLPUSERNAME13}
+    # clear_location  ${HLPUSERNAME13}
+    # clear_queue  ${HLPUSERNAME13}
     clear_customer   ${HLPUSERNAME13}
     ${resp}=  Update Waitlist Settings  ${calc_mode[1]}  10  true  true  true  true  ${EMPTY}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -83,9 +83,9 @@ JD-TC-GetWaitingTimeOfProviders-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  10  true  true  true  true  ${EMPTY}
     Should Be Equal As Strings  ${resp.status_code}  200
-    clear_service   ${HLPUSERNAME11}
-    clear_location  ${HLPUSERNAME11}
-    clear_queue  ${HLPUSERNAME11}
+    # clear_service   ${HLPUSERNAME11}
+    # clear_location  ${HLPUSERNAME11}
+    # clear_queue  ${HLPUSERNAME11}
     clear_customer   ${HLPUSERNAME11}
     ${lid2}=  Create Sample Location
     Set Suite Variable  ${lid2}
@@ -135,9 +135,9 @@ JD-TC-GetWaitingTimeOfProviders-1
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    clear_service   ${HLPUSERNAME12}
-    clear_location  ${HLPUSERNAME12}
-    clear_queue  ${HLPUSERNAME12}
+    # clear_service   ${HLPUSERNAME12}
+    # clear_location  ${HLPUSERNAME12}
+    # clear_queue  ${HLPUSERNAME12}
 
     ${lid3}=  Create Sample Location
     Set Suite Variable  ${lid3}
@@ -266,9 +266,9 @@ JD-TC-GetWaitingTimeOfProviders-4
     [Documentation]  Get Waiting Time Of a provider when queue capacity is 1, checking that provider available only at next day
     ${resp}=  Encrypted Provider Login  ${PUSERNAME159}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    clear_service   ${PUSERNAME159}
-    clear_location  ${PUSERNAME159}
-    clear_queue  ${PUSERNAME159}
+    # clear_service   ${PUSERNAME159}
+    # clear_location  ${PUSERNAME159}
+    # clear_queue  ${PUSERNAME159}
     clear_customer   ${PUSERNAME159}
     ${resp}=  Update Waitlist Settings  ${calc_mode[1]}  10  true  true  true  true  ${EMPTY}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -289,7 +289,7 @@ JD-TC-GetWaitingTimeOfProviders-4
     ${eTime1}=  add_timezone_time  ${tz}   1  58
     Set Suite Variable   ${eTime1}
     ${queue_name}=  FakerLibrary.bs
-    clear_queue  ${PUSERNAME159}
+    # clear_queue  ${PUSERNAME159}
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  1  ${lid1}  ${s_id}  ${s_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${qid1}  ${resp.json()}

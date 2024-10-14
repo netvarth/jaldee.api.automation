@@ -61,7 +61,7 @@ JD-TC-ProviderGetApptRequestCount-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_appt_schedule   ${PUSERPH0}
+    # clear_appt_schedule   ${PUSERPH0}
 
     ${SERVICE1}=    FakerLibrary.word
     ${service_duration}=   Random Int   min=5   max=10

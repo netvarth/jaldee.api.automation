@@ -34,7 +34,7 @@ JD-TC-Appointment Schedule TodayAppmt Status-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${PUSERNAME50}
+    # clear_service   ${PUSERNAME50}
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -59,7 +59,7 @@ JD-TC-Appointment Schedule TodayAppmt Status-1
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${s_id1}
     
-    clear_appt_schedule   ${PUSERNAME50}
+    # clear_appt_schedule   ${PUSERNAME50}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -216,14 +216,14 @@ JD-TC-Appointment Schedule TodayAppmt Status-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${PUSERNAME50}
-    clear_location  ${PUSERNAME50}
+    # clear_service   ${PUSERNAME50}
+    # clear_location  ${PUSERNAME50}
 
     ${lid}=  Create Sample Location
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
     
-    clear_appt_schedule   ${PUSERNAME50}
+    # clear_appt_schedule   ${PUSERNAME50}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        

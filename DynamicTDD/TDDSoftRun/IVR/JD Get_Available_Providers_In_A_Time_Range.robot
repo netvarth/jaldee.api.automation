@@ -26,9 +26,9 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-1
 
     [Documentation]  Get Avaliable Providers In A Time Range
 
-    clear_queue      ${PUSERNAME161}
+    # clear_queue      ${PUSERNAME161}
     # clear_location   ${PUSERNAME161}
-    clear_service    ${PUSERNAME161}
+    # clear_service    ${PUSERNAME161}
     clear_customer   ${PUSERNAME161}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME161}  ${PASSWORD}

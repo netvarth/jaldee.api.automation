@@ -125,7 +125,7 @@ JD-TC-AddToWaitlist-0
 JD-TC-AddToWaitlist-1
       [Documentation]   Add a consumer to the waitlist for the current day
 
-      clear_service   ${HLPUSERNAME18}
+      # clear_service   ${HLPUSERNAME18}
      
       ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}   
       Log   ${resp.json()}
@@ -1135,8 +1135,8 @@ JD-TC-AddToWaitlist-14
       Set Test Variable  ${pid}  ${resp.json()['id']}
       Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-      clear_location   ${HLPUSERNAME18}
-      clear_service    ${HLPUSERNAME18}
+      # clear_location   ${HLPUSERNAME18}
+      # clear_service    ${HLPUSERNAME18}
       clear_customer   ${HLPUSERNAME18}
       clear_consumer_msgs  ${CUSERNAME12}
       clear_provider_msgs  ${HLPUSERNAME18}
@@ -1162,7 +1162,7 @@ JD-TC-AddToWaitlist-14
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-      clear_queue   ${HLPUSERNAME18}
+      # clear_queue   ${HLPUSERNAME18}
 
       ${resp}=  Get Queues
       Log  ${resp.json()}
@@ -1242,8 +1242,8 @@ JD-TC-AddToWaitlist-15
       Set Test Variable  ${pid}  ${resp.json()['id']}
       Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-      clear_location   ${HLPUSERNAME18}
-      clear_service    ${HLPUSERNAME18}
+      # clear_location   ${HLPUSERNAME18}
+      # clear_service    ${HLPUSERNAME18}
       clear_customer   ${HLPUSERNAME18}
       clear_consumer_msgs  ${CUSERNAME12}
       clear_provider_msgs  ${HLPUSERNAME18}
@@ -1269,7 +1269,7 @@ JD-TC-AddToWaitlist-15
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-      clear_queue   ${HLPUSERNAME18}
+      # clear_queue   ${HLPUSERNAME18}
 
       ${resp}=  Get Queues
       Log  ${resp.json()}
@@ -1349,8 +1349,8 @@ JD-TC-AddToWaitlist-UH18
       Set Test Variable  ${pid}  ${resp.json()['id']}
       Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-      clear_location   ${HLPUSERNAME18}
-      clear_service    ${HLPUSERNAME18}
+      # clear_location   ${HLPUSERNAME18}
+      # clear_service    ${HLPUSERNAME18}
       clear_customer   ${HLPUSERNAME18}
       clear_consumer_msgs  ${CUSERNAME12}
       clear_provider_msgs  ${HLPUSERNAME18}
@@ -1376,7 +1376,7 @@ JD-TC-AddToWaitlist-UH18
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-      clear_queue   ${HLPUSERNAME18}
+      # clear_queue   ${HLPUSERNAME18}
 
       ${resp}=  Get Queues
       Log  ${resp.json()}
@@ -1459,8 +1459,8 @@ JD-TC-AddToWaitlist-16
       Set Test Variable  ${pid}  ${resp.json()['id']}
       Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-      clear_location   ${HLPUSERNAME18}
-      clear_service    ${HLPUSERNAME18}
+      # clear_location   ${HLPUSERNAME18}
+      # clear_service    ${HLPUSERNAME18}
       clear_customer   ${HLPUSERNAME18}
       clear_consumer_msgs  ${CUSERNAME12}
       clear_provider_msgs  ${HLPUSERNAME18}
@@ -1486,7 +1486,7 @@ JD-TC-AddToWaitlist-16
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-      clear_queue   ${HLPUSERNAME18}
+      # clear_queue   ${HLPUSERNAME18}
 
       ${resp}=  Get Queues
       Log  ${resp.json()}
@@ -1567,8 +1567,8 @@ JD-TC-AddToWaitlist-UH19
       Set Test Variable  ${pid}  ${resp.json()['id']}
       Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-      clear_location   ${HLPUSERNAME18}
-      clear_service    ${HLPUSERNAME18}
+      # clear_location   ${HLPUSERNAME18}
+      # clear_service    ${HLPUSERNAME18}
       clear_customer   ${HLPUSERNAME18}
       clear_consumer_msgs  ${CUSERNAME12}
       clear_provider_msgs  ${HLPUSERNAME18}
@@ -1594,7 +1594,7 @@ JD-TC-AddToWaitlist-UH19
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-      clear_queue   ${HLPUSERNAME18}
+      # clear_queue   ${HLPUSERNAME18}
 
       ${resp}=  Get Queues
       Log  ${resp.json()}

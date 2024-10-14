@@ -34,8 +34,8 @@ JD-TC-GetAppointmentRating-1
     Log  ${decrypted_data}
     Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
-    clear_queue    ${PUSERNAME200}
-    clear_service  ${PUSERNAME200}
+    # clear_queue    ${PUSERNAME200}
+    # clear_service  ${PUSERNAME200}
     clear_rating    ${PUSERNAME200}
 
     ${resp}=  Get Business Profile
@@ -47,7 +47,7 @@ JD-TC-GetAppointmentRating-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
     Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
-    clear_appt_schedule   ${PUSERNAME200}
+    # clear_appt_schedule   ${PUSERNAME200}
 
     ${resp}=   Get License UsageInfo 
     Log  ${resp.json()}
@@ -346,8 +346,8 @@ JD-TC-GetAppointmentRating-3
     Log  ${decrypted_data}
     Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
-    clear_queue    ${PUSERNAME101}
-    clear_service  ${PUSERNAME101}
+    # clear_queue    ${PUSERNAME101}
+    # clear_service  ${PUSERNAME101}
     clear_rating    ${PUSERNAME101}
     
     ${resp}=   Get License UsageInfo 
@@ -370,7 +370,7 @@ JD-TC-GetAppointmentRating-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid1}  ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
-    clear_appt_schedule   ${PUSERNAME101}
+    # clear_appt_schedule   ${PUSERNAME101}
 
     ${SERVICE1}=   FakerLibrary.name
     ${ser_id}=  Create Sample Service  ${SERVICE1}

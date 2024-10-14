@@ -77,7 +77,7 @@ JD-TC-EnableDisable Appointment Schedule-1
     # Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME${a}}
     # clear_location  ${PUSERNAME${a}}
-    clear_service   ${PUSERNAME${a}}
+    # clear_service   ${PUSERNAME${a}}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -93,7 +93,7 @@ JD-TC-EnableDisable Appointment Schedule-1
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME${a}}
+    # clear_appt_schedule   ${PUSERNAME${a}}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -150,7 +150,7 @@ JD-TC-EnableDisable Appointment Schedule-2
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME${a}}
     # clear_location  ${PUSERNAME${a}}
-    clear_service   ${PUSERNAME${a}}
+    # clear_service   ${PUSERNAME${a}}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -166,7 +166,7 @@ JD-TC-EnableDisable Appointment Schedule-2
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME${a}}
+    # clear_appt_schedule   ${PUSERNAME${a}}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -214,7 +214,7 @@ JD-TC-EnableDisable Appointment Schedule-UH1
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME${a}}
     # clear_location  ${PUSERNAME${a}}
-    clear_service   ${PUSERNAME${a}}
+    # clear_service   ${PUSERNAME${a}}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -230,7 +230,7 @@ JD-TC-EnableDisable Appointment Schedule-UH1
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME${a}}
+    # clear_appt_schedule   ${PUSERNAME${a}}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -275,7 +275,7 @@ JD-TC-EnableDisable Appointment Schedule-UH2
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME${a}}
     # clear_location  ${PUSERNAME${a}}
-    clear_service   ${PUSERNAME${a}}
+    # clear_service   ${PUSERNAME${a}}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -291,7 +291,7 @@ JD-TC-EnableDisable Appointment Schedule-UH2
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME${a}}
+    # clear_appt_schedule   ${PUSERNAME${a}}
 
     ${resp}=   Get Service
     Log   ${resp.json()}

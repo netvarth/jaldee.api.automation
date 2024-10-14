@@ -27,7 +27,7 @@ JD-TC-ConsumerCreateApptRequest-1
 
     [Documentation]   Consumer create an appt request.
 
-    clear_appt_schedule   ${HLPUSERNAME45}
+    # clear_appt_schedule   ${HLPUSERNAME45}
     
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
     Log  ${resp.json()}

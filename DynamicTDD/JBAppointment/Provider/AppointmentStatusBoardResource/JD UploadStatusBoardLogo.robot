@@ -54,8 +54,8 @@ JD-TC-UploadStatusboardLogo-1
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${HLPUSERNAME45}
-    clear_location  ${HLPUSERNAME45}
+    # clear_service   ${HLPUSERNAME45}
+    # clear_location  ${HLPUSERNAME45}
     clear_Addon  ${HLPUSERNAME45}
 
     ${SERVICE1}=    generate_service_name

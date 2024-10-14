@@ -52,9 +52,9 @@ JD-TC-Add_Notes_in_IVR-1
 
     [Documentation]   Add notes in IVR
     
-    clear_queue      ${PUSERNAME150}
+    # clear_queue      ${PUSERNAME150}
     # clear_location   ${PUSERNAME150}
-    clear_service    ${PUSERNAME150}
+    # clear_service    ${PUSERNAME150}
     clear_customer   ${PUSERNAME150}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}

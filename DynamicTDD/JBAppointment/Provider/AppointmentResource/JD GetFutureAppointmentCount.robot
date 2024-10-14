@@ -41,14 +41,14 @@ JD-TC-GetFutureAppointmentCount-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME179}
-    clear_location  ${PUSERNAME179}
+    # clear_service   ${PUSERNAME179}
+    # clear_location  ${PUSERNAME179}
     clear_customer   ${PUSERNAME179}
 
     ${lid}=  Create Sample Location
     ${SERVICE1}=    FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    clear_appt_schedule   ${PUSERNAME179}
+    # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -177,13 +177,13 @@ JD-TC-GetFutureAppointmentCount-2
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME179}
-    clear_location  ${PUSERNAME179}
+    # clear_service   ${PUSERNAME179}
+    # clear_location  ${PUSERNAME179}
     
     ${lid}=  Create Sample Location
     ${SERVICE1}=    FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    clear_appt_schedule   ${PUSERNAME179}
+    # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -324,7 +324,7 @@ JD-TC-GetFutureAppointmentCount-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME179}
+    # clear_appt_schedule   ${PUSERNAME179}
 
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
@@ -415,8 +415,8 @@ JD-TC-GetFutureAppointmentCount-4
 
     [Documentation]  Get provider's future appointment list based on payment status
 
-    clear_service   ${PUSERNAME179}
-    clear_location  ${PUSERNAME179}
+    # clear_service   ${PUSERNAME179}
+    # clear_location  ${PUSERNAME179}
   
     ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log   ${resp.json()}
@@ -469,7 +469,7 @@ JD-TC-GetFutureAppointmentCount-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_appt_schedule   ${PUSERNAME179}
+    # clear_appt_schedule   ${PUSERNAME179}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10    
@@ -658,13 +658,13 @@ JD-TC-GetFutureAppointmentCount-5
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME179}
-    clear_location  ${PUSERNAME179}
+    # clear_service   ${PUSERNAME179}
+    # clear_location  ${PUSERNAME179}
     
     ${lid}=  Create Sample Location
     ${SERVICE1}=    FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    clear_appt_schedule   ${PUSERNAME179}
+    # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -783,15 +783,15 @@ JD-TC-GetFutureAppointmentCount-6
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME179}
-    clear_location  ${PUSERNAME179}
+    # clear_service   ${PUSERNAME179}
+    # clear_location  ${PUSERNAME179}
    
     ${lid}=  Create Sample Location
     ${SERVICE1}=    FakerLibrary.word
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${SERVICE2}=    FakerLibrary.word
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME179}
+    # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -888,15 +888,15 @@ JD-TC-GetFutureAppointmentCount-7
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME179}
-    clear_location  ${PUSERNAME179}
+    # clear_service   ${PUSERNAME179}
+    # clear_location  ${PUSERNAME179}
   
     ${lid}=  Create Sample Location
     ${SERVICE1}=    FakerLibrary.word
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${SERVICE2}=    FakerLibrary.word
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME179}
+    # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -991,15 +991,15 @@ JD-TC-GetFutureAppointmentCount-8
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME179}
-    clear_location  ${PUSERNAME179}
+    # clear_service   ${PUSERNAME179}
+    # clear_location  ${PUSERNAME179}
     
     ${lid}=  Create Sample Location
     ${SERVICE1}=    FakerLibrary.word
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${SERVICE2}=    FakerLibrary.word
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME179}
+    # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -1095,15 +1095,15 @@ JD-TC-GetFutureAppointmentCount-9
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME179}
-    clear_location  ${PUSERNAME179}
+    # clear_service   ${PUSERNAME179}
+    # clear_location  ${PUSERNAME179}
    
     ${lid}=  Create Sample Location
     ${SERVICE1}=    FakerLibrary.word
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${SERVICE2}=    FakerLibrary.word
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME179}
+    # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -1199,15 +1199,15 @@ JD-TC-GetFutureAppointmentCount-10
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME179}
-    clear_location  ${PUSERNAME179}
+    # clear_service   ${PUSERNAME179}
+    # clear_location  ${PUSERNAME179}
 
     ${lid}=  Create Sample Location
     ${SERVICE1}=    FakerLibrary.word
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${SERVICE2}=    FakerLibrary.word
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME179}
+    # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -1324,15 +1324,15 @@ JD-TC-GetFutureAppointmentCount-11
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME179}
-    clear_location  ${PUSERNAME179}
+    # clear_service   ${PUSERNAME179}
+    # clear_location  ${PUSERNAME179}
 
     ${lid}=  Create Sample Location
     ${SERVICE1}=    FakerLibrary.word
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${SERVICE2}=    FakerLibrary.word
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME179}
+    # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -1444,15 +1444,15 @@ JD-TC-GetFutureAppointmentCount-12
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME179}
-    clear_location  ${PUSERNAME179}
+    # clear_service   ${PUSERNAME179}
+    # clear_location  ${PUSERNAME179}
     
     ${lid}=  Create Sample Location
     ${SERVICE1}=    FakerLibrary.word
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${SERVICE2}=    FakerLibrary.word
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME179}
+    # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -1552,13 +1552,13 @@ JD-TC-GetFutureAppointmentCount-13
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME179}
-    clear_location  ${PUSERNAME179}
+    # clear_service   ${PUSERNAME179}
+    # clear_location  ${PUSERNAME179}
     
     ${lid}=  Create Sample Location
     ${SERVICE1}=    FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    clear_appt_schedule   ${PUSERNAME179}
+    # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
@@ -1672,15 +1672,15 @@ JD-TC-GetFutureAppointmentCount-14
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME179}
-    clear_location  ${PUSERNAME179}
+    # clear_service   ${PUSERNAME179}
+    # clear_location  ${PUSERNAME179}
     
     ${lid}=  Create Sample Location
     ${SERVICE1}=    FakerLibrary.word
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${SERVICE2}=    FakerLibrary.word
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME179}
+    # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -1775,8 +1775,8 @@ JD-TC-GetFutureAppointmentCount-15
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME180}
-    clear_location  ${PUSERNAME180}
+    # clear_service   ${PUSERNAME180}
+    # clear_location  ${PUSERNAME180}
 
     ${lid1}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid1}
@@ -1792,7 +1792,7 @@ JD-TC-GetFutureAppointmentCount-15
 
     ${SERVICE1}=    FakerLibrary.word
     ${s_id1}=  Create Sample Service  ${SERVICE1}
-    clear_appt_schedule   ${PUSERNAME180}
+    # clear_appt_schedule   ${PUSERNAME180}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10     
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
@@ -1908,15 +1908,15 @@ JD-TC-GetFutureAppointmentCount-16
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME179}
-    clear_location  ${PUSERNAME179}
+    # clear_service   ${PUSERNAME179}
+    # clear_location  ${PUSERNAME179}
 
     ${lid}=  Create Sample Location
     ${SERVICE1}=    FakerLibrary.word
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${SERVICE2}=    FakerLibrary.word
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME179}
+    # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -2013,15 +2013,15 @@ JD-TC-GetFutureAppointmentCount-17
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME179}
-    clear_location  ${PUSERNAME179}
+    # clear_service   ${PUSERNAME179}
+    # clear_location  ${PUSERNAME179}
 
     ${lid}=  Create Sample Location
     ${SERVICE1}=    FakerLibrary.word
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${SERVICE2}=    FakerLibrary.word
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME179}
+    # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -2130,13 +2130,13 @@ JD-TC-GetFutureAppointmentCount-18
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME179}
-    clear_location  ${PUSERNAME179}
+    # clear_service   ${PUSERNAME179}
+    # clear_location  ${PUSERNAME179}
     
     ${lid}=  Create Sample Location
     ${SERVICE1}=    FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    clear_appt_schedule   ${PUSERNAME179}
+    # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10   
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
@@ -2252,15 +2252,15 @@ JD-TC-GetFutureAppointmentCount-19
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME179}
-    clear_location  ${PUSERNAME179}
+    # clear_service   ${PUSERNAME179}
+    # clear_location  ${PUSERNAME179}
     
     ${lid}=  Create Sample Location
     ${SERVICE1}=    FakerLibrary.word
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${SERVICE2}=    FakerLibrary.word
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME179}
+    # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -2398,15 +2398,15 @@ JD-TC-GetFutureAppointmentCount-UH1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME179}
-    clear_location  ${PUSERNAME179}
+    # clear_service   ${PUSERNAME179}
+    # clear_location  ${PUSERNAME179}
 
     ${lid}=  Create Sample Location
     ${SERVICE1}=    FakerLibrary.word
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${SERVICE2}=    FakerLibrary.word
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME179}
+    # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  

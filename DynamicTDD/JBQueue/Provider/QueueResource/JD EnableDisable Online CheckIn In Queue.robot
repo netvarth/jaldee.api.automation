@@ -27,9 +27,9 @@ JD-TC-Online CheckIn In Queue-1
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.json()} 
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${HLPUSERNAME8}
+    # clear_service   ${HLPUSERNAME8}
     # clear_location  ${HLPUSERNAME8}
-    clear_queue  ${HLPUSERNAME8}
+    # clear_queue  ${HLPUSERNAME8}
 
     ${pid}=  get_acc_id  ${HLPUSERNAME8}
     ${resp}=    Get Locations
@@ -116,9 +116,9 @@ JD-TC-Online CheckIn In Queue-2
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.json()} 
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${HLPUSERNAME8}  
+    # clear_service   ${HLPUSERNAME8}  
     # clear_location  ${HLPUSERNAME8}  
-    clear_queue  ${HLPUSERNAME8}  
+    # clear_queue  ${HLPUSERNAME8}  
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -161,9 +161,9 @@ JD-TC-Online CheckIn In Queue-3
     Log   ${resp.json()} 
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${HLPUSERNAME8}
+    # clear_service   ${HLPUSERNAME8}
     # clear_location  ${HLPUSERNAME8}
-    clear_queue  ${HLPUSERNAME8}
+    # clear_queue  ${HLPUSERNAME8}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -213,9 +213,9 @@ JD-TC-Online CheckIn In Queue-UH1
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
     Log   ${resp.json()} 
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${HLPUSERNAME8}
+    # clear_service   ${HLPUSERNAME8}
     # clear_location  ${HLPUSERNAME8}
-    clear_queue  ${HLPUSERNAME8}
+    # clear_queue  ${HLPUSERNAME8}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -233,7 +233,7 @@ JD-TC-Online CheckIn In Queue-UH1
 
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
-    clear_queue  ${HLPUSERNAME8}
+    # clear_queue  ${HLPUSERNAME8}
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${s_id}  ${s_id1}
     Log   ${resp.json()} 

@@ -574,8 +574,8 @@ JD-TC-MakeAvailable-UH3
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME174}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME174}
-    clear_queue  ${PUSERNAME174}
+    # clear_service   ${PUSERNAME174}
+    # clear_queue  ${PUSERNAME174}
 
     ${pid}=  get_acc_id  ${PUSERNAME174}
     Set Suite Variable  ${pid}

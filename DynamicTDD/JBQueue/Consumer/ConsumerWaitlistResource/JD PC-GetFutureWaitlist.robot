@@ -21,7 +21,7 @@ ${service_duration}   5
 
 JD-TC-Get Future Waitlist Consumer-1
 	[Documentation]  Add To Waitlist By Consumer valid  provider
-    [setup]  Run Keywords  clear_service  ${PUSERNAME204}  AND  clear_queue  ${PUSERNAME204}  AND   clear_location  ${PUSERNAME204}
+    # [setup]  Run Keywords  clear_service  ${PUSERNAME204}  AND  clear_queue  ${PUSERNAME204}  AND   clear_location  ${PUSERNAME204}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME204}  ${PASSWORD}  
     Should Be Equal As Strings  ${resp.status_code}  200
 

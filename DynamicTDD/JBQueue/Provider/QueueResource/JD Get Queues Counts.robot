@@ -25,9 +25,9 @@ JD-TC-GetQueuesCount-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${HLPUSERNAME5}
+    # clear_service   ${HLPUSERNAME5}
     # clear_location  ${HLPUSERNAME5}
-    clear_queue  ${HLPUSERNAME5}
+    # clear_queue  ${HLPUSERNAME5}
     ${lid1}=  Create Sample Location
     Set Suite Variable  ${lid1}
 

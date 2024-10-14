@@ -44,9 +44,9 @@ JD-TC-Get_IVR_Settings-1
 
     [Documentation]   Get IVR Settings
     
-    clear_queue      ${PUSERNAME166}
+    # clear_queue      ${PUSERNAME166}
     # clear_location   ${PUSERNAME166}
-    clear_service    ${PUSERNAME166}
+    # clear_service    ${PUSERNAME166}
     clear_customer   ${PUSERNAME166}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME166}  ${PASSWORD}

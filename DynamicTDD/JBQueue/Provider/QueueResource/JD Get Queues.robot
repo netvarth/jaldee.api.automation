@@ -26,9 +26,9 @@ JD-TC-Get Queues-1
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    clear_service   ${HLPUSERNAME3}
+    # clear_service   ${HLPUSERNAME3}
     # clear_location  ${HLPUSERNAME3}
-    clear_queue  ${HLPUSERNAME3}
+    # clear_queue  ${HLPUSERNAME3}
     
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}

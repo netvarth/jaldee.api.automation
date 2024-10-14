@@ -44,7 +44,7 @@ JD-TC-GetFutureAppointment-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME256}
+    # clear_location_n_service  ${PUSERNAME256}
     clear_customer   ${PUSERNAME256}
     
     ${resp}=    Get Locations
@@ -221,7 +221,7 @@ JD-TC-GetFutureAppointment-2
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME256}
+    # clear_location_n_service  ${PUSERNAME256}
        
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -378,8 +378,8 @@ JD-TC-GetFutureAppointment-3
     Log   ${multilocPro}
     Set Suite Variable   ${multilocPro}
     ${pro_len}=  Get Length   ${billable_providers}
-    clear_service   ${billable_providers[6]}
-    clear_location  ${billable_providers[6]}
+    # clear_service   ${billable_providers[6]}
+    # clear_location  ${billable_providers[6]}
     ${pid}=  get_acc_id  ${billable_providers[6]}
    
     ${resp}=  Encrypted Provider Login  ${billable_providers[6]}  ${PASSWORD}
@@ -418,7 +418,7 @@ JD-TC-GetFutureAppointment-3
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${billable_providers[6]}
+    # clear_appt_schedule   ${billable_providers[6]}
 
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -523,8 +523,8 @@ JD-TC-GetFutureAppointment-4
     Log   ${billable_providers}
     Set Suite Variable   ${billable_providers}
     ${pro_len}=  Get Length   ${billable_providers}
-    clear_service   ${billable_providers[6]}
-    clear_location  ${billable_providers[6]}
+    # clear_service   ${billable_providers[6]}
+    # clear_location  ${billable_providers[6]}
     ${pid}=  get_acc_id  ${billable_providers[6]}
 
     ${resp}=  Encrypted Provider Login  ${billable_providers[6]}  ${PASSWORD}
@@ -570,7 +570,7 @@ JD-TC-GetFutureAppointment-4
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${billable_providers[6]}
+    # clear_appt_schedule   ${billable_providers[6]}
 
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -859,7 +859,7 @@ JD-TC-GetFutureAppointment-5
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME256}
+    # clear_location_n_service  ${PUSERNAME256}
         
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1024,7 +1024,7 @@ JD-TC-GetFutureAppointment-6
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME256}
+    # clear_location_n_service  ${PUSERNAME256}
   
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1043,7 +1043,7 @@ JD-TC-GetFutureAppointment-6
 
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    # clear_appt_schedule   ${PUSERNAME256}
+    # # clear_appt_schedule   ${PUSERNAME256}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
@@ -1165,7 +1165,7 @@ JD-TC-GetFutureAppointment-7
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME256}
+    # clear_location_n_service  ${PUSERNAME256}
  
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1302,7 +1302,7 @@ JD-TC-GetFutureAppointment-8
 
     # clear_service   ${PUSERNAME256}
     # clear_location  ${PUSERNAME256}
-    clear_location_n_service  ${PUSERNAME256}
+    # clear_location_n_service  ${PUSERNAME256}
         
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1321,7 +1321,7 @@ JD-TC-GetFutureAppointment-8
 
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    # clear_appt_schedule   ${PUSERNAME256}
+    # # clear_appt_schedule   ${PUSERNAME256}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -1443,7 +1443,7 @@ JD-TC-GetFutureAppointment-9
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME256}
+    # clear_location_n_service  ${PUSERNAME256}
         
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1583,7 +1583,7 @@ JD-TC-GetFutureAppointment-10
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME256}
+    # clear_location_n_service  ${PUSERNAME256}
     
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1602,7 +1602,7 @@ JD-TC-GetFutureAppointment-10
 
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    # clear_appt_schedule   ${PUSERNAME256}
+    # # clear_appt_schedule   ${PUSERNAME256}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -1746,7 +1746,7 @@ JD-TC-GetFutureAppointment-11
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME256}
+    # clear_location_n_service  ${PUSERNAME256}
     
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1765,7 +1765,7 @@ JD-TC-GetFutureAppointment-11
 
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    # clear_appt_schedule   ${PUSERNAME256}
+    # # clear_appt_schedule   ${PUSERNAME256}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -1904,7 +1904,7 @@ JD-TC-GetFutureAppointment-12
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME256}
+    # clear_location_n_service  ${PUSERNAME256}
         
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1923,7 +1923,7 @@ JD-TC-GetFutureAppointment-12
 
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    # clear_appt_schedule   ${PUSERNAME256}
+    # # clear_appt_schedule   ${PUSERNAME256}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -2050,7 +2050,7 @@ JD-TC-GetFutureAppointment-13
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME256}
+    # clear_location_n_service  ${PUSERNAME256}
         
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -2068,7 +2068,7 @@ JD-TC-GetFutureAppointment-13
     END
 
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    # clear_appt_schedule   ${PUSERNAME256}
+    # # clear_appt_schedule   ${PUSERNAME256}
 
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -2194,7 +2194,7 @@ JD-TC-GetFutureAppointment-14
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME256}
+    # clear_location_n_service  ${PUSERNAME256}
         
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -2213,7 +2213,7 @@ JD-TC-GetFutureAppointment-14
 
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    # clear_appt_schedule   ${PUSERNAME256}
+    # # clear_appt_schedule   ${PUSERNAME256}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -2337,7 +2337,7 @@ JD-TC-GetFutureAppointment-15
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${multilocPro[6]}
+    # clear_location_n_service  ${multilocPro[6]}
     clear_customer   ${multilocPro[6]}
     
     ${lid1}=  Create Sample Location
@@ -2353,7 +2353,7 @@ JD-TC-GetFutureAppointment-15
     Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
 
     ${s_id1}=  Create Sample Service  ${SERVICE1}
-    # clear_appt_schedule   ${multilocPro[6]}
+    # # clear_appt_schedule   ${multilocPro[6]}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10     
@@ -2501,7 +2501,7 @@ JD-TC-GetFutureAppointment-16
 
     # clear_service   ${PUSERNAME256}
     # clear_location  ${PUSERNAME256}
-    clear_location_n_service  ${PUSERNAME256}
+    # clear_location_n_service  ${PUSERNAME256}
     
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -2520,7 +2520,7 @@ JD-TC-GetFutureAppointment-16
 
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    # clear_appt_schedule   ${PUSERNAME256}
+    # # clear_appt_schedule   ${PUSERNAME256}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -2643,7 +2643,7 @@ JD-TC-GetFutureAppointment-17
 
     # clear_service   ${PUSERNAME256}
     # clear_location  ${PUSERNAME256}
-    clear_location_n_service  ${PUSERNAME256}
+    # clear_location_n_service  ${PUSERNAME256}
    
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -2662,7 +2662,7 @@ JD-TC-GetFutureAppointment-17
 
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    # clear_appt_schedule   ${PUSERNAME256}
+    # # clear_appt_schedule   ${PUSERNAME256}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -2795,7 +2795,7 @@ JD-TC-GetFutureAppointment-18
 
     # clear_service   ${PUSERNAME256}
     # clear_location  ${PUSERNAME256}
-    clear_location_n_service  ${PUSERNAME256}
+    # clear_location_n_service  ${PUSERNAME256}
     
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -2814,7 +2814,7 @@ JD-TC-GetFutureAppointment-18
 
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    # clear_appt_schedule   ${PUSERNAME256}
+    # # clear_appt_schedule   ${PUSERNAME256}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -2960,7 +2960,7 @@ JD-TC-GetFutureAppointment-19
 
     # clear_service   ${PUSERNAME256}
     # clear_location  ${PUSERNAME256}
-    clear_location_n_service  ${PUSERNAME256}
+    # clear_location_n_service  ${PUSERNAME256}
         
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -2978,7 +2978,7 @@ JD-TC-GetFutureAppointment-19
     END
 
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    # clear_appt_schedule   ${PUSERNAME256}
+    # # clear_appt_schedule   ${PUSERNAME256}
 
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -3120,7 +3120,7 @@ JD-TC-GetFutureAppointment-20
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME256}
+    # clear_location_n_service  ${PUSERNAME256}
     
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -3139,7 +3139,7 @@ JD-TC-GetFutureAppointment-20
 
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    # clear_appt_schedule   ${PUSERNAME256}
+    # # clear_appt_schedule   ${PUSERNAME256}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -3303,7 +3303,7 @@ JD-TC-GetFutureAppointment-UH1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME256}
+    # clear_location_n_service  ${PUSERNAME256}
     
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -3322,7 +3322,7 @@ JD-TC-GetFutureAppointment-UH1
 
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    # clear_appt_schedule   ${PUSERNAME256}
+    # # clear_appt_schedule   ${PUSERNAME256}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  

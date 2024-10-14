@@ -164,7 +164,7 @@ JD-TC-ChangeAnsStatusForAppt-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
 
-    clear_appt_schedule   ${PUSERNAME113}
+    # clear_appt_schedule   ${PUSERNAME113}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -311,7 +311,7 @@ JD-TC-ChangeAnsStatusForAppt-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
 
-    clear_appt_schedule   ${PUSERNAME113}
+    # clear_appt_schedule   ${PUSERNAME113}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -564,7 +564,7 @@ JD-TC-ChangeAnsStatusForAppt-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
 
-    clear_appt_schedule   ${PUSERNAME113}
+    # clear_appt_schedule   ${PUSERNAME113}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -743,7 +743,7 @@ JD-TC-ChangeAnsStatusForAppt-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
 
-    clear_appt_schedule   ${PUSERNAME113}
+    # clear_appt_schedule   ${PUSERNAME113}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -893,7 +893,7 @@ JD-TC-ChangeAnsStatusForAppt-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
 
-    clear_appt_schedule   ${PUSERNAME113}
+    # clear_appt_schedule   ${PUSERNAME113}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1040,7 +1040,7 @@ JD-TC-ChangeAnsStatusForAppt-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
 
-    clear_appt_schedule   ${PUSERNAME113}
+    # clear_appt_schedule   ${PUSERNAME113}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1195,7 +1195,7 @@ JD-TC-ChangeAnsStatusForAppt-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
 
-    clear_appt_schedule   ${PUSERNAME113}
+    # clear_appt_schedule   ${PUSERNAME113}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1345,7 +1345,7 @@ JD-TC-ChangeAnsStatusForAppt-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
 
-    clear_appt_schedule   ${PUSERNAME113}
+    # clear_appt_schedule   ${PUSERNAME113}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1496,7 +1496,7 @@ JD-TC-ChangeAnsStatusForAppt-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
 
-    clear_appt_schedule   ${PUSERNAME113}
+    # clear_appt_schedule   ${PUSERNAME113}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1691,8 +1691,8 @@ JD-TC-ChangeAnsStatusForAppt-UH7
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_appt_schedule   ${PUSERNAME114}
-    clear_service   ${PUSERNAME114}
+    # clear_appt_schedule   ${PUSERNAME114}
+    # clear_service   ${PUSERNAME114}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -2016,7 +2016,7 @@ JD-TC-ChangeAnsStatusForAppt-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
 
-    clear_appt_schedule   ${PUSERNAME113}
+    # clear_appt_schedule   ${PUSERNAME113}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     

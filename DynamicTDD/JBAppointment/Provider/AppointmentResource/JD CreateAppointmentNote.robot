@@ -39,9 +39,9 @@ JD-TC-CreateAppointmentNote-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME190}
-    clear_location  ${PUSERNAME190}
-    clear_appt_schedule   ${PUSERNAME190}
+    # clear_service   ${PUSERNAME190}
+    # clear_location  ${PUSERNAME190}
+    # clear_appt_schedule   ${PUSERNAME190}
     clear_customer   ${PUSERNAME190}
 
     ${resp}=    Get Locations
@@ -145,9 +145,9 @@ JD-TC-CreateAppointmentNote-2
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME190}
-    clear_location  ${PUSERNAME190}
-    clear_appt_schedule   ${PUSERNAME190}
+    # clear_service   ${PUSERNAME190}
+    # clear_location  ${PUSERNAME190}
+    # clear_appt_schedule   ${PUSERNAME190}
 
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid} 
@@ -287,9 +287,9 @@ JD-TC-CreateAppointmentNote-UH1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME190}
-    clear_location  ${PUSERNAME190}
-    clear_appt_schedule   ${PUSERNAME190}
+    # clear_service   ${PUSERNAME190}
+    # clear_location  ${PUSERNAME190}
+    # clear_appt_schedule   ${PUSERNAME190}
 
     ${lid}=  Create Sample Location
     

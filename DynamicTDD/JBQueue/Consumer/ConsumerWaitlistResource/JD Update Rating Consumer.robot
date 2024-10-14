@@ -26,8 +26,8 @@ ${self}       0
 JD-TC-Update Rating Consumer-1    
 	[Documentation]    Rating Added By Consumer by login of a consumer
 	
-    clear_queue    ${HLPUSERNAME18}
-    clear_service  ${HLPUSERNAME18}
+    # clear_queue    ${HLPUSERNAME18}
+    # clear_service  ${HLPUSERNAME18}
     clear_rating    ${HLPUSERNAME18}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}

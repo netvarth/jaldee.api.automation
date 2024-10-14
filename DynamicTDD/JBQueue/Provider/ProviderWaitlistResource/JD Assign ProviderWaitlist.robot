@@ -2400,8 +2400,8 @@ JD-TC-CreateUser -0
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${PUSERNAME58}
-    clear_service    ${PUSERNAME58}
+    # clear_queue      ${PUSERNAME58}
+    # clear_service    ${PUSERNAME58}
     clear_customer   ${PUSERNAME58}
 
     ${pid}=  get_acc_id  ${PUSERNAME58}
@@ -2531,8 +2531,8 @@ JD-TC-CreateUser -01
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${PUSERNAME66}
-    clear_service    ${PUSERNAME66}
+    # clear_queue      ${PUSERNAME66}
+    # clear_service    ${PUSERNAME66}
     clear_customer   ${PUSERNAME66}
 
     ${pid}=  get_acc_id  ${PUSERNAME66}

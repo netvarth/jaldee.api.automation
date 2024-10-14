@@ -106,7 +106,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_service  ${PUSERNAME101} 
+    # clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
     ${min_pre}=   Random Int   min=40   max=50
     ${min_pre}=  Convert To Number  ${min_pre}  0
@@ -213,9 +213,9 @@ JD-TC-GetAppointmentAdvancePaymentDetails-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
     
-    clear_service  ${PUSERNAME101} 
-    clear_location  ${PUSERNAME101} 
-    clear_queue  ${PUSERNAME101} 
+    # clear_service  ${PUSERNAME101} 
+    # clear_location  ${PUSERNAME101} 
+    # clear_queue  ${PUSERNAME101} 
 
     ${loc_id1}=  Create Sample Location
     Set Test Variable   ${loc_id1}
@@ -335,7 +335,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_service  ${PUSERNAME101} 
+    # clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
     ${min_pre}=   Random Int   min=40   max=50
     ${min_pre}=  Convert To Number  ${min_pre}  0
@@ -483,7 +483,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_service  ${PUSERNAME101} 
+    # clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
     ${min_pre}=   Random Int   min=40   max=50
     ${min_pre}=  Convert To Number  ${min_pre}  0
@@ -635,7 +635,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_service  ${PUSERNAME101} 
+    # clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
     ${min_pre}=   Random Int   min=100   max=100
     ${min_pre}=  Convert To Number  ${min_pre}  0

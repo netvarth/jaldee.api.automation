@@ -1553,7 +1553,7 @@ JD-TC-CreateService-2
 
     [Documentation]   Create service in Non Billable domain
     ${resp}=   Non Billable
-    clear_service      ${resp}
+    # clear_service      ${resp}
     ${description}=  FakerLibrary.sentence
     # ${time}=  FakerLibrary.pyfloat   left_digits=2   right_digits=2   positive=True
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${EMPTY}  ${bool[0]}
@@ -1571,7 +1571,7 @@ JD-TC-CreateService-3
     ${min_pre1}=   Pyfloat  right_digits=1  min_value=1  max_value=10
     ${Total1}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${resp}=   Billable  ${start2}
-    clear_service      ${resp}
+    # clear_service      ${resp}
     #${min_pre1}=   FakerLibrary.pyfloat   left_digits=2   right_digits=2   positive=True
     #${Total1}=   FakerLibrary.pyfloat   left_digits=3   right_digits=2   positive=True
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total1}  ${bool[0]}  minPrePaymentAmount=${min_pre1}
@@ -1582,7 +1582,7 @@ JD-TC-CreateService-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}  notification=${bool[1]}  notificationType=${notifytype[1]}  minPrePaymentAmount=${min_pre1}  totalAmount=${Total1}  status=${status[0]}   bType=${btype}  isPrePayment=${bool[1]}
     ${resp}=   Billable  ${start3}
-    clear_service      ${resp}
+    # clear_service      ${resp}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total1}  ${bool[0]}  minPrePaymentAmount=${min_pre1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1596,7 +1596,7 @@ JD-TC-CreateService-4
 
     [Documentation]  Create service for a valid provider in billable Domain without Prepayment amount
     ${resp}=   Billable  ${start1}
-    clear_service      ${resp}
+    # clear_service      ${resp}
     ${description}=  FakerLibrary.sentence
     ${Total1}=   Random Int   min=100   max=500
     ${Total1}=  Convert To Number  ${Total1}  1
@@ -1612,8 +1612,8 @@ JD-TC-CreateService-5
     [Documentation]   create service in Non Billable Domain and didn't inputs total amount and prepayment amount
     ${description}=  FakerLibrary.sentence
     ${resp}=   Non Billable
-    clear_service   ${resp}
-    clear_service      ${resp}
+    # clear_service   ${resp}
+    # clear_service      ${resp}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${status[0]}  ${btype}  ${bool[1]}  ${notifytype[1]}  ${EMPTY}  ${EMPTY}  ${bool[0]}  ${bool[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1627,7 +1627,7 @@ JD-TC-CreateService-UH1
     ${description}=  FakerLibrary.sentence
     #  clear_service       ${PUSERNAME35}
     ${resp}=   Billable  ${start1}
-    clear_service      ${resp}
+    # clear_service      ${resp}
     ${min_pre1}=   Random Int   min=10   max=50
     Set Suite Variable  ${min_pre1}
     ${Total1}=   Random Int   min=100   max=500
@@ -2164,7 +2164,7 @@ JD-TC-CreateService-9
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME27}
+    # clear_service   ${PUSERNAME27}
 
     ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
@@ -2217,7 +2217,7 @@ JD-TC-CreateService-10
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME27}
+    # clear_service   ${PUSERNAME27}
 
     ${resp}=  Get Service
     Log  ${resp.content}
@@ -2272,7 +2272,7 @@ JD-TC-CreateService-11
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME27}
+    # clear_service   ${PUSERNAME27}
 
     ${resp}=  Get Departments 
     Log  ${resp.content}
@@ -2326,7 +2326,7 @@ JD-TC-CreateService-12
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME27}
+    # clear_service   ${PUSERNAME27}
 
     ${resp}=  Get Service
     Log  ${resp.content}
@@ -2374,7 +2374,7 @@ JD-TC-CreateService-13
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME27}
+    # clear_service   ${PUSERNAME27}
 
     
     ${resp}=  Get Service
@@ -2430,7 +2430,7 @@ JD-TC-CreateService-UH4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME27}
+    # clear_service   ${PUSERNAME27}
 
     ${resp}=  Get Waitlist Settings
     Log  ${resp.content}
@@ -2485,7 +2485,7 @@ JD-TC-CreateService-UH5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME27}
+    # clear_service   ${PUSERNAME27}
 
     ${resp}=  Get Service
     Log  ${resp.content}
@@ -2529,7 +2529,7 @@ JD-TC-CreateService-UH6
 
     [Documentation]   Create service in the  billabe domain without prepayment amount and total amount 
     ${resp}=   Non Billable
-    clear_service      ${resp}
+    # clear_service      ${resp}
     ${description}=  FakerLibrary.sentence
     ${resp}=   Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${status[0]}  ${btype}  ${bool[1]}  ${notifytype[1]}  ${min_pre1}  ${EMPTY}  ${bool[1]}  ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2618,7 +2618,7 @@ JD-TC-CreateService-UH7
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME27}
+    # clear_service   ${PUSERNAME27}
 
     
     ${resp}=  Get Departments 
@@ -2673,7 +2673,7 @@ JD-TC-CreateService-UH8
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME27}
+    # clear_service   ${PUSERNAME27}
 
     
     ${resp}=  Get Service
@@ -2724,7 +2724,7 @@ JD-TC-CreateService-16
     ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME27}
+    # clear_service   ${PUSERNAME27}
 
     
     ${resp}=  Get Service
@@ -2753,7 +2753,7 @@ JD-TC-CreateService-17
     ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME27}
+    # clear_service   ${PUSERNAME27}
 
     
     ${resp}=  Get Service
@@ -2786,7 +2786,7 @@ JD-TC-CreateService-18
     ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME27}
+    # clear_service   ${PUSERNAME27}
 
     ${resp}=  Get Service
     Log  ${resp.content}
@@ -2814,7 +2814,7 @@ JD-TC-CreateService-19
     ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME27}
+    # clear_service   ${PUSERNAME27}
 
     ${resp}=  Get Service
     Log  ${resp.content}
@@ -2841,7 +2841,7 @@ JD-TC-CreateService-UH9
     ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME27}
+    # clear_service   ${PUSERNAME27}
 
     ${resp}=  Get Service
     Log  ${resp.content}
@@ -2869,7 +2869,7 @@ JD-TC-CreateService-UH10
     ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME27}
+    # clear_service   ${PUSERNAME27}
 
     ${resp}=  Get Service
     Log  ${resp.content}
@@ -2897,7 +2897,7 @@ JD-TC-CreateService-UH11
     ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME27}
+    # clear_service   ${PUSERNAME27}
 
     ${resp}=  Get Service
     Log  ${resp.content}
@@ -3007,7 +3007,7 @@ JD-TC-CreateService-21
 
     [Documentation]   Create multiple Services for a user
 
-    clear_service    ${PUSERNAME10}
+    # clear_service    ${PUSERNAME10}
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME4_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -3060,7 +3060,7 @@ JD-TC-CreateService-UH12
 
     [Documentation]   Create Service for an invalid user id
 
-    clear_service    ${PUSERNAME10}
+    # clear_service    ${PUSERNAME10}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME4_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -3276,7 +3276,7 @@ JD-TC-CreateService-22
     ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME27}
+    # clear_service   ${PUSERNAME27}
 
     ${resp}=  Get Service
     Log  ${resp.content}
@@ -3304,7 +3304,7 @@ JD-TC-CreateService-23
     ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME27}
+    # clear_service   ${PUSERNAME27}
 
     ${resp}=  Get Service
     Log  ${resp.content}
@@ -3332,7 +3332,7 @@ JD-TC-CreateService-24
     ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME27}
+    # clear_service   ${PUSERNAME27}
 
     ${resp}=  Get Service
     Log  ${resp.content}
@@ -3361,7 +3361,7 @@ JD-TC-CreateService-25
     ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME27}
+    # clear_service   ${PUSERNAME27}
 
     ${resp}=  Get Service
     Log  ${resp.content}
@@ -3389,7 +3389,7 @@ JD-TC-CreateService-26
     ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME27}
+    # clear_service   ${PUSERNAME27}
 
     ${resp}=  Get Service
     Log  ${resp.content}
@@ -3418,7 +3418,7 @@ JD-TC-CreateService-27
     ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME27}
+    # clear_service   ${PUSERNAME27}
 
     ${resp}=  Get Service
     Log  ${resp.content}
@@ -3446,7 +3446,7 @@ JD-TC-CreateService-28
     ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME27}
+    # clear_service   ${PUSERNAME27}
 
     ${resp}=  Get Service
     Log  ${resp.content}
@@ -3475,7 +3475,7 @@ JD-TC-CreateService-29
     ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME27}
+    # clear_service   ${PUSERNAME27}
 
     ${resp}=  Get Service
     Log  ${resp.content}
@@ -3504,7 +3504,7 @@ JD-TC-CreateService-30
     ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME27}
+    # clear_service   ${PUSERNAME27}
 
     ${resp}=  Get Service
     Log  ${resp.content}
@@ -3667,7 +3667,7 @@ wlsettings
 # #         ${length}=  Get Length   ${len}
 
 # #      FOR    ${a}   IN RANGE    ${length}
-# #         clear_service       ${PUSERNAME${a}}
+# #         # clear_service       ${PUSERNAME${a}}
 # #         ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
 # #         Should Be Equal As Strings    ${resp.status_code}    200
 # #         ${domain}=   Set Variable    ${resp.json()['sector']}

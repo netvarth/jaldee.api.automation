@@ -41,9 +41,9 @@ JD-TC-Get waitlist Today count-1
 
 	[Documentation]  Add To Waitlist By Consumer valid  provider
     
-    clear_service   ${HLPUSERNAME16}
-    clear_location   ${HLPUSERNAME16}
-    clear_queue     ${HLPUSERNAME16}
+    # clear_service   ${HLPUSERNAME16}
+    # clear_location   ${HLPUSERNAME16}
+    # clear_queue     ${HLPUSERNAME16}
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${pid}=  get_acc_id  ${HLPUSERNAME16}

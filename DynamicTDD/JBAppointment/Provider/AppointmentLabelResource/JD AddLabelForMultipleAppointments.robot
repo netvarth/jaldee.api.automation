@@ -51,8 +51,8 @@ JD-TC-AddMultipleAppointmentLabel-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME65}
-    clear_location  ${PUSERNAME65}
+    # clear_service   ${PUSERNAME65}
+    # clear_location  ${PUSERNAME65}
     clear_customer   ${PUSERNAME65}
 
     ${resp}=   Get Service
@@ -78,7 +78,7 @@ JD-TC-AddMultipleAppointmentLabel-1
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME65}
+    # clear_appt_schedule   ${PUSERNAME65}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -269,8 +269,8 @@ JD-TC-AddMultipleAppointmentLabel-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
-    clear_service   ${PUSERNAME65}
-    clear_location  ${PUSERNAME65}
+    # clear_service   ${PUSERNAME65}
+    # clear_location  ${PUSERNAME65}
     clear_customer   ${PUSERNAME65}
     clear_Label  ${PUSERNAME65}
 
@@ -308,7 +308,7 @@ JD-TC-AddMultipleAppointmentLabel-2
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME65}
+    # clear_appt_schedule   ${PUSERNAME65}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -557,8 +557,8 @@ JD-TC-AddMultipleAppointmentLabel-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME65}
-    clear_location  ${PUSERNAME65}
+    # clear_service   ${PUSERNAME65}
+    # clear_location  ${PUSERNAME65}
     clear_customer   ${PUSERNAME65}
     clear_Label  ${PUSERNAME65}
 
@@ -584,7 +584,7 @@ JD-TC-AddMultipleAppointmentLabel-3
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME65}
+    # clear_appt_schedule   ${PUSERNAME65}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -679,8 +679,8 @@ JD-TC-AddMultipleAppointmentLabel-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME65}
-    clear_location  ${PUSERNAME65}
+    # clear_service   ${PUSERNAME65}
+    # clear_location  ${PUSERNAME65}
     clear_customer   ${PUSERNAME65}
 
     ${resp}=   Get Service
@@ -721,7 +721,7 @@ JD-TC-AddMultipleAppointmentLabel-4
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME65}
+    # clear_appt_schedule   ${PUSERNAME65}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -840,8 +840,8 @@ JD-TC-AddMultipleAppointmentLabel-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME65}
-    clear_location  ${PUSERNAME65}
+    # clear_service   ${PUSERNAME65}
+    # clear_location  ${PUSERNAME65}
     clear_customer   ${PUSERNAME65}
 
     ${resp}=   Get Service
@@ -867,7 +867,7 @@ JD-TC-AddMultipleAppointmentLabel-5
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME65}
+    # clear_appt_schedule   ${PUSERNAME65}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1023,8 +1023,8 @@ JD-TC-AddMultipleAppointmentLabel-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME65}
-    clear_location  ${PUSERNAME65}
+    # clear_service   ${PUSERNAME65}
+    # clear_location  ${PUSERNAME65}
     clear_customer   ${PUSERNAME65}
 
     ${resp}=   Get Service
@@ -1055,7 +1055,7 @@ JD-TC-AddMultipleAppointmentLabel-6
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME65}
+    # clear_appt_schedule   ${PUSERNAME65}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1241,7 +1241,7 @@ JD-TC-AddMultipleAppointmentLabel-7
     ${SERVICE2}=    FakerLibrary.Word
     ${s_id1}=  Create Sample Service  ${SERVICE2}
 
-    clear_appt_schedule   ${PUSERNAME65}
+    # clear_appt_schedule   ${PUSERNAME65}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1420,7 +1420,7 @@ JD-TC-AddMultipleAppointmentLabel-8
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME65}
+    # clear_appt_schedule   ${PUSERNAME65}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1590,8 +1590,8 @@ JD-TC-AddMultipleAppointmentLabel-9
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME65}
-    clear_location  ${PUSERNAME65}
+    # clear_service   ${PUSERNAME65}
+    # clear_location  ${PUSERNAME65}
     clear_customer   ${PUSERNAME65}
 
     ${resp}=   Get Service
@@ -1617,7 +1617,7 @@ JD-TC-AddMultipleAppointmentLabel-9
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME65}
+    # clear_appt_schedule   ${PUSERNAME65}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1912,7 +1912,7 @@ JD-TC-AddMultipleAppointmentLabel-10
     ${servicecharge}=   Random Int  min=100  max=200
     ${s_id1}=  Create Sample Service   ${SERVICE2}   isPrePayment=${bool[1]}  PrePaymentAmount=${min_pre}   
 
-    clear_appt_schedule   ${PUSERNAME65}
+    # clear_appt_schedule   ${PUSERNAME65}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2081,8 +2081,8 @@ JD-TC-AddMultipleAppointmentLabel-11
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME65}
-    clear_location  ${PUSERNAME65}
+    # clear_service   ${PUSERNAME65}
+    # clear_location  ${PUSERNAME65}
     clear_customer   ${PUSERNAME65}
 
     ${resp}=   Get Service
@@ -2108,7 +2108,7 @@ JD-TC-AddMultipleAppointmentLabel-11
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME65}
+    # clear_appt_schedule   ${PUSERNAME65}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -2251,8 +2251,8 @@ JD-TC-AddMultipleAppointmentLabel-12
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME65}
-    clear_location  ${PUSERNAME65}
+    # clear_service   ${PUSERNAME65}
+    # clear_location  ${PUSERNAME65}
     clear_customer   ${PUSERNAME65}
 
     ${resp}=   Get Service
@@ -2279,7 +2279,7 @@ JD-TC-AddMultipleAppointmentLabel-12
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME65}
+    # clear_appt_schedule   ${PUSERNAME65}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -2420,8 +2420,8 @@ JD-TC-AddMultipleAppointmentLabel-13
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME65}
-    clear_location  ${PUSERNAME65}
+    # clear_service   ${PUSERNAME65}
+    # clear_location  ${PUSERNAME65}
     clear_customer   ${PUSERNAME65}
 
     ${resp}=   Get Service
@@ -2447,7 +2447,7 @@ JD-TC-AddMultipleAppointmentLabel-13
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME65}
+    # clear_appt_schedule   ${PUSERNAME65}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -2567,8 +2567,8 @@ JD-TC-AddMultipleAppointmentLabel-14
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME65}
-    clear_location  ${PUSERNAME65}
+    # clear_service   ${PUSERNAME65}
+    # clear_location  ${PUSERNAME65}
     clear_customer   ${PUSERNAME65}
 
     ${resp}=   Get Service
@@ -2594,7 +2594,7 @@ JD-TC-AddMultipleAppointmentLabel-14
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME65}
+    # clear_appt_schedule   ${PUSERNAME65}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}      
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -2728,8 +2728,8 @@ JD-TC-AddMultipleAppointmentLabel-15
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME65}
-    clear_location  ${PUSERNAME65}
+    # clear_service   ${PUSERNAME65}
+    # clear_location  ${PUSERNAME65}
     clear_customer   ${PUSERNAME65}
 
     ${resp}=   Get Service
@@ -2755,7 +2755,7 @@ JD-TC-AddMultipleAppointmentLabel-15
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME65}
+    # clear_appt_schedule   ${PUSERNAME65}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -3011,7 +3011,7 @@ JD-TC-AddMultipleAppointmentLabel-UH3
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME65}
+    # clear_appt_schedule   ${PUSERNAME65}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
 
@@ -3148,7 +3148,7 @@ JD-TC-AddMultipleAppointmentLabel-UH4
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME65}
+    # clear_appt_schedule   ${PUSERNAME65}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
 
@@ -3306,7 +3306,7 @@ JD-TC-AddMultipleAppointmentLabel-UH5
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME65}
+    # clear_appt_schedule   ${PUSERNAME65}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
 
@@ -3484,8 +3484,8 @@ JD-TC-AddMultipleAppointmentLabel-UH7
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid1}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME66}
-    clear_location  ${PUSERNAME66}
+    # clear_service   ${PUSERNAME66}
+    # clear_location  ${PUSERNAME66}
     clear_customer   ${PUSERNAME66} 
     clear_Label  ${PUSERNAME66}
 
@@ -3497,7 +3497,7 @@ JD-TC-AddMultipleAppointmentLabel-UH7
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME66}
+    # clear_appt_schedule   ${PUSERNAME66}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
 
@@ -3584,8 +3584,8 @@ JD-TC-AddMultipleAppointmentLabel-UH7
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME65}
-    clear_location  ${PUSERNAME65}
+    # clear_service   ${PUSERNAME65}
+    # clear_location  ${PUSERNAME65}
     clear_customer   ${PUSERNAME65} 
     clear_Label  ${PUSERNAME65}
 
@@ -3620,8 +3620,8 @@ JD-TC-AddMultipleAppointmentLabel-UH8
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME66}
-    clear_location  ${PUSERNAME66}
+    # clear_service   ${PUSERNAME66}
+    # clear_location  ${PUSERNAME66}
     clear_customer   ${PUSERNAME66} 
     clear_Label  ${PUSERNAME66}
 
@@ -3649,8 +3649,8 @@ JD-TC-AddMultipleAppointmentLabel-UH8
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid1}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME65}
-    clear_location  ${PUSERNAME65}
+    # clear_service   ${PUSERNAME65}
+    # clear_location  ${PUSERNAME65}
     clear_customer   ${PUSERNAME65} 
     clear_Label  ${PUSERNAME65}
 
@@ -3662,7 +3662,7 @@ JD-TC-AddMultipleAppointmentLabel-UH8
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME65}
+    # clear_appt_schedule   ${PUSERNAME65}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
 
@@ -3766,8 +3766,8 @@ JD-TC-AddMultipleAppointmentLabel-UH10
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME65}
-    clear_location  ${PUSERNAME65}
+    # clear_service   ${PUSERNAME65}
+    # clear_location  ${PUSERNAME65}
     clear_customer   ${PUSERNAME65} 
     clear_Label  ${PUSERNAME65}
 
@@ -3785,7 +3785,7 @@ JD-TC-AddMultipleAppointmentLabel-UH10
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME65}
+    # clear_appt_schedule   ${PUSERNAME65}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
 
@@ -3923,7 +3923,7 @@ JD-TC-AddMultipleAppointmentLabel-UH11
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME65}
+    # clear_appt_schedule   ${PUSERNAME65}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
 
@@ -4035,8 +4035,8 @@ JD-TC-AddMultipleAppointmentLabel-UH12
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME65}
-    clear_location  ${PUSERNAME65}
+    # clear_service   ${PUSERNAME65}
+    # clear_location  ${PUSERNAME65}
     clear_customer   ${PUSERNAME65} 
     clear_Label  ${PUSERNAME65}
 
@@ -4054,7 +4054,7 @@ JD-TC-AddMultipleAppointmentLabel-UH12
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME65}
+    # clear_appt_schedule   ${PUSERNAME65}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
 
@@ -4182,8 +4182,8 @@ JD-TC-AddMultipleAppointmentLabel-UH13
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME65}
-    clear_location  ${PUSERNAME65}
+    # clear_service   ${PUSERNAME65}
+    # clear_location  ${PUSERNAME65}
     clear_customer   ${PUSERNAME65}
     clear_Label  ${PUSERNAME65}
 
@@ -4209,7 +4209,7 @@ JD-TC-AddMultipleAppointmentLabel-UH13
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME65}
+    # clear_appt_schedule   ${PUSERNAME65}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -4349,8 +4349,8 @@ JD-TC-AddMultipleAppointmentLabel-UH14
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${PUSERNAME65}
-    clear_location  ${PUSERNAME65}
+    # clear_service   ${PUSERNAME65}
+    # clear_location  ${PUSERNAME65}
     clear_customer   ${PUSERNAME65}
     clear_Label  ${PUSERNAME65}
 
@@ -4377,7 +4377,7 @@ JD-TC-AddMultipleAppointmentLabel-UH14
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${PUSERNAME65}
+    # clear_appt_schedule   ${PUSERNAME65}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     

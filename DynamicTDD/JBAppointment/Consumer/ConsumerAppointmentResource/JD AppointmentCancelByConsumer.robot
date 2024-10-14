@@ -29,8 +29,8 @@ JD-TC-AppointmentCancelByConsumer-1
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME131}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME131}
-    clear_location  ${PUSERNAME131}    
+    # clear_service   ${PUSERNAME131}
+    # clear_location  ${PUSERNAME131}    
     ${resp}=   Get Service
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -58,7 +58,7 @@ JD-TC-AppointmentCancelByConsumer-1
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
 
-    clear_appt_schedule   ${PUSERNAME131}
+    # clear_appt_schedule   ${PUSERNAME131}
     ${SERVICE1}=   FakerLibrary.name
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
@@ -180,8 +180,8 @@ JD-TC-AppointmentCancelByConsumer-2
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME132}
-    clear_location  ${PUSERNAME132} 
+    # clear_service   ${PUSERNAME132}
+    # clear_location  ${PUSERNAME132} 
 
     ${pid01}=  get_acc_id  ${PUSERNAME132}
     Set Suite Variable   ${pid01}
@@ -199,8 +199,8 @@ JD-TC-AppointmentCancelByConsumer-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    clear_appt_schedule   ${PUSERNAME132}
-    clear_appt_schedule   ${PUSERNAME132}
+    # clear_appt_schedule   ${PUSERNAME132}
+    # clear_appt_schedule   ${PUSERNAME132}
     ${SERVICE1}=   FakerLibrary.name
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}

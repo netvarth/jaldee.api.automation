@@ -44,9 +44,9 @@ JD-TC-Update_IVR_Settings-1
 
     [Documentation]   Update IVR Settings
     
-    clear_queue      ${PUSERNAME179}
+    # clear_queue      ${PUSERNAME179}
     # clear_location   ${PUSERNAME179}
-    clear_service    ${PUSERNAME179}
+    # clear_service    ${PUSERNAME179}
     clear_customer   ${PUSERNAME179}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
@@ -214,9 +214,9 @@ JD-TC-Update_IVR_Settings-2
 
     [Documentation]   Update IVR Settingswithout creating ivr settings
     
-    clear_queue      ${PUSERNAME179}
-    clear_location   ${PUSERNAME179}
-    clear_service    ${PUSERNAME179}
+    # clear_queue      ${PUSERNAME179}
+    # clear_location   ${PUSERNAME179}
+    # clear_service    ${PUSERNAME179}
     clear_customer   ${PUSERNAME179}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
@@ -369,9 +369,9 @@ JD-TC-Update_IVR_Settings-3
 
     [Documentation]   Update IVR Settings where call waiting time is empty
     
-    clear_queue      ${PUSERNAME179}
-    clear_location   ${PUSERNAME179}
-    clear_service    ${PUSERNAME179}
+    # clear_queue      ${PUSERNAME179}
+    # clear_location   ${PUSERNAME179}
+    # clear_service    ${PUSERNAME179}
     clear_customer   ${PUSERNAME179}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
@@ -426,9 +426,9 @@ JD-TC-Update_IVR_Settings-4
 
     [Documentation]   Update IVR Settings where sample service is empty
     
-    clear_queue      ${PUSERNAME179}
-    clear_location   ${PUSERNAME179}
-    clear_service    ${PUSERNAME179}
+    # clear_queue      ${PUSERNAME179}
+    # clear_location   ${PUSERNAME179}
+    # clear_service    ${PUSERNAME179}
     clear_customer   ${PUSERNAME179}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
@@ -501,9 +501,9 @@ JD-TC-Update_IVR_Settings-5
 
     [Documentation]   Update IVR Settings where token is empty
     
-    clear_queue      ${PUSERNAME179}
-    clear_location   ${PUSERNAME179}
-    clear_service    ${PUSERNAME179}
+    # clear_queue      ${PUSERNAME179}
+    # clear_location   ${PUSERNAME179}
+    # clear_service    ${PUSERNAME179}
     clear_customer   ${PUSERNAME179}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
@@ -558,9 +558,9 @@ JD-TC-Update_IVR_Settings-6
 
     [Documentation]   Update IVR Settings where secret key is empty 
     
-    clear_queue      ${PUSERNAME179}
-    clear_location   ${PUSERNAME179}
-    clear_service    ${PUSERNAME179}
+    # clear_queue      ${PUSERNAME179}
+    # clear_location   ${PUSERNAME179}
+    # clear_service    ${PUSERNAME179}
     clear_customer   ${PUSERNAME179}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
@@ -615,9 +615,9 @@ JD-TC-Update_IVR_Settings-7
 
     [Documentation]   Update IVR Settings where api key is empty
     
-    clear_queue      ${PUSERNAME179}
-    clear_location   ${PUSERNAME179}
-    clear_service    ${PUSERNAME179}
+    # clear_queue      ${PUSERNAME179}
+    # clear_location   ${PUSERNAME179}
+    # clear_service    ${PUSERNAME179}
     clear_customer   ${PUSERNAME179}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
@@ -672,9 +672,9 @@ JD-TC-Update_IVR_Settings-8
 
     [Documentation]   Update IVR Settings where token is empty
     
-    clear_queue      ${PUSERNAME179}
-    clear_location   ${PUSERNAME179}
-    clear_service    ${PUSERNAME179}
+    # clear_queue      ${PUSERNAME179}
+    # clear_location   ${PUSERNAME179}
+    # clear_service    ${PUSERNAME179}
     clear_customer   ${PUSERNAME179}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
@@ -729,9 +729,9 @@ JD-TC-Update_IVR_Settings-9
 
     [Documentation]   Update IVR Settings where public id  is empty
     
-    clear_queue      ${PUSERNAME179}
-    clear_location   ${PUSERNAME179}
-    clear_service    ${PUSERNAME179}
+    # clear_queue      ${PUSERNAME179}
+    # clear_location   ${PUSERNAME179}
+    # clear_service    ${PUSERNAME179}
     clear_customer   ${PUSERNAME179}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
@@ -786,9 +786,9 @@ JD-TC-Update_IVR_Settings-10
 
     [Documentation]   Update IVR Settings where Language reset count  is empty
     
-    clear_queue      ${PUSERNAME179}
-    clear_location   ${PUSERNAME179}
-    clear_service    ${PUSERNAME179}
+    # clear_queue      ${PUSERNAME179}
+    # clear_location   ${PUSERNAME179}
+    # clear_service    ${PUSERNAME179}
     clear_customer   ${PUSERNAME179}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
@@ -844,9 +844,9 @@ JD-TC-Update_IVR_Settings-UH1
 
     [Documentation]   Update IVR Settings with another provider login
     
-    clear_queue      ${PUSERNAME14}
-    clear_location   ${PUSERNAME14}
-    clear_service    ${PUSERNAME14}
+    # clear_queue      ${PUSERNAME14}
+    # clear_location   ${PUSERNAME14}
+    # clear_service    ${PUSERNAME14}
     clear_customer   ${PUSERNAME14}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
@@ -1020,9 +1020,9 @@ JD-TC-Update_IVR_Settings-UH3
 
     [Documentation]   Update IVR Settings where ivr call priority is low
     
-    clear_queue      ${PUSERNAME179}
-    clear_location   ${PUSERNAME179}
-    clear_service    ${PUSERNAME179}
+    # clear_queue      ${PUSERNAME179}
+    # clear_location   ${PUSERNAME179}
+    # clear_service    ${PUSERNAME179}
     clear_customer   ${PUSERNAME179}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
@@ -1076,9 +1076,9 @@ JD-TC-Update_IVR_Settings-UH4
 
     [Documentation]   Update IVR Settings where ivr_config_data  is empty
     
-    clear_queue      ${PUSERNAME179}
-    clear_location   ${PUSERNAME179}
-    clear_service    ${PUSERNAME179}
+    # clear_queue      ${PUSERNAME179}
+    # clear_location   ${PUSERNAME179}
+    # clear_service    ${PUSERNAME179}
     clear_customer   ${PUSERNAME179}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}

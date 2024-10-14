@@ -24,7 +24,7 @@ ${capacity}     5
 JD-TC-Get Waitlist By Id Consumer-1  
 	[Documentation]  Add To Waitlist By Consumer valid  provider
     
-    [Setup]  Run Keywords  clear_queue  ${PUSERNAME193}  AND  clear_location  ${PUSERNAME193}  AND  clear_service  ${PUSERNAME192}
+    # [Setup]  Run Keywords  clear_queue  ${PUSERNAME193}  AND  clear_location  ${PUSERNAME193}  AND  clear_service  ${PUSERNAME192}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME193}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

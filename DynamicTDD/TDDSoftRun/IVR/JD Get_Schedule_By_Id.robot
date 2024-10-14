@@ -25,9 +25,9 @@ JD-Get_schedules_Using_Id-1
 
     [Documentation]  Get schedules using id
 
-    clear_queue      ${PUSERNAME168}
+    # clear_queue      ${PUSERNAME168}
     # clear_location   ${PUSERNAME168}
-    clear_service    ${PUSERNAME168}
+    # clear_service    ${PUSERNAME168}
     clear_customer   ${PUSERNAME168}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME168}  ${PASSWORD}

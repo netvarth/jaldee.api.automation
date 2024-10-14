@@ -30,7 +30,7 @@ JD-TC-Get Service Image-1
     [Documentation]  Provider check to Get Gallery Image
     ${resp}=  Encrypted Provider Login  ${PUSERNAME215}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service       ${PUSERNAME215}
+    # clear_service       ${PUSERNAME215}
     ${description}=  FakerLibrary.sentence
     ${min_pre}=   Random Int   min=10   max=50
     ${Total}=   Random Int   min=100   max=500

@@ -27,8 +27,8 @@ JD-TC-Waitlist Rating By Consumer-1
 
 	[Documentation]    Rating Added By Consumer by login of a consumer
 	
-    clear_queue    ${HLPUSERNAME8}
-    clear_service  ${HLPUSERNAME8}
+    # clear_queue    ${HLPUSERNAME8}
+    # clear_service  ${HLPUSERNAME8}
     clear_rating    ${HLPUSERNAME8}
     
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}

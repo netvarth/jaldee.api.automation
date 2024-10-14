@@ -25,9 +25,9 @@ JD-TC-Get Queue By Id-1
 	[Documentation]  Get Queues by Id valid  provider
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${HLPUSERNAME2}
+    # clear_service   ${HLPUSERNAME2}
     # clear_location  ${HLPUSERNAME2}
-    clear_queue  ${HLPUSERNAME2}
+    # clear_queue  ${HLPUSERNAME2}
 
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -71,9 +71,9 @@ JD-TC-Get Queue By Id-2
     [Documentation]    Create a queue with field tokenStart in a location of a valid provider and get queue by id
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${HLPUSERNAME2}
+    # clear_service   ${HLPUSERNAME2}
     # clear_location  ${HLPUSERNAME2}
-    clear_queue  ${HLPUSERNAME2}
+    # clear_queue  ${HLPUSERNAME2}
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
     ${eTime1}=  add_timezone_time  ${tz}  0  30  

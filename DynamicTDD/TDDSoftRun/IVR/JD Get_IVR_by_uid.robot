@@ -46,9 +46,9 @@ JD-TC-Get_IVR_By_UID-1
 
     [Documentation]   Get IVR by Uid
         
-    clear_queue      ${PUSERNAME163}
+    # clear_queue      ${PUSERNAME163}
     # clear_location   ${PUSERNAME163}
-    clear_service    ${PUSERNAME163}
+    # clear_service    ${PUSERNAME163}
     clear_customer   ${PUSERNAME163}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME163}  ${PASSWORD}
@@ -324,9 +324,9 @@ JD-TC-Get_IVR_By_UID-2
 
     [Documentation]   Get IVR by Uid before after login
         
-    clear_queue      ${PUSERNAME163}
-    clear_location   ${PUSERNAME163}
-    clear_service    ${PUSERNAME163}
+    # clear_queue      ${PUSERNAME163}
+    # clear_location   ${PUSERNAME163}
+    # clear_service    ${PUSERNAME163}
     clear_customer   ${PUSERNAME163}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME163}  ${PASSWORD}
@@ -590,9 +590,9 @@ JD-TC-Get_IVR_By_UID-3
 
     [Documentation]   Get IVR by Uid  after incoming call on server
         
-    clear_queue      ${PUSERNAME163}
-    clear_location   ${PUSERNAME163}
-    clear_service    ${PUSERNAME163}
+    # clear_queue      ${PUSERNAME163}
+    # clear_location   ${PUSERNAME163}
+    # clear_service    ${PUSERNAME163}
     clear_customer   ${PUSERNAME163}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME163}  ${PASSWORD}
@@ -855,9 +855,9 @@ JD-TC-Get_IVR_By_UID-4
 
     [Documentation]   Get IVR by Uid  after Dialing user
         
-    clear_queue      ${PUSERNAME163}
-    clear_location   ${PUSERNAME163}
-    clear_service    ${PUSERNAME163}
+    # clear_queue      ${PUSERNAME163}
+    # clear_location   ${PUSERNAME163}
+    # clear_service    ${PUSERNAME163}
     clear_customer   ${PUSERNAME163}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME163}  ${PASSWORD}
@@ -1121,9 +1121,9 @@ JD-TC-Get_IVR_By_UID-5
 
     [Documentation]   Get IVR by Uid  after User answered the call
         
-    clear_queue      ${PUSERNAME163}
-    clear_location   ${PUSERNAME163}
-    clear_service    ${PUSERNAME163}
+    # clear_queue      ${PUSERNAME163}
+    # clear_location   ${PUSERNAME163}
+    # clear_service    ${PUSERNAME163}
     clear_customer   ${PUSERNAME163}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME163}  ${PASSWORD}

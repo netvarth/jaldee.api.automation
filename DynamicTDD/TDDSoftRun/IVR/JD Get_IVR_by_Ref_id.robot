@@ -56,9 +56,9 @@ JD-TC-Get_IVR_By_Ref_Id-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_queue      ${PUSERNAME162}
+    # clear_queue      ${PUSERNAME162}
     # clear_location   ${PUSERNAME162}
-    clear_service    ${PUSERNAME162}
+    # clear_service    ${PUSERNAME162}
     clear_customer   ${PUSERNAME162}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME162}  ${PASSWORD}
@@ -337,9 +337,9 @@ JD-TC-Get_IVR_By_Ref_Id-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_queue      ${PUSERNAME162}
-    clear_location   ${PUSERNAME162}
-    clear_service    ${PUSERNAME162}
+    # clear_queue      ${PUSERNAME162}
+    # clear_location   ${PUSERNAME162}
+    # clear_service    ${PUSERNAME162}
     clear_customer   ${PUSERNAME162}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME162}  ${PASSWORD}
@@ -611,9 +611,9 @@ JD-TC-Get_IVR_By_Ref_Id-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_queue      ${PUSERNAME162}
-    clear_location   ${PUSERNAME162}
-    clear_service    ${PUSERNAME162}
+    # clear_queue      ${PUSERNAME162}
+    # clear_location   ${PUSERNAME162}
+    # clear_service    ${PUSERNAME162}
     clear_customer   ${PUSERNAME162}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME162}  ${PASSWORD}
@@ -885,9 +885,9 @@ JD-TC-Get_IVR_By_Ref_Id-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_queue      ${PUSERNAME162}
-    clear_location   ${PUSERNAME162}
-    clear_service    ${PUSERNAME162}
+    # clear_queue      ${PUSERNAME162}
+    # clear_location   ${PUSERNAME162}
+    # clear_service    ${PUSERNAME162}
     clear_customer   ${PUSERNAME162}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME162}  ${PASSWORD}
@@ -1160,9 +1160,9 @@ JD-TC-Get_IVR_By_Ref_Id-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_queue      ${PUSERNAME162}
-    clear_location   ${PUSERNAME162}
-    clear_service    ${PUSERNAME162}
+    # clear_queue      ${PUSERNAME162}
+    # clear_location   ${PUSERNAME162}
+    # clear_service    ${PUSERNAME162}
     clear_customer   ${PUSERNAME162}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME162}  ${PASSWORD}

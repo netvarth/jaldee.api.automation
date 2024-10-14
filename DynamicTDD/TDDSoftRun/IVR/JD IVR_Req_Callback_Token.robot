@@ -44,9 +44,9 @@ JD-TC-IVR_Request_Call_Back_Token-1
 
     [Documentation]   IVR Request Call Back Token
     
-    clear_queue      ${PUSERNAME173}
+    # clear_queue      ${PUSERNAME173}
     # clear_location   ${PUSERNAME173}
-    clear_service    ${PUSERNAME173}
+    # clear_service    ${PUSERNAME173}
     clear_customer   ${PUSERNAME173}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME173}  ${PASSWORD}
@@ -323,9 +323,9 @@ JD-TC-IVR_Request_Call_Back_Token-2
 
     [Documentation]   IVR Request Call Back Token before after call
     
-    clear_queue      ${PUSERNAME173}
-    clear_location   ${PUSERNAME173}
-    clear_service    ${PUSERNAME173}
+    # clear_queue      ${PUSERNAME173}
+    # clear_location   ${PUSERNAME173}
+    # clear_service    ${PUSERNAME173}
     clear_customer   ${PUSERNAME173}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME173}  ${PASSWORD}
@@ -592,9 +592,9 @@ JD-TC-IVR_Request_Call_Back_Token-3
 
     [Documentation]   IVR Request Call Back Token before after call
     
-    clear_queue      ${PUSERNAME173}
-    clear_location   ${PUSERNAME173}
-    clear_service    ${PUSERNAME173}
+    # clear_queue      ${PUSERNAME173}
+    # clear_location   ${PUSERNAME173}
+    # clear_service    ${PUSERNAME173}
     clear_customer   ${PUSERNAME173}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME173}  ${PASSWORD}

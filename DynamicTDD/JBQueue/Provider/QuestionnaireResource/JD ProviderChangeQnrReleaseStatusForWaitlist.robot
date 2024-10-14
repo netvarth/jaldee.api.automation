@@ -202,7 +202,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-1
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${HLPUSERNAME33}
+    # clear_queue   ${HLPUSERNAME33}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -344,7 +344,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-2
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${HLPUSERNAME33}
+    # clear_queue   ${HLPUSERNAME33}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -486,7 +486,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-3
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${HLPUSERNAME33}
+    # clear_queue   ${HLPUSERNAME33}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
 
@@ -672,7 +672,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-4
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${HLPUSERNAME33}
+    # clear_queue   ${HLPUSERNAME33}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
 
@@ -856,7 +856,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-5
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${HLPUSERNAME33}
+    # clear_queue   ${HLPUSERNAME33}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
 
@@ -1051,7 +1051,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-UH3
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${HLPUSERNAME33}
+    # clear_queue   ${HLPUSERNAME33}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
 

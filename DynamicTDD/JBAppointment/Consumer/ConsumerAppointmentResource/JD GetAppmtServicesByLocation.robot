@@ -39,8 +39,8 @@ JD-TC-GetAppmtServicesByLocation-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME_R}
-    clear_location  ${PUSERNAME_R}
+    # clear_service   ${PUSERNAME_R}
+    # clear_location  ${PUSERNAME_R}
 
     ${account_id1}=  get_acc_id  ${PUSERNAME_R}
     Set Suite Variable  ${account_id1}
@@ -110,7 +110,7 @@ JD-TC-GetAppmtServicesByLocation-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_l3}  ${resp.json()}
 
-    clear_appt_schedule   ${PUSERNAME_R}
+    # clear_appt_schedule   ${PUSERNAME_R}
         
     ${service_duration}=   Random Int   min=5   max=10
     Set Suite Variable    ${service_duration}
@@ -772,8 +772,8 @@ JD-TC-GetAppmtServicesByLocation-10
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME_S}
-    clear_location  ${PUSERNAME_S}
+    # clear_service   ${PUSERNAME_S}
+    # clear_location  ${PUSERNAME_S}
    
 
     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
@@ -795,7 +795,7 @@ JD-TC-GetAppmtServicesByLocation-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${p1_l1}  ${resp.json()}
    
-    clear_appt_schedule   ${PUSERNAME_S}
+    # clear_appt_schedule   ${PUSERNAME_S}
 
     ${account_id2}=  get_acc_id  ${PUSERNAME_S}
     Set Test Variable  ${account_id2}

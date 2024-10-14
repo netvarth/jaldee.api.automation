@@ -50,8 +50,8 @@ JD-TC-GetAppointmentAttachment-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME130}
-    clear_location  ${PUSERNAME130}
+    # clear_service   ${PUSERNAME130}
+    # clear_location  ${PUSERNAME130}
     clear_customer   ${PUSERNAME130}
 
     ${lid}=  Create Sample Location  
@@ -60,7 +60,7 @@ JD-TC-GetAppointmentAttachment-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME130}
+    # clear_appt_schedule   ${PUSERNAME130}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -139,8 +139,8 @@ JD-TC-GetAppointmentAttachment-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${PUSERNAME130}
-    clear_location  ${PUSERNAME130}
+    # clear_service   ${PUSERNAME130}
+    # clear_location  ${PUSERNAME130}
     clear_customer   ${PUSERNAME130}
 
     ${lid}=  Create Sample Location  
@@ -149,7 +149,7 @@ JD-TC-GetAppointmentAttachment-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME130}
+    # clear_appt_schedule   ${PUSERNAME130}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -228,8 +228,8 @@ JD-TC-GetAppointmentAttachment-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
   
-    clear_service   ${PUSERNAME130}
-    clear_location  ${PUSERNAME130}
+    # clear_service   ${PUSERNAME130}
+    # clear_location  ${PUSERNAME130}
     clear_customer   ${PUSERNAME130}
 
     ${lid}=  Create Sample Location  
@@ -238,7 +238,7 @@ JD-TC-GetAppointmentAttachment-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME130}
+    # clear_appt_schedule   ${PUSERNAME130}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -318,8 +318,8 @@ JD-TC-GetAppointmentAttachment-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${PUSERNAME130}
-    clear_location  ${PUSERNAME130}
+    # clear_service   ${PUSERNAME130}
+    # clear_location  ${PUSERNAME130}
     clear_customer   ${PUSERNAME130}
 
     ${lid}=  Create Sample Location  
@@ -328,7 +328,7 @@ JD-TC-GetAppointmentAttachment-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME130}
+    # clear_appt_schedule   ${PUSERNAME130}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -408,8 +408,8 @@ JD-TC-GetAppointmentAttachment-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${PUSERNAME130}
-    clear_location  ${PUSERNAME130}
+    # clear_service   ${PUSERNAME130}
+    # clear_location  ${PUSERNAME130}
     clear_customer   ${PUSERNAME130}
 
     ${lid}=  Create Sample Location  
@@ -418,7 +418,7 @@ JD-TC-GetAppointmentAttachment-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME130}
+    # clear_appt_schedule   ${PUSERNAME130}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -497,8 +497,8 @@ JD-TC-GetAppointmentAttachment-6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${PUSERNAME130}
-    clear_location  ${PUSERNAME130}
+    # clear_service   ${PUSERNAME130}
+    # clear_location  ${PUSERNAME130}
     clear_customer   ${PUSERNAME130}
 
     ${lid}=  Create Sample Location  
@@ -507,7 +507,7 @@ JD-TC-GetAppointmentAttachment-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME130}
+    # clear_appt_schedule   ${PUSERNAME130}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        

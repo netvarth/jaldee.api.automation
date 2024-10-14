@@ -200,7 +200,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-1
     END
     Set Suite Variable   ${s_id}  
 
-    clear_appt_schedule   ${PUSERNAME164}
+    # clear_appt_schedule   ${PUSERNAME164}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -377,7 +377,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-2
     END
     Set Suite Variable   ${s_id}  
 
-    clear_appt_schedule   ${PUSERNAME164}
+    # clear_appt_schedule   ${PUSERNAME164}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -515,7 +515,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-3
     END
     Set Suite Variable   ${s_id}  
 
-    clear_appt_schedule   ${PUSERNAME164}
+    # clear_appt_schedule   ${PUSERNAME164}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
 
@@ -679,7 +679,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-4
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${PUSERNAME164}
+    # clear_queue   ${PUSERNAME164}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Get Questionnaire List By Provider   
@@ -722,7 +722,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-4
     Set Suite Variable  ${Questionnaireid}  ${qns.json()['questionnaireId']}
     Set Suite Variable  ${Questionnaireid4}  ${qns.json()['questionnaireId']}
    
-    clear_appt_schedule   ${PUSERNAME164}
+    # clear_appt_schedule   ${PUSERNAME164}
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -863,7 +863,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-5
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${PUSERNAME164}
+    # clear_queue   ${PUSERNAME164}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
 
@@ -894,7 +894,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-5
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
     Set Suite Variable  ${Questionnaireid5}  ${qns.json()['questionnaireId']}
 
-    clear_appt_schedule   ${PUSERNAME164}
+    # clear_appt_schedule   ${PUSERNAME164}
  
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}
@@ -1057,7 +1057,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-UH3
     END
     Set Suite Variable   ${s_id}  
 
-    clear_appt_schedule   ${PUSERNAME164}
+    # clear_appt_schedule   ${PUSERNAME164}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
 

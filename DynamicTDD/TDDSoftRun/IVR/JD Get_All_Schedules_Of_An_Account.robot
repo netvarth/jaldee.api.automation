@@ -25,9 +25,9 @@ JD-Get_all_schedules_of_an_account-1
 
     [Documentation]  Get all schedules of an account
 
-    clear_queue      ${PUSERNAME160}
+    # clear_queue      ${PUSERNAME160}
     # clear_location   ${PUSERNAME160}
-    clear_service    ${PUSERNAME160}
+    # clear_service    ${PUSERNAME160}
     clear_customer   ${PUSERNAME160}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
@@ -83,9 +83,9 @@ JD-Get_all_schedules_of_an_account-2
 
     [Documentation]  Get all schedules of an account  without creating schedule for same provider
 
-    clear_queue      ${PUSERNAME160}
-    clear_location   ${PUSERNAME160}
-    clear_service    ${PUSERNAME160}
+    # clear_queue      ${PUSERNAME160}
+    # clear_location   ${PUSERNAME160}
+    # clear_service    ${PUSERNAME160}
     clear_customer   ${PUSERNAME160}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
@@ -120,9 +120,9 @@ JD-Get_all_schedules_of_an_account-3
 
     [Documentation]  Create two schedules and Get all schedules of an account
 
-    clear_queue      ${PUSERNAME160}
-    clear_location   ${PUSERNAME160}
-    clear_service    ${PUSERNAME160}
+    # clear_queue      ${PUSERNAME160}
+    # clear_location   ${PUSERNAME160}
+    # clear_service    ${PUSERNAME160}
     clear_customer   ${PUSERNAME160}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}

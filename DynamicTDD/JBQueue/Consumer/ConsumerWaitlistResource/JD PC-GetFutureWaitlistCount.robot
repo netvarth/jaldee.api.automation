@@ -23,7 +23,7 @@ JD-TC-Get Future Waitlist Count-1
 	
     [Documentation]  Add To Waitlist By Consumer valid  provider
     
-    [Setup]  Run Keywords  clear_queue  ${PUSERNAME205}  AND  clear_location  ${PUSERNAME205}
+    # [Setup]  Run Keywords  clear_queue  ${PUSERNAME205}  AND  clear_location  ${PUSERNAME205}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 

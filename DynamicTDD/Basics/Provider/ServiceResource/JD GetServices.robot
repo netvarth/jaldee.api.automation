@@ -43,7 +43,7 @@ JD-TC-GetServices-1
     Set Suite Variable  ${min_pre}
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service       ${HLPUSERNAME7}  
+    # clear_service       ${HLPUSERNAME7}  
 
 
     ${resp}=  Create Service  ${SERVICE1}  ${description}   {service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre} 

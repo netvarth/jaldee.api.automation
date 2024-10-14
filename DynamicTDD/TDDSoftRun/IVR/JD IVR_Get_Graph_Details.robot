@@ -44,9 +44,9 @@ JD-TC-Get_IVR_Graph_Details-1
 
     [Documentation]   Get IVR Graph Details
     
-    clear_queue      ${PUSERNAME171}
+    # clear_queue      ${PUSERNAME171}
     # clear_location   ${PUSERNAME171}
-    clear_service    ${PUSERNAME171}
+    # clear_service    ${PUSERNAME171}
     clear_customer   ${PUSERNAME171}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}
@@ -427,9 +427,9 @@ JD-TC-Get_IVR_Graph_Details-2
 
     [Documentation]   Get IVR Graph Details with a particular date range
     
-    clear_queue      ${PUSERNAME171}
-    clear_location   ${PUSERNAME171}
-    clear_service    ${PUSERNAME171}
+    # clear_queue      ${PUSERNAME171}
+    # clear_location   ${PUSERNAME171}
+    # clear_service    ${PUSERNAME171}
     clear_customer   ${PUSERNAME171}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}
@@ -489,9 +489,9 @@ JD-TC-Get_IVR_Graph_Details-UH2
 
     [Documentation]   Get IVR Graph Details with another provider login
     
-    clear_queue      ${PUSERNAME14}
-    clear_location   ${PUSERNAME14}
-    clear_service    ${PUSERNAME14}
+    # clear_queue      ${PUSERNAME14}
+    # clear_location   ${PUSERNAME14}
+    # clear_service    ${PUSERNAME14}
     clear_customer   ${PUSERNAME14}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
@@ -533,9 +533,9 @@ JD-TC-Get_IVR_Graph_Details-UH3
 
     [Documentation]   Get IVR Graph Details where Report date category is different
     
-    clear_queue      ${PUSERNAME171}
-    clear_location   ${PUSERNAME171}
-    clear_service    ${PUSERNAME171}
+    # clear_queue      ${PUSERNAME171}
+    # clear_location   ${PUSERNAME171}
+    # clear_service    ${PUSERNAME171}
     clear_customer   ${PUSERNAME171}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}
@@ -577,9 +577,9 @@ JD-TC-Get_IVR_Graph_Details-UH4
 
     [Documentation]   Get IVR Graph Details where start date given null
     
-    clear_queue      ${PUSERNAME171}
-    clear_location   ${PUSERNAME171}
-    clear_service    ${PUSERNAME171}
+    # clear_queue      ${PUSERNAME171}
+    # clear_location   ${PUSERNAME171}
+    # clear_service    ${PUSERNAME171}
     clear_customer   ${PUSERNAME171}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}
@@ -617,9 +617,9 @@ JD-TC-Get_IVR_Graph_Details-UH5
 
     [Documentation]   Get IVR Graph Details where start date is empty
     
-    clear_queue      ${PUSERNAME171}
-    clear_location   ${PUSERNAME171}
-    clear_service    ${PUSERNAME171}
+    # clear_queue      ${PUSERNAME171}
+    # clear_location   ${PUSERNAME171}
+    # clear_service    ${PUSERNAME171}
     clear_customer   ${PUSERNAME171}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}
@@ -657,9 +657,9 @@ JD-TC-Get_IVR_Graph_Details-UH6
 
     [Documentation]   Get IVR Graph Details where end date is null
     
-    clear_queue      ${PUSERNAME171}
-    clear_location   ${PUSERNAME171}
-    clear_service    ${PUSERNAME171}
+    # clear_queue      ${PUSERNAME171}
+    # clear_location   ${PUSERNAME171}
+    # clear_service    ${PUSERNAME171}
     clear_customer   ${PUSERNAME171}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}
@@ -697,9 +697,9 @@ JD-TC-Get_IVR_Graph_Details-UH7
 
     [Documentation]   Get IVR Graph Details where end date is empty
     
-    clear_queue      ${PUSERNAME171}
-    clear_location   ${PUSERNAME171}
-    clear_service    ${PUSERNAME171}
+    # clear_queue      ${PUSERNAME171}
+    # clear_location   ${PUSERNAME171}
+    # clear_service    ${PUSERNAME171}
     clear_customer   ${PUSERNAME171}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}
@@ -737,9 +737,9 @@ JD-TC-Get_IVR_Graph_Details-UH8
 
     [Documentation]   Get IVR Graph Details where date format is different
     
-    clear_queue      ${PUSERNAME171}
-    clear_location   ${PUSERNAME171}
-    clear_service    ${PUSERNAME171}
+    # clear_queue      ${PUSERNAME171}
+    # clear_location   ${PUSERNAME171}
+    # clear_service    ${PUSERNAME171}
     clear_customer   ${PUSERNAME171}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}

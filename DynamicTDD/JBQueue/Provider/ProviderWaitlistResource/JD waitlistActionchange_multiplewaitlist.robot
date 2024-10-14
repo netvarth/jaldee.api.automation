@@ -25,9 +25,9 @@ ${count}   5
 JD-TC-change Waitlist Action for multiple account-1
       [Documentation]   Waitlist Action multiple account Done after STARTED
 
-      clear_queue      ${HLPUSERNAME27}
+      # clear_queue      ${HLPUSERNAME27}
       # clear_location   ${HLPUSERNAME27}
-      clear_service    ${HLPUSERNAME27}
+      # clear_service    ${HLPUSERNAME27}
       clear_customer    ${HLPUSERNAME27}
 
       ${resp}=  Encrypted Provider Login  ${HLPUSERNAME27}  ${PASSWORD}
@@ -442,9 +442,9 @@ JD-TC-change Waitlist Action for multiple account-6
       [Documentation]   Waitlist Action multiple account 
 
 
-      clear_queue      ${HLPUSERNAME27}
+      # clear_queue      ${HLPUSERNAME27}
       # clear_location   ${HLPUSERNAME27}
-      clear_service    ${HLPUSERNAME27}
+      # clear_service    ${HLPUSERNAME27}
       clear_customer    ${HLPUSERNAME27}
 
       ${resp}=  Encrypted Provider Login  ${HLPUSERNAME27}  ${PASSWORD}

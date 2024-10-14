@@ -225,7 +225,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-1
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${PUSERNAME21}
+    # clear_queue   ${PUSERNAME21}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -375,7 +375,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-2
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${PUSERNAME21}
+    # clear_queue   ${PUSERNAME21}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -523,7 +523,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-2
 #     END
 #     Set Suite Variable   ${s_id}  
 
-#     clear_queue   ${PUSERNAME21}
+#     # clear_queue   ${PUSERNAME21}
 
 #     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -670,7 +670,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-4
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${PUSERNAME21}
+    # clear_queue   ${PUSERNAME21}
     
     ${list}=  Create List  1  2  3  4  5  6  7
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -858,7 +858,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-5
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${PUSERNAME21}
+    # clear_queue   ${PUSERNAME21}
 
     ${list}=  Create List  1  2  3  4  5  6  7
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1045,7 +1045,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-UH1
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${PUSERNAME21}
+    # clear_queue   ${PUSERNAME21}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1225,7 +1225,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-UH2
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${PUSERNAME21}
+    # clear_queue   ${PUSERNAME21}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1380,7 +1380,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-UH3
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${PUSERNAME21}
+    # clear_queue   ${PUSERNAME21}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1631,7 +1631,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-6
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${PUSERNAME21}
+    # clear_queue   ${PUSERNAME21}
 
     ${resp}=  AddCustomer  ${CUSERNAME22}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
     Log   ${resp.content}
@@ -1822,7 +1822,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-7
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${PUSERNAME21}
+    # clear_queue   ${PUSERNAME21}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     

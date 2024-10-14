@@ -25,9 +25,9 @@ JD-TC-Create_Provider_Schedule-1
 
     [Documentation]  Create Provider Schedule
 
-    clear_queue      ${PUSERNAME155}
+    # clear_queue      ${PUSERNAME155}
     # clear_location   ${PUSERNAME155}
-    clear_service    ${PUSERNAME155}
+    # clear_service    ${PUSERNAME155}
     clear_customer   ${PUSERNAME155}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
@@ -97,9 +97,9 @@ JD-TC-Create_Provider_Schedule-2
 
     [Documentation]   Create a schedule with same details of another provider
 
-    clear_queue      ${PUSERNAME155}
-    clear_location   ${PUSERNAME155}
-    clear_service    ${PUSERNAME155}
+    # clear_queue      ${PUSERNAME155}
+    # clear_location   ${PUSERNAME155}
+    # clear_service    ${PUSERNAME155}
     clear_customer   ${PUSERNAME155}
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}

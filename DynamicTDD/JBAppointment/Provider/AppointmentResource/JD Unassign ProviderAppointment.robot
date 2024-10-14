@@ -27,8 +27,8 @@ JD-TC-UnAssignproviderAppointment-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${HLPUSERNAME3}
-    clear_appt_schedule   ${HLPUSERNAME3}
+    # clear_service   ${HLPUSERNAME3}
+    # clear_appt_schedule   ${HLPUSERNAME3}
     clear_customer   ${HLPUSERNAME3}
 
     ${pid}=  get_acc_id  ${HLPUSERNAME3}
@@ -156,8 +156,8 @@ JD-TC-UnAssignproviderAppointment-2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${HLPUSERNAME5}
-    clear_appt_schedule   ${HLPUSERNAME3}
+    # clear_service   ${HLPUSERNAME5}
+    # clear_appt_schedule   ${HLPUSERNAME3}
     clear_customer   ${HLPUSERNAME3}
 
     ${pid}=  get_acc_id  ${HLPUSERNAME3}
@@ -257,8 +257,8 @@ JD-TC-UnAssignproviderAppointment-3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${HLPUSERNAME3}
-    clear_appt_schedule   ${HLPUSERNAME3}
+    # clear_service   ${HLPUSERNAME3}
+    # clear_appt_schedule   ${HLPUSERNAME3}
     clear_customer   ${HLPUSERNAME3}
 
     ${pid}=  get_acc_id  ${HLPUSERNAME3}
@@ -380,8 +380,8 @@ JD-TC-UnAssignproviderAppointment-UH1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${HLPUSERNAME3}
-    clear_appt_schedule   ${HLPUSERNAME3}
+    # clear_service   ${HLPUSERNAME3}
+    # clear_appt_schedule   ${HLPUSERNAME3}
     clear_customer   ${HLPUSERNAME3}
 
     ${pid}=  get_acc_id  ${HLPUSERNAME3}
@@ -487,8 +487,8 @@ JD-TC-UnAssignproviderAppointment-UH2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${HLPUSERNAME3}
-    clear_appt_schedule   ${HLPUSERNAME3}
+    # clear_service   ${HLPUSERNAME3}
+    # clear_appt_schedule   ${HLPUSERNAME3}
     clear_customer   ${HLPUSERNAME3}
 
     ${pid}=  get_acc_id  ${HLPUSERNAME3}

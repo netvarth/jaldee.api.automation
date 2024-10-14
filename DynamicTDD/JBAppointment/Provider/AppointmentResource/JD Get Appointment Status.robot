@@ -34,8 +34,8 @@ JD-TC-GetAppointmentStatus-1
     Log   ${billable_providers}
     Set Suite Variable   ${billable_providers}
     ${pro_len}=  Get Length   ${billable_providers}
-    clear_service   ${billable_providers[1]}
-    clear_location  ${billable_providers[1]}
+    # clear_service   ${billable_providers[1]}
+    # clear_location  ${billable_providers[1]}
     ${pid}=  get_acc_id  ${billable_providers[1]}
     ${cid}=  get_id  ${CUSERNAME24}
 
@@ -75,7 +75,7 @@ JD-TC-GetAppointmentStatus-1
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
 
-    clear_appt_schedule   ${billable_providers[1]}
+    # clear_appt_schedule   ${billable_providers[1]}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -228,8 +228,8 @@ JD-TC-GetAppointmentStatus-2
 
     Log   ${billable_providers}
     ${pro_len}=  Get Length   ${billable_providers}
-    clear_service   ${billable_providers[2]}
-    clear_location  ${billable_providers[2]}
+    # clear_service   ${billable_providers[2]}
+    # clear_location  ${billable_providers[2]}
     ${pid}=  get_acc_id  ${billable_providers[2]}
     ${cid}=  get_id  ${CUSERNAME24}
 
@@ -288,7 +288,7 @@ JD-TC-GetAppointmentStatus-2
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
 
-    clear_appt_schedule   ${billable_providers[2]}
+    # clear_appt_schedule   ${billable_providers[2]}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -436,8 +436,8 @@ JD-TC-GetAppointmentStatus-3
 
     [Documentation]  Check status Confirmed after consumer takes appointment without prepayment
 
-    clear_service   ${PUSERNAME187}
-    clear_location  ${PUSERNAME187}
+    # clear_service   ${PUSERNAME187}
+    # clear_location  ${PUSERNAME187}
     ${pid}=  get_acc_id  ${PUSERNAME187}
     ${cid}=  get_id  ${CUSERNAME24}
 
@@ -477,7 +477,7 @@ JD-TC-GetAppointmentStatus-3
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
 
-    clear_appt_schedule   ${PUSERNAME187}
+    # clear_appt_schedule   ${PUSERNAME187}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -607,9 +607,9 @@ JD-TC-GetAppointmentStatus-4
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME183}
-    clear_location  ${PUSERNAME183}
-    clear_appt_schedule   ${PUSERNAME183}
+    # clear_service   ${PUSERNAME183}
+    # clear_location  ${PUSERNAME183}
+    # clear_appt_schedule   ${PUSERNAME183}
     clear_customer   ${PUSERNAME183}
 
     ${resp}=   Get Service
@@ -706,9 +706,9 @@ JD-TC-GetAppointmentStatus-5
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME183}
-    clear_location  ${PUSERNAME183}
-    clear_appt_schedule   ${PUSERNAME183}
+    # clear_service   ${PUSERNAME183}
+    # clear_location  ${PUSERNAME183}
+    # clear_appt_schedule   ${PUSERNAME183}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -955,9 +955,9 @@ JD-TC-GetAppointmentStatus-9
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME183}
-    clear_location  ${PUSERNAME183}
-    clear_appt_schedule   ${PUSERNAME183}
+    # clear_service   ${PUSERNAME183}
+    # clear_location  ${PUSERNAME183}
+    # clear_appt_schedule   ${PUSERNAME183}
 
     ${resp}=   Get Service
     Log   ${resp.json()}

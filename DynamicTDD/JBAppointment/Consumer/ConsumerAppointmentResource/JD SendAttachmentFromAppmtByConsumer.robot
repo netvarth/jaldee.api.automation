@@ -57,8 +57,8 @@ JD-TC-SendAttachmentFromAppmtByConsumer-1
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
-    clear_service   ${PUSERNAME305}
-    clear_location  ${PUSERNAME305} 
+    # clear_service   ${PUSERNAME305}
+    # clear_location  ${PUSERNAME305} 
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -98,7 +98,7 @@ JD-TC-SendAttachmentFromAppmtByConsumer-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # clear_appt_schedule   ${primaryMobileNo}
+    # # clear_appt_schedule   ${primaryMobileNo}
     
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id}

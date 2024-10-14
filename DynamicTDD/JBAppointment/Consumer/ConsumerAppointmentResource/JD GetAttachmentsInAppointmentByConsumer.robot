@@ -116,7 +116,7 @@ JD-TC-GetAttachmentFromAppmtByConsumer-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    # clear_appt_schedule   ${primaryMobileNo}
+    # # clear_appt_schedule   ${primaryMobileNo}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        

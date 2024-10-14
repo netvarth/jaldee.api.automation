@@ -34,8 +34,8 @@ JD-TC-AddAppointmentRating-1
     Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
     Set Suite Variable  ${lic_name}  ${decrypted_data['accountLicenseDetails']['accountLicense']['name']}
     
-    clear_queue    ${PUSERNAME99}
-    clear_service  ${PUSERNAME99}
+    # clear_queue    ${PUSERNAME99}
+    # clear_service  ${PUSERNAME99}
     clear_rating    ${PUSERNAME99}
     clear_customer   ${PUSERNAME99}
 
@@ -61,7 +61,7 @@ JD-TC-AddAppointmentRating-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
     Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
-    clear_appt_schedule   ${PUSERNAME99}
+    # clear_appt_schedule   ${PUSERNAME99}
 
     ${SERVICE1}=   FakerLibrary.name
     ${s_id}=  Create Sample Service  ${SERVICE1}

@@ -35,7 +35,7 @@ JD-TC-GetServiceCount-1
     [Documentation]   Get Service Counts
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service       ${HLPUSERNAME10} 
+    # clear_service       ${HLPUSERNAME10} 
     ${min_pre}=   Random Int  min=200  max=500
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${Total}=   Random Int  min=600  max=800

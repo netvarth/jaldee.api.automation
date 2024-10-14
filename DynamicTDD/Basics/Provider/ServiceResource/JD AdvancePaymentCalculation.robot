@@ -91,7 +91,7 @@ JD-TC-AdvancePaymentcalculation-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    clear_service  ${PUSERNAME101} 
+    # clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
     ${min_pre}=   Random Int   min=40   max=50
     ${min_pre}=  Convert To Number  ${min_pre}  0
@@ -118,7 +118,7 @@ JD-TC-AdvancePaymentcalculation-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    clear_service  ${PUSERNAME101} 
+    # clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
     ${min_pre}=   Random Int   min=10   max=20
     ${min_pre}=  Convert To Number  ${min_pre}  0
@@ -145,7 +145,7 @@ JD-TC-AdvancePaymentcalculation-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    clear_service  ${PUSERNAME101} 
+    # clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
     ${min_pre}=   Random Int   min=40   max=50
     ${min_pre}=  Convert To Number  ${min_pre}  0
@@ -172,7 +172,7 @@ JD-TC-AdvancePaymentcalculation-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    clear_service  ${PUSERNAME101} 
+    # clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
     ${min_pre}=   Random Int   min=10   max=20
     ${min_pre}=  Convert To Number  ${min_pre}  0
@@ -200,7 +200,7 @@ JD-TC-AdvancePaymentcalculation-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    clear_service  ${PUSERNAME101} 
+    # clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
     ${min_pre}=   Random Int   min=40   max=50
     ${min_pre}=  Convert To Number  ${min_pre}  0
@@ -226,7 +226,7 @@ JD-TC-AdvancePaymentcalculation-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    clear_service  ${PUSERNAME101} 
+    # clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
     ${ser_amount}=   Random Int   min=100   max=500
     ${SERVICE1}=    FakerLibrary.word
@@ -262,7 +262,7 @@ JD-TC-AdvancePaymentcalculation-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_service  ${PUSERNAME101} 
+    # clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
     ${min_pre}=   Random Int   min=40   max=50
     ${min_pre}=  Convert To Number  ${min_pre}  0
@@ -318,9 +318,9 @@ JD-TC-AdvancePaymentcalculation-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
     
-    clear_service  ${PUSERNAME101} 
-    clear_location  ${PUSERNAME101} 
-    clear_queue  ${PUSERNAME101} 
+    # clear_service  ${PUSERNAME101} 
+    # clear_location  ${PUSERNAME101} 
+    # clear_queue  ${PUSERNAME101} 
 
     ${loc_id1}=  Create Sample Location
     Set Test Variable   ${loc_id1}
@@ -397,7 +397,7 @@ JD-TC-AdvancePaymentcalculation-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_service  ${PUSERNAME101} 
+    # clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
     ${min_pre}=   Random Int   min=40   max=50
     ${min_pre}=  Convert To Number  ${min_pre}  0
@@ -490,9 +490,9 @@ JD-TC-AdvancePaymentcalculation-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
     
-    clear_service  ${PUSERNAME101} 
-    clear_location  ${PUSERNAME101} 
-    clear_queue  ${PUSERNAME101} 
+    # clear_service  ${PUSERNAME101} 
+    # clear_location  ${PUSERNAME101} 
+    # clear_queue  ${PUSERNAME101} 
 
     ${loc_id1}=  Create Sample Location
     Set Test Variable   ${loc_id1}
@@ -592,7 +592,7 @@ JD-TC-AdvancePaymentcalculation-11
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    clear_service  ${PUSERNAME101} 
+    # clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
     ${service_amount}=   Random Int   min=100   max=500
     ${SERVICE1}=    FakerLibrary.word
@@ -632,7 +632,7 @@ JD-TC-AdvancePaymentcalculation-12
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    clear_service  ${PUSERNAME101} 
+    # clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
     ${service_amount}=   Random Int   min=100   max=500
     ${SERVICE1}=    FakerLibrary.word
@@ -672,7 +672,7 @@ JD-TC-AdvancePaymentcalculation-13
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    clear_service  ${PUSERNAME101} 
+    # clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
     ${min_pre}=   Random Int   min=40   max=50
     ${min_pre}=  Convert To Number  ${min_pre}  0
@@ -729,7 +729,7 @@ JD-TC-AdvancePaymentcalculation-14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_service  ${PUSERNAME101} 
+    # clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
     ${min_pre}=   Random Int   min=40   max=50
     ${min_pre}=  Convert To Number  ${min_pre}  0
@@ -861,7 +861,7 @@ JD-TC-AdvancePaymentcalculation-15
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_service  ${PUSERNAME101} 
+    # clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
     ${min_pre}=   Random Int   min=40   max=50
     ${min_pre}=  Convert To Number  ${min_pre}  0
@@ -998,7 +998,7 @@ JD-TC-AdvancePaymentcalculation-16
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_service  ${PUSERNAME101} 
+    # clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
     ${min_pre}=   Random Int   min=40   max=50
     ${min_pre}=  Convert To Number  ${min_pre}  0
@@ -1170,7 +1170,7 @@ JD-TC-AdvancePaymentcalculation-17
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_service  ${PUSERNAME101} 
+    # clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
     ${min_pre}=   Random Int   min=40   max=50
     ${min_pre}=  Convert To Number  ${min_pre}  0
@@ -1345,7 +1345,7 @@ JD-TC-AdvancePaymentcalculation-18
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_service  ${PUSERNAME101} 
+    # clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
     ${min_pre}=   Random Int   min=100   max=100
     ${min_pre}=  Convert To Number  ${min_pre}  0
@@ -1504,7 +1504,7 @@ JD-TC-AdvancePaymentcalculation-19
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_service  ${PUSERNAME101} 
+    # clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
     ${min_pre}=   Random Int   min=100   max=100
     ${min_pre}=  Convert To Number  ${min_pre}  0

@@ -26,9 +26,9 @@ JD-TC-Update_Provider_Schedule-1
 
     [Documentation]  Update Provider Schedule
 
-    clear_queue      ${PUSERNAME180}
+    # clear_queue      ${PUSERNAME180}
     # clear_location   ${PUSERNAME180}
-    clear_service    ${PUSERNAME180}
+    # clear_service    ${PUSERNAME180}
     clear_customer   ${PUSERNAME180}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}

@@ -46,8 +46,8 @@ JD-TC-GetApptByEncryptedIDconsumer-1
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
 
-    clear_service   ${PUSERNAME_X}
-    clear_location  ${PUSERNAME_X}
+    # clear_service   ${PUSERNAME_X}
+    # clear_location  ${PUSERNAME_X}
 
     ${pid}=  get_acc_id  ${PUSERNAME_X}
     Set Suite Variable   ${pid}
@@ -64,7 +64,7 @@ JD-TC-GetApptByEncryptedIDconsumer-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME_X}
+    # clear_appt_schedule   ${PUSERNAME_X}
     ${SERVICE1}=   FakerLibrary.name
     Set Suite Variable   ${SERVICE1} 
     ${s_id}=  Create Sample Service  ${SERVICE1}

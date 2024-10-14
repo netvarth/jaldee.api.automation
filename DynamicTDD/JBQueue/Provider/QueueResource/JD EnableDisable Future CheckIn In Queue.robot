@@ -26,9 +26,9 @@ JD-TC-Future Checkin In Queue-1
     [Documentation]  Enable  Future Checkin in queuelevel
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${HLPUSERNAME9}
+    # clear_service   ${HLPUSERNAME9}
     # clear_location  ${HLPUSERNAME9}
-    clear_queue  ${HLPUSERNAME9}
+    # clear_queue  ${HLPUSERNAME9}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -109,9 +109,9 @@ JD-TC-Future Checkin In Queue-2
     [Documentation]  Enable  Future Checkin in accountlevel when queue level is false
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${HLPUSERNAME9}
+    # clear_service   ${HLPUSERNAME9}
     # clear_location  ${HLPUSERNAME9}
-    clear_queue  ${HLPUSERNAME9}
+    # clear_queue  ${HLPUSERNAME9}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -177,9 +177,9 @@ JD-TC-Future Checkin In Queue-3
     [Documentation]  Enable  Future Checkin in accountlevel when queue level is false
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${HLPUSERNAME9}
+    # clear_service   ${HLPUSERNAME9}
     # clear_location  ${HLPUSERNAME9}
-    clear_queue  ${HLPUSERNAME9}
+    # clear_queue  ${HLPUSERNAME9}
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -223,9 +223,9 @@ JD-TC-Future Checkin In Queue-UH1
     [Documentation]  Future checkin in accountlevel when queue level is false
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${HLPUSERNAME9}
+    # clear_service   ${HLPUSERNAME9}
     # clear_location  ${HLPUSERNAME9}
-    clear_queue  ${HLPUSERNAME9}
+    # clear_queue  ${HLPUSERNAME9}
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200

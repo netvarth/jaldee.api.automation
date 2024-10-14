@@ -37,7 +37,7 @@ JD-TC-ConsumerGetApptRequest-1
     Set Test Variable   ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
     Set Test Variable   ${lic_name}   ${decrypted_data['accountLicenseDetails']['accountLicense']['name']}
 
-    clear_appt_schedule   ${HLPUSERNAME44}
+    # clear_appt_schedule   ${HLPUSERNAME44}
 
 
     ${resp}=  Get Business Profile

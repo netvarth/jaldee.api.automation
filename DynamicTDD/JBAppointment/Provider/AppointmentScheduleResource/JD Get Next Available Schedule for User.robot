@@ -26,8 +26,8 @@ JD-TC-NextAvailableSchedule for User-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${PUSERNAME68}
 
-    clear_service   ${PUSERNAME68}
-    clear_appt_schedule   ${PUSERNAME68}
+    # clear_service   ${PUSERNAME68}
+    # clear_appt_schedule   ${PUSERNAME68}
   
     ${PUSERPH0}  ${u_id} =  Create and Configure Sample User
     Set Suite Variable  ${PUSERPH0}
@@ -91,10 +91,10 @@ JD-TC-NextAvailableSchedule for User-2
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${PUSERNAME68}
 
-    clear_service   ${PUSERNAME68}
-    clear_appt_schedule   ${PUSERNAME68}
-    clear_service   ${PUSERPH0}
-    clear_appt_schedule   ${PUSERPH0}
+    # clear_service   ${PUSERNAME68}
+    # clear_appt_schedule   ${PUSERNAME68}
+    # clear_service   ${PUSERPH0}
+    # clear_appt_schedule   ${PUSERPH0}
 
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -170,10 +170,10 @@ JD-TC-NextAvailableSchedule for User-3
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${PUSERNAME68}
 
-    clear_service   ${PUSERNAME68}
-    clear_appt_schedule   ${PUSERNAME68}
-    clear_service   ${PUSERPH0}
-    clear_appt_schedule   ${PUSERPH0}
+    # clear_service   ${PUSERNAME68}
+    # clear_appt_schedule   ${PUSERNAME68}
+    # clear_service   ${PUSERPH0}
+    # clear_appt_schedule   ${PUSERPH0}
 
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -250,8 +250,8 @@ JD-TC-NextAvailableSchedule for User-4
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid1}=  get_acc_id  ${PUSERNAME53}
     
-    clear_service   ${PUSERNAME53}
-    clear_appt_schedule   ${PUSERNAME53}
+    # clear_service   ${PUSERNAME53}
+    # clear_appt_schedule   ${PUSERNAME53}
     
     ${PUSERPH1}  ${u_id} =  Create and Configure Sample User
     Set Suite Variable  ${PUSERPH1}
@@ -293,10 +293,10 @@ JD-TC-NextAvailableSchedule for User-4
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${PUSERNAME59}
 
-    clear_service   ${PUSERNAME59}
-    clear_appt_schedule   ${PUSERNAME59}
-    clear_service   ${PUSERNAME59}
-    clear_appt_schedule   ${PUSERNAME59}
+    # clear_service   ${PUSERNAME59}
+    # clear_appt_schedule   ${PUSERNAME59}
+    # clear_service   ${PUSERNAME59}
+    # clear_appt_schedule   ${PUSERNAME59}
 
     ${PUSERPH2}  ${u_id1} =  Create and Configure Sample User
     Set Suite Variable  ${PUSERPH2}

@@ -46,9 +46,9 @@ JD-TC-Enable_Disable_IVR-1
 
     [Documentation]   Enable Disable IVR
     
-    clear_queue      ${PUSERNAME158}
+    # clear_queue      ${PUSERNAME158}
     # clear_location   ${PUSERNAME158}
-    clear_service    ${PUSERNAME158}
+    # clear_service    ${PUSERNAME158}
     clear_customer   ${PUSERNAME158}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME158}  ${PASSWORD}

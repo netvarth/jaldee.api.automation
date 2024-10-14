@@ -41,9 +41,9 @@ JD-TC-GetQueueAvaliability-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${accountId}=    get_acc_id       ${HLPUSERNAME11}
     Set Suite Variable  ${accountId}
-    clear_service   ${HLPUSERNAME11}
+    # clear_service   ${HLPUSERNAME11}
     # clear_location  ${HLPUSERNAME11}
-    clear_queue  ${HLPUSERNAME11}
+    # clear_queue  ${HLPUSERNAME11}
 
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}

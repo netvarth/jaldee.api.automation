@@ -53,8 +53,8 @@ JD-TC-change appointment status for multiple appointments-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service  ${PUSERNAME85}
-    clear_location  ${PUSERNAME85}
+    # clear_service  ${PUSERNAME85}
+    # clear_location  ${PUSERNAME85}
     clear_customer   ${PUSERNAME85}
 
     ${resp}=   Get Service
@@ -79,7 +79,7 @@ JD-TC-change appointment status for multiple appointments-1
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${s_id1}
 
-    clear_appt_schedule   ${PUSERNAME85}
+    # clear_appt_schedule   ${PUSERNAME85}
 
     ${resp}=  Create Sample Schedule  ${lid}   ${s_id}
     Log  ${resp.content}
@@ -164,7 +164,7 @@ JD-TC-change appointment status for multiple appointments-2
     Should Be Equal As Strings    ${resp.status_code}    200
     
     clear_customer   ${PUSERNAME85}
-    clear_appt_schedule   ${PUSERNAME85}
+    # clear_appt_schedule   ${PUSERNAME85}
 
     ${resp}=  Create Sample Schedule  ${lid}   ${s_id}   
     Log  ${resp.content}
@@ -273,7 +273,7 @@ JD-TC-change appointment status for multiple appointments-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
   
-    clear_appt_schedule   ${PUSERNAME85}
+    # clear_appt_schedule   ${PUSERNAME85}
     
     ${resp}=  Create Sample Schedule  ${lid}   ${s_id}
     Log  ${resp.content}
@@ -378,7 +378,7 @@ JD-TC-change appointment status for multiple appointments- 4
     Set Suite Variable   ${lid}  ${resp.json()[0]['id']}
    # Set Test Variable  ${sch_id1}  ${resp.json()['id']}
 
-    clear_appt_schedule   ${PUSERNAME85}
+    # clear_appt_schedule   ${PUSERNAME85}
      
 
      ${resp}=  Create Sample Schedule  ${lid}   ${s_id}
@@ -477,7 +477,7 @@ JD-TC-change appointment status for multiple appointments- 5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
-   clear_appt_schedule   ${PUSERNAME85}
+   # clear_appt_schedule   ${PUSERNAME85}
      
 
      ${resp}=  Create Sample Schedule  ${lid}   ${s_id}
@@ -534,7 +534,7 @@ JD-TC-change appointment status for multiple appointments-6
     ${resp}=  Encrypted Provider Login   ${PUSERNAME85}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-     clear_appt_schedule   ${PUSERNAME85}
+     # clear_appt_schedule   ${PUSERNAME85}
       clear_customer   ${PUSERNAME85}
 
     ${resp}=  Create Sample Schedule  ${lid}   ${s_id}
@@ -633,7 +633,7 @@ JD-TC-change appointment status for multiple appointments- 7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
-      clear_appt_schedule   ${PUSERNAME85}
+      # clear_appt_schedule   ${PUSERNAME85}
       clear_customer   ${PUSERNAME85}
 
     ${resp}=  Create Sample Schedule  ${lid}   ${s_id}
@@ -776,7 +776,7 @@ JD-TC-change appointment status for multiple appointments UH-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
-     clear_appt_schedule   ${PUSERNAME85}
+     # clear_appt_schedule   ${PUSERNAME85}
       clear_customer   ${PUSERNAME85}
 
     ${resp}=  Create Sample Schedule  ${lid}   ${s_id}

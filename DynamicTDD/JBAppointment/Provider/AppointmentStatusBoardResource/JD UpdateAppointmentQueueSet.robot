@@ -223,8 +223,8 @@ JD-TC-UpdateAppointmentQueueSet-2
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAMEA}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    clear_service   ${PUSERNAMEA}
-    clear_location  ${PUSERNAMEA}
+    # clear_service   ${PUSERNAMEA}
+    # clear_location  ${PUSERNAMEA}
     clear_Addon  ${PUSERNAMEA}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}

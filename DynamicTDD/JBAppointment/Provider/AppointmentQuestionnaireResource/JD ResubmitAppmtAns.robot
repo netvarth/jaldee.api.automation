@@ -203,7 +203,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-1
     END
     Set Suite Variable   ${s_id}  
 
-    clear_appt_schedule   ${PUSERNAME28}
+    # clear_appt_schedule   ${PUSERNAME28}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -372,7 +372,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-2
     END
     Set Suite Variable   ${s_id}  
 
-    clear_appt_schedule   ${PUSERNAME28}
+    # clear_appt_schedule   ${PUSERNAME28}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -608,7 +608,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-3
     END
     Set Suite Variable   ${s_id}  
 
-    clear_appt_schedule   ${PUSERNAME28}
+    # clear_appt_schedule   ${PUSERNAME28}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -788,7 +788,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-4
     END
     Set Suite Variable   ${s_id}  
 
-    clear_appt_schedule   ${PUSERNAME28}
+    # clear_appt_schedule   ${PUSERNAME28}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -981,7 +981,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-UH1
     END
     Set Suite Variable   ${s_id}  
 
-    clear_appt_schedule   ${PUSERNAME28}
+    # clear_appt_schedule   ${PUSERNAME28}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1163,7 +1163,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-UH2
     END
     Set Suite Variable   ${s_id}  
 
-    clear_appt_schedule   ${PUSERNAME28}
+    # clear_appt_schedule   ${PUSERNAME28}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1333,7 +1333,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-UH3
     END
     Set Suite Variable   ${s_id}  
 
-    clear_appt_schedule   ${PUSERNAME28}
+    # clear_appt_schedule   ${PUSERNAME28}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1593,7 +1593,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-5
     END
     Set Suite Variable   ${s_id}  
 
-    clear_appt_schedule   ${PUSERNAME28}
+    # clear_appt_schedule   ${PUSERNAME28}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     

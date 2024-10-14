@@ -412,7 +412,7 @@ JD-TC-Get Next Available Dates-6
 
 	[Documentation]   Get available queue with same service in diffrent queue
  
-    clear_queue  ${PUSERNAME_P}
+    # clear_queue  ${PUSERNAME_P}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -822,7 +822,7 @@ JD-TC-Get Next Available Dates-UH5
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_location      ${PUSERNAME_P}
+    # clear_location      ${PUSERNAME_P}
 
     ${sTime}=  db.get_time_by_timezone  ${tz}
     ${eTime}=  add_timezone_time  ${tz}  4  30  
@@ -968,7 +968,7 @@ JD-TC-Get Next Available Dates-UH8
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${PUSERNAME34}
+    # clear_service   ${PUSERNAME34}
     ${resp}=    Get Locations
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

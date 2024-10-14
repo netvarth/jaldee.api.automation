@@ -45,7 +45,7 @@ JD-TC-Get consumer Appt Bill Details-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME249}
+    # clear_location_n_service  ${PUSERNAME249}
     clear_customer   ${PUSERNAME249}
 
     ${resp}=  Get Business Profile
@@ -207,7 +207,7 @@ JD-TC-Get consumer Appt Bill Details-2
 
     [Documentation]  Get provider's appointments for service with prepayment but prepayment not done by consumer and get that bill details
     
-    clear_location_n_service  ${PUSERNAME234}
+    # clear_location_n_service  ${PUSERNAME234}
     clear_customer   ${PUSERNAME234}
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME234}  ${PASSWORD}
@@ -427,7 +427,7 @@ JD-TC-Get consumer Appt Bill Details-3
 
     [Documentation]  Get consumer Appt Bill Details  after prepayment
     
-    clear_location_n_service  ${PUSERNAME234}
+    # clear_location_n_service  ${PUSERNAME234}
    
     ${resp}=  Encrypted Provider Login  ${PUSERNAME234}  ${PASSWORD}
     Log   ${resp.json()}
@@ -628,7 +628,7 @@ JD-TC-Get consumer Appt Bill Details-4
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME249}
+    # clear_location_n_service  ${PUSERNAME249}
     
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -831,7 +831,7 @@ JD-TC-Get consumer Appt Bill Details-5
  
 
 
-    clear_location_n_service  ${PUSERNAME249}
+    # clear_location_n_service  ${PUSERNAME249}
     
     ${resp}=   Get Service
     Log   ${resp.json()}

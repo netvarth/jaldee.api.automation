@@ -318,7 +318,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-1
     END
     Set Suite Variable   ${s_id}  
 
-    clear_appt_schedule   ${PUSERNAME158}
+    # clear_appt_schedule   ${PUSERNAME158}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -473,7 +473,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-2
     END
     Set Suite Variable   ${s_id}  
 
-    clear_appt_schedule   ${PUSERNAME158}
+    # clear_appt_schedule   ${PUSERNAME158}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -628,7 +628,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-3
     END
     Set Suite Variable   ${s_id}  
 
-    clear_appt_schedule   ${PUSERNAME158}
+    # clear_appt_schedule   ${PUSERNAME158}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -760,7 +760,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForAppointment-UH1
     END
     Set Suite Variable   ${s_id}  
 
-    clear_appt_schedule   ${PUSERNAME158}
+    # clear_appt_schedule   ${PUSERNAME158}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     

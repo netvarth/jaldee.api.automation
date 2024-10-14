@@ -4002,8 +4002,8 @@ JD-TC-ChangeAppointmentStatus-UH25
 
     # clear_service   ${PUSERNAME377}
     # clear_location  ${PUSERNAME377}
-    # clear_appt_schedule   ${PUSERNAME377}
-    clear_location_n_service  ${PUSERNAME377}
+    # # clear_appt_schedule   ${PUSERNAME377}
+    # clear_location_n_service  ${PUSERNAME377}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -4114,8 +4114,8 @@ JD-TC-ChangeAppointmentStatus-UH26
 
     # clear_service   ${PUSERNAME377}
     # clear_location  ${PUSERNAME377}
-    # clear_appt_schedule   ${PUSERNAME377}
-    clear_location_n_service  ${PUSERNAME377}
+    # # clear_appt_schedule   ${PUSERNAME377}
+    # clear_location_n_service  ${PUSERNAME377}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -4196,8 +4196,8 @@ JD-TC-ChangeAppointmentStatus-14
 
     # clear_service   ${PUSERNAME377}
     # clear_location  ${PUSERNAME377}
-    # clear_appt_schedule   ${PUSERNAME377}
-    clear_location_n_service  ${PUSERNAME377}
+    # # clear_appt_schedule   ${PUSERNAME377}
+    # clear_location_n_service  ${PUSERNAME377}
 
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -4352,7 +4352,7 @@ JD-TC-ChangeAppointmentStatus-15
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
 
-    clear_appt_schedule   ${PUSERNAME377}
+    # clear_appt_schedule   ${PUSERNAME377}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}

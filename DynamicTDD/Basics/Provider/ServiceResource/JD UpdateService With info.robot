@@ -61,7 +61,7 @@ JD-TC-Update Service With info-1-Service_type
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         
-        clear_service      ${resp}
+        # clear_service      ${resp}
         ${description}=  FakerLibrary.sentence
         ${min_pre}=   Random Int   min=10   max=50
         ${Total}=   Random Int   min=100   max=500
@@ -110,7 +110,7 @@ JD-TC-Update Service With info-2-Service_type
 
         [Documentation]  update a  virtual_service to Physical_service for a valid provider when domain is Billable 
         ${resp}=   Billable
-        clear_service      ${resp}
+        # clear_service      ${resp}
         ${description}=  FakerLibrary.sentence
         ${min_pre}=   Random Int   min=10   max=50
         ${Total}=   Random Int   min=100   max=500
@@ -148,7 +148,7 @@ JD-TC-Update Service With info-3-Service_type
         ${len}=  Get Length  ${multilocPro}
         ${resp}=  Encrypted Provider Login  ${multilocPro[1]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        clear_service       ${multilocPro[1]}
+        # clear_service       ${multilocPro[1]}
         ${ser_durtn}=   Random Int   min=2   max=10
         ${description}=  FakerLibrary.sentence
         ${Total1}=   Random Int   min=100   max=500
@@ -242,7 +242,7 @@ JD-TC-Update Service With info-4-Service_type
         [Documentation]     Checking Service Type in before and after taking appointment
         ${resp}=  Encrypted Provider Login  ${multilocPro[2]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        clear_service       ${multilocPro[2]}
+        # clear_service       ${multilocPro[2]}
 
         ${pkg_id}=   get_highest_license_pkg
         Log   ${pkg_id}
@@ -403,7 +403,7 @@ JD-TC-Update Service With info-4-Service_type
 JD-TC-Update Service With info-5-Prepayment_amt
         [Documentation]  update  a service to set prepayment amount 0
         ${resp}=   Billable
-        clear_service      ${resp}
+        # clear_service      ${resp}
         ${description}=  FakerLibrary.sentence
         ${min_pre}=   Random Int   min=10   max=50
         ${Total}=   Random Int   min=100   max=500
@@ -444,7 +444,7 @@ JD-TC-Update Service With info-6-Change_Prepayment_amt
 
         [Documentation]   Create a service with PrePayment  and  Update with 'remove_pre_payment Amount'
         ${resp}=   Billable
-        clear_service      ${resp}
+        # clear_service      ${resp}
         ${description}=  FakerLibrary.sentence
         ${min_pre}=   Random Int   min=10   max=50
         ${Total}=   Random Int   min=100   max=500
@@ -480,7 +480,7 @@ JD-TC-Update Service With info-6-Change_Prepayment_amt
 JD-TC-Update Service With info-7-Change_Prepayment_amt
         [Documentation]   Create service in a non billable domain and update service like billable (updation is not possible) 
         ${resp}=   Non Billable
-        clear_service      ${resp}
+        # clear_service      ${resp}
         ${description}=  FakerLibrary.sentence
         ${min_pre}=   Random Int   min=10   max=50
         ${Total}=   Random Int   min=100   max=500
@@ -519,7 +519,7 @@ JD-TC-Update Service With info-8- consumer_Note_Mandatory
         ${len}=  Get Length  ${multilocPro}
         ${resp}=  Encrypted Provider Login  ${multilocPro[2]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        clear_service       ${multilocPro[2]}
+        # clear_service       ${multilocPro[2]}
         ${ser_durtn}=   Random Int   min=2   max=10
         ${description}=  FakerLibrary.sentence
         ${Total1}=   Random Int   min=100   max=500
@@ -568,7 +568,7 @@ JD-TC-Update Service With info-9- consumer_Note_Mandatory
         ${len}=  Get Length  ${multilocPro}
         ${resp}=  Encrypted Provider Login  ${multilocPro[3]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        clear_service       ${multilocPro[3]}
+        # clear_service       ${multilocPro[3]}
         ${ser_durtn}=   Random Int   min=2   max=10
         ${description}=  FakerLibrary.sentence
         ${Total1}=   Random Int   min=100   max=500
@@ -637,7 +637,7 @@ JD-TC-Update Service With info-10- consumer_Note_Mandatory
         ${len}=  Get Length  ${multilocPro}
         ${resp}=  Encrypted Provider Login  ${multilocPro[4]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        clear_service       ${multilocPro[4]}
+        # clear_service       ${multilocPro[4]}
         ${ser_durtn}=   Random Int   min=2   max=10
         ${description}=  FakerLibrary.sentence
         ${Total1}=   Random Int   min=100   max=500
@@ -741,7 +741,7 @@ JD-TC-Update Service With info-11- consumer_Note_Mandatory
         ${len}=  Get Length  ${multilocPro}
         ${resp}=  Encrypted Provider Login  ${multilocPro[5]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        clear_service       ${multilocPro[5]}
+        # clear_service       ${multilocPro[5]}
         ${ser_durtn}=   Random Int   min=2   max=10
         ${description}=  FakerLibrary.sentence
         ${Total1}=   Random Int   min=100   max=500
@@ -854,7 +854,7 @@ JD-TC-Update Service With info-UH1- consumer_Note_Mandatory
         
         ${resp}=  Encrypted Provider Login  ${multilocPro[4]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        clear_service       ${multilocPro[4]}
+        # clear_service       ${multilocPro[4]}
         ${ser_durtn}=   Random Int   min=2   max=10
         ${description}=  FakerLibrary.sentence
         ${Total1}=   Random Int   min=100   max=500
@@ -934,7 +934,7 @@ JD-TC-Update Service With info-12-Pre_info_&_Post_info
         [Documentation]     Change Pre_info_&_post_info  status, before and after taking appointment
         ${resp}=  Encrypted Provider Login  ${multilocPro[5]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        clear_service       ${multilocPro[5]}
+        # clear_service       ${multilocPro[5]}
         ${ser_durtn}=   Random Int   min=2   max=10
         ${description}=  FakerLibrary.sentence
         ${Total1}=   Random Int   min=100   max=500
@@ -1037,7 +1037,7 @@ JD-TC-Update Service With info-13-Pre_info_&_Post_info
         
         ${resp}=  Encrypted Provider Login  ${multilocPro[4]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        clear_service       ${multilocPro[4]}
+        # clear_service       ${multilocPro[4]}
         ${ser_durtn}=   Random Int   min=2   max=10
         ${description}=  FakerLibrary.sentence
         ${Total1}=   Random Int   min=100   max=500
@@ -1079,7 +1079,7 @@ JD-TC-Update Service With info-UH2-Pre_info_&_Post_info
         
         ${resp}=  Encrypted Provider Login  ${multilocPro[4]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        clear_service       ${multilocPro[4]}
+        # clear_service       ${multilocPro[4]}
         ${ser_durtn}=   Random Int   min=2   max=10
         ${description}=  FakerLibrary.sentence
         ${Total1}=   Random Int   min=100   max=500
@@ -1116,7 +1116,7 @@ JD-TC-Update Service With info-14-Pre_info_&_Post_info
         
         ${resp}=  Encrypted Provider Login  ${multilocPro[4]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        clear_service       ${multilocPro[4]}
+        # clear_service       ${multilocPro[4]}
         ${ser_durtn}=   Random Int   min=2   max=10
         ${description}=  FakerLibrary.sentence
         ${Total1}=   Random Int   min=100   max=500
@@ -1160,7 +1160,7 @@ JD-TC-Update Service With info-UH3-Pre_info_&_Post_info
         
         ${resp}=  Encrypted Provider Login  ${multilocPro[4]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        clear_service       ${multilocPro[4]}
+        # clear_service       ${multilocPro[4]}
         ${ser_durtn}=   Random Int   min=2   max=10
         ${description}=  FakerLibrary.sentence
         ${Total1}=   Random Int   min=100   max=500
@@ -1202,7 +1202,7 @@ JD-TC-Update Service With info-UH4
         [Documentation]  Update a service name to  an already existing name
         ${resp}=  Encrypted Provider Login  ${multilocPro[4]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        clear_service       ${multilocPro[4]}
+        # clear_service       ${multilocPro[4]}
 
 
         ${description}=  FakerLibrary.sentence
@@ -1297,7 +1297,7 @@ JD-TC-Update Service With info-UH7
         ${Total}=   Random Int  min=11   max=100
         ${resp}=  Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        clear_service       ${PUSERNAME69}
+        # clear_service       ${PUSERNAME69}
 
         ${consumerNoteTitle}=  FakerLibrary.sentence    
         ${preInfoTitle}=  FakerLibrary.sentence   
@@ -1322,7 +1322,7 @@ JD-TC-Update Service With info-UH8
 
         [Documentation]  update a  service for a valid provider with 0 Total amount
         ${resp}=   Billable
-        clear_service      ${resp}
+        # clear_service      ${resp}
         ${description}=  FakerLibrary.sentence
         ${min_pre}=   Random Int   min=10   max=20
         ${Total}=   Random Int   min=21   max=40
@@ -1351,7 +1351,7 @@ JD-TC-Update Service With info-UH8
 JD-TC-Update Service With info-UH9
         [Documentation]  Create a service with prePrePayment and  Update with remove pre payment Amount
         ${resp}=   Billable
-        clear_service      ${resp}
+        # clear_service      ${resp}
         ${description}=  FakerLibrary.sentence
         ${min_pre}=   Random Int   min=10   max=50
         ${Total}=   Random Int   min=100   max=500

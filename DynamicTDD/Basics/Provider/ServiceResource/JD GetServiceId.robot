@@ -295,7 +295,7 @@ JD-TC-GetServiceId-UH2
 
 JD-TC-GetServiceId-UH3
     [Documentation]  Get details of another provider's service
-    clear_service       ${PUSERNAME168}
+    # clear_service       ${PUSERNAME168}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME168}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${description}=  FakerLibrary.sentence
@@ -331,7 +331,7 @@ Billable
      
     FOR   ${a}  IN RANGE   ${length}
             
-        clear_service       ${PUSERNAME${a}}
+        # clear_service       ${PUSERNAME${a}}
         ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -367,7 +367,7 @@ Non Billable
         ${length}=  Get Length   ${len}
 
      FOR    ${a}   IN RANGE    ${length}
-        clear_service       ${PUSERNAME${a}}
+        # clear_service       ${PUSERNAME${a}}
         ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
 

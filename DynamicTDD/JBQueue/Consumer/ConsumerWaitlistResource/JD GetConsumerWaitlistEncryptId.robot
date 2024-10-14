@@ -26,9 +26,9 @@ JD-TC-GetWaitlistByEncryptedID-1
     
     ${pid}=  get_acc_id  ${PUSERNAME202}
     Set Suite Variable      ${pid}
-    clear_service   ${PUSERNAME202}
-    clear_location  ${PUSERNAME202}
-    clear_queue  ${PUSERNAME202}
+    # clear_service   ${PUSERNAME202}
+    # clear_location  ${PUSERNAME202}
+    # clear_queue  ${PUSERNAME202}
     clear waitlist   ${PUSERNAME202}
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}

@@ -44,8 +44,8 @@ JD-TC-UnassignTeamFromAppointment-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_queue      ${HLPUSERNAME7}
-    clear_service    ${HLPUSERNAME7}
+    # clear_queue      ${HLPUSERNAME7}
+    # clear_service    ${HLPUSERNAME7}
     clear_customer   ${HLPUSERNAME7}
 
     ${pid}=  get_acc_id  ${HLPUSERNAME7}

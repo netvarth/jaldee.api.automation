@@ -46,9 +46,9 @@ JD-TC-GET_All_IVR_USer_Avaliability-1
 
     [Documentation]   Get all IVR user avaliability
 
-    clear_queue      ${HLPUSERNAME2}
+    # clear_queue      ${HLPUSERNAME2}
     # clear_location   ${HLPUSERNAME2}
-    clear_service    ${HLPUSERNAME2}
+    # clear_service    ${HLPUSERNAME2}
     clear_customer   ${HLPUSERNAME2}
     
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}

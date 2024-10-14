@@ -39,8 +39,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME19}
-    clear_location  ${HLPUSERNAME19}
+    # clear_service   ${HLPUSERNAME19}
+    # clear_location  ${HLPUSERNAME19}
     clear_customer   ${HLPUSERNAME19}
     clear_Label  ${HLPUSERNAME19}
 
@@ -77,7 +77,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-1
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}     maxBookingsAllowed=10
 
-    clear_queue    ${HLPUSERNAME19}
+    # clear_queue    ${HLPUSERNAME19}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -271,8 +271,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME19}
-    clear_location  ${HLPUSERNAME19}
+    # clear_service   ${HLPUSERNAME19}
+    # clear_location  ${HLPUSERNAME19}
     clear_customer   ${HLPUSERNAME19}
     clear_Label  ${HLPUSERNAME19}
 
@@ -320,7 +320,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-2
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_queue    ${HLPUSERNAME19}
+    # clear_queue    ${HLPUSERNAME19}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -474,8 +474,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME19}
-    clear_location  ${HLPUSERNAME19}
+    # clear_service   ${HLPUSERNAME19}
+    # clear_location  ${HLPUSERNAME19}
     clear_customer   ${HLPUSERNAME19}
     clear_Label  ${HLPUSERNAME19}
 
@@ -502,7 +502,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-3
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_queue    ${HLPUSERNAME19}
+    # clear_queue    ${HLPUSERNAME19}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -617,8 +617,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME19}
-    clear_location  ${HLPUSERNAME19}
+    # clear_service   ${HLPUSERNAME19}
+    # clear_location  ${HLPUSERNAME19}
     clear_customer   ${HLPUSERNAME19}
     clear_Label  ${HLPUSERNAME19}
 
@@ -659,7 +659,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-4
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_queue    ${HLPUSERNAME19}
+    # clear_queue    ${HLPUSERNAME19}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -824,8 +824,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME19}
-    clear_location  ${HLPUSERNAME19}
+    # clear_service   ${HLPUSERNAME19}
+    # clear_location  ${HLPUSERNAME19}
     clear_customer   ${HLPUSERNAME19}
     clear_Label  ${HLPUSERNAME19}
 
@@ -866,7 +866,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-5
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_queue    ${HLPUSERNAME19}
+    # clear_queue    ${HLPUSERNAME19}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1037,8 +1037,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME19}
-    clear_location  ${HLPUSERNAME19}
+    # clear_service   ${HLPUSERNAME19}
+    # clear_location  ${HLPUSERNAME19}
     clear_customer   ${HLPUSERNAME19}
     clear_Label  ${HLPUSERNAME19}
 
@@ -1065,7 +1065,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-6
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_queue    ${HLPUSERNAME19}
+    # clear_queue    ${HLPUSERNAME19}
     
     ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.json()}
@@ -1204,8 +1204,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME19}
-    clear_location  ${HLPUSERNAME19}
+    # clear_service   ${HLPUSERNAME19}
+    # clear_location  ${HLPUSERNAME19}
     clear_customer   ${HLPUSERNAME19}
     clear_Label  ${HLPUSERNAME19}
 
@@ -1237,7 +1237,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-7
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_queue    ${HLPUSERNAME19}
+    # clear_queue    ${HLPUSERNAME19}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1368,8 +1368,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME19}
-    clear_location  ${HLPUSERNAME19}
+    # clear_service   ${HLPUSERNAME19}
+    # clear_location  ${HLPUSERNAME19}
     clear_customer   ${HLPUSERNAME19}
     clear_Label  ${HLPUSERNAME19}
 
@@ -1398,7 +1398,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-8
     ${SERVICE2}=    FakerLibrary.Word
     ${s_id1}=  Create Sample Service  ${SERVICE2}
 
-    clear_queue    ${HLPUSERNAME19}
+    # clear_queue    ${HLPUSERNAME19}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
@@ -1525,8 +1525,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME19}
-    clear_location  ${HLPUSERNAME19}
+    # clear_service   ${HLPUSERNAME19}
+    # clear_location  ${HLPUSERNAME19}
     clear_customer   ${HLPUSERNAME19}
     clear_Label  ${HLPUSERNAME19}
 
@@ -1553,7 +1553,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-9
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_queue    ${HLPUSERNAME19}
+    # clear_queue    ${HLPUSERNAME19}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1729,8 +1729,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME19}
-    clear_location  ${HLPUSERNAME19}
+    # clear_service   ${HLPUSERNAME19}
+    # clear_location  ${HLPUSERNAME19}
     clear_customer   ${HLPUSERNAME19}
     clear_Label  ${HLPUSERNAME19}
 
@@ -1757,7 +1757,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-10
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_queue    ${HLPUSERNAME19}
+    # clear_queue    ${HLPUSERNAME19}
 
     ${DAY3}=  db.add_timezone_date  ${tz}  5
     
@@ -1877,8 +1877,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-11
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME19}
-    clear_location  ${HLPUSERNAME19}
+    # clear_service   ${HLPUSERNAME19}
+    # clear_location  ${HLPUSERNAME19}
     clear_customer   ${HLPUSERNAME19}
     clear_Label  ${HLPUSERNAME19}
 
@@ -1905,7 +1905,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-11
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_queue    ${HLPUSERNAME19}
+    # clear_queue    ${HLPUSERNAME19}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -2029,8 +2029,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME19}
-    clear_location  ${HLPUSERNAME19}
+    # clear_service   ${HLPUSERNAME19}
+    # clear_location  ${HLPUSERNAME19}
     clear_customer   ${HLPUSERNAME19}
     clear_Label  ${HLPUSERNAME19}
 
@@ -2064,7 +2064,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH1
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_queue    ${HLPUSERNAME19}
+    # clear_queue    ${HLPUSERNAME19}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -2212,8 +2212,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME19}
-    clear_location  ${HLPUSERNAME19}
+    # clear_service   ${HLPUSERNAME19}
+    # clear_location  ${HLPUSERNAME19}
     clear_customer   ${HLPUSERNAME19}
     clear_Label  ${HLPUSERNAME19}
 
@@ -2247,7 +2247,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH2
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_queue    ${HLPUSERNAME19}
+    # clear_queue    ${HLPUSERNAME19}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -2377,8 +2377,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME19}
-    clear_location  ${HLPUSERNAME19}
+    # clear_service   ${HLPUSERNAME19}
+    # clear_location  ${HLPUSERNAME19}
     clear_customer   ${HLPUSERNAME19}
     clear_Label  ${HLPUSERNAME19}
 
@@ -2405,7 +2405,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH3
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_queue    ${HLPUSERNAME19}
+    # clear_queue    ${HLPUSERNAME19}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -2510,8 +2510,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME19}
-    clear_location  ${HLPUSERNAME19}
+    # clear_service   ${HLPUSERNAME19}
+    # clear_location  ${HLPUSERNAME19}
     clear_customer   ${HLPUSERNAME19}
     clear_Label  ${HLPUSERNAME19}
 
@@ -2538,7 +2538,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH4
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_queue    ${HLPUSERNAME19}
+    # clear_queue    ${HLPUSERNAME19}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -2665,8 +2665,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME19}
-    clear_location  ${HLPUSERNAME19}
+    # clear_service   ${HLPUSERNAME19}
+    # clear_location  ${HLPUSERNAME19}
     clear_customer   ${HLPUSERNAME19}
     clear_Label  ${HLPUSERNAME19}
 
@@ -2693,7 +2693,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH5
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_queue    ${HLPUSERNAME19}
+    # clear_queue    ${HLPUSERNAME19}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -3144,8 +3144,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH13
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
 
-    clear_service   ${HLPUSERNAME19}
-    clear_location  ${HLPUSERNAME19}
+    # clear_service   ${HLPUSERNAME19}
+    # clear_location  ${HLPUSERNAME19}
     clear_customer   ${HLPUSERNAME19}
     clear_Label  ${HLPUSERNAME19}
 
@@ -3172,7 +3172,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH13
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    clear_appt_schedule   ${HLPUSERNAME19}
+    # clear_appt_schedule   ${HLPUSERNAME19}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     

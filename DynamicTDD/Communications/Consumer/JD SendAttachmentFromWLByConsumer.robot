@@ -36,9 +36,9 @@ ${fileSize}     0.00458
 JD-TC-SendAttachmentFromWLByConsumer-1
 	[Documentation]  ProviderConsumer  Send Attachment From WL By Consumer.
     
-    clear_queue      ${PUSERNAME306}
-    clear_location   ${PUSERNAME306}
-    clear_service    ${PUSERNAME306}
+    # clear_queue      ${PUSERNAME306}
+    # clear_location   ${PUSERNAME306}
+    # clear_service    ${PUSERNAME306}
     clear_customer   ${PUSERNAME306}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME306}  ${PASSWORD}

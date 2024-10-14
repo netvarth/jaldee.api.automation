@@ -41,7 +41,7 @@ JD-TC-ProviderGetApptRequest-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${acc_id1}  ${resp.json()['id']}
 
-    clear_appt_schedule   ${PUSERNAME6}
+    # clear_appt_schedule   ${PUSERNAME6}
 
     
     ${SERVICE1}=    FakerLibrary.word

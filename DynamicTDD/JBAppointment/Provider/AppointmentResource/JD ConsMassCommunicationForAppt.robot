@@ -52,8 +52,8 @@ JD-TC-ConsMassCommunicationForAppt-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME250}
-    clear_location  ${PUSERNAME250}
+    # clear_service   ${PUSERNAME250}
+    # clear_location  ${PUSERNAME250}
     clear_customer   ${PUSERNAME250}
 
     ${resp}=   Get Service
@@ -70,7 +70,7 @@ JD-TC-ConsMassCommunicationForAppt-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME250}
+    # clear_appt_schedule   ${PUSERNAME250}
     clear_Consumermsg  ${CUSERNAME11}
     clear_Providermsg  ${PUSERNAME250}
     
@@ -252,8 +252,8 @@ JD-TC-ConsMassCommunicationForAppt-2
     Set Test Variable  ${p_id}  ${decrypted_data['id']}
     # Set Test Variable  ${p_id}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME247}
-    clear_location  ${PUSERNAME247}
+    # clear_service   ${PUSERNAME247}
+    # clear_location  ${PUSERNAME247}
     clear_customer   ${PUSERNAME247}
     clear_Consumermsg  ${CUSERNAME36}
     clear_Providermsg  ${PUSERNAME247}
@@ -264,7 +264,7 @@ JD-TC-ConsMassCommunicationForAppt-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME247}
+    # clear_appt_schedule   ${PUSERNAME247}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        

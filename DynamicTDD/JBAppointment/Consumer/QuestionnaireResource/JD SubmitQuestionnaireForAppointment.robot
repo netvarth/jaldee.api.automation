@@ -206,7 +206,7 @@ JD-TC-SubmitQuestionnaireForAppointment-1
     END
     Set Suite Variable   ${s_id}  
 
-    clear_appt_schedule   ${PUSERNAME18}
+    # clear_appt_schedule   ${PUSERNAME18}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -382,7 +382,7 @@ JD-TC-SubmitQuestionnaireForAppointment-2
     END
     Set Suite Variable   ${s_id}  
 
-    clear_appt_schedule   ${PUSERNAME18}
+    # clear_appt_schedule   ${PUSERNAME18}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -557,7 +557,7 @@ JD-TC-SubmitQuestionnaireForAppointment-3
     END
     Set Suite Variable   ${s_id}  
 
-    clear_appt_schedule   ${PUSERNAME18}
+    # clear_appt_schedule   ${PUSERNAME18}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -740,7 +740,7 @@ JD-TC-SubmitQuestionnaireForAppointment-4
     END
     Set Suite Variable   ${s_id}  
 
-    clear_appt_schedule   ${PUSERNAME18}
+    # clear_appt_schedule   ${PUSERNAME18}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -928,7 +928,7 @@ JD-TC-SubmitQuestionnaireForAppointment-5
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${PUSERNAME18}
+    # clear_queue   ${PUSERNAME18}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Get Questionnaire List By Provider   
@@ -958,7 +958,7 @@ JD-TC-SubmitQuestionnaireForAppointment-5
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
     Set Suite Variable  ${Questionnaireid5}  ${qns.json()['questionnaireId']}
    
-    clear_appt_schedule   ${PUSERNAME18}
+    # clear_appt_schedule   ${PUSERNAME18}
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1100,7 +1100,7 @@ JD-TC-SubmitQuestionnaireForAppointment-UH1
     END
     Set Suite Variable   ${s_id}  
 
-    clear_appt_schedule   ${PUSERNAME18}
+    # clear_appt_schedule   ${PUSERNAME18}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1305,7 +1305,7 @@ JD-TC-SubmitQuestionnaireForAppointment-UH2
     END
     Set Suite Variable   ${s_id}  
 
-    clear_appt_schedule   ${PUSERNAME18}
+    # clear_appt_schedule   ${PUSERNAME18}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1468,7 +1468,7 @@ JD-TC-SubmitQuestionnaireForAppointment-UH3
     END
     Set Suite Variable   ${s_id}  
 
-    clear_appt_schedule   ${PUSERNAME18}
+    # clear_appt_schedule   ${PUSERNAME18}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1644,7 +1644,7 @@ JD-TC-SubmitQuestionnaireForAppointment-UH4
     END
     Set Suite Variable   ${s_id}  
 
-    clear_appt_schedule   ${PUSERNAME18}
+    # clear_appt_schedule   ${PUSERNAME18}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1804,7 +1804,7 @@ JD-TC-SubmitQuestionnaireForAppointment-UH5
     END
     Set Suite Variable   ${s_id}  
 
-    clear_appt_schedule   ${PUSERNAME18}
+    # clear_appt_schedule   ${PUSERNAME18}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -2024,7 +2024,7 @@ JD-TC-SubmitQuestionnaireForAppointment-6
     END
     Set Suite Variable   ${s_id}  
 
-    clear_appt_schedule   ${PUSERNAME18}
+    # clear_appt_schedule   ${PUSERNAME18}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     

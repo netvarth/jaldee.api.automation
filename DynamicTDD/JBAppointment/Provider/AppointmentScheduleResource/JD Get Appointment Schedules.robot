@@ -30,7 +30,7 @@ JD-TC-Get Appointment schedules-1
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME192}
     # clear_location  ${PUSERNAME192}
-    clear_service   ${PUSERNAME192}
+    # clear_service   ${PUSERNAME192}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -46,7 +46,7 @@ JD-TC-Get Appointment schedules-1
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME192}
+    # clear_appt_schedule   ${PUSERNAME192}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -90,7 +90,7 @@ JD-TC-Get Appointment schedules-2
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME192}
     # clear_location  ${PUSERNAME192}
-    clear_service   ${PUSERNAME192}
+    # clear_service   ${PUSERNAME192}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -106,7 +106,7 @@ JD-TC-Get Appointment schedules-2
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME192}
+    # clear_appt_schedule   ${PUSERNAME192}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -151,7 +151,7 @@ JD-TC-Get Appointment schedules-3
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME192}
     # clear_location  ${PUSERNAME192}
-    clear_service   ${PUSERNAME192}
+    # clear_service   ${PUSERNAME192}
    
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -167,7 +167,7 @@ JD-TC-Get Appointment schedules-3
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME192}
+    # clear_appt_schedule   ${PUSERNAME192}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -249,7 +249,7 @@ JD-TC-Get Appointment schedules-5
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME192}
     # clear_location  ${PUSERNAME192}
-    clear_service   ${PUSERNAME192}
+    # clear_service   ${PUSERNAME192}
    
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -265,7 +265,7 @@ JD-TC-Get Appointment schedules-5
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME192}
+    # clear_appt_schedule   ${PUSERNAME192}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -308,7 +308,7 @@ JD-TC-Get Appointment schedules-6
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME192}
     # clear_location  ${PUSERNAME192}
-    clear_service   ${PUSERNAME192}
+    # clear_service   ${PUSERNAME192}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -324,7 +324,7 @@ JD-TC-Get Appointment schedules-6
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME192}
+    # clear_appt_schedule   ${PUSERNAME192}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -367,7 +367,7 @@ JD-TC-Get Appointment schedules-7
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME192}
     # clear_location  ${PUSERNAME192}
-    clear_service   ${PUSERNAME192}
+    # clear_service   ${PUSERNAME192}
    
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -383,7 +383,7 @@ JD-TC-Get Appointment schedules-7
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME192}
+    # clear_appt_schedule   ${PUSERNAME192}
 
     ${resp}=   Get Service
     Log   ${resp.json()}

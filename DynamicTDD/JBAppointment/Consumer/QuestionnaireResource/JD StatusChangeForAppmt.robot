@@ -202,7 +202,7 @@ JD-TC-StatusChangeForServiceOptionAppointment-1
     END
     Set Suite Variable   ${s_id}  
 
-    clear_appt_schedule   ${PUSERNAME67}
+    # clear_appt_schedule   ${PUSERNAME67}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     

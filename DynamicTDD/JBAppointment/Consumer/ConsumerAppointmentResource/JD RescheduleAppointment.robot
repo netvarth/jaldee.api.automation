@@ -55,8 +55,8 @@ JD-TC-Reschedule Appointment-1
     Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
     Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -88,7 +88,7 @@ JD-TC-Reschedule Appointment-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -255,8 +255,8 @@ JD-TC-Reschedule Appointment-2
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -273,7 +273,7 @@ JD-TC-Reschedule Appointment-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -427,8 +427,8 @@ JD-TC-Reschedule Appointment-3
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -445,7 +445,7 @@ JD-TC-Reschedule Appointment-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -596,8 +596,8 @@ JD-TC-Reschedule Appointment-9
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -614,7 +614,7 @@ JD-TC-Reschedule Appointment-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -790,8 +790,8 @@ JD-TC-Reschedule Appointment-10
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -808,7 +808,7 @@ JD-TC-Reschedule Appointment-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -1000,8 +1000,8 @@ JD-TC-Reschedule Appointment-UH1
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -1018,7 +1018,7 @@ JD-TC-Reschedule Appointment-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -1170,8 +1170,8 @@ JD-TC-Reschedule Appointment-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -1188,7 +1188,7 @@ JD-TC-Reschedule Appointment-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -1359,8 +1359,8 @@ JD-TC-Reschedule Appointment-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -1377,7 +1377,7 @@ JD-TC-Reschedule Appointment-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -1545,8 +1545,8 @@ JD-TC-Reschedule Appointment-UH4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -1567,7 +1567,7 @@ JD-TC-Reschedule Appointment-UH4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz1}  ${resp.json()['timezone']} 
-    clear_appt_schedule   ${PUSERNAME139}
+    # clear_appt_schedule   ${PUSERNAME139}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -1713,8 +1713,8 @@ JD-TC-Reschedule Appointment-UH5
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -1731,7 +1731,7 @@ JD-TC-Reschedule Appointment-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -1873,8 +1873,8 @@ JD-TC-Reschedule Appointment-UH6
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -1891,7 +1891,7 @@ JD-TC-Reschedule Appointment-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -2015,8 +2015,8 @@ JD-TC-Reschedule Appointment-UH7
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -2033,7 +2033,7 @@ JD-TC-Reschedule Appointment-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -2171,8 +2171,8 @@ JD-TC-Reschedule Appointment-UH8
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -2189,7 +2189,7 @@ JD-TC-Reschedule Appointment-UH8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -2327,8 +2327,8 @@ JD-TC-Reschedule Appointment-UH9
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -2345,7 +2345,7 @@ JD-TC-Reschedule Appointment-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -2483,8 +2483,8 @@ JD-TC-Reschedule Appointment-UH10
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -2501,7 +2501,7 @@ JD-TC-Reschedule Appointment-UH10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -2639,8 +2639,8 @@ JD-TC-Reschedule Appointment-UH11
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -2657,7 +2657,7 @@ JD-TC-Reschedule Appointment-UH11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -2795,8 +2795,8 @@ JD-TC-Reschedule Appointment-UH12
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -2813,7 +2813,7 @@ JD-TC-Reschedule Appointment-UH12
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -2951,8 +2951,8 @@ JD-TC-Reschedule Appointment-UH13
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -2969,7 +2969,7 @@ JD-TC-Reschedule Appointment-UH13
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -3108,8 +3108,8 @@ JD-TC-Reschedule Appointment-UH14
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -3126,7 +3126,7 @@ JD-TC-Reschedule Appointment-UH14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -3268,8 +3268,8 @@ JD-TC-Reschedule Appointment-UH15
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -3286,7 +3286,7 @@ JD-TC-Reschedule Appointment-UH15
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -3433,8 +3433,8 @@ JD-TC-Reschedule Appointment-UH16
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -3451,7 +3451,7 @@ JD-TC-Reschedule Appointment-UH16
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -3617,8 +3617,8 @@ JD-TC-Reschedule Appointment-UH17
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME138}
-    clear_location  ${PUSERNAME138}
+    # clear_service   ${PUSERNAME138}
+    # clear_location  ${PUSERNAME138}
     clear_customer   ${PUSERNAME138}
 
     ${resp}=   Get Service
@@ -3630,7 +3630,7 @@ JD-TC-Reschedule Appointment-UH17
     Should Be Equal As Strings  ${resp.status_code}  200  
 
     ${lid1}=  Create Sample Location  
-    clear_appt_schedule   ${PUSERNAME148}
+    # clear_appt_schedule   ${PUSERNAME148}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -3677,8 +3677,8 @@ JD-TC-Reschedule Appointment-UH17
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -3695,7 +3695,7 @@ JD-TC-Reschedule Appointment-UH17
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -3839,8 +3839,8 @@ JD-TC-Reschedule Appointment-UH20
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -3857,7 +3857,7 @@ JD-TC-Reschedule Appointment-UH20
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -4012,8 +4012,8 @@ JD-TC-Reschedule Appointment-UH21
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -4030,7 +4030,7 @@ JD-TC-Reschedule Appointment-UH21
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -4219,8 +4219,8 @@ JD-TC-Reschedule Appointment-UH22
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -4241,7 +4241,7 @@ JD-TC-Reschedule Appointment-UH22
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -4426,8 +4426,8 @@ JD-TC-Reschedule Appointment-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -4444,7 +4444,7 @@ JD-TC-Reschedule Appointment-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -4642,8 +4642,8 @@ JD-TC-Reschedule Appointment-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -4660,7 +4660,7 @@ JD-TC-Reschedule Appointment-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -4834,8 +4834,8 @@ JD-TC-Reschedule Appointment-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -4852,7 +4852,7 @@ JD-TC-Reschedule Appointment-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -5068,8 +5068,8 @@ JD-TC-Reschedule Appointment-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -5090,7 +5090,7 @@ JD-TC-Reschedule Appointment-7
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz1}  ${resp.json()['timezone']} 
-    clear_appt_schedule   ${PUSERNAME139}
+    # clear_appt_schedule   ${PUSERNAME139}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -5265,8 +5265,8 @@ JD-TC-Reschedule Appointment-8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -5287,7 +5287,7 @@ JD-TC-Reschedule Appointment-8
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz1}  ${resp.json()['timezone']} 
-    clear_appt_schedule   ${PUSERNAME139}
+    # clear_appt_schedule   ${PUSERNAME139}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -5453,8 +5453,8 @@ JD-TC-Reschedule Appointment-UH18
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -5471,7 +5471,7 @@ JD-TC-Reschedule Appointment-UH18
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -5611,8 +5611,8 @@ JD-TC-Reschedule Appointment-UH19
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME139}
-    clear_location  ${PUSERNAME139}
+    # clear_service   ${PUSERNAME139}
+    # clear_location  ${PUSERNAME139}
     clear_customer   ${PUSERNAME139}
 
     ${resp}=   Get Service
@@ -5629,7 +5629,7 @@ JD-TC-Reschedule Appointment-UH19
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}

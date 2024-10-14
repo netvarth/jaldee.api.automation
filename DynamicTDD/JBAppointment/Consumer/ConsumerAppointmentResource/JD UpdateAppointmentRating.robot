@@ -36,8 +36,8 @@ JD-TC-UpdateAppointmentRating-1
     ${resp}=  Get Active License
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_queue    ${PUSERNAME202}
-    clear_service  ${PUSERNAME202}
+    # clear_queue    ${PUSERNAME202}
+    # clear_service  ${PUSERNAME202}
     clear_rating    ${PUSERNAME202}
     clear_customer   ${PUSERNAME202}
 
@@ -67,7 +67,7 @@ JD-TC-UpdateAppointmentRating-1
         Should Be Equal As Strings    ${resp.status_code}   200
     END
     
-    clear_appt_schedule   ${PUSERNAME202}
+    # clear_appt_schedule   ${PUSERNAME202}
 
     ${SERVICE1}=   FakerLibrary.name
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10

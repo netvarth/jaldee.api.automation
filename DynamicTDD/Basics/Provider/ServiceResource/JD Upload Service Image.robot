@@ -36,7 +36,7 @@ JD-TC-Upload service Image-1
     ${Total}=  Convert To Number  ${Total}  1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME199}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service       ${PUSERNAME199}
+    # clear_service       ${PUSERNAME199}
     ${resp}=  Create Service  ${SERVICE3}  ${description}  ${service_duration[2]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  

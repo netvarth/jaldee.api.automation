@@ -45,7 +45,7 @@ JD-TC-Get AppointmentById-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME259}
+    # clear_location_n_service  ${PUSERNAME259}
     clear_customer   ${PUSERNAME259}
 
     ${resp}=    Get Locations
@@ -63,7 +63,7 @@ JD-TC-Get AppointmentById-1
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME259}
+    # clear_appt_schedule   ${PUSERNAME259}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -153,8 +153,8 @@ JD-TC-Get AppointmentById-2
     ${resp}=  Encrypted Provider Login  ${PUSERNAME259}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME259}
-    clear_location  ${PUSERNAME259}
+    # clear_service   ${PUSERNAME259}
+    # clear_location  ${PUSERNAME259}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -176,7 +176,7 @@ JD-TC-Get AppointmentById-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME259}
+    # clear_appt_schedule   ${PUSERNAME259}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -288,8 +288,8 @@ JD-TC-Get AppointmentById-3
     ${resp}=  Encrypted Provider Login  ${PUSERNAME259}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME259}
-    clear_location  ${PUSERNAME259}
+    # clear_service   ${PUSERNAME259}
+    # clear_location  ${PUSERNAME259}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -316,7 +316,7 @@ JD-TC-Get AppointmentById-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME259}
+    # clear_appt_schedule   ${PUSERNAME259}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10       
@@ -455,8 +455,8 @@ JD-TC-Get AppointmentById-4
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME259}
-    clear_location  ${PUSERNAME259}
+    # clear_service   ${PUSERNAME259}
+    # clear_location  ${PUSERNAME259}
     # clear_customer   ${PUSERNAME259}
 
     ${lid}=  Create Sample Location  
@@ -465,7 +465,7 @@ JD-TC-Get AppointmentById-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME259}
+    # clear_appt_schedule   ${PUSERNAME259}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        

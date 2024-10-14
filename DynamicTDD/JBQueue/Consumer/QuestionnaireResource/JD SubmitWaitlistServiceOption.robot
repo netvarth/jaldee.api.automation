@@ -200,7 +200,7 @@ JD-TC-SubmitServiceOptionsForWaitlist-1
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${PUSERNAME128}
+    # clear_queue   ${PUSERNAME128}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -352,7 +352,7 @@ JD-TC-SubmitServiceOptionsForWaitlist-2
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${PUSERNAME128}
+    # clear_queue   ${PUSERNAME128}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -493,7 +493,7 @@ JD-TC-SubmitServiceOptionsForWaitlist-3
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${PUSERNAME128}
+    # clear_queue   ${PUSERNAME128}
     
     ${list}=  Create List  1  2  3  4  5  6  7
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -647,7 +647,7 @@ JD-TC-SubmitServiceOptionsForWaitlist-4
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${PUSERNAME128}
+    # clear_queue   ${PUSERNAME128}
 
     ${list}=  Create List  1  2  3  4  5  6  7
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -810,7 +810,7 @@ JD-TC-SubmitServiceOptionsForWaitlist-UH1
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${PUSERNAME128}
+    # clear_queue   ${PUSERNAME128}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     

@@ -27,8 +27,8 @@ JD-TC-GetConsumerAppointmentById-1
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME47}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${HLPUSERNAME47}
-    clear_location  ${HLPUSERNAME47}
+    # clear_service   ${HLPUSERNAME47}
+    # clear_location  ${HLPUSERNAME47}
     ${pid1}=  get_acc_id  ${HLPUSERNAME47}
     Set Suite Variable   ${pid1}
     
@@ -145,8 +145,8 @@ JD-TC-GetConsumerAppointmentById-2
     
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME46}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${HLPUSERNAME46}
-    clear_location  ${HLPUSERNAME46}
+    # clear_service   ${HLPUSERNAME46}
+    # clear_location  ${HLPUSERNAME46}
     ${pid2}=  get_acc_id  ${HLPUSERNAME46}
     Set Suite Variable   ${pid2}
     ${DAY1}=  db.get_date_by_timezone  ${tz}

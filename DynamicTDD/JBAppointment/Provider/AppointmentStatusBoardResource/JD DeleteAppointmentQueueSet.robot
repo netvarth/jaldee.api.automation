@@ -32,8 +32,8 @@ JD-TC-DeleteAppointmentQueueSet-1
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME14}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    clear_service   ${HLPUSERNAME14}
-    clear_location  ${HLPUSERNAME14}
+    # clear_service   ${HLPUSERNAME14}
+    # clear_location  ${HLPUSERNAME14}
     clear_Addon  ${HLPUSERNAME14}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}

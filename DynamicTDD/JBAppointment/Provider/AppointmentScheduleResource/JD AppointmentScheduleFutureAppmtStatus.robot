@@ -34,7 +34,7 @@ JD-TC-Appointment Schedule FutureAppmt Status-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${PUSERNAME52}
+    # clear_service   ${PUSERNAME52}
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -57,7 +57,7 @@ JD-TC-Appointment Schedule FutureAppmt Status-1
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
 
-    clear_appt_schedule   ${PUSERNAME52}
+    # clear_appt_schedule   ${PUSERNAME52}
     ${DAY1}=  db.add_timezone_date  ${tz}  4  
     Set Suite Variable   ${DAY1}    
     ${list}=  Create List  1  2  3  4  5  6  7

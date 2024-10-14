@@ -33,8 +33,8 @@ JD-TC-Get Appointment history-1
     change_system_date   -5
 
 
-    clear_service   ${HLPUSERNAME48}
-    clear_location  ${HLPUSERNAME48}
+    # clear_service   ${HLPUSERNAME48}
+    # clear_location  ${HLPUSERNAME48}
     
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
@@ -78,7 +78,7 @@ JD-TC-Get Appointment history-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Suite Variable  ${lid1}  ${resp.json()}
-    clear_appt_schedule   ${HLPUSERNAME48}
+    # clear_appt_schedule   ${HLPUSERNAME48}
       
     ${s_id1}=   Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id1}

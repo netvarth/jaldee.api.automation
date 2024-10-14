@@ -44,9 +44,9 @@ JD-TC-Update_IVR_Call_Status-1
 
     [Documentation]   Update IVR Call Status
     
-    clear_queue      ${PUSERNAME178}
+    # clear_queue      ${PUSERNAME178}
     # clear_location   ${PUSERNAME178}
-    clear_service    ${PUSERNAME178}
+    # clear_service    ${PUSERNAME178}
     clear_customer   ${PUSERNAME178}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME178}  ${PASSWORD}

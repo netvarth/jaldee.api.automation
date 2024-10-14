@@ -61,8 +61,8 @@ JD-TC-SendAttachmentAppmt-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME303}
-    clear_location  ${PUSERNAME303}
+    # clear_service   ${PUSERNAME303}
+    # clear_location  ${PUSERNAME303}
     clear_customer   ${PUSERNAME303}
 
     ${resp}=   Get Service
@@ -98,7 +98,7 @@ JD-TC-SendAttachmentAppmt-1
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME303}
+    # clear_appt_schedule   ${PUSERNAME303}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}

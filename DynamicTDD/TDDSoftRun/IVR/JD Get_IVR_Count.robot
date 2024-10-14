@@ -44,8 +44,8 @@ JD-TC-Get_IVR_Count-1
 
     [Documentation]   Get IVR Count
     
-    clear_queue      ${PUSERNAME164}
-    clear_service    ${PUSERNAME164}
+    # clear_queue      ${PUSERNAME164}
+    # clear_service    ${PUSERNAME164}
     clear_customer   ${PUSERNAME164}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
@@ -316,9 +316,9 @@ JD-TC-Get_IVR_Count-2
 
     [Documentation]   Add two calls and Get IVR Count
     
-    clear_queue      ${PUSERNAME164}
+    # clear_queue      ${PUSERNAME164}
     #   clear_location   ${PUSERNAME164}
-    clear_service    ${PUSERNAME164}
+    # clear_service    ${PUSERNAME164}
     clear_customer   ${PUSERNAME164}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
@@ -675,9 +675,9 @@ JD-TC-Get_IVR_Count-3
 
     [Documentation]   Get IVR Count before aftercall
     
-    clear_queue      ${PUSERNAME164}
+    # clear_queue      ${PUSERNAME164}
     #   clear_location   ${PUSERNAME164}
-    clear_service    ${PUSERNAME164}
+    # clear_service    ${PUSERNAME164}
     clear_customer   ${PUSERNAME164}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
@@ -937,9 +937,9 @@ JD-TC-Get_IVR_Count-4
 
     [Documentation]   Get IVR Count after incoming call on server
     
-    clear_queue      ${PUSERNAME164}
+    # clear_queue      ${PUSERNAME164}
     #   clear_location   ${PUSERNAME164}
-    clear_service    ${PUSERNAME164}
+    # clear_service    ${PUSERNAME164}
     clear_customer   ${PUSERNAME164}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
@@ -1199,9 +1199,9 @@ JD-TC-Get_IVR_Count-5
 
     [Documentation]   Get IVR Count after dialling call
     
-    clear_queue      ${PUSERNAME164}
+    # clear_queue      ${PUSERNAME164}
     #   clear_location   ${PUSERNAME164}
-    clear_service    ${PUSERNAME164}
+    # clear_service    ${PUSERNAME164}
     clear_customer   ${PUSERNAME164}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
@@ -1461,9 +1461,9 @@ JD-TC-Get_IVR_Count-6
 
     [Documentation]   Get IVR Count after answeing call
     
-    clear_queue      ${PUSERNAME164}
+    # clear_queue      ${PUSERNAME164}
     #   clear_location   ${PUSERNAME164}
-    clear_service    ${PUSERNAME164}
+    # clear_service    ${PUSERNAME164}
     clear_customer   ${PUSERNAME164}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}

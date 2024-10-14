@@ -31,9 +31,9 @@ JD-TC-Get Waitlist history-1
     
     change_system_date  -5
 
-    clear_queue      ${HLPUSERNAME10}
-    clear_location   ${HLPUSERNAME10}
-    clear_service    ${HLPUSERNAME10}
+    # clear_queue      ${HLPUSERNAME10}
+    # clear_location   ${HLPUSERNAME10}
+    # clear_service    ${HLPUSERNAME10}
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
     Log  ${resp.json()}

@@ -38,7 +38,7 @@ JD-TC-UpdateService-1
 
         [Documentation]   update a  service for a valid provider when domain is Billable 
         ${resp}=   Billable
-        clear_service      ${resp}
+        # clear_service      ${resp}
         ${description}=  FakerLibrary.sentence
         ${min_pre}=   Random Int   min=10   max=50
         ${Total}=   Random Int   min=100   max=500
@@ -61,7 +61,7 @@ JD-TC-UpdateService-2
 
         [Documentation]  update a  service for a valid provider when domain is Billable 
         ${resp}=   Billable
-        clear_service      ${resp}
+        # clear_service      ${resp}
         ${description}=  FakerLibrary.sentence
         ${min_pre}=   Random Int   min=10   max=50
         ${Total}=   Random Int   min=100   max=500
@@ -83,7 +83,7 @@ JD-TC-UpdateService-2
 JD-TC-UpdateService-3
         [Documentation]  update  a service to set prepayment amount 0
         ${resp}=   Billable
-        clear_service      ${resp}
+        # clear_service      ${resp}
         ${description}=  FakerLibrary.sentence
         ${min_pre}=   Random Int   min=10   max=50
         ${Total}=   Random Int   min=100   max=500
@@ -108,7 +108,7 @@ JD-TC-UpdateService-4
 
         [Documentation]   Create a service with prePrePaymentand  and  Update with remove pre payment Amount
         ${resp}=   Billable
-        clear_service      ${resp}
+        # clear_service      ${resp}
         ${description}=  FakerLibrary.sentence
         ${min_pre}=   Random Int   min=10   max=50
         ${Total}=   Random Int   min=100   max=500
@@ -130,7 +130,7 @@ JD-TC-UpdateService-5
 
         [Documentation]   Create service in a non billable domain and update service like billable 
         ${resp}=   Non Billable
-        clear_service      ${resp}
+        # clear_service      ${resp}
         ${description}=  FakerLibrary.sentence
         ${min_pre}=   Random Int   min=10   max=50
         ${Total}=   Random Int   min=100   max=500
@@ -236,7 +236,7 @@ JD-TC-UpdateService-UH4
         ${Total}=   Random Int  min=11   max=100
         ${resp}=  Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        clear_service       ${PUSERNAME69}
+        # clear_service       ${PUSERNAME69}
         ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[3]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${id123}  ${resp.json()}
@@ -252,7 +252,7 @@ JD-TC-UpdateService-UH6
 
         [Documentation]  update a  service for a valid provider with 0 Total amount
         ${resp}=   Billable
-        clear_service      ${resp}
+        # clear_service      ${resp}
         ${description}=  FakerLibrary.sentence
         # ${min_pre}=   FakerLibrary.pyfloat   left_digits=2   right_digits=2   positive=True
         # ${Total}=   FakerLibrary.pyfloat   left_digits=3   right_digits=2   positive=True
@@ -277,7 +277,7 @@ JD-TC-UpdateService-UH7
 
         [Documentation]  Create a service with prePrePayment and  Update with remove pre payment Amount
         ${resp}=   Billable
-        clear_service      ${resp}
+        # clear_service      ${resp}
         ${description}=  FakerLibrary.sentence
         ${min_pre}=   Random Int   min=10   max=50
         ${Total}=   Random Int   min=100   max=500
@@ -302,7 +302,7 @@ JD-TC-UpdateService-6
         ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${PUSERNAME27}
+        # clear_service   ${PUSERNAME27}
 
         ${resp}=  Get Service
         Log  ${resp.json()}
@@ -339,7 +339,7 @@ JD-TC-UpdateService-7
         ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${PUSERNAME27}
+        # clear_service   ${PUSERNAME27}
 
         
         ${resp}=  Get Service
@@ -385,7 +385,7 @@ JD-TC-UpdateService-8
         ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${PUSERNAME27}
+        # clear_service   ${PUSERNAME27}
 
         ${resp}=  Get Service
         Log  ${resp.json()}
@@ -422,7 +422,7 @@ JD-TC-UpdateService-9
         ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${PUSERNAME27}
+        # clear_service   ${PUSERNAME27}
 
         ${resp}=  Get Service
         Log  ${resp.json()}
@@ -459,7 +459,7 @@ JD-TC-UpdateService-10
         ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${PUSERNAME27}
+        # clear_service   ${PUSERNAME27}
 
         
         ${resp}=  Get Service
@@ -499,7 +499,7 @@ JD-TC-UpdateService-UH8
         ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${PUSERNAME27}
+        # clear_service   ${PUSERNAME27}
         
         ${resp}=  Get Service
         Log  ${resp.json()}
@@ -536,7 +536,7 @@ JD-TC-UpdateService-UH9
         ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${PUSERNAME27}
+        # clear_service   ${PUSERNAME27}
 
         ${resp}=  Get Service
         Log  ${resp.json()}
@@ -577,7 +577,7 @@ JD-TC-UpdateService-UH10
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        clear_service   ${PUSERNAME27}
+        # clear_service   ${PUSERNAME27}
 
         ${resp}=  Get Service
         Log  ${resp.json()}
@@ -620,7 +620,7 @@ Billable
      
     FOR   ${a}  IN RANGE   ${length}
             
-        clear_service       ${PUSERNAME${a}}
+        # clear_service       ${PUSERNAME${a}}
         ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -646,7 +646,7 @@ Non Billable
         ${length}=  Get Length   ${len}
 
      FOR    ${a}   IN RANGE    ${length}
-        clear_service       ${PUSERNAME${a}}
+        # clear_service       ${PUSERNAME${a}}
         ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
 

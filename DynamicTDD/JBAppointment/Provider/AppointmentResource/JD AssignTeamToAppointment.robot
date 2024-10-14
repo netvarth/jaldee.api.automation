@@ -38,8 +38,8 @@ JD-TC-AssignTeamToAppointment-1
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    clear_queue      ${HLPUSERNAME7}
-    clear_service    ${HLPUSERNAME7}
+    # clear_queue      ${HLPUSERNAME7}
+    # clear_service    ${HLPUSERNAME7}
     clear_customer   ${HLPUSERNAME7}
 
     ${pid}=  get_acc_id  ${HLPUSERNAME7}

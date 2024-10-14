@@ -30,7 +30,7 @@ JD-TC-GetSlots By Date-1
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME101}
     # clear_location  ${PUSERNAME101}
-    clear_service   ${PUSERNAME101}
+    # clear_service   ${PUSERNAME101}
     
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -46,7 +46,7 @@ JD-TC-GetSlots By Date-1
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME101}
+    # clear_appt_schedule   ${PUSERNAME101}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
@@ -113,7 +113,7 @@ JD-TC-GetSlots By Date-2
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME102}
     # clear_location  ${PUSERNAME102}
-    clear_service   ${PUSERNAME102}
+    # clear_service   ${PUSERNAME102}
     
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -129,7 +129,7 @@ JD-TC-GetSlots By Date-2
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME102}
+    # clear_appt_schedule   ${PUSERNAME102}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -166,7 +166,7 @@ JD-TC-GetSlots By Date-3
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME103}
     # clear_location  ${PUSERNAME103}
-    clear_service   ${PUSERNAME103}
+    # clear_service   ${PUSERNAME103}
  
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -182,7 +182,7 @@ JD-TC-GetSlots By Date-3
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
     
-    clear_appt_schedule   ${PUSERNAME103}
+    # clear_appt_schedule   ${PUSERNAME103}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        

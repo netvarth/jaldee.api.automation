@@ -187,8 +187,8 @@ JD-TC-SPConsumer Deactivation -2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME_B}
-    clear_location  ${PUSERNAME_B}    
+    # clear_service   ${PUSERNAME_B}
+    # clear_location  ${PUSERNAME_B}    
     ${resp}=   Get Service
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -218,7 +218,7 @@ JD-TC-SPConsumer Deactivation -2
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    clear_appt_schedule   ${PUSERNAME_B}
+    # clear_appt_schedule   ${PUSERNAME_B}
     ${SERVICE1}=   FakerLibrary.name
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}

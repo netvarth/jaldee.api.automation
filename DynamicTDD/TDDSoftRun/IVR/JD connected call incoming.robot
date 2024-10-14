@@ -42,9 +42,9 @@ JD-TC-Incall_IVR-1
 
     [Documentation]   Incall IVR
     
-    clear_queue      ${PUSERNAME152}
+    # clear_queue      ${PUSERNAME152}
     # clear_location   ${PUSERNAME152}
-    clear_service    ${PUSERNAME152}
+    # clear_service    ${PUSERNAME152}
     clear_customer   ${PUSERNAME152}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
@@ -273,9 +273,9 @@ JD-TC-Incall_IVR-2
 
     [Documentation]   Incall IVR-Work Flow change
     #  Work flow change will works here-From dev
-    clear_queue      ${PUSERNAME152}
-    clear_location   ${PUSERNAME152}
-    clear_service    ${PUSERNAME152}
+    # clear_queue      ${PUSERNAME152}
+    # clear_location   ${PUSERNAME152}
+    # clear_service    ${PUSERNAME152}
     clear_customer   ${PUSERNAME152}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
@@ -371,9 +371,9 @@ JD-TC-Incall_IVR-3
 
     [Documentation]   Given Past date on Incoming call on server
     
-    clear_queue      ${PUSERNAME152}
-    clear_location   ${PUSERNAME152}
-    clear_service    ${PUSERNAME152}
+    # clear_queue      ${PUSERNAME152}
+    # clear_location   ${PUSERNAME152}
+    # clear_service    ${PUSERNAME152}
     clear_customer   ${PUSERNAME152}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
@@ -466,9 +466,9 @@ JD-TC-Incall_IVR-UH1
 
     [Documentation]   Passing different account id
     
-    clear_queue      ${PUSERNAME152}
-    clear_location   ${PUSERNAME152}
-    clear_service    ${PUSERNAME152}
+    # clear_queue      ${PUSERNAME152}
+    # clear_location   ${PUSERNAME152}
+    # clear_service    ${PUSERNAME152}
     clear_customer   ${PUSERNAME152}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
@@ -564,9 +564,9 @@ JD-TC-Incall_IVR-UH2
 
     [Documentation]   Passing empty incall uid on "Incoming call on server" 
     
-    clear_queue      ${PUSERNAME152}
-    clear_location   ${PUSERNAME152}
-    clear_service    ${PUSERNAME152}
+    # clear_queue      ${PUSERNAME152}
+    # clear_location   ${PUSERNAME152}
+    # clear_service    ${PUSERNAME152}
     clear_customer   ${PUSERNAME152}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
@@ -664,9 +664,9 @@ JD-TC-Incall_IVR-UH3
 
     [Documentation]   Passing empty reference id on "Incoming call on server" 
     
-    clear_queue      ${PUSERNAME152}
-    clear_location   ${PUSERNAME152}
-    clear_service    ${PUSERNAME152}
+    # clear_queue      ${PUSERNAME152}
+    # clear_location   ${PUSERNAME152}
+    # clear_service    ${PUSERNAME152}
     clear_customer   ${PUSERNAME152}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
@@ -972,9 +972,9 @@ JD-TC-Incall_IVR-UH7
 
     [Documentation]   Passing empty call state id on "Incoming call on server" 
     
-    clear_queue      ${PUSERNAME152}
-    clear_location   ${PUSERNAME152}
-    clear_service    ${PUSERNAME152}
+    # clear_queue      ${PUSERNAME152}
+    # clear_location   ${PUSERNAME152}
+    # clear_service    ${PUSERNAME152}
     clear_customer   ${PUSERNAME152}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
@@ -1075,9 +1075,9 @@ JD-TC-Incall_IVR-UH8
 
     [Documentation]   Passing empty call time on Incoming call on server
     
-    clear_queue      ${PUSERNAME152}
-    clear_location   ${PUSERNAME152}
-    clear_service    ${PUSERNAME152}
+    # clear_queue      ${PUSERNAME152}
+    # clear_location   ${PUSERNAME152}
+    # clear_service    ${PUSERNAME152}
     clear_customer   ${PUSERNAME152}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
@@ -1170,9 +1170,9 @@ JD-TC-Incall_IVR-UH9
 
     [Documentation]   Given Future date on Incoming call on server
     
-    clear_queue      ${PUSERNAME152}
-    clear_location   ${PUSERNAME152}
-    clear_service    ${PUSERNAME152}
+    # clear_queue      ${PUSERNAME152}
+    # clear_location   ${PUSERNAME152}
+    # clear_service    ${PUSERNAME152}
     clear_customer   ${PUSERNAME152}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
@@ -1265,9 +1265,9 @@ JD-TC-Incall_IVR-UH10
 
     [Documentation]   Passing empty reference id on "Incoming call on server" 
     
-    clear_queue      ${PUSERNAME152}
-    clear_location   ${PUSERNAME152}
-    clear_service    ${PUSERNAME152}
+    # clear_queue      ${PUSERNAME152}
+    # clear_location   ${PUSERNAME152}
+    # clear_service    ${PUSERNAME152}
     clear_customer   ${PUSERNAME152}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
@@ -1366,9 +1366,9 @@ JD-TC-Incall_IVR-UH11
     
  
 
-    clear_queue      ${PUSERNAME152}
-    clear_location   ${PUSERNAME152}
-    clear_service    ${PUSERNAME152}
+    # clear_queue      ${PUSERNAME152}
+    # clear_location   ${PUSERNAME152}
+    # clear_service    ${PUSERNAME152}
     clear_customer   ${PUSERNAME152}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
@@ -1467,9 +1467,9 @@ JD-TC-Incall_IVR-UH12
     
  
 
-    clear_queue      ${PUSERNAME152}
-    clear_location   ${PUSERNAME152}
-    clear_service    ${PUSERNAME152}
+    # clear_queue      ${PUSERNAME152}
+    # clear_location   ${PUSERNAME152}
+    # clear_service    ${PUSERNAME152}
     clear_customer   ${PUSERNAME152}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
@@ -1568,9 +1568,9 @@ JD-TC-Incall_IVR-UH13
     
  
 
-    clear_queue      ${PUSERNAME152}
-    clear_location   ${PUSERNAME152}
-    clear_service    ${PUSERNAME152}
+    # clear_queue      ${PUSERNAME152}
+    # clear_location   ${PUSERNAME152}
+    # clear_service    ${PUSERNAME152}
     clear_customer   ${PUSERNAME152}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}

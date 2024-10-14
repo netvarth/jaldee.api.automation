@@ -32,8 +32,8 @@ JD-TC-CreateStatusBoardAppoinment-1
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${HLPUSERNAME45}
-    clear_location  ${HLPUSERNAME45}
+    # clear_service   ${HLPUSERNAME45}
+    # clear_location  ${HLPUSERNAME45}
     clear_Addon  ${HLPUSERNAME45}
 
     ${s_id1}=  Create Sample Service  ${SERVICE1}
@@ -226,8 +226,8 @@ JD-TC-CreateStatusBoardAppoinment-UH4
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME162}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    clear_service   ${PUSERNAME162}
-    clear_location  ${PUSERNAME162}
+    # clear_service   ${PUSERNAME162}
+    # clear_location  ${PUSERNAME162}
     clear_Statusboard  ${PUSERNAME162}
     clear_Addon  ${PUSERNAME162}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
@@ -251,8 +251,8 @@ JD-TC-CreateStatusBoardAppoinment-UH4
 #     [Documentation]  Create a Appoinment StatusBoard with empty metric list
 #     ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}
 #     Should Be Equal As Strings  ${resp.status_code}  200
-#     clear_service   ${PUSERNAME171}
-#     clear_location  ${PUSERNAME171}
+#     # clear_service   ${PUSERNAME171}
+#     # clear_location  ${PUSERNAME171}
 #     clear_Statusboard  ${PUSERNAME171}
 #     clear_Addon  ${PUSERNAME171}
 #     ${Addon_id}=  get_statusboard_addonId
@@ -275,8 +275,8 @@ JD-TC-CreateStatusBoardAppoinment-UH6
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAMEA}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    clear_service   ${PUSERNAMEA}
-    clear_location  ${PUSERNAMEA}
+    # clear_service   ${PUSERNAMEA}
+    # clear_location  ${PUSERNAMEA}
     clear_Addon  ${PUSERNAMEA}
 
     ${resp}=   Get Active License
@@ -364,8 +364,8 @@ JD-TC-CreateStatusBoardAppoinment-UH7
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAMEA}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    clear_service   ${PUSERNAMEA}
-    clear_location  ${PUSERNAMEA}
+    # clear_service   ${PUSERNAMEA}
+    # clear_location  ${PUSERNAMEA}
     clear_Addon  ${PUSERNAMEA}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
@@ -446,8 +446,8 @@ JD-TC-CreateStatusBoardAppoinment-UH8
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAMEA}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    clear_service   ${PUSERNAMEA}
-    clear_location  ${PUSERNAMEA}
+    # clear_service   ${PUSERNAMEA}
+    # clear_location  ${PUSERNAMEA}
     clear_Addon  ${PUSERNAMEA}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}

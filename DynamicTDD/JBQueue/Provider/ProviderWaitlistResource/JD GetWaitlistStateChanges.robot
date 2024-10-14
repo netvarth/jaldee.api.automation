@@ -22,9 +22,9 @@ ${self}                   0
 JD-TC-WaitlistStateChange-1
       [Documentation]   Get waitlist state change after CHECK_IN
 
-      clear_location    ${HLPUSERNAME26}
-      clear_service     ${HLPUSERNAME26}
-      clear_queue       ${HLPUSERNAME26}
+      # clear_location    ${HLPUSERNAME26}
+      # clear_service     ${HLPUSERNAME26}
+      # clear_queue       ${HLPUSERNAME26}
       ${resp}=  Encrypted Provider Login  ${HLPUSERNAME26}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
 

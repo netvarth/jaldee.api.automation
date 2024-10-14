@@ -40,8 +40,8 @@ JD-TC-Reschedule Waitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -68,7 +68,7 @@ JD-TC-Reschedule Waitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -201,8 +201,8 @@ JD-TC-Reschedule Waitlist-2
     # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
     # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -229,7 +229,7 @@ JD-TC-Reschedule Waitlist-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -367,8 +367,8 @@ JD-TC-Reschedule Waitlist-3
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -395,7 +395,7 @@ JD-TC-Reschedule Waitlist-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -560,8 +560,8 @@ JD-TC-Reschedule Waitlist-4
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -588,7 +588,7 @@ JD-TC-Reschedule Waitlist-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -741,8 +741,8 @@ JD-TC-Reschedule Waitlist-5
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -769,7 +769,7 @@ JD-TC-Reschedule Waitlist-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -924,8 +924,8 @@ JD-TC-Reschedule Waitlist-6
     # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
     # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_provider_msgs  ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
@@ -953,7 +953,7 @@ JD-TC-Reschedule Waitlist-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -1110,7 +1110,7 @@ JD-TC-Reschedule Waitlist-7
     # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
     # clear_location   ${PUSERNAME${a}}
-    clear_service    ${PUSERNAME${a}}
+    # clear_service    ${PUSERNAME${a}}
     clear_customer   ${PUSERNAME${a}}
     clear_provider_msgs  ${PUSERNAME${a}}
     clear_consumer_msgs  ${CUSERNAME27}
@@ -1134,7 +1134,7 @@ JD-TC-Reschedule Waitlist-7
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     # ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -1270,8 +1270,8 @@ JD-TC-Reschedule Waitlist-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -1312,7 +1312,7 @@ JD-TC-Reschedule Waitlist-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -1469,8 +1469,8 @@ JD-TC-Reschedule Waitlist-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -1499,7 +1499,7 @@ JD-TC-Reschedule Waitlist-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -1672,8 +1672,8 @@ JD-TC-Reschedule Waitlist-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -1707,7 +1707,7 @@ JD-TC-Reschedule Waitlist-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -1872,8 +1872,8 @@ JD-TC-Reschedule Waitlist-11
     # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
     # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -1901,7 +1901,7 @@ JD-TC-Reschedule Waitlist-11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -2077,8 +2077,8 @@ JD-TC-Reschedule Waitlist-12
     # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
     # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -2106,7 +2106,7 @@ JD-TC-Reschedule Waitlist-12
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -2270,8 +2270,8 @@ JD-TC-Reschedule Waitlist-13
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  showTokenId=${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -2298,7 +2298,7 @@ JD-TC-Reschedule Waitlist-13
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -2426,8 +2426,8 @@ JD-TC-Reschedule Waitlist-14
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  showTokenId=${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -2454,7 +2454,7 @@ JD-TC-Reschedule Waitlist-14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -2607,8 +2607,8 @@ JD-TC-Reschedule Waitlist-15
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  showTokenId=${bool[0]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -2635,7 +2635,7 @@ JD-TC-Reschedule Waitlist-15
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -2779,8 +2779,8 @@ JD-TC-Reschedule Waitlist-16
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -2803,7 +2803,7 @@ JD-TC-Reschedule Waitlist-16
 
     ${lid}=  Create Sample Location  
     ${lid2}=  Create Sample Location
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -2934,8 +2934,8 @@ JD-TC-Reschedule Waitlist-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -2962,7 +2962,7 @@ JD-TC-Reschedule Waitlist-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -3070,8 +3070,8 @@ JD-TC-Reschedule Waitlist-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -3098,7 +3098,7 @@ JD-TC-Reschedule Waitlist-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -3218,8 +3218,8 @@ JD-TC-Reschedule Waitlist-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -3246,7 +3246,7 @@ JD-TC-Reschedule Waitlist-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -3353,8 +3353,8 @@ JD-TC-Reschedule Waitlist-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -3381,7 +3381,7 @@ JD-TC-Reschedule Waitlist-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -3488,8 +3488,8 @@ JD-TC-Reschedule Waitlist-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -3516,7 +3516,7 @@ JD-TC-Reschedule Waitlist-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -3623,8 +3623,8 @@ JD-TC-Reschedule Waitlist-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -3651,7 +3651,7 @@ JD-TC-Reschedule Waitlist-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -3759,7 +3759,7 @@ JD-TC-Reschedule Waitlist-UH7
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
     # clear_location   ${PUSERNAME${a}}
-    clear_service    ${PUSERNAME${a}}
+    # clear_service    ${PUSERNAME${a}}
     clear_customer   ${PUSERNAME${a}}
     clear_provider_msgs  ${PUSERNAME${a}}
     clear_consumer_msgs  ${CUSERNAME27}
@@ -3783,7 +3783,7 @@ JD-TC-Reschedule Waitlist-UH7
     Set Test Variable   ${duration}   ${resp.json()[0]['serviceDuration']}
 
     # ${lid}=  Create Sample Location  
-    clear_queue   ${PUSERNAME${a}}
+    # clear_queue   ${PUSERNAME${a}}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -3909,8 +3909,8 @@ JD-TC-Reschedule Waitlist-UH8
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -3937,7 +3937,7 @@ JD-TC-Reschedule Waitlist-UH8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -4098,8 +4098,8 @@ JD-TC-Reschedule Waitlist-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -4126,7 +4126,7 @@ JD-TC-Reschedule Waitlist-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -4296,8 +4296,8 @@ JD-TC-Reschedule Waitlist-UH10
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -4324,7 +4324,7 @@ JD-TC-Reschedule Waitlist-UH10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -4443,8 +4443,8 @@ JD-TC-Reschedule Waitlist-UH11
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -4471,7 +4471,7 @@ JD-TC-Reschedule Waitlist-UH11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -4621,8 +4621,8 @@ JD-TC-Reschedule Waitlist-UH12
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -4649,7 +4649,7 @@ JD-TC-Reschedule Waitlist-UH12
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -4800,8 +4800,8 @@ JD-TC-Reschedule Waitlist-UH13
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -4828,7 +4828,7 @@ JD-TC-Reschedule Waitlist-UH13
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -4971,8 +4971,8 @@ JD-TC-Reschedule Waitlist-UH14
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -4999,7 +4999,7 @@ JD-TC-Reschedule Waitlist-UH14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -5137,8 +5137,8 @@ JD-TC-Reschedule Waitlist-UH15
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -5165,7 +5165,7 @@ JD-TC-Reschedule Waitlist-UH15
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -5308,8 +5308,8 @@ JD-TC-Reschedule Waitlist-UH16
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -5336,7 +5336,7 @@ JD-TC-Reschedule Waitlist-UH16
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -5478,8 +5478,8 @@ JD-TC-Reschedule Waitlist-UH17
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME31}
-    clear_service    ${PUSERNAME31}
+    # clear_location   ${PUSERNAME31}
+    # clear_service    ${PUSERNAME31}
     clear_customer   ${PUSERNAME31}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME31}
@@ -5506,7 +5506,7 @@ JD-TC-Reschedule Waitlist-UH17
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -5559,8 +5559,8 @@ JD-TC-Reschedule Waitlist-UH17
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -5587,7 +5587,7 @@ JD-TC-Reschedule Waitlist-UH17
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -5710,8 +5710,8 @@ JD-TC-Reschedule Waitlist-UH19
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -5738,7 +5738,7 @@ JD-TC-Reschedule Waitlist-UH19
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -5860,8 +5860,8 @@ JD-TC-Reschedule Waitlist-UH20
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -5888,7 +5888,7 @@ JD-TC-Reschedule Waitlist-UH20
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -6011,8 +6011,8 @@ JD-TC-Reschedule Waitlist-UH21
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -6039,7 +6039,7 @@ JD-TC-Reschedule Waitlist-UH21
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -6157,8 +6157,8 @@ JD-TC-Reschedule Waitlist-UH22
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -6185,7 +6185,7 @@ JD-TC-Reschedule Waitlist-UH22
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -6277,8 +6277,8 @@ JD-TC-Reschedule Waitlist-UH23
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -6305,7 +6305,7 @@ JD-TC-Reschedule Waitlist-UH23
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -6454,8 +6454,8 @@ JD-TC-Reschedule Waitlist-UH24
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[0]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME7}
     clear_provider_msgs  ${PUSERNAME32}
@@ -6482,7 +6482,7 @@ JD-TC-Reschedule Waitlist-UH24
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -6612,8 +6612,8 @@ JD-TC-Reschedule Waitlist-UH25
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -6640,7 +6640,7 @@ JD-TC-Reschedule Waitlist-UH25
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -6813,8 +6813,8 @@ JD-TC-Reschedule Waitlist-UH30
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -6843,7 +6843,7 @@ JD-TC-Reschedule Waitlist-UH30
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}
@@ -6952,8 +6952,8 @@ JD-TC-Reschedule Waitlist-UH31
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    clear_location   ${PUSERNAME32}
-    clear_service    ${PUSERNAME32}
+    # clear_location   ${PUSERNAME32}
+    # clear_service    ${PUSERNAME32}
     clear_customer   ${PUSERNAME32}
     clear_consumer_msgs  ${CUSERNAME27}
     clear_provider_msgs  ${PUSERNAME32}
@@ -6982,7 +6982,7 @@ JD-TC-Reschedule Waitlist-UH31
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_queue   ${PUSERNAME32}
+    # clear_queue   ${PUSERNAME32}
 
     ${resp}=  Get Queues
     Log  ${resp.json()}

@@ -38,7 +38,7 @@ JD-TC-GetAppointmentTodayCount-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME105}
+    # clear_location_n_service  ${PUSERNAME105}
     clear_customer   ${PUSERNAME105}
 
     ${resp}=    Get Locations
@@ -274,8 +274,8 @@ JD-TC-GetAppointmentTodayCount-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME105}
-    clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME105}
+    # clear_appt_schedule   ${PUSERNAME105}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -351,8 +351,8 @@ JD-TC-GetAppointmentTodayCount-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME105}
-    clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME105}
+    # clear_appt_schedule   ${PUSERNAME105}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -471,8 +471,8 @@ JD-TC-GetAppointmentTodayCount-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME105}
-    clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME105}
+    # clear_appt_schedule   ${PUSERNAME105}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -581,8 +581,8 @@ JD-TC-GetAppointmentTodayCount-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME105}
-    clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME105}
+    # clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -703,8 +703,8 @@ JD-TC-GetAppointmentTodayCount-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME105}
-    clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME105}
+    # clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -795,8 +795,8 @@ JD-TC-GetAppointmentTodayCount-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME105}
-    clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME105}
+    # clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -895,8 +895,8 @@ JD-TC-GetAppointmentTodayCount-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME105}
-    clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME105}
+    # clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -988,8 +988,8 @@ JD-TC-GetAppointmentTodayCount-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME105}
-    clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME105}
+    # clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -1081,8 +1081,8 @@ JD-TC-GetAppointmentTodayCount-11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME105}
-    clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME105}
+    # clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -1166,8 +1166,8 @@ JD-TC-GetAppointmentTodayCount-12
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME105}
-    clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME105}
+    # clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -1250,8 +1250,8 @@ JD-TC-GetAppointmentTodayCount-13
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME105}
-    clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME105}
+    # clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -1335,8 +1335,8 @@ JD-TC-GetAppointmentTodayCount-14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME105}
-    clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME105}
+    # clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -1423,8 +1423,8 @@ JD-TC-GetAppointmentTodayCount-15
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME105}
-    clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME105}
+    # clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -1521,8 +1521,8 @@ JD-TC-GetAppointmentTodayCount-16
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME105}
-    clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME105}
+    # clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -1643,8 +1643,8 @@ JD-TC-GetAppointmentTodayCount-17
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME105}
-    clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME105}
+    # clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -1727,8 +1727,8 @@ JD-TC-GetAppointmentTodayCount-18
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME105}
-    clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME105}
+    # clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -1811,8 +1811,8 @@ JD-TC-GetAppointmentTodayCount-19
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME105}
-    clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME105}
+    # clear_appt_schedule   ${PUSERNAME105}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -1907,8 +1907,8 @@ JD-TC-GetAppointmentTodayCount-20
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME105}
-    clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME105}
+    # clear_appt_schedule   ${PUSERNAME105}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -2004,8 +2004,8 @@ JD-TC-GetAppointmentTodayCount-21
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME105}
-    clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME105}
+    # clear_appt_schedule   ${PUSERNAME105}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -2106,8 +2106,8 @@ JD-TC-GetAppointmentTodayCount-22
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME105}
-    clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME105}
+    # clear_appt_schedule   ${PUSERNAME105}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -2198,8 +2198,8 @@ JD-TC-GetAppointmentTodayCount-23
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME105}
-    clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME105}
+    # clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -2284,8 +2284,8 @@ JD-TC-GetAppointmentTodayCount-24
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME105}
-    clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME105}
+    # clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -2389,8 +2389,8 @@ JD-TC-GetAppointmentTodayCount-25
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME105}
-    clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME105}
+    # clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -2511,8 +2511,8 @@ JD-TC-GetAppointmentTodayCount-26
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME105}
-    clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME105}
+    # clear_appt_schedule   ${PUSERNAME105}
     clear_customer   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
@@ -2611,8 +2611,8 @@ JD-TC-GetAppointmentTodayCount-27
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME105}
-    clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME105}
+    # clear_appt_schedule   ${PUSERNAME105}
 
     ${SERVICE1}=  FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
@@ -2705,8 +2705,8 @@ JD-TC-GetAppointmentTodayCount-28
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
-    clear_service   ${PUSERNAME105}
-    clear_appt_schedule   ${PUSERNAME105}
+    # clear_service   ${PUSERNAME105}
+    # clear_appt_schedule   ${PUSERNAME105}
     clear_Label  ${PUSERNAME105}
   
     ${SERVICE1}=  FakerLibrary.word
@@ -2820,8 +2820,8 @@ JD-TC-GetAppointmentTodayCount-29
     [Documentation]  taking a appt for a provider who has a branch in US. base location is India.(online appt from India),
     ...   then verify get appt today details. 
 
-    clear_location_n_service  ${PUSERNAME230}
-    clear_queue     ${PUSERNAME230}
+    # clear_location_n_service  ${PUSERNAME230}
+    # clear_queue     ${PUSERNAME230}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200

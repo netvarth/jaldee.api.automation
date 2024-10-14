@@ -294,7 +294,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-2
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${HLPUSERNAME30}
+    # clear_queue   ${HLPUSERNAME30}
     
     ${list}=  Create List  1  2  3  4  5  6  7
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -441,7 +441,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-3
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${HLPUSERNAME30}
+    # clear_queue   ${HLPUSERNAME30}
 
     ${list}=  Create List  1  2  3  4  5  6  7
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -597,7 +597,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH1
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${HLPUSERNAME30}
+    # clear_queue   ${HLPUSERNAME30}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -734,7 +734,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH2
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${HLPUSERNAME30}
+    # clear_queue   ${HLPUSERNAME30}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -863,7 +863,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH3
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${HLPUSERNAME30}
+    # clear_queue   ${HLPUSERNAME30}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -979,7 +979,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_queue   ${HLPUSERNAME30}
+    # clear_queue   ${HLPUSERNAME30}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1211,7 +1211,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-5
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${PUSERNAME120}
+    # clear_queue   ${PUSERNAME120}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1372,7 +1372,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH4
     END
     Set Suite Variable   ${s_id}  
 
-    clear_queue   ${HLPUSERNAME30}
+    # clear_queue   ${HLPUSERNAME30}
     
     ${list}=  Create List  1  2  3  4  5  6  7
     ${DAY1}=  db.get_date_by_timezone  ${tz}

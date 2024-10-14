@@ -43,7 +43,7 @@ JD-TC-Update schedule-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -60,7 +60,7 @@ JD-TC-Update schedule-1
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
@@ -128,7 +128,7 @@ JD-TC-Update schedule-2
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME208}
     # 
-    clear_service   ${PUSERNAME210}
+    # clear_service   ${PUSERNAME210}
     
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -144,7 +144,7 @@ JD-TC-Update schedule-2
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME210}
+    # clear_appt_schedule   ${PUSERNAME210}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
@@ -211,7 +211,7 @@ JD-TC-Update schedule-3
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME208}
     # 
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -227,7 +227,7 @@ JD-TC-Update schedule-3
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
@@ -297,7 +297,7 @@ JD-TC-Update schedule-4
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME208}
     # 
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -314,7 +314,7 @@ JD-TC-Update schedule-4
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
@@ -421,7 +421,7 @@ JD-TC-Update schedule-5
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME208}
     # 
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -438,7 +438,7 @@ JD-TC-Update schedule-5
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
@@ -548,7 +548,7 @@ JD-TC-Update schedule-6
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME208}
     # 
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -564,7 +564,7 @@ JD-TC-Update schedule-6
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
@@ -692,7 +692,7 @@ JD-TC-Update schedule-7
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME208}
     # 
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -713,7 +713,7 @@ JD-TC-Update schedule-7
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -791,7 +791,7 @@ JD-TC-Update schedule-8
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME208}
     # 
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -808,7 +808,7 @@ JD-TC-Update schedule-8
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -931,7 +931,7 @@ JD-TC-Update schedule-9
     # clear_service   ${PUSERNAME208}
     # 
 
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -948,7 +948,7 @@ JD-TC-Update schedule-9
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1024,7 +1024,7 @@ JD-TC-Update schedule-10
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -1041,7 +1041,7 @@ JD-TC-Update schedule-10
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1119,7 +1119,7 @@ JD-TC-Update schedule-11
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -1136,7 +1136,7 @@ JD-TC-Update schedule-11
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1211,7 +1211,7 @@ JD-TC-Update schedule-12
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -1228,7 +1228,7 @@ JD-TC-Update schedule-12
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1304,8 +1304,8 @@ JD-TC-Update schedule-13
     ${resp}=  Encrypted Provider Login  ${PUSERNAME207}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME207}
-    clear_location  ${PUSERNAME207}
+    # clear_service   ${PUSERNAME207}
+    # clear_location  ${PUSERNAME207}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1321,7 +1321,7 @@ JD-TC-Update schedule-13
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME207}
+    # clear_appt_schedule   ${PUSERNAME207}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1380,7 +1380,7 @@ JD-TC-Update schedule-13
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -1397,7 +1397,7 @@ JD-TC-Update schedule-13
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1460,8 +1460,8 @@ JD-TC-Update schedule-14
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME207}
     # clear_location  ${PUSERNAME207}
-    clear_service   ${PUSERNAME207}
-    clear_location  ${PUSERNAME207}
+    # clear_service   ${PUSERNAME207}
+    # clear_location  ${PUSERNAME207}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1477,7 +1477,7 @@ JD-TC-Update schedule-14
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME207}
+    # clear_appt_schedule   ${PUSERNAME207}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1536,7 +1536,7 @@ JD-TC-Update schedule-14
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -1553,7 +1553,7 @@ JD-TC-Update schedule-14
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1618,8 +1618,8 @@ JD-TC-Update schedule-15
     ${resp}=  Encrypted Provider Login  ${PUSERNAME207}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME207}
-    clear_location  ${PUSERNAME207}
+    # clear_service   ${PUSERNAME207}
+    # clear_location  ${PUSERNAME207}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1635,7 +1635,7 @@ JD-TC-Update schedule-15
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME207}
+    # clear_appt_schedule   ${PUSERNAME207}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1693,7 +1693,7 @@ JD-TC-Update schedule-15
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -1710,7 +1710,7 @@ JD-TC-Update schedule-15
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1813,8 +1813,8 @@ JD-TC-Update schedule-16
     ${resp}=  Encrypted Provider Login  ${PUSERNAME207}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME207}
-    clear_location  ${PUSERNAME207}
+    # clear_service   ${PUSERNAME207}
+    # clear_location  ${PUSERNAME207}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1830,7 +1830,7 @@ JD-TC-Update schedule-16
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME207}
+    # clear_appt_schedule   ${PUSERNAME207}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1890,7 +1890,7 @@ JD-TC-Update schedule-16
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -1907,7 +1907,7 @@ JD-TC-Update schedule-16
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2004,8 +2004,8 @@ JD-TC-Update schedule-17
     ${resp}=  Encrypted Provider Login  ${PUSERNAME207}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME207}
-    clear_location  ${PUSERNAME207}
+    # clear_service   ${PUSERNAME207}
+    # clear_location  ${PUSERNAME207}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2041,7 +2041,7 @@ JD-TC-Update schedule-17
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid}  ${resp.json()}
-    clear_appt_schedule   ${PUSERNAME207}
+    # clear_appt_schedule   ${PUSERNAME207}
 
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name1}=  FakerLibrary.bs
@@ -2072,7 +2072,7 @@ JD-TC-Update schedule-17
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
     ${latti}  ${longi}  ${postcode}  ${city}  ${address}=  get_random_location_data
     ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}      
@@ -2095,7 +2095,7 @@ JD-TC-Update schedule-17
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2158,8 +2158,8 @@ JD-TC-Update schedule-18
     ${resp}=  Encrypted Provider Login  ${PUSERNAME207}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME207}
-    clear_location  ${PUSERNAME207}
+    # clear_service   ${PUSERNAME207}
+    # clear_location  ${PUSERNAME207}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -2175,7 +2175,7 @@ JD-TC-Update schedule-18
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME207}
+    # clear_appt_schedule   ${PUSERNAME207}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2242,7 +2242,7 @@ JD-TC-Update schedule-18
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -2259,7 +2259,7 @@ JD-TC-Update schedule-18
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2325,7 +2325,7 @@ JD-TC-Update schedule-19
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${lid1}=  Create Sample Location
@@ -2347,7 +2347,7 @@ JD-TC-Update schedule-19
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2452,7 +2452,7 @@ JD-TC-Update schedule-20
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -2469,7 +2469,7 @@ JD-TC-Update schedule-20
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2573,7 +2573,7 @@ JD-TC-Update schedule-21
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${lid1}=  Create Sample Location
@@ -2595,7 +2595,7 @@ JD-TC-Update schedule-21
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2701,7 +2701,7 @@ JD-TC-Update schedule-22
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -2718,7 +2718,7 @@ JD-TC-Update schedule-22
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2824,7 +2824,7 @@ JD-TC-Update schedule-23
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -2841,7 +2841,7 @@ JD-TC-Update schedule-23
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2978,7 +2978,7 @@ JD-TC-Update schedule-24
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -2995,7 +2995,7 @@ JD-TC-Update schedule-24
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3137,7 +3137,7 @@ JD-TC-Update schedule-25
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -3154,7 +3154,7 @@ JD-TC-Update schedule-25
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3297,7 +3297,7 @@ JD-TC-Update schedule-26
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -3314,7 +3314,7 @@ JD-TC-Update schedule-26
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3396,7 +3396,7 @@ JD-TC-Update schedule-27
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -3413,7 +3413,7 @@ JD-TC-Update schedule-27
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3514,7 +3514,7 @@ JD-TC-Update schedule-28
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -3531,7 +3531,7 @@ JD-TC-Update schedule-28
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3611,7 +3611,7 @@ JD-TC-Update schedule-29
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -3628,7 +3628,7 @@ JD-TC-Update schedule-29
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3742,7 +3742,7 @@ JD-TC-Update schedule-30
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -3759,7 +3759,7 @@ JD-TC-Update schedule-30
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
@@ -3864,7 +3864,7 @@ JD-TC-Update schedule-31
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -3881,7 +3881,7 @@ JD-TC-Update schedule-31
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
@@ -3984,14 +3984,14 @@ JD-TC-Update schedule-32
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${lid}=  Create Sample Location
     Set Suite Variable    ${lid}
     ${lid1}=  Create Sample Location
     Set Suite Variable    ${lid1}
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable    ${DAY1}
@@ -4214,7 +4214,7 @@ JD-TC-Update schedule-36
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -4231,7 +4231,7 @@ JD-TC-Update schedule-36
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -4313,7 +4313,7 @@ JD-TC-Update schedule-37
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -4330,7 +4330,7 @@ JD-TC-Update schedule-37
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -4413,7 +4413,7 @@ JD-TC-Update schedule-38
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -4430,7 +4430,7 @@ JD-TC-Update schedule-38
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -4571,7 +4571,7 @@ JD-TC-Update schedule-39
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -4588,7 +4588,7 @@ JD-TC-Update schedule-39
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -4729,7 +4729,7 @@ JD-TC-Update schedule-40
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -4746,7 +4746,7 @@ JD-TC-Update schedule-40
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -4889,7 +4889,7 @@ JD-TC-Update schedule-41
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -4906,7 +4906,7 @@ JD-TC-Update schedule-41
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -5047,7 +5047,7 @@ JD-TC-Update schedule-UH1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -5064,7 +5064,7 @@ JD-TC-Update schedule-UH1
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -5171,7 +5171,7 @@ JD-TC-Update schedule-UH2
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -5188,7 +5188,7 @@ JD-TC-Update schedule-UH2
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -5298,8 +5298,8 @@ JD-TC-Update schedule-UH3
     ${resp}=  Encrypted Provider Login  ${PUSERNAME207}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME207}
-    clear_location  ${PUSERNAME207}
+    # clear_service   ${PUSERNAME207}
+    # clear_location  ${PUSERNAME207}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -5315,7 +5315,7 @@ JD-TC-Update schedule-UH3
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME207}
+    # clear_appt_schedule   ${PUSERNAME207}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -5374,7 +5374,7 @@ JD-TC-Update schedule-UH3
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -5391,7 +5391,7 @@ JD-TC-Update schedule-UH3
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -5471,15 +5471,15 @@ JD-TC-Update schedule-UH4
     ${resp}=  Encrypted Provider Login  ${PUSERNAME207}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME207}
-    clear_location  ${PUSERNAME207}
+    # clear_service   ${PUSERNAME207}
+    # clear_location  ${PUSERNAME207}
 
     ${lid1}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
-    clear_appt_schedule   ${PUSERNAME207}
+    # clear_appt_schedule   ${PUSERNAME207}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -5503,7 +5503,7 @@ JD-TC-Update schedule-UH4
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -5520,7 +5520,7 @@ JD-TC-Update schedule-UH4
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -5598,15 +5598,15 @@ JD-TC-Update schedule-UH5
     ${resp}=  Encrypted Provider Login  ${PUSERNAME207}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME207}
-    clear_location  ${PUSERNAME207}
+    # clear_service   ${PUSERNAME207}
+    # clear_location  ${PUSERNAME207}
 
     ${lid1}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
-    clear_appt_schedule   ${PUSERNAME207}
+    # clear_appt_schedule   ${PUSERNAME207}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -5630,7 +5630,7 @@ JD-TC-Update schedule-UH5
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -5647,7 +5647,7 @@ JD-TC-Update schedule-UH5
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -5738,7 +5738,7 @@ JD-TC-Update schedule-UH7
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -5755,7 +5755,7 @@ JD-TC-Update schedule-UH7
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -5834,7 +5834,7 @@ JD-TC-Update schedule-UH8
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -5851,7 +5851,7 @@ JD-TC-Update schedule-UH8
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -5928,7 +5928,7 @@ JD-TC-Update schedule-UH9
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -5945,7 +5945,7 @@ JD-TC-Update schedule-UH9
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
@@ -6009,7 +6009,7 @@ JD-TC-Update schedule-UH10
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -6026,7 +6026,7 @@ JD-TC-Update schedule-UH10
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
@@ -6091,7 +6091,7 @@ JD-TC-Update schedule-UH11
     ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -6108,7 +6108,7 @@ JD-TC-Update schedule-UH11
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -6186,14 +6186,14 @@ JD-TC-Update schedule-UH12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${lid}=  Create Sample Location
     Set Suite Variable    ${lid}
     ${lid1}=  Create Sample Location
     Set Suite Variable    ${lid1}
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -6717,7 +6717,7 @@ JD-TC-Update schedule-UH23
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME208}
     # 
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -6734,7 +6734,7 @@ JD-TC-Update schedule-UH23
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -6813,7 +6813,7 @@ JD-TC-Update schedule-UH24
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME208}
     # 
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -6830,7 +6830,7 @@ JD-TC-Update schedule-UH24
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -6952,7 +6952,7 @@ JD-TC-Update schedule-UH25
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME208}
     # 
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -6969,7 +6969,7 @@ JD-TC-Update schedule-UH25
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -7123,7 +7123,7 @@ JD-TC-Update schedule-UH26
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
     clear_customer   ${PUSERNAME208}
 
@@ -7142,7 +7142,7 @@ JD-TC-Update schedule-UH26
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10   
@@ -7241,7 +7241,7 @@ JD-TC-Update schedule-UH27
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
     clear_customer   ${PUSERNAME208}
 
@@ -7264,7 +7264,7 @@ JD-TC-Update schedule-UH27
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -7372,7 +7372,7 @@ JD-TC-Update schedule-UH28
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
     clear_customer   ${PUSERNAME208}
 
@@ -7392,7 +7392,7 @@ JD-TC-Update schedule-UH28
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -7505,7 +7505,7 @@ JD-TC-Update schedule-42
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}   200
 
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -7522,7 +7522,7 @@ JD-TC-Update schedule-42
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -7631,7 +7631,7 @@ JD-TC-Update schedule-43
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}   200
 
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -7648,7 +7648,7 @@ JD-TC-Update schedule-43
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -7805,7 +7805,7 @@ JD-TC-Update schedule-44
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}   200
 
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -7822,7 +7822,7 @@ JD-TC-Update schedule-44
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -7994,7 +7994,7 @@ JD-TC-Update schedule-45
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}   200
 
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -8011,7 +8011,7 @@ JD-TC-Update schedule-45
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -8189,7 +8189,7 @@ JD-TC-Update schedule-UH29
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}   200
 
-    clear_service   ${PUSERNAME208}
+    # clear_service   ${PUSERNAME208}
     
 
     ${resp}=    Get Locations
@@ -8206,7 +8206,7 @@ JD-TC-Update schedule-UH29
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -8289,7 +8289,7 @@ JD-TC-Update schedule-UH30
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -8404,7 +8404,7 @@ JD-TC-Update schedule-UH31
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME208}
+    # clear_appt_schedule   ${PUSERNAME208}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        

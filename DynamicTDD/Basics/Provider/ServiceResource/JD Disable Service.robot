@@ -36,7 +36,7 @@ JD-TC-Disable Service-1
     ${Total}=  Convert To Number  ${Total}  1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service       ${PUSERNAME71}
+    # clear_service       ${PUSERNAME71}
     ${resp}=  Create Service  ${SERVICE1}  ${description}   {service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid}  ${resp.json()}
@@ -59,7 +59,7 @@ JD-TC-Disable Service-UH1
     ${Total}=  Convert To Number  ${Total}  1 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME34}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service       ${PUSERNAME34}
+    # clear_service       ${PUSERNAME34}
     ${resp}=  Create Service  ${SERVICE5}    ${description}   {service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${ssid}  ${resp.json()}
@@ -91,7 +91,7 @@ JD-TC-Disable Service-UH3
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service       ${PUSERNAME64}
+    # clear_service       ${PUSERNAME64}
     ${resp}=    Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${sid}  ${resp}
     ${resp}=  Disable service  ${sid} 
@@ -123,9 +123,9 @@ JD-TC-Disable Service-UH6
     [Documentation]   Disable a service which in an active checkin(status=prepayment pending)
     ${resp}=  Encrypted Provider Login  ${PUSERNAME78}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service       ${PUSERNAME78}
-    clear_location  ${PUSERNAME78}
-    clear_queue  ${PUSERNAME78}
+    # clear_service       ${PUSERNAME78}
+    # clear_location  ${PUSERNAME78}
+    # clear_queue  ${PUSERNAME78}
 
     ${resp}=  Create Sample Queue
     Set Suite Variable  ${s_id}  ${resp['service_id']}
@@ -179,7 +179,7 @@ JD-TC-Disable Service-UH7
             
     [Documentation]   Disable a service which in an active checkin(status=checkin)
     
-    clear_service       ${PUSERNAME78}
+    # clear_service       ${PUSERNAME78}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME78}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 

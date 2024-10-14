@@ -46,9 +46,9 @@ JD-TC-Get_User_Specified_Schedules-1
 
     [Documentation]   Get all IVR user details
 
-    clear_queue      ${HLPUSERNAME6}
+    # clear_queue      ${HLPUSERNAME6}
     # clear_location   ${HLPUSERNAME6}
-    clear_service    ${HLPUSERNAME6}
+    # clear_service    ${HLPUSERNAME6}
     clear_customer   ${HLPUSERNAME6}
     
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}

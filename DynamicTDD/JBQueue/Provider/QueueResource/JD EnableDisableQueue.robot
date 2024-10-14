@@ -21,9 +21,9 @@ JD-TC-Enable Disable Queue-1
     [Documentation]  Enable  Queue of valid  provider
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service  ${HLPUSERNAME6}
+    # clear_service  ${HLPUSERNAME6}
     # clear_location  ${HLPUSERNAME6}
-    clear_queue  ${HLPUSERNAME6}
+    # clear_queue  ${HLPUSERNAME6}
     ${resp}=  Create Sample Queue
     Set Suite Variable  ${qid}   ${resp['queue_id']}
     Set Suite Variable  ${s_id1}   ${resp['service_id']}
@@ -98,7 +98,7 @@ JD-TC-Enable Disable Queue-UH3
     [Documentation]  Enable queue by another  provider
     ${resp}=  Encrypted Provider Login  ${PUSERNAME225}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    clear_queue  ${PUSERNAME225}
+    # clear_queue  ${PUSERNAME225}
     ${resp}=  Get queues
     Log  ${resp.json()}
     ${resp}=  Enable Disable Queue  ${qid}   ${toggleButton[0]}

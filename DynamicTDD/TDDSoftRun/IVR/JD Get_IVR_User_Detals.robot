@@ -44,9 +44,9 @@ JD-TC-Get_IVR_USER_DETAILS-1
 
     [Documentation]   Get IVR User Details
     
-    clear_queue      ${PUSERNAME167}
+    # clear_queue      ${PUSERNAME167}
     # clear_location   ${PUSERNAME167}
-    clear_service    ${PUSERNAME167}
+    # clear_service    ${PUSERNAME167}
     clear_customer   ${PUSERNAME167}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME167}  ${PASSWORD}

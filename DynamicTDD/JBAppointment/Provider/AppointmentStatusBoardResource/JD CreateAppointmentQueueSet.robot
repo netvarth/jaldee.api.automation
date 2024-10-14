@@ -326,8 +326,8 @@ JD-TC-CreateAppointmentQueueSet-3
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    clear_service   ${PUSERNAME_B}
-    clear_location  ${PUSERNAME_B}
+    # clear_service   ${PUSERNAME_B}
+    # clear_location  ${PUSERNAME_B}
     clear_Addon  ${PUSERNAME_B}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
@@ -516,8 +516,8 @@ JD-TC-CreateAppointmentQueueSet-5
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    clear_service   ${PUSERNAME_C}
-    clear_location  ${PUSERNAME_C}
+    # clear_service   ${PUSERNAME_C}
+    # clear_location  ${PUSERNAME_C}
     clear_Addon  ${PUSERNAME_C}
     ${lid1}=  Create Sample Location  
     Set Suite Variable  ${lid1}
@@ -717,8 +717,8 @@ JD-TC-CreateAppointmentQueueSet-UH5
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    clear_service   ${PUSERNAME_C}
-    clear_location  ${PUSERNAME_C}
+    # clear_service   ${PUSERNAME_C}
+    # clear_location  ${PUSERNAME_C}
     clear_Addon  ${PUSERNAME_C}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
@@ -795,8 +795,8 @@ JD-TC-CreateAppointmentQueueSet-UH6
     [Documentation]  Create a Appointment QueueSet with status board type and without service list
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    clear_service   ${PUSERNAME_C}
-    clear_location  ${PUSERNAME_C}
+    # clear_service   ${PUSERNAME_C}
+    # clear_location  ${PUSERNAME_C}
     clear_Addon  ${PUSERNAME_C}
 
     ${resp}=  Get Waitlist Settings
@@ -870,8 +870,8 @@ JD-TC-CreateAppointmentQueueSet-UH7
     [Documentation]  Create a Appointment QueueSet with status board type and using invalid sevice ids
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    clear_service   ${PUSERNAME_C}
-    clear_location  ${PUSERNAME_C}
+    # clear_service   ${PUSERNAME_C}
+    # clear_location  ${PUSERNAME_C}
     clear_Addon  ${PUSERNAME_C}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
@@ -936,8 +936,8 @@ JD-TC-CreateAppointmentQueueSet-UH8
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    clear_service   ${PUSERNAME67}
-    clear_location  ${PUSERNAME67}
+    # clear_service   ${PUSERNAME67}
+    # clear_location  ${PUSERNAME67}
     clear_Addon  ${PUSERNAME67}
 
     ${resp}=   Get addons auditlog    

@@ -49,8 +49,8 @@ JD-TC-Get All Schedule slots-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME_B}
-    clear_location  ${PUSERNAME_B}    
+    # clear_service   ${PUSERNAME_B}
+    # clear_location  ${PUSERNAME_B}    
     ${resp}=   Get Service
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -79,7 +79,7 @@ JD-TC-Get All Schedule slots-1
     ${DAY3}=  db.add_timezone_date  ${tz}  5 
     Set Suite Variable   ${DAY3}      
 
-    clear_appt_schedule   ${PUSERNAME_B}
+    # clear_appt_schedule   ${PUSERNAME_B}
     ${SERVICE1}=   FakerLibrary.name
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
@@ -258,8 +258,8 @@ JD-TC-Get All Schedule slots-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${HLPUSERNAME1}
-    clear_appt_schedule   ${HLPUSERNAME1}
+    # clear_service   ${HLPUSERNAME1}
+    # clear_appt_schedule   ${HLPUSERNAME1}
     clear_customer   ${HLPUSERNAME1}
     reset_user_metric  ${pid}
 

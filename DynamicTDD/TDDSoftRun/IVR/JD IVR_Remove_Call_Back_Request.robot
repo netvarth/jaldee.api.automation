@@ -44,9 +44,9 @@ JD-TC-IVR_Remove_Call_Back_Request-1
 
     [Documentation]   IVR Remove Call Back Request
     
-    clear_queue      ${PUSERNAME172}
+    # clear_queue      ${PUSERNAME172}
     # clear_location   ${PUSERNAME172}
-    clear_service    ${PUSERNAME172}
+    # clear_service    ${PUSERNAME172}
     clear_customer   ${PUSERNAME172}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
@@ -332,9 +332,9 @@ JD-TC-IVR_Remove_Call_Back_Request-2
 
     [Documentation]   IVR Remove Call Back Request before aftercall
     
-    clear_queue      ${PUSERNAME172}
-    clear_location   ${PUSERNAME172}
-    clear_service    ${PUSERNAME172}
+    # clear_queue      ${PUSERNAME172}
+    # clear_location   ${PUSERNAME172}
+    # clear_service    ${PUSERNAME172}
     clear_customer   ${PUSERNAME172}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
@@ -609,9 +609,9 @@ JD-TC-IVR_Remove_Call_Back_Request-3
 
     [Documentation]   IVR Remove Call Back Request In between call
     
-    clear_queue      ${PUSERNAME172}
-    clear_location   ${PUSERNAME172}
-    clear_service    ${PUSERNAME172}
+    # clear_queue      ${PUSERNAME172}
+    # clear_location   ${PUSERNAME172}
+    # clear_service    ${PUSERNAME172}
     clear_customer   ${PUSERNAME172}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
@@ -886,9 +886,9 @@ JD-TC-IVR_Remove_Call_Back_Request-UH1
 
     [Documentation]   IVR Remove Call Back Request where call back is not requested
     
-    clear_queue      ${PUSERNAME133}
-    clear_location   ${PUSERNAME133}
-    clear_service    ${PUSERNAME133}
+    # clear_queue      ${PUSERNAME133}
+    # clear_location   ${PUSERNAME133}
+    # clear_service    ${PUSERNAME133}
     clear_customer   ${PUSERNAME133}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}

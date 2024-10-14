@@ -937,9 +937,9 @@ JD-TC-GetWaitlistCountToday-75
 
 JD-TC-GetWaitlistCountToday-76
       [Documentation]   Get Today Waitlist count of a family member. 
-      clear_queue      ${PUSERNAME49}
-      clear_location   ${PUSERNAME49}
-      clear_service    ${PUSERNAME49}
+      # clear_queue      ${PUSERNAME49}
+      # clear_location   ${PUSERNAME49}
+      # clear_service    ${PUSERNAME49}
       ${resp}=  Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${ser_duratn}=  Random Int   min=2   max=4

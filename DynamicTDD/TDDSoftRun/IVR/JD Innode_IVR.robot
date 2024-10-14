@@ -46,9 +46,9 @@ JD-TC-Innode_IVR-1
 
     [Documentation]   Innode IVR
     
-    clear_queue      ${PUSERNAME169}
+    # clear_queue      ${PUSERNAME169}
     # clear_location   ${PUSERNAME169}
-    clear_service    ${PUSERNAME169}
+    # clear_service    ${PUSERNAME169}
     clear_customer   ${PUSERNAME169}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME169}  ${PASSWORD}
@@ -234,9 +234,9 @@ JD-TC-Innode_IVR-UH1
 
     [Documentation]   Innode IVR with another provider login
     
-    clear_queue      ${PUSERNAME15}
-    clear_location   ${PUSERNAME15}
-    clear_service    ${PUSERNAME15}
+    # clear_queue      ${PUSERNAME15}
+    # clear_location   ${PUSERNAME15}
+    # clear_service    ${PUSERNAME15}
     clear_customer   ${PUSERNAME15}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
@@ -320,9 +320,9 @@ JD-TC-Innode_IVR-UH3
 
     [Documentation]   Innode IVR -without ivr settings
     
-    clear_queue      ${PUSERNAME15}
-    clear_location   ${PUSERNAME15}
-    clear_service    ${PUSERNAME15}
+    # clear_queue      ${PUSERNAME15}
+    # clear_location   ${PUSERNAME15}
+    # clear_service    ${PUSERNAME15}
     clear_customer   ${PUSERNAME15}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
@@ -471,9 +471,9 @@ JD-TC-Innode_IVR-UH6
 
     [Documentation]   Innode IVR -where account id is invalid
     
-    clear_queue      ${PUSERNAME169}
-    clear_location   ${PUSERNAME169}
-    clear_service    ${PUSERNAME169}
+    # clear_queue      ${PUSERNAME169}
+    # clear_location   ${PUSERNAME169}
+    # clear_service    ${PUSERNAME169}
     clear_customer   ${PUSERNAME169}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
@@ -515,9 +515,9 @@ JD-TC-Innode_IVR-UH7
 
     [Documentation]   Innode IVR -where client number is empty
     
-    clear_queue      ${PUSERNAME169}
-    clear_location   ${PUSERNAME169}
-    clear_service    ${PUSERNAME169}
+    # clear_queue      ${PUSERNAME169}
+    # clear_location   ${PUSERNAME169}
+    # clear_service    ${PUSERNAME169}
     clear_customer   ${PUSERNAME169}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
@@ -566,9 +566,9 @@ JD-TC-Innode_IVR-UH8
 
     [Documentation]   Innode IVR -passing empty innod id
     
-    clear_queue      ${PUSERNAME169}
-    clear_location   ${PUSERNAME169}
-    clear_service    ${PUSERNAME169}
+    # clear_queue      ${PUSERNAME169}
+    # clear_location   ${PUSERNAME169}
+    # clear_service    ${PUSERNAME169}
     clear_customer   ${PUSERNAME169}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}

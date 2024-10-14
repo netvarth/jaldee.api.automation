@@ -352,7 +352,7 @@ JD-TC-GetServiceOptions-1
     END
     Set Suite Variable   ${s_id}  
 
-    clear_appt_schedule   ${PUSERNAME69}
+    # clear_appt_schedule   ${PUSERNAME69}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     

@@ -408,7 +408,7 @@ JD-TC-ApplyJaldeeCouponToChannel-2
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+100114103
     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Suite Variable   ${PUSERPH0}
-    ${resp}=   Run Keywords  clear_queue  ${PUSERPH0}   AND  clear_service  ${PUSERPH0}  AND  clear_Item    ${PUSERPH0}  AND   clear_Coupon   ${PUSERPH0}   AND  clear_Discount  ${PUSERPH0}  AND  clear_customer  ${PUSERPH0}
+    # ${resp}=   Run Keywords  clear_queue  ${PUSERPH0}   AND  clear_service  ${PUSERPH0}  AND  clear_Item    ${PUSERPH0}  AND   clear_Coupon   ${PUSERPH0}   AND  clear_Discount  ${PUSERPH0}  AND  clear_customer  ${PUSERPH0}
      
 
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -431,7 +431,7 @@ JD-TC-ApplyJaldeeCouponToChannel-2
     # END
     # Log  ${d1}
     # Log  ${sd1}
-    clear_service   ${PUSERPH0}
+    # clear_service   ${PUSERPH0}
     clear_Label  ${PUSERPH0}  
 
     ${firstname}=  FakerLibrary.first_name

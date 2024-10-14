@@ -181,7 +181,7 @@ JD-TC-ChangeAnsStatus-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}   
 
-    clear_queue   ${HLPUSERNAME32}
+    # clear_queue   ${HLPUSERNAME32}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     

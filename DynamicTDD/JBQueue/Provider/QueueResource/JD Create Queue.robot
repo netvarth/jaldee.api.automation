@@ -35,9 +35,9 @@ JD-TC-CreateQueue-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${HLPUSERNAME1}
+    # clear_service   ${HLPUSERNAME1}
     # clear_location  ${HLPUSERNAME1}
-    clear_queue  ${HLPUSERNAME1}
+    # clear_queue  ${HLPUSERNAME1}
 
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -216,8 +216,8 @@ JD-TC-CreateQueue-4
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}   200
 
-    clear_service   ${PUSERNAME_U1}
-    clear_queue  ${PUSERNAME_U1}
+    # clear_service   ${PUSERNAME_U1}
+    # clear_queue  ${PUSERNAME_U1}
 
     ${s_id6}=  Create Sample Service  ${SERVICE7}
     ${s_id7}=  Create Sample Service  ${SERVICE8}
@@ -243,8 +243,8 @@ JD-TC-CreateQueue-4
 
 JD-TC-CreateQueue-5
     [Documentation]    Create a  queue in different location with another service and  already existing queue name and time 
-    clear_service   ${PUSERNAME_U1}
-    clear_queue  ${PUSERNAME_U1}
+    # clear_service   ${PUSERNAME_U1}
+    # clear_queue  ${PUSERNAME_U1}
     ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}   200
@@ -276,8 +276,8 @@ JD-TC-CreateQueue-5
 JD-TC-CreateQueue-6
     [Documentation]    Create 2 queues with same time schedule on different days
 
-    clear_service   ${PUSERNAME_U1}
-    clear_queue  ${PUSERNAME_U1}
+    # clear_service   ${PUSERNAME_U1}
+    # clear_queue  ${PUSERNAME_U1}
     ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}   200
@@ -325,8 +325,8 @@ JD-TC-CreateQueue-6
 
 JD-TC-CreateQueue-7
     [Documentation]    Two queue have same time schedul,one queue is enabled and another one disabled
-    clear_service   ${PUSERNAME_U1}
-    clear_queue  ${PUSERNAME_U1}
+    # clear_service   ${PUSERNAME_U1}
+    # clear_queue  ${PUSERNAME_U1}
     ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}   200
@@ -475,9 +475,9 @@ JD-TC-CreateQueue-8
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_service   ${PUSERNAME_B}
+    # clear_service   ${PUSERNAME_B}
     # clear_location  ${PUSERNAME_B}
-    clear_queue  ${PUSERNAME_B}
+    # clear_queue  ${PUSERNAME_B}
     
     ${lid1}=  Create Sample Location
     Set Suite Variable  ${lid1}
@@ -573,8 +573,8 @@ JD-TC-CreateQueue-9
     
 JD-TC-CreateQueue-10
     [Documentation]    Create a queue with field tokenStart in a location of a valid provider then check next queue token start
-    clear_service   ${PUSERNAME_U1}
-    clear_queue  ${PUSERNAME_U1}
+    # clear_service   ${PUSERNAME_U1}
+    # clear_queue  ${PUSERNAME_U1}
     ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}   200
@@ -629,8 +629,8 @@ JD-TC-CreateQueue-10
 
 JD-TC-CreateQueue-11
     [Documentation]    Create a queue with field tokenStart in a location then create a another queue with another token start then check 2nd queue token start and check third queue token start.
-    clear_service   ${PUSERNAME_U1}
-    clear_queue  ${PUSERNAME_U1}
+    # clear_service   ${PUSERNAME_U1}
+    # clear_queue  ${PUSERNAME_U1}
     ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}   200
@@ -701,8 +701,8 @@ JD-TC-CreateQueue-11
 
 JD-TC-CreateQueue-12
     [Documentation]    Create a queue with field tokenStart in a location then create a another queue with same token start of first queue
-    clear_service   ${PUSERNAME_U1}
-    clear_queue  ${PUSERNAME_U1}
+    # clear_service   ${PUSERNAME_U1}
+    # clear_queue  ${PUSERNAME_U1}
     ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}   200
@@ -818,7 +818,7 @@ JD-TC-CreateQueue-UH6
     ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME4}
+    # clear_service   ${PUSERNAME4}
 
     ${s_id5}=  Create Sample Service  ${SERVICE3}
     ${queue_name}=  FakerLibrary.bs
@@ -832,7 +832,7 @@ JD-TC-CreateQueue-UH7
     ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME4}
+    # clear_service   ${PUSERNAME4}
 
     ${s_id6}=  Create Sample Service  ${SERVICE6}
     ${resp}=   ProviderLogout
@@ -880,8 +880,8 @@ JD-TC-CreateQueue-UH9
 JD-TC-CreateQueue-UH10
     [Documentation]    Create 2 queues with same time schedule on same date
 
-    clear_service   ${PUSERNAME_U1}
-    clear_queue  ${PUSERNAME_U1}
+    # clear_service   ${PUSERNAME_U1}
+    # clear_queue  ${PUSERNAME_U1}
     ${resp}=  Encrypted Provider Login     ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}   200
@@ -951,9 +951,9 @@ JD-TC-Create Queue with timeinterval-13
     [Documentation]    Create Queue with timeInterval value and Appointment is Enable
     ${resp}=  Encrypted Provider Login  ${PUSERNAME85}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME85}
+    # clear_service   ${PUSERNAME85}
     # clear_location  ${PUSERNAME85}
-    clear_queue  ${PUSERNAME85}
+    # clear_queue  ${PUSERNAME85}
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}  
     ${resp}=   Get Location ById  ${lid}
@@ -1006,9 +1006,9 @@ JD-TC-Create Queue with timeinterval-UH1
     [Documentation]    Create Queue with timeInterval value and Appointment is Disable (In this case Can't Expect timeInterval In the Get queue)
     ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME80}
+    # clear_service   ${PUSERNAME80}
     # clear_location  ${PUSERNAME80}
-    clear_queue  ${PUSERNAME80}
+    # clear_queue  ${PUSERNAME80}
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}  
     ${resp}=   Get Location ById  ${lid}
@@ -1061,9 +1061,9 @@ JD-TC-Create Queue with timeinterval-UH2
     [Documentation]    Create Queue with timeInterval with Negative value
     ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${PUSERNAME120}
+    # clear_service   ${PUSERNAME120}
     # clear_location  ${PUSERNAME120}
-    clear_queue  ${PUSERNAME120}
+    # clear_queue  ${PUSERNAME120}
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}  
     ${resp}=   Get Location ById  ${lid}
@@ -1097,12 +1097,12 @@ JD-TC-Create Queue with timeinterval-UH2
 JD-TC-Create Queue with timeinterval-UH3
     [Documentation]    Calculation Mode is ML when Create Queue with timeinterval value And Appointment is Enable (In this case Can't Expect timeInterval In the Get queue)
     
-    clear_queue  ${PUSERNAME120}   
+    # clear_queue  ${PUSERNAME120}   
     ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200  
-    clear_service   ${PUSERNAME120}
+    # clear_service   ${PUSERNAME120}
     # clear_location  ${PUSERNAME120}
-    clear_queue  ${PUSERNAME120}  
+    # clear_queue  ${PUSERNAME120}  
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}  
     ${resp}=   Get Location ById  ${lid}
@@ -1152,12 +1152,12 @@ JD-TC-Create Queue with timeinterval-UH3
 
 JD-TC-Create Queue with timeinterval-UH4
     [Documentation]    Calculation Mode is NoCalc when Create Queue with timeinterval value And Appointment is Enable (In this case Can't Expect timeInterval In the Get queue)
-    clear_queue  ${PUSERNAME120}    
+    # clear_queue  ${PUSERNAME120}    
     ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200 
-    clear_service   ${PUSERNAME120}
+    # clear_service   ${PUSERNAME120}
     # clear_location  ${PUSERNAME120}
-    clear_queue  ${PUSERNAME120}   
+    # clear_queue  ${PUSERNAME120}   
     ${resp}=  Update Waitlist Settings  ${calc_mode[2]}  0  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}    
     Should Be Equal As Strings  ${resp.status_code}  200
     

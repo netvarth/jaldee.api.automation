@@ -55,7 +55,7 @@ JD-TC-CreateAppointmentSchedule-1
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_service   ${HLPUSERNAME50}
+    # clear_service   ${HLPUSERNAME50}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     
@@ -219,7 +219,7 @@ JD-TC-CreateAppointmentSchedule-5
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    # clear_appt_schedule   ${PUSERPHONE1}
+    # # clear_appt_schedule   ${PUSERPHONE1}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -470,7 +470,7 @@ JD-TC-CreateAppointmentSchedule-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_appt_schedule   ${PUSERPHONE1}
+    # clear_appt_schedule   ${PUSERPHONE1}
 
     ${schedule_name}=  FakerLibrary.bs
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}  ${parallel}  ${p2_lid2}  ${duration}  ${bool1}  ${s_id2}
@@ -566,7 +566,7 @@ JD-TC-CreateAppointmentSchedule-UH7
     [Documentation]    Create a schedule with eTime is less than sTime
     ${resp}=  Encrypted Provider Login  ${PUSERPHONE1}   ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_appt_schedule   ${PUSERPHONE1}
+    # # clear_appt_schedule   ${PUSERPHONE1}
     ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -734,7 +734,7 @@ JD-TC-CreateAppointmentSchedule-UH10
         Set Test Variable  ${p1_lid}  ${resp.json()[0]['id']}
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
-    # clear_appt_schedule   ${HLPUSERNAME50}
+    # # clear_appt_schedule   ${HLPUSERNAME50}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -791,7 +791,7 @@ JD-TC-CreateAppointmentSchedule-UH11
         Set Test Variable  ${p1_lid}  ${resp.json()[0]['id']}
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
-    # clear_appt_schedule   ${HLPUSERNAME50}
+    # # clear_appt_schedule   ${HLPUSERNAME50}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -1663,7 +1663,7 @@ JD-TC-CreateAppointmentSchedule-17
 
 JD-TC-CreateAppointmentSchedule-18
     # [Setup]   Run Keywords  clear_service   ${HLPUSERNAME50}  
-    # ...   AND  clear_location  ${HLPUSERNAME50}  AND  clear_appt_schedule   ${HLPUSERNAME50}
+    # ...   AND  clear_location  ${HLPUSERNAME50}  AND  # clear_appt_schedule   ${HLPUSERNAME50}
     [Documentation]    Create an instant schedule with the same details as that of another schedule in another location
      
    #   ${billable_providers}=    Billable   
@@ -1695,7 +1695,7 @@ JD-TC-CreateAppointmentSchedule-18
 
     # clear_service   ${HLPUSERNAME49}
     # clear_location  ${HLPUSERNAME49}
-    # clear_appt_schedule   ${HLPUSERNAME49}
+    # # clear_appt_schedule   ${HLPUSERNAME49}
     # clear_location_n_service  ${HLPUSERNAME49}
 
     ${resp}=    Get Locations
@@ -1825,7 +1825,7 @@ JD-TC-CreateAppointmentSchedule-19
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    # clear_appt_schedule   ${HLPUSERNAME50}
+    # # clear_appt_schedule   ${HLPUSERNAME50}
     ${resp}=   Get Service
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1914,7 +1914,7 @@ JD-TC-CreateAppointmentSchedule-20
         Set Test Variable  ${p1_lid}  ${resp.json()[0]['id']}
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
-    clear_appt_schedule   ${HLPUSERNAME50}
+    # clear_appt_schedule   ${HLPUSERNAME50}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -1975,7 +1975,7 @@ JD-TC-CreateAppointmentSchedule-21
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${HLPUSERNAME50}
+    # clear_service   ${HLPUSERNAME50}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -2049,7 +2049,7 @@ JD-TC-CreateAppointmentSchedule-22
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${HLPUSERNAME50}
+    # clear_service   ${HLPUSERNAME50}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -2127,7 +2127,7 @@ JD-TC-CreateAppointmentSchedule-23
     Should Be Equal As Strings    ${resp.status_code}    200
 
     # clear_service   ${HLPUSERNAME50}
-    # clear_appt_schedule   ${HLPUSERNAME50}
+    # # clear_appt_schedule   ${HLPUSERNAME50}
 
     ${resp}=   Get Service
     Log  ${resp.content}

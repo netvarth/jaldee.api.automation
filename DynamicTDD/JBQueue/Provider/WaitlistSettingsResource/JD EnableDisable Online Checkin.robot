@@ -12,7 +12,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
-Suite Setup     Run Keywords  clear_queue  ${PUSERNAME2}  AND  clear_location  ${PUSERNAME2}
+# Suite Setup     Run Keywords  clear_queue  ${PUSERNAME2}  AND  clear_location  ${PUSERNAME2}
 
 *** Test Cases ***
 
@@ -23,7 +23,7 @@ JD-TC-EnableDisableOnlineCheckin-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    clear_location  ${PUSERNAME2}
+    # clear_location  ${PUSERNAME2}
     ${account_id}=  get_acc_id  ${PUSERNAME2}
     Set Suite Variable  ${account_id}
 

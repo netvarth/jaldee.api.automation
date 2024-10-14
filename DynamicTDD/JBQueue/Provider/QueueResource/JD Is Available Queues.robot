@@ -27,9 +27,9 @@ JD-TC-Available Queues-1
     [Documentation]   Checking Avalible queues
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${HLPUSERNAME7}
+    # clear_service   ${HLPUSERNAME7}
     # clear_location  ${HLPUSERNAME7}
-    clear_queue  ${HLPUSERNAME7}
+    # clear_queue  ${HLPUSERNAME7}
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
@@ -77,9 +77,9 @@ JD-TC-Available Queues-2
     [Documentation]   Checking avaliable queues when there is no queue
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${HLPUSERNAME7}
+    # clear_service   ${HLPUSERNAME7}
     # clear_location  ${HLPUSERNAME7}
-    clear_queue  ${HLPUSERNAME7}
+    # clear_queue  ${HLPUSERNAME7}
     # ${city}=   get_place
     # Set Suite Variable  ${city}
     # ${latti}=  get_latitude
@@ -123,9 +123,9 @@ JD-TC-Available Queues-3
     [Documentation]   Checking Avalible queues when there is some gaps between two queues
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_service   ${HLPUSERNAME7}
+    # clear_service   ${HLPUSERNAME7}
     # clear_location  ${HLPUSERNAME7}
-    clear_queue  ${HLPUSERNAME7}
+    # clear_queue  ${HLPUSERNAME7}
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}

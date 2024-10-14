@@ -36,7 +36,7 @@ JD-TC-Block Appointment-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${resp}=    Get Locations
@@ -54,7 +54,7 @@ JD-TC-Block Appointment-1
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -124,7 +124,7 @@ JD-TC-Block Appointment-2
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${resp}=    Get Locations
@@ -142,7 +142,7 @@ JD-TC-Block Appointment-2
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -226,7 +226,7 @@ JD-TC-Block Appointment-3
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${resp}=    Get Locations
@@ -244,7 +244,7 @@ JD-TC-Block Appointment-3
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -333,7 +333,7 @@ JD-TC-Block Appointment-4
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${resp}=    Get Locations
@@ -351,7 +351,7 @@ JD-TC-Block Appointment-4
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
 
     Set Test Variable  ${callingMode1}     ${CallingModes[1]}
     Set Test Variable  ${ModeId1}          ${PUSERNAME48}
@@ -435,7 +435,7 @@ JD-TC-Block Appointment-5
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${resp}=    Get Locations
@@ -453,7 +453,7 @@ JD-TC-Block Appointment-5
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -574,7 +574,7 @@ JD-TC-Block Appointment-6
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${resp}=    Get Locations
@@ -592,7 +592,7 @@ JD-TC-Block Appointment-6
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
 
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -716,13 +716,13 @@ JD-TC-Block Appointment-7
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${lid}=  Create Sample Location  
     ${lid1}=  Create Sample Location 
     
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
 
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -858,7 +858,7 @@ JD-TC-Block Appointment-8
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${resp}=    Get Locations
@@ -876,7 +876,7 @@ JD-TC-Block Appointment-8
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
 
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -988,7 +988,7 @@ JD-TC-Block Appointment-9
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${resp}=    Get Locations
@@ -1006,7 +1006,7 @@ JD-TC-Block Appointment-9
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1106,7 +1106,7 @@ JD-TC-Block Appointment-10
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${resp}=    Get Locations
@@ -1124,7 +1124,7 @@ JD-TC-Block Appointment-10
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1229,7 +1229,7 @@ JD-TC-Block Appointment-UH1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${resp}=    Get Locations
@@ -1247,7 +1247,7 @@ JD-TC-Block Appointment-UH1
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1330,7 +1330,7 @@ JD-TC-Block Appointment-UH2
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${lid}=  Create Sample Location  
@@ -1339,7 +1339,7 @@ JD-TC-Block Appointment-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1420,7 +1420,7 @@ JD-TC-Block Appointment-UH3
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${lid}=  Create Sample Location  
@@ -1429,7 +1429,7 @@ JD-TC-Block Appointment-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1529,7 +1529,7 @@ JD-TC-Block Appointment-UH4
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${resp}=    Get Locations
@@ -1547,7 +1547,7 @@ JD-TC-Block Appointment-UH4
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
 
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -1610,11 +1610,11 @@ JD-TC-Block Appointment-UH5
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${lid1}=  Create Sample Location  
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1652,7 +1652,7 @@ JD-TC-Block Appointment-UH5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${lid}=  Create Sample Location  
@@ -1661,7 +1661,7 @@ JD-TC-Block Appointment-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1710,11 +1710,11 @@ JD-TC-Block Appointment-UH6
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${lid1}=  Create Sample Location  
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1747,7 +1747,7 @@ JD-TC-Block Appointment-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${resp}=    Get Locations
@@ -1765,7 +1765,7 @@ JD-TC-Block Appointment-UH6
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1819,11 +1819,11 @@ JD-TC-Block Appointment-UH7
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${lid1}=  Create Sample Location  
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1856,7 +1856,7 @@ JD-TC-Block Appointment-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_location_n_service  ${PUSERNAME186}
+    # clear_location_n_service  ${PUSERNAME186}
     clear_customer   ${PUSERNAME186}
 
     ${lid}=  Create Sample Location  
@@ -1865,7 +1865,7 @@ JD-TC-Block Appointment-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME186}
+    # clear_appt_schedule   ${PUSERNAME186}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1919,7 +1919,7 @@ JD-TC-Block Appointment-UH8
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${lid}=  Create Sample Location  
@@ -1928,7 +1928,7 @@ JD-TC-Block Appointment-UH8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1983,7 +1983,7 @@ JD-TC-Block Appointment-UH9
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${lid}=  Create Sample Location  
@@ -1992,7 +1992,7 @@ JD-TC-Block Appointment-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2048,7 +2048,7 @@ JD-TC-Block Appointment-UH10
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${lid}=  Create Sample Location  
@@ -2057,7 +2057,7 @@ JD-TC-Block Appointment-UH10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2116,7 +2116,7 @@ JD-TC-Block Appointment-UH11
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${lid}=  Create Sample Location  
@@ -2125,7 +2125,7 @@ JD-TC-Block Appointment-UH11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2186,7 +2186,7 @@ JD-TC-Block Appointment-UH12
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${lid}=  Create Sample Location  
@@ -2195,7 +2195,7 @@ JD-TC-Block Appointment-UH12
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2265,7 +2265,7 @@ JD-TC-Block Appointment-UH13
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${lid}=  Create Sample Location  
@@ -2274,7 +2274,7 @@ JD-TC-Block Appointment-UH13
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2334,7 +2334,7 @@ JD-TC-Block Appointment-UH14
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${lid}=  Create Sample Location  
@@ -2343,7 +2343,7 @@ JD-TC-Block Appointment-UH14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2403,7 +2403,7 @@ JD-TC-Block Appointment-UH15
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${lid}=  Create Sample Location  
@@ -2412,7 +2412,7 @@ JD-TC-Block Appointment-UH15
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2474,7 +2474,7 @@ JD-TC-Block Appointment-UH16
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${lid}=  Create Sample Location  
@@ -2483,7 +2483,7 @@ JD-TC-Block Appointment-UH16
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2543,7 +2543,7 @@ JD-TC-Block Appointment-UH17
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_location_n_service  ${PUSERNAME48}
+    # clear_location_n_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
 
     ${lid}=  Create Sample Location  
@@ -2552,7 +2552,7 @@ JD-TC-Block Appointment-UH17
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME48}
+    # clear_appt_schedule   ${PUSERNAME48}
 
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
