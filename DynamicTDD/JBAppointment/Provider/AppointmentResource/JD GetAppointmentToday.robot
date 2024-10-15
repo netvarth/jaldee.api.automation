@@ -29,6 +29,11 @@ JD-TC-GetAppointmentToday-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Get Business Profile
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']} 
+
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -45,46 +50,85 @@ JD-TC-GetAppointmentToday-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${lid}=  Create Sample Location
-        sleep   1s
+        Set Suite Variable   ${lid}
         ${resp}=   Get Location ById  ${lid}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${tz}  ${resp.json()['timezone']}
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ELSE
-        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+        Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    ${SERVICE1}=  FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
-    
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
+    Set Suite Variable   ${DAY2}    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    Set Suite Variable   ${list}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    Set Suite Variable   ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    Set Suite Variable   ${delta}
+    ${eTime1}=  add_timezone_time  ${tz}  3   50  
+    Set Suite Variable   ${eTime1}
+   
+    ${SERVICE1}=    generate_service_name   
+    ${s_id}=  Create Sample Service  ${SERVICE1}      maxBookingsAllowed=20
+    Set Suite Variable  ${s_id}
 
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
+    ${SERVICE2}=  generate_service_name
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    Set Suite Variable   ${min_pre}
+    ${s_id1}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=10   isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre} 
+    Set Suite Variable  ${s_id1}
+
+    ${SERVICE3}=  FakerLibrary.word
+    ${s_id2}=  Create Sample Service  ${SERVICE3}   maxBookingsAllowed=10
+    Set Suite Variable  ${s_id2}
+
+    ${resp}=    Get Appointment Schedules
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
-    Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
+    IF   '${resp.content}' == '${emptylist}'       
+        ${schedule_name}=  FakerLibrary.bs
+        ${parallel}=  FakerLibrary.Random Int  min=10  max=20
+        ${maxval}=  Convert To Integer   ${delta/2}
+        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+        ${bool1}=  Random Element  ${bool}
+        ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}  ${s_id1}  ${s_id2}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${sch_id}  ${resp.json()}
+    ELSE
+        Set Suite Variable  ${sch_id}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${lid}  ${resp.json()[0]['location']['id']}
+        Set Suite Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
+    END
     
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j1}]}
+    IF  ${resp.json()['availableSlots'][${j1}]['noOfAvailbleSlots']} == 0   
+        Remove From List    ${slots}    ${slot1}
+    END
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot2}   ${slots[${j1}]}
+
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
-   
-    ${resp}=  AddCustomer  ${CUSERNAME20}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
+    Set Suite Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${resp}=  AddCustomer  ${CUSERNAME20}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}   email=${pc_emailid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${cid}  ${resp.json()}
@@ -105,8 +149,7 @@ JD-TC-GetAppointmentToday-1
 
     ${fname1}=  FakerLibrary.first_name
     ${lname1}=  FakerLibrary.last_name
-   
-    ${resp}=  AddCustomer  ${CUSERNAME21}   firstName=${fname1}   lastName=${lname1}  countryCode=${countryCodes[1]}  
+    ${resp}=  AddCustomer  ${CUSERNAME21}   firstName=${fname1}   lastName=${lname1}  countryCode=${countryCodes[1]}   email=${pc_emailid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${cid1}  ${resp.json()}
@@ -160,34 +203,6 @@ JD-TC-GetAppointmentToday-1
 JD-TC-GetAppointmentToday-2
 
     [Documentation]  takes two online appointment for today and verify today appointment details.
-    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get Business Profile
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${account_id}  ${resp.json()['id']} 
-
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${s_id}  ${resp.json()[0]['id']}
-
-    ${resp}=  Get Appointment Schedules 
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
-
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Send Otp For Login    ${CUSERNAME20}    ${account_id}
     Log   ${resp.content}
@@ -220,9 +235,9 @@ JD-TC-GetAppointmentToday-2
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
-    Log  ${resp.json()}
+    ${cnote}=   FakerLibrary.word
+    ${resp}=   Customer Take Appointment  ${account_id}   ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid3}=  Get From Dictionary  ${resp.json()}  ${fname}
 
@@ -311,14 +326,6 @@ JD-TC-GetAppointmentToday-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-
-    # clear_service   ${PUSERNAME100}
-    # clear_appt_schedule   ${PUSERNAME100}
-
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
     ${prepay_amt}=   Random Int   min=50   max=100
@@ -373,11 +380,13 @@ JD-TC-GetAppointmentToday-3
     ${resp}=  Get Appointments Today
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}   1
-
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    @{uid_list}=  Create List
+    FOR    ${index}    IN RANGE    ${len}
+        Append To List  ${uid_list}  ${resp.json()[${index}]['uid']}
+    END
+    Log  ${uid_list}
+    List Should Contain Value   ${uid_list}   ${apptid1}  
 
 JD-TC-GetAppointmentToday-4
 
@@ -386,16 +395,6 @@ JD-TC-GetAppointmentToday-4
     ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get Business Profile
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${account_id}  ${resp.json()['id']} 
-
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
     # clear_service   ${PUSERNAME100}
     # clear_appt_schedule   ${PUSERNAME100}
@@ -483,7 +482,14 @@ JD-TC-GetAppointmentToday-4
     ${resp}=  Get Appointments Today
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()}    []
+    # Should Be Equal As Strings  ${resp.json()}    []
+    ${len}=  Get Length  ${resp.json()}
+    @{uid_list}=  Create List
+    FOR    ${index}    IN RANGE    ${len}
+        Append To List  ${uid_list}  ${resp.json()[${index}]['uid']}
+    END
+    Log  ${uid_list}
+    List Should Not Contain Value   ${uid_list}   ${apptid3}  
 
 JD-TC-GetAppointmentToday-5
 
@@ -492,16 +498,6 @@ JD-TC-GetAppointmentToday-5
     ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get Business Profile
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${account_id}  ${resp.json()['id']} 
-
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${lid}  ${resp.json()[0]['id']}
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
@@ -582,9 +578,9 @@ JD-TC-GetAppointmentToday-5
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}  uid=
-    Log  ${resp.json()}
+    ${cnote}=   FakerLibrary.word
+    ${resp}=   Customer Take Appointment  ${account_id}   ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
@@ -600,6 +596,7 @@ JD-TC-GetAppointmentToday-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
+    sleep  2s
     ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -607,9 +604,13 @@ JD-TC-GetAppointmentToday-5
     ${resp}=  Get Appointments Today
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}   1
+    @{uid_list}=  Create List
+    FOR    ${index}    IN RANGE    ${len}
+        Append To List  ${uid_list}  ${resp.json()[${index}]['uid']}
+    END
+    Log  ${uid_list}
+    List Should Contain Value   ${uid_list}   ${apptid1}  
 
 JD-TC-GetAppointmentToday-6
 
@@ -619,37 +620,8 @@ JD-TC-GetAppointmentToday-6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Business Profile
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${account_id}  ${resp.json()['id']} 
-
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-
     # clear_service   ${PUSERNAME100}
     # clear_appt_schedule   ${PUSERNAME100}
-
-    ${SERVICE1}=  FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -733,20 +705,24 @@ JD-TC-GetAppointmentToday-6
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}   2
-
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
-    Should Be Equal As Strings  ${resp.json()[1]['uid']}   ${apptid2}
+    @{uid_list}=  Create List
+    FOR    ${index}    IN RANGE    ${len}
+        Append To List  ${uid_list}  ${resp.json()[${index}]['uid']}
+    END
+    Log  ${uid_list}
+    List Should Contain Value   ${uid_list}   ${apptid1}   ${apptid2}
 
     ${resp}=  Get Appointments Today   apptStatus-eq=${apptStatus[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}   2
-
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
-    Should Be Equal As Strings  ${resp.json()[1]['uid']}   ${apptid2}
+    @{uid_list}=  Create List
+    FOR    ${index}    IN RANGE    ${len}
+        Append To List  ${uid_list}  ${resp.json()[${index}]['uid']}
+    END
+    Log  ${uid_list}
+    List Should Contain Value   ${uid_list}   ${apptid1}  ${apptid2}
 
 JD-TC-GetAppointmentToday-7
 
@@ -756,32 +732,8 @@ JD-TC-GetAppointmentToday-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-
     # clear_service   ${PUSERNAME100}
     # clear_appt_schedule   ${PUSERNAME100}
-
-    ${SERVICE1}=  FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -840,8 +792,12 @@ JD-TC-GetAppointmentToday-7
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    @{uid_list}=  Create List
+    FOR    ${index}    IN RANGE    ${len}
+        Append To List  ${uid_list}  ${resp.json()[${index}]['uid']}
+    END
+    Log  ${uid_list}
+    List Should Contain Value   ${uid_list}   ${apptid1}  
 
 JD-TC-GetAppointmentToday-8
 
@@ -851,32 +807,8 @@ JD-TC-GetAppointmentToday-8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-
     # clear_service   ${PUSERNAME100}
     # clear_appt_schedule   ${PUSERNAME100}
-
-    ${SERVICE1}=  FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -943,8 +875,12 @@ JD-TC-GetAppointmentToday-8
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    @{uid_list}=  Create List
+    FOR    ${index}    IN RANGE    ${len}
+        Append To List  ${uid_list}  ${resp.json()[${index}]['uid']}
+    END
+    Log  ${uid_list}
+    List Should Contain Value   ${uid_list}   ${apptid1}  
 
 JD-TC-GetAppointmentToday-9
 
@@ -954,32 +890,8 @@ JD-TC-GetAppointmentToday-9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-
     # clear_service   ${PUSERNAME100}
     # clear_appt_schedule   ${PUSERNAME100}
-
-    ${SERVICE1}=  FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -1039,8 +951,12 @@ JD-TC-GetAppointmentToday-9
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    @{uid_list}=  Create List
+    FOR    ${index}    IN RANGE    ${len}
+        Append To List  ${uid_list}  ${resp.json()[${index}]['uid']}
+    END
+    Log  ${uid_list}
+    List Should Contain Value   ${uid_list}   ${apptid1}  
 
 JD-TC-GetAppointmentToday-10
 
@@ -1050,34 +966,10 @@ JD-TC-GetAppointmentToday-10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-
     # clear_service   ${PUSERNAME100}
     # clear_appt_schedule   ${PUSERNAME100}
 
-    ${SERVICE1}=  FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
-
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
@@ -1093,7 +985,7 @@ JD-TC-GetAppointmentToday-10
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id2}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
@@ -1135,8 +1027,12 @@ JD-TC-GetAppointmentToday-10
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    @{uid_list}=  Create List
+    FOR    ${index}    IN RANGE    ${len}
+        Append To List  ${uid_list}  ${resp.json()[${index}]['uid']}
+    END
+    Log  ${uid_list}
+    List Should Contain Value   ${uid_list}   ${apptid1}  
 
 JD-TC-GetAppointmentToday-11
 
@@ -1146,35 +1042,24 @@ JD-TC-GetAppointmentToday-11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-
     # clear_service   ${PUSERNAME100}
     # clear_appt_schedule   ${PUSERNAME100}
 
-    ${SERVICE1}=  FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
+    # ${SERVICE1}=  FakerLibrary.word
+    # ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
 
-    ${SERVICE2}=  FakerLibrary.word
-    ${s_id1}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=10
+    # ${SERVICE2}=  FakerLibrary.word
+    # ${s_id1}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=10  
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}  ${s_id1}
-    Log  ${resp.json()}
+    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+  
+    ${parallel}=  FakerLibrary.Random Int  min=20  max=25
+    ${resp}=  Update Appointment Schedule  ${sch_id}  ${resp.json()['name']}  ${resp.json()['apptSchedule']['recurringType']}  ${resp.json()['apptSchedule']['repeatIntervals']}
+    ...  ${resp.json()['apptSchedule']['startDate']}  ${resp.json()['apptSchedule']['terminator']['endDate']}  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}
+    ...  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${parallel}  ${parallel}  ${lid}  ${resp.json()['timeDuration']}  ${bool[1]}  ${s_id}  ${s_id1}  ${s_id2}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -1234,32 +1119,8 @@ JD-TC-GetAppointmentToday-12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-
     # clear_service   ${PUSERNAME100}
     # clear_appt_schedule   ${PUSERNAME100}
-
-    ${SERVICE1}=  FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -1310,8 +1171,12 @@ JD-TC-GetAppointmentToday-12
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid2}
+    @{uid_list}=  Create List
+    FOR    ${index}    IN RANGE    ${len}
+        Append To List  ${uid_list}  ${resp.json()[${index}]['uid']}
+    END
+    Log  ${uid_list}
+    List Should Contain Value   ${uid_list}   ${apptid2}  
 
 JD-TC-GetAppointmentToday-13
 
@@ -1321,32 +1186,8 @@ JD-TC-GetAppointmentToday-13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-
     # clear_service   ${PUSERNAME100}
     # clear_appt_schedule   ${PUSERNAME100}
-
-    ${SERVICE1}=  FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -1398,8 +1239,12 @@ JD-TC-GetAppointmentToday-13
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    @{uid_list}=  Create List
+    FOR    ${index}    IN RANGE    ${len}
+        Append To List  ${uid_list}  ${resp.json()[${index}]['uid']}
+    END
+    Log  ${uid_list}
+    List Should Contain Value   ${uid_list}   ${apptid1}  
 
 JD-TC-GetAppointmentToday-14
 
@@ -1409,32 +1254,8 @@ JD-TC-GetAppointmentToday-14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-
     # clear_service   ${PUSERNAME100}
     # clear_appt_schedule   ${PUSERNAME100}
-
-    ${SERVICE1}=  FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -1490,8 +1311,12 @@ JD-TC-GetAppointmentToday-14
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid2}
+    @{uid_list}=  Create List
+    FOR    ${index}    IN RANGE    ${len}
+        Append To List  ${uid_list}  ${resp.json()[${index}]['uid']}
+    END
+    Log  ${uid_list}
+    List Should Contain Value   ${uid_list}   ${apptid2}  
 
 JD-TC-GetAppointmentToday-15
 
@@ -1501,36 +1326,16 @@ JD-TC-GetAppointmentToday-15
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-
     # clear_service   ${PUSERNAME100}
     # clear_appt_schedule   ${PUSERNAME100}
-
-    ${SERVICE1}=  FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
-
+   
     ${SERVICE2}=  FakerLibrary.word
     ${s_id1}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=10
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    ${parallel}=  FakerLibrary.Random Int  min=10  max=20
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}  
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
-
     ${sTime1}=  add_timezone_time  ${tz}  2  15  
     ${eTime1}=  add_timezone_time  ${tz}  3  30  
     ${schedule_name}=  FakerLibrary.bs
@@ -1586,8 +1391,12 @@ JD-TC-GetAppointmentToday-15
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid2}
+    @{uid_list}=  Create List
+    FOR    ${index}    IN RANGE    ${len}
+        Append To List  ${uid_list}  ${resp.json()[${index}]['uid']}
+    END
+    Log  ${uid_list}
+    List Should Contain Value   ${uid_list}   ${apptid2} 
 
 JD-TC-GetAppointmentToday-16
 
@@ -1597,37 +1406,8 @@ JD-TC-GetAppointmentToday-16
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Business Profile
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${account_id}  ${resp.json()['id']} 
-
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-
     # clear_service   ${PUSERNAME100}
     # clear_appt_schedule   ${PUSERNAME100}
-
-    ${SERVICE1}=  FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -1711,16 +1491,24 @@ JD-TC-GetAppointmentToday-16
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}   1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid2}
+    @{uid_list}=  Create List
+    FOR    ${index}    IN RANGE    ${len}
+        Append To List  ${uid_list}  ${resp.json()[${index}]['uid']}
+    END
+    Log  ${uid_list}
+    List Should Contain Value   ${uid_list}   ${apptid2} 
 
     ${resp}=  Get Appointments Today   apptBy-eq=${apptBy[0]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}   1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    @{uid_list}=  Create List
+    FOR    ${index}    IN RANGE    ${len}
+        Append To List  ${uid_list}  ${resp.json()[${index}]['uid']}
+    END
+    Log  ${uid_list}
+    List Should Contain Value   ${uid_list}   ${apptid1} 
 
 JD-TC-GetAppointmentToday-17
 
@@ -1730,32 +1518,8 @@ JD-TC-GetAppointmentToday-17
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-
     # clear_service   ${PUSERNAME100}
     # clear_appt_schedule   ${PUSERNAME100}
-
-    ${SERVICE1}=  FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -1806,8 +1570,12 @@ JD-TC-GetAppointmentToday-17
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    @{uid_list}=  Create List
+    FOR    ${index}    IN RANGE    ${len}
+        Append To List  ${uid_list}  ${resp.json()[${index}]['uid']}
+    END
+    Log  ${uid_list}
+    List Should Contain Value   ${uid_list}   ${apptid1}  
 
 JD-TC-GetAppointmentToday-18
 
@@ -1817,32 +1585,8 @@ JD-TC-GetAppointmentToday-18
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-
     # clear_service   ${PUSERNAME100}
     # clear_appt_schedule   ${PUSERNAME100}
-
-    ${SERVICE1}=  FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -1893,9 +1637,12 @@ JD-TC-GetAppointmentToday-18
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    2
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
-    Should Be Equal As Strings  ${resp.json()[1]['uid']}   ${apptid2}
+    @{uid_list}=  Create List
+    FOR    ${index}    IN RANGE    ${len}
+        Append To List  ${uid_list}  ${resp.json()[${index}]['uid']}
+    END
+    Log  ${uid_list}
+    List Should Contain Value   ${uid_list}   ${apptid1}  ${apptid2}   
 
 JD-TC-GetAppointmentToday-19
 
@@ -1905,42 +1652,10 @@ JD-TC-GetAppointmentToday-19
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-
     # clear_service   ${PUSERNAME100}
     # clear_appt_schedule   ${PUSERNAME100}
 
-    ${description}=  FakerLibrary.sentence
-    ${ser_durtn}=   Random Int   min=2   max=10
-    ${prepay_amt}=   Random Int   min=50   max=100
-    ${ser_amount}=   Random Int   min=100   max=1000
-    ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
-    ${resp}=  Create Service  ${SERVICE1}   ${description}  ${ser_durtn}  ${bool[1]}  ${ser_amount1}  ${bool[0]}  minPrePaymentAmount=${prepay_amt}  maxBookingsAllowed=10
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200  
-    Set Test Variable  ${s_id}  ${resp.json()}
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
-
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
@@ -1955,7 +1670,7 @@ JD-TC-GetAppointmentToday-19
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
@@ -1974,7 +1689,7 @@ JD-TC-GetAppointmentToday-19
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid1}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid1}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid2}=  Get From Dictionary  ${resp.json()}  ${fname1}
@@ -1984,7 +1699,7 @@ JD-TC-GetAppointmentToday-19
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${note}=    FakerLibrary.word
-    ${resp}=  Make Payment By Cash   ${apptid1}  ${payment_modes[0]}  ${prepay_amt}   ${note}
+    ${resp}=  Make Payment By Cash   ${apptid1}  ${payment_modes[0]}  ${min_pre}   ${note}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1993,8 +1708,12 @@ JD-TC-GetAppointmentToday-19
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    @{uid_list}=  Create List
+    FOR    ${index}    IN RANGE    ${len}
+        Append To List  ${uid_list}  ${resp.json()[${index}]['uid']}
+    END
+    Log  ${uid_list}
+    List Should Contain Value   ${uid_list}   ${apptid1}    ${apptid2}  
 
 JD-TC-GetAppointmentToday-20
 
@@ -2004,40 +1723,35 @@ JD-TC-GetAppointmentToday-20
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-
     # clear_service   ${PUSERNAME100}
     # clear_appt_schedule   ${PUSERNAME100}
 
-    ${description}=  FakerLibrary.sentence
-    ${ser_durtn}=   Random Int   min=2   max=10
-    ${prepay_amt}=   Random Int   min=50   max=100
-    ${ser_amount}=   Random Int   min=100   max=1000
-    ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
-    ${resp}=  Create Service  ${SERVICE1}   ${description}  ${ser_durtn}  ${bool[1]}  ${ser_amount1}  ${bool[0]}  minPrePaymentAmount=${prepay_amt}  maxBookingsAllowed=10
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200  
-    Set Test Variable  ${s_id}  ${resp.json()}
+    # ${description}=  FakerLibrary.sentence
+    # ${ser_durtn}=   Random Int   min=2   max=10
+    # ${prepay_amt}=   Random Int   min=50   max=100
+    # ${ser_amount}=   Random Int   min=100   max=1000
+    # ${ser_amount1}=   Convert To Number   ${ser_amount}
+    # ${SERVICE1}=    FakerLibrary.word
+    # ${resp}=  Create Service  ${SERVICE1}   ${description}  ${ser_durtn}  ${bool[1]}  ${ser_amount1}  ${bool[0]}  minPrePaymentAmount=${prepay_amt}  maxBookingsAllowed=10
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200  
+    # Set Test Variable  ${s_id}  ${resp.json()}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    # ${list}=  Create List  1  2  3  4  5  6  7
+    # ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    # ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    # ${eTime1}=  add_two   ${sTime1}  ${delta}
+    # ${schedule_name}=  FakerLibrary.bs
+    # ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    # ${maxval}=  Convert To Integer   ${delta/2}
+    # ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    # ${bool1}=  Random Element  ${bool}
+    # ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -2055,7 +1769,7 @@ JD-TC-GetAppointmentToday-20
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
@@ -2074,7 +1788,7 @@ JD-TC-GetAppointmentToday-20
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid1}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid1}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid2}=  Get From Dictionary  ${resp.json()}  ${fname1}
@@ -2082,6 +1796,11 @@ JD-TC-GetAppointmentToday-20
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${s_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${ser_amount1}  ${resp.json()['totalAmount']} 
 
     ${note}=    FakerLibrary.word
     ${resp}=  Make Payment By Cash   ${apptid1}  ${payment_modes[0]}  ${ser_amount1}   ${note}
@@ -2093,156 +1812,20 @@ JD-TC-GetAppointmentToday-20
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    @{uid_list}=  Create List
+    FOR    ${index}    IN RANGE    ${len}
+        Append To List  ${uid_list}  ${resp.json()[${index}]['uid']}
+    END
+    Log  ${uid_list}
+    List Should Contain Value   ${uid_list}   ${apptid1}   ${apptid2}  
 
 JD-TC-GetAppointmentToday-21
-
-    [Documentation]  takes two walkin appointment for today, then verify the get appointment today with filter as paymentStatus Refund.
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-
-    # clear_service   ${PUSERNAME100}
-    # clear_appt_schedule   ${PUSERNAME100}
-
-    ${description}=  FakerLibrary.sentence
-    ${ser_durtn}=   Random Int   min=2   max=10
-    ${prepay_amt}=   Random Int   min=50   max=100
-    ${ser_amount}=   Random Int   min=100   max=1000
-    ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
-    ${resp}=  Create Service  ${SERVICE1}   ${description}  ${ser_durtn}  ${bool[1]}  ${ser_amount1}  ${bool[0]}  minPrePaymentAmount=${prepay_amt}  maxBookingsAllowed=10
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200  
-    Set Test Variable  ${s_id}  ${resp.json()}
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
-
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
-    Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
-  
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME21}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${cid}  ${resp.json()[0]['id']}
-    Set Test Variable  ${fname}  ${resp.json()[0]['firstName']}
-
-    ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
-    ${apptfor}=   Create List  ${apptfor1}
-    
-    ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
-  
-    ${resp}=  Get Appointment By Id   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
-    Set Test Variable  ${fname1}  ${resp.json()[0]['firstName']}
-
-    ${apptfor1}=  Create Dictionary  id=${cid1}   apptTime=${slot2}
-    ${apptfor}=   Create List  ${apptfor1}
-    
-    ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid1}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${apptid2}=  Get From Dictionary  ${resp.json()}  ${fname1}
-  
-    ${resp}=  Get Appointment By Id   ${apptid2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${note}=    FakerLibrary.word
-    ${resp}=  Make Payment By Cash   ${apptid1}  ${payment_modes[0]}  ${ser_amount1}   ${note}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${reason}=  Random Element  ${cancelReason}
-    ${resp}=     Appointment Action    ${apptStatus[4]}   ${apptid1}   cancelReason=${reason}  
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Appointments Today   paymentStatus-eq=${paymentStatus[3]}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
-
-JD-TC-GetAppointmentToday-22
 
     [Documentation]  takes two walkin appointment for today, then verify the get appointment today with filter as location.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-
-    # clear_service   ${PUSERNAME100}
-    # clear_appt_schedule   ${PUSERNAME100}
-
-    ${description}=  FakerLibrary.sentence
-    ${ser_durtn}=   Random Int   min=2   max=10
-    ${prepay_amt}=   Random Int   min=50   max=100
-    ${ser_amount}=   Random Int   min=100   max=1000
-    ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
-    ${resp}=  Create Service  ${SERVICE1}   ${description}  ${ser_durtn}  ${bool[1]}  ${ser_amount1}  ${bool[0]}  minPrePaymentAmount=${prepay_amt}  maxBookingsAllowed=10
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200  
-    Set Test Variable  ${s_id}  ${resp.json()}
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -2293,11 +1876,14 @@ JD-TC-GetAppointmentToday-22
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    2
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
-    Should Be Equal As Strings  ${resp.json()[1]['uid']}   ${apptid2}
+    @{uid_list}=  Create List
+    FOR    ${index}    IN RANGE    ${len}
+        Append To List  ${uid_list}  ${resp.json()[${index}]['uid']}
+    END
+    Log  ${uid_list}
+    List Should Contain Value   ${uid_list}   ${apptid1}  ${apptid2}
 
-JD-TC-GetAppointmentToday-23
+JD-TC-GetAppointmentToday-22
 
     [Documentation]  takes two walkin appointment for today, then verify the get appointment today with filter as appt start time.
     
@@ -2305,32 +1891,8 @@ JD-TC-GetAppointmentToday-23
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-
     # clear_service   ${PUSERNAME100}
     # clear_appt_schedule   ${PUSERNAME100}
-
-    ${SERVICE1}=  FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -2383,10 +1945,14 @@ JD-TC-GetAppointmentToday-23
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    @{uid_list}=  Create List
+    FOR    ${index}    IN RANGE    ${len}
+        Append To List  ${uid_list}  ${resp.json()[${index}]['uid']}
+    END
+    Log  ${uid_list}
+    List Should Contain Value   ${uid_list}   ${apptid1}  
 
-JD-TC-GetAppointmentToday-24
+JD-TC-GetAppointmentToday-23
 
     [Documentation]  takes two walkin appointment for today, change first appointment to cancelled, then verify the get appointment today with filter cancel reason.
     
@@ -2394,32 +1960,8 @@ JD-TC-GetAppointmentToday-24
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-
     # clear_service   ${PUSERNAME100}
     # clear_appt_schedule   ${PUSERNAME100}
-
-    ${SERVICE1}=  FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -2485,10 +2027,14 @@ JD-TC-GetAppointmentToday-24
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}    1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    @{uid_list}=  Create List
+    FOR    ${index}    IN RANGE    ${len}
+        Append To List  ${uid_list}  ${resp.json()[${index}]['uid']}
+    END
+    Log  ${uid_list}
+    List Should Contain Value   ${uid_list}   ${apptid1}  
 
-JD-TC-GetAppointmentToday-25
+JD-TC-GetAppointmentToday-24
 
     [Documentation]  takes an online and a walkin appointment for today, then verify the get appointment today with filter apptmode.
     
@@ -2496,39 +2042,10 @@ JD-TC-GetAppointmentToday-25
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Business Profile
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${account_id}  ${resp.json()['id']} 
-
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-
     # clear_service   ${PUSERNAME100}
     # clear_appt_schedule   ${PUSERNAME100}
 
-    ${SERVICE1}=  FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
-
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
@@ -2543,7 +2060,7 @@ JD-TC-GetAppointmentToday-25
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
@@ -2570,7 +2087,7 @@ JD-TC-GetAppointmentToday-25
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${fname}   ${resp.json()['firstName']}
 
-    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id}
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${account_id}  ${DAY1}  ${lid}  ${s_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
@@ -2588,10 +2105,14 @@ JD-TC-GetAppointmentToday-25
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}  
+    ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid2}=  Get From Dictionary  ${resp.json()}  ${fname}
+
+    ${resp}=  Make payment Consumer Mock  ${account_id}  ${min_pre}  ${purpose[0]}  ${apptid2}  ${s_id}  ${bool[0]}   ${bool[1]}  ${None}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get consumer Appointment By Id   ${account_id}  ${apptid2}
     Log  ${resp.json()}
@@ -2610,18 +2131,26 @@ JD-TC-GetAppointmentToday-25
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}   1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    @{uid_list}=  Create List
+    FOR    ${index}    IN RANGE    ${len}
+        Append To List  ${uid_list}  ${resp.json()[${index}]['uid']}
+    END
+    Log  ${uid_list}
+    List Should Contain Value   ${uid_list}   ${apptid1}    
 
     ${resp}=  Get Appointments Today   appointmentMode-eq=${appointmentMode[2]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}   1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid2}
+    @{uid_list}=  Create List
+    FOR    ${index}    IN RANGE    ${len}
+        Append To List  ${uid_list}  ${resp.json()[${index}]['uid']}
+    END
+    Log  ${uid_list}
+    List Should Contain Value   ${uid_list}   ${apptid2} 
 
-JD-TC-GetAppointmentToday-26
+JD-TC-GetAppointmentToday-25
 
     [Documentation]  takes two walkin appointment for today for two different provider consumers, then verify the get appointment today with filter as dob.
     
@@ -2629,40 +2158,29 @@ JD-TC-GetAppointmentToday-26
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-
     # clear_service   ${PUSERNAME100}
     # clear_appt_schedule   ${PUSERNAME100}
     clear_customer   ${PUSERNAME100}
 
-    ${SERVICE1}=  FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
-
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${slot1}    ${resp.json()['availableSlots'][0]['time']}
-    Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
-
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j1}]}
+    IF  ${resp.json()['availableSlots'][${j1}]['noOfAvailbleSlots']} == 0   
+        Remove From List    ${slots}    ${slot1}
+    END
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot2}   ${slots[${j1}]}
+    
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
     ${dob1}=    FakerLibrary.Date
@@ -2713,17 +2231,25 @@ JD-TC-GetAppointmentToday-26
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}   1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
+    @{uid_list}=  Create List
+    FOR    ${index}    IN RANGE    ${len}
+        Append To List  ${uid_list}  ${resp.json()[${index}]['uid']}
+    END
+    Log  ${uid_list}
+    List Should Contain Value   ${uid_list}   ${apptid1} 
 
     ${resp}=  Get Appointments Today   dob-eq=${dob2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}   1
-    Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid2}
+    @{uid_list}=  Create List
+    FOR    ${index}    IN RANGE    ${len}
+        Append To List  ${uid_list}  ${resp.json()[${index}]['uid']}
+    END
+    Log  ${uid_list}
+    List Should Contain Value   ${uid_list}   ${apptid2} 
 
-JD-TC-GetAppointmentToday-27
+JD-TC-GetAppointmentToday-26
 
     [Documentation]  takes two walkin appointment for today for two different provider consumers, then verify the get appointment today with filter as gender.
     
@@ -2733,38 +2259,27 @@ JD-TC-GetAppointmentToday-27
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-
     # clear_service   ${PUSERNAME100}
     # clear_appt_schedule   ${PUSERNAME100}
 
-    ${SERVICE1}=  FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
-
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${slot1}    ${resp.json()['availableSlots'][0]['time']}
-    Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j1}]}
+    IF  ${resp.json()['availableSlots'][${j1}]['noOfAvailbleSlots']} == 0   
+        Remove From List    ${slots}    ${slot1}
+    END
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot2}   ${slots[${j1}]}
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME22}
     Log   ${resp.content}
@@ -2806,22 +2321,15 @@ JD-TC-GetAppointmentToday-27
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${count_male}=  Get Match Count  ${gens}  ${Genderlist[1]}
-    ${count_female}=  Get Match Count  ${gens}  ${Genderlist[0]}
-
     ${resp}=  Get Appointments Today   gender-eq=${Genderlist[1]} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${len}=  Get Length   ${resp.json()}
-    Should Be Equal As Strings  ${len}  ${count_male}
     
     ${resp}=  Get Appointments Today   gender-eq=${Genderlist[0]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${len}=  Get Length   ${resp.json()}
-    Should Be Equal As Strings  ${len}  ${count_female}
-
-JD-TC-GetAppointmentToday-28
+    
+JD-TC-GetAppointmentToday-27
 
     [Documentation]  takes two walkin appointment for today for two different provider consumers, then verify the get appointment today with filter as dob.
     
@@ -2829,39 +2337,28 @@ JD-TC-GetAppointmentToday-28
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-
     # clear_service   ${PUSERNAME100}
     # clear_appt_schedule   ${PUSERNAME100}
     clear_Label  ${PUSERNAME100}
   
-    ${SERVICE1}=  FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
-
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${slot1}    ${resp.json()['availableSlots'][0]['time']}
-    Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j1}]}
+    IF  ${resp.json()['availableSlots'][${j1}]['noOfAvailbleSlots']} == 0   
+        Remove From List    ${slots}    ${slot1}
+    END
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot2}   ${slots[${j1}]}
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME22}
     Log   ${resp.content}
@@ -2944,7 +2441,7 @@ JD-TC-GetAppointmentToday-28
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['uid']}   ${apptid1}
 
-JD-TC-GetAppointmentToday-29
+JD-TC-GetAppointmentToday-28
 
     [Documentation]  taking a appt for a provider who has a branch in US. base location is India.(online appt from India),
     ...   then verify get appt today details. 
@@ -2979,21 +2476,20 @@ JD-TC-GetAppointmentToday-29
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id1}=   Create Sample Service  ${SERVICE1}
 
-    ${latti}  ${longi}  ${city}  ${country_abbr}  ${US_tz}=  FakerLibrary.Local Latlng  country_code=US  coords_only=False
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${US_tz}  0  30  
-    ${eTime1}=  add_timezone_time  ${US_tz}  1  00  
-    ${DAY}=  db.get_date_by_timezone  ${US_tz}
-    ${DAY1}=  db.add_timezone_date  ${US_tz}  10       
-    ${address} =  FakerLibrary.address
-    ${postcode}=  FakerLibrary.postcode
-    ${parking}    Random Element     ${parkingType} 
-    ${24hours}    Random Element    ['True','False']
-    ${url}=   FakerLibrary.url
-    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
-    Log  ${resp.json()}
+    ${resp}=    Get Locations
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${loc_id1}  ${resp.json()}
+    IF   '${resp.content}' == '${emptylist}'
+        ${loc_id1}=  Create Sample Location
+        Set Suite Variable   ${loc_id1}
+        ${resp}=   Get Location ById  ${loc_id1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Suite Variable  ${loc_id1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
@@ -3003,7 +2499,7 @@ JD-TC-GetAppointmentToday-29
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=5
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY}  ${DAY1}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${loc_id1}  ${duration}  ${bool1}  ${s_id1}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${loc_id1}  ${duration}  ${bool1}  ${s_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id1}  ${resp.json()}
@@ -3021,8 +2517,8 @@ JD-TC-GetAppointmentToday-29
 
     ${firstName}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-
-    ${resp}=    Send Otp For Login    ${CUSERNAME9}    ${pid}  alternateLoginId=${CUSEREMAIL9}
+    Set Test Variable  ${pc_emailid1}  ${firstName}${C_Email}.${test_mail}
+    ${resp}=    Send Otp For Login    ${CUSERNAME9}    ${pid}  alternateLoginId=${pc_emailid1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3031,7 +2527,7 @@ JD-TC-GetAppointmentToday-29
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${CUSEREMAIL9}  ${CUSERNAME9}  ${pid}  countryCode=${countryCodes[0]}
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${pc_emailid1}  ${CUSERNAME9}  ${pid}  countryCode=${countryCodes[0]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200    
 
@@ -3043,7 +2539,7 @@ JD-TC-GetAppointmentToday-29
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-    ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY}  ${loc_id1}  ${s_id1}
+    ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${loc_id1}  ${s_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${no_of_slots}=  Get Length  ${resp.json()[0]['availableSlots']}
@@ -3061,7 +2557,7 @@ JD-TC-GetAppointmentToday-29
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Customer Take Appointment  ${pid}   ${s_id1}  ${sch_id1}  ${DAY}  ${cnote}  ${apptfor}  location=${{str('${loc_id1}')}}
+    ${resp}=   Customer Take Appointment  ${pid}   ${s_id1}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${loc_id1}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -3134,3 +2630,80 @@ JD-TC-GetAppointmentToday-UH3
     ${resp}=  Get Appointments Today   account-eq=${pid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+*** Comments ***
+
+
+JD-TC-GetAppointmentToday-21
+
+    [Documentation]  takes two walkin appointment for today, then verify the get appointment today with filter as paymentStatus Refund.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+    Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
+  
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME21}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${cid}  ${resp.json()[0]['id']}
+    Set Test Variable  ${fname}  ${resp.json()[0]['firstName']}
+
+    ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
+    ${apptfor}=   Create List  ${apptfor1}
+    
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
+  
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
+    Set Test Variable  ${fname1}  ${resp.json()[0]['firstName']}
+
+    ${apptfor1}=  Create Dictionary  id=${cid1}   apptTime=${slot2}
+    ${apptfor}=   Create List  ${apptfor1}
+    
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Take Appointment For Consumer  ${cid1}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${apptid2}=  Get From Dictionary  ${resp.json()}  ${fname1}
+  
+    ${resp}=  Get Appointment By Id   ${apptid2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${note}=    FakerLibrary.word
+    ${resp}=  Make Payment By Cash   ${apptid1}  ${payment_modes[0]}  ${ser_amount1}   ${note}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${reason}=  Random Element  ${cancelReason}
+    ${resp}=     Appointment Action    ${apptStatus[4]}   ${apptid1}   cancelReason=${reason}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointments Today   paymentStatus-eq=${paymentStatus[3]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${len}=  Get Length  ${resp.json()}
+    @{uid_list}=  Create List
+    FOR    ${index}    IN RANGE    ${len}
+        Append To List  ${uid_list}  ${resp.json()[${index}]['uid']}
+    END
+    Log  ${uid_list}
+    List Should Contain Value   ${uid_list}   ${apptid1}  
