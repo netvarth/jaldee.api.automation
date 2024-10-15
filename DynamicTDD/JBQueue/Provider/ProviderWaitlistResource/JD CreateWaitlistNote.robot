@@ -481,17 +481,25 @@ JD-TC-Provider Note-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}
-    
-    ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}
-    ${resp}=   Get Location ById  ${loc_id1}
+
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
-    ${ser_name1}=   FakerLibrary.word
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Suite Variable  ${loc_id1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END 
+    
+    ${ser_name1}=   generate_service_name 
     ${resp}=   Create Sample Service  ${ser_name1}
     Set Test Variable    ${ser_id1}    ${resp}  
-    ${ser_name2}=   FakerLibrary.word
+    ${ser_name2}=   generate_service_name 
     ${resp}=   Create Sample Service  ${ser_name2}
     Set Test Variable    ${ser_id2}    ${resp}  
     ${q_name}=    FakerLibrary.name

@@ -7,7 +7,6 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 *** Variables ***
@@ -103,8 +102,18 @@ JD-TC-AddMultipleWaitlistLabel-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END 
 
     ${label_id}=  Create Sample Label
 
@@ -113,12 +122,7 @@ JD-TC-AddMultipleWaitlistLabel-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${label_id}  
     
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_service_name 
     ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
     # clear_queue    ${HLPUSERNAME17}
@@ -311,10 +315,6 @@ JD-TC-AddMultipleWaitlistLabel-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
-
     ${label_id1}=  Create Sample Label
 
     ${resp}=  Get Label By Id  ${label_id1}
@@ -341,21 +341,21 @@ JD-TC-AddMultipleWaitlistLabel-2
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${lid}=  Create Sample Location
-        ${resp}=   Get Location ById  ${lid}
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ELSE
-        Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
-    END
+    # ${resp}=    Get Locations
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF   '${resp.content}' == '${emptylist}'
+    #     ${lid}=  Create Sample Location
+    #     ${resp}=   Get Location ById  ${lid}
+    #     Log  ${resp.content}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    #     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    # ELSE
+    #     Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+    #     Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    # END
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_service_name 
     ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
     # clear_queue    ${HLPUSERNAME17}
@@ -518,12 +518,7 @@ JD-TC-AddMultipleWaitlistLabel-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${label_id}
     
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_service_name 
     ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10    maxBookingsAllowed=10
 
     # clear_queue    ${HLPUSERNAME17}
@@ -634,12 +629,7 @@ JD-TC-AddMultipleWaitlistLabel-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${label_id3}
     
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_service_name 
     ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
     # clear_queue    ${HLPUSERNAME17}
@@ -760,12 +750,7 @@ JD-TC-AddMultipleWaitlistLabel-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${label_id}
     
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_service_name 
     ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
     # clear_queue    ${HLPUSERNAME17}
@@ -913,8 +898,18 @@ JD-TC-AddMultipleWaitlistLabel-6
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END  
 
     ${label_id}=  Create Sample Label
 
@@ -923,17 +918,12 @@ JD-TC-AddMultipleWaitlistLabel-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${label_id}
     
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     ${lid1}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_service_name 
     ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
     # clear_appt_schedule   ${multilocPro[2]}
@@ -1072,14 +1062,9 @@ JD-TC-AddMultipleWaitlistLabel-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${label_id}
     
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_service_name 
     ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
-    ${SERVICE2}=    FakerLibrary.Word
+    ${SERVICE2}=    generate_service_name 
     ${s_id1}=  Create Sample Service  ${SERVICE2}
 
     # clear_queue    ${HLPUSERNAME17}
@@ -1224,12 +1209,7 @@ JD-TC-AddMultipleWaitlistLabel-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${label_id2}
     
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_service_name 
     ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
     # clear_queue    ${HLPUSERNAME17}
@@ -1397,12 +1377,7 @@ JD-TC-AddMultipleWaitlistLabel-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${label_id}
     
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_service_name 
     ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
 
     # clear_queue    ${HLPUSERNAME17}
@@ -1469,7 +1444,7 @@ JD-TC-AddMultipleWaitlistLabel-9
     Should Be Equal As Strings    ${resp.status_code}   200
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
+    ${resp}=  Add To Waitlist Consumers     ${cid1}   ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${wid}=  Get Dictionary Values  ${resp.json()}
@@ -1560,15 +1535,11 @@ JD-TC-AddMultipleWaitlistLabel-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${label_id}
     
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
-    ${min_pre}=   Random Int   min=10   max=50
+    
+    ${SERVICE1}=    generate_service_name 
+    ${min_pre}=   Random Int   min=20   max=50
     ${servicecharge}=   Random Int  min=100  max=200
-    ${s_id}=  Create Sample Service with Prepayment   ${SERVICE1}  ${min_pre}  ${servicecharge}
+    ${s_id}=  Create Sample Service   ${SERVICE1}  isPrePayment=${bool[1]}  PrePaymentAmount=${min_pre}
 
     # clear_queue    ${HLPUSERNAME17}
     
@@ -1855,7 +1826,7 @@ JD-TC-AddMultipleWaitlistLabel-12
     ${SERVICE1}=    FakerLibrary.Word
     ${min_pre}=   Random Int   min=10   max=50
     ${servicecharge}=   Random Int  min=100  max=200
-    ${s_id}=  Create Sample Service with Prepayment   ${SERVICE1}  ${min_pre}  ${servicecharge}
+    ${s_id}=  Create Sample Service   ${SERVICE1}  isPrePayment=${bool[1]}  PrePaymentAmount=${min_pre}
 
     # clear_queue    ${HLPUSERNAME17}
     

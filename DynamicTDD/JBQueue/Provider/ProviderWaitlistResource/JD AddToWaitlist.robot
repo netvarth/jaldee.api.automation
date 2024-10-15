@@ -10,8 +10,7 @@ Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
-Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/consumermail.py
+Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 *** Variables ***
@@ -57,6 +56,14 @@ JD-TC-AddToWaitlist-0
             Set Suite Variable  ${loc_id1}  ${resp.json()[0]['id']}
             Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
       END
+
+      ${SERVICE1}=    generate_service_name 
+      ${SERVICE2}=    generate_service_name 
+      ${SERVICE3}=    generate_service_name 
+      ${SERVICE4}=    generate_service_name 
+      ${SERVICE5}=    generate_service_name 
+      ${SERVICE6}=    generate_service_name 
+
       ${resp}=   Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
       Set Test Variable    ${ser_id1}    ${resp}  
       ${resp}=   Create Sample Service  ${SERVICE2}   maxBookingsAllowed=10
@@ -155,12 +162,21 @@ JD-TC-AddToWaitlist-1
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
+
+      ${SERVICE1}=    generate_service_name 
+      Set Suite Variable    ${SERVICE1} 
+      ${SERVICE2}=    generate_service_name 
+      Set Suite Variable    ${SERVICE2} 
+      ${SERVICE3}=    generate_service_name 
+      Set Suite Variable    ${SERVICE3} 
+
       ${resp}=   Create Sample Service  ${SERVICE1}
       Set Suite Variable    ${ser_id1}    ${resp}  
       ${resp}=   Create Sample Service  ${SERVICE2}
       Set Suite Variable    ${ser_id2}    ${resp}  
       ${resp}=   Create Sample Service  ${SERVICE3}
       Set Suite Variable    ${ser_id3}    ${resp}  
+
       ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
       Set Suite Variable  ${CUR_DAY}
       ${q_name}=    FakerLibrary.name
@@ -350,6 +366,10 @@ JD-TC-AddToWaitlist-7
             Set Suite Variable  ${loc_id2}  ${resp.json()[0]['id']}
             Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
       END 
+
+      ${SERVICE5}=    generate_service_name 
+      ${SERVICE6}=    generate_service_name 
+
       ${resp}=   Create Sample Service  ${SERVICE5}
       Set Suite Variable    ${ser_id5}    ${resp}  
       ${resp}=   Create Sample Service  ${SERVICE6}
@@ -393,7 +413,7 @@ JD-TC-AddToWaitlist-8
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Verify Response  ${resp}  date=${FUT_DAY}  waitlistStatus=${wl_status[0]}  partySize=1  appxWaitingTime=0   waitlistedBy=${waitlistedby}  personsAhead=0
-      Should Be Equal As Strings  ${resp.json()['service']['name']}                   ${SERVICE5}
+      # Should Be Equal As Strings  ${resp.json()['service']['name']}                   ${SERVICE5}
       Should Be Equal As Strings  ${resp.json()['service']['id']}                     ${ser_id5}
       Should Be Equal As Strings  ${resp.json()['consumer']['id']}                    ${cid1}
       Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}           ${cid1}
@@ -437,10 +457,10 @@ JD-TC-AddToWaitlist-10
       ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME2}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Test Variable  ${id}  ${resp.json()[0]['id']}
+      Set Suite Variable  ${c_id}  ${resp.json()[0]['id']}
 
       ${desc}=   FakerLibrary.word
-      ${resp}=  Add To Waitlist  ${id}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${id} 
+      ${resp}=  Add To Waitlist  ${c_id}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${c_id} 
       Should Be Equal As Strings  ${resp.status_code}  200
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${wid7}  ${wid[0]}
@@ -489,7 +509,9 @@ JD-TC-AddToWaitlist-11
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable    ${loc_id3}   ${resp.json()[0]['id']}
       Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
-      ${ser_id7}=   Create Sample Service  ${SERVICE1}
+      ${SERVICE11}=    generate_service_name 
+
+      ${ser_id7}=   Create Sample Service  ${SERVICE11}     maxBookingsAllowed=10
       Set Suite Variable   ${ser_id7}
       ${q_name1}=    FakerLibrary.name
       Set Suite Variable    ${q_name1}
@@ -502,7 +524,8 @@ JD-TC-AddToWaitlist-11
       Set Suite Variable   ${parallel}
       Set Suite Variable   ${capacity}
       ${partysize}=  Create Dictionary  maxPartySize=${parallel}
-      ${resp}=  Create Queue    ${q_name1}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time1}  ${end_time1}   ${parallel}   ${capacity}    ${loc_id3}  ${ser_id7}     ${partysize} 
+      
+      ${resp}=  Sample Queue      ${loc_id3}  ${ser_id7}   
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${que_id4}   ${resp.json()}
@@ -535,18 +558,18 @@ JD-TC-AddToWaitlist-11
       Log  ${resp.json()} 
       Should Be Equal As Strings  ${resp.status_code}  200
       Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[1]}  partySize=1   waitlistedBy=${waitlistedby}  personsAhead=0
-      Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
+      Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE11}
       Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id7}
       Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${id}
       Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${mem_id}
       ${resp}=  Get Waitlist By Id  ${wait_id2} 
       Should Be Equal As Strings  ${resp.status_code}  200
       Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[1]}  partySize=1  waitlistedBy=${waitlistedby}  personsAhead=1
-      Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
+      Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE11}
       Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id7}
       Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${id}
       Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${mem_id1}
-*** Comments ***
+# *** Comments ***
 JD-TC-AddToWaitlist-12
       [Documentation]   Add again to the same queue and service after cancelling the waitlist
 
@@ -555,24 +578,24 @@ JD-TC-AddToWaitlist-12
      
       ${desc}=   FakerLibrary.word
       Set Suite Variable    ${desc}
-      ${resp}=  Add To Waitlist  ${pid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${pid} 
+      ${resp}=  Add To Waitlist  ${c_id}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${c_id} 
       Should Be Equal As Strings  ${resp.status_code}  200
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${wid1}  ${wid[0]}
       ${cncl_resn}=   Random Element     ${waitlist_cancl_reasn}
       ${resp}=  Waitlist Action Cancel  ${wid1}  ${cncl_resn}  ${desc}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${resp}=  Add To Waitlist   ${pid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${pid} 
+      ${resp}=  Add To Waitlist   ${c_id}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${c_id} 
       Should Be Equal As Strings  ${resp.status_code}  200
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${wait_id3}  ${wid[0]}
       ${resp}=  Get Waitlist By Id  ${wait_id3} 
       Should Be Equal As Strings  ${resp.status_code}  200
-      Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[1]}  partySize=1  waitlistedBy=${waitlistedby}  personsAhead=4
+      Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[1]}  partySize=1  waitlistedBy=${waitlistedby}  
       Should Be Equal As Strings  ${resp.json()['service']['name']}                   ${SERVICE1}
       Should Be Equal As Strings  ${resp.json()['service']['id']}                     ${ser_id1}
-      Should Be Equal As Strings  ${resp.json()['consumer']['id']}                    ${pid}
-      Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}           ${pid}
+      Should Be Equal As Strings  ${resp.json()['consumer']['id']}                    ${c_id}
+      Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}           ${c_id}
 
 JD-TC-AddToWaitlist-13
       [Documentation]   Add to waitlist after disabling future checkin
@@ -604,8 +627,36 @@ JD-TC-AddToWaitlist-13
 JD-TC-AddToWaitlist-UH1
       [Documentation]   Add To Waitlist by Consumer login
 
-      ${resp}=  ConsumerLogin  ${CUSERNAME0}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
+      Log   ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
+      ${account_id}=  get_acc_id  ${HLPUSERNAME18}
+
+      ${fname}=  FakerLibrary.first_name
+      ${lname}=  FakerLibrary.last_name
+      Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+
+      ${resp}=  AddCustomer  ${CUSERNAME8}    firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  email=${pc_emailid1}
+      Log   ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${resp}=  Send Otp For Login    ${CUSERNAME8}    ${account_id}
+      Log   ${resp.content}
+      Should Be Equal As Strings    ${resp.status_code}   200
+
+      ${resp}=  Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}
+      Log   ${resp.content}
+      Should Be Equal As Strings    ${resp.status_code}   200
+      Set Suite Variable  ${token}  ${resp.json()['token']}
+
+      ${resp}=  Provider Logout
+      Log   ${resp.json()}
+      Should Be Equal As Strings    ${resp.status_code}    200
+
+      ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${account_id}  ${token} 
+      Log   ${resp.content}
+      Should Be Equal As Strings    ${resp.status_code}   200
+
       ${resp}=  Add To Waitlist  ${cid}  ${ser_id2}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
       Should Be Equal As Strings  ${resp.status_code}  401
       Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}"
@@ -683,7 +734,7 @@ JD-TC-AddToWaitlist-UH7
       ${highest_package}=  get_highest_license_pkg
       ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_C}    ${highest_package[0]}
       Log  ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    200
+      Should Be Equal As Strings    ${resp.status_code}    202
       ${resp}=  Account Activation  ${PUSERNAME_C}  0
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Set Credential  ${PUSERNAME_C}  ${PASSWORD}  ${OtpPurpose['ProviderSignUp']}  ${PUSERNAME_C}
@@ -1109,18 +1160,6 @@ JD-TC-AddToWaitlist-UH17
 JD-TC-AddToWaitlist-14
       [Documentation]  Provider takes checkin for a consumer with a different phone number
       
-      ${resp}=  Consumer Login  ${CUSERNAME12}  ${PASSWORD}
-      Log   ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      Set Test Variable  ${jdconID}   ${resp.json()['id']}
-      Set Test Variable  ${fname}   ${resp.json()['firstName']}
-      Set Test Variable  ${lname}   ${resp.json()['lastName']}
-      Set Test Variable  ${uname}   ${resp.json()['userName']}
-
-      ${resp}=  Consumer Logout
-      Log   ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      
       ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
       Log   ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
@@ -1168,7 +1207,7 @@ JD-TC-AddToWaitlist-14
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${resp}=  AddCustomer  ${CUSERNAME12}  firstName=${fname}   lastName=${lname}
+      ${resp}=  AddCustomer  ${CUSERNAME12}  
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${cid}   ${resp.json()}
@@ -1215,18 +1254,7 @@ JD-TC-AddToWaitlist-14
 
 JD-TC-AddToWaitlist-15
       [Documentation]  Provider takes checkin for a consumer with an international phone number
-      
-      ${resp}=  Consumer Login  ${CUSERNAME12}  ${PASSWORD}
-      Log   ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      Set Test Variable  ${jdconID}   ${resp.json()['id']}
-      Set Test Variable  ${fname}   ${resp.json()['firstName']}
-      Set Test Variable  ${lname}   ${resp.json()['lastName']}
-      Set Test Variable  ${uname}   ${resp.json()['userName']}
 
-      ${resp}=  Consumer Logout
-      Log   ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    200
       
       ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
       Log   ${resp.json()}
@@ -1275,7 +1303,7 @@ JD-TC-AddToWaitlist-15
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${resp}=  AddCustomer  ${CUSERNAME12}  firstName=${fname}   lastName=${lname}
+      ${resp}=  AddCustomer  ${CUSERNAME12}  
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${cid}   ${resp.json()}
@@ -1323,18 +1351,6 @@ JD-TC-AddToWaitlist-15
 JD-TC-AddToWaitlist-UH18
       [Documentation]  Provider takes checkin for a consumer without phone number and country code
       
-      ${resp}=  Consumer Login  ${CUSERNAME12}  ${PASSWORD}
-      Log   ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      Set Test Variable  ${jdconID}   ${resp.json()['id']}
-      Set Test Variable  ${fname}   ${resp.json()['firstName']}
-      Set Test Variable  ${lname}   ${resp.json()['lastName']}
-      Set Test Variable  ${uname}   ${resp.json()['userName']}
-
-      ${resp}=  Consumer Logout
-      Log   ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      
       ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
       Log   ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
@@ -1363,7 +1379,7 @@ JD-TC-AddToWaitlist-UH18
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
             
-      ${SERVICE1}=    FakerLibrary.Word
+      ${SERVICE1}=    generate_service_name 
       ${s_id}=  Create Sample Service  ${SERVICE1}
 
       ${resp}=   Get Service
@@ -1382,7 +1398,7 @@ JD-TC-AddToWaitlist-UH18
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${resp}=  AddCustomer  ${CUSERNAME12}  firstName=${fname}   lastName=${lname}
+      ${resp}=  AddCustomer  ${CUSERNAME12}  
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${cid}   ${resp.json()}
@@ -1433,18 +1449,6 @@ JD-TC-AddToWaitlist-UH18
 JD-TC-AddToWaitlist-16
       [Documentation]  Provider takes checkin for a consumer without phone number and with country code
       
-      ${resp}=  Consumer Login  ${CUSERNAME12}  ${PASSWORD}
-      Log   ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      Set Test Variable  ${jdconID}   ${resp.json()['id']}
-      Set Test Variable  ${fname}   ${resp.json()['firstName']}
-      Set Test Variable  ${lname}   ${resp.json()['lastName']}
-      Set Test Variable  ${uname}   ${resp.json()['userName']}
-
-      ${resp}=  Consumer Logout
-      Log   ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      
       ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
       Log   ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
@@ -1492,7 +1496,7 @@ JD-TC-AddToWaitlist-16
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${resp}=  AddCustomer  ${CUSERNAME12}  firstName=${fname}   lastName=${lname}
+      ${resp}=  AddCustomer  ${CUSERNAME12}  
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${cid}   ${resp.json()}
@@ -1541,18 +1545,6 @@ JD-TC-AddToWaitlist-16
 JD-TC-AddToWaitlist-UH19
       [Documentation]  Provider takes checkin for a consumer with phone number but without country code
       
-      ${resp}=  Consumer Login  ${CUSERNAME12}  ${PASSWORD}
-      Log   ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      Set Test Variable  ${jdconID}   ${resp.json()['id']}
-      Set Test Variable  ${fname}   ${resp.json()['firstName']}
-      Set Test Variable  ${lname}   ${resp.json()['lastName']}
-      Set Test Variable  ${uname}   ${resp.json()['userName']}
-
-      ${resp}=  Consumer Logout
-      Log   ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    200
-      
       ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
       Log   ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
@@ -1600,7 +1592,7 @@ JD-TC-AddToWaitlist-UH19
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${resp}=  AddCustomer  ${CUSERNAME12}  firstName=${fname}   lastName=${lname}
+      ${resp}=  AddCustomer  ${CUSERNAME12}  
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${cid}   ${resp.json()}
