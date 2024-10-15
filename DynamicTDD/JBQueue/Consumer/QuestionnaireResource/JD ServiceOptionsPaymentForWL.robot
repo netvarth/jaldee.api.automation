@@ -181,7 +181,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-1
     END
     Set Suite Variable   ${s_id}  
 
-    # clear_queue   ${PUSERNAME101}
+    clear_queue   ${PUSERNAME101}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -248,7 +248,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-1
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=  Add To Waitlist Consumers  ${account_id}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${account_id}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
           
@@ -394,7 +394,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-2
     END
     Set Suite Variable   ${s_id}  
 
-    # clear_queue   ${PUSERNAME106}
+    clear_queue   ${PUSERNAME106}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -461,7 +461,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-2
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=  Add To Waitlist Consumers  ${account_id2}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${account_id2}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
           
@@ -650,7 +650,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-3
     END
     Set Suite Variable   ${s_id1}  
 
-    # clear_queue   ${PUSERNAME108}
+    clear_queue   ${PUSERNAME108}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -702,7 +702,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-3
     Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=  Add To Waitlist Consumers  ${account_id}  ${q_id}  ${DAY1}  ${s_id1}  ${cnote}  ${bool[0]}  ${self}  
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${account_id}  ${q_id}  ${DAY1}  ${s_id1}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
           
@@ -958,7 +958,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-4
     END
     Set Suite Variable   ${s_id2}  
 
-    # clear_queue   ${PUSERNAME109}
+    clear_queue   ${PUSERNAME109}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1010,7 +1010,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-4
     Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=  Add To Waitlist Consumers  ${account_id}  ${q_id}  ${DAY1}  ${s_id2}  ${cnote}  ${bool[0]}  ${self}  
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${account_id}  ${q_id}  ${DAY1}  ${s_id2}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
           
@@ -1273,7 +1273,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-5
     END
     Set Suite Variable   ${s_id3}  
 
-    # clear_queue   ${PUSERNAME110}
+    clear_queue   ${PUSERNAME110}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1325,7 +1325,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-5
     Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=  Add To Waitlist Consumers  ${account_id}  ${q_id}  ${DAY1}  ${s_id3}  ${cnote}  ${bool[0]}  ${self}  
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${account_id}  ${q_id}  ${DAY1}  ${s_id3}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
           

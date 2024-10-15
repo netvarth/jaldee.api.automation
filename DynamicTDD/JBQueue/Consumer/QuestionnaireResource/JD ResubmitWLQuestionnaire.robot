@@ -225,7 +225,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-1
     END
     Set Suite Variable   ${s_id}  
 
-    # clear_queue   ${PUSERNAME21}
+    clear_queue   ${PUSERNAME21}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -294,7 +294,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-1
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=  Add To Waitlist Consumers  ${account_id}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${account_id}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
           
@@ -375,7 +375,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-2
     END
     Set Suite Variable   ${s_id}  
 
-    # clear_queue   ${PUSERNAME21}
+    clear_queue   ${PUSERNAME21}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -425,7 +425,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-2
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=  Add To Waitlist Consumers  ${account_id}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${account_id}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
           
@@ -523,7 +523,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-2
 #     END
 #     Set Suite Variable   ${s_id}  
 
-#     # clear_queue   ${PUSERNAME21}
+#     clear_queue   ${PUSERNAME21}
 
 #     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -670,7 +670,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-4
     END
     Set Suite Variable   ${s_id}  
 
-    # clear_queue   ${PUSERNAME21}
+    clear_queue   ${PUSERNAME21}
     
     ${list}=  Create List  1  2  3  4  5  6  7
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -858,7 +858,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-5
     END
     Set Suite Variable   ${s_id}  
 
-    # clear_queue   ${PUSERNAME21}
+    clear_queue   ${PUSERNAME21}
 
     ${list}=  Create List  1  2  3  4  5  6  7
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1045,7 +1045,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-UH1
     END
     Set Suite Variable   ${s_id}  
 
-    # clear_queue   ${PUSERNAME21}
+    clear_queue   ${PUSERNAME21}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1225,7 +1225,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-UH2
     END
     Set Suite Variable   ${s_id}  
 
-    # clear_queue   ${PUSERNAME21}
+    clear_queue   ${PUSERNAME21}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1289,7 +1289,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-UH2
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=  Add To Waitlist Consumers  ${account_id}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${account_id}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -1380,7 +1380,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-UH3
     END
     Set Suite Variable   ${s_id}  
 
-    # clear_queue   ${PUSERNAME21}
+    clear_queue   ${PUSERNAME21}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1444,7 +1444,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-UH3
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=  Add To Waitlist Consumers  ${account_id}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${account_id}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -1631,9 +1631,9 @@ JD-TC-ResubmitQuestionnaireForWaitlist-6
     END
     Set Suite Variable   ${s_id}  
 
-    # clear_queue   ${PUSERNAME21}
+    clear_queue   ${PUSERNAME21}
 
-    ${resp}=  AddCustomer  ${CUSERNAME22}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
+    ${resp}=  AddCustomer  ${CUSERNAME21}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid}  ${resp.json()}
@@ -1681,21 +1681,21 @@ JD-TC-ResubmitQuestionnaireForWaitlist-6
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Send Otp For Login    ${CUSERNAME22}    ${account_id}
+    ${resp}=    Send Otp For Login    ${CUSERNAME21}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${CUSERNAME22}   ${OtpPurpose['Authentication']}
+    ${resp}=    Verify Otp For Login   ${CUSERNAME21}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME22}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME21}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=  Add To Waitlist Consumers  ${account_id}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${account_id}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -1724,7 +1724,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.ProconLogin  ${CUSERNAME22}   ${account_id}  ${token}
+    ${cookie}  ${resp}=  Imageupload.ProconLogin  ${CUSERNAME21}   ${account_id}  ${token}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
@@ -1822,7 +1822,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-7
     END
     Set Suite Variable   ${s_id}  
 
-    # clear_queue   ${PUSERNAME21}
+    clear_queue   ${PUSERNAME21}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     

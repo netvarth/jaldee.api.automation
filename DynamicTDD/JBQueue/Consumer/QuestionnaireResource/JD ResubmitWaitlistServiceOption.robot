@@ -201,7 +201,7 @@ JD-TC-ResubmitServiceOptionsForWaitlist-1
     END
     Set Suite Variable   ${s_id}  
 
-    # clear_queue   ${HLPUSERNAME10}
+    clear_queue   ${HLPUSERNAME10}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -270,7 +270,7 @@ JD-TC-ResubmitServiceOptionsForWaitlist-1
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=  Add To Waitlist Consumers  ${account_id}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
+    ${resp}=  Add To Waitlist Consumers  ${cid}  ${account_id}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
           
@@ -361,7 +361,7 @@ JD-TC-ResubmitServiceOptionsForWaitlist-2
     END
     Set Suite Variable   ${s_id}  
 
-    # clear_queue   ${HLPUSERNAME10}
+    clear_queue   ${HLPUSERNAME10}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -402,10 +402,10 @@ JD-TC-ResubmitServiceOptionsForWaitlist-2
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
     Set Suite Variable  ${Questionnaireid}  ${qns.json()['questionnaireId']}
 
-    # ${resp}=  AddCustomer  ${CUSERNAME36}   firstName=${fname}   lastName=${lname}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${cid}  ${resp.json()}
+    ${resp}=  AddCustomer  ${CUSERNAME36}   firstName=${fname}   lastName=${lname}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${cid}  ${resp.json()}
     
     ${description}=  FakerLibrary.sentence
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${description}   ${bool[1]}  ${cid}
@@ -417,7 +417,7 @@ JD-TC-ResubmitServiceOptionsForWaitlist-2
     ${resp}=   Get Waitlist EncodedId    ${wid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId}=  Set Variable   ${resp.json()}
+    ${encId}=  Set Variable   ${resp.json()} 
 
     ${resp}=  Get Waitlist By Id  ${wid1}
     Log  ${resp.content}
@@ -444,7 +444,7 @@ JD-TC-ResubmitServiceOptionsForWaitlist-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME36}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.ProconLogin  ${CUSERNAME36}   ${account_id}  ${token}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
@@ -503,7 +503,7 @@ JD-TC-ResubmitServiceOptionsForWaitlist-3
     END
     Set Suite Variable   ${s_id}  
 
-    # clear_queue   ${HLPUSERNAME10}
+    clear_queue   ${HLPUSERNAME10}
     
     ${list}=  Create List  1  2  3  4  5  6  7
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -552,10 +552,10 @@ JD-TC-ResubmitServiceOptionsForWaitlist-3
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
     Set Suite Variable  ${Questionnaireid}  ${qns.json()['questionnaireId']}
 
-    # ${resp}=  AddCustomer  ${CUSERNAME36}   firstName=${fname}   lastName=${lname}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${cid}  ${resp.json()}
+    ${resp}=  AddCustomer  ${CUSERNAME36}   firstName=${fname}   lastName=${lname}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${cid}  ${resp.json()}
     
     ${description}=  FakerLibrary.sentence
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${description}   ${bool[1]}  ${cid}
@@ -593,10 +593,9 @@ JD-TC-ResubmitServiceOptionsForWaitlist-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME36}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME36}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Service Options By Service  ${s_id}  ${consumer}  ${account_id}
     Log  ${resp.content}
@@ -610,7 +609,7 @@ JD-TC-ResubmitServiceOptionsForWaitlist-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME36}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.ProconLogin  ${CUSERNAME36}   ${account_id}  ${token}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
@@ -668,7 +667,7 @@ JD-TC-ResubmitServiceOptionsForWaitlist-4
     END
     Set Suite Variable   ${s_id}  
 
-    # clear_queue   ${HLPUSERNAME10}
+    clear_queue   ${HLPUSERNAME10}
 
     ${list}=  Create List  1  2  3  4  5  6  7
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -767,10 +766,9 @@ JD-TC-ResubmitServiceOptionsForWaitlist-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME36}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME36}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Service Options By Service  ${s_id}  ${consumer}  ${account_id}
     Log  ${resp.content}
@@ -784,7 +782,7 @@ JD-TC-ResubmitServiceOptionsForWaitlist-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME36}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.ProconLogin  ${CUSERNAME36}   ${account_id}  ${token}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
@@ -842,7 +840,7 @@ JD-TC-ResubmitServiceOptionsForWaitlist-UH1
     END
     Set Suite Variable   ${s_id}  
 
-    # clear_queue   ${HLPUSERNAME10}
+    clear_queue   ${HLPUSERNAME10}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -925,10 +923,9 @@ JD-TC-ResubmitServiceOptionsForWaitlist-UH1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME36}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME36}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Service Options By Service  ${s_id}  ${consumer}  ${account_id}
     Log  ${resp.content}
@@ -942,7 +939,7 @@ JD-TC-ResubmitServiceOptionsForWaitlist-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME36}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.ProconLogin  ${CUSERNAME36}   ${account_id}  ${token}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
