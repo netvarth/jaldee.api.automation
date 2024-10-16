@@ -1936,7 +1936,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-11
 
     FOR   ${a}  IN RANGE   15
 
-        ${PO_Number}    Generate random string    4    0123456789
+        ${PO_Number}    Generate random string    4    ${digits} 
         ${PO_Number}    Convert To Integer  ${PO_Number}
         ${CUSERPH}=  Evaluate  ${CUSERNAME}+${PO_Number}+${a}
         Set Test Variable  ${CUSERPH${a}}  ${CUSERPH}

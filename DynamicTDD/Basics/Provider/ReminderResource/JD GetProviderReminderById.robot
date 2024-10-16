@@ -95,7 +95,7 @@ JD-TC-GetProviderReminderById-2
 
     ${ufname1}=  FakerLibrary.name
     ${ulname1}=  FakerLibrary.last_name
-    ${PO_Number}    Generate random string    7    0123456789
+    ${PO_Number}    Generate random string    7    ${digits} 
     ${p_num}    Convert To Integer  ${PO_Number}
     ${PUSERNAME}=  Evaluate  ${PUSERNAME}+${p_num}
     Set Test Variable  ${USERNAME1}  ${PUSERNAME}
@@ -164,7 +164,7 @@ JD-TC-GetProviderReminderById-3
 
     ${ufname1}=  FakerLibrary.name
     ${ulname1}=  FakerLibrary.last_name
-    ${PO_Number}    Generate random string    7    0123456789
+    ${PO_Number}    Generate random string    7    ${digits} 
     ${p_num}    Convert To Integer  ${PO_Number}
     ${PUSERNAME}=  Evaluate  ${PUSERNAME}+${p_num}
     Set Test Variable  ${USERNAME1}  ${PUSERNAME}
@@ -176,7 +176,7 @@ JD-TC-GetProviderReminderById-3
 
     ${ufname2}=  FakerLibrary.name
     ${ulname2}=  FakerLibrary.last_name
-    ${PO_Number}    Generate random string    7    0123456789
+    ${PO_Number}    Generate random string    7    ${digits} 
     ${p_num}    Convert To Integer  ${PO_Number}
     ${PUSERNAME}=  Evaluate  ${PUSERNAME}+${p_num}
     Set Test Variable  ${USERNAME2}  ${PUSERNAME}
@@ -541,7 +541,7 @@ JD-TC-GetProviderReminderById-9
 
     ${ufname1}=  FakerLibrary.name
     ${ulname1}=  FakerLibrary.last_name
-    ${PO_Number}    Generate random string    7    0123456789
+    ${PO_Number}    Generate random string    7    ${digits} 
     ${p_num}    Convert To Integer  ${PO_Number}
     ${PUSERNAME}=  Evaluate  ${PUSERNAME}+${p_num}
     Set Test Variable  ${USERNAME1}  ${PUSERNAME}
@@ -553,7 +553,7 @@ JD-TC-GetProviderReminderById-9
 
     ${ufname2}=  FakerLibrary.name
     ${ulname2}=  FakerLibrary.last_name
-    ${PO_Number}    Generate random string    7    0123456789
+    ${PO_Number}    Generate random string    7    ${digits} 
     ${p_num}    Convert To Integer  ${PO_Number}
     ${PUSERNAME}=  Evaluate  ${PUSERNAME}+${p_num}
     Set Test Variable  ${USERNAME2}  ${PUSERNAME}

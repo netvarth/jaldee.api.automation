@@ -243,7 +243,7 @@ JD-TC-UpdateProviderConsumer-3
 
     ${accountId}=    get_acc_id       ${PUSERNAME16}
     
-    ${alt_Number}    Generate random string    5    0123456789
+    ${alt_Number}    Generate random string    5    ${digits} 
     ${alt_Number}    Convert To Integer  ${alt_Number}
     ${PO_Number}=  random_phone_num_generator  subscriber_number_length=10  cc=2
     Log Many  ${PO_Number}

@@ -19,7 +19,12 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 #Suite Setup       Run Keyword    wlsettings
 *** Variables ***
 @{service_duration}  10  20  30   40   50
-${ZOOM_url}    https://zoom.us/j/{}?pwd=THVLcTBZa2lESFZQbU9DQTQrWUxWZz09
+# ${ZOOM_url}    https://zoom.us/j/{}?pwd=THVLcTBZa2lESFZQbU9DQTQrWUxWZz09
+# # https://zoom.us/j/96372238873?pwd=1rkXN1yAmbY4aBx4doWpFy6qA36gXF.1
+# # https://zoom.us/j/97985866065?pwd=yqPeWXMVIuAwj1huBHs31DK3YJcBql.1
+# # https://zoom.us/j/93601570300?pwd=msppAk2CRbfW0hXZEKT2JpuJKd2jW3.1
+${ZOOM_URL}    https://zoom.us/j/{meeting_id}?pwd={passwd}
+${GoogleMeet_url}    https://meet.google.com/abc-mnop-xyz
 ${self}     0
 @{empty_list}
 ${zero_amt}  ${0.0}
@@ -738,7 +743,11 @@ JD-TC-CreateService-25
 JD-TC-CreateService-26
     [Documentation]   Create a donation service
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${licid}  ${licname}=  get_highest_license_pkg
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_D}=  Provider Signup without Profile  LicenseId=${licid}
+    Set Suite Variable  ${PUSERNAME_D}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${min_don_amt1}=   Random Int   min=100   max=500
@@ -790,7 +799,11 @@ JD-TC-CreateService-27
 JD-TC-CreateService-28
     [Documentation]   Create a Virtual service
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${licid}  ${licname}=  get_highest_license_pkg
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_E}=  Provider Signup without Profile  LicenseId=${licid}
+    Set Suite Variable  ${PUSERNAME_E}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Waitlist Settings
@@ -801,11 +814,20 @@ JD-TC-CreateService-28
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['virtualService']}==${bool[0]}   
+        ${resp}=   Enable Disable Virtual Service   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     ${Description1}=    FakerLibrary.sentences
-    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_A}   countryCode=${countryCodes[0]}  status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_E}   countryCode=${countryCodes[0]}  status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
     ${virtualCallingModes}=  Create List  ${VScallingMode1}
-    Set Test Variable  ${vstype}  ${vservicetype[1]}
+    # Set Test Variable  ${vstype}  ${vservicetype[1]}
+    ${vstype}=   Random Element   ${vservicetype}
 
     ${description}=    FakerLibrary.sentence
     ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
@@ -818,12 +840,14 @@ JD-TC-CreateService-28
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['serviceType']}   ${ServiceType[0]}
+    Should Be Equal As Strings  ${resp.json()['virtualServiceType']}   ${vstype}
+    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['callingMode']}   ${CallingModes[1]}
 
 
 JD-TC-CreateService-29
     [Documentation]   Create a Virtual service in a department
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Waitlist Settings
@@ -858,9 +882,9 @@ JD-TC-CreateService-29
     Set Suite Variable  ${dep_id1}  ${resp.json()}
     
     ${Description1}=    FakerLibrary.sentences
-    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_A}   countryCode=${countryCodes[0]}  status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_E}   countryCode=${countryCodes[0]}  status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
     ${virtualCallingModes}=  Create List  ${VScallingMode1}
-    Set Test Variable  ${vstype}  ${vservicetype[1]}
+    ${vstype}=   Random Element   ${vservicetype}
 
     ${description}=    FakerLibrary.sentence
     ${Total1}=   Random Int   min=100   max=500
@@ -887,7 +911,7 @@ JD-TC-CreateService-29
 JD-TC-CreateService-30
     [Documentation]   Create a Virtual service with prepayment
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Waitlist Settings
@@ -900,9 +924,9 @@ JD-TC-CreateService-30
     END
     
     ${Description1}=    FakerLibrary.sentences
-    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_A}   countryCode=${countryCodes[0]}  status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_E}   countryCode=${countryCodes[0]}  status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
     ${virtualCallingModes}=  Create List  ${VScallingMode1}
-    Set Test Variable  ${vstype}  ${vservicetype[1]}
+    ${vstype}=   Random Element   ${vservicetype}
 
     ${description}=    FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
@@ -921,19 +945,19 @@ JD-TC-CreateService-30
 JD-TC-CreateService-31
     [Documentation]   Create a Virtual service with whatsapp only.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${Description1}=    FakerLibrary.sentences
-    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_A}   countryCode=${countryCodes[0]}  status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_E}   countryCode=${countryCodes[0]}  status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
     ${virtualCallingModes}=  Create List  ${VScallingMode1}
-    Set Test Variable  ${vstype}  ${vservicetype[1]}
+    ${vstype}=   Random Element   ${vservicetype}
 
     ${description}=    FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
     ${SERVICE1}=    generate_service_name
-    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}  minPrePaymentAmount=${min_pre}  virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}  virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -941,10 +965,52 @@ JD-TC-CreateService-31
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['serviceType']}   ${ServiceType[0]}
+    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['callingMode']}   ${CallingModes[1]}
 
 
 JD-TC-CreateService-32
     [Documentation]   Create two virtual services for a provider using same virtual calling mode.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${Description1}=    FakerLibrary.sentences
+    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_E}   countryCode=${countryCodes[0]}  status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${virtualCallingModes}=  Create List  ${VScallingMode1}
+    ${vstype}=   Random Element   ${vservicetype}
+
+    ${description}=    FakerLibrary.sentence
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
+    ${SERVICE1}=    generate_service_name
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}  virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${resp.json()}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['serviceType']}   ${ServiceType[0]}
+    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['callingMode']}   ${CallingModes[1]}
+
+    ${Description1}=    FakerLibrary.sentences
+    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_A}   countryCode=${countryCodes[0]}  status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${virtualCallingModes}=  Create List  ${VScallingMode1}
+    ${vstype}=   Random Element   ${vservicetype}
+
+    ${description}=    FakerLibrary.sentence
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
+    ${SERVICE2}=    generate_service_name
+    ${resp}=  Create Service  ${SERVICE2}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}  virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${resp.json()}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['serviceType']}   ${ServiceType[0]}
+    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['callingMode']}   ${CallingModes[1]}
 
 
 JD-TC-CreateService-UH1

@@ -215,6 +215,8 @@ JD-TC-Take Appointment-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+
+
 JD-TC-Take Appointment-4
 
     [Documentation]  Provider takes appointment for consumer and consumer's family member
@@ -268,6 +270,8 @@ JD-TC-Take Appointment-4
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+
 
 JD-TC-Take Appointment-5
 
@@ -392,6 +396,8 @@ JD-TC-Take Appointment-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+
+
 JD-TC-Take Appointment-8
 
     [Documentation]  Provider takes appointment for same consumer for 2 different services
@@ -447,6 +453,8 @@ JD-TC-Take Appointment-8
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+
 
 JD-TC-Take Appointment-9
 
@@ -504,7 +512,7 @@ JD-TC-Take Appointment-10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME345}
-    # clear_location
+
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2234,7 +2242,7 @@ JD-TC-Take Appointment-22
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME345}
     clear_customer   ${PUSERNAME345}
-    # clear_location
+
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2333,7 +2341,7 @@ JD-TC-Take Appointment-22
 JD-TC-Take Appointment-23
 
     [Documentation]  Provider takes appointment for provider consumer when onlinePresence is enabled and checks it in consumer side
-    # clear_location
+
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -2457,7 +2465,7 @@ JD-TC-Take Appointment-23
 JD-TC-Take Appointment-24
 
     [Documentation]  Provider takes appointment for jaldee consumer and family member when onlinePresence and walkinConsumerBecomesJdCons is enabled and checks it in consumer side
-    # clear_location
+
     ${resp}=  Encrypted Provider Login  ${PUSERNAME345}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -2591,7 +2599,7 @@ JD-TC-Take Appointment-25
     ${resp}=  Encrypted Provider Login  ${PUSERNAME345}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_location
+
     # clear_service   ${PUSERNAME345}
     # clear_location  ${PUSERNAME345}
     clear_customer   ${PUSERNAME345}
@@ -2659,7 +2667,7 @@ JD-TC-Take Appointment-26
     ${resp}=  Encrypted Provider Login  ${PUSERNAME345}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_location
+
     # clear_service   ${PUSERNAME345}
     # clear_location  ${PUSERNAME345}
     clear_customer   ${PUSERNAME345}
@@ -2765,7 +2773,7 @@ JD-TC-Take Appointment-27
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_location
+
     # clear_service   ${PUSERNAME_A}
     # clear_location  ${PUSERNAME_A}
     clear_customer   ${PUSERNAME_A}
@@ -2851,7 +2859,7 @@ JD-TC-Take Appointment-28
     ${resp}=  Encrypted Provider Login  ${PUSERNAME345}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_location
+
     # clear_service   ${PUSERNAME345}
     # clear_location  ${PUSERNAME345}
     clear_customer   ${PUSERNAME345}
@@ -2965,7 +2973,7 @@ JD-TC-Take Appointment-29
     ${resp}=  Encrypted Provider Login  ${PUSERNAME345}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_location
+
     # clear_service   ${PUSERNAME345}
     # clear_location  ${PUSERNAME345}
     clear_customer   ${PUSERNAME345}
@@ -3126,7 +3134,7 @@ JD-TC-Take Appointment-30
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME345}  ${PASSWORD}
     Log   ${resp.json()}
-    # clear_locationl As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME345}
     # clear_location  ${PUSERNAME345}
     clear_customer   ${PUSERNAME345}
@@ -3197,7 +3205,7 @@ JD-TC-Take Appointment-31
     ${resp}=  Encrypted Provider Login  ${PUSERNAME345}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_location
+
     # clear_service   ${PUSERNAME345}
     # clear_location  ${PUSERNAME345}
     clear_customer   ${PUSERNAME345}
@@ -3268,7 +3276,7 @@ JD-TC-Take Appointment-32
     ${resp}=  Encrypted Provider Login  ${PUSERNAME345}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_location
+
     # clear_service   ${PUSERNAME345}
     # clear_location  ${PUSERNAME345}
     clear_customer   ${PUSERNAME345}
@@ -3352,7 +3360,7 @@ JD-TC-Take Appointment-33
     ${resp}=  Encrypted Provider Login  ${PUSERNAME345}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_location
+
     # clear_service   ${PUSERNAME345}
     # clear_location  ${PUSERNAME345}
     clear_customer   ${PUSERNAME345}
@@ -3436,7 +3444,7 @@ JD-TC-Take Appointment-34
     ${resp}=  Encrypted Provider Login  ${PUSERNAME345}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_location
+
     # clear_service   ${PUSERNAME345}
     clear_customer   ${PUSERNAME345}
 
@@ -3511,7 +3519,6 @@ JD-TC-Take Appointment-34
     Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-Take Appointment-35
-    # clear_location
     [Documentation]  take appointment for future after disabling future appointment
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME345}  ${PASSWORD}
@@ -3590,7 +3597,7 @@ JD-TC-Take Appointment-35
     Should Be Equal As Strings  ${resp.status_code}  200
    
 JD-TC-Take Appointment-36
-    # clear_location
+
     [Documentation]  take appointments for service with prepayment but prepayment not done by consumer and try to take appointment for another slot
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME345}  ${PASSWORD}
@@ -3766,7 +3773,7 @@ JD-TC-Take Appointment-36
     Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-Take Appointment-37
-    # clear_location
+
     [Documentation]  take appointments for service with prepayment but prepayment not done by consumer, cancel that appointment and try to take appointment for another slot
    
     ${resp}=  Encrypted Provider Login  ${PUSERNAME345}  ${PASSWORD}
@@ -3978,7 +3985,7 @@ JD-TC-Take Appointment-37
             Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
         END
     END
-    # clear_location  ${slots}    ${slot1}
+    Should Contain  ${slots}    ${slot1}
 
     ${resp}=  Provider Logout
     Log   ${resp.json()}
@@ -4158,7 +4165,7 @@ JD-TC-Take Appointment-UH2
 
 JD-TC-Take Appointment-UH3
 
-    # clear_location]  take appointment for past date
+    [Documentation]  take appointment for past date
 
     comment  UH3 testcase moved to time resource 
 
@@ -4223,7 +4230,7 @@ JD-TC-Take Appointment-UH4
 
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
-    # clear_locationkerLibrary.word
+    ${cnote}=   FakerLibrary.word
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY3}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -4310,7 +4317,7 @@ JD-TC-Take Appointment-UH6
 
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
-    # clear_locationkerLibrary.word
+    ${cnote}=   FakerLibrary.word
     ${resp}=  Take Appointment For Consumer  ${cid}  ${ser_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
@@ -4395,7 +4402,7 @@ JD-TC-Take Appointment-UH9
 
     ${apptfor1}=  Create Dictionary  id=${rand int}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
-    # clear_locationkerLibrary.word
+    ${cnote}=   FakerLibrary.word
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -4412,7 +4419,7 @@ JD-TC-Take Appointment-UH10
     # clear_service   ${PUSERNAME345}
     clear_customer   ${PUSERNAME345}
 
-    $${resp}=    Get Locations
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
@@ -4462,7 +4469,7 @@ JD-TC-Take Appointment-UH10
           
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
-    # clear_location
+
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -4529,7 +4536,7 @@ JD-TC-Take Appointment-UH11
 
     ${resp}=  AddCustomer  ${CUSERNAME8}  
     Log   ${resp.json()}
-    # clear_locationl As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
     ${resp}=  Disable Location  ${lid}
@@ -4585,7 +4592,7 @@ JD-TC-Take Appointment-UH12
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    # clear_locationdom Element  ${bool}
+    ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -4640,7 +4647,7 @@ JD-TC-Take Appointment-UH13
 
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
-    # clear_locationntent}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
@@ -4711,7 +4718,7 @@ JD-TC-Take Appointment-UH14
     ${SERVICE1}=    FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
-    # clear_locationFakerLibrary.Random Int  min=1  max=1
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
@@ -4784,7 +4791,7 @@ JD-TC-Take Appointment-UH15
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
-    # clear_locationFakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -4893,7 +4900,9 @@ JD-TC-Take Appointment-UH16
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][0]['time']}
 
-    # clear_locationustomer  ${CUSERNAME8} 
+    # clear_customer  ${CUSERNAME8} 
+
+    ${resp}=  AddCustomer  ${CUSERNAME8}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
@@ -4972,7 +4981,7 @@ JD-TC-Take Appointment-UH18
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
-    # clear_location
+
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -5037,7 +5046,7 @@ JD-TC-Take Appointment-UH19
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # clear_locationable  ${tz}  ${resp.json()['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     # clear_appt_schedule   ${PUSERNAME345}
     
@@ -5103,7 +5112,7 @@ JD-TC-Take Appointment-UH20
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    # clear_location
+
     # clear_appt_schedule   ${PUSERNAME345}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -5202,7 +5211,7 @@ JD-TC-Take Appointment-UH21
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
-    # clear_locationkerLibrary.word
+    ${cnote}=   FakerLibrary.word
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -5281,7 +5290,7 @@ JD-TC-Take Appointment-UH22
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
-    # clear_location
+
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -5362,7 +5371,7 @@ JD-TC-Take Appointment-UH23
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id1}  ${resp.json()}
 
-    # clear_locationAppointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id}
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
@@ -5468,7 +5477,7 @@ JD-TC-Take Appointment-UH24
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    # clear_locationndom Element  ${cancelReason}
+    ${bool1}=  Random Element  ${cancelReason}
     ${resp}=     Appointment Action    ${apptStatus[4]}   ${apptid1}   cancelReason=${reason}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -5555,7 +5564,7 @@ JD-TC-Take Appointment-UH25
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # clear_location
+
     ${empty_dict}=   Create Dictionary
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY3}  ${s_id}
     Log  ${resp.json()}
@@ -5667,7 +5676,7 @@ JD-TC-Take Appointment-UH27
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
-    # clear_location
+
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
@@ -5766,7 +5775,7 @@ JD-TC-Take Appointment-UH28
     Set Test Variable  ${cid}  ${resp.json()}
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
-    # clear_locationCreate List  ${apptfor1}
+    ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
@@ -5822,7 +5831,7 @@ JD-TC-Take Appointment-40
     ${SERVICE1}=    FakerLibrary.word
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${lid}=  Create Sample Location  
-    # clear_location Location ById  ${lid}
+    ${resp}=  Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
@@ -5848,7 +5857,7 @@ JD-TC-Take Appointment-40
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${PO_Number}    Generate random string    5    0123456789
+    ${PO_Number}    Generate random string    5    ${digits} 
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${CUSERPH8}=  Evaluate  ${CUSERNAME8}+${PO_Number}
     ${cnote}=   FakerLibrary.word
@@ -5879,7 +5888,6 @@ JD-TC-Take Appointment-41
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # clear_location
     
     IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
         ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
@@ -6119,7 +6127,7 @@ JD-TC-Take Appointment-UH30
     
     ${cnote}=   FakerLibrary.word
     ${resp}=  Take Appointment For Consumer   ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor2}
-    # clear_locationon()}
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  424
     Should Be Equal As Strings   "${resp.json()}"   "${APPOINTMET_SLOT_NOT_AVAILABLE}"
   
@@ -6194,7 +6202,7 @@ JD-TC-Take Appointment-42
  
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
-    # clear_locationl As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  200
    
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log   ${resp.json()}
@@ -6260,7 +6268,7 @@ JD-TC-Take Appointment-UH31
     ${apptfor2}=  Create Dictionary  id=${cid1}   apptTime=${slot2}
     ${apptfor}=   Create List  ${apptfor1}  ${apptfor2}     
     
-    # clear_locationkerLibrary.word
+    ${cnote}=   FakerLibrary.word
     ${resp}=  Take Appointment For Consumer   ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -6338,7 +6346,7 @@ JD-TC-Take Appointment-UH32
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
-    # clear_location
+
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot2}
     ${apptfor}=   Create List  ${apptfor1}      
     
@@ -6439,7 +6447,7 @@ JD-TC-Take Appointment-43
     ${resp}=  AddCustomer  ${CUSERNAME8}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # clear_locationble  ${cid}   ${resp.json()}
+    Set Test Variable  ${cid}   ${resp.json()}
 
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -6562,7 +6570,7 @@ JD-TC-Take Appointment-UH33
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # clear_location
+
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -6747,9 +6755,9 @@ JD-TC-Take Appointment-41
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${PO_Number}    Generate random string    5    0123456789
+    ${PO_Number}    Generate random string    5    ${digits} 
     ${PO_Number}    Convert To Integer  ${PO_Number}
-    ${country_code}    Generate random string    2    0123456789
+    ${country_code}    Generate random string    2    ${digits} 
     ${country_code}    Convert To Integer  ${country_code}
     ${CUSERPH8}=  Evaluate  ${CUSERNAME8}+${PO_Number}
     ${cnote}=   FakerLibrary.word

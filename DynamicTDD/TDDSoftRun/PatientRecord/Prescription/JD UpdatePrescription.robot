@@ -566,7 +566,7 @@ JD-TC-Update Prescription-UH6
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${PO_Number}    Generate random string    4    0123456789
+    ${PO_Number}    Generate random string    4    ${digits} 
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
     clear_users  ${PUSERPH0}

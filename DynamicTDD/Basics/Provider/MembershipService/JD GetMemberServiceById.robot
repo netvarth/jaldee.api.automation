@@ -82,7 +82,7 @@ JD-TC-Get_Member_Service_By_Id-UH1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${invmem}=    Generate random string    4    0123456789
+    ${invmem}=    Generate random string    4    ${digits} 
 
     ${resp}=    Get Membership Service by id    ${invmem}
     Log  ${resp.content}
