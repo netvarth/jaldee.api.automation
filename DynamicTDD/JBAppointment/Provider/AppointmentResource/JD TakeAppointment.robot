@@ -5909,7 +5909,7 @@ JD-TC-Take Appointment-40
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${PO_Number}    Generate random string    5    0123456789
+    ${PO_Number}    Generate random string    5    ${digits} 
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${CUSERPH8}=  Evaluate  ${CUSERNAME8}+${PO_Number}
     ${cnote}=   FakerLibrary.word
@@ -6815,9 +6815,9 @@ JD-TC-Take Appointment-41
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${PO_Number}    Generate random string    5    0123456789
+    ${PO_Number}    Generate random string    5    ${digits} 
     ${PO_Number}    Convert To Integer  ${PO_Number}
-    ${country_code}    Generate random string    2    0123456789
+    ${country_code}    Generate random string    2    ${digits} 
     ${country_code}    Convert To Integer  ${country_code}
     ${CUSERPH8}=  Evaluate  ${CUSERNAME8}+${PO_Number}
     ${cnote}=   FakerLibrary.word

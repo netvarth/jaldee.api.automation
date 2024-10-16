@@ -2813,7 +2813,7 @@ JD-TC-AddMultipleAppointmentLabel-14
 
         ${j1}=  Random Int  max=${num_slots-1}
         Set Test Variable   ${slot1}   ${slots[${j1}]}
-        ${PO_Number}    Generate random string    3    0123456789
+        ${PO_Number}    Generate random string    3    ${digits} 
         ${PO_Number}    Convert To Integer  ${PO_Number}
         ${randomval}    FakerLibrary.Numerify  %%%%
         ${CUSERPH}=  Evaluate  ${CUSERNAME}+${PO_Number}+${randomval}

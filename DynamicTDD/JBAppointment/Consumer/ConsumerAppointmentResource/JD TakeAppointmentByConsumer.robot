@@ -4481,9 +4481,9 @@ JD-TC-Take Appointment-19
     ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
-    ${PO_Number}    Generate random string    5    0123456789
+    ${PO_Number}    Generate random string    5    ${digits} 
     ${PO_Number}    Convert To Integer  ${PO_Number}
-    # ${country_code}    Generate random string    2    0123456789
+    # ${country_code}    Generate random string    2    ${digits} 
     # ${country_code}    Convert To Integer  ${country_code}
     ${CUSERPH7}=  Evaluate  ${CUSERNAME7}+${PO_Number}
     ${resp}=   Take Appointment For Provider with Phone no    ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${CUSERPH7}  ${apptfor}  

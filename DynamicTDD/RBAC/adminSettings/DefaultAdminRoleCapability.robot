@@ -303,7 +303,7 @@ JD-TC-Default Admin Role Capability-10
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${PO_Number}    Generate random string    7    0123456789
+    ${PO_Number}    Generate random string    7    ${digits} 
     ${cons_num}    Convert To Integer  ${PO_Number}
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${cons_num}
     Set Suite Variable  ${CUSERPH} 

@@ -4869,9 +4869,9 @@ JD-TC-Add To WaitlistByConsumer-26
 
     # ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY1}=  get_date_by_timezone  ${tz}
-    ${PO_Number}    Generate random string    4    0123456789
+    ${PO_Number}    Generate random string    4    ${digits} 
     ${PO_Number}    Convert To Integer  ${PO_Number}
-    # ${country_code}    Generate random string    2    0123456789
+    # ${country_code}    Generate random string    2    ${digits} 
     # ${country_code}    Convert To Integer  ${country_code}
     ${CUSERPH27}=  Evaluate  ${CUSERNAME27}+${PO_Number}
     ${resp}=  Consumer Add To Waitlist with Phone no   ${pid}  ${s_id}  ${q_id}  ${DAY1}  ${CUSERPH27}  91  ${self} 

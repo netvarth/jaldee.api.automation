@@ -2103,7 +2103,7 @@ JD-TC-RemoveMultipleAppointmentLabel-11
         Verify Response  ${resp}  scheduleId=${sch_id}
         Set Test Variable   ${slot}   ${resp.json()['availableSlots'][${a}]['time']}
         
-        ${PO_Number}    Generate random string    4    0123456789
+        ${PO_Number}    Generate random string    4    ${digits} 
         ${PO_Number}    Convert To Integer  ${PO_Number}
         ${CUSERPH}=  Evaluate  ${CUSERNAME}+${PO_Number}
         Set Test Variable  ${CUSERPH${a}}  ${CUSERPH}
