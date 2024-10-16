@@ -3359,14 +3359,6 @@ JD-TC-Add To WaitlistByConsumer-UH16
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${resp}=  pyproviderlogin  ${PUSERPH3}  ${PASSWORD}
-    # Should Be Equal As Strings  ${resp}  200      
-    # @{resp}=  uploadLogoImages
-    # Should Be Equal As Strings  ${resp[1]}  200
-    # ${resp}=  Get GalleryOrlogo image  logo
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()[0]['prefix']}  logo
-
     ${resp}=  Enable Waitlist
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

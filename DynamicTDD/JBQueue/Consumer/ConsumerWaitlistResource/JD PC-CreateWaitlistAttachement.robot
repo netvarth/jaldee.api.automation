@@ -32,15 +32,15 @@ JD-TC-WaitlistAttachment-1
 
     [Documentation]   Add waitlist attachment as jpg file.
     
-    # clear_queue      ${HLPUSERNAME12}
-    # clear_location   ${HLPUSERNAME12}
-    # clear_service    ${HLPUSERNAME12}
-    clear_customer   ${HLPUSERNAME12}
+    # clear_queue      ${HLPUSERNAME6}
+    # clear_location   ${HLPUSERNAME6}
+    # clear_service    ${HLPUSERNAME6}
+    clear_customer   ${HLPUSERNAME6}
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${acc_id}=  get_acc_id  ${HLPUSERNAME12}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME6}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=   Create Sample Location
@@ -153,15 +153,15 @@ JD-TC-WaitlistAttachment-2
 
     [Documentation]   Add waitlist attachment as png file.
     
-    # clear_queue      ${HLPUSERNAME12}
-    # clear_location   ${HLPUSERNAME12}
-    # clear_service    ${HLPUSERNAME12}
-    clear_customer   ${HLPUSERNAME12}
+    # clear_queue      ${HLPUSERNAME6}
+    # clear_location   ${HLPUSERNAME6}
+    # clear_service    ${HLPUSERNAME6}
+    clear_customer   ${HLPUSERNAME6}
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${acc_id}=  get_acc_id  ${HLPUSERNAME12}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME6}
     Set Test Variable   ${acc_id} 
 
     ${resp}=   Create Sample Location
@@ -261,15 +261,15 @@ JD-TC-WaitlistAttachment-3
 
     [Documentation]   Add waitlist attachment as pdf file.
     
-    # clear_queue      ${HLPUSERNAME12}
-    # clear_location   ${HLPUSERNAME12}
-    # clear_service    ${HLPUSERNAME12}
-    clear_customer   ${HLPUSERNAME12}
+    # clear_queue      ${HLPUSERNAME6}
+    # clear_location   ${HLPUSERNAME6}
+    # clear_service    ${HLPUSERNAME6}
+    clear_customer   ${HLPUSERNAME6}
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${acc_id}=  get_acc_id  ${HLPUSERNAME12}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME6}
     Set Test Variable   ${acc_id} 
 
     ${resp}=   Create Sample Location
@@ -372,15 +372,15 @@ JD-TC-WaitlistAttachment-4
 
     [Documentation]   Add waitlist attachment by as jpeg file.
     
-    # clear_queue      ${HLPUSERNAME12}
-    # clear_location   ${HLPUSERNAME12}
-    # clear_service    ${HLPUSERNAME12}
-    clear_customer   ${HLPUSERNAME12}
+    # clear_queue      ${HLPUSERNAME6}
+    # clear_location   ${HLPUSERNAME6}
+    # clear_service    ${HLPUSERNAME6}
+    clear_customer   ${HLPUSERNAME6}
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${acc_id}=  get_acc_id  ${HLPUSERNAME12}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME6}
     Set Test Variable   ${acc_id} 
 
     ${resp}=   Create Sample Location
@@ -481,15 +481,15 @@ JD-TC-WaitlistAttachment-5
 
     [Documentation]   Add waitlist attachment by without caption.
     
-    # clear_queue      ${HLPUSERNAME12}
-    # clear_location   ${HLPUSERNAME12}
-    # clear_service    ${HLPUSERNAME12}
-    clear_customer   ${HLPUSERNAME12}
+    # clear_queue      ${HLPUSERNAME6}
+    # clear_location   ${HLPUSERNAME6}
+    # clear_service    ${HLPUSERNAME6}
+    clear_customer   ${HLPUSERNAME6}
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${acc_id}=  get_acc_id  ${HLPUSERNAME12}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME6}
     Set Test Variable   ${acc_id} 
 
     ${resp}=   Create Sample Location
@@ -590,15 +590,15 @@ JD-TC-WaitlistAttachment-6
 
     [Documentation]   Add waitlist attachment as gif file.
     
-    # clear_queue      ${HLPUSERNAME12}
-    # clear_location   ${HLPUSERNAME12}
-    # clear_service    ${HLPUSERNAME12}
-    clear_customer   ${HLPUSERNAME12}
+    # clear_queue      ${HLPUSERNAME6}
+    # clear_location   ${HLPUSERNAME6}
+    # clear_service    ${HLPUSERNAME6}
+    clear_customer   ${HLPUSERNAME6}
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${acc_id}=  get_acc_id  ${HLPUSERNAME12}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME6}
     Set Test Variable   ${acc_id} 
 
     ${resp}=   Create Sample Location
@@ -705,15 +705,15 @@ JD-TC-WaitlistAttachment-7
 
     [Documentation]   Add waitlist attachment for a canceled waitlist.
     
-    # clear_queue      ${HLPUSERNAME12}
-    # clear_location   ${HLPUSERNAME12}
-    # clear_service    ${HLPUSERNAME12}
-    clear_customer   ${HLPUSERNAME12}
+    # clear_queue      ${HLPUSERNAME6}
+    # clear_location   ${HLPUSERNAME6}
+    # clear_service    ${HLPUSERNAME6}
+    clear_customer   ${HLPUSERNAME6}
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${acc_id}=  get_acc_id  ${HLPUSERNAME12}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME6}
     Set Test Variable   ${acc_id} 
 
     ${resp}=   Create Sample Location
@@ -792,7 +792,7 @@ JD-TC-WaitlistAttachment-7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -863,15 +863,15 @@ JD-TC-WaitlistAttachment-8
 
     [Documentation]   Add waitlist attachment for a family member's waitlist.
     
-    # clear_queue      ${HLPUSERNAME12}
-    # clear_location   ${HLPUSERNAME12}
-    # clear_service    ${HLPUSERNAME12}
-    clear_customer   ${HLPUSERNAME12}
+    # clear_queue      ${HLPUSERNAME6}
+    # clear_location   ${HLPUSERNAME6}
+    # clear_service    ${HLPUSERNAME6}
+    clear_customer   ${HLPUSERNAME6}
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${acc_id}=  get_acc_id  ${HLPUSERNAME12}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME6}
     Set Test Variable   ${acc_id} 
 
     ${resp}=   Create Sample Location
@@ -1051,15 +1051,15 @@ JD-TC-WaitlistAttachment-UH4
 
     [Documentation]   Add waitlist attachment as doc file.
     
-    # clear_queue      ${HLPUSERNAME12}
-    # clear_location   ${HLPUSERNAME12}
-    # clear_service    ${HLPUSERNAME12}
-    clear_customer   ${HLPUSERNAME12}
+    # clear_queue      ${HLPUSERNAME6}
+    # clear_location   ${HLPUSERNAME6}
+    # clear_service    ${HLPUSERNAME6}
+    clear_customer   ${HLPUSERNAME6}
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${acc_id}=  get_acc_id  ${HLPUSERNAME12}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME6}
     Set Test Variable   ${acc_id} 
 
     ${resp}=   Create Sample Location
@@ -1163,15 +1163,15 @@ JD-TC-WaitlistAttachment-UH5
 
     [Documentation]   Add waitlist attachment as sh file.
     
-    # clear_queue      ${HLPUSERNAME12}
-    # clear_location   ${HLPUSERNAME12}
-    # clear_service    ${HLPUSERNAME12}
-    clear_customer   ${HLPUSERNAME12}
+    # clear_queue      ${HLPUSERNAME6}
+    # clear_location   ${HLPUSERNAME6}
+    # clear_service    ${HLPUSERNAME6}
+    clear_customer   ${HLPUSERNAME6}
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${acc_id}=  get_acc_id  ${HLPUSERNAME12}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME6}
     Set Test Variable   ${acc_id} 
 
     ${resp}=   Create Sample Location
@@ -1263,15 +1263,15 @@ JD-TC-WaitlistAttachment-UH6
 
     [Documentation]   Add waitlist attachment as txt file.
     
-    # clear_queue      ${HLPUSERNAME12}
-    # clear_location   ${HLPUSERNAME12}
-    # clear_service    ${HLPUSERNAME12}
-    clear_customer   ${HLPUSERNAME12}
+    # clear_queue      ${HLPUSERNAME6}
+    # clear_location   ${HLPUSERNAME6}
+    # clear_service    ${HLPUSERNAME6}
+    clear_customer   ${HLPUSERNAME6}
 
-    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${acc_id}=  get_acc_id  ${HLPUSERNAME12}
+    ${acc_id}=  get_acc_id  ${HLPUSERNAME6}
     Set Test Variable   ${acc_id} 
 
     ${resp}=   Create Sample Location
@@ -1376,7 +1376,7 @@ JD-TC-WaitlistAttachment-UH7
 
     [Documentation]   Add waitlist attachment by provider login.
 
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${HLPUSERNAME12}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${HLPUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${caption}=  Fakerlibrary.sentence

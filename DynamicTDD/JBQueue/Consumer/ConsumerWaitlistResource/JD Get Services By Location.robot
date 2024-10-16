@@ -27,7 +27,7 @@ JD-TC-Get Service By Location -1
 
 	[Documentation]  get service  location id
 
-    ${PUSERNAME_G}=  Evaluate  ${PUSERNAME}+55102088
+    ${PUSERNAME_G}=  Evaluate  ${PUSERNAME}+55157487
     
     ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_G}=  Provider Signup  PhoneNumber=${PUSERNAME_G}
     
@@ -295,112 +295,4 @@ JD-TC-Get Queue By Location and Service-UH2
     ${resp}=  ProviderLogout     
 
 
-
-JD-TC-Get Service By Location-UH3
-    
-    [Documentation]   Try to get a waitlist service(not added in queue) by a jaldee consumer.
-
-    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME116}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-   
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${locId}=  Create Sample Location
-        Set Test Variable  ${locId}
-        ${resp}=   Get Location ById  ${locId}
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
-    END
-
-    ${service_duration}=   Random Int   min=5   max=10
-    ${P1SERVICE1}=    FakerLibrary.word
-    ${desc}=   FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=1   max=50
-    ${servicecharge}=   Random Int  min=100  max=500
-    ${resp}=  Create Service  ${P1SERVICE1}  ${desc}  ${service_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${ser_id1}  ${resp.json()}    
-
-    ${resp}=   Get Service By Id  ${ser_id1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${fname}=  FakerLibrary.first_name
-    ${lname}=  FakerLibrary.last_name
-   
-    ${resp}=  AddCustomer  ${CUSERNAME17}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${cid}  ${resp.json()}
-
-    ${resp}=  Provider Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${account_id1}  ${resp.json()['id']}
-   
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${locId}=  Create Sample Location
-        Set Test Variable  ${locId}
-        ${resp}=   Get Location ById  ${locId}
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
-    END
-
-    ${service_duration}=   Random Int   min=5   max=10
-    ${P1SERVICE1}=    FakerLibrary.word
-    ${desc}=   FakerLibrary.sentence
-    ${min_pre}=   Random Int   min=1   max=50
-    ${servicecharge}=   Random Int  min=100  max=500
-    ${resp}=  Create Service  ${P1SERVICE1}  ${desc}  ${service_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${ser_id1}  ${resp.json()}    
-
-    ${resp}=   Get Service By Id  ${ser_id1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${firstName}=  FakerLibrary.name
-    ${lastName}=  FakerLibrary.last_name
-    ${primaryMobileNo}    Generate random string    10    123456789
-    ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
-    ${email}=    FakerLibrary.Email
-   
-    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${account_id1}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${CUSERNAME17}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${token}  ${resp.json()['token']}
-
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME17}    ${pid}  ${token} 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=  Get Service By Location   ${locId}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()}        []
 

@@ -15,7 +15,6 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Resource          /ebs/TDD/AppKeywords.robot
 
-
 *** Variables ***
 
 @{emptylist} 
