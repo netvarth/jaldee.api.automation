@@ -17,7 +17,8 @@ ${Invalid_email}          inv.${test_mail}
 ${LOWER}                  abcdefghijklmnopqrstuvwxyz
 ${UPPER}                  ABCDEFGHIJKLMNOPQRSTUVWXYZ
 ${LETTERS}                abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
-${NUMBERS}                0123456789
+# ${NUMBERS}                0123456789
+${digits}                 0123456789
 ${merchantid}             6811180
 @{wl_status}              checkedIn     arrived   started   prepaymentPending   cancelled    done   unrevertable   failed   blocked
 @{waitlist_cancl_reasn}   closingSoon   tooFull   prePaymentPending   holiday   noshowup   blocked   QueueDisabled   self
@@ -32,7 +33,6 @@ ${pay_mode_selfpay}       self pay
 @{notifytype}             none  pushMsg  email
 @{bool}                   False  True
 @{boolean}                false  true
-${digits}                 0123456789
 @{status}                 ACTIVE   INACTIVE  CANCELLED  INCOMPLETE
 ${bType}                  Waitlist
 @{calctype}               Percentage  Fixed
