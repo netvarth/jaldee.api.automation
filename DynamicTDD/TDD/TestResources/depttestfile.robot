@@ -15,13 +15,36 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 
 *** Variables ***
 
-${ZOOM_url}    https://zoom.us/j/{}?pwd=THVLcTBZa2lESFZQbU9DQTQrWUxWZz09
-${GoogleMeet_url}    https://meet.google.com/gif-pqrs-abc
+# ${ZOOM_url}    https://zoom.us/j/{}?pwd=THVLcTBZa2lESFZQbU9DQTQrWUxWZz09
+# ${ZOOM_url}    https://zoom.us/j/{}?pwd={}
+${ZOOM_URL}    https://zoom.us/j/{meeting_id}?pwd={passwd}
+# ${GoogleMeet_url}    https://meet.google.com/gif-pqrs-abc
+${MEET_URL}    https://meet.google.com/{meeting_id}
 @{emptylist}
+${lower}  abcdefghijklmnopqrstuvwxyz
+
+# [LOWER] 	Lowercase ASCII characters from 'a' to 'z'.
+# [UPPER] 	Uppercase ASCII characters from 'A' to 'Z'.
+# [LETTERS] 	Lowercase and uppercase ASCII characters.
+# [NUMBERS] 	Numbers from 0 to 9.
 
 
 
 *** Test Cases ***
+
+JD-TC-check something-2
+
+    ${meeting_id}=  Generate Random String    10    [NUMBERS]
+    # ${passwd}=  Generate Random String    30    [NUMBERS] [LETTERS]
+    ${passwd}=  FakerLibrary.password  length=30  #special_chars=False  upper_case=False
+    ${ZOOM_id0}=     Format String    ${ZOOM_URL}    meeting_id=9${meeting_id}    passwd=${passwd}.1
+    Log  ${ZOOM_id0}
+
+    ${meeting_id}=   FakerLibrary.lexify  text='???-????-???'  letters=${lower}    # Adjust length and characters as needed
+    ${meet_url}=     Format String    ${MEET_URL}    meeting_id=${meeting_id}
+    Log    ${meet_url}
+
+*** Comments ***
 
 JD-TC-CheckDepartment-2
 
@@ -130,7 +153,7 @@ JD-TC-CheckDepartment-2
 
     END
 
-*** Comments ***
+
 
 JD-TC-CreateVirtualService-(Billable Subdomain)-17
     [Documentation]   create virtual service for a user

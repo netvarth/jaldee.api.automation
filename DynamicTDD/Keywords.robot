@@ -14,6 +14,10 @@ ${PASSWORD}               Jaldee12
 ${SPASSWORD}              Netvarth1
 ${test_mail}              test@jaldee.com
 ${Invalid_email}          inv.${test_mail}
+${LOWER}                  abcdefghijklmnopqrstuvwxyz
+${UPPER}                  ABCDEFGHIJKLMNOPQRSTUVWXYZ
+${LETTERS}                abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
+${NUMBERS}                0123456789
 ${merchantid}             6811180
 @{wl_status}              checkedIn     arrived   started   prepaymentPending   cancelled    done   unrevertable   failed   blocked
 @{waitlist_cancl_reasn}   closingSoon   tooFull   prePaymentPending   holiday   noshowup   blocked   QueueDisabled   self

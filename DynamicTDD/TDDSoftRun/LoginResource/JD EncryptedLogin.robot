@@ -46,7 +46,7 @@ JD-TC-EncryptedProviderLogin-1
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    ${PO_Number}    Generate random string    7    0123456789
+    ${PO_Number}    Generate random string    7    ${digits} 
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERNAME_B}=  Evaluate  ${PUSERNAME}+${PO_Number}
     # ${PUSERNAME_B}=  Evaluate  ${PUSERNAME}+5566014

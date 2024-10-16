@@ -351,7 +351,6 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-4
     # ${vstype1}=  Evaluate  random.choice($vservicetype)  random
     Set Test Variable  ${vstype1}  ${vservicetype[1]}
     ${resp}=  Create virtual Service  ${SERVICE6}   ${description1}   5   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${Total1}  ${bool[0]}   ${bool[0]}   ${vstype1}   ${virtualCallingModes}
-    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${S_id1}  ${resp.json()} 
