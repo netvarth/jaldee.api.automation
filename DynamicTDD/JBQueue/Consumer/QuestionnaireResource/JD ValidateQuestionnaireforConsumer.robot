@@ -11,6 +11,7 @@ Library           OperatingSystem
 Library           /ebs/TDD/excelfuncs.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
@@ -133,13 +134,30 @@ JD-TC-ValidateConsumerQuestionnaire-1
     END
     Set Suite Variable   ${s_id}
 
+    ${fname}=  FakerLibrary.first_name
+    ${lname}=  FakerLibrary.last_name
+   
+    ${resp}=  AddCustomer  ${CUSERNAME8}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${cid}  ${resp.json()}
+
     ${resp}=  Provider Logout
-    Log  ${resp.content}
+    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    ${resp}=    Send Otp For Login    ${CUSERNAME8}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME8}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME8}    ${account_id}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Consumer View Questionnaire  ${account_id}  ${s_id}  ${self}
     Log  ${resp.content}

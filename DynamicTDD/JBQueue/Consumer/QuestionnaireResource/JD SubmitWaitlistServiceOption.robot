@@ -15,6 +15,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 ${xlFile}      ${EXECDIR}/TDD/ServiceoptionsQnr.xlsx   # DataSheet
@@ -126,7 +127,7 @@ JD-TC-SubmitServiceOptionsForWaitlist-1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME128}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -175,7 +176,7 @@ JD-TC-SubmitServiceOptionsForWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME128}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -200,7 +201,7 @@ JD-TC-SubmitServiceOptionsForWaitlist-1
     END
     Set Suite Variable   ${s_id}  
 
-    # clear_queue   ${PUSERNAME128}
+    # clear_queue   ${HLPUSERNAME16}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -314,9 +315,9 @@ JD-TC-SubmitServiceOptionsForWaitlist-1
 JD-TC-SubmitServiceOptionsForWaitlist-2
     [Documentation]  Submit service options for waitlist taken from provider side
 
-    clear_customer   ${PUSERNAME128}
+    clear_customer   ${HLPUSERNAME16}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME128}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -352,7 +353,7 @@ JD-TC-SubmitServiceOptionsForWaitlist-2
     END
     Set Suite Variable   ${s_id}  
 
-    # clear_queue   ${PUSERNAME128}
+    # clear_queue   ${HLPUSERNAME16}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -466,9 +467,9 @@ JD-TC-SubmitServiceOptionsForWaitlist-2
 JD-TC-SubmitServiceOptionsForWaitlist-3
     [Documentation]  Submit service options for waitlist after starting waitlist
 
-    clear_customer   ${PUSERNAME128}
+    clear_customer   ${HLPUSERNAME16}
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME128}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -493,7 +494,7 @@ JD-TC-SubmitServiceOptionsForWaitlist-3
     END
     Set Suite Variable   ${s_id}  
 
-    # clear_queue   ${PUSERNAME128}
+    # clear_queue   ${HLPUSERNAME16}
     
     ${list}=  Create List  1  2  3  4  5  6  7
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -620,9 +621,9 @@ JD-TC-SubmitServiceOptionsForWaitlist-3
 JD-TC-SubmitServiceOptionsForWaitlist-4
     [Documentation]  Submit service options for waitlist after completing waitlist
 
-    clear_customer   ${PUSERNAME128}
+    clear_customer   ${HLPUSERNAME16}
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME128}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -647,7 +648,7 @@ JD-TC-SubmitServiceOptionsForWaitlist-4
     END
     Set Suite Variable   ${s_id}  
 
-    # clear_queue   ${PUSERNAME128}
+    # clear_queue   ${HLPUSERNAME16}
 
     ${list}=  Create List  1  2  3  4  5  6  7
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -783,9 +784,9 @@ JD-TC-SubmitServiceOptionsForWaitlist-4
 JD-TC-SubmitServiceOptionsForWaitlist-UH1
     [Documentation]  Submit service options for cancelled appointment
     
-    clear_customer   ${PUSERNAME128}
+    clear_customer   ${HLPUSERNAME16}
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME128}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -810,7 +811,7 @@ JD-TC-SubmitServiceOptionsForWaitlist-UH1
     END
     Set Suite Variable   ${s_id}  
 
-    # clear_queue   ${PUSERNAME128}
+    # clear_queue   ${HLPUSERNAME16}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     

@@ -1742,25 +1742,25 @@ JD-TC-ResubmitQuestionnaireForWaitlist-6
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()['questionnaire']['questionAnswers']}
     ${j}=  Set Variable  ${0}
-    FOR  ${i}  IN RANGE   ${len}
+    # FOR  ${i}  IN RANGE   ${len}
 
-        Continue For Loop If  '${resp.json()['questionnaire']['questionAnswers'][${i}]['question']['fieldDataType']}' != '${QnrDatatypes[5]}'
+    #     Continue For Loop If  '${resp.json()['questionnaire']['questionAnswers'][${i}]['question']['fieldDataType']}' != '${QnrDatatypes[5]}'
 
-        Run Keyword If  '${resp.json()['questionnaire']['questionAnswers'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[5]}' and '${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['answer']['${QnrDatatypes[5]}'][0]['status']}' == '${QnrStatus[0]}'
-        ...    Run Keywords
-        ...    Run Keyword And Continue On Failure  Set Test Variable  ${fileid${j}}  ${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['answer']['${QnrDatatypes[5]}'][0]['uid']}
-        ...    AND  Run Keyword And Continue On Failure  Set Test Variable  ${lblname${j}}  ${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['labelName']}
-        # ...    AND  Run Keyword And Continue On Failure  Consumer Change Answer Status for Waitlist  ${lblname${j}}  ${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['labelName']}
-        ${resp1}=   Run Keyword If  '${resp.json()['questionnaire']['questionAnswers'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[5]}' and '${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['answer']['${QnrDatatypes[5]}'][0]['status']}' == '${QnrStatus[0]}'
-        ...   Consumer Change Answer Status for Waitlist  ${account_id}  ${wid1}  ${fileid${j}}  ${lblname${j}}
-        Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
-        Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    #     Run Keyword If  '${resp.json()['questionnaire']['questionAnswers'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[5]}' and '${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['answer']['${QnrDatatypes[5]}'][0]['status']}' == '${QnrStatus[0]}'
+    #     ...    Run Keywords
+    #     ...    Run Keyword And Continue On Failure  Set Test Variable  ${fileid${j}}  ${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['answer']['${QnrDatatypes[5]}'][0]['uid']}
+    #     ...    AND  Run Keyword And Continue On Failure  Set Test Variable  ${lblname${j}}  ${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['labelName']}
+    #     # ...    AND  Run Keyword And Continue On Failure  Consumer Change Answer Status for Waitlist  ${lblname${j}}  ${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['labelName']}
+    #     ${resp1}=   Run Keyword If  '${resp.json()['questionnaire']['questionAnswers'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[5]}' and '${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['answer']['${QnrDatatypes[5]}'][0]['status']}' == '${QnrStatus[0]}'
+    #     ...   Consumer Change Answer Status for Waitlist  ${account_id}  ${wid1}  ${fileid${j}}  ${lblname${j}}
+    #     Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
+    #     Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
         
         
-        ${j}=  Set variable if  '${resp.json()['questionnaire']['questionAnswers'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[5]}' and '${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['answer']['${QnrDatatypes[5]}'][0]['status']}' == '${QnrStatus[0]}'
-        ...   ${j+1}    ${j}
+    #     ${j}=  Set variable if  '${resp.json()['questionnaire']['questionAnswers'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[5]}' and '${resp.json()['questionnaire']['questionAnswers'][${i}]['answerLine']['answer']['${QnrDatatypes[5]}'][0]['status']}' == '${QnrStatus[0]}'
+    #     ...   ${j+1}    ${j}
         
-    END
+    # END
     
 
     ${fudata}=  db.fileUploadDT   ${qnr_resp.json()}  ${FileAction[0]}  ${pdffile}

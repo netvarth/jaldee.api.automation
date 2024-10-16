@@ -63,14 +63,6 @@ Comapre Lists without order
     RETURN  ${val}
 
 
-# Open given Excel file
-#     [Arguments]    ${xlFile}  ${doc id}
-#     #Check that the given Excel Exists
-#     ${inputfileStatus}    ${msg}    Run Keyword And Ignore Error    OperatingSystem.File Should Exist    ${xlFile}
-#     Run Keyword If    "${inputfileStatus}"=="PASS"    Log   ${xlFile} Test data file exist    ELSE    Log    Cannot locate the given Excel file.  ERROR
-#     Open workbook   ${xlFile}   ${doc id}
-
-
 Check Questions
     [Arguments]  ${resp}  ${qnid}  ${sheet}
     ${len}=  Get Length  ${resp.json()['labels']}
