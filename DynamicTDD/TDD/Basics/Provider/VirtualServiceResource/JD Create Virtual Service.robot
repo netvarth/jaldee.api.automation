@@ -26,6 +26,12 @@ ${GoogleMeet_url}    https://meet.google.com/gif-pqrs-abc
 # ${Mode1}    Skype	   
 # ${Mode2}	WhatsApp
 # ${Mode3}    Imo
+# ${ZOOM_url}    https://zoom.us/j/{}?pwd=THVLcTBZa2lESFZQbU9DQTQrWUxWZz09
+# # https://zoom.us/j/96372238873?pwd=1rkXN1yAmbY4aBx4doWpFy6qA36gXF.1
+# # https://zoom.us/j/97985866065?pwd=yqPeWXMVIuAwj1huBHs31DK3YJcBql.1
+# # https://zoom.us/j/93601570300?pwd=msppAk2CRbfW0hXZEKT2JpuJKd2jW3.1
+
+# ${GoogleMeet_url}    https://meet.google.com/abc-mnop-xyz
 
 
 
