@@ -4419,7 +4419,7 @@ JD-TC-Take Appointment-UH10
     # clear_service   ${PUSERNAME345}
     clear_customer   ${PUSERNAME345}
 
-    $${resp}=    Get Locations
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
