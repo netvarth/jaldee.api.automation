@@ -1406,7 +1406,7 @@ JD-TC-Communication Between Consumer and Provider-UH2
     Should Be Equal As Strings  ${resp.json()}  ${INVALID_WAITLIST}
 
    
-JD-TC-Communication Between Consumer and Provider-UH2
+JD-TC-Communication Between Consumer and Provider-UH3
 	
     [Documentation]  Communication Between Consumer and Provider by provider login
 	

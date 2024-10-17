@@ -28,7 +28,7 @@ JD-TC-Get Service By Location -1
 
 	[Documentation]  get service  location id
 
-    ${PUSERNAME_G}=  Evaluate  ${PUSERNAME}+55102088
+    ${PUSERNAME_G}=  Evaluate  ${PUSERNAME}+8957489
     
     ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_G}=  Provider Signup  PhoneNumber=${PUSERNAME_G}
     
@@ -300,6 +300,7 @@ JD-TC-Get Queue By Location and Service-UH2
 
 
 
+<<<<<<< HEAD
 JD-TC-Get Service By Location-UH3
     
     [Documentation]   Try to get a waitlist service(not added in queue) by a jaldee consumer.
@@ -410,3 +411,5 @@ JD-TC-Get Service By Location-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}        []
 
+=======
+>>>>>>> branch 'master' of https://github.com/netvarth/jaldee.api.automation

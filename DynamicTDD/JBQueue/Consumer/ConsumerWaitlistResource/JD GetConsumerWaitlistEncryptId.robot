@@ -22,15 +22,15 @@ ${waitlistedby}           CONSUMER
 JD-TC-GetWaitlistByEncryptedID-1
     [Documentation]   Get Waitlist details By Encrypted ID
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME202}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${pid}=  get_acc_id  ${PUSERNAME202}
+    ${pid}=  get_acc_id  ${PUSERNAME179}
     Set Suite Variable      ${pid}
-    # clear_service   ${PUSERNAME202}
-    # clear_location  ${PUSERNAME202}
-    # clear_queue  ${PUSERNAME202}
-    clear waitlist   ${PUSERNAME202}
+    # clear_service   ${PUSERNAME179}
+    # clear_location  ${PUSERNAME179}
+    # clear_queue  ${PUSERNAME179}
+    clear waitlist   ${PUSERNAME179}
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}
     ${resp}=   Get Location ById  ${lid}
@@ -94,7 +94,7 @@ JD-TC-GetWaitlistByEncryptedID-1
     Set Suite Variable  ${f1}   ${resp.json()}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${qid}  ${DAY1}  ${s_id1}  ${cnote}  ${bool[0]}  ${f1}
+    ${resp}=  Add To Waitlist Consumers  ${f1}  ${pid}  ${qid}  ${DAY1}  ${s_id1}  ${cnote}  ${bool[0]}  ${f1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -113,7 +113,7 @@ JD-TC-GetWaitlistByEncryptedID-1
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['lastName']}  ${lastname}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['phoneNo']}  ${CUSERNAME20}
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME202}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

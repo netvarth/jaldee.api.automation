@@ -16,7 +16,6 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Resource          /ebs/TDD/AppKeywords.robot
 
-
 *** Variables ***
 
 @{emptylist} 
@@ -187,11 +186,11 @@ JD-TC-ApplyJaldeeCouponToChannel-1
 
     ${resp}=  Get Bill Settings 
     Log   ${resp.content}
-    IF  ${resp.status_code}!=200 or ${resp.json()['enablepos']}==${bool[0]}
+    # IF  ${resp.status_code}!=200 or ${resp.json()['enablepos']}==${bool[0]}
         ${resp}=  Enable Disable bill  ${bool[1]}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-    END
+    # END
 
     ${resp}=  Get Bill Settings 
     Log   ${resp.content}

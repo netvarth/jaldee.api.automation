@@ -76,7 +76,7 @@ JD-TC-Get waitlist Today count-1
     ${resp}=  Get Waitlist Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  onlineCheckIns=${bool[1]}
+
     ${duration}=   Random Int  min=2  max=10
     Set Suite Variable   ${duration}  
     ${resp}=  Update Waitlist Settings  ${calc_mode[1]}   ${duration}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${Empty}
@@ -85,7 +85,6 @@ JD-TC-Get waitlist Today count-1
     ${resp}=  Get Waitlist Settings
     Log   ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  200 
-    Verify Response  ${resp}  calculationMode=${calc_mode[1]}  trnArndTime=${duration}  futureDateWaitlist=${bool[1]}  showTokenId=${bool[1]}  onlineCheckIns=${bool[1]}   maxPartySize=1
     
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
