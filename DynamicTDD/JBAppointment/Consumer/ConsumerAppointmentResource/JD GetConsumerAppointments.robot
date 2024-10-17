@@ -6,6 +6,7 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library 	      JSONLibrary
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
@@ -23,6 +24,7 @@ ${SERVICE2}  sampleservice2
 ${SERVICE3}  sampleservice3
 ${SERVICE4}  sampleservice4
 ${self}     0
+@{service_names}
 ${digits}       0123456789
 
 
@@ -64,7 +66,8 @@ JD-TC-GetConsumerAppointments-1
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    ${SERVICE1}=  FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}

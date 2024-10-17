@@ -7,8 +7,10 @@ Library           String
 Library           json
 Library           requests
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           Process
 Library           OperatingSystem
+Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/excelfuncs.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
@@ -32,6 +34,7 @@ ${self}      0
 ${mp4mime}   video/mp4
 ${avimime}   video/avi
 ${mp3mime}   audio/mpeg
+@{service_names}
 
 
 *** Keywords ***
@@ -96,7 +99,8 @@ JD-TC-AdvancePaymentcalculation-1
     ${min_pre}=   Random Int   min=40   max=50
     ${min_pre}=  Convert To Number  ${min_pre}  0
     ${service_amount}=   Random Int   min=100   max=500
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[1]}  minPrePaymentAmount=${min_pre}  taxable=${bool[1]}  prePaymentType=${advancepaymenttype[1]}
     Log  ${resp.content}
@@ -123,7 +127,8 @@ JD-TC-AdvancePaymentcalculation-2
     ${min_pre}=   Random Int   min=10   max=20
     ${min_pre}=  Convert To Number  ${min_pre}  0
     ${ser_amount}=   Random Int   min=100   max=500
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${ser_amount}  ${bool[1]}  minPrePaymentAmount=${min_pre}  taxable=${bool[1]}  prePaymentType=${advancepaymenttype[0]}
     Log  ${resp.content}
@@ -150,7 +155,8 @@ JD-TC-AdvancePaymentcalculation-3
     ${min_pre}=   Random Int   min=40   max=50
     ${min_pre}=  Convert To Number  ${min_pre}  0
     ${service_amount}=   Random Int   min=100   max=500
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[1]}  minPrePaymentAmount=${min_pre}  taxable=${bool[1]}  prePaymentType=${advancepaymenttype[1]}
     Log  ${resp.content}
@@ -177,7 +183,8 @@ JD-TC-AdvancePaymentcalculation-4
     ${min_pre}=   Random Int   min=10   max=20
     ${min_pre}=  Convert To Number  ${min_pre}  0
     ${ser_amount}=   Random Int   min=100   max=500
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${ser_amount}  ${bool[1]}  minPrePaymentAmount=${min_pre}  taxable=${bool[1]}  prePaymentType=${advancepaymenttype[0]}
     Log  ${resp.content}
@@ -205,7 +212,8 @@ JD-TC-AdvancePaymentcalculation-5
     ${min_pre}=   Random Int   min=40   max=50
     ${min_pre}=  Convert To Number  ${min_pre}  0
     ${service_amount}=   Random Int   min=100   max=500
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[1]}  minPrePaymentAmount=${min_pre}  taxable=${bool[1]} 
     Log  ${resp.content}
@@ -229,7 +237,8 @@ JD-TC-AdvancePaymentcalculation-6
     # clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
     ${ser_amount}=   Random Int   min=100   max=500
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[0]}  ${ser_amount}  ${bool[0]}  taxable=${bool[1]}  prePaymentType=${advancepaymenttype[1]}
     Log  ${resp.content}
@@ -268,7 +277,8 @@ JD-TC-AdvancePaymentcalculation-7
     ${min_pre}=  Convert To Number  ${min_pre}  0
     ${service_amount}=   Random Int   min=100   max=500
     ${service_amount}=  Convert To Number  ${service_amount}  0
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[1]}  minPrePaymentAmount=${min_pre}  taxable=${bool[1]}  prePaymentType=${advancepaymenttype[1]}
     Log  ${resp.content}
@@ -335,7 +345,8 @@ JD-TC-AdvancePaymentcalculation-8
     ${min_pre}=  Convert To Number  ${min_pre}  0
     ${service_amount}=   Random Int   min=100   max=500
     ${service_amount}=  Convert To Number  ${service_amount}  0
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[1]}  minPrePaymentAmount=${min_pre}  taxable=${bool[1]}  prePaymentType=${advancepaymenttype[0]}
     Log  ${resp.content}
@@ -403,7 +414,8 @@ JD-TC-AdvancePaymentcalculation-9
     ${min_pre}=  Convert To Number  ${min_pre}  0
     ${service_amount}=   Random Int   min=100   max=500
     ${service_amount}=  Convert To Number  ${service_amount}  0
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[1]}  minPrePaymentAmount=${min_pre}  taxable=${bool[1]}  prePaymentType=${advancepaymenttype[1]}
     Log  ${resp.content}
@@ -507,7 +519,8 @@ JD-TC-AdvancePaymentcalculation-10
     ${min_pre}=  Convert To Number  ${min_pre}  0
     ${service_amount}=   Random Int   min=100   max=500
     ${service_amount}=  Convert To Number  ${service_amount}  0
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${ser_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}
     Log  ${resp.content}
@@ -595,7 +608,8 @@ JD-TC-AdvancePaymentcalculation-11
     # clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
     ${service_amount}=   Random Int   min=100   max=500
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[0]}  ${service_amount}  ${bool[0]}
     Log  ${resp.content}
@@ -611,7 +625,8 @@ JD-TC-AdvancePaymentcalculation-11
     ${min_pre}=   Random Int   min=40   max=50
     ${min_pre}=  Convert To Number  ${min_pre}  0
     ${service_amount}=   Random Int   min=100   max=500
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Update Service  ${ser_id1}  ${SERVICE2}  ${desc}   ${ser_durtn}   ${status[0]}    ${btype}   ${bool[0]}  ${notifytype[0]}  ${min_pre}   ${service_amount}    ${bool[1]}  ${bool[0]}  prePaymentType=${advancepaymenttype[1]}
     Log  ${resp.json()}   
@@ -635,7 +650,8 @@ JD-TC-AdvancePaymentcalculation-12
     # clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
     ${service_amount}=   Random Int   min=100   max=500
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[0]}  ${service_amount}  ${bool[0]}
     Log  ${resp.content}
@@ -651,7 +667,8 @@ JD-TC-AdvancePaymentcalculation-12
     ${min_pre}=   Random Int   min=40   max=50
     ${min_pre}=  Convert To Number  ${min_pre}  0
     ${service_amount}=   Random Int   min=100   max=500
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Update Service  ${ser_id1}  ${SERVICE2}  ${desc}   ${ser_durtn}   ${status[0]}    ${btype}   ${bool[0]}  ${notifytype[0]}  ${min_pre}   ${service_amount}    ${bool[1]}  ${bool[0]}  prePaymentType=${advancepaymenttype[0]}
     Log  ${resp.json()}   
@@ -677,7 +694,8 @@ JD-TC-AdvancePaymentcalculation-13
     ${min_pre}=   Random Int   min=40   max=50
     ${min_pre}=  Convert To Number  ${min_pre}  0
     ${service_amount}=   Random Int   min=100   max=500
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[1]}  minPrePaymentAmount=${min_pre}  taxable=${bool[1]}   prePaymentType=${advancepaymenttype[1]}
     Log  ${resp.content}
@@ -695,7 +713,8 @@ JD-TC-AdvancePaymentcalculation-13
     ${min_pre}=   Random Int   min=40   max=50
     ${min_pre}=  Convert To Number  ${min_pre}  0
     ${service_amount}=   Random Int   min=100   max=500
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Update Service  ${ser_id1}  ${SERVICE2}  ${desc}   ${ser_durtn}   ${status[0]}    ${btype}   ${bool[0]}  ${notifytype[0]}  ${min_pre}   ${service_amount}    ${bool[1]}  ${bool[0]}  prePaymentType=${advancepaymenttype[0]}
     Log  ${resp.json()}   
@@ -735,7 +754,8 @@ JD-TC-AdvancePaymentcalculation-14
     ${min_pre}=  Convert To Number  ${min_pre}  0
     ${service_amount}=   Random Int   min=100   max=500
     ${service_amount}=  Convert To Number  ${service_amount}  0
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${ser_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[1]}
     Log  ${resp.content}
@@ -867,7 +887,8 @@ JD-TC-AdvancePaymentcalculation-15
     ${min_pre}=  Convert To Number  ${min_pre}  0
     ${service_amount}=   Random Int   min=100   max=500
     ${service_amount}=  Convert To Number  ${service_amount}  0
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${ser_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}
     Log  ${resp.content}
@@ -1004,7 +1025,8 @@ JD-TC-AdvancePaymentcalculation-16
     ${min_pre}=  Convert To Number  ${min_pre}  0
     ${service_amount}=   Random Int   min=100   max=500
     ${service_amount}=  Convert To Number  ${service_amount}  0
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${ser_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[1]}
     Log  ${resp.content}
@@ -1176,7 +1198,8 @@ JD-TC-AdvancePaymentcalculation-17
     ${min_pre}=  Convert To Number  ${min_pre}  0
     ${service_amount}=   Random Int   min=100   max=500
     ${service_amount}=  Convert To Number  ${service_amount}  0
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${ser_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}
     Log  ${resp.content}
@@ -1351,7 +1374,8 @@ JD-TC-AdvancePaymentcalculation-18
     ${min_pre}=  Convert To Number  ${min_pre}  0
     ${service_amount}=   Random Int   min=100   max=500
     ${service_amount}=  Convert To Number  ${service_amount}  0
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${ser_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}
     Log  ${resp.content}
@@ -1510,7 +1534,8 @@ JD-TC-AdvancePaymentcalculation-19
     ${min_pre}=  Convert To Number  ${min_pre}  0
     ${service_amount}=   Random Int   min=100   max=500
     ${service_amount}=  Convert To Number  ${service_amount}  0
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${ser_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}
     Log  ${resp.content}

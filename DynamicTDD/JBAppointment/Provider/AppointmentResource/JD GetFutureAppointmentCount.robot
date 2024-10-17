@@ -2,11 +2,11 @@
 Suite Teardown    Delete All Sessions
 Test Teardown     Delete All Sessions
 Force Tags        Appointment  
-Library           FakerLibrary
 Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           random
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
@@ -18,6 +18,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 *** Variables ***
 
 ${self}     0
+@{service_names}
 
 
 *** Test Cases ***
@@ -46,7 +47,8 @@ JD-TC-GetFutureAppointmentCount-1
     clear_customer   ${PUSERNAME179}
 
     ${lid}=  Create Sample Location
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -181,7 +183,8 @@ JD-TC-GetFutureAppointmentCount-2
     # clear_location  ${PUSERNAME179}
     
     ${lid}=  Create Sample Location
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -326,7 +329,8 @@ JD-TC-GetFutureAppointmentCount-3
 
     # clear_appt_schedule   ${PUSERNAME179}
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500
@@ -448,7 +452,8 @@ JD-TC-GetFutureAppointmentCount-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500
@@ -462,7 +467,8 @@ JD-TC-GetFutureAppointmentCount-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
 
     ${resp}=  Auto Invoice Generation For Service   ${s_id2}    ${toggle[0]}
@@ -662,7 +668,8 @@ JD-TC-GetFutureAppointmentCount-5
     # clear_location  ${PUSERNAME179}
     
     ${lid}=  Create Sample Location
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -787,9 +794,11 @@ JD-TC-GetFutureAppointmentCount-6
     # clear_location  ${PUSERNAME179}
    
     ${lid}=  Create Sample Location
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -892,9 +901,11 @@ JD-TC-GetFutureAppointmentCount-7
     # clear_location  ${PUSERNAME179}
   
     ${lid}=  Create Sample Location
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -995,9 +1006,11 @@ JD-TC-GetFutureAppointmentCount-8
     # clear_location  ${PUSERNAME179}
     
     ${lid}=  Create Sample Location
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1099,9 +1112,11 @@ JD-TC-GetFutureAppointmentCount-9
     # clear_location  ${PUSERNAME179}
    
     ${lid}=  Create Sample Location
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1203,9 +1218,11 @@ JD-TC-GetFutureAppointmentCount-10
     # clear_location  ${PUSERNAME179}
 
     ${lid}=  Create Sample Location
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1328,9 +1345,11 @@ JD-TC-GetFutureAppointmentCount-11
     # clear_location  ${PUSERNAME179}
 
     ${lid}=  Create Sample Location
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1448,9 +1467,11 @@ JD-TC-GetFutureAppointmentCount-12
     # clear_location  ${PUSERNAME179}
     
     ${lid}=  Create Sample Location
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1556,7 +1577,8 @@ JD-TC-GetFutureAppointmentCount-13
     # clear_location  ${PUSERNAME179}
     
     ${lid}=  Create Sample Location
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1676,9 +1698,11 @@ JD-TC-GetFutureAppointmentCount-14
     # clear_location  ${PUSERNAME179}
     
     ${lid}=  Create Sample Location
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1790,7 +1814,8 @@ JD-TC-GetFutureAppointmentCount-15
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz2}  ${resp.json()['timezone']}
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     # clear_appt_schedule   ${PUSERNAME180}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1912,9 +1937,11 @@ JD-TC-GetFutureAppointmentCount-16
     # clear_location  ${PUSERNAME179}
 
     ${lid}=  Create Sample Location
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -2017,9 +2044,11 @@ JD-TC-GetFutureAppointmentCount-17
     # clear_location  ${PUSERNAME179}
 
     ${lid}=  Create Sample Location
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -2134,7 +2163,8 @@ JD-TC-GetFutureAppointmentCount-18
     # clear_location  ${PUSERNAME179}
     
     ${lid}=  Create Sample Location
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -2256,9 +2286,11 @@ JD-TC-GetFutureAppointmentCount-19
     # clear_location  ${PUSERNAME179}
     
     ${lid}=  Create Sample Location
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -2402,9 +2434,11 @@ JD-TC-GetFutureAppointmentCount-UH1
     # clear_location  ${PUSERNAME179}
 
     ${lid}=  Create Sample Location
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     # clear_appt_schedule   ${PUSERNAME179}
     ${DAY1}=  db.get_date_by_timezone  ${tz}

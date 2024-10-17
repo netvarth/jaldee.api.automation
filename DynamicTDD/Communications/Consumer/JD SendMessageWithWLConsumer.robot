@@ -6,6 +6,7 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
@@ -17,13 +18,15 @@ Variables         /ebs/TDD/varfiles/consumermail.py
 *** Variables ***
 
 ${digits}       0123456789
-${self}         0
+${self}     0
+@{service_names}
 @{service_duration}   5   20
 ${parallel}     1
 
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
 ${order}        0
 ${fileSize}     0.00458
+@{service_names}
 
 
 ***Keywords***
@@ -190,7 +193,8 @@ JD-TC-SendMessageWithWL-1
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${Total}=   Random Int   min=100   max=500
 
     ${resp}=  Create Service  ${P1SERVICE1}  ${desc}   ${service_duration[0]}  ${bool[0]}  ${Total}    ${bool[1]}

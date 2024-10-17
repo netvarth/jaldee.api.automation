@@ -6,6 +6,7 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
@@ -16,11 +17,13 @@ Variables         /ebs/TDD/varfiles/consumermail.py
 
 *** Variables ***
 
-${self}         0
+${self}     0
+@{service_names}
 ${parallel}     1
 ${SERVICE1}  manicure 
 ${SERVICE2}  pedicure
 ${self}     0
+@{service_names}
 ${digits}       0123456789
 @{dom_list}
 @{provider_list}

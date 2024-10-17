@@ -7,6 +7,7 @@ Library           String
 Library           json
 Library           requests
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
@@ -49,16 +50,20 @@ JD-TC-Get Appointment Schedule Count-1
         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    ${SERVICE1}=  FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
-    ${SERVICE2}=  FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${s_id2}
-    ${SERVICE3}=  FakerLibrary.word
+    ${SERVICE3}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE3}
     ${s_id3}=  Create Sample Service  ${SERVICE3}
     Set Suite Variable   ${s_id3}
-    ${SERVICE4}=  FakerLibrary.word
+    ${SERVICE4}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE4}
     ${s_id4}=  Create Sample Service  ${SERVICE4}
     Set Suite Variable   ${s_id4}
     ${DAY1}=  db.get_date_by_timezone  ${tz}

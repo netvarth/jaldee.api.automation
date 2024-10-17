@@ -7,6 +7,7 @@ Library           String
 Library           json
 Library           requests
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
@@ -15,7 +16,8 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 # Variables         /ebs/TDD/varfiles/consumermail.py
 
 *** Variables ***
-${self}         0
+${self}     0
+@{service_names}
 ${SERVICE1}               SERVICE1001
 
 
@@ -219,10 +221,12 @@ JD-TC-SPConsumer Deactivation -2
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     # clear_appt_schedule   ${PUSERNAME_B}
-    ${SERVICE1}=   FakerLibrary.name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
-    ${SERVICE2}=   FakerLibrary.name
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${s_id2}
     ${schedule_name}=  FakerLibrary.bs

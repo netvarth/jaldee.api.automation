@@ -2,11 +2,11 @@
 Suite Teardown    Delete All Sessions
 Test Teardown     Delete All Sessions
 Force Tags        Appointment  
-Library           FakerLibrary
 Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           random
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
@@ -17,6 +17,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 *** Variables ***
 
 ${self}     0
+@{service_names}
 
 *** Test Cases ***
 
@@ -67,7 +68,8 @@ JD-TC-Block Appointment-1
     ${eTime1}=  add_timezone_time  ${tz}  3   50  
     Set Suite Variable   ${eTime1}
    
-    ${SERVICE1}=    generate_service_name   
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}   
     ${s_id}=  Create Sample Service  ${SERVICE1}      maxBookingsAllowed=20
     Set Suite Variable  ${s_id}
 
@@ -77,7 +79,8 @@ JD-TC-Block Appointment-1
     ${s_id1}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=10   isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre} 
     Set Suite Variable  ${s_id1}
 
-    ${SERVICE3}=  FakerLibrary.word
+    ${SERVICE3}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE3}
     ${s_id2}=  Create Sample Service  ${SERVICE3}   maxBookingsAllowed=10
     Set Suite Variable  ${s_id2}
 
@@ -260,7 +263,8 @@ JD-TC-Block Appointment-4
     ${virtualCallingModes1}=  Create List  ${VScallingMode1}
     ${Total1}=   Random Int   min=100   max=500
     ${Total1}=  Convert To Number  ${Total1}  1
-    ${SERVICE1}=    generate_service_name  
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}  
     ${description}=    FakerLibrary.word
     Set Test Variable  ${vstype}  ${vservicetype[0]}
     ${resp}=  Create virtual Service  ${SERVICE1}   ${description}   5   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${Total1}  ${bool[0]}   ${bool[0]}   ${vstype}   ${virtualCallingModes1}
@@ -349,7 +353,8 @@ JD-TC-Block Appointment-5
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=    generate_service_name  
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}  
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -482,9 +487,11 @@ JD-TC-Block Appointment-6
 
     # clear_appt_schedule   ${PUSERNAME370}
 
-    ${SERVICE1}=    generate_service_name  
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}  
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    ${SERVICE2}=    FakerLibrary.Word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
 
     reset_queue_metric  ${pid}
@@ -612,7 +619,8 @@ JD-TC-Block Appointment-7
     
     # clear_appt_schedule   ${PUSERNAME370}
 
-    ${SERVICE1}=    generate_service_name  
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}  
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Location ById  ${lid}
@@ -766,7 +774,8 @@ JD-TC-Block Appointment-8
 
     # clear_appt_schedule   ${PUSERNAME370}
 
-    ${SERVICE1}=    generate_service_name  
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}  
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -902,7 +911,8 @@ JD-TC-Block Appointment-9
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=    generate_service_name  
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}  
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -1107,7 +1117,8 @@ JD-TC-Block Appointment-UH1
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=    generate_service_name  
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}  
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
@@ -1211,7 +1222,8 @@ JD-TC-Block Appointment-UH2
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=    generate_service_name  
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}  
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
@@ -1301,7 +1313,8 @@ JD-TC-Block Appointment-UH3
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=    generate_service_name  
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}  
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
@@ -1424,9 +1437,11 @@ JD-TC-Block Appointment-UH4
 
     # clear_appt_schedule   ${PUSERNAME370}
 
-    ${SERVICE1}=    generate_service_name  
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}  
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    ${SERVICE2}=    FakerLibrary.Word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
 
     reset_queue_metric  ${pid}
@@ -1498,7 +1513,8 @@ JD-TC-Block Appointment-UH5
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=20
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=    generate_service_name  
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}  
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -1544,7 +1560,8 @@ JD-TC-Block Appointment-UH5
     ${delta}=  FakerLibrary.Random Int  min=20  max=40        
     ${sTime1}=  add_timezone_time  ${tz}  0  ${delta}
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=    generate_service_name  
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}  
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -1598,7 +1615,8 @@ JD-TC-Block Appointment-UH6
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=20
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=    generate_service_name  
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}  
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -1649,7 +1667,8 @@ JD-TC-Block Appointment-UH6
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=20  max=40
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=    generate_service_name  
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}  
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -1700,7 +1719,8 @@ JD-TC-Block Appointment-UH7
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${SERVICE1}=    generate_service_name   
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}   
         ${s_id}=  Create Sample Service  ${SERVICE1}  
     ELSE
         Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -1774,7 +1794,8 @@ JD-TC-Block Appointment-UH8
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=    generate_service_name  
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}  
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -1839,7 +1860,8 @@ JD-TC-Block Appointment-UH9
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=    generate_service_name  
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}  
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -1904,7 +1926,8 @@ JD-TC-Block Appointment-UH10
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=    generate_service_name  
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}  
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -1972,7 +1995,8 @@ JD-TC-Block Appointment-UH11
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=    generate_service_name  
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}  
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -2042,7 +2066,8 @@ JD-TC-Block Appointment-UH12
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=    generate_service_name  
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}  
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -2127,7 +2152,8 @@ JD-TC-Block Appointment-UH13
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=    generate_service_name  
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}  
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -2196,7 +2222,8 @@ JD-TC-Block Appointment-UH14
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=    generate_service_name  
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}  
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -2270,7 +2297,8 @@ JD-TC-Block Appointment-UH15
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${SERVICE1}=    generate_service_name   
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}   
         ${s_id1}=  Create Sample Service  ${SERVICE1}  
     ELSE
         Set Test Variable  ${s_id1}   ${resp.json()[0]['id']}
@@ -2345,7 +2373,8 @@ JD-TC-Block Appointment-UH16
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=    generate_service_name  
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}  
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -2401,7 +2430,8 @@ JD-TC-Block Appointment-UH17
 
     # clear_appt_schedule   ${PUSERNAME370}
 
-    ${SERVICE1}=    generate_service_name  
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}  
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id}
     

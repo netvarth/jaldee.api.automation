@@ -6,6 +6,7 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
@@ -116,13 +117,16 @@ JD-TC-GetAppointmentTodayCount-1
 
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
 
-    ${SERVICE1}=   FakerLibrary.name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id1}
-    ${SERVICE2}=   FakerLibrary.name
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${s_id2}
-    ${SERVICE3}=   FakerLibrary.name
+    ${SERVICE3}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE3}
     ${s_id3}=  Create Sample Service  ${SERVICE3}
     Set Suite Variable   ${s_id3}
 

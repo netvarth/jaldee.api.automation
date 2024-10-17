@@ -9,7 +9,9 @@ Library           String
 Library           json
 Library           requests
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
+Library           /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
@@ -22,9 +24,11 @@ Variables         /ebs/TDD/varfiles/consumermail.py
 
 ${ZOOM_url}    https://zoom.us/j/{}?pwd=THVLcTBZa2lESFZQbU9DQTQrWUxWZz09
 
-${self}         0
+${self}     0
+@{service_names}
 
 &{Emptydict}
+@{service_names}
 
 
 
@@ -87,7 +91,8 @@ JD-TC-GetAppointmentMeetingDetails-1
     ${virtualCallingModes1}=  Create List  ${VScallingMode1}
     ${Total1}=   Random Int   min=100   max=500
     ${Total1}=  Convert To Number  ${Total1}  1
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${description}=    FakerLibrary.word
     # ${vstype}=  Evaluate  random.choice($vservicetype)  random
     Set Test Variable  ${vstype}  ${vservicetype[0]}
@@ -111,7 +116,8 @@ JD-TC-GetAppointmentMeetingDetails-1
     ${virtualCallingModes2}=  Create List  ${VScallingMode1}
     ${Total2}=   Random Int   min=100   max=500
     ${Total2}=  Convert To Number  ${Total2}  1
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${description2}=    FakerLibrary.word
     # ${vstype2}=  Evaluate  random.choice($vservicetype)  random
     Set Test Variable  ${vstype2}  ${vservicetype[1]}
@@ -1039,7 +1045,8 @@ JD-TC-GetAppointmentMeetingDetails-7
     ${Total}=   Random Int   min=100   max=500
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${Total}=  Convert To Number  ${Total}  1
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${description}=    FakerLibrary.word
     # ${vstype}=  Evaluate  random.choice($vservicetype)  random
     Set Test Variable  ${vstype}  ${vservicetype[1]}

@@ -467,4 +467,17 @@ Get Cookie from Header
         Log   ${jsessionynw_value}
     END
     RETURN    ${jsessionynw_value}
+
+    
+Get service names
+    [Arguments]    ${response}  ${service_names}
+    # ${resp}=   Get Service
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${response}
+    ${names}=  Evaluate  [item['name'] for item in ${response}]
+    Log  ${names}
+    Append To List  ${service_names}  @{names}
+    RETURN  ${service_names}
+
     

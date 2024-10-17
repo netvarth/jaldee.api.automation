@@ -9,6 +9,7 @@ Library           db.py
 Resource          Keywords.robot
 Library	          Imageupload.py
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           RequestsLibrary
 Library	          CustomKeywords.py
 
@@ -3108,14 +3109,16 @@ Create Sample Queue
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
+    ${service_names}=  Create List
     ${resp}=   Get Service
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    ${service_names}  Get service names  ${resp.json()}  ${service_names}
     IF   '${resp.content}' == '${emptylist}'
-        ${SERVICE1}=    FakerLibrary.Word
+        ${SERVICE1}=    generate_service_name
         ${s_id}=  Create Sample Service  ${SERVICE1}
     ELSE IF  '${resp.json()[0]['serviceType']}' == '${ServiceType[2]}'
-        ${SERVICE1}=    FakerLibrary.Word
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
         ${s_id}=  Create Sample Service  ${SERVICE1}
     ELSE
         Set Test Variable   ${s_id}   ${resp.json()[0]['id']}

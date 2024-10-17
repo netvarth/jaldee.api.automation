@@ -3,8 +3,8 @@ Suite Teardown    Delete All Sessions
 Test Teardown    Delete All Sessions
 Force Tags        Waitlist  Label
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ProviderKeywords.robot
-Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/consumermail.py
@@ -13,6 +13,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 
 *** Variables ***
 ${self}     0
+@{service_names}
 ${digits}       0123456789
 &{Emptydict}
 
@@ -74,7 +75,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}     maxBookingsAllowed=10
 
     # clear_queue    ${HLPUSERNAME19}
@@ -317,7 +319,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_queue    ${HLPUSERNAME19}
@@ -499,7 +502,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_queue    ${HLPUSERNAME19}
@@ -656,7 +660,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_queue    ${HLPUSERNAME19}
@@ -863,7 +868,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_queue    ${HLPUSERNAME19}
@@ -1062,7 +1068,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_queue    ${HLPUSERNAME19}
@@ -1234,7 +1241,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-7
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_queue    ${HLPUSERNAME19}
@@ -1393,9 +1401,11 @@ JD-TC-RemoveLabelFromMultipleWaitlist-8
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    ${SERVICE2}=    FakerLibrary.Word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
 
     # clear_queue    ${HLPUSERNAME19}
@@ -1550,7 +1560,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-9
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_queue    ${HLPUSERNAME19}
@@ -1754,7 +1765,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-10
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_queue    ${HLPUSERNAME19}
@@ -1902,7 +1914,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-11
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_queue    ${HLPUSERNAME19}
@@ -2061,7 +2074,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_queue    ${HLPUSERNAME19}
@@ -2244,7 +2258,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_queue    ${HLPUSERNAME19}
@@ -2402,7 +2417,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_queue    ${HLPUSERNAME19}
@@ -2535,7 +2551,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_queue    ${HLPUSERNAME19}
@@ -2690,7 +2707,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_queue    ${HLPUSERNAME19}
@@ -3169,7 +3187,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH13
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_appt_schedule   ${HLPUSERNAME19}

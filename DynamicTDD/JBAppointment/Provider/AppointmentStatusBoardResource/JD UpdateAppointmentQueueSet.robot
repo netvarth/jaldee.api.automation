@@ -3,11 +3,11 @@
 Suite Teardown    Delete All Sessions
 Test Teardown     Delete All Sessions
 Force Tags        Appointment  
-Library           FakerLibrary
 Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           random
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot

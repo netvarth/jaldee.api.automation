@@ -32,6 +32,7 @@ from Keywordspy import create_tz, check_deprecation
 from dateutil import tz
 import re
 from decimal import Decimal, ROUND_HALF_UP
+import CustomKeywords
 
 
 if os.environ['SYSTEM_ENV'] == 'Microsoft WSL':

@@ -3,11 +3,11 @@
 Suite Teardown    Delete All Sessions
 Test Teardown     Delete All Sessions
 Force Tags        Appointment  
-Library           FakerLibrary
 Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           random
 Library           /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ProviderKeywords.robot
@@ -58,7 +58,8 @@ JD-TC-UploadStatusboardLogo-1
     # clear_location  ${HLPUSERNAME45}
     clear_Addon  ${HLPUSERNAME45}
 
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${lid1}=  Create Sample Location  
     ${resp}=   Get Location ById  ${lid1}

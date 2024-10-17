@@ -4,6 +4,7 @@ Test Teardown     Run Keywords     Delete All Sessions
 ...               AND           Remove File  cookies.txt
 Force Tags        Appointment, mass communication
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
@@ -15,6 +16,7 @@ Variables         /ebs/TDD/varfiles/consumermail.py
 ${SERVICE1}  manicure 
 ${SERVICE2}  pedicure
 ${self}     0
+@{service_names}
 ${digits}       0123456789
 ${jpgfile}     /ebs/TDD/uploadimage.jpg
 ${pngfile}     /ebs/TDD/upload.png

@@ -2,11 +2,11 @@
 Suite Teardown    Delete All Sessions
 Test Teardown     Delete All Sessions
 Force Tags        Appointment  
-Library           FakerLibrary
 Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           random
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
@@ -20,6 +20,7 @@ Variables         /ebs/TDD/varfiles/consumermail.py
 ${SERVICE1}  sampleservice11 
 ${SERVICE2}  sampleservice22
 ${self}     0
+@{service_names}
 ${digits}       0123456789
 @{provider_list}
 @{dom_list}
@@ -264,7 +265,8 @@ JD-TC-Get consumer Appt Bill Details-2
 
     ${service_duration}=   Random Int   min=5   max=10
     Set Suite Variable    ${service_duration}
-    ${P1SERVICE1}=    FakerLibrary.word
+    ${P1SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE1}
     Set Suite Variable  ${P1SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50

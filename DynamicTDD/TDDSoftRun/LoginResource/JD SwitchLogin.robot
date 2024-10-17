@@ -6,6 +6,7 @@ Library           String
 Library           json
 Library           /ebs/TDD/db.py
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ApiKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
@@ -462,7 +463,8 @@ JD-TC-Switch_Login-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
 
-    ${SERVICE1}=   FakerLibrary.name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${sid3}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${sid3}
 

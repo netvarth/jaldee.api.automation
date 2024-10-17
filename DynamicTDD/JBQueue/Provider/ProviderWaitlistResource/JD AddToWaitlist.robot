@@ -6,6 +6,7 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
@@ -13,6 +14,7 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
+
 *** Variables ***
 ${waitlistedby}           PROVIDER
 ${SERVICE1}               SERVICE1001
@@ -22,6 +24,7 @@ ${SERVICE4}               SERVICE4004
 ${SERVICE5}               SERVICE3005
 ${SERVICE6}               SERVICE4006
 ${sample}                     4452135820
+@{service_names}
 
 *** Test Cases ***
 
@@ -57,7 +60,8 @@ ${sample}                     4452135820
 #             Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 #       END
 
-#       ${SERVICE1}=    generate_service_name 
+#       ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1} 
 #       ${SERVICE2}=    generate_service_name 
 #       ${SERVICE3}=    generate_service_name 
 #       ${SERVICE4}=    generate_service_name 
@@ -163,7 +167,8 @@ JD-TC-AddToWaitlist-1
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${tz}  ${resp.json()['timezone']} 
 
-      ${SERVICE1}=    generate_service_name 
+      ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1} 
       Set Suite Variable    ${SERVICE1} 
       ${SERVICE2}=    generate_service_name 
       Set Suite Variable    ${SERVICE2} 
@@ -1117,7 +1122,8 @@ JD-TC-AddToWaitlist-14
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
             
-      ${SERVICE1}=    FakerLibrary.Word
+      ${SERVICE1}=    generate_unique_service_name  ${service_names}
+      Append To List  ${service_names}  ${SERVICE1}
       ${s_id}=  Create Sample Service  ${SERVICE1}
 
       ${resp}=   Get Service
@@ -1213,7 +1219,8 @@ JD-TC-AddToWaitlist-15
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
             
-      ${SERVICE1}=    FakerLibrary.Word
+      ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
       ${s_id}=  Create Sample Service  ${SERVICE1}
 
       ${resp}=   Get Service
@@ -1308,7 +1315,8 @@ JD-TC-AddToWaitlist-UH18
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
             
-      ${SERVICE1}=    generate_service_name 
+      ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1} 
       ${s_id}=  Create Sample Service  ${SERVICE1}
 
       ${resp}=   Get Service
@@ -1406,7 +1414,8 @@ JD-TC-AddToWaitlist-16
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
             
-      ${SERVICE1}=    FakerLibrary.Word
+      ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
       ${s_id}=  Create Sample Service  ${SERVICE1}
 
       ${resp}=   Get Service
@@ -1502,7 +1511,8 @@ JD-TC-AddToWaitlist-UH19
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
             
-      ${SERVICE1}=    FakerLibrary.Word
+      ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
       ${s_id}=  Create Sample Service  ${SERVICE1}
 
       ${resp}=   Get Service

@@ -6,6 +6,7 @@ Library         Collections
 Library         String
 Library         json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
@@ -15,7 +16,8 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 *** Variables ***
 ${service_duration}   20   
-${self}         0
+${self}     0
+@{service_names}
 ${parallel}     1
 ${capacity}     5
 
@@ -60,7 +62,8 @@ JD-TC-Get Waitlist By Id Consumer-1
     Set Suite Variable  ${p1_l1}  ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${P1SERVICE1}=    FakerLibrary.word
+    ${P1SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE1}
     Set Suite Variable  ${P1SERVICE1}
     ${desc}=   FakerLibrary.sentence
     # ${min_pre}=   Random Int   min=1   max=50
@@ -70,7 +73,8 @@ JD-TC-Get Waitlist By Id Consumer-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_s1}  ${resp.json()}
 
-    ${P1SERVICE2}=    FakerLibrary.word
+    ${P1SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE2}
     Set Suite Variable  ${P1SERVICE2}
     ${desc}=   FakerLibrary.sentence
     # ${min_pre}=   Random Int   min=1   max=50

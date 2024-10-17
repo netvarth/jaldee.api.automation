@@ -6,6 +6,7 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
@@ -17,7 +18,8 @@ Variables         /ebs/TDD/varfiles/consumermail.py
 *** Variables ***
 
 ${digits}       0123456789
-${self}         0
+${self}     0
+@{service_names}
 @{service_duration}   5   20
 ${parallel}     1
 
@@ -143,7 +145,8 @@ JD-TC-Add To WaitlistByConsumer-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_s1}  ${resp.json()}
     
-    # ${P1SERVICE2}=    FakerLibrary.word
+    # ${P1SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE2}
     ${P1SERVICE2}=  Set Variable  ${unique_words[1]}
     Set Suite Variable   ${P1SERVICE2}
     ${desc}=   FakerLibrary.sentence
@@ -1657,7 +1660,8 @@ JD-TC-Add To WaitlistByConsumer-18
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     Set Suite Variable   ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     # ${DAY}=  db.get_date_by_timezone  ${tz}
@@ -4131,7 +4135,8 @@ JD-TC-Add To WaitlistByConsumer-24
     Set Suite Variable  ${loc1}  ${resp.json()[0]['id']} 
     Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     
-    ${P1SERVICE1}=    FakerLibrary.word
+    ${P1SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE1}
     Set Suite Variable   ${P1SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
@@ -4792,7 +4797,8 @@ JD-TC-Add To WaitlistByConsumer-26
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${lid}=  Create Sample Location  

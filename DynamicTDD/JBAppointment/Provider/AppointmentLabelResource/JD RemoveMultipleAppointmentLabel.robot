@@ -2,11 +2,11 @@
 Suite Teardown    Delete All Sessions
 Test Teardown     Delete All Sessions
 Force Tags        Appointment  
-Library           FakerLibrary
 Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           random
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
@@ -17,8 +17,10 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 *** Variables ***
 
 ${self}     0
+@{service_names}
 ${digits}       0123456789
 &{Emptydict}
+@{service_names}
 
 *** Test Cases ***
 
@@ -75,7 +77,8 @@ JD-TC-RemoveMultipleAppointmentLabel-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_appt_schedule   ${PUSERNAME74}
@@ -336,7 +339,8 @@ JD-TC-RemoveMultipleAppointmentLabel-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_appt_schedule   ${PUSERNAME74}
@@ -537,7 +541,8 @@ JD-TC-RemoveMultipleAppointmentLabel-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_appt_schedule   ${PUSERNAME74}
@@ -682,7 +687,8 @@ JD-TC-RemoveMultipleAppointmentLabel-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_appt_schedule   ${PUSERNAME74}
@@ -853,7 +859,8 @@ JD-TC-RemoveMultipleAppointmentLabel-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_appt_schedule   ${PUSERNAME74}
@@ -1071,7 +1078,8 @@ JD-TC-RemoveMultipleAppointmentLabel-6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_appt_schedule   ${PUSERNAME74}
@@ -1273,7 +1281,8 @@ JD-TC-RemoveMultipleAppointmentLabel-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_appt_schedule   ${multilocPro[74]}
@@ -1465,9 +1474,11 @@ JD-TC-RemoveMultipleAppointmentLabel-8
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    ${SERVICE2}=    FakerLibrary.Word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
 
     # clear_appt_schedule   ${PUSERNAME74}
@@ -1644,7 +1655,8 @@ JD-TC-RemoveMultipleAppointmentLabel-9
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_appt_schedule   ${PUSERNAME74}
@@ -1897,7 +1909,8 @@ JD-TC-RemoveMultipleAppointmentLabel-10
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_appt_schedule   ${PUSERNAME74}
@@ -2070,7 +2083,8 @@ JD-TC-RemoveMultipleAppointmentLabel-11
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_appt_schedule   ${PUSERNAME74}
@@ -2249,7 +2263,8 @@ JD-TC-RemoveMultipleAppointmentLabel-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_appt_schedule   ${PUSERNAME74}
@@ -2427,7 +2442,8 @@ JD-TC-RemoveMultipleAppointmentLabel-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_appt_schedule   ${PUSERNAME74}
@@ -2612,7 +2628,8 @@ JD-TC-RemoveMultipleAppointmentLabel-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_appt_schedule   ${PUSERNAME74}
@@ -3094,7 +3111,8 @@ JD-TC-RemoveMultipleAppointmentLabel-UH11
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_appt_schedule   ${PUSERNAME74}
@@ -3237,7 +3255,8 @@ JD-TC-RemoveMultipleAppointmentLabel-UH12
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_appt_schedule   ${PUSERNAME72}

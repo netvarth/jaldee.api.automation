@@ -6,6 +6,7 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           RequestsLibrary
 Library           OperatingSystem
 Library           /ebs/TDD/excelfuncs.py
@@ -17,9 +18,8 @@ Variables       /ebs/TDD/varfiles/providers.py
 Variables       /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/hl_providers.py
 
+
 *** Variables ***
-
-
 ${cons_verfy_name}    consumer Verfy
 ${call_back_name}     call back message
 ${token_Verfy_name}    token Verfy
@@ -41,6 +41,8 @@ ${waiting_option_name}    Waiting Option
 
 
 ${loc}    AP, IN
+
+@{service_names}
 
 
 
@@ -134,16 +136,16 @@ JD-TC-Create_Provider_Schedule-1
        Should be equal as strings  ${resp.status_code}       200
 
 # --------------------------  Multi User - 1000 Count ---------------------
-       ${resp}=   Get Addons Metadata For Superadmin
-	Log  ${resp.content}
-       Should Be Equal As Strings  ${resp.status_code}  200
-	Set Suite Variable    ${addon_id}      ${resp.json()[6]['addons'][4]['addonId']}
-	Set Suite Variable    ${addon_name}      ${resp.json()[6]['addons'][4]['addonName']}
-       Log   ${addon_id}
+        ${resp}=   Get Addons Metadata For Superadmin
+	    Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable    ${addon_id}      ${resp.json()[6]['addons'][4]['addonId']}
+        Set Suite Variable    ${addon_name}      ${resp.json()[6]['addons'][4]['addonName']}
+        Log   ${addon_id}
 
-       ${resp}=  Add Addons details  ${acc_id}  ${addon_id}
-	Log   ${resp.content}
-	Should Be Equal As Strings  ${resp.status_code}  200
+        ${resp}=  Add Addons details  ${acc_id}  ${addon_id}
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
        ${resp}=  Get Addon Transactions details     ${acc_id}
        Log  ${resp.content}
@@ -172,7 +174,8 @@ JD-TC-Create_Provider_Schedule-1
     ${min_pre}=  Convert To Number  ${min_pre}  0
     ${service_amount}=   Random Int   min=100   max=500
     ${service_amount}=  Convert To Number  ${service_amount}  0
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Create Service  ${ser_name1}  ${desc}  ${ser_durtn}  ${bool[0]}  ${service_amount}  ${bool[0]}  prePaymentType=${advancepaymenttype[0]}  department=${dep_id}
     Log  ${resp.content}

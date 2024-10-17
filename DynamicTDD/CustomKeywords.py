@@ -42,3 +42,23 @@ def generate_unique_service_name(existing_services):
         new_service_name = generate_service_name()
         if new_service_name not in existing_services:
             return new_service_name
+        
+
+def get_service_names(response, service_names):
+    """
+    Extract service names from the response and append to the service_names list.
+
+    :param response: The response containing service data (list of dictionaries).
+    :param service_names: The list to which service names will be appended.
+    :return: Updated list of service names.
+    """
+    # Extract names using a list comprehension
+    names = [item['name'] for item in response]
+
+    # Log the names (optional)
+    print(names)
+
+    # Append names to the service_names list
+    service_names.extend(names)
+
+    return service_names

@@ -4,6 +4,7 @@ Test Teardown     Run Keywords     Delete All Sessions
 ...               AND           Remove File  cookies.txt
 Force Tags        Appointment Communication
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Library           String
 Library           json
@@ -16,7 +17,8 @@ Variables         /ebs/TDD/varfiles/consumermail.py
 
 *** Variables ***
 
-${self}         0
+${self}     0
+@{service_names}
 ${digits}       0123456789
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
 ${pngfile}      /ebs/TDD/upload.png
@@ -235,11 +237,13 @@ JD-TC-ConsumerAppointmentCommunication-1
     ${eTime2}=  add_two   ${sTime2}  ${delta}
 
     clear_appt_schedule   ${PUSERNAME_H}
-    ${SERVICE1}=   FakerLibrary.name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     Set Suite Variable   ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id1}
-    ${SERVICE2}=   FakerLibrary.name
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     Set Suite Variable   ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${s_id2}

@@ -6,6 +6,7 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
@@ -14,7 +15,8 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py   
 
 *** Variables ***
-${self}         0
+${self}     0
+@{service_names}
 ${service_duration}   5  
 
 *** Test Cases ***
@@ -57,7 +59,8 @@ JD-TC-Get Future Waitlist Consumer-1
     ${loc_result} = 	Convert To Integer 	 ${resp.json()}
     Set Suite Variable  ${p1_l1}   ${loc_result}
 
-    ${P1SERVICE1}=    FakerLibrary.word
+    ${P1SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE1}
     ${desc}=   FakerLibrary.sentence
     # ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500

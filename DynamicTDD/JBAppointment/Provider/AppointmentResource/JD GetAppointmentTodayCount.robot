@@ -3,11 +3,11 @@
 Suite Teardown    Delete All Sessions
 Test Teardown     Delete All Sessions
 Force Tags        Appointment  
-Library           FakerLibrary
 Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           random
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
@@ -19,6 +19,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 *** Variables ***
 
 ${self}     0
+@{service_names}
 
 *** Test Cases ***
 
@@ -74,7 +75,8 @@ JD-TC-GetAppointmentTodayCount-1
     ${eTime1}=  add_timezone_time  ${tz}  3   50  
     Set Suite Variable   ${eTime1}
    
-    ${SERVICE1}=    generate_service_name   
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}   
     ${s_id}=  Create Sample Service  ${SERVICE1}      maxBookingsAllowed=20
     Set Suite Variable  ${s_id}
 
@@ -84,7 +86,8 @@ JD-TC-GetAppointmentTodayCount-1
     ${s_id1}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=10   isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre} 
     Set Suite Variable  ${s_id1}
 
-    ${SERVICE3}=  FakerLibrary.word
+    ${SERVICE3}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE3}
     ${s_id2}=  Create Sample Service  ${SERVICE3}   maxBookingsAllowed=10
     Set Suite Variable  ${s_id2}
 
@@ -299,7 +302,8 @@ JD-TC-GetAppointmentTodayCount-3
     ${prepay_amt}=   Random Int   min=50   max=100
     ${ser_amount}=   Random Int   min=100   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}   ${description}  ${ser_durtn}  ${bool[1]}  ${ser_amount1}  ${bool[0]}  minPrePaymentAmount=${prepay_amt}  maxBookingsAllowed=10
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -376,7 +380,8 @@ JD-TC-GetAppointmentTodayCount-4
     ${prepay_amt}=   Random Int   min=50   max=100
     ${ser_amount}=   Random Int   min=100   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}   ${description}  ${ser_durtn}  ${bool[1]}  ${ser_amount1}  ${bool[0]}  minPrePaymentAmount=${prepay_amt}  maxBookingsAllowed=10
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -496,7 +501,8 @@ JD-TC-GetAppointmentTodayCount-5
     ${prepay_amt}=   Random Int   min=50   max=100
     ${ser_amount}=   Random Int   min=100   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}   ${description}  ${ser_durtn}  ${bool[1]}  ${ser_amount1}  ${bool[0]}  minPrePaymentAmount=${prepay_amt}  maxBookingsAllowed=10
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -601,7 +607,8 @@ JD-TC-GetAppointmentTodayCount-6
     # clear_service   ${PUSERNAME105}
     # clear_appt_schedule   ${PUSERNAME105}
 
-    ${SERVICE1}=  FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -723,7 +730,8 @@ JD-TC-GetAppointmentTodayCount-7
     # clear_service   ${PUSERNAME105}
     # clear_appt_schedule   ${PUSERNAME105}
 
-    ${SERVICE1}=  FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -815,7 +823,8 @@ JD-TC-GetAppointmentTodayCount-8
     # clear_service   ${PUSERNAME105}
     # clear_appt_schedule   ${PUSERNAME105}
 
-    ${SERVICE1}=  FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -915,7 +924,8 @@ JD-TC-GetAppointmentTodayCount-9
     # clear_service   ${PUSERNAME105}
     # clear_appt_schedule   ${PUSERNAME105}
 
-    ${SERVICE1}=  FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1008,7 +1018,8 @@ JD-TC-GetAppointmentTodayCount-10
     # clear_service   ${PUSERNAME105}
     # clear_appt_schedule   ${PUSERNAME105}
 
-    ${SERVICE1}=  FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1101,10 +1112,12 @@ JD-TC-GetAppointmentTodayCount-11
     # clear_service   ${PUSERNAME105}
     # clear_appt_schedule   ${PUSERNAME105}
 
-    ${SERVICE1}=  FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
 
-    ${SERVICE2}=  FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id1}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=10
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1186,7 +1199,8 @@ JD-TC-GetAppointmentTodayCount-12
     # clear_service   ${PUSERNAME105}
     # clear_appt_schedule   ${PUSERNAME105}
 
-    ${SERVICE1}=  FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1270,7 +1284,8 @@ JD-TC-GetAppointmentTodayCount-13
     # clear_service   ${PUSERNAME105}
     # clear_appt_schedule   ${PUSERNAME105}
 
-    ${SERVICE1}=  FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1355,7 +1370,8 @@ JD-TC-GetAppointmentTodayCount-14
     # clear_service   ${PUSERNAME105}
     # clear_appt_schedule   ${PUSERNAME105}
 
-    ${SERVICE1}=  FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1443,10 +1459,12 @@ JD-TC-GetAppointmentTodayCount-15
     # clear_service   ${PUSERNAME105}
     # clear_appt_schedule   ${PUSERNAME105}
 
-    ${SERVICE1}=  FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
 
-    ${SERVICE2}=  FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id1}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=10
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1541,7 +1559,8 @@ JD-TC-GetAppointmentTodayCount-16
     # clear_service   ${PUSERNAME105}
     # clear_appt_schedule   ${PUSERNAME105}
 
-    ${SERVICE1}=  FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1663,7 +1682,8 @@ JD-TC-GetAppointmentTodayCount-17
     # clear_service   ${PUSERNAME105}
     # clear_appt_schedule   ${PUSERNAME105}
 
-    ${SERVICE1}=  FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1747,7 +1767,8 @@ JD-TC-GetAppointmentTodayCount-18
     # clear_service   ${PUSERNAME105}
     # clear_appt_schedule   ${PUSERNAME105}
 
-    ${SERVICE1}=  FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1836,7 +1857,8 @@ JD-TC-GetAppointmentTodayCount-19
     ${prepay_amt}=   Random Int   min=50   max=100
     ${ser_amount}=   Random Int   min=100   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}   ${description}  ${ser_durtn}  ${bool[1]}  ${ser_amount1}  ${bool[0]}  minPrePaymentAmount=${prepay_amt}  maxBookingsAllowed=10
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -1932,7 +1954,8 @@ JD-TC-GetAppointmentTodayCount-20
     ${prepay_amt}=   Random Int   min=50   max=100
     ${ser_amount}=   Random Int   min=100   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}   ${description}  ${ser_durtn}  ${bool[1]}  ${ser_amount1}  ${bool[0]}  minPrePaymentAmount=${prepay_amt}  maxBookingsAllowed=10
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -2029,7 +2052,8 @@ JD-TC-GetAppointmentTodayCount-21
     ${prepay_amt}=   Random Int   min=50   max=100
     ${ser_amount}=   Random Int   min=100   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}   ${description}  ${ser_durtn}  ${bool[1]}  ${ser_amount1}  ${bool[0]}  minPrePaymentAmount=${prepay_amt}  maxBookingsAllowed=10
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -2131,7 +2155,8 @@ JD-TC-GetAppointmentTodayCount-22
     ${prepay_amt}=   Random Int   min=50   max=100
     ${ser_amount}=   Random Int   min=100   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}   ${description}  ${ser_durtn}  ${bool[1]}  ${ser_amount1}  ${bool[0]}  minPrePaymentAmount=${prepay_amt}  maxBookingsAllowed=10
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -2218,7 +2243,8 @@ JD-TC-GetAppointmentTodayCount-23
     # clear_service   ${PUSERNAME105}
     # clear_appt_schedule   ${PUSERNAME105}
 
-    ${SERVICE1}=  FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -2304,7 +2330,8 @@ JD-TC-GetAppointmentTodayCount-24
     # clear_service   ${PUSERNAME105}
     # clear_appt_schedule   ${PUSERNAME105}
 
-    ${SERVICE1}=  FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -2409,7 +2436,8 @@ JD-TC-GetAppointmentTodayCount-25
     # clear_service   ${PUSERNAME105}
     # clear_appt_schedule   ${PUSERNAME105}
 
-    ${SERVICE1}=  FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -2532,7 +2560,8 @@ JD-TC-GetAppointmentTodayCount-26
     # clear_appt_schedule   ${PUSERNAME105}
     clear_customer   ${PUSERNAME105}
 
-    ${SERVICE1}=  FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -2631,7 +2660,8 @@ JD-TC-GetAppointmentTodayCount-27
     # clear_service   ${PUSERNAME105}
     # clear_appt_schedule   ${PUSERNAME105}
 
-    ${SERVICE1}=  FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -2726,7 +2756,8 @@ JD-TC-GetAppointmentTodayCount-28
     # clear_appt_schedule   ${PUSERNAME105}
     clear_Label  ${PUSERNAME105}
   
-    ${SERVICE1}=  FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -2864,7 +2895,8 @@ JD-TC-GetAppointmentTodayCount-29
 
     ${pid}=  get_acc_id  ${PUSERNAME230}
     
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id1}=   Create Sample Service  ${SERVICE1}
 
     ${latti}  ${longi}  ${city}  ${country_abbr}  ${US_tz}=  FakerLibrary.Local Latlng  country_code=US  coords_only=False

@@ -7,8 +7,10 @@ Library           String
 Library           json
 Library           requests
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           Process
 Library           OperatingSystem
+Library           /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/excelfuncs.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
@@ -33,6 +35,7 @@ ${self}      0
 ${mp4mime}   video/mp4
 ${avimime}   video/avi
 ${mp3mime}   audio/mpeg
+@{service_names}
 
 
 *** Keywords ***
@@ -112,7 +115,8 @@ JD-TC-GetAppointmentAdvancePaymentDetails-1
     ${min_pre}=  Convert To Number  ${min_pre}  0
     ${service_amount}=   Random Int   min=100   max=500
     ${service_amount}=  Convert To Number  ${service_amount}  0
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[1]}  minPrePaymentAmount=${min_pre}  taxable=${bool[0]}  prePaymentType=${advancepaymenttype[1]}
     Log  ${resp.content}
@@ -230,7 +234,8 @@ JD-TC-GetAppointmentAdvancePaymentDetails-2
     ${min_pre}=  Convert To Number  ${min_pre}  0
     ${service_amount}=   Random Int   min=100   max=500
     ${service_amount}=  Convert To Number  ${service_amount}  0
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}
     Log  ${resp.content}
@@ -341,7 +346,8 @@ JD-TC-GetAppointmentAdvancePaymentDetails-3
     ${min_pre}=  Convert To Number  ${min_pre}  0
     ${service_amount}=   Random Int   min=100   max=500
     ${service_amount}=  Convert To Number  ${service_amount}  0
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[1]}
     Log  ${resp.content}
@@ -489,7 +495,8 @@ JD-TC-GetAppointmentAdvancePaymentDetails-4
     ${min_pre}=  Convert To Number  ${min_pre}  0
     ${service_amount}=   Random Int   min=100   max=500
     ${service_amount}=  Convert To Number  ${service_amount}  0
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}
     Log  ${resp.content}
@@ -641,7 +648,8 @@ JD-TC-GetAppointmentAdvancePaymentDetails-5
     ${min_pre}=  Convert To Number  ${min_pre}  0
     ${service_amount}=   Random Int   min=100   max=500
     ${service_amount}=  Convert To Number  ${service_amount}  0
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}  ${bool[1]}  ${service_amount}  ${bool[0]}  minPrePaymentAmount=${min_pre}  prePaymentType=${advancepaymenttype[0]}
     Log  ${resp.content}

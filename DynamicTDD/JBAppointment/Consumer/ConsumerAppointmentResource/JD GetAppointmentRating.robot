@@ -6,6 +6,7 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
@@ -62,19 +63,23 @@ JD-TC-GetAppointmentRating-1
         Should Be Equal As Strings    ${resp.status_code}   200
     END
 
-    ${SERVICE1}=   FakerLibrary.name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
     
-    ${SERVICE2}=   FakerLibrary.name
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${s_id2}
 
-    ${SERVICE3}=   FakerLibrary.name
+    ${SERVICE3}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE3}
     ${s_id3}=  Create Sample Service  ${SERVICE3}
     Set Suite Variable   ${s_id3}
 
-    ${SERVICE4}=   FakerLibrary.name
+    ${SERVICE4}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE4}
     ${s_id4}=  Create Sample Service  ${SERVICE4}
     Set Suite Variable   ${s_id4}
 
@@ -372,19 +377,23 @@ JD-TC-GetAppointmentRating-3
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     # clear_appt_schedule   ${PUSERNAME101}
 
-    ${SERVICE1}=   FakerLibrary.name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${ser_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${ser_id}
     
-    ${SERVICE2}=   FakerLibrary.name
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${ser_id2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${ser_id2}
 
-    ${SERVICE3}=   FakerLibrary.name
+    ${SERVICE3}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE3}
     ${ser_id3}=  Create Sample Service  ${SERVICE3}
     Set Suite Variable   ${ser_id3}
 
-    ${SERVICE4}=   FakerLibrary.name
+    ${SERVICE4}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE4}
     ${ser_id4}=  Create Sample Service  ${SERVICE4}
     Set Suite Variable   ${ser_id4}
 

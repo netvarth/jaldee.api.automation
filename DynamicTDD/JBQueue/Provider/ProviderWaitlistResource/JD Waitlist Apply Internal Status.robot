@@ -6,6 +6,7 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/hl_providers.py
@@ -132,7 +133,8 @@ JD-TC-WaitlistApplyInternalSts-1
     Set Suite Variable  ${u_id2} 
     ${u_id2}=  Convert To String  ${u_id2}
 
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
     ${ser_duratn}=      Random Int   min=01   max=05

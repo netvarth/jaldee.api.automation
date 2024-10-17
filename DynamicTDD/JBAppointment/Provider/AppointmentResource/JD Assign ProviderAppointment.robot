@@ -7,6 +7,7 @@ Library           String
 Library           json
 Library           requests
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
@@ -15,6 +16,9 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/hl_providers.py
+
+*** Variables ***
+@{service_names}
 
 ***Test Cases***
 
@@ -46,7 +50,8 @@ JD-TC-AssignproviderAppointment-1
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -89,7 +94,8 @@ JD-TC-AssignproviderAppointment-1
 
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${eTime1}=  add_timezone_time  ${tz}  1  00  
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${user_id}=  Create Dictionary   id=${u_id1}
     ${s_id1}=  Create Sample Service   ${SERVICE1}    provider=${user_id}
     ${schedule_name}=  FakerLibrary.bs
@@ -169,7 +175,8 @@ JD-TC-AssignproviderAppointment-2
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service   ${SERVICE1}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -222,7 +229,8 @@ JD-TC-AssignproviderAppointment-2
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${eTime1}=  add_timezone_time  ${tz}  3  00  
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${user_id}=  Create Dictionary   id=${u_id1} 
     ${s_id1}=  Create Sample Service   ${SERVICE1}  provider=${user_id}
     ${schedule_name}=  FakerLibrary.bs
@@ -288,7 +296,8 @@ JD-TC-AssignproviderAppointment-3
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
     ${ser_duratn}=      Random Int   min=10   max=30
@@ -371,7 +380,8 @@ JD-TC-AssignproviderAppointment-4
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
     ${ser_duratn}=      Random Int   min=10   max=30
@@ -429,7 +439,8 @@ JD-TC-AssignproviderAppointment-4
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${eTime1}=  add_timezone_time  ${tz}  3  00  
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${user_id}=  Create Dictionary   id=${u_id1}
     ${s_id1}=  Create Sample Service   ${SERVICE1}   provider=${user_id}
     ${schedule_name}=  FakerLibrary.bs
@@ -502,7 +513,8 @@ JD-TC-AssignproviderAppointment-5
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service   ${SERVICE1}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -571,7 +583,8 @@ JD-TC-AssignproviderAppointment-5
 
     ${sTime2}=  add_timezone_time  ${tz}  3  15  
     ${eTime2}=  add_timezone_time  ${tz}  4  00  
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id2}=  Create Sample Service   ${SERVICE1}    provider=${u_id2}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -628,7 +641,8 @@ JD-TC-AssignproviderAppointment-6
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id}=  Create Sample Service  ${SERVICE2}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -719,7 +733,8 @@ JD-TC-AssignproviderAppointment-6
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${eTime1}=  add_timezone_time  ${tz}  3  00  
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${user_id}=  Create Dictionary   id=${u_id1}
     ${s_id1}=  Create Sample Service   ${SERVICE1}   provider=${user_id}
     ${schedule_name}=  FakerLibrary.bs
@@ -786,7 +801,8 @@ JD-TC-AssignproviderAppointment-7
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE2}=    FakerLibrary.Word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id}=  Create Sample Service  ${SERVICE2}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -832,7 +848,8 @@ JD-TC-AssignproviderAppointment-7
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${sTime3}=  add_timezone_time  ${tz}  0  15  
     ${eTime3}=  add_timezone_time  ${tz}  1  00  
-    ${SERVICE2}=    FakerLibrary.Word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id1}=  Create Sample Service   ${SERVICE2}  provider=${u_id1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -902,7 +919,8 @@ JD-TC-AssignproviderAppointment-8
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -982,7 +1000,8 @@ JD-TC-AssignproviderAppointment-9
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -1032,7 +1051,8 @@ JD-TC-AssignproviderAppointment-9
     
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${eTime1}=  add_timezone_time  ${tz}  1  00  
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id1}=  Create Sample Service   ${SERVICE1}  provider=${u_id1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -1077,7 +1097,8 @@ JD-TC-AssignproviderAppointment-10
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -1162,7 +1183,8 @@ JD-TC-AssignproviderAppointment-UH1
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${eTime1}=  add_timezone_time  ${tz}  3  00  
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${user_id}=  Create Dictionary   id=${u_id1}
     ${s_id1}=  Create Sample Service   ${SERVICE1}   provider=${user_id}
@@ -1236,7 +1258,8 @@ JD-TC-AssignproviderAppointment-UH1
 
     ${sTime2}=  add_timezone_time  ${tz}  3  15  
     ${eTime2}=  add_timezone_time  ${tz}  4  00  
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id2}=  Create Sample Service   ${SERVICE1}  provider=${u_id2}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -1271,7 +1294,8 @@ JD-TC-AssignproviderAppointment-UH2
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service   ${SERVICE1}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1322,7 +1346,8 @@ JD-TC-AssignproviderAppointment-UH2
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${eTime1}=  add_timezone_time  ${tz}  3  00  
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${user_id}=  Create Dictionary   id=${u_id1}
     ${s_id1}=  Create Sample Service   ${SERVICE1}  provider=${user_id}
     ${schedule_name}=  FakerLibrary.bs
@@ -1358,7 +1383,8 @@ JD-TC-AssignproviderAppointment-UH3
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service   ${SERVICE1}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1410,7 +1436,8 @@ JD-TC-AssignproviderAppointment-UH3
  
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${eTime1}=  add_timezone_time  ${tz}  3  00  
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${user_id}=  Create Dictionary   id=${u_id1}
     ${s_id1}=  Create Sample Service   ${SERVICE1}   provider=${user_id}
     ${schedule_name}=  FakerLibrary.bs
@@ -1458,7 +1485,8 @@ JD-TC-AssignproviderAppointment-UH4
 
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${eTime1}=  add_timezone_time  ${tz}  3  00  
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id1}=  Create Sample Service   ${SERVICE1}  provider=${u_id5}
     ${schedule_name}=  FakerLibrary.bs
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -1484,7 +1512,8 @@ JD-TC-AssignproviderAppointment-UH4
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service   ${SERVICE1}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1555,7 +1584,8 @@ JD-TC-AssignproviderAppointment-UH5
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service   ${SERVICE1}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1612,7 +1642,8 @@ JD-TC-AssignproviderAppointment-UH5
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${eTime1}=  add_timezone_time  ${tz}  3  00  
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${user_id}=  Create Dictionary   id=${u_id1}
     ${s_id1}=  Create Sample Service   ${SERVICE1}   provider=${user_id}
     ${schedule_name}=  FakerLibrary.bs
@@ -1651,7 +1682,8 @@ JD-TC-AssignproviderAppointment-UH6
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service   ${SERVICE1}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1703,7 +1735,8 @@ JD-TC-AssignproviderAppointment-UH6
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${eTime1}=  add_timezone_time  ${tz}  3  00  
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id1}=  Create Sample Service   ${SERVICE1}  provider=${u_id6}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10

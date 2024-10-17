@@ -7,8 +7,8 @@ Library           String
 Library           json
 Library           requests
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
-Library           /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
@@ -30,6 +30,7 @@ ${P_PASSWORD}        Netvarth008
 ${C_PASSWORD}        Netvarth009
 ${waitlistedby}           PROVIDER
 @{countryCode}   91  +91  48 
+@{service_names}
 
 
 
@@ -266,7 +267,8 @@ JD-TC-AssignproviderWaitlist-2
 
     clear_customer   ${HLPUSERNAME2}
 
-    ${SERVICE1}=    generate_service_name 
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1} 
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
     ${ser_duratn}=      Random Int   min=10   max=30
@@ -408,7 +410,8 @@ JD-TC-AssignproviderWaitlist-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}
 
-    ${SERVICE1}=    generate_service_name 
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1} 
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
     ${ser_duratn}=      Random Int   min=10   max=30
@@ -487,7 +490,8 @@ JD-TC-AssignproviderWaitlist-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}
 
-    ${SERVICE1}=    generate_service_name 
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1} 
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
     ${ser_duratn}=      Random Int   min=10   max=30
@@ -654,7 +658,8 @@ JD-TC-AssignproviderWaitlist-5
 
     clear_customer   ${HLPUSERNAME2}
 
-    ${SERVICE1}=    generate_service_name 
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1} 
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
     ${ser_duratn}=      Random Int   min=10   max=30
@@ -802,7 +807,8 @@ JD-TC-AssignproviderWaitlist-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}
 
-    ${SERVICE1}=    generate_service_name 
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1} 
 
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id}    ${resp}  
@@ -1006,7 +1012,8 @@ JD-TC-AssignproviderWaitlist-7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    generate_service_name 
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1} 
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id}    ${resp}  
 
@@ -1339,7 +1346,8 @@ JD-TC-AssignproviderWaitlist-9
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    generate_service_name 
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1} 
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id}    ${resp}  
 
@@ -1512,7 +1520,8 @@ JD-TC-AssignproviderWaitlist-10
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    generate_service_name 
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1} 
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id}    ${resp}  
 
@@ -1724,7 +1733,8 @@ JD-TC-AssignproviderWaitlist-UH3
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
     ${ser_duratn}=      Random Int   min=10   max=30
@@ -1800,7 +1810,8 @@ JD-TC-AssignproviderWaitlist-UH4
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${SERVICE1}=    generate_service_name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
     ${ser_duratn}=      Random Int   min=10   max=30
@@ -1896,7 +1907,8 @@ JD-TC-AssignproviderWaitlist-UH5
 
     END
 
-    ${SERVICE1}=    generate_service_name 
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1} 
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id}    ${resp}  
 
@@ -1932,7 +1944,8 @@ JD-TC-AssignproviderWaitlist-UH5
     Set Suite Variable  ${ph1}
     Set Suite Variable  ${u_id5}
 
-    ${SERVICE1}=    generate_service_name 
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1} 
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -1966,7 +1979,8 @@ JD-TC-AssignproviderWaitlist-UH5
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${SERVICE1}=    generate_service_name 
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1} 
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
     ${ser_duratn}=      Random Int   min=10   max=30
@@ -2043,7 +2057,8 @@ JD-TC-AssignproviderWaitlist-UH6
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${SERVICE1}=    generate_service_name 
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1} 
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
     ${ser_duratn}=      Random Int   min=10   max=30
@@ -2127,7 +2142,8 @@ JD-TC-AssignproviderWaitlist-UH7
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${SERVICE1}=    generate_service_name 
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1} 
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
     ${ser_duratn}=      Random Int   min=10   max=30
@@ -2255,7 +2271,8 @@ JD-TC-AssignproviderWaitlist-UH9
     ${resp}=   Get License UsageInfo 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${SERVICE1}=    generate_service_name 
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1} 
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id}    ${resp}  
     
@@ -2686,7 +2703,8 @@ JD-TC-AssignproviderWaitlist-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
     ${ser_duratn}=      Random Int   min=10   max=30
@@ -2821,7 +2839,8 @@ JD-TC-AssignproviderWaitlist-UH2
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
     ${ser_duratn}=      Random Int   min=10   max=30

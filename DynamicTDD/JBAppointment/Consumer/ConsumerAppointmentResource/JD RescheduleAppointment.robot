@@ -3,6 +3,7 @@ Suite Teardown    Delete All Sessions
 Test Teardown     Delete All Sessions
 Force Tags        Appointment, Schedule
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
@@ -13,10 +14,13 @@ Variables         /ebs/TDD/varfiles/consumermail.py
 *** Variables ***
 
 ${self}     0
+@{service_names}
 ${digits}       0123456789
 @{dom_list}
 @{provider_list}
 @{multiloc_providers}
+@{service_names}
+@{service_names}
 
 
 
@@ -94,7 +98,8 @@ JD-TC-Reschedule Appointment-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -284,7 +289,8 @@ JD-TC-Reschedule Appointment-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]} 
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -451,7 +457,8 @@ JD-TC-Reschedule Appointment-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -620,7 +627,8 @@ JD-TC-Reschedule Appointment-9
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -814,7 +822,8 @@ JD-TC-Reschedule Appointment-10
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1024,7 +1033,8 @@ JD-TC-Reschedule Appointment-UH1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1194,7 +1204,8 @@ JD-TC-Reschedule Appointment-UH2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1383,7 +1394,8 @@ JD-TC-Reschedule Appointment-UH3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1412,7 +1424,8 @@ JD-TC-Reschedule Appointment-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  scheduleName=${schedule_name1}  scheduleId=${sch_id1}
 
-    ${SERVICE2}=    FakerLibrary.Word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     
     ${DAY3}=  db.add_timezone_date  ${tz}  6  
@@ -1573,7 +1586,8 @@ JD-TC-Reschedule Appointment-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1737,7 +1751,8 @@ JD-TC-Reschedule Appointment-UH5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -1897,7 +1912,8 @@ JD-TC-Reschedule Appointment-UH6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -2039,7 +2055,8 @@ JD-TC-Reschedule Appointment-UH7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -2195,7 +2212,8 @@ JD-TC-Reschedule Appointment-UH8
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -2351,7 +2369,8 @@ JD-TC-Reschedule Appointment-UH9
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -2507,7 +2526,8 @@ JD-TC-Reschedule Appointment-UH10
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -2663,7 +2683,8 @@ JD-TC-Reschedule Appointment-UH11
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -2819,7 +2840,8 @@ JD-TC-Reschedule Appointment-UH12
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -2975,7 +2997,8 @@ JD-TC-Reschedule Appointment-UH13
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -3132,7 +3155,8 @@ JD-TC-Reschedule Appointment-UH14
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -3292,7 +3316,8 @@ JD-TC-Reschedule Appointment-UH15
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -3457,7 +3482,8 @@ JD-TC-Reschedule Appointment-UH16
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -3636,7 +3662,8 @@ JD-TC-Reschedule Appointment-UH17
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -3701,7 +3728,8 @@ JD-TC-Reschedule Appointment-UH17
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -3879,7 +3907,8 @@ JD-TC-Reschedule Appointment-UH20
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['futureAppt']}   ${bool[0]}
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -4036,7 +4065,8 @@ JD-TC-Reschedule Appointment-UH21
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -4247,7 +4277,8 @@ JD-TC-Reschedule Appointment-UH22
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -4450,7 +4481,8 @@ JD-TC-Reschedule Appointment-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -4666,7 +4698,8 @@ JD-TC-Reschedule Appointment-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -4858,7 +4891,8 @@ JD-TC-Reschedule Appointment-6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -4888,7 +4922,8 @@ JD-TC-Reschedule Appointment-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  scheduleName=${schedule_name1}  scheduleId=${sch_id1}
 
-    # ${SERVICE2}=    FakerLibrary.Word
+    # ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     # ${s_id2}=  Create Sample Service  ${SERVICE2}
 
     ${DAY3}=  db.add_timezone_date  ${tz}  6  
@@ -5096,7 +5131,8 @@ JD-TC-Reschedule Appointment-7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -5293,7 +5329,8 @@ JD-TC-Reschedule Appointment-8
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -5477,7 +5514,8 @@ JD-TC-Reschedule Appointment-UH18
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -5635,7 +5673,8 @@ JD-TC-Reschedule Appointment-UH19
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}

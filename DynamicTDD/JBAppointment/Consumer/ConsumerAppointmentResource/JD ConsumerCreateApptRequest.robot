@@ -7,8 +7,10 @@ Library           String
 Library           json
 Library           requests
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           Process
 Library           OperatingSystem
+Library           /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
@@ -20,6 +22,7 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 
 @{emptylist}
 ${self}     0
+@{service_names}
 
 *** Test Cases ***
 
@@ -44,7 +47,8 @@ JD-TC-ConsumerCreateApptRequest-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${acc_id1}  ${resp.json()['id']}
 
-    # ${SERVICE1}=    FakerLibrary.word
+    # ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    # Append To List  ${service_names}  ${SERVICE1}
     
     # ${service_duration}=   Random Int   min=5   max=10
     # ${desc}=   FakerLibrary.sentence
@@ -58,14 +62,16 @@ JD-TC-ConsumerCreateApptRequest-1
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${sid1}  ${resp.json()}
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${sid1}=  Create Sample Service  ${SERVICE1}  date=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
 
     ${resp}=   Get Service By Id  ${sid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${SERVICE2}=    FakerLibrary.word
+    # ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     # ${service_duration}=   Random Int   min=5   max=10
     # ${desc}=   FakerLibrary.sentence
     # ${min_pre}=   Random Int   min=1   max=50
@@ -78,14 +84,16 @@ JD-TC-ConsumerCreateApptRequest-1
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${sid2}  ${resp.json()}
 
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${sid2}=  Create Sample Service  ${SERVICE2}  dateTime=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
 
     ${resp}=   Get Service By Id  ${sid2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${SERVICE3}=    FakerLibrary.word
+    # ${SERVICE3}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE3}
     # ${service_duration}=   Random Int   min=5   max=10
     # ${desc}=   FakerLibrary.sentence
     # ${min_pre}=   Random Int   min=1   max=50
@@ -98,7 +106,8 @@ JD-TC-ConsumerCreateApptRequest-1
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${sid3}  ${resp.json()}
 
-    ${SERVICE3}=    FakerLibrary.word
+    ${SERVICE3}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE3}
     ${sid3}=  Create Sample Service  ${SERVICE3}  dateTime=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
 
     ${resp}=   Get Service By Id  ${sid3}
@@ -248,7 +257,8 @@ JD-TC-ConsumerCreateApptRequest-4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${service_duration}=   Random Int   min=5   max=10
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50

@@ -6,7 +6,9 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           random
+Library         /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
@@ -21,7 +23,8 @@ ${SERVICE2}     pedicure
 ${SERVICE3}     service3
 ${SERVICE4}     service4
 ${SERVICE5}     service5
-${self}         0
+${self}     0
+@{service_names}
 ${digits}       0123456789
 @{provider_list}
 @{dom_list}
@@ -103,10 +106,12 @@ JD-TC-Take Appointment-1
     Set Suite Variable   ${DAY3}      
 
     # clear_appt_schedule   ${PUSERNAME_B}
-    ${SERVICE1}=   FakerLibrary.name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
-    ${SERVICE2}=   FakerLibrary.name
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=10
     Set Suite Variable   ${s_id2}
     
@@ -806,10 +811,12 @@ JD-TC-Take Appointment-9
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=   FakerLibrary.name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${p1_s1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${p1_s1}
-    ${SERVICE2}=   FakerLibrary.name
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${p1_s2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${p1_s2}
     ${p1_l1}=  Create Sample Location
@@ -2452,10 +2459,12 @@ JD-TC-Take Appointment-UH1
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=   FakerLibrary.name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${p1_s1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${p1_s1}
-    ${SERVICE2}=   FakerLibrary.name
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${p1_s2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${p1_s2}
     ${p1_l1}=  Create Sample Location
@@ -2571,7 +2580,8 @@ JD-TC-Take Appointment-UH2
 
     ${p1_s1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${p1_s1}
-    ${SERVICE2}=   FakerLibrary.name
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${p1_s2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${p1_s2}
     ${p1_l1}=  Create Sample Location
@@ -2600,7 +2610,8 @@ JD-TC-Take Appointment-UH2
     ${sTime1}=  add_timezone_time  ${tz1}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=   FakerLibrary.name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -2664,10 +2675,12 @@ JD-TC-Take Appointment-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=   FakerLibrary.name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${p1_s1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${p1_s1}
-    ${SERVICE2}=   FakerLibrary.name
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${p1_s2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${p1_s2}
     ${p1_l1}=  Create Sample Location
@@ -2774,10 +2787,12 @@ JD-TC-Take Appointment-UH4
 
     # clear_appt_schedule   ${PUSERNAME76}
 
-    ${SERVICE1}=   FakerLibrary.name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${p1_s1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${p1_s1}
-    ${SERVICE2}=   FakerLibrary.name
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${p1_s2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${p1_s2}
     ${p1_l1}=  Create Sample Location
@@ -2874,7 +2889,8 @@ JD-TC-Take Appointment-UH5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=   FakerLibrary.name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
    
@@ -3468,7 +3484,8 @@ JD-TC-Take Appointment-UH9
 
     ${p1_s1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${p1_s1}
-    ${SERVICE2}=   FakerLibrary.name
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${p1_s2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${p1_s2}
 
@@ -3597,7 +3614,8 @@ JD-TC-Take Appointment-UH11
 
     ${p1_s1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${p1_s1}
-    ${SERVICE2}=   FakerLibrary.name
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${p1_s2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${p1_s2}
 
@@ -3869,7 +3887,8 @@ JD-TC-Take Appointment-UH12
     # clear_location  ${PUSERNAME_W}
     ${p1_s1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${p1_s1}
-    ${SERVICE2}=   FakerLibrary.name
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${p1_s2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${p1_s2}
 
@@ -4066,7 +4085,8 @@ JD-TC-Take Appointment-18
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${min_pre}=   Random Int   min=10   max=50
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${servicecharge}=   Random Int  min=100  max=200
@@ -4410,7 +4430,8 @@ JD-TC-Take Appointment-19
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
@@ -4572,7 +4593,8 @@ JD-TC-Take Appointment-20
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 	
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
@@ -4809,7 +4831,8 @@ JD-TC-Take Appointment-21
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 	
-    # ${SERVICE1}=    FakerLibrary.Word
+    # ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     # ${description}=  FakerLibrary.sentence
     # # ${s_id}=  Create Sample Service For User  ${SERVICE1}  ${dep_id}  ${u_id}
     # ${dur}=  FakerLibrary.Random Int  min=10  max=20
@@ -4820,7 +4843,8 @@ JD-TC-Take Appointment-21
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${s_id}  ${resp.json()}
 
-        ${SERVICE2}=    FakerLibrary.Word
+        ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
         ${desc2}=   FakerLibrary.sentence
         ${min_pre2}=   Pyfloat  right_digits=1  min_value=10  max_value=50
         # ${servicecharge2}=   Random Int  min=100  max=500
@@ -5099,10 +5123,12 @@ JD-TC-Take Appointment-UH14
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     # clear_appt_schedule   ${PUSERNAME_D}
-    ${SERVICE1}=   FakerLibrary.name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
-    ${SERVICE2}=   FakerLibrary.name
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${s_id2}
     ${schedule_name}=  FakerLibrary.bs
@@ -5248,10 +5274,12 @@ JD-TC-Take Appointment-UH15
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
-    ${SERVICE1}=   FakerLibrary.name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${p1_s1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${p1_s1}
-    ${SERVICE2}=   FakerLibrary.name
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${p1_s2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${p1_s2}
     ${p1_l1}=  Create Sample Location

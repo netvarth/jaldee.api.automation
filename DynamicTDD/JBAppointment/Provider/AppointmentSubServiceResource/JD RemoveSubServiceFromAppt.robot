@@ -7,6 +7,7 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/Imageupload.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
@@ -18,7 +19,8 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 
 *** Variables ***
 
-${self}         0
+${self}     0
+@{service_names}
 
 
 *** Test Cases ***
@@ -125,7 +127,8 @@ JD-TC-RemoveSubServicesToAppt-1
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${empty_list}=   Create List
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     Set Suite Variable   ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}   
     Set Suite Variable    ${s_id}

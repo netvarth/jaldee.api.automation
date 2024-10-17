@@ -57,7 +57,8 @@ JD-TC-CheckDepartment-1
     ${resp}=  Get Departments
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   'len(${resp.json()}) < 1'
+    ${len}=  Get Length  ${resp.json()['departments']}
+    IF  ${len} <= 1
             ${dep_name1}=  FakerLibrary.bs
             ${dep_code1}=   Random Int  min=100   max=999
             ${dep_desc1}=   FakerLibrary.word  

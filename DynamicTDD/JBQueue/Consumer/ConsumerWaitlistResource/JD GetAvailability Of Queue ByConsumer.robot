@@ -6,6 +6,7 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
@@ -16,6 +17,7 @@ Variables         /ebs/TDD/varfiles/consumermail.py
 *** Variables ***
 ${service_duration}   5  
 ${SERVICE2}     conselling
+@{service_names}
 
 
 *** Test Cases ***
@@ -162,7 +164,8 @@ JD-TC-Get Next Available Dates-1
         Run Keyword If  '${keywordstatus}' == 'PASS'  Append To List   ${name_list}  ${P1SERVICE2}
         Exit For Loop IF   '${keywordstatus}' == 'PASS'
     END
-    # ${P1SERVICE2}=    FakerLibrary.word
+    # ${P1SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE2}
     Set Suite Variable  ${P1SERVICE2}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
@@ -178,7 +181,8 @@ JD-TC-Get Next Available Dates-1
         Run Keyword If  '${keywordstatus}' == 'PASS'  Append To List   ${name_list}  ${P1SERVICE3}
         Exit For Loop IF   '${keywordstatus}' == 'PASS'
     END
-    # ${P1SERVICE3}=    FakerLibrary.word
+    # ${P1SERVICE3}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE3}
     Set Suite Variable   ${P1SERVICE3}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
@@ -616,7 +620,8 @@ JD-TC-Get Next Available Dates-8
     Set Suite Variable   ${ulid}   ${resp.json()[0]['id']}
     Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=05  max=10
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -974,7 +979,8 @@ JD-TC-Get Next Available Dates-UH8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${plid}   ${resp.json()[0]['id']}
 
-    ${P1SERVICE1}=    FakerLibrary.word
+    ${P1SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE1}
     Set Test Variable  ${P1SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500

@@ -7,8 +7,10 @@ Library           String
 Library           json
 Library           requests
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           Process
 Library           OperatingSystem
+Library           /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables       /ebs/TDD/varfiles/providers.py
@@ -42,6 +44,7 @@ ${start3}         80
 ${loc}          TGR 
 ${queue1}     QUEUE1
 ${self}     0
+@{service_names}
 @{provider_list}
 @{dom_list}
 @{multiloc_providers}

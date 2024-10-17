@@ -6,19 +6,23 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           random
 Library           /ebs/TDD/db.py
+Library           /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
-Variables       /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/hl_providers.py
-Variables       /ebs/TDD/varfiles/consumerlist.py 
+Variables         /ebs/TDD/varfiles/consumerlist.py 
 
 *** Variables ***
-${self}         0
+${self}     0
+@{service_names}
 @{multiloc_providers}
 ${countryCode}   +91
+@{service_names}
 
 
 
@@ -80,10 +84,12 @@ JD-TC-Get All Schedule slots-1
     Set Suite Variable   ${DAY3}      
 
     # clear_appt_schedule   ${PUSERNAME_B}
-    ${SERVICE1}=   FakerLibrary.name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
-    ${SERVICE2}=   FakerLibrary.name
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=10
     Set Suite Variable   ${s_id2}
     
@@ -280,7 +286,8 @@ JD-TC-Get All Schedule slots-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
     ${ser_duratn}=      Random Int   min=10   max=30
@@ -304,7 +311,8 @@ JD-TC-Get All Schedule slots-3
     ${list}=  Create List  1  2  3  4  5  6  7 
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${eTime1}=  add_timezone_time  ${tz}  3  00  
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${user_id}=  Create Dictionary   id=${u_id1} 
     ${s_id1}=  Create Sample Service   ${SERVICE1}  provider=${user_id}
     ${schedule_name}=  FakerLibrary.bs

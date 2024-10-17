@@ -2,11 +2,11 @@
 Suite Teardown    Delete All Sessions
 Test Teardown     Delete All Sessions
 Force Tags        Appointment  
-Library           FakerLibrary
 Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           random
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
@@ -23,6 +23,7 @@ ${SERVICE1}  manicure
 ${SERVICE2}  pedicure
 ${SERVICE3}  Nail Art
 ${self}     0
+@{service_names}
 @{emptylist}
 
 *** Test Cases ***
@@ -582,7 +583,8 @@ JD-TC-Update schedule-6
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
-    ${SERVICE1}=  FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -8299,7 +8301,8 @@ JD-TC-Update schedule-UH30
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${resouces}=    FakerLibrary.Random Int  min=4  max=8
-    ${SERVICE1}=  FakerLibrary.name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}    resoucesRequired=${resouces}
 
     ${schedule_name}=  FakerLibrary.bs
@@ -8414,7 +8417,8 @@ JD-TC-Update schedule-UH31
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${resouces}=    FakerLibrary.Random Int  min=4  max=8
-    ${SERVICE1}=  FakerLibrary.name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}    resoucesRequired=${resouces}
 
     ${schedule_name}=  FakerLibrary.bs

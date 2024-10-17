@@ -7,6 +7,7 @@ Library         Collections
 Library         String
 Library         json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
@@ -105,7 +106,8 @@ JD-TC-Get Queue By Location and Service-1
     ${loc_result} = 	Convert To Integer 	 ${resp.json()}
     Set Suite Variable  ${p1_l2}   ${loc_result}
 
-    ${P1SERVICE1}=    FakerLibrary.word
+    ${P1SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE1}
     Set Suite Variable  ${P1SERVICE1}
     ${desc}=   FakerLibrary.sentence
     # ${min_pre}=   Random Int   min=1   max=50
@@ -115,7 +117,8 @@ JD-TC-Get Queue By Location and Service-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_s1}  ${resp.json()} 
 
-    ${P1SERVICE2}=    FakerLibrary.word
+    ${P1SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE2}
     Set Suite Variable  ${P1SERVICE2}
     ${desc}=   FakerLibrary.sentence
     # ${min_pre}=   Random Int   min=1   max=50
@@ -124,7 +127,8 @@ JD-TC-Get Queue By Location and Service-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_s2}  ${resp.json()} 
 
-    ${P1SERVICE3}=    FakerLibrary.word
+    ${P1SERVICE3}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE3}
     Set Suite Variable   ${P1SERVICE3}
     ${desc}=   FakerLibrary.sentence
     # ${min_pre}=   Random Int   min=1   max=50

@@ -7,6 +7,7 @@ Library           String
 Library           json
 Library           requests
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
@@ -14,6 +15,9 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
+
+*** Variables ***
+@{service_names}
 
 *** Test Cases ***  
 
@@ -43,7 +47,8 @@ JD-TC-NextAvailableSchedule for User-1
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}    provider=${u_id}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -102,7 +107,8 @@ JD-TC-NextAvailableSchedule for User-2
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service   ${SERVICE1}    provider=${u_id}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -181,7 +187,8 @@ JD-TC-NextAvailableSchedule for User-3
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service   ${SERVICE1}   provider=${u_id}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -262,7 +269,8 @@ JD-TC-NextAvailableSchedule for User-4
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}  provider=${u_id}
     
     ${DAY1}=  db.add_timezone_date  ${tz}  1
@@ -307,7 +315,8 @@ JD-TC-NextAvailableSchedule for User-4
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${SERVICE2}=    FakerLibrary.Word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id1}=  Create Sample Service   ${SERVICE2}   provider=${u_id1}
     
     ${DAY11}=  db.get_date_by_timezone  ${tz}

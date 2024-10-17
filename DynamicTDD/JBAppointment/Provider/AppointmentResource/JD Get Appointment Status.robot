@@ -2,11 +2,11 @@
 Suite Teardown    Delete All Sessions
 Test Teardown     Delete All Sessions
 Force Tags        Appointment  
-Library           FakerLibrary
 Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           random
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
@@ -20,6 +20,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 ${SERVICE1}  manicure 
 ${SERVICE2}  pedicure
 ${self}     0
+@{service_names}
 ${digits}       0123456789
 @{provider_list}
 @{empty_list}

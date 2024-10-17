@@ -2,12 +2,14 @@
 Library           Collections
 Library           String
 Library           OperatingSystem
+Library           /ebs/TDD/CustomKeywords.py
 Library           json
 Library           DateTime
 Library           db.py
 Resource          Keywords.robot
 Library	          Imageupload.py
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 
 
 *** Keywords ***

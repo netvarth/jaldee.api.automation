@@ -2,6 +2,7 @@
 Library           Collections
 Library           String
 Library           OperatingSystem
+Library           /ebs/TDD/CustomKeywords.py
 Library           json
 Library           db.py
 Resource          Keywords.robot

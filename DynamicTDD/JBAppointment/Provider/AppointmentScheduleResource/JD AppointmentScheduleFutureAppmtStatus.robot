@@ -7,6 +7,7 @@ Library           String
 Library           json
 Library           requests
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
@@ -20,7 +21,8 @@ Variables         /ebs/TDD/varfiles/consumermail.py
 
 ${SERVICE1}     Scannings111 
 ${SERVICE2}     Scanning
-${self}         0
+${self}     0
+@{service_names}
 ${prefix}       serviceBatch
 ${suffix}       serving
 

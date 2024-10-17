@@ -6,6 +6,7 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Library           random
 Resource          /ebs/TDD/ProviderKeywords.robot
@@ -17,6 +18,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 *** Variables ***
 ${self}     0
+@{service_names}
 
 *** Test Cases ***
 
@@ -74,7 +76,8 @@ JD-TC-GetAppointmentServicesByLocation-1
         
     ${service_duration}=   Random Int   min=5   max=10
     Set Suite Variable    ${service_duration}
-    ${P1SERVICE1}=    FakerLibrary.word
+    ${P1SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE1}
     Set Suite Variable  ${P1SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -84,7 +87,8 @@ JD-TC-GetAppointmentServicesByLocation-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_s1}  ${resp.json()}    
  
-    ${P1SERVICE2}=    FakerLibrary.word
+    ${P1SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE2}
     Set Suite Variable  ${P1SERVICE2}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -94,7 +98,8 @@ JD-TC-GetAppointmentServicesByLocation-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_s2}  ${resp.json()}
 
-    ${P1SERVICE3}=    FakerLibrary.word
+    ${P1SERVICE3}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE3}
     Set Suite Variable   ${P1SERVICE3}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -104,7 +109,8 @@ JD-TC-GetAppointmentServicesByLocation-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_s3}  ${resp.json()}
 
-    ${P1SERVICE4}=    FakerLibrary.word
+    ${P1SERVICE4}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE4}
     Set Suite Variable   ${P1SERVICE4}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -408,7 +414,8 @@ JD-TC-GetAppointmentServicesByLocation-8
 
     ${pid}=  get_acc_id  ${PUSERNAME210}
     
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id1}=   Create Sample Service  ${SERVICE1}
 
     ${address} =  FakerLibrary.address

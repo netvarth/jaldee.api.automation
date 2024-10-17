@@ -10,6 +10,7 @@ Library           DateTime
 Library           /ebs/TDD/db.py
 Library           /ebs/TDD/Imageupload.py
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
@@ -74,7 +75,8 @@ JD-TC-Communication Between Consumer and Provider-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${P1SERVICE1}=    FakerLibrary.word
+    ${P1SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE1}
     ${P2SERVICE2}=    FakerLibrary.word
 
     ${resp}=   Create Sample Service  ${P1SERVICE1}

@@ -6,6 +6,7 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           random
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
@@ -18,7 +19,8 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 *** Variables ***
 ${SERVICE1}     manicure 
 ${SERVICE2}     pedicure
-${self}         0
+${self}     0
+@{service_names}
 ${digits}       0123456789
 @{provider_list}
 @{dom_list}
@@ -90,10 +92,12 @@ JD-TC-Get Availability Of Appointment-1
     Set Suite Variable   ${DAY3}      
 
     # clear_appt_schedule   ${PUSERNAME_B}
-    ${SERVICE1}=   FakerLibrary.name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
-    ${SERVICE2}=   FakerLibrary.name
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=10
     Set Suite Variable   ${s_id2}
     

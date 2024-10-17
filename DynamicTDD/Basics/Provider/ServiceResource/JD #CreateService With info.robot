@@ -7,8 +7,10 @@ Library           String
 Library           json
 Library           requests
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           Process
 Library           OperatingSystem
+Library           /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables       /ebs/TDD/varfiles/providers.py
@@ -32,11 +34,13 @@ ${start3}         80
 ${loc}          TGR 
 ${queue1}     QUEUE1
 ${self}     0
+@{service_names}
 @{provider_list}
 @{dom_list}
 @{multiloc_providers}
 @{serviceType}      virtualService     physicalService 
 ${ZOOM_url}    https://zoom.us/j/{}?pwd=THVLcTBZa2lESFZQbU9DQTQrWUxWZz09
+@{service_names}
 
 
 
@@ -95,7 +99,8 @@ JD-TC-Create Service With info-1
         ${Total}=   Random Int   min=100   max=500
         ${min_pre}=  Convert To Number  ${min_pre}  1
         ${Total}=  Convert To Number  ${Total}  1
-        ${SERVICE1}=    FakerLibrary.word
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
 
         ${ZOOM_id0}=  Format String  ${ZOOM_url}  ${PUSERNAME120}
         Set Suite Variable   ${ZOOM_id0}
@@ -138,7 +143,8 @@ JD-TC-Create Service With info-2
         ${Total}=   Random Int   min=100   max=500
         ${min_pre}=  Convert To Number  ${min_pre}  1
         ${Total}=  Convert To Number  ${Total}  1
-        ${SERVICE1}=    FakerLibrary.word
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
 
         
         # ${resp}=  Create Service  ${SERVICE1}  ${description}   {service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
@@ -912,7 +918,8 @@ JD-TC-Create Service With info-11
         Should Be Equal As Strings  ${resp.status_code}  200
         Verify Response  ${resp}    departmentId=${def_depid}   departmentStatus=${status[0]}
 
-        ${SERVICE1}=    FakerLibrary.word
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
         Set Suite Variable  ${SERVICE1}
         ${desc}=   FakerLibrary.sentence
         ${servicecharge}=   Random Int  min=100  max=500
@@ -975,7 +982,8 @@ JD-TC-Create Service With info-12
         Should Be Equal As Strings  ${resp.status_code}  200
         Verify Response  ${resp}    departmentId=${depid1}   departmentStatus=${status[0]}
 
-        ${SERVICE1}=    FakerLibrary.word
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
         Set Suite Variable  ${SERVICE1}
         ${desc}=   FakerLibrary.sentence
         ${servicecharge}=   Random Int  min=100  max=500
@@ -1018,7 +1026,8 @@ JD-TC-Create Service With info-13
         Should Be Equal As Strings  ${resp.json()['departments'][1]['serviceIds']}   ${empty_list}
         Should Be Equal As Strings  ${resp.json()['departments'][1]['isDefault']}   ${bool[0]}
 
-        ${SERVICE1}=    FakerLibrary.word
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
         Set Suite Variable  ${SERVICE1}
         ${desc}=   FakerLibrary.sentence
         ${servicecharge}=   Random Int  min=100  max=500
@@ -1034,7 +1043,8 @@ JD-TC-Create Service With info-13
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${sid1}  ${resp.json()}
 
-        ${SERVICE2}=    FakerLibrary.word
+        ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
         Set Suite Variable  ${SERVICE2}
         ${desc}=   FakerLibrary.sentence
         ${servicecharge}=   Random Int  min=100  max=500
@@ -1082,7 +1092,8 @@ JD-TC-Create Service With info-14
         Should Be Equal As Strings  ${resp.json()['departments'][1]['serviceIds']}   ${empty_list}
         Should Be Equal As Strings  ${resp.json()['departments'][1]['isDefault']}   ${bool[0]}
 
-        ${SERVICE1}=    FakerLibrary.word
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
         Set Suite Variable  ${SERVICE1}
         ${desc}=   FakerLibrary.sentence
         ${servicecharge}=   Random Int  min=100  max=500
@@ -1148,7 +1159,8 @@ JD-TC-Create Service With info-15
         Should Be Equal As Strings  ${resp.status_code}  200
         Verify Response  ${resp}    departmentId=${def_depid}   departmentStatus=${status[0]}
 
-        ${SERVICE1}=    FakerLibrary.word
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
         Set Suite Variable  ${SERVICE1}
         ${desc}=   FakerLibrary.sentence
         ${servicecharge}=   Random Int  min=100  max=500
@@ -1163,7 +1175,8 @@ JD-TC-Create Service With info-15
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${sid2}  ${resp.json()}
 
-        ${SERVICE2}=    FakerLibrary.word
+        ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
         Set Suite Variable  ${SERVICE2}
         ${desc}=   FakerLibrary.sentence
         ${servicecharge}=   Random Int  min=100  max=500
@@ -1211,7 +1224,8 @@ JD-TC-Create Service With info-16
         Should Be Equal As Strings  ${resp.status_code}  200
         Verify Response  ${resp}    departmentId=${depid1}   departmentStatus=${status[0]}
 
-        ${SERVICE1}=    FakerLibrary.word
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
         Set Suite Variable  ${SERVICE1}
         ${desc}=   FakerLibrary.sentence
         ${servicecharge}=   Random Int  min=100  max=500
@@ -1228,7 +1242,8 @@ JD-TC-Create Service With info-16
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${sid1}  ${resp.json()}
 
-        ${SERVICE2}=    FakerLibrary.word
+        ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
         Set Suite Variable  ${SERVICE2}
         ${desc}=   FakerLibrary.sentence
         ${servicecharge}=   Random Int  min=100  max=500
@@ -1280,7 +1295,8 @@ JD-TC-Create Service With info-17
         Should Be Equal As Strings  ${resp.status_code}  200
         Verify Response  ${resp}    departmentId=${depid1}   departmentStatus=${status[0]}
 
-        ${SERVICE1}=    FakerLibrary.word
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
         Set Suite Variable  ${SERVICE1}
         ${desc}=   FakerLibrary.sentence
         ${servicecharge}=   Random Int  min=100  max=500
@@ -1330,7 +1346,8 @@ JD-TC-Create Service With info-UH5
 
         END
 
-        ${SERVICE1}=    FakerLibrary.word
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
         ${resp}=  Create Sample Service  ${SERVICE1}
         Set Suite Variable  ${sid1}  ${resp}
 
@@ -1398,7 +1415,8 @@ JD-TC-Create Service With info-UH6
         Should Be Equal As Strings  ${resp.status_code}  200
         Verify Response  ${resp}    departmentId=${def_depid}   departmentStatus=${status[0]}
         
-        ${SERVICE1}=    FakerLibrary.word
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
         ${desc}=   FakerLibrary.sentence
         ${servicecharge}=   Random Int  min=100  max=500
         ${ser_duratn}=      Random Int   min=10   max=30

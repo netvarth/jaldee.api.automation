@@ -7,8 +7,10 @@ Library           String
 Library           json
 Library           requests
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           Process
 Library           OperatingSystem
+Library           /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
@@ -19,6 +21,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 @{emptylist}
 ${self}     0
+@{service_names}
 
 
 *** Test Cases ***
@@ -42,7 +45,8 @@ JD-TC-ProviderConfirmApptRequest-1
 
     # clear_appt_schedule   ${PUSERNAME35}
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${service_duration}=   Random Int   min=5   max=10
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -58,7 +62,8 @@ JD-TC-ProviderConfirmApptRequest-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${service_duration}=   Random Int   min=5   max=10
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50

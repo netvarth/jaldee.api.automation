@@ -6,6 +6,7 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
@@ -69,19 +70,23 @@ JD-TC-UpdateAppointmentRating-1
     
     # clear_appt_schedule   ${PUSERNAME202}
 
-    ${SERVICE1}=   FakerLibrary.name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
     Set Suite Variable   ${s_id}
     
-    ${SERVICE2}=   FakerLibrary.name
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${s_id2}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=10
     Set Suite Variable   ${s_id2}
 
-    ${SERVICE3}=   FakerLibrary.name  
+    ${SERVICE3}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE3}  
     ${s_id3}=  Create Sample Service  ${SERVICE3}   maxBookingsAllowed=10
     Set Suite Variable   ${s_id3}
 
-    ${SERVICE4}=   FakerLibrary.name
+    ${SERVICE4}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE4}
     ${s_id4}=  Create Sample Service  ${SERVICE4}    maxBookingsAllowed=10
     Set Suite Variable   ${s_id4}
 

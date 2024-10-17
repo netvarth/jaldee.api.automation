@@ -3,8 +3,8 @@ Suite Teardown    Delete All Sessions
 Test Teardown     Run Keywords  Delete All Sessions
 Force Tags        Questionnaire
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/excelfuncs.py
-Library           FakerLibrary
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
@@ -1699,7 +1699,8 @@ JD-TC-ChangeAnsStatusForAppt-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
 
-    ${SERVICE1}=    FakerLibrary.Word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}

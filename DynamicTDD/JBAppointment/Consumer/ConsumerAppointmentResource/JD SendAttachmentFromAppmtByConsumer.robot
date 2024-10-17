@@ -3,6 +3,7 @@ Suite Teardown    Delete All Sessions
 Test Teardown     Delete All Sessions
 Force Tags        communication
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
@@ -16,6 +17,7 @@ Variables         /ebs/TDD/varfiles/consumermail.py
 ${SERVICE1}  manicure 
 ${SERVICE2}  pedicure
 ${self}     0
+@{service_names}
 ${digits}       0123456789
 @{dom_list}
 @{provider_list}

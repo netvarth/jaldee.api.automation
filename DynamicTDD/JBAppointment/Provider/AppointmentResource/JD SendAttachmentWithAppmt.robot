@@ -7,6 +7,7 @@ Library           String
 Library           json
 Library           requests
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
@@ -22,6 +23,7 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 ${SERVICE1}  manicure 
 ${SERVICE2}  pedicure
 ${self}     0
+@{service_names}
 ${digits}       0123456789
 @{dom_list}
 @{provider_list}

@@ -21,7 +21,8 @@ Variables   /ebs/TDD/varfiles/consumerlist.py
 *** Variables ***
 ${SERVICE1}     manicure 
 ${SERVICE2}     pedicure
-${self}         0
+${self}     0
+@{service_names}
 ${digits}       0123456789
 @{provider_list}
 @{dom_list}

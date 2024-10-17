@@ -5,7 +5,9 @@ Library           Collections
 Library           String
 Library           json
 Library           /ebs/TDD/db.py
+Library           /ebs/TDD/CustomKeywords.py
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
@@ -17,6 +19,7 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 
 ${DisplayName1}   item1_DisplayName
 ${pdffile}      /ebs/TDD/sample.pdf
+@{service_names}
 
 *** Test Cases ***
 
@@ -569,7 +572,8 @@ JD-TC-Switch_Login-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
 
-    ${SERVICE1}=   FakerLibrary.name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${sid3}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${sid3}
 
@@ -1059,10 +1063,12 @@ JD-TC-Switch_Login-12
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${sid1}=  Create Sample Service  ${SERVICE1}
     
-    ${SERVICE2}=    FakerLibrary.word
+    ${SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE2}
     ${sid2}=  Create Sample Service  ${SERVICE2}
     
     ${resp}=  Get Business Profile
@@ -1390,7 +1396,8 @@ JD-TC-Switch_Login-14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id1}   ${resp.json()}
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     Set Suite Variable  ${SERVICE1}
     ${sid1}=  Create Sample Service  ${SERVICE1}
 
@@ -1825,7 +1832,8 @@ JD-TC-Switch_Login-16
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${empty_list}=   Create List
 
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${user_id}=   Create Dictionary  id=${pro_id3}
     ${s_id}=  Create Sample Service  ${SERVICE1}   department=${dep_id}   provider=${user_id}
    

@@ -7,6 +7,7 @@ Library         Collections
 Library         String
 Library         json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
@@ -123,7 +124,8 @@ JD-TC-Get Service By Location -1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_l2}  ${resp.json()}
 
-    ${P1SERVICE1}=    FakerLibrary.word
+    ${P1SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE1}
     Set Suite Variable  ${P1SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
@@ -132,7 +134,8 @@ JD-TC-Get Service By Location -1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_s1}  ${resp.json()}
 
-    ${P1SERVICE2}=    FakerLibrary.word
+    ${P1SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE2}
     Set Suite Variable  ${P1SERVICE2}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
@@ -141,7 +144,8 @@ JD-TC-Get Service By Location -1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_s2}  ${resp.json()}
 
-    ${P1SERVICE3}=    FakerLibrary.word
+    ${P1SERVICE3}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE3}
     Set Suite Variable   ${P1SERVICE3}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
@@ -321,7 +325,8 @@ JD-TC-Get Service By Location-UH3
     END
 
     ${service_duration}=   Random Int   min=5   max=10
-    ${P1SERVICE1}=    FakerLibrary.word
+    ${P1SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500
@@ -367,7 +372,8 @@ JD-TC-Get Service By Location-UH3
     END
 
     ${service_duration}=   Random Int   min=5   max=10
-    ${P1SERVICE1}=    FakerLibrary.word
+    ${P1SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500

@@ -6,7 +6,8 @@ Force Tags        Jaldee Homeo
 Library           Collections
 Library           String
 Library           json
-Library           FakerLibrary  
+Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py  
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
@@ -19,7 +20,8 @@ Resource          /ebs/TDD/AppKeywords.robot
 *** Variables ***
 
 @{emptylist} 
-${self}         0
+${self}     0
+@{service_names}
 ${parallel}     1
 ${capacity}     5
 &{custom_web_headers}    Content-Type=application/json  BOOKING_REQ_FROM=CUSTOM_WEBSITE   website-link=https://jaldeehomeo.com
@@ -131,7 +133,8 @@ JD-TC-ApplyJaldeeCouponToChannel-1
     Should Be Equal As Strings  ${resp.json()[0]['status']}       ${Qstate[0]}
 
     ${service_duration}=   Random Int   min=5   max=10
-    ${P1SERVICE1}=    FakerLibrary.word
+    ${P1SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500
@@ -145,7 +148,8 @@ JD-TC-ApplyJaldeeCouponToChannel-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${service_duration}=   Random Int   min=5   max=10
-    ${P1SERVICE2}=    FakerLibrary.word
+    ${P1SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE2}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
     # ${servicecharge}=   Random Int  min=100  max=500
@@ -588,7 +592,8 @@ JD-TC-ApplyJaldeeCouponToChannel-2
     Should Be Equal As Strings  ${resp.json()[0]['status']}       ${Qstate[0]}
 
     ${service_duration}=   Random Int   min=5   max=10
-    ${P1SERVICE1}=    FakerLibrary.word
+    ${P1SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500
@@ -602,7 +607,8 @@ JD-TC-ApplyJaldeeCouponToChannel-2
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${service_duration}=   Random Int   min=5   max=10
-    ${P1SERVICE2}=    FakerLibrary.word
+    ${P1SERVICE2}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${P1SERVICE2}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
     # ${servicecharge}=   Random Int  min=100  max=500

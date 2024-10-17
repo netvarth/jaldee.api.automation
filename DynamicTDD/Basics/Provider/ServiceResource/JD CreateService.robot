@@ -22,9 +22,11 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 ${ZOOM_URL}    https://zoom.us/j/{meeting_id}?pwd={passwd}
 ${MEET_URL}    https://meet.google.com/{meeting_id}
 ${self}     0
+@{service_names}
 @{empty_list}
 ${zero_amt}  ${0.0}
 @{service_names}
+@{service_names1}
 
 
 *** Test Cases ***
@@ -73,7 +75,7 @@ JD-TC-CreateService-2
 
     ${description}=  FakerLibrary.sentence
     ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  provider=${u_id1}
     Log  ${resp.content}
@@ -117,7 +119,7 @@ JD-TC-CreateService-3
     
     ${description}=  FakerLibrary.sentence
     ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  department=${dep_id}
     Log  ${resp.content}
@@ -149,7 +151,7 @@ JD-TC-CreateService-4
     ${description}=  FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     # ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}
@@ -174,7 +176,7 @@ JD-TC-CreateService-5
     ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_C}=  Provider Signup without Profile  Domain=${domain}  SubDomain=${subdomain}
     Set Suite Variable  ${PUSERNAME_C}
 
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${description}=  FakerLibrary.sentence
     ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
@@ -233,7 +235,7 @@ JD-TC-CreateService-7
     ${description}=  FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${min_pre}  
     Log  ${resp.content}
@@ -253,7 +255,7 @@ JD-TC-CreateService-8
 
     ${description}=  FakerLibrary.sentence
     ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  
     Log  ${resp.content}
@@ -282,7 +284,7 @@ JD-TC-CreateService-9
     ${servicecharge}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${srv_duration}=   Random Int   min=10   max=20
     ${leadTime}=   Random Int   min=1   max=5
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${servicecharge}  ${bool[0]}  leadTime=${leadTime}
     Log  ${resp.content}
@@ -309,7 +311,7 @@ JD-TC-CreateService-10
     ${servicecharge}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${srv_duration}=   Random Int   min=10   max=20
     ${maxbookings}=   Random Int   min=1   max=10
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}  maxBookingsAllowed=${maxbookings}
     Log  ${resp.content}
@@ -340,7 +342,7 @@ JD-TC-CreateService-11
     ${servicecharge}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${srv_duration}=   Random Int   min=10   max=20
     ${resoucesRequired}=   Random Int   min=1   max=10
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}  resoucesRequired=${resoucesRequired}
     Log  ${resp.content}
@@ -362,7 +364,7 @@ JD-TC-CreateService-12
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
@@ -387,7 +389,7 @@ JD-TC-CreateService-13
     ${description}=  FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${EMPTY}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}
     Log  ${resp.content}
@@ -408,7 +410,7 @@ JD-TC-CreateService-14
     ${description}=  FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${0.0}  ${bool[0]}
     Log  ${resp.content}
@@ -454,7 +456,7 @@ JD-TC-CreateService-15
 
     ${desc}=  FakerLibrary.sentence
     ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  Description is "${desc}"  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  provider=${u_id1}  department=${dep_id}
     Log  ${resp.content}
@@ -494,7 +496,7 @@ JD-TC-CreateService-16
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
@@ -515,7 +517,7 @@ JD-TC-CreateService-17
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
@@ -542,7 +544,7 @@ JD-TC-CreateService-18
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=250
@@ -568,7 +570,7 @@ JD-TC-CreateService-19
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=250
@@ -595,7 +597,7 @@ JD-TC-CreateService-20
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=250
@@ -621,7 +623,7 @@ JD-TC-CreateService-21
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=250
@@ -661,7 +663,7 @@ JD-TC-CreateService-22
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${intlamt}=   Pyfloat  right_digits=1  min_value=100  max_value=250
@@ -687,7 +689,7 @@ JD-TC-CreateService-23
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
@@ -715,7 +717,7 @@ JD-TC-CreateService-24
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${min_pre_percent}=   Pyfloat  right_digits=1  min_value=10  max_value=50
@@ -743,7 +745,7 @@ JD-TC-CreateService-25
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${min_pre_percent}=   Convert To Number  100  1
@@ -782,7 +784,7 @@ JD-TC-CreateService-26
     ${max_don_amt}=  Convert To Number  ${max_don_amt}  1
     ${description}=  FakerLibrary.sentence
     ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[2]}  minDonationAmount=${min_don_amt}  maxDonationAmount=${max_don_amt}  multiples=${multiples[0]}
     Log  ${resp.content}
@@ -807,7 +809,7 @@ JD-TC-CreateService-27
     ${max_don_amt}=  Evaluate  ${max_don_amt1}-${mod1}
     ${description}=  FakerLibrary.sentence
     ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[2]}  minDonationAmount=${min_don_amt}  maxDonationAmount=${max_don_amt}  multiples=${multiples[0]}
     Log  ${resp.content}
@@ -855,7 +857,7 @@ JD-TC-CreateService-28
 
     ${description}=    FakerLibrary.sentence
     ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
     Log  ${resp.content}
@@ -914,7 +916,7 @@ JD-TC-CreateService-29
     ${description}=    FakerLibrary.sentence
     ${Total1}=   Random Int   min=100   max=500
     ${Total}=  Convert To Number  ${Total1}  1
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}  department=${dep_id1}
     Log  ${resp.content}
@@ -957,7 +959,7 @@ JD-TC-CreateService-30
     ${description}=    FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}  minPrePaymentAmount=${min_pre}  virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
     Log  ${resp.content}
@@ -983,7 +985,7 @@ JD-TC-CreateService-31
     ${description}=    FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}  virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
     Log  ${resp.content}
@@ -1010,7 +1012,7 @@ JD-TC-CreateService-32
     ${description}=    FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}  virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
     Log  ${resp.content}
@@ -1044,17 +1046,22 @@ JD-TC-CreateService-32
 
 
 JD-TC-CreateService-33
-    [Documentation]   Use different Zoom_id and different virtual service type to create different Virtual services
+    [Documentation]   Use different google meet ids and different virtual service type to create different Virtual services
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${meeting_id}=  Generate Random String    10    [NUMBERS]
-    ${passwd}=  FakerLibrary.password  length=30  #special_chars=False  upper_case=False
-    ${ZOOM_id0}=     Format String    ${ZOOM_URL}    meeting_id=9${meeting_id}    passwd=${passwd}.1
+    # ${meeting_id}=  Generate Random String    10    [NUMBERS]
+    # ${passwd}=  FakerLibrary.password  length=30  #special_chars=False  upper_case=False
+    # ${ZOOM_id0}=     Format String    ${ZOOM_URL}    meeting_id=9${meeting_id}    passwd=${passwd}.1
     
+    ${meeting_id}=   FakerLibrary.lexify  text='???-????-???'  letters=${lower}    # Adjust length and characters as needed
+    ${GoogleMeet_url}=     Format String    ${MEET_URL}    meeting_id=${meeting_id}
+    Log    ${meet_url}
+
     ${Description1}=    FakerLibrary.sentences
-    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_id0}   status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[3]}   value=${GoogleMeet_url}   status=${status[0]}    instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    # ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_id0}   status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
     ${virtualCallingModes}=  Create List  ${VScallingMode1}
     # ${vstype}=   Random Element   ${vservicetype}
     ${vstype1}=   Set Variable   ${vservicetype[0]}
@@ -1062,7 +1069,7 @@ JD-TC-CreateService-33
     ${description}=    FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}  virtualServiceType=${vstype1}  virtualCallingModes=${virtualCallingModes}
     Log  ${resp.content}
@@ -1073,14 +1080,19 @@ JD-TC-CreateService-33
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['serviceType']}   ${ServiceType[0]}
     Should Be Equal As Strings  ${resp.json()['virtualServiceType']}   ${vstype1}
-    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['callingMode']}   ${CallingModes[0]}
+    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['callingMode']}   ${CallingModes[3]}
 
-    ${meeting_id}=  Generate Random String    10    [NUMBERS]
-    ${passwd}=  FakerLibrary.password  length=30  #special_chars=False  upper_case=False
-    ${ZOOM_id1}=     Format String    ${ZOOM_URL}    meeting_id=9${meeting_id}    passwd=${passwd}.1
+    # ${meeting_id}=  Generate Random String    10    [NUMBERS]
+    # ${passwd}=  FakerLibrary.password  length=30  #special_chars=False  upper_case=False
+    # ${ZOOM_id1}=     Format String    ${ZOOM_URL}    meeting_id=9${meeting_id}    passwd=${passwd}.1
+
+    ${meeting_id}=   FakerLibrary.lexify  text='???-????-???'  letters=${lower}    # Adjust length and characters as needed
+    ${GoogleMeet_url}=     Format String    ${MEET_URL}    meeting_id=${meeting_id}
+    Log    ${meet_url}
     
     ${Description1}=    FakerLibrary.sentences
-    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_id1}   status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[3]}   value=${GoogleMeet_url}   status=${status[0]}    instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    # ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_id1}   status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
     ${virtualCallingModes}=  Create List  ${VScallingMode1}
     # ${vstype}=   Random Element   ${vservicetype}
     ${vstype2}=   Set Variable   ${vservicetype[1]}
@@ -1099,11 +1111,11 @@ JD-TC-CreateService-33
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['serviceType']}   ${ServiceType[0]}
     Should Be Equal As Strings  ${resp.json()['virtualServiceType']}   ${vstype2}
-    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['callingMode']}   ${CallingModes[0]}
+    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['callingMode']}   ${CallingModes[3]}
 
 
 JD-TC-CreateService-34
-    [Documentation]   Use different Zoom_id and same virtual service type to create different Virtual services
+    [Documentation]   Use different Zoom id and same virtual service type to create different Virtual services
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1116,12 +1128,12 @@ JD-TC-CreateService-34
     ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_id0}   status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
     ${virtualCallingModes}=  Create List  ${VScallingMode1}
     # ${vstype}=   Random Element   ${vservicetype}
-    ${vstype}=   Set Variable   ${vservicetype[0]}
+    ${vstype}=   Set Variable   ${vservicetype[1]}
 
     ${description}=    FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}  virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
     Log  ${resp.content}
@@ -1167,13 +1179,17 @@ JD-TC-CreateService-35
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${meeting_id}=  Generate Random String    10    [NUMBERS]
-    ${passwd}=  FakerLibrary.password  length=30  #special_chars=False  upper_case=False
-    ${ZOOM_id0}=     Format String    ${ZOOM_URL}    meeting_id=9${meeting_id}    passwd=${passwd}.1
+    # ${meeting_id}=  Generate Random String    10    [NUMBERS]
+    # ${passwd}=  FakerLibrary.password  length=30  #special_chars=False  upper_case=False
+    # ${ZOOM_id0}=     Format String    ${ZOOM_URL}    meeting_id=9${meeting_id}    passwd=${passwd}.1
+    
+    ${meeting_id}=   FakerLibrary.lexify  text='???-????-???'  letters=${lower}
+    ${GoogleMeet_url}=     Format String    ${MEET_URL}    meeting_id=${meeting_id}
+    Log    ${meet_url}
     
     ${Description1}=    FakerLibrary.sentences
     ${instructions2}=   FakerLibrary.sentence
-    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_id0}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[3]}   value=${GoogleMeet_url}   status=${status[0]}    instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
     ${VScallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_E}   countryCode=${countryCodes[0]}  instructions=${instructions2} 
     ${virtualCallingModes}=  Create List  ${VScallingMode1}  ${VScallingMode2}
     ${vstype}=   Random Element   ${vservicetype}
@@ -1181,7 +1197,7 @@ JD-TC-CreateService-35
     ${description}=    FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}  virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
     Log  ${resp.content}
@@ -1192,8 +1208,87 @@ JD-TC-CreateService-35
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['serviceType']}   ${ServiceType[0]}
     Should Be Equal As Strings  ${resp.json()['virtualServiceType']}   ${vstype}
-    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['callingMode']}   ${CallingModes[0]}
+    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['callingMode']}   ${CallingModes[3]}
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['callingMode']}   ${CallingModes[1]}
+
+
+JD-TC-CreateService-36
+    [Documentation]   Use Google_meet and Whatsapp virtual calling modes to create a video services
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${meeting_id}=   FakerLibrary.lexify  text='???-????-???'  letters=${lower}
+    ${GoogleMeet_url}=     Format String    ${MEET_URL}    meeting_id=${meeting_id}
+    Log    ${meet_url}
+    
+    ${Description1}=    FakerLibrary.sentences
+    ${instructions2}=   FakerLibrary.sentence
+    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[3]}   value=${GoogleMeet_url}   status=${status[0]}    instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${VScallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_E}   countryCode=${countryCodes[0]}  instructions=${instructions2} 
+    ${virtualCallingModes}=  Create List  ${VScallingMode1}  ${VScallingMode2}
+    ${vstype}=   Set Variable   ${vservicetype[1]}
+
+    ${description}=    FakerLibrary.sentence
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}  virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${resp.json()}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['serviceType']}   ${ServiceType[0]}
+    Should Be Equal As Strings  ${resp.json()['virtualServiceType']}   ${vservicetype[1]}
+    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['callingMode']}   ${CallingModes[3]}
+    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['callingMode']}   ${CallingModes[1]}
+
+
+JD-TC-CreateService-37
+    [Documentation]   Use Phone_call and Whatsapp virtual calling modes to create a audio services
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${meeting_id}=   FakerLibrary.lexify  text='???-????-???'  letters=${lower}
+    ${GoogleMeet_url}=     Format String    ${MEET_URL}    meeting_id=${meeting_id}
+    Log    ${meet_url}
+    
+    ${Description1}=    FakerLibrary.sentences
+    ${instructions2}=   FakerLibrary.sentence
+    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[2]}   value=${PUSERNAME_E}   countryCode=${countryCodes[0]}    instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${VScallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_E}   countryCode=${countryCodes[0]}  instructions=${instructions2} 
+    ${virtualCallingModes}=  Create List  ${VScallingMode1}  ${VScallingMode2}
+    ${vstype}=   Set Variable   ${vservicetype[0]}
+
+    ${description}=    FakerLibrary.sentence
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}  virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${resp.json()}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['serviceType']}   ${ServiceType[0]}
+    Should Be Equal As Strings  ${resp.json()['virtualServiceType']}   ${vservicetype[0]}
+    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['callingMode']}   ${CallingModes[2]}
+    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['callingMode']}   ${CallingModes[1]}
+
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${service_names1}  Get service names  ${resp.json()}  ${service_names1}
+    Log  ${service_names1}
+    ${SERVICE1}=    generate_unique_service_name  ${service_names1}
+    Append To List  ${service_names1}  ${SERVICE1}
+    Log  ${service_names1}
 
 
 JD-TC-CreateService-UH1
@@ -1223,7 +1318,7 @@ JD-TC-CreateService-UH2
 
     ${description}=  FakerLibrary.sentence
     ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  
     Log  ${resp.content}
@@ -1244,7 +1339,7 @@ JD-TC-CreateService-UH3
 
     ${description}=  FakerLibrary.sentence
     ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  
     Log  ${resp.content}
@@ -1258,11 +1353,13 @@ JD-TC-CreateService-UH4
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    
     ${resp}=  Get Departments
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   'len(${resp.json()}) < 1'
+    Set Test Variable  ${def_depid}  ${resp.json()['departments'][0]['departmentId']}
+
+    ${len}=  Get Length  ${resp.json()['departments']}
+    IF  ${len} <= 1
             ${dep_name1}=  FakerLibrary.bs
             ${dep_code1}=   Random Int  min=100   max=999
             ${dep_desc1}=   FakerLibrary.word  
@@ -1270,21 +1367,9 @@ JD-TC-CreateService-UH4
             Log  ${resp1.content}
             Should Be Equal As Strings  ${resp1.status_code}  200
             Set Test Variable  ${dep_id1}  ${resp1.json()}
+    ELSE
+        Set Test Variable  ${dep_id1}  ${resp.json()['departments'][1]['departmentId']}
     END
-    
-    ${resp}=  Get Departments 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${def_depid}  ${resp.json()['departments'][0]['departmentId']}
-    # Set Test Variable  ${depid1}  ${resp.json()['departments'][1]['departmentId']}
-
-    # ${dep_name1}=  FakerLibrary.bs
-    # ${dep_code1}=   Random Int  min=100   max=999
-    # ${dep_desc1}=   FakerLibrary.word  
-    # ${resp}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${depid1}  ${resp.json()}
 
     ${resp}=  Get Services in Department  ${def_depid}
     Log  ${resp.content}
@@ -1297,7 +1382,7 @@ JD-TC-CreateService-UH4
 
     ${description}=  FakerLibrary.sentence
     ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  department=${dep_id1}
     Log  ${resp.content}
@@ -1326,7 +1411,7 @@ JD-TC-CreateService-UH5
     ${description}=  FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${EMPTY}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}
     Log  ${resp.content}
@@ -1343,7 +1428,7 @@ JD-TC-CreateService-UH6
     ${description}=  FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${EMPTY}  ${bool[0]}  ${Total}  ${bool[0]}
     Log  ${resp.content}
@@ -1360,7 +1445,7 @@ JD-TC-CreateService-UH7
     ${description}=  FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${EMPTY}  ${bool[0]}  ${Total}  ${bool[1]}  notificationType=${EMPTY}
     Log  ${resp.content}
@@ -1376,7 +1461,7 @@ JD-TC-CreateService-UH8
     ${description}=  FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${EMPTY}
     Log  ${resp.content}
@@ -1393,7 +1478,7 @@ JD-TC-CreateService-UH9
     ${description}=  FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${EMPTY}  ${bool[0]}
     Log  ${resp.content}
@@ -1415,7 +1500,7 @@ JD-TC-CreateService-UH10
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${servicecharge}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${srv_duration}=   Random Int   min=10   max=20
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  maxBookingsAllowed=${EMPTY}
     Log  ${resp.content}
@@ -1441,7 +1526,7 @@ JD-TC-CreateService-UH11
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${servicecharge}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${srv_duration}=   Random Int   min=10   max=20
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  resoucesRequired=${EMPTY}
     Log  ${resp.content}
@@ -1467,7 +1552,7 @@ JD-TC-CreateService-UH12
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${servicecharge}=   Pyfloat  right_digits=1  min_value=250  max_value=500
     ${srv_duration}=   Random Int   min=10   max=20
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[0]}  ${servicecharge}  ${bool[0]}  leadTime=${EMPTY}
     Log  ${resp.content}
@@ -1488,7 +1573,7 @@ JD-TC-CreateService-UH13
     ${description}=  FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
     ${Total}=   Pyfloat  right_digits=1  min_value=250  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[1]}  ${Total}  ${bool[0]}  minPrePaymentAmount=${0.0}
     Log  ${resp.content}
@@ -1512,7 +1597,7 @@ JD-TC-CreateService-UH14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
@@ -1565,7 +1650,7 @@ JD-TC-CreateService-UH15
             Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
     END
 
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
@@ -1591,7 +1676,7 @@ JD-TC-CreateService-UH16
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
@@ -1618,7 +1703,7 @@ JD-TC-CreateService-UH17
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
@@ -1653,7 +1738,7 @@ JD-TC-CreateService-UH18
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
@@ -1689,7 +1774,7 @@ JD-TC-CreateService-UH20
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${description}=  FakerLibrary.sentence
     ${servicecharge}=   Pyfloat  right_digits=1  min_value=100  max_value=500
@@ -1737,7 +1822,7 @@ JD-TC-CreateService-UH21
     ${max_don_amt}=  Evaluate  ${max_don_amt1}-${mod1}
     ${description}=  FakerLibrary.sentence
     ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[2]}  minDonationAmount=${EMPTY}  maxDonationAmount=${max_don_amt}  multiples=${multiples[0]}
     Log  ${resp.content}
@@ -1768,7 +1853,7 @@ JD-TC-CreateService-UH22
     ${max_don_amt}=  Evaluate  ${max_don_amt1}-${mod1}
     ${description}=  FakerLibrary.sentence
     ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[2]}  minDonationAmount=${min_don_amt}  maxDonationAmount=${EMPTY}  multiples=${multiples[0]}
     Log  ${resp.content}
@@ -1799,7 +1884,7 @@ JD-TC-CreateService-UH23
     ${max_don_amt}=  Evaluate  ${max_don_amt1}-${mod1}
     ${description}=  FakerLibrary.sentence
     ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[2]}  minDonationAmount=${min_don_amt}  maxDonationAmount=${max_don_amt}  multiples=${EMPTY}
     Log  ${resp.content}
@@ -1830,7 +1915,7 @@ JD-TC-CreateService-UH24
     ${max_don_amt}=  Evaluate  ${max_don_amt1}-${mod1}
     ${description}=  FakerLibrary.sentence
     ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${inv_multiples}=  FakerLibrary.Numerify  %%
     ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[2]}  minDonationAmount=${min_don_amt}  maxDonationAmount=${max_don_amt}  multiples=${inv_multiples}
@@ -1838,6 +1923,9 @@ JD-TC-CreateService-UH24
     Should Be Equal As Strings  ${resp.status_code}  422  
     ${MULTIPLES_DOES_NOT_MATCH}=  Format String  ${MULTIPLES_DOES_NOT_MATCH}  ${inv_multiples}
     Should Be Equal As Strings   ${resp.json()}  ${MULTIPLES_DOES_NOT_MATCH}
+
+
+# ................................ Virtual Service .......................... #
 
 
 

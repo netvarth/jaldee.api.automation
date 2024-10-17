@@ -6,6 +6,7 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library         /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
@@ -18,7 +19,8 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 ${SERVICE1}     manicure 
 ${SERVICE2}     pedicure
-${self}         0
+${self}     0
+@{service_names}
 ${digits}       0123456789
 
 *** Test Cases ***
@@ -59,7 +61,8 @@ JD-TC-AppointmentCancelByConsumer-1
     ${eTime1}=  add_two   ${sTime1}  ${delta}
 
     # clear_appt_schedule   ${PUSERNAME131}
-    ${SERVICE1}=   FakerLibrary.name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
     ${schedule_name}=  FakerLibrary.bs
@@ -201,7 +204,8 @@ JD-TC-AppointmentCancelByConsumer-2
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     # clear_appt_schedule   ${PUSERNAME132}
     # clear_appt_schedule   ${PUSERNAME132}
-    ${SERVICE1}=   FakerLibrary.name
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
     ${schedule_name}=  FakerLibrary.bs
