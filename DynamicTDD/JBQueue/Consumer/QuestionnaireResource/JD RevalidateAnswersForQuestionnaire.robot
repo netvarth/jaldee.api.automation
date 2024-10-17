@@ -22,6 +22,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 ${xlFile}      ${EXECDIR}/TDD/sampleqnr.xlsx    # DataSheet
 ${xlFile2}      ${EXECDIR}/TDD/qnr.xlsx    # DataSheet 2
 ${self}      0
+@{service_names}
 @{emptylist}
 ${mp4file}   /ebs/TDD/MP4file.mp4
 ${mp4mime}   video/mp4

@@ -18,6 +18,7 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 ${SERVICE1}  Makeup  
 ${SERVICE2}  Hair makeup
 ${self}      0
+@{service_names}
 
 *** Test Cases ***
 

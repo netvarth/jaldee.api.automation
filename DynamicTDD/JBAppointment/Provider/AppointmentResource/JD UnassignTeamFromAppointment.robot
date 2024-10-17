@@ -22,6 +22,7 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 ${digits}       0123456789
 ${P_PASSWORD}        Netvarth008
 ${C_PASSWORD}        Netvarth009
+@{service_names}
 
 
 *** Keywords ***

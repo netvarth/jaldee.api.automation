@@ -23,6 +23,7 @@ ${SERVICE1}    SERVICE1
 ${SERVICE2}    SERVICE2
 ${SERVICE3}    SERVICE3
 ${self}       0
+@{service_names}
 
 *** Test Cases ***
 

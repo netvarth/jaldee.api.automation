@@ -6,7 +6,6 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
-Library         /ebs/TDD/CustomKeywords.py
 Library           random
 Library           /ebs/TDD/db.py
 Library           /ebs/TDD/CustomKeywords.py
@@ -22,7 +21,6 @@ ${self}     0
 @{service_names}
 @{multiloc_providers}
 ${countryCode}   +91
-@{service_names}
 
 
 

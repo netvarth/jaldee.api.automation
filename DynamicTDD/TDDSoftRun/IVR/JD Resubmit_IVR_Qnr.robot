@@ -22,6 +22,7 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Variables ***
 ${xlFile}      ${EXECDIR}/TDD/IVRQNR.xlsx   # DataSheet
 ${self}      0
+@{service_names}
 @{emptylist}
 ${pdffile}     /ebs/TDD/sample.pdf
 

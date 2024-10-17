@@ -22,6 +22,7 @@ ${SERVICE3}   Makeup1
 ${SERVICE4}   FacialBody7
 ${SERVICE2}   MakeupHair7
 ${self}       0
+@{service_names}
 
 *** Test Cases ***
 JD-TC-Update Rating Consumer-1    

@@ -19,8 +19,7 @@ ${digits}       0123456789
 @{dom_list}
 @{provider_list}
 @{multiloc_providers}
-@{service_names}
-@{service_names}
+
 
 
 

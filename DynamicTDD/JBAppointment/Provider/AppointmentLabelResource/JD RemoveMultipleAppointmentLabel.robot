@@ -20,7 +20,6 @@ ${self}     0
 @{service_names}
 ${digits}       0123456789
 &{Emptydict}
-@{service_names}
 
 *** Test Cases ***
 

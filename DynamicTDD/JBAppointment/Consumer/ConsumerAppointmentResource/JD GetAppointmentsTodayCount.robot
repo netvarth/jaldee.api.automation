@@ -23,6 +23,7 @@ ${SERVICE2}  sampleservice2
 ${SERVICE3}  sampleservice3
 ${digits}       0123456789
 ${self}          0
+@{service_names}
 
 
 *** Test Cases ***

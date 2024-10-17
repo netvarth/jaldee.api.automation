@@ -8,7 +8,6 @@ Library           json
 Library           FakerLibrary
 Library         /ebs/TDD/CustomKeywords.py
 Library           /ebs/TDD/db.py
-Library           /ebs/TDD/CustomKeywords.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
@@ -26,6 +25,7 @@ ${docfile}     /ebs/TDD/docsample.doc
 ${txtfile}     /ebs/TDD/textsample.txt
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
 ${self}      0
+@{service_names}
 ${order}        0
 ${fileSize}     0.00458
 

@@ -30,6 +30,7 @@ ${docfile}     /ebs/TDD/docsample.doc
 ${txtfile}     /ebs/TDD/textsample.txt
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
 ${self}      0
+@{service_names}
 ${order}        0
 ${fileSize}     0.00458
 

@@ -25,6 +25,7 @@ ${pdffile}     /ebs/TDD/sample.pdf
 ${self}        0
 ${service_duration}   5  
 ${parallel}            1
+@{service_names}
 
 *** Test Cases ***
 

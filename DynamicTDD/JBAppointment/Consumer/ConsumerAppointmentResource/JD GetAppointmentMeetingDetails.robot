@@ -28,7 +28,6 @@ ${self}     0
 @{service_names}
 
 &{Emptydict}
-@{service_names}
 
 
 

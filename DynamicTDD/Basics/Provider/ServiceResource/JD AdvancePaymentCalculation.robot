@@ -7,7 +7,6 @@ Library           String
 Library           json
 Library           requests
 Library           FakerLibrary
-Library         /ebs/TDD/CustomKeywords.py
 Library           Process
 Library           OperatingSystem
 Library           /ebs/TDD/CustomKeywords.py
@@ -30,6 +29,7 @@ ${mp4file}   /ebs/TDD/MP4file.mp4
 ${avifile}   /ebs/TDD/AVIfile.avi
 ${mp3file}   /ebs/TDD/MP3file.mp3
 ${self}      0
+@{service_names}
 @{emptylist}
 ${mp4mime}   video/mp4
 ${avimime}   video/avi

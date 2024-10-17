@@ -21,6 +21,7 @@ ${SERVICE3}   Makeup
 ${SERVICE4}   FacialBody6
 ${SERVICE2}   MakeupHair6
 ${self}       0
+@{service_names}
 
 *** Test Cases ***
 

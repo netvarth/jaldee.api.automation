@@ -24,6 +24,7 @@ ${shfile}     /ebs/TDD/example.sh
 ${docfile}     /ebs/TDD/docsample.doc
 ${txtfile}     /ebs/TDD/textsample.txt
 ${self}      0
+@{service_names}
 
 *** Test Cases ***
 

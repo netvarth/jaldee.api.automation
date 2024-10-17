@@ -61,7 +61,7 @@ ${sample}                     4452135820
 #       END
 
 #       ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1} 
+    # Append To List  ${service_names}  ${SERVICE1} 
 #       ${SERVICE2}=    generate_service_name 
 #       ${SERVICE3}=    generate_service_name 
 #       ${SERVICE4}=    generate_service_name 

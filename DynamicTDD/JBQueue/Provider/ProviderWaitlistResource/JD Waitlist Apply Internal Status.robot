@@ -12,6 +12,9 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/hl_providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
+*** Variables ***
+@{service_names}
+
 ***Test Cases***
 
 JD-TC-WaitlistApplyInternalSts-1

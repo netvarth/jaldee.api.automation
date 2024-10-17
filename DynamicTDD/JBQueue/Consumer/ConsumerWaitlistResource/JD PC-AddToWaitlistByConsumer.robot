@@ -1639,7 +1639,6 @@ JD-TC-Add To WaitlistByConsumer-UH1
     
     Comment  delete all waitlist of  ${CUSERNAME5} its used in anoter test case  
 
-<<<<<<< HEAD
 
 
 JD-TC-Add To WaitlistByConsumer-18
@@ -2161,8 +2160,6 @@ JD-TC-Add To WaitlistByConsumer-20
     Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_l2}
 
 
-=======
->>>>>>> branch 'master' of https://github.com/netvarth/jaldee.api.automation
 JD-TC-Add To WaitlistByConsumer-UH2
     [Documentation]  waitlist  maximum capacity and check
     # clear waitlist   ${PUSERPH0}

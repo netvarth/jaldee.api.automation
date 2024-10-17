@@ -21,6 +21,7 @@ ${prefix}       serviceBatch
 ${suffix}       serving
 ${Apptstat}     ENABLED  DISABLED
 ${start}        110
+@{service_names}
 
 *** Test Cases ***  
 

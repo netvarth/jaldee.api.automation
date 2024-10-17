@@ -16,6 +16,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 *** Variables ***
 ${waitlistedby}           CONSUMER
+@{service_names}
                             
 
 *** Test Cases ***    
