@@ -31,7 +31,6 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-Update Sales Order Status-1
-
     [Documentation]   Create a sales Order then change it's order status to ORDER_CONFIRMED.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
@@ -324,7 +323,6 @@ JD-TC-Update Sales Order Status-1
 # ------------------------------------------------------------------------------------------------------------------------------------
 
 JD-TC-Update Sales Order Status-2
-
     [Documentation]   Update order status ORDER_CONFIRMED to ORDER_CANCELED.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
@@ -342,7 +340,6 @@ JD-TC-Update Sales Order Status-2
     Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[3]}
 
 JD-TC-Update Sales Order Status-3
-
     [Documentation]   Update order status ORDER_CANCELED to ORDER_DRAFT.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
@@ -360,7 +357,6 @@ JD-TC-Update Sales Order Status-3
     Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[0]}
 
 JD-TC-Update Sales Order Status-4
-
     [Documentation]   Update order status ORDER_DRAFT to ORDER_CONFIRMED then change to ORDER_COMPLETED.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
@@ -383,7 +379,6 @@ JD-TC-Update Sales Order Status-4
 
 
 JD-TC-Update Sales Order Status-5
-
     [Documentation]   Update order status ORDER_COMPLETED to ORDER_DRAFT.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
@@ -399,7 +394,6 @@ JD-TC-Update Sales Order Status-5
 
 
 JD-TC-Update Sales Order Status-6
-
     [Documentation]   Update order status ORDER_COMPLETED to ORDER_CONFIRMED.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
@@ -414,7 +408,6 @@ JD-TC-Update Sales Order Status-6
     Should Be Equal As Strings    ${resp.json()}   ${CAN_NOT_UPDATE_STATUS}
 
 JD-TC-Update Sales Order Status-7
-
     [Documentation]   Update order status ORDER_COMPLETED to ORDER_CANCELED.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
@@ -430,7 +423,6 @@ JD-TC-Update Sales Order Status-7
 
 
 JD-TC-Update Sales Order Status-8
-
     [Documentation]   Update order status ORDER_COMPLETED to ORDER_DISCARDED.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
@@ -445,7 +437,6 @@ JD-TC-Update Sales Order Status-8
     Should Be Equal As Strings    ${resp.json()}   ${CAN_NOT_UPDATE_STATUS}
 
 JD-TC-Update Sales Order Status-9
-
     [Documentation]   Update order status ORDER_COMPLETED to ORDER_COMPLETED.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
@@ -460,7 +451,6 @@ JD-TC-Update Sales Order Status-9
     Should Be Equal As Strings    ${resp.json()}   ${ALREADY_IN}
 
 JD-TC-Update Sales Order Status-10
-
     [Documentation]   Update order status ORDER_DRAFT to ORDER_COMPLETED.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
@@ -490,7 +480,6 @@ JD-TC-Update Sales Order Status-10
     Should Be Equal As Strings    ${resp.json()}   ${CAN_NOT_UPDATE_STATUS}
 
 JD-TC-Update Sales Order Status-11
-
     [Documentation]   Update order status ORDER_DRAFT to ORDER_CANCELED.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
@@ -505,7 +494,6 @@ JD-TC-Update Sales Order Status-11
     Should Be Equal As Strings    ${resp.json()}   ${CAN_NOT_UPDATE_STATUS}
 
 JD-TC-Update Sales Order Status-12
-
     [Documentation]   Update order status ORDER_DRAFT to ORDER_CONFIRMED then try to change ORDER_DRAFT.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
@@ -527,7 +515,6 @@ JD-TC-Update Sales Order Status-12
     Should Be Equal As Strings    ${resp.status_code}   200
 
 JD-TC-Update Sales Order Status-13
-
     [Documentation]   Update order status ORDER_CONFIRMED to ORDER_DISCARDED.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}

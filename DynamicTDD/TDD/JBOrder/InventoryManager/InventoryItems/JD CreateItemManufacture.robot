@@ -20,7 +20,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-CreateItemManufacture-1
-
     [Documentation]  Provider Create a Item Manufacture.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
@@ -45,7 +44,6 @@ JD-TC-CreateItemManufacture-1
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemManufacture-2
-
     [Documentation]  Provider Create another Item Manufacture contain 250 words.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
@@ -59,7 +57,6 @@ JD-TC-CreateItemManufacture-2
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemManufacture-3
-
     [Documentation]  Provider Create another Item Manufacture with Number.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
@@ -73,7 +70,6 @@ JD-TC-CreateItemManufacture-3
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemManufacture-UH1
-
     [Documentation]  Provider Create another Item Manufacture with same name.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
@@ -88,7 +84,6 @@ JD-TC-CreateItemManufacture-UH1
     Should Be Equal As Strings    ${resp.json()}    ${MANUFACTURER_NAME_ALREADY_EXIST}
 
 JD-TC-CreateItemManufacture-UH2
-
     [Documentation]  Provider Create a Item Manufacture without Login.
 
     ${ManufactureName}=    FakerLibrary.Random Number
@@ -99,7 +94,6 @@ JD-TC-CreateItemManufacture-UH2
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
 
 JD-TC-CreateItemManufacture-UH3
-
     [Documentation]  Provider Create a Item Manufacture with Consumer Login.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}

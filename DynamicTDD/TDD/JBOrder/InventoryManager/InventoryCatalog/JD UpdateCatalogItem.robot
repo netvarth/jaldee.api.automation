@@ -26,7 +26,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Update Inventory Catalog Item-1
-
     [Documentation]  update Inventory Catalog Item with valid details.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME46}  ${PASSWORD}
@@ -183,7 +182,6 @@ JD-TC-Update Inventory Catalog Item-1
 
 
 JD-TC-Update Inventory Catalog Item-2
-
     [Documentation]  Update Inventory Catalog Item from user login.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME46}  ${PASSWORD}
@@ -260,7 +258,6 @@ JD-TC-Update Inventory Catalog Item-2
 
 
 JD-TC-Update Inventory Catalog Item-3
-
     [Documentation]  Update Inventory Catalog Item  with batch applicable is false 
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME46}  ${PASSWORD}
@@ -278,7 +275,6 @@ JD-TC-Update Inventory Catalog Item-3
     Should Be Equal As Strings    ${resp.json()['lotNumber']}     ${bool[1]}
 
 JD-TC-Update Inventory Catalog Item-4
-
     [Documentation]  Update Inventory Catalog Item  with lot number is false 
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME46}  ${PASSWORD}
@@ -310,7 +306,6 @@ JD-TC-Update Inventory Catalog Item-4
 #     Should Be Equal As Strings   ${resp.json()}   ${Item_id_can_not_be_updated}
 
 JD-TC-Update Inventory Catalog Item-UH2
-
     [Documentation]  Update Inventory Catalog Item with invalid catalogid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME46}  ${PASSWORD}
@@ -324,7 +319,6 @@ JD-TC-Update Inventory Catalog Item-UH2
     Should Be Equal As Strings   ${resp.json()}   ${Catalog_id_can_not_be_updated}
 
 JD-TC-Update Inventory Catalog Item-UH3
-
     [Documentation]  Update Inventory Catalog Item with invalid item catalog id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME46}  ${PASSWORD}
@@ -339,7 +333,6 @@ JD-TC-Update Inventory Catalog Item-UH3
     Should Be Equal As Strings   ${resp.json()}   ${Invalid_Catalog_id}
 
 JD-TC-Update Inventory Catalog Item-UH4
-
     [Documentation]  Create Inventory Catalog Item without login.
 
 
@@ -349,7 +342,6 @@ JD-TC-Update Inventory Catalog Item-UH4
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-Update Inventory Catalog Item-UH5
-
     [Documentation]  Create Inventory Catalog Item from sa login login.
 
 
@@ -363,7 +355,6 @@ JD-TC-Update Inventory Catalog Item-UH5
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-Update Inventory Catalog Item-UH6
-
     [Documentation]  Create Inventory Catalog Item using another provider
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}

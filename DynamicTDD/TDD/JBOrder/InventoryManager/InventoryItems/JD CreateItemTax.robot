@@ -20,7 +20,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-CreateItemTax-1
-
     [Documentation]  Create Item tax
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
@@ -58,7 +57,6 @@ JD-TC-CreateItemTax-1
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemTax-UH1
-
     [Documentation]  Create Item tax - where tax name is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
@@ -72,7 +70,6 @@ JD-TC-CreateItemTax-UH1
     
 
 JD-TC-CreateItemTax-3
-
     [Documentation]  Create Item tax - where tax type enum is vat ( For VAT and CDSS CGST,SGST and IGST are not Mandatory)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
@@ -86,7 +83,6 @@ JD-TC-CreateItemTax-3
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemTax-4
-
     [Documentation]  Create Item tax - where tax type enum is CESS ( For VAT and CDSS CGST,SGST and IGST are not Mandatory)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
@@ -100,7 +96,6 @@ JD-TC-CreateItemTax-4
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemTax-UH3
-
     [Documentation]  Create Item tax - tax percentage is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
@@ -113,7 +108,6 @@ JD-TC-CreateItemTax-UH3
     Should Be Equal As Strings    ${resp.json()}         ${INVALID_TAX_PERCENTAGE}
 
 JD-TC-CreateItemTax-UH4
-
     [Documentation]  Create Item tax - cgst is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
@@ -126,7 +120,6 @@ JD-TC-CreateItemTax-UH4
     Should Be Equal As Strings    ${resp.json()}         ${INVALID_CGST_PERCENTAGE}
 
 JD-TC-CreateItemTax-UH5
-
     [Documentation]  Create Item tax - sgst is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
@@ -139,7 +132,6 @@ JD-TC-CreateItemTax-UH5
     Should Be Equal As Strings    ${resp.json()}         ${INVALID_SGST_PERCENTAGE}
 
 JD-TC-CreateItemTax-UH6
-
     [Documentation]  Create Item tax - igst is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
@@ -152,7 +144,6 @@ JD-TC-CreateItemTax-UH6
     Should Be Equal As Strings    ${resp.json()}         ${INVALID_IGST_PERCENTAGE}
 
 JD-TC-CreateItemTax-UH7 
-
     [Documentation]  Create Item tax - without Login
 
     ${resp}=    Create Item Tax  ${taxName}  ${taxtypeenum[0]}  ${taxPercentage}  ${cgst}  ${cgst}  0
@@ -162,7 +153,6 @@ JD-TC-CreateItemTax-UH7
 
 
 JD-TC-CreateItemTax-UH8
-
     [Documentation]  Create Item tax - consumer login
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
@@ -214,7 +204,6 @@ JD-TC-CreateItemTax-UH8
     Should Be Equal As Strings    ${resp.json()}         ${NoAccess}
 
 JD-TC-CreateItemTax-UH9
-
     [Documentation]  Create Item tax - creating a tax with existing name
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}

@@ -27,7 +27,6 @@ ${order}        0
 *** Test Cases ***
 
 JD-TC-GetPurchaseItemFilterCount-1
-
     [Documentation]  Get Purchase Item Filter Count Count
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -597,7 +596,6 @@ JD-TC-GetPurchaseItemFilterCount-1
 
 
 JD-TC-GetPurchaseItemFilterCount-3
-
     [Documentation]  Get Purchase Item Filter Count - purchaseUid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -610,7 +608,6 @@ JD-TC-GetPurchaseItemFilterCount-3
     Should Be Equal As Strings      ${resp.json()}          1
 
 JD-TC-GetPurchaseItemFilterCount-4
-
     [Documentation]  Get Purchase Item Filter Count - expiryDate
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -623,7 +620,6 @@ JD-TC-GetPurchaseItemFilterCount-4
     Should Be Equal As Strings      ${resp.json()}          1
 
 JD-TC-GetPurchaseItemFilterCount-UH2
-
     [Documentation]  Get Purchase Item Filter Count - without login
 
     ${resp}=    Get Purchase Item Filter Count 

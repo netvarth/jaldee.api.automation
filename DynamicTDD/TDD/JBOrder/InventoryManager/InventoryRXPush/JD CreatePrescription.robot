@@ -30,7 +30,6 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-CreatePrescription-1
-
     [Documentation]    Create Prescription
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
@@ -551,7 +550,6 @@ JD-TC-CreatePrescription-1
 
 
 JD-TC-CreatePrescription-2
-
     [Documentation]    Create Prescription -  with same details 
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -563,7 +561,6 @@ JD-TC-CreatePrescription-2
     Should Be Equal As Strings      ${resp.status_code}     200
 
 JD-TC-CreatePrescription-UH1
-
     [Documentation]    Create Prescription -  where provider consumer id is empty 
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -578,7 +575,6 @@ JD-TC-CreatePrescription-UH1
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_X_ID}
 
 JD-TC-CreatePrescription-UH2
-
     [Documentation]    Create Prescription -  where doc id is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -593,7 +589,6 @@ JD-TC-CreatePrescription-UH2
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_X_ID}
 
 JD-TC-CreatePrescription-3
-
     [Documentation]    Create Prescription -  display name is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -605,7 +600,6 @@ JD-TC-CreatePrescription-3
     Should Be Equal As Strings      ${resp.status_code}     200
 
 JD-TC-CreatePrescription-UH3
-
     [Documentation]    Create Prescription -  duration is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -620,7 +614,6 @@ JD-TC-CreatePrescription-UH3
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
 
 JD-TC-CreatePrescription-UH4
-
     [Documentation]    Create Prescription -  quantity is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -632,7 +625,6 @@ JD-TC-CreatePrescription-UH4
     Should Be Equal As Strings      ${resp.status_code}     422
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_QUANTITY_VALUE}
 JD-TC-CreatePrescription-4
-
     [Documentation]    Create Prescription -  description is empty 
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -644,7 +636,6 @@ JD-TC-CreatePrescription-4
     Should Be Equal As Strings      ${resp.status_code}     200
 
 JD-TC-CreatePrescription-5
-
     [Documentation]    Create Prescription -  item code is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -656,7 +647,6 @@ JD-TC-CreatePrescription-5
     Should Be Equal As Strings      ${resp.status_code}     200
 
 JD-TC-CreatePrescription-UH5
-
     [Documentation]    Create Prescription -  Dosage is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -671,7 +661,6 @@ JD-TC-CreatePrescription-UH5
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
 
 JD-TC-CreatePrescription-UH6
-
     [Documentation]    Create Prescription -  frequency id is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -686,7 +675,6 @@ JD-TC-CreatePrescription-UH6
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
 
 JD-TC-CreatePrescription-UH7
-
     [Documentation]    Create Prescription -  html is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}

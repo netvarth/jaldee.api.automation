@@ -19,7 +19,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-GetItemHsn-1
-
     [Documentation]  Get Item Hsn
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
@@ -57,7 +56,6 @@ JD-TC-GetItemHsn-1
 
 
 JD-TC-GetItemHsn-UH1
-
     [Documentation]  Get Item Hsn - where hsn code is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
@@ -72,7 +70,6 @@ JD-TC-GetItemHsn-UH1
     Should Be Empty     ${resp.content}
 
 JD-TC-GetItemHsn-UH2
-
     [Documentation]  Get Item Hsn - without login
 
     ${resp}=    Get Item hns by id   ${hns_id}
@@ -81,7 +78,6 @@ JD-TC-GetItemHsn-UH2
     Should Be Equal As Strings    ${resp.json()}        ${SESSION_EXPIRED}
 
 JD-TC-GetItemHsn-UH3
-
     [Documentation]  Get Item Hsn - with another provider login
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}

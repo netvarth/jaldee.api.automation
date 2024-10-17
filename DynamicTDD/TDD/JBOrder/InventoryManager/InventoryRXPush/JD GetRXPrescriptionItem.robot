@@ -30,7 +30,6 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-GetRXPrescriptionItem-1
-
     [Documentation]    Get RX Prescription Item
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
@@ -564,7 +563,6 @@ JD-TC-GetRXPrescriptionItem-1
     Should Be Equal As Strings      ${resp.json()['prescriptioinUid']}      ${prescription_id}    
 
 JD-TC-GetRXPrescriptionItem-2
-
     [Documentation]    Get RX Prescription Item - where prescription item id is invalid
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -579,7 +577,6 @@ JD-TC-GetRXPrescriptionItem-2
     Should Be Empty  ${resp.content}
 
 JD-TC-GetRXPrescriptionItem-3
-
     [Documentation]    Get RX Prescription Item - without login
 
     ${resp}=    Get RX Prescription Item By EncId  ${pitm_id}

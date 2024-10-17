@@ -19,7 +19,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-UpdateItemHsn-1
-
     [Documentation]  Update Item Hsn - Hsn Code changed
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME42}  ${PASSWORD}
@@ -72,7 +71,6 @@ JD-TC-UpdateItemHsn-1
     Should Be Equal As Strings    ${resp.json()['status']}            ${toggle[0]}
 
 JD-TC-UpdateItemHsn-UH1
-
     [Documentation]  Update Item Hsn - Hsn Code is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME42}  ${PASSWORD}
@@ -86,7 +84,6 @@ JD-TC-UpdateItemHsn-UH1
 
 
 JD-TC-UpdateItemHsn-UH2
-
     [Documentation]  Update Item Hsn - Hsn Id is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME42}  ${PASSWORD}
@@ -101,7 +98,6 @@ JD-TC-UpdateItemHsn-UH2
     Should Be Equal As Strings    ${resp.json()}          ${INVALID_FIELD}
 
 JD-TC-UpdateItemHsn-UH3
-
     [Documentation]  Update Item Hsn - hsn id is invalid changed
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME42}  ${PASSWORD}
@@ -118,7 +114,6 @@ JD-TC-UpdateItemHsn-UH3
     Should Be Equal As Strings    ${resp.json()}          ${INVALID_FIELD}
 
 JD-TC-UpdateItemHsn-UH4
-
     [Documentation]  Update Item Hsn - without login
 
     ${resp}=    Update Item hns  ${hns_id}   ${hsnCode2}
@@ -127,7 +122,6 @@ JD-TC-UpdateItemHsn-UH4
     Should Be Equal As Strings    ${resp.json()}          ${SESSION_EXPIRED}
 
 JD-TC-UpdateItemHsn-UH5
-
     [Documentation]  Update Item Hsn - with another provider login
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}

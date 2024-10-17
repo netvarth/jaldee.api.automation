@@ -35,7 +35,6 @@ ${order}        0
 *** Test Cases ***
 
 JD-TC-Create Catalog Item Batch-UH1
-
     [Documentation]  When inventory manager is false,cant create batch for sales order catalog item.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
@@ -204,7 +203,6 @@ JD-TC-Create Catalog Item Batch-UH1
 
 
 JD-TC-Create Catalog Item Batch-UH2
-
     [Documentation]   Item is Batch applicable,create sales order catalog and item where ivntry mgr is on.Then create batch invtry mgr is off
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
@@ -254,7 +252,6 @@ JD-TC-Create Catalog Item Batch-UH2
 
 
 JD-TC-Create Catalog Item Batch-UH3
-
     [Documentation]   create catalog item batch where invalid SO_itemEncid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
@@ -270,7 +267,6 @@ JD-TC-Create Catalog Item Batch-UH3
     
 
 JD-TC-Create Catalog Item Batch-UH4
-
     [Documentation]   create catalog item batch where name is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
@@ -284,7 +280,6 @@ JD-TC-Create Catalog Item Batch-UH4
     Should Be Equal As Strings    ${resp.json()}    ${BATCH_NAME_REQUIRED}
 
 JD-TC-Create Catalog Item Batch-UH5
-
     [Documentation]   create catalog item batch where price is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
@@ -298,7 +293,6 @@ JD-TC-Create Catalog Item Batch-UH5
     Should Be Equal As Strings    ${resp.json()}    ${PRICE_REQUIRED}
 
 JD-TC-Create Catalog Item Batch-UH6
-
     [Documentation]   create catalog item batch without login
 
     ${Name}=    FakerLibrary.first name
@@ -308,7 +302,6 @@ JD-TC-Create Catalog Item Batch-UH6
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-Create Catalog Item Batch-UH7
-
     [Documentation]  create catalog item batch using sa login.(inventory manager is false)
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -325,7 +318,6 @@ JD-TC-Create Catalog Item Batch-UH7
 
 
 JD-TC-Create Catalog Item Batch-UH8
-
     [Documentation]   create catalog item batch where price is zero
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
@@ -339,7 +331,6 @@ JD-TC-Create Catalog Item Batch-UH8
     Should Be Equal As Strings    ${resp.json()}    ${INVENTORY_BATCH_ITEM_ID_REQUIRED}
 
 JD-TC-Create Catalog Item Batch-UH9
-
     [Documentation]   create catalog item batch where price is negative
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
@@ -353,7 +344,6 @@ JD-TC-Create Catalog Item Batch-UH9
     Should Be Equal As Strings    ${resp.json()}    ${PRICE_REQUIRED}
 
 JD-TC-Create Catalog Item Batch-1
-
     [Documentation]  creating batch item when inventory manager is on
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
@@ -922,7 +912,6 @@ JD-TC-Create Catalog Item Batch-1
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-Create Catalog Item Batch-UH10
-
     [Documentation]  creating same batch item when inventory manager is on
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
@@ -941,7 +930,6 @@ JD-TC-Create Catalog Item Batch-UH10
 
 
 JD-TC-Create Catalog Item Batch-2
-
     [Documentation]  creating multiple batch item for same catalog item batch when inventory manager is on
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
@@ -1141,7 +1129,6 @@ JD-TC-Create Catalog Item Batch-2
 #     # Should Be Equal As Strings    ${resp.json()}    ${ITEM_BATCH_EXISTS_WITH_GIVEN_NAME}
 
 JD-TC-Create Catalog Item Batch-UH11
-
     [Documentation]  Try to create batch where inventory manager is off.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
@@ -1296,7 +1283,6 @@ JD-TC-Create Catalog Item Batch-UH11
 
 
 JD-TC-Create Catalog Item Batch-UH12
-
     [Documentation]   Given inventory catalog item is not an item of the inventory catalogs which are connected to this order catalog.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}

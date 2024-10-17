@@ -26,7 +26,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Update SO Catalog Item Price-1
-
     [Documentation]  Update So Catalog Item Price (Batch is disables)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
@@ -220,7 +219,6 @@ JD-TC-Update SO Catalog Item Price-1
     Should Be Equal As Strings    ${resp.json()['price']}    ${price1}   
 
 JD-TC-Update SO Catalog Item Price-2
-
     [Documentation]  Update So Catalog Item Price as Zero (Batch is disables)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
@@ -233,7 +231,6 @@ JD-TC-Update SO Catalog Item Price-2
     Should Be Equal As Strings   ${resp.json()}   ${ITEM_BATCH_WISE_PRICE_REQUIRED}
 
 JD-TC-Update SO Catalog Item Price-3
-
     [Documentation]  Update So Catalog Item Price as Negative number (Batch is disables)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
@@ -247,7 +244,6 @@ JD-TC-Update SO Catalog Item Price-3
 
 
 JD-TC-Update SO Catalog Item Price-UH1
-
     [Documentation]  Update So Catalog Item Price without login.
 
     ${resp}=  Update SO Catalog Item Price     ${SO_Cata_Encid}     ${SO_itemEncIds}        ${price}       ${EMPTY}    ${EMPTY}
@@ -257,7 +253,6 @@ JD-TC-Update SO Catalog Item Price-UH1
 
 
 JD-TC-Update SO Catalog Item Price-UH2
-
     [Documentation]  Update So Catalog Item Price using sa login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}

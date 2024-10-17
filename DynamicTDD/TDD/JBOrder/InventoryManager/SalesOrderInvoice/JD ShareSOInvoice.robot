@@ -27,7 +27,6 @@ ${invalidItem}     sprx-3250dr0-800
 *** Test Cases ***
 
 JD-TC-Share Sales Order Invoice-1
-
     [Documentation]   Create a sales Order with Valid Details then generate and Share Sales Order.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
@@ -370,7 +369,6 @@ JD-TC-Share Sales Order Invoice-1
     Should Be Equal As Strings    ${resp.status_code}   200
 
 JD-TC-Share Sales Order Invoice-UH1
-
     [Documentation]   Share Sales Order invoice With Empty email Id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
@@ -388,7 +386,6 @@ JD-TC-Share Sales Order Invoice-UH1
     Should Be Equal As Strings    ${resp.json()}   ${INVALID_SHARING_INFO}
 
 JD-TC-Share Sales Order Invoice-UH2
-
     [Documentation]   Share Sales Order invoice With  email Notification is true but email is EMPTY.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
@@ -406,7 +403,6 @@ JD-TC-Share Sales Order Invoice-UH2
     Should Be Equal As Strings    ${resp.json()}   ${EMPTY_EMAIL}
 
 JD-TC-Share Sales Order Invoice-UH3
-
     [Documentation]   Share Sales Order invoice With  SMS Notification is true but phone is EMPTY.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
@@ -424,7 +420,6 @@ JD-TC-Share Sales Order Invoice-UH3
     Should Be Equal As Strings    ${resp.json()}   ${INVAID_USER_PHONE_NUMBER}
 
 JD-TC-Share Sales Order Invoice-UH4
-
     [Documentation]   Share Sales Order invoice With  SMS Notification is false but phonenumber is active.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
@@ -442,7 +437,6 @@ JD-TC-Share Sales Order Invoice-UH4
     Should Be Equal As Strings    ${resp.json()}   ${INVALID_SHARING_INFO}
 
 JD-TC-Share Sales Order Invoice-UH5
-
     [Documentation]   Share Sales Order invoice With  whatsappPhNo Notification is true but whatsappPhNo is EMPTY.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
@@ -460,7 +454,6 @@ JD-TC-Share Sales Order Invoice-UH5
     Should Be Equal As Strings    ${resp.json()}   ${INVAID_WHATSAPP_NUMBER}
 
 JD-TC-Share Sales Order Invoice-UH6
-
     [Documentation]   Share Sales Order invoice With  telegramPhNo Notification is true but telegramPhNo is EMPTY.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
@@ -478,7 +471,6 @@ JD-TC-Share Sales Order Invoice-UH6
     Should Be Equal As Strings    ${resp.json()}   ${INVALID_TELEGRAM_NUM}
 
 JD-TC-Share Sales Order Invoice-UH7
-
     [Documentation]   Share Sales Order invoice Without login.
 
     ${PO_Number}    Generate random string    5    123456789
@@ -492,7 +484,6 @@ JD-TC-Share Sales Order Invoice-UH7
     Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-Share Sales Order Invoice-UH8
-
     [Documentation]   Share Sales Order invoice With EMPTY HTML.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}

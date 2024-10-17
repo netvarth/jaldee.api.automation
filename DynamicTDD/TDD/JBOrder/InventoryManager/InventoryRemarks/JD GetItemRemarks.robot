@@ -25,7 +25,6 @@ ${invalidEma}        asd122
 *** Test Cases ***
 
 JD-TC-GetItemRemarks-1
-
     [Documentation]  create item remarks with transaction type as adjustment and Get Item Remark. 
 
 
@@ -59,7 +58,6 @@ JD-TC-GetItemRemarks-1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${remarks_encid}
 
 JD-TC-GetItemRemarks-2
-
     [Documentation]  create item remarks with transaction type as opening and Get Item Remark.
 
 
@@ -80,7 +78,6 @@ JD-TC-GetItemRemarks-2
     Should Be Equal As Strings    ${resp.json()['encId']}    ${remarks_encid}
 
 JD-TC-GetItemRemarks-3
-
     [Documentation]  create item remarks with transaction type as PURCHASE_ORDER and Get Item Remark.
 
 
@@ -102,7 +99,6 @@ JD-TC-GetItemRemarks-3
 
 
 JD-TC-GetItemRemarks-4
-
     [Documentation]  create item remarks with transaction type as PURCHASE and Get Item Remark.
 
 
@@ -124,7 +120,6 @@ JD-TC-GetItemRemarks-4
 
 
 JD-TC-GetItemRemarks-5
-
     [Documentation]  create item remarks with transaction type as PURCHASE_RETURN and Get Item Remark.
 
 
@@ -146,7 +141,6 @@ JD-TC-GetItemRemarks-5
 
 
 JD-TC-GetItemRemarks-6
-
     [Documentation]  create item remarks with transaction type as SALES_ORDER and Get Item Remark.
 
 
@@ -168,7 +162,6 @@ JD-TC-GetItemRemarks-6
 
 
 JD-TC-GetItemRemarks-7
-
     [Documentation]  create item remarks with transaction type as SALES_ORDER_CANCEL and Get Item Remark.
 
 
@@ -190,7 +183,6 @@ JD-TC-GetItemRemarks-7
 
 
 JD-TC-GetItemRemarks-8
-
     [Documentation]  create item remarks with transaction type as SALES and Get Item Remark.
 
 
@@ -212,7 +204,6 @@ JD-TC-GetItemRemarks-8
 
 
 JD-TC-GetItemRemarks-9
-
     [Documentation]  create item remarks with transaction type as SALES_RETURN and Get Item Remark.
 
 
@@ -234,7 +225,6 @@ JD-TC-GetItemRemarks-9
 
 
 JD-TC-GetItemRemarks-10
-
     [Documentation]  create item remarks with transaction type as TRANSFER_IN and Get Item Remark.
 
 
@@ -257,7 +247,6 @@ JD-TC-GetItemRemarks-10
 
 
 JD-TC-GetItemRemarks-11
-
     [Documentation]  create item remarks with transaction type as TRANSFER_OUT and Get Item Remark.
 
 
@@ -301,7 +290,6 @@ JD-TC-GetItemRemarks-12
 
 
 JD-TC-GetItemRemarks-UH1
-
     [Documentation]  Get Item Remark with invalid encid.
 
 
@@ -316,7 +304,6 @@ JD-TC-GetItemRemarks-UH1
 
 
 JD-TC-GetItemRemarks-UH2
-
     [Documentation]  Get Item Remark without login.
 
 
@@ -326,7 +313,6 @@ JD-TC-GetItemRemarks-UH2
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-GetItemRemarks-UH3
-
     [Documentation]  Get Item Remark using SA login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}

@@ -25,7 +25,6 @@ ${order}        0
 *** Test Cases ***
 
 JD-TC-UpdateItemInvStatus-1
-
     [Documentation]   Update Item Inv Status
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
@@ -250,7 +249,6 @@ JD-TC-UpdateItemInvStatus-1
 
 
 JD-TC-UpdateItemInvStatus-2
-
     [Documentation]  Update Item Inv Status - Disable to Disable
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
@@ -267,7 +265,6 @@ JD-TC-UpdateItemInvStatus-2
     Should Be Equal As Strings    ${resp.status_code}    422
 
 JD-TC-UpdateItemInvStatus-3
-
     [Documentation]  Update Item Inv Status - Disable to Enable
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
@@ -289,7 +286,6 @@ JD-TC-UpdateItemInvStatus-3
     Should Be Equal As Strings      ${resp.json()['status']}         ${toggle[0]}
 
 JD-TC-UpdateItemInvStatus-4
-
     [Documentation]  Update Item Inv Status - Enable to Enable
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
@@ -307,7 +303,6 @@ JD-TC-UpdateItemInvStatus-4
 
 
 JD-TC-UpdateItemInvStatus-5
-
     [Documentation]  Update Item Inv Status - without login
 
     ${resp}=    Update Item Inv Status  ${item}  ${toggle[0]}
@@ -316,7 +311,6 @@ JD-TC-UpdateItemInvStatus-5
     Should Be Equal As Strings    ${resp.json()}         ${SESSION_EXPIRED}
 
 JD-TC-UpdateItemInvStatus-6
-
     [Documentation]  Update Item Inv Status - where id is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}

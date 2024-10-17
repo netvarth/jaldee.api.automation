@@ -21,7 +21,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-UpdateItemCategoryStatus-1
-
     [Documentation]  Provider Create a Item Category then try to Update Item Category Status.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
@@ -65,7 +64,6 @@ JD-TC-UpdateItemCategoryStatus-1
     Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[1]}
 
 JD-TC-UpdateItemCategoryStatus-2
-
     [Documentation]  Update Item Category Status as already disabled.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
@@ -78,7 +76,6 @@ JD-TC-UpdateItemCategoryStatus-2
     Should Be Equal As Strings    ${resp.json()}         ${STATUS_ALREADY_UPDATED}
 
 JD-TC-UpdateItemCategoryStatus-3
-
     [Documentation]  try to Enable ,Disabled Status.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
@@ -97,7 +94,6 @@ JD-TC-UpdateItemCategoryStatus-3
     Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[0]}
 
 JD-TC-UpdateItemCategoryStatus-UH1
-
     [Documentation]  Get Item Category without Login.
 
     ${resp}=  Update Item Category Status   ${Ca_Id}    ${toggle[0]}
@@ -106,7 +102,6 @@ JD-TC-UpdateItemCategoryStatus-UH1
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
 
 JD-TC-UpdateItemCategoryStatus-UH2
-
     [Documentation]  Get Item Category with Consumer Login.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}

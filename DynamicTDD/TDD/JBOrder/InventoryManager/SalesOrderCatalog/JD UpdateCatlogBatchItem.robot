@@ -32,7 +32,6 @@ ${order}        0
 *** Test Cases ***
 
 JD-TC-Update Catalog Item Batch-1
-
     [Documentation]  update batch item when inventory manager is on
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
@@ -715,7 +714,6 @@ JD-TC-Update Catalog Item Batch-1
 
 
 JD-TC-Update Catalog Item Batch-UH1
-
     [Documentation]   create catalog item batch where name is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
@@ -742,7 +740,6 @@ JD-TC-Update Catalog Item Batch-UH2
     Should Be Equal As Strings    ${resp.json()}    ${PRICE_REQUIRED}
 
 JD-TC-Update Catalog Item Batch-UH3
-
     [Documentation]   create catalog item batch without login
 
     ${Name}=    FakerLibrary.first name
@@ -752,7 +749,6 @@ JD-TC-Update Catalog Item Batch-UH3
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-Update Catalog Item Batch-UH4
-
     [Documentation]  create catalog item batch using sa login.(inventory manager is false)
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -766,7 +762,6 @@ JD-TC-Update Catalog Item Batch-UH4
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-Update Catalog Item Batch-UH5
-
     [Documentation]  update catalog item batch where invalid SO_Cata_Item_Batch_Encid1
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
@@ -780,7 +775,6 @@ JD-TC-Update Catalog Item Batch-UH5
     Should Be Equal As Strings   ${resp.json()}   ${CATALOG_ITEM_BATCH_ID_REQUIRED}
 
 JD-TC-Update Catalog Item Batch-UH6
-
     [Documentation]  update catalog item batch without giving batch id-"Inventory Item Batch Id required"
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
@@ -793,7 +787,6 @@ JD-TC-Update Catalog Item Batch-UH6
     Should Be Equal As Strings   ${resp.json()}   ${INVENTORY_BATCH_ITEM_ID_REQUIRED}
 
 JD-TC-Update Catalog Item Batch-UH7
-
     [Documentation]  update catalog item batch using same name
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
@@ -809,7 +802,6 @@ JD-TC-Update Catalog Item Batch-UH7
 
 *** Comments ***
 JD-TC-Update Catalog Item Batch-2
-
     [Documentation]  creating batch item when inventory manager is on
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
@@ -1401,7 +1393,6 @@ JD-TC-Update Catalog Item Batch-2
 *** Comments ***
 
 JD-TC-Update Catalog Item Batch-1
-
     [Documentation]  Tests the updation of a batch of catalog items.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
@@ -1575,7 +1566,6 @@ JD-TC-Update Catalog Item Batch-1
 
 
 JD-TC-Update Catalog Item Batch-2
-
     [Documentation]    create catalog item batch where invmgnt is false then update catalog item batch where invmgmt is off
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}

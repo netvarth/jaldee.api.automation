@@ -24,7 +24,6 @@ ${invalidEma}        asd122
 *** Test Cases ***
 
 JD-TC-UpdateStoreStatus-1
-
     [Documentation]  Update Store Status
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -148,7 +147,6 @@ JD-TC-UpdateStoreStatus-1
 
 
 JD-TC-UpdateStoreStatus-UH1
-
     [Documentation]  Update Store Status - inactive to inactive
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -169,7 +167,6 @@ JD-TC-UpdateStoreStatus-UH1
 
 
 JD-TC-UpdateStoreStatus-2
-
     [Documentation]  Update Store Status - inactive to active
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -191,7 +188,6 @@ JD-TC-UpdateStoreStatus-2
     Should Be Equal As Strings  ${resp.json()['status']}    ${LoanApplicationStatus[0]}
 
 JD-TC-UpdateStoreStatus-UH2
-
     [Documentation]  Update Store Status - active to active
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -211,7 +207,6 @@ JD-TC-UpdateStoreStatus-UH2
     Should Be Equal As Strings  ${resp.json()}       ${STORE_ALREADY_IN_STATUS}
 
 JD-TC-UpdateStoreStatus-UH3
-
     [Documentation]  Update Store Status - where store is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -226,7 +221,6 @@ JD-TC-UpdateStoreStatus-UH3
     Should Be Equal As Strings  ${resp.json()}       ${INVALID_STORE_ID}
 
 JD-TC-UpdateStoreStatus-UH4
-
     [Documentation]  Update Store Status - without login
 
     ${resp}=   Update store status  ${store_id}  ${LoanApplicationStatus[0]}

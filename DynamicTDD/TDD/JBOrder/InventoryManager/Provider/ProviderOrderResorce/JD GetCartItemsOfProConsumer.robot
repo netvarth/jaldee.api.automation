@@ -26,7 +26,6 @@ ${maxSaleQuantity}   50
 *** Test Cases ***
 
 JD-TC-Get Cart Iems of Provider consumer-1
-
     [Documentation]  Create cart and check that from provider side
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -333,7 +332,6 @@ JD-TC-Get Cart Iems of Provider consumer-1
 
 
 JD-TC-Get Cart Iems of Provider consumer-2
-
     [Documentation]  Create cart  wwhere item is tax applicable and get that from provider side
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
@@ -623,7 +621,6 @@ JD-TC-Get Cart Iems of Provider consumer-2
 
 
 JD-TC-Get Cart Iems of Provider consumer-3
-
     [Documentation]  In the sales order catalog, only home delivery is disable and store pickup is enabled. Then, try to add an item to the cart using home delivery without address. then get that from provider side
 
 
@@ -814,7 +811,6 @@ JD-TC-Get Cart Iems of Provider consumer-3
 
 
 JD-TC-Get Cart Iems of Provider consumer-4
-
     [Documentation]  In the sales order catalog where inventory manager is on , only courier delivery is disable and store pickup is enabled. Then, try to add an item to the cart using Courier Service.get that from provider side
 
 
@@ -1023,7 +1019,6 @@ JD-TC-Get Cart Iems of Provider consumer-4
     END
 
 JD-TC-Get Cart Iems of Provider consumer-5
-
     [Documentation]  Get Cart Iems of Provider consumer
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -1252,7 +1247,6 @@ JD-TC-Get Cart Iems of Provider consumer-5
     Should Be Equal As Strings    ${len}    3
 
 JD-TC-Get Cart Iems of Provider consumer-UH1
-
     [Documentation]  Get Cart Iems of Provider consumer without login
     ${resp}=    Get Cart Items by provider consumer id   ${cid} 
     Log   ${resp.content}

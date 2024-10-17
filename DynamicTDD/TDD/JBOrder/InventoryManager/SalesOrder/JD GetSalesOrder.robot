@@ -30,7 +30,6 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-Get Sales Order-1
-
     [Documentation]   Create a sales Order with Valid Details then Get sales order by encid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -291,7 +290,6 @@ JD-TC-Get Sales Order-1
 # -----------------------------------------------------------------------------------------------------------------------------------------
 
 JD-TC-Get Sales Order-2
-
     [Documentation]   Create a sales Order with billingAddress , homeDeliveryAddress , notes , notesForCustomer details then verify all the detiles.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}

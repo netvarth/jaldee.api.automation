@@ -19,7 +19,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-UpdateItemUnit-1
-
     [Documentation]  Update Item Unit - updated unit name
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME51}  ${PASSWORD}
@@ -67,7 +66,6 @@ JD-TC-UpdateItemUnit-1
     Should Be Equal As Strings    ${resp.json()['status']}      ${toggle[0]}
 
 JD-TC-UpdateItemUnit-2
-
     [Documentation]  Update Item Unit - update convertion qty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME51}  ${PASSWORD}
@@ -88,7 +86,6 @@ JD-TC-UpdateItemUnit-2
     Should Be Equal As Strings    ${resp.json()['status']}      ${toggle[0]}
 
 JD-TC-UpdateItemUnit-3
-
     [Documentation]  Update Item Unit - name as empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME51}  ${PASSWORD}
@@ -107,7 +104,6 @@ JD-TC-UpdateItemUnit-3
     Should Be Equal As Strings    ${resp.json()['status']}      ${toggle[0]}
 
 JD-TC-UpdateItemUnit-4
-
     [Documentation]  Update Item Unit - convertionQty as empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME51}  ${PASSWORD}
@@ -126,7 +122,6 @@ JD-TC-UpdateItemUnit-4
     Should Be Equal As Strings    ${resp.json()['status']}      ${toggle[0]}
 
 JD-TC-UpdateItemUnit-UH1
-
     [Documentation]  Update Item Unit - item unit id is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME51}  ${PASSWORD}
@@ -141,7 +136,6 @@ JD-TC-UpdateItemUnit-UH1
     Should Be Equal As Strings    ${resp.json()}         ${INVALID_FIELD}
 
 JD-TC-UpdateItemUnit-UH2
-
     [Documentation]  Update Item Unit - item unit id is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME51}  ${PASSWORD}
@@ -158,7 +152,6 @@ JD-TC-UpdateItemUnit-UH2
     Should Be Equal As Strings    ${resp.json()}         ${INVALID_FIELD}
 
 JD-TC-UpdateItemUnit-UH3
-
     [Documentation]  Update Item Unit - without login
 
     ${resp}=    Update Item Unit  ${unitName}  ${iu_id}  ${convertionQty}

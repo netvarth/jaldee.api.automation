@@ -30,7 +30,6 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-OrderRequest-1
-
     [Documentation]    Order Request
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
@@ -619,7 +618,6 @@ JD-TC-OrderRequest-1
 
 
 JD-TC-OrderRequest-UH1
-
     [Documentation]    Order Request - with same details  
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -633,7 +631,6 @@ JD-TC-OrderRequest-UH1
 
 
 JD-TC-OrderRequest-UH2
-
     [Documentation]    Order Request - after order approvel  
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -667,7 +664,6 @@ JD-TC-OrderRequest-UH2
 
 
 JD-TC-OrderRequest-UH3
-
     [Documentation]    Order Request - where store id is invalid  
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -690,7 +686,6 @@ JD-TC-OrderRequest-UH3
 
 
 JD-TC-OrderRequest-UH4
-
     [Documentation]    Order Request - same request after order Declined 
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -706,7 +701,6 @@ JD-TC-OrderRequest-UH4
     Should Be Equal As Strings      ${resp.status_code}             200
 
 JD-TC-OrderRequest-UH5
-
     [Documentation]    Order Request - where prescription id is invalid  
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -722,7 +716,6 @@ JD-TC-OrderRequest-UH5
 
 
 JD-TC-OrderRequest-UH6
-
     [Documentation]    Order Request - without login
 
     ${resp}=    Order Request    ${store_id}  ${prescription_id2}
@@ -732,7 +725,6 @@ JD-TC-OrderRequest-UH6
 
 
 JD-TC-OrderRequest-UH7
-
     [Documentation]    Here is the corrected version of your sentence:"Order Request: If the same request is declined,  try to place the order again with the declined request."
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}

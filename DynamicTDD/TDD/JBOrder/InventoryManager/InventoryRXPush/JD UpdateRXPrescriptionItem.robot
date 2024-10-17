@@ -30,7 +30,6 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-UpdateRXPrescriptionItem-1
-
     [Documentation]    Update RX Prescription Item
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
@@ -574,7 +573,6 @@ JD-TC-UpdateRXPrescriptionItem-1
 
 
 JD-TC-UpdateRXPrescriptionItem-2
-
     [Documentation]    Update RX Prescription Item - 
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -611,7 +609,6 @@ JD-TC-UpdateRXPrescriptionItem-2
 
 
 JD-TC-UpdateRXPrescriptionItem-2
-
     [Documentation]    Update RX Prescription Item - 
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}

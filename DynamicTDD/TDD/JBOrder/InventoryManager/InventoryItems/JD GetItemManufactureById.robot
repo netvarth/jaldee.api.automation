@@ -20,7 +20,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-GetItemManufactureById-1
-
     [Documentation]  Provider Create a Item Manufacture then try to get by id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME24}  ${PASSWORD}
@@ -52,7 +51,6 @@ JD-TC-GetItemManufactureById-1
     Should Be Equal As Strings    ${resp.json()['manufacturerCode']}    ${mf_id}
 
 JD-TC-GetItemManufactureById-2
-
     [Documentation]  Provider Create another Item Manufacture contain 250 words then try to get by id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME24}  ${PASSWORD}
@@ -73,7 +71,6 @@ JD-TC-GetItemManufactureById-2
     Should Be Equal As Strings    ${resp.json()['manufacturerCode']}    ${mf_id2}
 
 JD-TC-GetItemManufactureById-3
-
     [Documentation]  Provider Create another Item Manufacture with Number then try to get by id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME24}  ${PASSWORD}
@@ -95,7 +92,6 @@ JD-TC-GetItemManufactureById-3
 
 
 JD-TC-GetItemManufactureById-UH1
-
     [Documentation]  Provider Get a Item Manufacture without Login.
 
     ${resp}=  Get Item Manufacture By Id   ${mf_id3}
@@ -104,7 +100,6 @@ JD-TC-GetItemManufactureById-UH1
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
 
 JD-TC-GetItemManufactureById-UH2
-
     [Documentation]  Provider Get a Item Manufacture with Consumer Login.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME24}  ${PASSWORD}

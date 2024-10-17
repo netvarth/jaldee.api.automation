@@ -26,7 +26,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Get item list by catalog encId-1
-
     [Documentation]  Test whether the system can successfully create items with all items having invMgmt set to false (with out Tax) Then it Get item list by catalog encId.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME15}  ${PASSWORD}
@@ -202,7 +201,6 @@ JD-TC-Get item list by catalog encId-1
     Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${displayName}
     
 JD-TC-Get item list by catalog encId-2
-
     [Documentation]  Another provider to try Get item list by catalog encId.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
@@ -215,7 +213,6 @@ JD-TC-Get item list by catalog encId-2
     Should Be Equal As Strings   ${resp.json()}   ${CAP_Invalid_Catalog_id}
 
 JD-TC-Get item list by catalog encId-3
-
     [Documentation]   try Get item list by invalid catalog encId .
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME15}  ${PASSWORD}
@@ -228,7 +225,6 @@ JD-TC-Get item list by catalog encId-3
     Should Be Equal As Strings   ${resp.json()}   ${CAP_Invalid_Catalog_id}
 
 JD-TC-Get item list by catalog encId-UH1
-
     [Documentation]  Get item list by catalog encId without login.
 
     ${resp}=  Get Item List By Catalog EncId     ${SO_Cata_Encid}  
@@ -238,7 +234,6 @@ JD-TC-Get item list by catalog encId-UH1
 
 
 JD-TC-Get item list by catalog encId-UH2
-
     [Documentation]  Get item list by catalog encId using sa login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}

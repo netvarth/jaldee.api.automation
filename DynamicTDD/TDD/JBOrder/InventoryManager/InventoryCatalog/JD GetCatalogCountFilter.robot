@@ -29,7 +29,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Get Inventory catalog Filter Count-1
-
     [Documentation]  create inventory catalog then Get Inventory catalog Filter Count.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -127,7 +126,6 @@ JD-TC-Get Inventory catalog Filter Count-1
 
 
 JD-TC-Get Inventory catalog Filter Count-2
-
     [Documentation]  update inventory catalog then Get Inventory catalog Filter Count using accountid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
@@ -146,7 +144,6 @@ JD-TC-Get Inventory catalog Filter Count-2
     Should Be Equal As Strings    ${resp.json()}    1
 
 JD-TC-Get Inventory catalog Filter Count-3
-
     [Documentation]  Update Inventory Catalog status as inactive then Get Inventory catalog Filter Count using catalogName
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
     Log   ${resp.content}
@@ -162,7 +159,6 @@ JD-TC-Get Inventory catalog Filter Count-3
     Should Be Equal As Strings    ${resp.json()}    1
 
 JD-TC-Get Inventory catalog Filter Count-4
-
     [Documentation]  create  inventory catalog from main account then get inventory catalog using encid from user login.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
@@ -262,7 +258,6 @@ JD-TC-Get Inventory catalog Filter Count-4
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()}   2
 JD-TC-Get Inventory catalog Filter Count-5
-
     [Documentation]  create  inventory catalog where name as invalid string then Get Inventory catalog Filter Count using encid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
@@ -284,7 +279,6 @@ JD-TC-Get Inventory catalog Filter Count-5
     Should Be Equal As Strings    ${resp.json()}    1
 
 JD-TC-Get Inventory catalog Filter Count-6
-
     [Documentation]   update inventory catalog then Update Inventory Catalog status as disable and get with filter.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
@@ -308,7 +302,6 @@ JD-TC-Get Inventory catalog Filter Count-6
 
 
 JD-TC-Get Inventory catalog Filter Count-UH1
-
     [Documentation]    Get Inventory catalog Filter Count with invalid encid id
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
@@ -324,7 +317,6 @@ JD-TC-Get Inventory catalog Filter Count-UH1
 
 
 JD-TC-Get Inventory catalog Filter Count-UH2
-
     [Documentation]  Get Inventory catalog Filter Count without login.
 
     ${resp}=  Get Inventory catalog Filter Count   encId-eq=${encid}  
@@ -334,7 +326,6 @@ JD-TC-Get Inventory catalog Filter Count-UH2
 
 
 JD-TC-Get Inventory catalog Filter Count-UH3
-
     [Documentation]  Get Inventory catalog Filter Count using sa login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}

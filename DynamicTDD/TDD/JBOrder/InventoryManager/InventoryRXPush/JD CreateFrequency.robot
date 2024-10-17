@@ -30,7 +30,6 @@ ${originFrom}       NONE
 
 
 JD-TC-CreateFrequency-1
-
     [Documentation]  Create Frequency
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME107}  ${PASSWORD}
@@ -80,7 +79,6 @@ JD-TC-CreateFrequency-1
 
 
 JD-TC-CreateFrequency-2
-
     [Documentation]  Create Frequency - description and remark not given
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME107}  ${PASSWORD}
@@ -97,7 +95,6 @@ JD-TC-CreateFrequency-2
     Set Suite Variable              ${frequency_id3}         ${resp.json()}
 
 JD-TC-CreateFrequency-3
-
     [Documentation]  Create Frequency - where frequency is empty
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME107}  ${PASSWORD}
@@ -115,7 +112,6 @@ JD-TC-CreateFrequency-3
     Should Be Equal As Strings      ${resp.json()}          ${FIELD_REQUIRED}${space}
 
 JD-TC-CreateFrequency-4
-
     [Documentation]  Create Frequency - frequency is above 1000
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME107}  ${PASSWORD}
@@ -132,7 +128,6 @@ JD-TC-CreateFrequency-4
     Set Suite Variable              ${frequency_id3}         ${resp.json()}
 
 JD-TC-CreateFrequency-5
-
     [Documentation]  Create Frequency - Dosage is empty
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME107}  ${PASSWORD}
@@ -148,7 +143,6 @@ JD-TC-CreateFrequency-5
     Should Be Equal As Strings      ${resp.json()}          ${FIELD_REQUIRED}${space}
 
 JD-TC-CreateFrequency-6
-
     [Documentation]  Create Frequency - dosage is above 1000
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME107}  ${PASSWORD}
@@ -165,7 +159,6 @@ JD-TC-CreateFrequency-6
     Set Suite Variable              ${frequency_id3}         ${resp.json()}
 
 JD-TC-CreateFrequency-7
-
     [Documentation]  Create Frequency - without login
 
     ${frequency3}=       Random Int  min=1  max=10

@@ -30,7 +30,6 @@ ${order}        0
 *** Test Cases ***
 
 JD-TC-Update Catalog Item Batch Status-1
-
     [Documentation]  Create Catalog Item Batch then disable the batch status.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
@@ -601,7 +600,6 @@ JD-TC-Update Catalog Item Batch Status-1
 
 
 JD-TC-Update Catalog Item Batch Status-2
-
     [Documentation]   enable batch status
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
@@ -618,7 +616,6 @@ JD-TC-Update Catalog Item Batch Status-2
     Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[0]}
 
 JD-TC-Update Catalog Item Batch Status-UH1
-
     [Documentation]   enable batch status thats already enabled.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
@@ -632,7 +629,6 @@ JD-TC-Update Catalog Item Batch Status-UH1
     Should Be Equal As Strings   ${resp.json()}   ${CAP_ALREADY_ENABLED}
 
 JD-TC-Update Catalog Item Batch Status-UH2
-
     [Documentation]   disable batch status thats already disabled.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
@@ -649,7 +645,6 @@ JD-TC-Update Catalog Item Batch Status-UH2
     Should Be Equal As Strings   ${resp.json()}   ${CAP_ALREADY_DISABLED}
 
 JD-TC-Update Catalog Item Batch Status-UH3
-
     [Documentation]   change batch status with invalid encid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
@@ -663,7 +658,6 @@ JD-TC-Update Catalog Item Batch Status-UH3
     Should Be Equal As Strings    ${resp.json()}    ${INVENORY_CATALOG_ITEM_BATCH}
 
 JD-TC-Update Catalog Item Batch Status-UH4
-
     [Documentation]  change batch status without login
 
     ${resp}=  Update Catalog Item Batch Status      ${SO_Cata_Item_Batch_Encid}     ${toggle[1]}      
@@ -672,7 +666,6 @@ JD-TC-Update Catalog Item Batch Status-UH4
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-Update Catalog Item Batch Status-UH5
-
     [Documentation]  change batch status using sa login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -846,7 +839,6 @@ JD-TC-Update Catalog Item Batch Status-UH5
 
 
 JD-TC-Update Catalog Item Batch Status-2
-
     [Documentation]   create salesorder catalog items where inventory management is true then create catalog item batch where invmgnt is false then disable the status
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}

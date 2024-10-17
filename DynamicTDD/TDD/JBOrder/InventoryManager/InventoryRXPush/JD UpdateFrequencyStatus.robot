@@ -30,7 +30,6 @@ ${originFrom}       NONE
 
 
 JD-TC-UpdateFrequencyStatus-1
-
     [Documentation]  Update Frequency Status
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD}
@@ -73,7 +72,6 @@ JD-TC-UpdateFrequencyStatus-1
     Should Be Equal As Strings      ${resp.json()['active']}        ${bool[0]}
 
 JD-TC-UpdateFrequencyStatus-UH1
-
     [Documentation]  Update Frequency Status - status disable to disable
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD}
@@ -91,7 +89,6 @@ JD-TC-UpdateFrequencyStatus-UH1
     Should Be Equal As Strings      ${resp.json()}             ${RECORD_ALREADY_UPDATED}
 
 JD-TC-UpdateFrequencyStatus-U2
-
     [Documentation]  Update Frequency Status - status disable to enable
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD}
@@ -113,7 +110,6 @@ JD-TC-UpdateFrequencyStatus-U2
     Should Be Equal As Strings      ${resp.json()['active']}        ${bool[1]}
 
 JD-TC-UpdateFrequencyStatus-UH2
-
     [Documentation]  Update Frequency Status - status enable to enable
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD}
@@ -131,7 +127,6 @@ JD-TC-UpdateFrequencyStatus-UH2
     Should Be Equal As Strings      ${resp.json()}             ${RECORD_ALREADY_UPDATED}
 
 JD-TC-UpdateFrequencyStatus-UH3
-
     [Documentation]  Update Frequency Status - without login
 
     ${resp}=    Update Frequency Status  ${frequency_id}  ${toggle[0]}

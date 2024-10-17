@@ -30,7 +30,6 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-GetOrderByFilter-1
-
     [Documentation]    Get Order By Filter
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
@@ -663,7 +662,6 @@ JD-TC-GetOrderByFilter-1
     Should Be Equal As Strings      ${resp.json()['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-2
-
     [Documentation]    Get Order By Filter - account
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -686,7 +684,6 @@ JD-TC-GetOrderByFilter-2
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-3
-
     [Documentation]    Get Order By Filter - uid
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -709,7 +706,6 @@ JD-TC-GetOrderByFilter-3
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-4
-
     [Documentation]    Get Order By Filter -  locationId
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -732,7 +728,6 @@ JD-TC-GetOrderByFilter-4
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-5
-
     [Documentation]    Get Order By Filter -  storeId
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -755,7 +750,6 @@ JD-TC-GetOrderByFilter-5
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-6
-
     [Documentation]    Get Order By Filter -  storeName
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -778,7 +772,6 @@ JD-TC-GetOrderByFilter-6
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-7
-
     [Documentation]    Get Order By Filter -  storeRefNo
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -801,7 +794,6 @@ JD-TC-GetOrderByFilter-7
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-8
-
     [Documentation]    Get Order By Filter -  acceptedBy
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -824,7 +816,6 @@ JD-TC-GetOrderByFilter-8
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-9
-
     [Documentation]    Get Order By Filter -  originFrom
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -847,7 +838,6 @@ JD-TC-GetOrderByFilter-9
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-10
-
     [Documentation]    Get Order By Filter -   prescriptionUid
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -870,7 +860,6 @@ JD-TC-GetOrderByFilter-10
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-11
-
     [Documentation]    Get Order By Filter -   prescriptionRefNo
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -893,7 +882,6 @@ JD-TC-GetOrderByFilter-11
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-12
-
     [Documentation]    Get Order By Filter -   prescriptionUid
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -916,7 +904,6 @@ JD-TC-GetOrderByFilter-12
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-13
-
     [Documentation]    Get Order By Filter -   prescriptionDate
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -939,7 +926,6 @@ JD-TC-GetOrderByFilter-13
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-14
-
     [Documentation]    Get Order By Filter -   doctorId
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -962,7 +948,6 @@ JD-TC-GetOrderByFilter-14
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-15
-
     [Documentation]    Get Order By Filter -   doctorName
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -985,7 +970,6 @@ JD-TC-GetOrderByFilter-15
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-16
-
     [Documentation]    Get Order By Filter -   orderStatus
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1008,7 +992,6 @@ JD-TC-GetOrderByFilter-16
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-17
-
     [Documentation]    Get Order By Filter -   pushedStatus
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1031,7 +1014,6 @@ JD-TC-GetOrderByFilter-17
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-18
-
     [Documentation]    Get Order By Filter -   providerConsumerId
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1054,7 +1036,6 @@ JD-TC-GetOrderByFilter-18
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-19
-
     [Documentation]    Get Order By Filter -   providerConsumerName
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1077,7 +1058,6 @@ JD-TC-GetOrderByFilter-19
     Should Be Equal As Strings      ${resp.json()[0]['orderStatus']}    ${couponState[0]}
 
 JD-TC-GetOrderByFilter-20 
-
     [Documentation]    Get Order By Filter -  acceptedDate
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1115,7 +1095,6 @@ JD-TC-GetOrderByFilter-20
 #     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH2
-
     [Documentation]    Get Order By Filter - invalid uid
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1130,7 +1109,6 @@ JD-TC-GetOrderByFilter-UH2
     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH3
-
     [Documentation]    Get Order By Filter -  invalid locationId
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1145,7 +1123,6 @@ JD-TC-GetOrderByFilter-UH3
     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH4
-
     [Documentation]    Get Order By Filter -  invalid storeId
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1160,7 +1137,6 @@ JD-TC-GetOrderByFilter-UH4
     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH5
-
     [Documentation]    Get Order By Filter -  invalid storeName
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1175,7 +1151,6 @@ JD-TC-GetOrderByFilter-UH5
     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH6
-
     [Documentation]    Get Order By Filter -  invalid storeRefNo
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1190,7 +1165,6 @@ JD-TC-GetOrderByFilter-UH6
     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH7
-
     [Documentation]    Get Order By Filter -  invalid acceptedBy
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1218,7 +1192,6 @@ JD-TC-GetOrderByFilter-UH7
 #     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH9
-
     [Documentation]    Get Order By Filter -   invalid prescriptionUid
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1233,7 +1206,6 @@ JD-TC-GetOrderByFilter-UH9
     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH10
-
     [Documentation]    Get Order By Filter -   invalid prescriptionRefNo
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1248,7 +1220,6 @@ JD-TC-GetOrderByFilter-UH10
     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH11
-
     [Documentation]    Get Order By Filter -   invalid prescriptionUid
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1263,7 +1234,6 @@ JD-TC-GetOrderByFilter-UH11
     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH12
-
     [Documentation]    Get Order By Filter -   invalid prescriptionDate
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1278,7 +1248,6 @@ JD-TC-GetOrderByFilter-UH12
     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH13
-
     [Documentation]    Get Order By Filter -  invalid doctorId
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1293,7 +1262,6 @@ JD-TC-GetOrderByFilter-UH13
     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH14
-
     [Documentation]    Get Order By Filter -   invalid doctorName
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1321,7 +1289,6 @@ JD-TC-GetOrderByFilter-UH14
 #     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH16
-
     [Documentation]    Get Order By Filter -   invalid pushedStatus
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1334,7 +1301,6 @@ JD-TC-GetOrderByFilter-UH16
     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH17
-
     [Documentation]    Get Order By Filter -   invalid providerConsumerId
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1349,7 +1315,6 @@ JD-TC-GetOrderByFilter-UH17
     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH18
-
     [Documentation]    Get Order By Filter -   invalid providerConsumerName
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1364,7 +1329,6 @@ JD-TC-GetOrderByFilter-UH18
     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH19
-
     [Documentation]    Get Order By Filter -  invalid acceptedDate
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1377,7 +1341,6 @@ JD-TC-GetOrderByFilter-UH19
     Should BeEqual As Strings     ${resp.json()}      []
 
 JD-TC-GetOrderByFilter-UH20
-
     [Documentation]    Get Order By Filter -  without login
 
     ${resp}=    Get Sorder By Filter       acceptedDate-eq=${DAY1}

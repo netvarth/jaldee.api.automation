@@ -26,7 +26,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Get Item Stock adjust Filter-1
-
     [Documentation]  Get Item Stock adjust Filter.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -211,7 +210,6 @@ JD-TC-Get Item Stock adjust Filter-1
 
 
 JD-TC-Get Item Stock adjust Filter-2
-
     [Documentation]  Get Item Stock adjust Filter using location name.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -233,7 +231,6 @@ JD-TC-Get Item Stock adjust Filter-2
     Should Be Equal As Strings    ${resp.json()[0]['inventoryRemarkDto']['id']}    ${id}
 
 JD-TC-Get Item Stock adjust Filter-3
-
     [Documentation]  Get Item Stock adjust Filter using storeId.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -256,7 +253,6 @@ JD-TC-Get Item Stock adjust Filter-3
 
 
 JD-TC-Get Item Stock adjust Filter-4
-
     [Documentation]  Get Item Stock adjust Filter using storeEncId.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -278,7 +274,6 @@ JD-TC-Get Item Stock adjust Filter-4
     Should Be Equal As Strings    ${resp.json()[0]['inventoryRemarkDto']['id']}    ${id}
 
 JD-TC-Get Item Stock adjust Filter-5
-
     [Documentation]  Get Item Stock adjust Filter using storeName.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -300,7 +295,6 @@ JD-TC-Get Item Stock adjust Filter-5
     Should Be Equal As Strings    ${resp.json()[0]['inventoryRemarkDto']['id']}    ${id}
 
 JD-TC-Get Item Stock adjust Filter-6
-
     [Documentation]  Get Item Stock adjust Filter using invCatalogId.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -325,7 +319,6 @@ JD-TC-Get Item Stock adjust Filter-6
 
 
 JD-TC-Get Item Stock adjust Filter-7
-
     [Documentation]  Get Item Stock adjust Filter using status.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -347,7 +340,6 @@ JD-TC-Get Item Stock adjust Filter-7
     Should Be Equal As Strings    ${resp.json()[0]['inventoryRemarkDto']['id']}    ${id}
 
 JD-TC-Get Item Stock adjust Filter-8
-
     [Documentation]  Get Item Stock adjust Filter using location.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -369,7 +361,6 @@ JD-TC-Get Item Stock adjust Filter-8
     Should Be Equal As Strings    ${resp.json()[0]['inventoryRemarkDto']['id']}    ${id}
 
 JD-TC-Get Item Stock adjust Filter-9
-
     [Documentation]  Get Item Stock adjust Filter using invCatalogEncId.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -391,7 +382,6 @@ JD-TC-Get Item Stock adjust Filter-9
     Should Be Equal As Strings    ${resp.json()[0]['inventoryRemarkDto']['id']}    ${id}
 
 JD-TC-Get Item Stock adjust Filter-10
-
     [Documentation]  Get Item Stock adjust Filter using uid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -413,7 +403,6 @@ JD-TC-Get Item Stock adjust Filter-10
     Should Be Equal As Strings    ${resp.json()[0]['inventoryRemarkDto']['id']}    ${id}
 
 JD-TC-Get Item Stock adjust Filter-11
-
     [Documentation]  Get Item Stock adjust Filter using remark.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -435,7 +424,6 @@ JD-TC-Get Item Stock adjust Filter-11
     Should Be Equal As Strings    ${resp.json()[0]['inventoryRemarkDto']['id']}    ${id}
 
 JD-TC-Get Item Stock adjust Filter-12
-
     [Documentation]  Get Item Stock adjust Filter using remark.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -457,7 +445,6 @@ JD-TC-Get Item Stock adjust Filter-12
     Should Be Equal As Strings    ${resp.json()[0]['inventoryRemarkDto']['id']}    ${id}
 
 JD-TC-Get Item Stock adjust Filter-13
-
     [Documentation]  update stock adjustment by adding more  stockAdjustDetailsDtos then get stock adjustment by flter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -495,7 +482,6 @@ JD-TC-Get Item Stock adjust Filter-13
 
 
 JD-TC-Get Item Stock adjust Filter-UH1
-
     [Documentation]  Get stock adjustment filter without login
 
     ${resp}=  Get Item Stock adjust Filter   account-eq=${accountId}     
@@ -504,7 +490,6 @@ JD-TC-Get Item Stock adjust Filter-UH1
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-Get Item Stock adjust Filter-UH2
-
     [Documentation]  Get stock adjustment filter with invalid remarks id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -519,7 +504,6 @@ JD-TC-Get Item Stock adjust Filter-UH2
 
 
 JD-TC-Get Item Stock adjust Filter-UH4
-
     [Documentation]  Get stock adjustment filter with invalid remark id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -533,7 +517,6 @@ JD-TC-Get Item Stock adjust Filter-UH4
     Should Be Equal As Strings   ${resp.json()}   []
 
 JD-TC-Get Item Stock adjust Filter-UH5
-
     [Documentation]  Get stock adjustment filter with invalid uid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -547,7 +530,6 @@ JD-TC-Get Item Stock adjust Filter-UH5
     Should Be Equal As Strings   ${resp.json()}   []
 
 JD-TC-Get Item Stock adjust Filter-UH6
-
     [Documentation]  Get stock adjustment filter with invalid location.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -561,7 +543,6 @@ JD-TC-Get Item Stock adjust Filter-UH6
     Should Be Equal As Strings   ${resp.json()}   []
 
 JD-TC-Get Item Stock adjust Filter-UH7
-
     [Documentation]  Get stock adjustment filter with invalid status.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -575,7 +556,6 @@ JD-TC-Get Item Stock adjust Filter-UH7
     Should Be Equal As Strings   ${resp.json()}   []
 
 JD-TC-Get Item Stock adjust Filter-UH8
-
     [Documentation]  Get stock adjustment filter with invalid locationName.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -589,7 +569,6 @@ JD-TC-Get Item Stock adjust Filter-UH8
     Should Be Equal As Strings   ${resp.json()}   []
 
 JD-TC-Get Item Stock adjust Filter-UH9
-
     [Documentation]  Get stock adjustment filter with invalid storeId.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -603,7 +582,6 @@ JD-TC-Get Item Stock adjust Filter-UH9
     Should Be Equal As Strings   ${resp.json()}   []
     
 JD-TC-Get Item Stock adjust Filter-UH10
-
     [Documentation]  Get stock adjustment filter with invalid storeEncId.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -617,7 +595,6 @@ JD-TC-Get Item Stock adjust Filter-UH10
     Should Be Equal As Strings   ${resp.json()}   []
 
 JD-TC-Get Item Stock adjust Filter-UH11
-
     [Documentation]  Get stock adjustment filter with invalid storeName.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}

@@ -19,7 +19,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-UpdateItemTaxStatus-1
-
     [Documentation]  Update Item tax Status
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
@@ -70,7 +69,6 @@ JD-TC-UpdateItemTaxStatus-1
 
 
 JD-TC-UpdateItemTaxStatus-2
-
     [Documentation]  Update Item tax Status - Disable to Disable
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
@@ -90,7 +88,6 @@ JD-TC-UpdateItemTaxStatus-2
     Should Be Equal As Strings    ${resp.status_code}    422
 
 JD-TC-UpdateItemTaxStatus-3
-
     [Documentation]  Update Item tax Status - Disable to Enable
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
@@ -118,7 +115,6 @@ JD-TC-UpdateItemTaxStatus-3
     Should Be Equal As Strings    ${resp.json()['taxCode']}         ${itemtax_id}
 
 JD-TC-UpdateItemTaxStatus-4
-
     [Documentation]  Update Item tax Status - Enable to Enable
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME48}  ${PASSWORD}
@@ -139,7 +135,6 @@ JD-TC-UpdateItemTaxStatus-4
 
 
 JD-TC-UpdateItemTaxStatus-5
-
     [Documentation]  Update Item tax Status - without login
 
     ${resp}=    Update Item tax Status  ${itemtax_id}  ${toggle[0]}

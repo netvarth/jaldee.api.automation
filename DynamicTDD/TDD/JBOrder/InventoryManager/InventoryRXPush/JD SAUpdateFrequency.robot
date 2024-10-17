@@ -26,7 +26,6 @@ ${order}        0
 *** Test Cases ***
 
 JD-TC-UpdateFrequencySA-1
-
     [Documentation]   Update Frequency SA
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -87,7 +86,6 @@ JD-TC-UpdateFrequencySA-1
     Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos}
 
 JD-TC-UpdateFrequencySA-2
-
     [Documentation]   Update Frequency SA - updated dosage
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}

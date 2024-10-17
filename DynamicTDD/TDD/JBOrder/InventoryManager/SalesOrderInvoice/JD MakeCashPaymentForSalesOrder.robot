@@ -27,7 +27,6 @@ ${invalidItem}     sprx-3250dr0-800
 *** Test Cases ***
 
 JD-TC-Make Cash Payment For Sales Order-1
-
     [Documentation]   Create a sales Order with Valid Details then Make cash payment.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
@@ -365,7 +364,6 @@ JD-TC-Make Cash Payment For Sales Order-1
 
 
 JD-TC-Make Cash Payment For Sales Order-UH1
-
     [Documentation]   sales Order Status is Complete then do the cash payment.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
@@ -421,7 +419,6 @@ JD-TC-Make Cash Payment For Sales Order-UH1
     Should Be Equal As Strings    ${resp.json()}   ${CAN_NOT_ACCEPT_PAYMENT}
 
 JD-TC-Make Cash Payment For Sales Order-3
-
     [Documentation]   do half of the amount for cash payment.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
@@ -560,7 +557,6 @@ JD-TC-Make Cash Payment For Sales Order-3
     Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       ${half_amt}
 
 JD-TC-Make Cash Payment For Sales Order-4
-
     [Documentation]   Do the balence payment using "other" acceptPayment Method.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
@@ -580,7 +576,6 @@ JD-TC-Make Cash Payment For Sales Order-4
     Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       ${half_amt}
 
 JD-TC-Make Cash Payment For Sales Order-5
-
     [Documentation]   Do the half od the payment using "other" acceptPayment Method then try to pay full amount using cash payment.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
@@ -656,7 +651,6 @@ JD-TC-Make Cash Payment For Sales Order-5
     Should Be Equal As Strings    ${resp.status_code}   200
 
 JD-TC-Make Cash Payment For Sales Order-
-
     [Documentation]   Make Cash Payment For SalesOrder with Self pay  payment method.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
@@ -732,7 +726,6 @@ JD-TC-Make Cash Payment For Sales Order-
     Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       ${netTotal}
 
 JD-TC-Make Cash Payment For Sales Order-6
-
     [Documentation]   Make Cash Payment For SalesOrder with wrong netTotal.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
@@ -748,7 +741,6 @@ JD-TC-Make Cash Payment For Sales Order-6
     Should Be Equal As Strings    ${resp.status_code}   200
 
 JD-TC-Make Cash Payment For Sales Order-7
-
     [Documentation]   Make Cash Payment For SalesOrder with Zero netToal.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
@@ -762,7 +754,6 @@ JD-TC-Make Cash Payment For Sales Order-7
     Should Be Equal As Strings    ${resp.status_code}   200
 
 JD-TC-Make Cash Payment For Sales Order-8
-
     [Documentation]   Make Cash Payment For SalesOrder with EMPTY netToal.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
@@ -776,7 +767,6 @@ JD-TC-Make Cash Payment For Sales Order-8
     Should Be Equal As Strings    ${resp.status_code}   200
 
 JD-TC-Make Cash Payment For Sales Order-9
-
     [Documentation]   Make Cash Payment For SalesOrder with EMPTY invoice id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
@@ -791,7 +781,6 @@ JD-TC-Make Cash Payment For Sales Order-9
     Should Be Equal As Strings    ${resp.json()}   ${INVALID_FM_INVOICE_ID}
 
 JD-TC-Make Cash Payment For Sales Order-10
-
     [Documentation]   Make Cash Payment For SalesOrder with EMPTY note.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
@@ -804,7 +793,6 @@ JD-TC-Make Cash Payment For Sales Order-10
     Should Be Equal As Strings    ${resp.status_code}   200
 
 JD-TC-Make Cash Payment For Sales Order-11
-
     [Documentation]   Make Cash Payment For SalesOrder without login.
 
     ${note}=  FakerLibrary.name

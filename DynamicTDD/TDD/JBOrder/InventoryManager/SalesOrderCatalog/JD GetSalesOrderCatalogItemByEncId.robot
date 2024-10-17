@@ -27,7 +27,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Get Sales Order Catalog Items By EncId-1
-
     [Documentation]  Test whether the system can successfully create items with all items having invMgmt set to false (with out Tax).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
@@ -177,7 +176,6 @@ JD-TC-Get Sales Order Catalog Items By EncId-1
     Should Be Equal As Strings    ${resp.json()['spItem']['name']}    ${displayName}
 
 JD-TC-Get Sales Order Catalog Items By EncId-2
-
     [Documentation]   create SO Catalog items with all items having invMgmt set to false (with Tax).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
@@ -268,7 +266,6 @@ JD-TC-Get Sales Order Catalog Items By EncId-2
 
 
 JD-TC-Get Sales Order Catalog Items By EncId-3
-
     [Documentation]   create SO Catalog items with all items having invMgmt set to True (with out Tax).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
@@ -328,7 +325,6 @@ JD-TC-Get Sales Order Catalog Items By EncId-3
     Should Be Equal As Strings    ${resp.json()['invCatItem']['encId']}    ${Inv_Cata_Item_Encid}
 
 JD-TC-Get Sales Order Catalog Items By EncId-4
-
     [Documentation]   create SO Catalog items with all items having invMgmt set to True (with Tax).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}

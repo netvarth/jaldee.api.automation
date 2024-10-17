@@ -30,7 +30,6 @@ ${originFrom}       NONE
 
 
 JD-TC-UpdateFrequency-1
-
     [Documentation]  Update Frequency - frequency updated
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
@@ -102,7 +101,6 @@ JD-TC-UpdateFrequency-1
     Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos}
 
 JD-TC-UpdateFrequency-2
-
     [Documentation]  Update Frequency - dosage is updated
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
@@ -126,7 +124,6 @@ JD-TC-UpdateFrequency-2
     Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos2}
 
 JD-TC-UpdateFrequency-3
-
     [Documentation]  Update Frequency - description is updated
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
@@ -149,7 +146,6 @@ JD-TC-UpdateFrequency-3
     Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos}
 
 JD-TC-UpdateFrequency-4
-
     [Documentation]  Update Frequency - remark is updated
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
@@ -172,7 +168,6 @@ JD-TC-UpdateFrequency-4
     Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos}
 
 JD-TC-UpdateFrequency-5
-
     [Documentation]  Update Frequency - remarks is empty
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
@@ -193,7 +188,6 @@ JD-TC-UpdateFrequency-5
     Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos}
 
 JD-TC-UpdateFrequency-6
-
     [Documentation]  Update Frequency - description is empty
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
@@ -214,7 +208,6 @@ JD-TC-UpdateFrequency-6
     Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos}
 
 JD-TC-UpdateFrequency-7
-
     [Documentation]  Update Frequency - dosage is empty
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
@@ -229,7 +222,6 @@ JD-TC-UpdateFrequency-7
     Should Be Equal As Strings      ${resp.json()}          ${FIELD_REQUIRED}${space}
 
 JD-TC-UpdateFrequency-8
-
     [Documentation]  Update Frequency - frequency is empty
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
@@ -244,7 +236,6 @@ JD-TC-UpdateFrequency-8
     Should Be Equal As Strings      ${resp.json()}          ${FIELD_REQUIRED}${space}
 
 JD-TC-UpdateFrequency-9
-
     [Documentation]  Update Frequency - frequency id is empty
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
@@ -259,7 +250,6 @@ JD-TC-UpdateFrequency-9
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_X_ID}
 
 JD-TC-UpdateFrequency-10
-
     [Documentation]  Update Frequency - frequency id is invalid
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
@@ -276,7 +266,6 @@ JD-TC-UpdateFrequency-10
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_X_ID}
 
 JD-TC-UpdateFrequency-11
-
     [Documentation]  Update Frequency - without login
 
     ${resp}=    Update Frequency  ${frequency_id}  ${frequency}  ${dos}  description=${description}  remark=${remark}

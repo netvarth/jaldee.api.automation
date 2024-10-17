@@ -20,7 +20,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-UpdateItemHsnStatus-1
-
     [Documentation]  Update Item Hsn Status
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME43}  ${PASSWORD}
@@ -71,7 +70,6 @@ JD-TC-UpdateItemHsnStatus-1
 
 
 JD-TC-UpdateItemHsnStatus-2
-
     [Documentation]  Update Item hns Status as already disabled.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME43}  ${PASSWORD}
@@ -83,7 +81,6 @@ JD-TC-UpdateItemHsnStatus-2
     Should Be Equal As Strings    ${resp.status_code}    422
 
 JD-TC-UpdateItemHsnStatus-3
-
     [Documentation]  try to Enable ,Disabled Status.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME43}  ${PASSWORD}
@@ -103,7 +100,6 @@ JD-TC-UpdateItemHsnStatus-3
     Should Be Equal As Strings    ${resp.json()['status']}            ${toggle[0]}
 
 JD-TC-UpdateItemHsnStatus-4
-
     [Documentation]  try to Enable ,enableled Status.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME43}  ${PASSWORD}
@@ -123,7 +119,6 @@ JD-TC-UpdateItemHsnStatus-4
     Should Be Equal As Strings    ${resp.status_code}    422
 
 JD-TC-UpdateItemHsnStatus-UH1
-
     [Documentation]  Get Item Unit without Login.
 
     ${resp}=  Update Item hns Status   ${hns_id}    ${toggle[0]}
@@ -132,7 +127,6 @@ JD-TC-UpdateItemHsnStatus-UH1
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
 
 JD-TC-UpdateItemHsnStatus-UH2
-
     [Documentation]  Get Item Unit with Consumer Login.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME43}  ${PASSWORD}

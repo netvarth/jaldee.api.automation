@@ -26,7 +26,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Get Item Stock adjust Details Filter-1
-
     [Documentation]  Get Item Stock adjust Details Filter  using account.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
@@ -228,7 +227,6 @@ JD-TC-Get Item Stock adjust Details Filter-1
     Should Be Equal As Strings    ${resp.json()[0]['qty']}     ${quantity}
 
 JD-TC-Get Item Stock adjust Details Filter-2
-
     [Documentation]  Get Item Stock adjust Details Filter  using invCatalogEncId.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
@@ -258,7 +256,6 @@ JD-TC-Get Item Stock adjust Details Filter-2
 
 
 JD-TC-Get Item Stock adjust Details Filter-3
-
     [Documentation]  Get Item Stock adjust Details Filter  using invCatalogItemEncId.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
@@ -288,7 +285,6 @@ JD-TC-Get Item Stock adjust Details Filter-3
 
 
 JD-TC-Get Item Stock adjust Details Filter-4
-
     [Documentation]   Get Item Stock adjust Details Filter  using quantity.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
@@ -320,7 +316,6 @@ JD-TC-Get Item Stock adjust Details Filter-4
 
 
 JD-TC-Get Item Stock adjust Details Filter-5
-
     [Documentation]  Get Item Stock adjust Details Filter  using stockAdjust.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
@@ -349,7 +344,6 @@ JD-TC-Get Item Stock adjust Details Filter-5
     Should Be Equal As Strings    ${resp.json()[0]['qty']}     ${quantity}
 
 JD-TC-Get Item Stock adjust Details Filter-6
-
     [Documentation]  Update Item Stock adjust Details Filter  using stockAdjust then Get Item Stock adjust Details Filter.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
@@ -468,7 +462,6 @@ JD-TC-Get Item Stock adjust Details Filter-6
 
 
 JD-TC-Get Item Stock adjust Details Filter-7
-
     [Documentation]  create Item Stock adjust   then Get Item Stock adjust Details Filter.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
@@ -692,7 +685,6 @@ JD-TC-Get Item Stock adjust Details Filter-7
     # Should Be Equal As Strings    ${resp.json()[3]['qty']}     ${quantity}
 
 JD-TC-Get Item Stock adjust Details Filter-UH1
-
     [Documentation]  remove all Stock adjust Details then Get Item Stock adjust Details Filter.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
@@ -709,7 +701,6 @@ JD-TC-Get Item Stock adjust Details Filter-UH1
     Should Be Equal As Strings    ${resp.json()}    [] 
 
 JD-TC-Get Item Stock adjust Details Filter-UH2
-
     [Documentation]   Get Item Stock adjust Details Filter using invalid invCatalogEncId.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
@@ -736,7 +727,6 @@ JD-TC-Get Item Stock adjust Details Filter-UH2
     Should Be Equal As Strings    ${resp.json()}    [] 
 
 JD-TC-Get Item Stock adjust Details Filter-UH3
-
     [Documentation]   Get Item Stock adjust Details Filter using invalid stockAdjust.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
@@ -751,7 +741,6 @@ JD-TC-Get Item Stock adjust Details Filter-UH3
     Should Be Equal As Strings    ${resp.json()}    [] 
 
 JD-TC-Get Item Stock adjust Details Filter-UH4
-
     [Documentation]   Get Item Stock adjust Details Filter using invalid qty.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
@@ -765,7 +754,6 @@ JD-TC-Get Item Stock adjust Details Filter-UH4
     Should Be Equal As Strings    ${resp.json()}    [] 
 
 JD-TC-Get Item Stock adjust Details Filter-UH5
-
     [Documentation]   Get Item Stock adjust Details Filter using invalid invCatalogItemEncId.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
@@ -778,7 +766,6 @@ JD-TC-Get Item Stock adjust Details Filter-UH5
     Should Be Equal As Strings    ${resp.json()}    [] 
 
 JD-TC-Get Item Stock adjust Details Filter-UH6
-
     [Documentation]   Get Item Stock adjust Details Filter without login.
 
     ${resp}=  Get Item Stock adjust Details Filter    invCatalogItemEncId-eq=${inventory_catalog_item_encid}           

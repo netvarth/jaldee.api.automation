@@ -30,7 +30,6 @@ ${originFrom}       NONE
 
 
 JD-TC-GetFrequency-1
-
     [Documentation]  Get Frequency
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME106}  ${PASSWORD}
@@ -63,7 +62,6 @@ JD-TC-GetFrequency-1
     Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos0}
 
 JD-TC-GetFrequency-2
-
     [Documentation]  Get Frequency - where frequency id is invalid
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME106}  ${PASSWORD}
@@ -78,7 +76,6 @@ JD-TC-GetFrequency-2
     Should Be Empty  ${resp.content}
     
 JD-TC-GetFrequency-3
-
     [Documentation]  Get Frequency - without login
 
     ${resp}=    Get Frequency  ${frequency_id0}

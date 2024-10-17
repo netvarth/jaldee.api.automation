@@ -26,7 +26,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Update SalesOrder Catalog Status-1
-
     [Documentation]  create sales order  catalog .(inventory manager is false) and update status as disable
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME38}  ${PASSWORD}
@@ -119,7 +118,6 @@ JD-TC-Update SalesOrder Catalog Status-1
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-Update SalesOrder Catalog Status-2
-
     [Documentation]   update sales order catalog status as enable
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME38}  ${PASSWORD}
@@ -131,7 +129,6 @@ JD-TC-Update SalesOrder Catalog Status-2
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-Update SalesOrder Catalog Status-3
-
     [Documentation]   create sales order catalog with inventory manager is true then update status as  disable.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME38}  ${PASSWORD}
@@ -155,7 +152,6 @@ JD-TC-Update SalesOrder Catalog Status-3
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-Update SalesOrder Catalog Status-4
-
     [Documentation]   update sales order cataloge then update status as  disable.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME38}  ${PASSWORD}
@@ -189,7 +185,6 @@ JD-TC-Update SalesOrder Catalog Status-4
 
 
 JD-TC-Update SalesOrder Catalog Status-UH1
-
     [Documentation]   update sales order catalog status as enable thats alreay enabled
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME38}  ${PASSWORD}
@@ -202,7 +197,6 @@ JD-TC-Update SalesOrder Catalog Status-UH1
     Should Be Equal As Strings   ${resp.json()}   ${CAP_ALREADY_ENABLED}
 
 JD-TC-Update SalesOrder Catalog Status-UH2
-
     [Documentation]   update sales order catalog status as disable thats alreay disabled
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME38}  ${PASSWORD}
@@ -215,7 +209,6 @@ JD-TC-Update SalesOrder Catalog Status-UH2
     Should Be Equal As Strings   ${resp.json()}   ${CAP_ALREADY_DISABLED}
 
 JD-TC-Update SalesOrder Catalog Status-UH3
-
     [Documentation]   update sales order catalog status without login
 
     ${resp}=  Update SalesOrder Catalog Status   ${saorder_catlog_id_true}     ${toggle[1]}
@@ -225,7 +218,6 @@ JD-TC-Update SalesOrder Catalog Status-UH3
 
 
 JD-TC-Update SalesOrder Catalog Status-UH4
-
     [Documentation]  update sales order  catalog status using sa login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -238,7 +230,6 @@ JD-TC-Update SalesOrder Catalog Status-UH4
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-Update SalesOrder Catalog Status-UH5
-
     [Documentation]   update sales order catalog status where catalog id is wrong
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME38}  ${PASSWORD}

@@ -26,7 +26,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Create SalesOrder Inventory Catalog-1
-
     [Documentation]  create sales order inventory catalog with valid details.(inventory manager is false)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD}
@@ -114,7 +113,6 @@ JD-TC-Create SalesOrder Inventory Catalog-1
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-Create SalesOrder Inventory Catalog-2
-
     [Documentation]  create multiple sales order inventory catalog with same store id.(inventory manager is false)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD}
@@ -127,7 +125,6 @@ JD-TC-Create SalesOrder Inventory Catalog-2
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-Create SalesOrder Inventory Catalog-3
-
     [Documentation]  create sales order inventory catalog using store nature as lab.(inventory manager is false)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD}
@@ -149,7 +146,6 @@ JD-TC-Create SalesOrder Inventory Catalog-3
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-Create SalesOrder Inventory Catalog-4
-
     [Documentation]  create  sales order inventory catalog where name as number.(inventory manager is false)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD}
@@ -161,7 +157,6 @@ JD-TC-Create SalesOrder Inventory Catalog-4
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-Create SalesOrder Inventory Catalog-5
-
     [Documentation]  create  sales order inventory catalog where name as invalid string.(inventory manager is false)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD}
@@ -173,7 +168,6 @@ JD-TC-Create SalesOrder Inventory Catalog-5
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-Create SalesOrder Inventory Catalog-6
-
     [Documentation]  create sales order inventory catalog with same  name with different store id.(inventory manager is false)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD}
@@ -190,7 +184,6 @@ JD-TC-Create SalesOrder Inventory Catalog-6
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-Create SalesOrder Inventory Catalog-7
-
     [Documentation]  create sales order inventory catalog from main account then create sales order catalog with same name from user login(without admin privilege).(inventory manager is false)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD}
@@ -294,7 +287,6 @@ JD-TC-Create SalesOrder Inventory Catalog-7
 
 
 JD-TC-Create SalesOrder Inventory Catalog-UH1
-
     [Documentation]  create sales order inventory catalog with empty name.(inventory manager is false)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD}
@@ -308,7 +300,6 @@ JD-TC-Create SalesOrder Inventory Catalog-UH1
     
 
 JD-TC-Create SalesOrder Inventory Catalog-UH2
-
     [Documentation]  create sales order inventory catalog with invalid store id.(inventory manager is false)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD}
@@ -323,7 +314,6 @@ JD-TC-Create SalesOrder Inventory Catalog-UH2
 
 
 JD-TC-Create SalesOrder Inventory Catalog-UH3
-
     [Documentation]  create sales odrer inventory catalog without login.(inventory manager is false)
 
     ${Name}=    FakerLibrary.first name
@@ -334,7 +324,6 @@ JD-TC-Create SalesOrder Inventory Catalog-UH3
 
 
 JD-TC-Create SalesOrder Inventory Catalog-UH4
-
     [Documentation]  create sales order inventory catalog using sa login.(inventory manager is false)
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -349,7 +338,6 @@ JD-TC-Create SalesOrder Inventory Catalog-UH4
 
 
 JD-TC-Create SalesOrder Inventory Catalog-UH5
-
     [Documentation]  create  sales order inventory catalog where name length is <1.(inventory manager is false)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD}
@@ -364,7 +352,6 @@ JD-TC-Create SalesOrder Inventory Catalog-UH5
 
 
 JD-TC-Create SalesOrder Inventory Catalog-UH6
-
     [Documentation]  create sales order inventory catalog where name(STRING length is 256).(inventory manager is false)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD}
@@ -379,7 +366,6 @@ JD-TC-Create SalesOrder Inventory Catalog-UH6
 
 
 JD-TC-Create SalesOrder Inventory Catalog-UH7
-
     [Documentation]  create  sales orderinventory catalog with same name .(inventory manager is false)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD}
@@ -392,7 +378,6 @@ JD-TC-Create SalesOrder Inventory Catalog-UH7
     Should Be Equal As Strings   ${resp.json()}   ${ORDER_CATALOG_EXIST_WITH_THE_GIVEN_NAME}
 
 JD-TC-Create SalesOrder Inventory Catalog-UH8
-
     [Documentation]  create  sales order catalog then try to disable inventory catalog
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME40}  ${PASSWORD}

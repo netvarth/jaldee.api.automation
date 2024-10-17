@@ -27,7 +27,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-GET Inventory Catalog Item ByEncid-1
-
     [Documentation]  GET Inventory Catalog Item ByEncid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME44}  ${PASSWORD}
@@ -183,7 +182,6 @@ JD-TC-GET Inventory Catalog Item ByEncid-1
     Should Be Equal As Strings    ${resp.json()['item']['spCode']}    ${itemEncId1}
 
 JD-TC-GET Inventory Catalog Item ByEncid-2
-
     [Documentation]  Create Inventory Catalog Item from main account then get inventory catalog from user login.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME44}  ${PASSWORD}
@@ -270,7 +268,6 @@ JD-TC-GET Inventory Catalog Item ByEncid-2
 
 
 JD-TC-GET Inventory Catalog Item ByEncid-3
-
     [Documentation]  update inventory catalog items then get catalog items by encid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME44}  ${PASSWORD}
@@ -299,7 +296,6 @@ JD-TC-GET Inventory Catalog Item ByEncid-3
     Should Be Equal As Strings    ${resp.json()['item']['spCode']}    ${itemEncIds}
 
 JD-TC-GET Inventory Catalog Item ByEncid-4
-
     [Documentation]  update inventory catalog items statusthen get catalog items by encid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME44}  ${PASSWORD}
@@ -330,7 +326,6 @@ JD-TC-GET Inventory Catalog Item ByEncid-4
 
 
 JD-TC-GET Inventory Catalog Item ByEncid-UH1
-
     [Documentation]  get Inventory Catalog Item using invalid encid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME44}  ${PASSWORD}
@@ -346,7 +341,6 @@ JD-TC-GET Inventory Catalog Item ByEncid-UH1
 
 
 JD-TC-GET Inventory Catalog Item ByEncid-UH2
-
     [Documentation]  get Inventory Catalog Item without login.
 
 
@@ -356,7 +350,6 @@ JD-TC-GET Inventory Catalog Item ByEncid-UH2
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-GET Inventory Catalog Item ByEncid-UH5
-
     [Documentation]  get Inventory Catalog Item from sa login login.
 
 
@@ -371,7 +364,6 @@ JD-TC-GET Inventory Catalog Item ByEncid-UH5
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-GET Inventory Catalog Item ByEncid-UH6
-
     [Documentation]  get Inventory Catalog Item using another provider
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}

@@ -27,7 +27,6 @@ ${invalidItem}     sprx-3250dr0-800
 *** Test Cases ***
 
 JD-TC-Apply SalesOrder discount-1
-
     [Documentation]   Create a sales Order with Valid Details and Genarate invoice then apply discount(calculationType is Percentage and discType is Predefine).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
@@ -399,7 +398,6 @@ JD-TC-Apply SalesOrder discount-1
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 
 JD-TC-Apply SalesOrder discount-2
-
     [Documentation]   Create a sales Order with Valid Details and Genarate invoice then apply discount(calculationType is Percentage and discType is OnDemand).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
@@ -463,7 +461,6 @@ JD-TC-Apply SalesOrder discount-2
     Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
 
 JD-TC-Apply SalesOrder discount-3
-
     [Documentation]   Create a sales Order with Valid Details and Genarate invoice then apply discount(calculationType is Fixed and discType is Predifine).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
@@ -572,7 +569,6 @@ JD-TC-Apply SalesOrder discount-3
     Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
 
 JD-TC-Apply SalesOrder discount-4
-
     [Documentation]   Create a sales Order with Valid Details and Genarate invoice then apply discount(calculationType is Fixed and discType is OnDemand).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
@@ -683,7 +679,6 @@ JD-TC-Apply SalesOrder discount-4
 
 
 JD-TC-Apply SalesOrder discount-5
-
     [Documentation]   Apply Discount with EMPTY privateNote.
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Log   ${resp.content}
@@ -753,7 +748,6 @@ JD-TC-Apply SalesOrder discount-5
     Should Be Equal As Strings    ${resp.status_code}   200
 
 JD-TC-Apply SalesOrder discount-6
-
     [Documentation]   Apply Discount with EMPTY displayNote.
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Log   ${resp.content}
@@ -823,7 +817,6 @@ JD-TC-Apply SalesOrder discount-6
     Should Be Equal As Strings    ${resp.status_code}   200
 
 JD-TC-Apply SalesOrder discount-7
-
     [Documentation]   Create a SO then apply predifine discount,then update that sales order and get invoice then apply discount.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
@@ -996,7 +989,6 @@ JD-TC-Apply SalesOrder discount-7
     Should Be Equal As Strings    ${resp.json()['gst']}                                             0.0
 
 JD-TC-Apply SalesOrder discount-8
-
     [Documentation]   Create a Inventory ON item and add to inventory catalog then create a sales order and create invoice and apply discount.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
@@ -1054,7 +1046,6 @@ JD-TC-Apply SalesOrder discount-8
 
 
 JD-TC-Apply SalesOrder discount-UH1
-
     [Documentation]   Apply Discount with EMPTY discoutID.
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Log   ${resp.content}
@@ -1125,7 +1116,6 @@ JD-TC-Apply SalesOrder discount-UH1
     Should Be Equal As Strings    ${resp.json()}        ${INCORRECT_DISCOUNT_ID}
 
 JD-TC-Apply SalesOrder discount-UH2
-
     [Documentation]   Apply Discount with EMPTY discountValue.
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Log   ${resp.content}
@@ -1196,7 +1186,6 @@ JD-TC-Apply SalesOrder discount-UH2
     Should Be Equal As Strings    ${resp.json()}        ${CANNOT_APPLY_ZERO_DISC}
 
 JD-TC-Apply SalesOrder discount-UH3
-
     [Documentation]    Try to Apply Discount without login.
 
     ${privateNote}=     FakerLibrary.word
@@ -1210,7 +1199,6 @@ JD-TC-Apply SalesOrder discount-UH3
     Should Be Equal As Strings    ${resp.json()}        ${SESSION_EXPIRED}
 
 JD-TC-Apply SalesOrder discount-UH4
-
     [Documentation]   Apply Discount with negative discountValue.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
@@ -1229,7 +1217,6 @@ JD-TC-Apply SalesOrder discount-UH4
     Should Be Equal As Strings    ${resp.json()}        ${CANNOT_APPLY_ZERO_DISC}
 
 JD-TC-Apply SalesOrder discount-UH5
-
     [Documentation]    Try to Apply Discount with Provider Consumer login.
 
     ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 

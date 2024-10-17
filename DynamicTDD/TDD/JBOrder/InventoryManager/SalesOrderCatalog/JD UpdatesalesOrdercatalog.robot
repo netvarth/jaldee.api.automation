@@ -26,7 +26,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Update SalesOrder Catalog-1
-
     [Documentation]  update sales order catalog with valid details.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
@@ -119,7 +118,6 @@ JD-TC-Update SalesOrder Catalog-1
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-Update SalesOrder Catalog-2
-
     [Documentation]  update multiple sales order catalog with same store id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
@@ -132,7 +130,6 @@ JD-TC-Update SalesOrder Catalog-2
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-Update SalesOrder Catalog-3
-
     [Documentation]  update sales order  catalog using all data.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
@@ -159,7 +156,6 @@ JD-TC-Update SalesOrder Catalog-3
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-Update SalesOrder Catalog-4
-
     [Documentation]  update sales order  catalog where name as number.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
@@ -172,7 +168,6 @@ JD-TC-Update SalesOrder Catalog-4
 
 
 JD-TC-Update SalesOrder Catalog-5
-
     [Documentation]  update sales order catalog with empty name
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
@@ -184,7 +179,6 @@ JD-TC-Update SalesOrder Catalog-5
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-Update SalesOrder Catalog-6
-
     [Documentation]  update  sales order  catalog where name length is <1.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
@@ -197,7 +191,6 @@ JD-TC-Update SalesOrder Catalog-6
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-Update SalesOrder Catalog-7
-
     [Documentation]  create sales order catalog where invmgr is true then update that sales order catalog.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
@@ -232,7 +225,6 @@ JD-TC-Update SalesOrder Catalog-7
    
 
 JD-TC-Update SalesOrder Catalog-UH1
-
     [Documentation]  update sales order inventory catalog with invalid catalog id
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
@@ -247,7 +239,6 @@ JD-TC-Update SalesOrder Catalog-UH1
 
 
 JD-TC-Update SalesOrder Catalog-UH2
-
     [Documentation]  update sales odrer  catalog without login.
 
     ${Name}=    FakerLibrary.first name
@@ -258,7 +249,6 @@ JD-TC-Update SalesOrder Catalog-UH2
 
 
 JD-TC-Update SalesOrder Catalog-UH3
-
     [Documentation]  update sales order inventory catalog using sa login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -273,7 +263,6 @@ JD-TC-Update SalesOrder Catalog-UH3
 
 
 JD-TC-Update SalesOrder Catalog-UH4
-
     [Documentation]  update  sales order  catalog where name(word length is 256).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
@@ -286,7 +275,6 @@ JD-TC-Update SalesOrder Catalog-UH4
     Should Be Equal As Strings    ${resp.status_code}    422
 
 JD-TC-Update SalesOrder Catalog-UH5
-
     [Documentation]  update  sales order  catalog .
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}

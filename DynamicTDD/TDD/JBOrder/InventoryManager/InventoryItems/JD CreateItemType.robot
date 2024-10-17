@@ -20,7 +20,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-CreateItemType-1
-
     [Documentation]  Provider Create a Item Type.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -45,7 +44,6 @@ JD-TC-CreateItemType-1
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemType-2
-
     [Documentation]  Provider Create another Item Category contain 250 words.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -59,7 +57,6 @@ JD-TC-CreateItemType-2
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemType-3
-
     [Documentation]  Provider Create another Item Category with Number.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -73,7 +70,6 @@ JD-TC-CreateItemType-3
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemType-UH1
-
     [Documentation]  Provider Create another Item TYPE with same name.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -88,7 +84,6 @@ JD-TC-CreateItemType-UH1
     Should Be Equal As Strings    ${resp.json()}    ${TYPE_NAME_ALREADY_EXIST}
 
 JD-TC-CreateItemType-UH2
-
     [Documentation]  Provider Create a Item Category without Login.
 
     ${TypeName}=    FakerLibrary.Random Number
@@ -99,7 +94,6 @@ JD-TC-CreateItemType-UH2
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
 
 JD-TC-CreateItemType-UH3
-
     [Documentation]  Provider Create a Item Category with Consumer Login.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}

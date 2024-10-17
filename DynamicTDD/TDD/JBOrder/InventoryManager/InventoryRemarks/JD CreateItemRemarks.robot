@@ -26,7 +26,6 @@ ${invalidEma}        asd122
 *** Test Cases ***
 
 JD-TC-CreateItemRemarks-1
-
     [Documentation]  create item remarks with transaction type as adjustment.
 
 
@@ -52,7 +51,6 @@ JD-TC-CreateItemRemarks-1
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemRemarks-2
-
     [Documentation]  create item remarks with transaction type as opening.
 
 
@@ -65,7 +63,6 @@ JD-TC-CreateItemRemarks-2
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemRemarks-3
-
     [Documentation]  create item remarks with transaction type as PURCHASE_ORDER.
 
 
@@ -78,7 +75,6 @@ JD-TC-CreateItemRemarks-3
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemRemarks-4
-
     [Documentation]  create item remarks with transaction type as PURCHASE.
 
 
@@ -91,7 +87,6 @@ JD-TC-CreateItemRemarks-4
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemRemarks-5
-
     [Documentation]  create item remarks with transaction type as PURCHASE_RETURN.
 
 
@@ -104,7 +99,6 @@ JD-TC-CreateItemRemarks-5
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemRemarks-6
-
     [Documentation]  create item remarks with transaction type as SALES_ORDER.
 
 
@@ -117,7 +111,6 @@ JD-TC-CreateItemRemarks-6
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemRemarks-7
-
     [Documentation]  create item remarks with transaction type as SALES_ORDER_CANCEL.
 
 
@@ -130,7 +123,6 @@ JD-TC-CreateItemRemarks-7
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemRemarks-8
-
     [Documentation]  create item remarks with transaction type as SALES.
 
 
@@ -143,7 +135,6 @@ JD-TC-CreateItemRemarks-8
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemRemarks-9
-
     [Documentation]  create item remarks with transaction type as SALES_RETURN.
 
 
@@ -156,7 +147,6 @@ JD-TC-CreateItemRemarks-9
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemRemarks-10
-
     [Documentation]  create item remarks with transaction type as TRANSFER_IN.
 
 
@@ -170,7 +160,6 @@ JD-TC-CreateItemRemarks-10
 
 
 JD-TC-CreateItemRemarks-11
-
     [Documentation]  create item remarks with transaction type as TRANSFER_OUT.
 
 
@@ -195,7 +184,6 @@ JD-TC-CreateItemRemarks-12
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemRemarks-UH4
-
     [Documentation]  create item remarks thats already created.
 
 
@@ -210,7 +198,6 @@ JD-TC-CreateItemRemarks-UH4
 
 
 JD-TC-CreateItemRemarks-UH1
-
     [Documentation]  create item remarks with empty remarks.
 
 
@@ -225,7 +212,6 @@ JD-TC-CreateItemRemarks-UH1
 
 
 JD-TC-CreateItemRemarks-UH2
-
     [Documentation]  create item remarks without login.
 
 
@@ -235,7 +221,6 @@ JD-TC-CreateItemRemarks-UH2
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-CreateItemRemarks-UH3
-
     [Documentation]  create item remarks using SA login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}

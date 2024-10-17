@@ -29,7 +29,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Get Inventory Catalog By account id-1
-
     [Documentation]  create inventory catalog then Get Inventory Catalog By account id.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -134,7 +133,6 @@ JD-TC-Get Inventory Catalog By account id-1
 
 
 JD-TC-Get Inventory Catalog By account id-2
-
     [Documentation]  update inventory catalog then Get Inventory Catalog By account id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME49}  ${PASSWORD}
@@ -158,7 +156,6 @@ JD-TC-Get Inventory Catalog By account id-2
     Should Be Equal As Strings    ${resp.json()[0]['storeName']}    ${Name}
 
 JD-TC-Get Inventory Catalog By account id-3
-
     [Documentation]  Update Inventory Catalog status as inactive then Get Inventory Catalog By account id
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME49}  ${PASSWORD}
     Log   ${resp.content}
@@ -179,7 +176,6 @@ JD-TC-Get Inventory Catalog By account id-3
     Should Be Equal As Strings    ${resp.json()[0]['storeName']}    ${Name}
 
 JD-TC-Get Inventory Catalog By account id-4
-
     [Documentation]  create  inventory catalog from main account then get inventory catalog using encid from user login.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME49}  ${PASSWORD}
@@ -276,7 +272,6 @@ JD-TC-Get Inventory Catalog By account id-4
     Should Be Equal As Strings    ${resp.json()[0]['accountId']}    ${accountId}
     # Should Be Equal As Strings    ${resp.json()[0]['storeName']}    ${Name}
 JD-TC-Get Inventory Catalog By account id-5
-
     [Documentation]  create  inventory catalog where name as invalid string then Get Inventory Catalog By account id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME49}  ${PASSWORD}
@@ -302,7 +297,6 @@ JD-TC-Get Inventory Catalog By account id-5
 
 
 JD-TC-Get Inventory Catalog By account id-UH1
-
     [Documentation]  Get Inventory Catalog By account id without login.
 
     ${resp}=  Get Inventory Catalog By account id  
@@ -312,7 +306,6 @@ JD-TC-Get Inventory Catalog By account id-UH1
 
 
 JD-TC-Get Inventory Catalog By account id-UH2
-
     [Documentation]  Get Inventory Catalog By account id using sa login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}

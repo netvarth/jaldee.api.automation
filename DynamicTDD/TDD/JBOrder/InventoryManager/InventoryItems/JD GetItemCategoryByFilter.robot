@@ -20,7 +20,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-GetItemCategoryByFilter-1
-
     [Documentation]   Create a Item Category then try to get that item Category with filter(categoryCode).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
@@ -60,7 +59,6 @@ JD-TC-GetItemCategoryByFilter-1
     Should Be Equal As Strings    ${resp.json()[0]['status']}    ${toggle[0]}
 
 JD-TC-GetItemCategoryByFilter-2
-
     [Documentation]   Create a Item Category then try to get that item Category with filter(categoryName).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
@@ -90,7 +88,6 @@ JD-TC-GetItemCategoryByFilter-2
     Should Be Equal As Strings    ${resp.json()[0]['status']}    ${toggle[0]}
 
 JD-TC-GetItemCategoryByFilter-3
-
     [Documentation]   Create a Item Category then try to get that item Category with filter(status).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
@@ -105,7 +102,6 @@ JD-TC-GetItemCategoryByFilter-3
     Should Be Equal As Strings    ${resp.json()[0]['status']}    ${toggle[0]}
 
 JD-TC-GetItemCategoryByFilter-4
-
     [Documentation]   Update a Item Category Status then try to get that item Category with filter(status).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
@@ -124,7 +120,6 @@ JD-TC-GetItemCategoryByFilter-4
     Should Be Equal As Strings    ${resp.json()[0]['status']}    ${toggle[1]}
 
 JD-TC-GetItemCategoryByFilter-UH1
-
     [Documentation]  GetItemCategoryByFilter without Login.
 
     ${resp}=  Get Item Category By Filter   categoryName-eq=${categoryName1}
@@ -133,7 +128,6 @@ JD-TC-GetItemCategoryByFilter-UH1
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
 
 JD-TC-GetItemCategoryByFilter-UH2
-
     [Documentation]  GetItemCategoryByFilter with Consumer Login.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}

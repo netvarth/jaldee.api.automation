@@ -26,7 +26,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Update Inventory Catalog Item Status-1
-
     [Documentation]  create Inventory Catalog Item then update status.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
@@ -165,7 +164,6 @@ JD-TC-Update Inventory Catalog Item Status-1
 
 
 JD-TC-Update Inventory Catalog Item Status-2
-
     [Documentation]  Update Inventory Catalog Item status as inactive from user login.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
@@ -240,7 +238,6 @@ JD-TC-Update Inventory Catalog Item Status-2
     Should Be Equal As Strings    ${resp.json()['status']}    ${InventoryCatalogStatus[1]}
 
 JD-TC-Update Inventory Catalog Item Status-3
-
     [Documentation]  update inventory catalog item and Update Inventory Catalog Item status as inactive from user login.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
@@ -261,7 +258,6 @@ JD-TC-Update Inventory Catalog Item Status-3
     Should Be Equal As Strings    ${resp.json()['status']}    ${InventoryCatalogStatus[1]}
 
 JD-TC-Update Inventory Catalog Item Status-UH1
-
     [Documentation]  Update Inventory Catalog Item status with invalid itemEncids.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME45}  ${PASSWORD}
@@ -278,7 +274,6 @@ JD-TC-Update Inventory Catalog Item Status-UH1
 
 
 JD-TC-Update Inventory Catalog Item Status-UH2
-
     [Documentation]  Create Inventory Catalog Item status without login.
 
     ${resp}=  Update Inventory Catalog Item status    ${EncId2}  ${InventoryCatalogStatus[1]} 
@@ -287,7 +282,6 @@ JD-TC-Update Inventory Catalog Item Status-UH2
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-Update Inventory Catalog Item Status-UH5
-
     [Documentation]  Create Inventory Catalog Item status from sa login login.
 
 
@@ -301,7 +295,6 @@ JD-TC-Update Inventory Catalog Item Status-UH5
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-Update Inventory Catalog Item Status-UH6
-
     [Documentation]  Create Inventory Catalog Item using another provider
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}

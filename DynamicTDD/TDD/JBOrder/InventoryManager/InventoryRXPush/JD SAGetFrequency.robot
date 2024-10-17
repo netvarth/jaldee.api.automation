@@ -26,7 +26,6 @@ ${order}        0
 *** Test Cases ***
 
 JD-TC-GetFrequencySA-1
-
     [Documentation]   Get Frequency SA
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
@@ -72,7 +71,6 @@ JD-TC-GetFrequencySA-1
     Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos}
 
 JD-TC-GetFrequencySA-2
-
     [Documentation]   Get Frequency SA - where frequency id is invalid 
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -87,7 +85,6 @@ JD-TC-GetFrequencySA-2
     Should Be Empty     ${resp.content}
 
 JD-TC-GetFrequencySA-3
-
     [Documentation]   Get Frequency SA - without login
 
     ${resp}=    SA Get Frequency  ${frequency_id}

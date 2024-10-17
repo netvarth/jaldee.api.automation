@@ -29,7 +29,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-update Inventory Catalog-1
-
     [Documentation]  Update Inventory Catalog with valid details.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -124,7 +123,6 @@ JD-TC-update Inventory Catalog-1
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-update Inventory Catalog-2
-
     [Documentation]  Update Inventory Catalog with same store id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME52}  ${PASSWORD}
@@ -144,7 +142,6 @@ JD-TC-update Inventory Catalog-2
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-update Inventory Catalog-3
-
     [Documentation]  Update Inventory Catalog using store nature as lab.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME52}  ${PASSWORD}
@@ -174,7 +171,6 @@ JD-TC-update Inventory Catalog-3
 
 
 JD-TC-update Inventory Catalog-4
-
     [Documentation]  Update Inventory Catalog where name as number.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME52}  ${PASSWORD}
@@ -191,7 +187,6 @@ JD-TC-update Inventory Catalog-4
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-update Inventory Catalog-5
-
     [Documentation]  Update Inventory Catalog where name as invalid string.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME52}  ${PASSWORD}
@@ -208,7 +203,6 @@ JD-TC-update Inventory Catalog-5
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-update Inventory Catalog-6
-
     [Documentation]  Update Inventory Catalog with same name.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME52}  ${PASSWORD}
@@ -226,7 +220,6 @@ JD-TC-update Inventory Catalog-6
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-update Inventory Catalog-7
-
     [Documentation]  create  inventory catalog from main account then update with same name from user login(with admin privilege)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}
@@ -353,7 +346,6 @@ JD-TC-update Inventory Catalog-7
 
 
 JD-TC-update Inventory Catalog-UH1
-
     [Documentation]  Update Inventory Catalog with empty name
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME52}  ${PASSWORD}
@@ -368,7 +360,6 @@ JD-TC-update Inventory Catalog-UH1
     
 
 JD-TC-update Inventory Catalog-UH2
-
     [Documentation]  Update Inventory Catalog with invalid store id
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME52}  ${PASSWORD}
@@ -383,7 +374,6 @@ JD-TC-update Inventory Catalog-UH2
 
 
 JD-TC-update Inventory Catalog-UH3
-
     [Documentation]  Update Inventory Catalog without login.
 
     ${Name}=    FakerLibrary.first name
@@ -394,7 +384,6 @@ JD-TC-update Inventory Catalog-UH3
 
 
 JD-TC-update Inventory Catalog-UH4
-
     [Documentation]  Update Inventory Catalog using sa login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -409,7 +398,6 @@ JD-TC-update Inventory Catalog-UH4
 
 
 JD-TC-update Inventory Catalog-UH5
-
     [Documentation]  Update Inventory Catalog where name length is <1.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME52}  ${PASSWORD}
@@ -424,7 +412,6 @@ JD-TC-update Inventory Catalog-UH5
 
 
 JD-TC-update Inventory Catalog-UH6
-
     [Documentation]  Update Inventory Catalog where name(word length is 256).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME52}  ${PASSWORD}
@@ -440,7 +427,6 @@ JD-TC-update Inventory Catalog-UH6
 
 
 JD-TC-update Inventory Catalog-UH7
-
     [Documentation]  Update Inventory Catalog where encid is invalid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME52}  ${PASSWORD}
@@ -455,7 +441,6 @@ JD-TC-update Inventory Catalog-UH7
     Should Be Equal As Strings   ${resp.json()}   ${Invalid_inventory_catalog_encoded_id}
 
 JD-TC-update Inventory Catalog-UH8
-
     [Documentation]  Update Inventory Catalog using another provider account
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -470,7 +455,6 @@ JD-TC-update Inventory Catalog-UH8
     Should Be Equal As Strings   ${resp.json()}   ${Invalid_inventory_catalog_encoded_id}
 
 JD-TC-update Inventory Catalog-UH9
-
     [Documentation]  Update Inventory Catalog status as inactive  then try to Update Inventory Catalog 
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME52}  ${PASSWORD}
@@ -492,7 +476,6 @@ JD-TC-update Inventory Catalog-UH9
     Should Be Equal As Strings    ${resp.status_code}    422
 
 JD-TC-update Inventory Catalog-UH10
-
     [Documentation]  create  inventory catalog from main account then update with same name from user login(without admin privilege)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME52}  ${PASSWORD}

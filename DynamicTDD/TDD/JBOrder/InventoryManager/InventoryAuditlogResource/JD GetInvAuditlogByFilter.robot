@@ -29,7 +29,6 @@ ${order}        0
 *** Test Cases ***
 
 JD-TC-GetInvAuditlogByFilter-1
-
     [Documentation]  Create inventory item, add item to inventory catalouge, then verify auditlog.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -157,7 +156,6 @@ JD-TC-GetInvAuditlogByFilter-1
     Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-2
-
     [Documentation]  Get Inventory Auditlog By account Filter.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -175,7 +173,6 @@ JD-TC-GetInvAuditlogByFilter-2
     Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-3
-
     [Documentation]  Get Inventory Auditlog By auditType Filter.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -193,7 +190,6 @@ JD-TC-GetInvAuditlogByFilter-3
     Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-4
-
     [Documentation]  Get Inventory Auditlog By auditContext Filter.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -211,7 +207,6 @@ JD-TC-GetInvAuditlogByFilter-4
     Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-5
-
     [Documentation]  Get Inventory Auditlog By auditLogAction Filter.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -229,7 +224,6 @@ JD-TC-GetInvAuditlogByFilter-5
     Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-6
-
     [Documentation]  Get Inventory Auditlog By userName Filter.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -247,7 +241,6 @@ JD-TC-GetInvAuditlogByFilter-6
     Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-7
-
     [Documentation]  Get Inventory Auditlog By userId Filter.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -265,7 +258,6 @@ JD-TC-GetInvAuditlogByFilter-7
     Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-8
-
     [Documentation]  Get Inventory Auditlog By userType Filter.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -283,7 +275,6 @@ JD-TC-GetInvAuditlogByFilter-8
     Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-9
-
     [Documentation]  Get Inventory Auditlog By deviceName Filter.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -301,7 +292,6 @@ JD-TC-GetInvAuditlogByFilter-9
     Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-10
-
     [Documentation]  Get Inventory Auditlog By deviceId Filter.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -319,7 +309,6 @@ JD-TC-GetInvAuditlogByFilter-10
     Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
   
 JD-TC-GetInvAuditlogByFilter-11
-
     [Documentation]  Get Inventory Auditlog By dateTime Filter.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -345,7 +334,6 @@ JD-TC-GetInvAuditlogByFilter-11
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-12
-
     [Documentation]  Provider Update Inventory catalog, then get inventory auditlog and verify.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -391,7 +379,6 @@ JD-TC-GetInvAuditlogByFilter-12
     Should Be Equal As Strings  ${resp.json()[1]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-13
-
     [Documentation]   Updated Inventory catalog verifing with account Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -420,7 +407,6 @@ JD-TC-GetInvAuditlogByFilter-13
     Should Be Equal As Strings  ${resp.json()[1]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-14
-
     [Documentation]   Updated Inventory catalog verifing with auditType Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -449,7 +435,6 @@ JD-TC-GetInvAuditlogByFilter-14
     Should Be Equal As Strings  ${resp.json()[1]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-15
-
     [Documentation]   Updated Inventory catalog verifing with auditContext Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -478,7 +463,6 @@ JD-TC-GetInvAuditlogByFilter-15
     Should Be Equal As Strings  ${resp.json()[1]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-16
-
     [Documentation]   Updated Inventory catalog verifing with auditLogAction Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -498,7 +482,6 @@ JD-TC-GetInvAuditlogByFilter-16
     Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-17
-
     [Documentation]   Updated Inventory catalog verifing with userName Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -518,7 +501,6 @@ JD-TC-GetInvAuditlogByFilter-17
     Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-18
-
     [Documentation]   Updated Inventory catalog status then verifing with accound Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -560,7 +542,6 @@ JD-TC-GetInvAuditlogByFilter-18
     Should Be Equal As Strings  ${resp.json()[2]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-19
-
     [Documentation]   Updated Inventory catalog status to activa then verifing with uid Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -611,7 +592,6 @@ JD-TC-GetInvAuditlogByFilter-19
     Should Be Equal As Strings  ${resp.json()[3]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-20
-
     [Documentation]   Updated Inventory catalog status then verifing with auditType Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -658,7 +638,6 @@ JD-TC-GetInvAuditlogByFilter-20
     Should Be Equal As Strings  ${resp.json()[3]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-21
-
     [Documentation]   Updated Inventory catalog status then verifing with auditContext Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -705,7 +684,6 @@ JD-TC-GetInvAuditlogByFilter-21
     Should Be Equal As Strings  ${resp.json()[3]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-22
-
     [Documentation]   Updated Inventory catalog status then verifing with auditLogAction Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -734,7 +712,6 @@ JD-TC-GetInvAuditlogByFilter-22
     Should Be Equal As Strings  ${resp.json()[1]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-23
-
     [Documentation]   Updated Inventory catalog status then verifing with userType Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -781,7 +758,6 @@ JD-TC-GetInvAuditlogByFilter-23
     Should Be Equal As Strings  ${resp.json()[3]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-24
-
     [Documentation]   Updated Inventory catalog status then verifing with userId Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -828,7 +804,6 @@ JD-TC-GetInvAuditlogByFilter-24
     Should Be Equal As Strings  ${resp.json()[3]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-25
-
     [Documentation]   Updated Inventory catalog status then verifing with dateTime Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -850,7 +825,6 @@ JD-TC-GetInvAuditlogByFilter-25
     Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 JD-TC-GetInvAuditlogByFilter-26
-
     [Documentation]   Provider do the purchase then verifing with account Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -1264,7 +1238,6 @@ JD-TC-GetInvAuditlogByFilter-26
     Should Be Equal As Strings  ${resp.json()[5]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-27
-
     [Documentation]   Provider do the purchase then verifing with uid Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -1285,7 +1258,6 @@ JD-TC-GetInvAuditlogByFilter-27
     Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-28
-
     [Documentation]   Provider do the purchase then verifing with auditType Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -1306,7 +1278,6 @@ JD-TC-GetInvAuditlogByFilter-28
     Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-29
-
     [Documentation]   Provider do the purchase then verifing with auditContext Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -1327,7 +1298,6 @@ JD-TC-GetInvAuditlogByFilter-29
     Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-30
-
     [Documentation]   Provider do the purchase then verifing with auditLogAction Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -1357,7 +1327,6 @@ JD-TC-GetInvAuditlogByFilter-30
     Should Be Equal As Strings  ${resp.json()[1]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-31
-
     [Documentation]   Provider do the purchase then verifing with userId Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -1424,7 +1393,6 @@ JD-TC-GetInvAuditlogByFilter-31
     Should Be Equal As Strings  ${resp.json()[5]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-32
-
     [Documentation]   Provider do the purchase then verifing with userType Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -1492,7 +1460,6 @@ JD-TC-GetInvAuditlogByFilter-32
 
 
 JD-TC-GetInvAuditlogByFilter-33
-
     [Documentation]   Update purchase then verifing with account Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -1537,7 +1504,6 @@ JD-TC-GetInvAuditlogByFilter-33
     Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-34
-
     [Documentation]   Updated purchase then verifing with uid Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -1557,7 +1523,6 @@ JD-TC-GetInvAuditlogByFilter-34
     Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-35
-
     [Documentation]   Updated purchase then verifing with auditType Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -1577,7 +1542,6 @@ JD-TC-GetInvAuditlogByFilter-35
     Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-37
-
     [Documentation]   Updated purchase then verifing with auditContext Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -1597,7 +1561,6 @@ JD-TC-GetInvAuditlogByFilter-37
     Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByFilter-38
-
     [Documentation]   Updated purchase then verifing with auditLogAction Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -1618,7 +1581,6 @@ JD-TC-GetInvAuditlogByFilter-38
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-39
-
     [Documentation]   Provider Update purchase status then verifing with account Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -1656,7 +1618,6 @@ JD-TC-GetInvAuditlogByFilter-39
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-40
-
     [Documentation]    Updated purchase status verifing with uid Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -1677,7 +1638,6 @@ JD-TC-GetInvAuditlogByFilter-40
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-41
-
     [Documentation]    Updated purchase status verifing with auditType Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -1698,7 +1658,6 @@ JD-TC-GetInvAuditlogByFilter-41
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-42
-
     [Documentation]    Updated purchase status verifing with auditContext Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -1728,7 +1687,6 @@ JD-TC-GetInvAuditlogByFilter-42
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-43
-
     [Documentation]    Updated purchase status verifing with auditLogAction Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -1750,7 +1708,6 @@ JD-TC-GetInvAuditlogByFilter-43
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-44
-
     [Documentation]    Updated purchase status verifing with userName Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -1772,7 +1729,6 @@ JD-TC-GetInvAuditlogByFilter-44
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-45
-
     [Documentation]    Updated purchase status verifing with userId Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -1794,7 +1750,6 @@ JD-TC-GetInvAuditlogByFilter-45
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-45
-
     [Documentation]    Updated purchase status verifing with userType Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -1816,7 +1771,6 @@ JD-TC-GetInvAuditlogByFilter-45
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-46
-
     [Documentation]    Provider add Remark then verifing with account Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -1845,7 +1799,6 @@ JD-TC-GetInvAuditlogByFilter-46
 
 
 JD-TC-GetInvAuditlogByFilter-47
-
     [Documentation]    Provider add another Remark then verifing with uid Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -1873,7 +1826,6 @@ JD-TC-GetInvAuditlogByFilter-47
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-48
-
     [Documentation]    Provider add another Remark then verifing with auditType Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -1901,7 +1853,6 @@ JD-TC-GetInvAuditlogByFilter-48
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-49
-
     [Documentation]    Provider add another Remark then verifing with auditLogAction Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -1930,7 +1881,6 @@ JD-TC-GetInvAuditlogByFilter-49
 
 
 JD-TC-GetInvAuditlogByFilter-50
-
     [Documentation]    Provider add another Remark then verifing with userName Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -1958,7 +1908,6 @@ JD-TC-GetInvAuditlogByFilter-50
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-51
-
     [Documentation]    Provider Adjust the stock then verifing with account Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -2000,7 +1949,6 @@ JD-TC-GetInvAuditlogByFilter-51
 
 
 JD-TC-GetInvAuditlogByFilter-52
-
     [Documentation]    Provider Adjusted stock verifing with userName Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -2022,7 +1970,6 @@ JD-TC-GetInvAuditlogByFilter-52
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-53
-
     [Documentation]    Provider Adjusted stock verifing with uid Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -2044,7 +1991,6 @@ JD-TC-GetInvAuditlogByFilter-53
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-54
-
     [Documentation]    Provider Adjusted stock verifing with auditType Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -2066,7 +2012,6 @@ JD-TC-GetInvAuditlogByFilter-54
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-55
-
     [Documentation]    Provider Adjusted stock verifing with auditContext Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -2088,7 +2033,6 @@ JD-TC-GetInvAuditlogByFilter-55
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-56
-
     [Documentation]    Provider Adjusted stock verifing with auditLogAction Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -2110,7 +2054,6 @@ JD-TC-GetInvAuditlogByFilter-56
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-57
-
     [Documentation]    Provider Adjusted stock verifing with userId Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -2132,7 +2075,6 @@ JD-TC-GetInvAuditlogByFilter-57
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-58
-
     [Documentation]    Provider Adjusted stock verifing with createdDate Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -2154,7 +2096,6 @@ JD-TC-GetInvAuditlogByFilter-58
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-59
-
     [Documentation]    Provider Adjusted stock verifing with userType Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -2176,7 +2117,6 @@ JD-TC-GetInvAuditlogByFilter-59
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-60
-
     [Documentation]    update the stock Adjusted then verifing with account Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -2207,7 +2147,6 @@ JD-TC-GetInvAuditlogByFilter-60
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-61
-
     [Documentation]    update the stock Adjusted then verifing with uid Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -2229,7 +2168,6 @@ JD-TC-GetInvAuditlogByFilter-61
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-62
-
     [Documentation]    update the stock Adjusted then verifing with auditType Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -2251,7 +2189,6 @@ JD-TC-GetInvAuditlogByFilter-62
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-63
-
     [Documentation]    update the stock Adjusted then verifing with auditContext Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -2273,7 +2210,6 @@ JD-TC-GetInvAuditlogByFilter-63
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-64
-
     [Documentation]    update the stock Adjusted then verifing with auditLogAction Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -2295,7 +2231,6 @@ JD-TC-GetInvAuditlogByFilter-64
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-65
-
     [Documentation]    update the stock Adjusted then verifing with userName Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -2317,7 +2252,6 @@ JD-TC-GetInvAuditlogByFilter-65
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-66
-
     [Documentation]    update the stock Adjusted then verifing with userId Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -2339,7 +2273,6 @@ JD-TC-GetInvAuditlogByFilter-66
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-67
-
     [Documentation]    update the stock Adjusted then verifing with userType Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -2361,7 +2294,6 @@ JD-TC-GetInvAuditlogByFilter-67
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByFilter-68
-
     [Documentation]    update the stock Adjusted then verifing with createdDate Filter
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}

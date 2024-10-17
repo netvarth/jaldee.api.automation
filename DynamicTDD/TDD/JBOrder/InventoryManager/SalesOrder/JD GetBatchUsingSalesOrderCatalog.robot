@@ -26,7 +26,6 @@ ${order}        0
 
 *** Test Cases ***
 JD-TC-Get Batches using Salesordercatalog-1
-
     [Documentation]  Get Batch details using Salesordercatalog item encid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME53}  ${PASSWORD}

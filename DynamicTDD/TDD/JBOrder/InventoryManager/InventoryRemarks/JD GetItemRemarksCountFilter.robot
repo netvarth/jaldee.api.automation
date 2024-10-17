@@ -25,7 +25,6 @@ ${invalidEma}        asd122
 *** Test Cases ***
 
 JD-TC-GetItemRemarksCountFilter-1
-
     [Documentation]   Get Item Remark  count Filter using account id. 
 
 
@@ -64,7 +63,6 @@ JD-TC-GetItemRemarksCountFilter-1
     Should Be Equal As Strings   ${resp.json()}   ${count}
 
 JD-TC-GetItemRemarksCountFilter-2
-
     [Documentation]   Get Item Remark count Filter using encid.
 
 
@@ -89,7 +87,6 @@ JD-TC-GetItemRemarksCountFilter-2
 
 
 JD-TC-GetItemRemarksCountFilter-3
-
     [Documentation]   Get Item Remark count Filter using transaction enum.
 
 
@@ -117,7 +114,6 @@ JD-TC-GetItemRemarksCountFilter-3
 
 
 JD-TC-GetItemRemarksCountFilter-4
-
     [Documentation]   Get Item Remark count Filter using id.
 
 
@@ -148,7 +144,6 @@ JD-TC-GetItemRemarksCountFilter-4
 
 
 JD-TC-GetItemRemarksCountFilter-5
-
     [Documentation]   update item remarks  and Get Item Remark  count filter using accountid.
 
 
@@ -174,7 +169,6 @@ JD-TC-GetItemRemarksCountFilter-5
     Should Be Equal As Strings   ${resp.json()}   ${count}
 
 JD-TC-GetItemRemarksCountFilter-6
-
     [Documentation]    Get Item Remark count filter using transactionTypeEnum.
 
 
@@ -193,7 +187,6 @@ JD-TC-GetItemRemarksCountFilter-6
     Should Be Equal As Strings   ${resp.json()}   ${count}
 
 JD-TC-GetItemRemarksCountFilter-UH1
-
     [Documentation]    Get Item Remark count filter without login.
 
     ${resp}=  Get Item Remark Count Filter  transactionTypeEnum-eq=${transactionTypeEnum[0]}  
@@ -202,7 +195,6 @@ JD-TC-GetItemRemarksCountFilter-UH1
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-GetItemRemarksCountFilter-UH2
-
     [Documentation]    Get Item Remark count filter using invalid data.
 
 
@@ -216,7 +208,6 @@ JD-TC-GetItemRemarksCountFilter-UH2
     Should Be Equal As Strings    ${resp.json()}    0
     
 JD-TC-GetItemRemarksCountFilter-UH3
-
     [Documentation]    Get Item Remark count filter using EMPTY ID.
 
 

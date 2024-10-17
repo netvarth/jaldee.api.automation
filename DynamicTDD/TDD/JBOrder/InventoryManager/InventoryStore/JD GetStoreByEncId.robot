@@ -24,7 +24,6 @@ ${invalidEma}        asd122
 *** Test Cases ***
 
 JD-TC-GetStoreByEncid-1
-
     [Documentation]  Service Provider Create a store with valid details(store type is PHARMACY)then try to get by encid.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -114,7 +113,6 @@ JD-TC-GetStoreByEncid-1
     Should Be Equal As Strings  ${resp.json()['emails'][0]}  ${email_id}
 
 JD-TC-GetStoreByEncid-2
-
     [Documentation]  Service Provider Create a store with valid details(store type is LAB)then try to get by encid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -148,7 +146,6 @@ JD-TC-GetStoreByEncid-2
     Should Be Equal As Strings  ${resp.json()['emails'][0]}  ${email_id}
 
 JD-TC-GetStoreByEncid-3
-
     [Documentation]  Service Provider Create a store with valid details(store type is RADIOLOGY)then try to get by encid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -187,7 +184,6 @@ JD-TC-GetStoreByEncid-3
     Should Be Equal As Strings  ${resp.json()['emails'][0]}  ${email_id}
 
 JD-TC-GetStoreByEncid-4
-
     [Documentation]   try to get by invalid encid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}

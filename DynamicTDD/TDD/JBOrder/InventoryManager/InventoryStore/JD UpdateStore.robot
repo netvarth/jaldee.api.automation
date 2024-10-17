@@ -24,7 +24,6 @@ ${invalidEma}        asd122
 *** Test Cases ***
 
 JD-TC-UpdateStore-1
-
     [Documentation]  Service Provider Create a store with valid details(store type is PHARMACY)then Update it's name.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -200,7 +199,6 @@ JD-TC-UpdateStore-1
 
 
 JD-TC-UpdateStore-2
-
     [Documentation]   Update store - without email
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -213,7 +211,6 @@ JD-TC-UpdateStore-2
     Should Be Equal As Strings    ${resp.json()}    
 
 JD-TC-UpdateStore-3
-
     [Documentation]   Update store - email id is changed
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -225,7 +222,6 @@ JD-TC-UpdateStore-3
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-UpdateStore-4
-
     [Documentation]   Update store - phoneNumber is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -238,7 +234,6 @@ JD-TC-UpdateStore-4
     Should Be Equal As Strings    ${resp.json()}    
 
 JD-TC-UpdateStore-5
-
     [Documentation]   Update store - phone number is changed
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -250,7 +245,6 @@ JD-TC-UpdateStore-5
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-UpdateStore-6
-
     [Documentation]   Update store - country code is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -263,7 +257,6 @@ JD-TC-UpdateStore-6
     Should Be Equal As Strings    ${resp.json()}    ${COUNTRYCODE_EMPTY}
 
 JD-TC-UpdateStore-7
-
     [Documentation]   Update store - country code is changed
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -275,7 +268,6 @@ JD-TC-UpdateStore-7
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-UpdateStore-8
-
     [Documentation]   Update store - store code is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -287,7 +279,6 @@ JD-TC-UpdateStore-8
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-UpdateStore-9
-
     [Documentation]   Update store - store code is changed
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -302,7 +293,6 @@ JD-TC-UpdateStore-9
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-UpdateStore-10
-
     [Documentation]   Update store - city is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -314,7 +304,6 @@ JD-TC-UpdateStore-10
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-UpdateStore-11
-
     [Documentation]   Update store - city is changed
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -326,7 +315,6 @@ JD-TC-UpdateStore-11
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-UpdateStore-12
-
     [Documentation]   Update store - district is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -338,7 +326,6 @@ JD-TC-UpdateStore-12
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-UpdateStore-13
-
     [Documentation]   Update store - district is changed
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -350,7 +337,6 @@ JD-TC-UpdateStore-13
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-UpdateStore-14
-
     [Documentation]   Update store - state is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -362,7 +348,6 @@ JD-TC-UpdateStore-14
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-UpdateStore-15
-
     [Documentation]   Update store - state is changed
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -374,7 +359,6 @@ JD-TC-UpdateStore-15
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-UpdateStore-16
-
     [Documentation]   Update store - country is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -386,7 +370,6 @@ JD-TC-UpdateStore-16
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-UpdateStore-17
-
     [Documentation]   Update store - country is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -398,7 +381,6 @@ JD-TC-UpdateStore-17
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-UpdateStore-18
-
     [Documentation]   Update store - pincode is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -410,7 +392,6 @@ JD-TC-UpdateStore-18
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-UpdateStore-19
-
     [Documentation]   Update store - pincode is changed
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -422,7 +403,6 @@ JD-TC-UpdateStore-19
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-UpdateStore-20
-
     [Documentation]   Update store - loc id is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -435,7 +415,6 @@ JD-TC-UpdateStore-20
     Should Be Equal As Strings    ${resp.json()}    ${LOCATION_INVALID}
 
 JD-TC-UpdateStore-21
-
     [Documentation]   Update store - loc id is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -450,7 +429,6 @@ JD-TC-UpdateStore-21
     Should Be Equal As Strings    ${resp.json()}    ${INVALID_LOCATION_ID}
 
 JD-TC-UpdateStore-22
-
     [Documentation]   Update store - store Type EncId is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -463,7 +441,6 @@ JD-TC-UpdateStore-22
     Should Be Equal As Strings    ${resp.json()}    ${INVALID_STORE_TYPE_ID}
 
 JD-TC-UpdateStore-23
-
     [Documentation]   Update store - store Type EncId is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -478,7 +455,6 @@ JD-TC-UpdateStore-23
     Should Be Equal As Strings    ${resp.json()}    ${INVALID_STORE_TYPE_ID}
 
 JD-TC-UpdateStore-24
-
     [Documentation]   Update store - name is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -504,7 +480,6 @@ JD-TC-UpdateStore-24
 #     Should Be Equal As Strings    ${resp.json()}    
 
 JD-TC-UpdateStore-26
-
     [Documentation]   Update store - store id is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -519,7 +494,6 @@ JD-TC-UpdateStore-26
     Should Be Equal As Strings    ${resp.json()}    ${INVALID_STORE_ID}
 
 JD-TC-UpdateStore-27
-
     [Documentation]   Update store - without login
 
     ${resp}=  Update Store      ${store_id}    ${Name}  ${St_Id}    ${locId1}   ${email}     ${PhoneNumber}  ${countryCodes[0]}  storeCode=${storeCode2}  city=${city}  district=${district}  State=${State}  country=${country}  pincode=${pincode}

@@ -27,7 +27,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Update Sales Order Catalog Item Status-1
-
     [Documentation]  create SO Catalog items with all items having invMgmt set to false (with out Tax)Then Update it's status as Disable.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
@@ -192,7 +191,6 @@ JD-TC-Update Sales Order Catalog Item Status-1
 
 
 JD-TC-Update Sales Order Catalog Item Status-2
-
     [Documentation]  update sales order catalog Item status as enable
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
@@ -209,7 +207,6 @@ JD-TC-Update Sales Order Catalog Item Status-2
     Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[0]}
 
 JD-TC-Update Sales Order Catalog Item Status-UH1
-
     [Documentation]  update sales order catalog Item status as enable thats alreay enabled
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
@@ -222,7 +219,6 @@ JD-TC-Update Sales Order Catalog Item Status-UH1
     Should Be Equal As Strings   ${resp.json()}   ${CAP_ALREADY_ENABLED}
 
 JD-TC-Update Sales Order Catalog Item Status-UH2
-
     [Documentation]   update sales order catalog Item status as disable thats alreay disabled
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}
@@ -239,7 +235,6 @@ JD-TC-Update Sales Order Catalog Item Status-UH2
     Should Be Equal As Strings   ${resp.json()}   ${CAP_ALREADY_DISABLED}
 
 JD-TC-Update Sales Order Catalog Item Status-UH3
-
     [Documentation]   update sales order catalog item status without login
 
     ${resp}=  Update Sales Order Catalog Item Status   ${SO_itemEncIds}     ${toggle[1]}
@@ -249,7 +244,6 @@ JD-TC-Update Sales Order Catalog Item Status-UH3
 
 
 JD-TC-Update Sales Order Catalog Item Status-UH4
-
     [Documentation]  update sales order catalog item status using sa login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -262,7 +256,6 @@ JD-TC-Update Sales Order Catalog Item Status-UH4
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-Update Sales Order Catalog Item Status-UH5
-
     [Documentation]   update sales order catalog item status where catalog id is wrong
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME10}  ${PASSWORD}

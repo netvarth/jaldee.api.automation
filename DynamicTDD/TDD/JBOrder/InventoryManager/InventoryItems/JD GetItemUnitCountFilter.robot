@@ -19,7 +19,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-GetitemUitCountFilter-1
-
     [Documentation]  Get Item Unit Count Filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
@@ -77,7 +76,6 @@ JD-TC-GetitemUitCountFilter-1
 
 
 JD-TC-GetitemUitCountFilter-2
-
     [Documentation]  Get Item Unit Count Filter - unitCode    
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
@@ -90,7 +88,6 @@ JD-TC-GetitemUitCountFilter-2
     Should Be Equal As Strings    ${resp.json()}        1
 
 JD-TC-GetitemUitCountFilter-3
-
     [Documentation]  Get Item Unit Count Filter - unitName
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
@@ -103,7 +100,6 @@ JD-TC-GetitemUitCountFilter-3
     Should Be Equal As Strings    ${resp.json()}        1
 
 JD-TC-GetitemUitCountFilter-4
-
     [Documentation]  Get Item Unit Count Filter - status
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
@@ -116,7 +112,6 @@ JD-TC-GetitemUitCountFilter-4
     Should Be Equal As Strings    ${resp.json()}        2
 
 JD-TC-GetitemUitCountFilter-UH1
-
     [Documentation]  Get Item Unit Count Filter - withou login
 
     ${resp}=    Get Item Unit Count Filter
@@ -125,7 +120,6 @@ JD-TC-GetitemUitCountFilter-UH1
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED}
 
 JD-TC-GetitemUitCountFilter-UH2
-
     [Documentation]  Get Item Unit Count Filter - with another provider login
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}

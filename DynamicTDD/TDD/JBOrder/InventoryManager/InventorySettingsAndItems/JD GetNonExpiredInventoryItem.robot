@@ -31,7 +31,6 @@ ${order}        0
 
 *** Test Cases ***
 JD-TC-Get NonExpired Item-1
-
     [Documentation]  creating batch item when inventory manager is on
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME316}  ${PASSWORD}

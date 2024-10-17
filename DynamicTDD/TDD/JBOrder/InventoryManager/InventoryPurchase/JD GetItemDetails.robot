@@ -27,7 +27,6 @@ ${order}        0
 *** Test Cases ***
 
 JD-TC-GetItemDetails-1
-
     [Documentation]  Get item Details.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -483,7 +482,6 @@ JD-TC-GetItemDetails-1
 
 
 JD-TC-GetItemDetails-UH1
-
     [Documentation]  Get item Details - store id is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -498,7 +496,6 @@ JD-TC-GetItemDetails-UH1
     Should Be Equal As Strings    ${resp.json()}        ${X_REQUIRED}
 
 JD-TC-GetItemDetails-UH2
-
     [Documentation]  Get item Details - store id is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -515,7 +512,6 @@ JD-TC-GetItemDetails-UH2
     Should Be Equal As Strings    ${resp.json()}        ${INVALID_FIELD}
 
 JD-TC-GetItemDetails-UH3
-
     [Documentation]  Get item Details - vendor id is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -530,7 +526,6 @@ JD-TC-GetItemDetails-UH3
     Should Be Equal As Strings    ${resp.json()}        ${X_REQUIRED}
 
 JD-TC-GetItemDetails-UH4
-
     [Documentation]  Get item Details - vendor id is inv
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -547,7 +542,6 @@ JD-TC-GetItemDetails-UH4
     Should Be Equal As Strings    ${resp.json()}        ${INVALID_FIELD}
 
 JD-TC-GetItemDetails-UH5
-
     [Documentation]  Get item Details - inventory Catalog Item is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -564,7 +558,6 @@ JD-TC-GetItemDetails-UH5
     Should Be Equal As Strings    ${resp.json()}        ${X_REQUIRED}
 
 JD-TC-GetItemDetails-UH6
-
     [Documentation]  Get item Details - inventory Catalog item is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -582,7 +575,6 @@ JD-TC-GetItemDetails-UH6
     Should Be Equal As Strings    ${resp.json()}        ${ITEM_NOT_FOUND}
 
 JD-TC-GetItemDetails-UH8
-
     [Documentation]  Get item Details - quantity id is 0
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -625,7 +617,6 @@ JD-TC-GetItemDetails-UH8
 
 
 JD-TC-GetItemDetails-3
-
     [Documentation]  Get item Details - free quantity is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -677,7 +668,6 @@ JD-TC-GetItemDetails-3
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-GetItemDetails-4
-
     [Documentation]  Get item Details - amount is negative
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -689,7 +679,6 @@ JD-TC-GetItemDetails-4
     Should Be Equal As Strings    ${resp.status_code}    422
 
 JD-TC-GetItemDetails-5
-
     [Documentation]  Get item Details - fixed discount is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -741,7 +730,6 @@ JD-TC-GetItemDetails-5
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-GetItemDetails-UH7
-
     [Documentation]  Get item Details - without login
 
     ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}

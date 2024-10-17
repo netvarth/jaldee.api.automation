@@ -24,7 +24,6 @@ Resource          /ebs/TDD/SuperAdminKeywords.robot
 *** Test Cases ***
 
 JD-TC-Get Item Batch By InvCatItem-1
-
     [Documentation]  Get Item Batch By InvCatItem.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME315}  ${PASSWORD}

@@ -20,7 +20,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-UpdateItemGroupStatus-1
-
     [Documentation]   Update Item Group Status
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME41}  ${PASSWORD}
@@ -73,7 +72,6 @@ JD-TC-UpdateItemGroupStatus-1
 
 
 JD-TC-UpdateItemGroupStatus-2
-
     [Documentation]  Update Item group Status - Disable to Disable
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME41}  ${PASSWORD}
@@ -89,7 +87,6 @@ JD-TC-UpdateItemGroupStatus-2
     Should Be Equal As Strings    ${resp.status_code}    422
 
 JD-TC-UpdateItemGroupStatus-3
-
     [Documentation]  Update Item group Status - Disable to Enable
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME41}  ${PASSWORD}
@@ -117,7 +114,6 @@ JD-TC-UpdateItemGroupStatus-3
     Should Be Equal As Strings    ${resp.json()['status']}       ${toggle[0]}
 
 JD-TC-UpdateItemGroupStatus-4
-
     [Documentation]  Update Item group Status - Enable to Enable
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME41}  ${PASSWORD}
@@ -138,7 +134,6 @@ JD-TC-UpdateItemGroupStatus-4
 
 
 JD-TC-UpdateItemGroupStatus-5
-
     [Documentation]  Update Item group Status - without login
 
     ${resp}=    Update Item group Status  ${ig_id}  ${toggle[0]}

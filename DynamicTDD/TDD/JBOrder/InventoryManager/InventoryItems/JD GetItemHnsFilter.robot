@@ -19,7 +19,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-GetItemHsnFilter-1
-
     [Documentation]  Get Item Hsn Filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME19}  ${PASSWORD}
@@ -94,7 +93,6 @@ JD-TC-GetItemHsnFilter-1
 
 
 JD-TC-GetItemHsnFilter-2
-
     [Documentation]  Get Item hns Filter - hsnCode
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME19}  ${PASSWORD}
@@ -111,7 +109,6 @@ JD-TC-GetItemHsnFilter-2
 
 
 JD-TC-GetItemHsnFilter-4
-
     [Documentation]  Get Item hns Filter - status
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME19}  ${PASSWORD}
@@ -143,7 +140,6 @@ JD-TC-GetItemHsnFilter-4
 
 
 JD-TC-GetItemHsnFilter-UH1
-
     [Documentation]  Get Item hns Filter - without login
 
     ${resp}=    Get Item hns Filter 
@@ -153,7 +149,6 @@ JD-TC-GetItemHsnFilter-UH1
 
 
 JD-TC-GetItemHsnFilter-5
-
     [Documentation]  Get Item hns Filter - with another provider login
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}

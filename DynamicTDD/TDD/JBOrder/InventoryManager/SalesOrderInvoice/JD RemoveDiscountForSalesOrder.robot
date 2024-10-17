@@ -27,7 +27,6 @@ ${invalidItem}     sprx-3250dr0-800
 *** Test Cases ***
 
 JD-TC-Remove SalesOrder discount-1
-
     [Documentation]   Create a sales Order with Valid Details and Genarate then apply discount(Percentage)and remove.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
@@ -416,7 +415,6 @@ JD-TC-Remove SalesOrder discount-1
     Should Be Equal As Strings    ${resp.status_code}   200
 
 JD-TC-Remove SalesOrder discount-2
-
     [Documentation]   Create a sales Order with Inventory manager is ON and Genarate then apply discount(Fixed)and remove.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
@@ -954,7 +952,6 @@ JD-TC-Remove SalesOrder discount-2
 
 
 JD-TC-Remove SalesOrder discount-UH1
-
     [Documentation]   Apply one discount then remove two time.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
@@ -1044,7 +1041,6 @@ JD-TC-Remove SalesOrder discount-UH1
     Should Be Equal As Strings    ${resp.json()}   ${INCORRECT_DISCOUNT_ID}
 
 JD-TC-Remove SalesOrder discount-UH2
-
     [Documentation]   Remove Discount with Invalid DiscountId.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
@@ -1092,7 +1088,6 @@ JD-TC-Remove SalesOrder discount-UH2
     Should Be Equal As Strings    ${resp.json()}   ${INCORRECT_DISCOUNT_ID}
 
 JD-TC-Remove SalesOrder discount-UH3
-
     [Documentation]   Remove Discount with Invalid discountValue.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
@@ -1105,7 +1100,6 @@ JD-TC-Remove SalesOrder discount-UH3
     Should Be Equal As Strings    ${resp.json()}   ${INCORRECT_DISCOUNT_ID}
 
 JD-TC-Remove SalesOrder discount-UH4
-
     [Documentation]   Remove Discount without login.
 
     ${resp}=    Remove SalesOrder discount    ${SO_Uid}    ${discountId3}     ${invalidEma}

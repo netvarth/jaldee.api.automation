@@ -30,7 +30,6 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-Get Order Item List-1
-
     [Documentation]   Create a sales Order with Valid Details then Get sales order Item by list.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
@@ -331,7 +330,6 @@ JD-TC-Get Order Item List-1
 
 
 JD-TC-Get Order Item List-2
-
     [Documentation]   Try to get Sales Order Item List using locationId param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}

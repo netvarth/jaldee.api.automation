@@ -28,7 +28,6 @@ ${order}        0
 *** Test Cases ***
 
 JD-TC-PurchaseAttachment-1
-
     [Documentation]  Purchase Attachment
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
@@ -605,7 +604,6 @@ JD-TC-PurchaseAttachment-1
      Should Be Equal As Strings      ${resp.json()['uploadedDocuments'][0]['fileName']}      ${jpgfile}
 
 JD-TC-PurchaseAttachment-2
-
     [Documentation]  Purchase Attachment - action is update
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
@@ -626,7 +624,6 @@ JD-TC-PurchaseAttachment-2
     Should Be Equal As Strings      ${resp.json()['uploadedDocuments'][0]['fileName']}      ${jpgfile}
 
 JD-TC-PurchaseAttachment-3
-
     [Documentation]  Purchase Attachment - action is remove
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}

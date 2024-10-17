@@ -20,7 +20,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-UpdateItemComposition-1
-
     [Documentation]  Update Item Composition - updated name
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME38}  ${PASSWORD}
@@ -70,7 +69,6 @@ JD-TC-UpdateItemComposition-1
 
 
 JD-TC-UpdateItemComposition-UH1
-
     [Documentation]  Update Item Composition - where composition name is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME38}  ${PASSWORD}
@@ -84,7 +82,6 @@ JD-TC-UpdateItemComposition-UH1
 
 
 JD-TC-UpdateItemComposition-UH2
-
     [Documentation]  Update Item Composition - where compositionCode is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME38}  ${PASSWORD}
@@ -99,7 +96,6 @@ JD-TC-UpdateItemComposition-UH2
     Should Be Equal As Strings    ${resp.json()}    ${INVALID_FIELD}
 
 JD-TC-UpdateItemComposition-UH3
-
     [Documentation]  Update Item Composition - where compositionCode is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME38}  ${PASSWORD}
@@ -116,7 +112,6 @@ JD-TC-UpdateItemComposition-UH3
     Should Be Equal As Strings    ${resp.json()}    ${INVALID_FIELD}
 
 JD-TC-UpdateItemComposition-UH4
-
     [Documentation]  Update Item Composition - without Login
 
     ${resp}=    Update Item Composition     ${compositionName}  ${compositionCode}
@@ -125,7 +120,6 @@ JD-TC-UpdateItemComposition-UH4
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED}
 
 JD-TC-UpdateItemComposition-UH5
-
     [Documentation]  Update Item Composition - where another provider login
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}

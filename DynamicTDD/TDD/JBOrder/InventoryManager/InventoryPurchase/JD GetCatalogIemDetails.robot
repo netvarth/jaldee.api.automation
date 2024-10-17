@@ -30,7 +30,6 @@ ${originFrom}       NONE
 
 
 JD-TC-GetCataologItemDetails-1
-
     [Documentation]  Get Cataolog Item Details
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}

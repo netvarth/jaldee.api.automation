@@ -19,7 +19,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-GetItemTax-1
-
     [Documentation]  Get Item tax
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME27}  ${PASSWORD}
@@ -59,7 +58,6 @@ JD-TC-GetItemTax-1
     Should Be Equal As Strings    ${resp.json()['taxCode']}         ${itemtax_id}
 
 JD-TC-GetItemTax-UH1
-
     [Documentation]  Get Item tax - where item tax id is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME27}  ${PASSWORD}
@@ -74,7 +72,6 @@ JD-TC-GetItemTax-UH1
     Should Be Empty  ${resp.content}
 
 JD-TC-GetItemTax-UH2
-
     [Documentation]  Get Item tax - withot login
 
     ${resp}=    Get Item Tax by id  ${itemtax_id}
@@ -83,7 +80,6 @@ JD-TC-GetItemTax-UH2
     Should Be Equal As Strings    ${resp.json()}         ${SESSION_EXPIRED}
 
 JD-TC-GetItemTax-UH3
-
     [Documentation]  Get Item tax - another provider who didnt created item tax
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}

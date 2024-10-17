@@ -19,7 +19,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-GetItemCompositionCountFilter-1
-
     [Documentation]  Get Item Composition Count Filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME13}  ${PASSWORD}
@@ -98,7 +97,6 @@ JD-TC-GetItemCompositionCountFilter-1
 
 
 JD-TC-GetItemCompositionCountFilter-2
-
     [Documentation]  Get Item Composition Count Filter - compositionCode
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME13}  ${PASSWORD}
@@ -111,7 +109,6 @@ JD-TC-GetItemCompositionCountFilter-2
     Should Be Equal As Strings    ${resp.json()}        1
 
 JD-TC-GetItemCompositionCountFilter-3
-
     [Documentation]  Get Item Composition Count Filter - compositionName
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME13}  ${PASSWORD}
@@ -124,7 +121,6 @@ JD-TC-GetItemCompositionCountFilter-3
     Should Be Equal As Strings    ${resp.json()}         1
 
 JD-TC-GetItemCompositionCountFilter-4
-
     [Documentation]  Get Item Composition Count Filter - status
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME13}  ${PASSWORD}
@@ -138,7 +134,6 @@ JD-TC-GetItemCompositionCountFilter-4
 
 
 JD-TC-GetItemCompositionCountFilter-5
-
     [Documentation]  Get Item Composition Count Filter - without login
 
     ${resp}=    Get Item Composition Count Filter    compositionCode-eq=${compositionCode}
@@ -148,7 +143,6 @@ JD-TC-GetItemCompositionCountFilter-5
 
 
 JD-TC-GetItemCompositionCountFilter-6
-
     [Documentation]  Get Item Composition Count Filter - with another provider login
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}

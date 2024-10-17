@@ -26,7 +26,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Update Stock Adjustment-1
-
     [Documentation]  update stock adjustment with same details.
     comment  NOTE-------------UPDATE STOCK ADJUSTMENT ---WE CAN ONLY UPDATE REMARKS AND STOCK ADJUSTMENT DTO
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
@@ -218,7 +217,6 @@ JD-TC-Update Stock Adjustment-1
 
 
 JD-TC-Update Stock Adjustment-2
-
     [Documentation]  Create stock adjustment with multiple stockAdjustDetailsDtos. then update stock adjustment by adding one more  stockAdjustDetailsDtos
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
@@ -300,7 +298,6 @@ JD-TC-Update Stock Adjustment-2
 
 
 JD-TC-Update Stock Adjustment-3
-
     [Documentation]  create one remarks and update stock adjustment
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
@@ -349,7 +346,6 @@ JD-TC-Update Stock Adjustment-3
 
 
 JD-TC-Update Stock Adjustment-4
-
     [Documentation]  Create stock adjustment with one batch disabled item then update stock adjustment with batch enable item.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
@@ -472,7 +468,6 @@ JD-TC-Update Stock Adjustment-4
     Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][0]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable8}
     # Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][0]['spItem']['status']}    ${spitem_status8}
 JD-TC-Update Stock Adjustment-UH1
-
     [Documentation]  update stock adjustment without login
 
     ${resp}=  Update Stock Adjustment  ${uid}    ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data} 
@@ -481,7 +476,6 @@ JD-TC-Update Stock Adjustment-UH1
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-Update Stock Adjustment-UH2
-
     [Documentation]  update stock adjustment with empty store id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
@@ -496,7 +490,6 @@ JD-TC-Update Stock Adjustment-UH2
     
 
 JD-TC-Update Stock Adjustment-UH3
-
     [Documentation]  Update stock adjustment with empty inventory_catalog_encid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
@@ -510,7 +503,6 @@ JD-TC-Update Stock Adjustment-UH3
     
 
 JD-TC-Update Stock Adjustment-UH4
-
     [Documentation]  Update stock adjustment with empty remarks_encid1.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
@@ -524,7 +516,6 @@ JD-TC-Update Stock Adjustment-UH4
     Should Be Equal As Strings   ${resp.json()}   ${INVALID_REMARKS_ID}
 
 JD-TC-Update Stock Adjustment-UH5
-
     [Documentation]  update stock adjustment with empty quantity.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}

@@ -30,7 +30,6 @@ ${fixedDiscount}      500
 *** Test Cases ***
 
 JD-TC-CreatePurchase-1
-
     [Documentation]  Create Purchase
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -607,7 +606,6 @@ JD-TC-CreatePurchase-1
 
 
 JD-TC-CreatePurchase-2
-
     [Documentation]  Create Purchase - invoice date is past date
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -629,7 +627,6 @@ JD-TC-CreatePurchase-2
 
 
 JD-TC-CreatePurchase-3
-
     [Documentation]  Create Purchase - purchase note is empty
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -650,7 +647,6 @@ JD-TC-CreatePurchase-3
 
 
 JD-TC-CreatePurchase-4
-
     [Documentation]  Create Purchase - roundoff is empty
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -671,7 +667,6 @@ JD-TC-CreatePurchase-4
 
 
 JD-TC-CreatePurchase-5
-
     [Documentation]  Create Purchase - free quantity as null
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -693,7 +688,6 @@ JD-TC-CreatePurchase-5
 
 
 JD-TC-CreatePurchase-6
-
     [Documentation]  Create Purchase - discount amount is empty
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -719,7 +713,6 @@ JD-TC-CreatePurchase-6
 
 
 JD-TC-CreatePurchase-7
-
     [Documentation]  Create Purchase - discount amount is updated
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -745,7 +738,6 @@ JD-TC-CreatePurchase-7
 
 
 JD-TC-CreatePurchase-8
-
     [Documentation]  Create Purchase - discount Percentage is empty
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -766,7 +758,6 @@ JD-TC-CreatePurchase-8
     Should Be Equal As Strings      ${resp.json()['totalDiscountAmount']}      ${fixedDiscount}
 
 JD-TC-CreatePurchase-9
-
     [Documentation]  Create Purchase - discount Percentage is null
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -788,7 +779,6 @@ JD-TC-CreatePurchase-9
 
 
 JD-TC-CreatePurchase-10
-
     [Documentation]  Create Purchase - mrp is changed
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -814,7 +804,6 @@ JD-TC-CreatePurchase-10
 
 
 JD-TC-CreatePurchase-11
-
     [Documentation]  Create Purchase - batch number is updated
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -838,7 +827,6 @@ JD-TC-CreatePurchase-11
 
 
 JD-TC-CreatePurchase-UH1
-
     [Documentation]  Create Purchase - where store id is empty
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -854,7 +842,6 @@ JD-TC-CreatePurchase-UH1
 
 
 JD-TC-CreatePurchase-UH2
-
     [Documentation]  Create Purchase - store id is invalid
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -872,7 +859,6 @@ JD-TC-CreatePurchase-UH2
 
 
 JD-TC-CreatePurchase-UH3
-
     [Documentation]  Create Purchase - invoice reference number is empty
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -903,7 +889,6 @@ JD-TC-CreatePurchase-UH3
 
 
 JD-TC-CreatePurchase-UH4
-
     [Documentation]  Create Purchase - using an already used invoice reference number.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -917,7 +902,6 @@ JD-TC-CreatePurchase-UH4
 
 
 JD-TC-CreatePurchase-UH5
-
     [Documentation]  Create Purchase - invoice date is empty
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -935,7 +919,6 @@ JD-TC-CreatePurchase-UH5
 
 
 JD-TC-CreatePurchase-UH6
-
     [Documentation]  Create Purchase - vendor id is empty
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -952,7 +935,6 @@ JD-TC-CreatePurchase-UH6
 
 
 JD-TC-CreatePurchase-UH7
-
     [Documentation]  Create Purchase - vendor id is invalid
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -971,7 +953,6 @@ JD-TC-CreatePurchase-UH7
 
 
 JD-TC-CreatePurchase-UH8
-
     [Documentation]  Create Purchase - item catalogue enc id is empty
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -987,7 +968,6 @@ JD-TC-CreatePurchase-UH8
 
 
 JD-TC-CreatePurchase-UH9
-
     [Documentation]  Create Purchase - item catalogue enc id is invalid
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -1004,7 +984,6 @@ JD-TC-CreatePurchase-UH9
 
 
 JD-TC-CreatePurchase-UH10
-
     [Documentation]  Create Purchase - purchase Item dto List is empty
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -1020,7 +999,6 @@ JD-TC-CreatePurchase-UH10
 
 
 JD-TC-CreatePurchase-UH11
-
     [Documentation]  Create Purchase - inventory catalogue encid in invalid
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -1041,7 +1019,6 @@ JD-TC-CreatePurchase-UH11
 
 
 JD-TC-CreatePurchase-UH12
-
     [Documentation]  Create Purchase - quantity is null
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -1060,7 +1037,6 @@ JD-TC-CreatePurchase-UH12
 
 
 JD-TC-CreatePurchase-UH13
-
     [Documentation]  Create Purchase - quantity is negative
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -1080,7 +1056,6 @@ JD-TC-CreatePurchase-UH13
 
 
 JD-TC-CreatePurchase-UH14
-
     [Documentation]  Create Purchase - free quantity as negative
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -1098,7 +1073,6 @@ JD-TC-CreatePurchase-UH14
 
 
 JD-TC-CreatePurchase-UH15
-
     [Documentation]  Create Purchase - amount is empty
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -1115,7 +1089,6 @@ JD-TC-CreatePurchase-UH15
 
 
 JD-TC-CreatePurchase-UH16
-
     [Documentation]  Create Purchase - amount is null
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -1131,7 +1104,6 @@ JD-TC-CreatePurchase-UH16
 
 
 JD-TC-CreatePurchase-UH17
-
     [Documentation]  Create Purchase - amount is negative
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -1150,7 +1122,6 @@ JD-TC-CreatePurchase-UH17
 
 
 JD-TC-CreatePurchase-UH18
-
     [Documentation]  Create Purchase - amount is changed
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -1173,7 +1144,6 @@ JD-TC-CreatePurchase-UH18
 
 
 JD-TC-CreatePurchase-UH19
-
     [Documentation]  Create Purchase - discount Percentage is negative
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -1192,7 +1162,6 @@ JD-TC-CreatePurchase-UH19
 
 
 JD-TC-CreatePurchase-UH20
-
     [Documentation]  Create Purchase - discount percentage is above 100
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -1213,7 +1182,6 @@ JD-TC-CreatePurchase-UH20
 
 
 JD-TC-CreatePurchase-UH21
-
     [Documentation]  Create Purchase - fixed discount is empty
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -1231,7 +1199,6 @@ JD-TC-CreatePurchase-UH21
 
 
 JD-TC-CreatePurchase-UH22
-
     [Documentation]  Create Purchase - fixed discount is null
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -1249,7 +1216,6 @@ JD-TC-CreatePurchase-UH22
 
 
 JD-TC-CreatePurchase-UH23
-
     [Documentation]  Create Purchase - fixed discount is negative
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -1270,7 +1236,6 @@ JD-TC-CreatePurchase-UH23
 
 
 JD-TC-CreatePurchase-UH24
-
     [Documentation]  Create Purchase - fixed discount is above total
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -1289,7 +1254,6 @@ JD-TC-CreatePurchase-UH24
     
 
 JD-TC-CreatePurchase-UH25
-
     [Documentation]  Create Purchase - expairy date is empty
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -1309,7 +1273,6 @@ JD-TC-CreatePurchase-UH25
     Should Be Equal As Strings      ${resp.json()}          ${EXPIRY_DATE_REQ}
 
 JD-TC-CreatePurchase-UH26
-
     [Documentation]  Create Purchase - expairy date is changed
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -1329,7 +1292,6 @@ JD-TC-CreatePurchase-UH26
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_EXPIRY_DATE_ITEM_WITH_BATCH}
 
 JD-TC-CreatePurchase-UH27
-
     [Documentation]  Create Purchase - expairy date is past date
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -1348,7 +1310,6 @@ JD-TC-CreatePurchase-UH27
     Should Be Equal As Strings      ${resp.json()}   ${INVALID_EXPIRY_DATE_X}
 
 JD-TC-CreatePurchase-UH28
-
     [Documentation]  Create Purchase - mrp is empty
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -1364,7 +1325,6 @@ JD-TC-CreatePurchase-UH28
     Should Be Equal As Strings      ${resp.json()}   ${INVALID_MRP}
 
 JD-TC-CreatePurchase-UH29
-
     [Documentation]  Create Purchase - mrp is null
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -1380,7 +1340,6 @@ JD-TC-CreatePurchase-UH29
     Should Be Equal As Strings      ${resp.json()}   ${INVALID_MRP}
 
 JD-TC-CreatePurchase-UH30
-
     [Documentation]  Create Purchase - mrp is negative
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -1399,7 +1358,6 @@ JD-TC-CreatePurchase-UH30
 
 
 JD-TC-CreatePurchase-UH31
-
     [Documentation]  Create Purchase - batch number is empty
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -1418,7 +1376,6 @@ JD-TC-CreatePurchase-UH31
 
 
 JD-TC-CreatePurchase-UH32
-
     [Documentation]  Create Purchase - unit code is empty
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -1439,7 +1396,6 @@ JD-TC-CreatePurchase-UH32
 
 
 JD-TC-CreatePurchase-UH33
-
     [Documentation]  Create Purchase - unit code is invalid
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -1460,7 +1416,6 @@ JD-TC-CreatePurchase-UH33
 
 
 JD-TC-CreatePurchase-UH34
-
     [Documentation]  Create Purchase - without login 
 
     ${invoiceReferenceNo}=  Generate Random String    10    [NUMBERS] [LETTERS]

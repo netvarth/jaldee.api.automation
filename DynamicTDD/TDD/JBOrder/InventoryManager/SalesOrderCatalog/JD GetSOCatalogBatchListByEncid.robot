@@ -965,7 +965,6 @@ JD-TC-Get list by item encId-1
 
 
 JD-TC-Get list by item encId-5
-
     [Documentation]    update batch status as disable and Get list by item encId.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
@@ -1018,7 +1017,6 @@ JD-TC-Get list by item encId-5
 
 
 JD-TC-Get list by item encId-UH1
-
     [Documentation]   Get list by item encId  with invalid catalog item id
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
@@ -1032,7 +1030,6 @@ JD-TC-Get list by item encId-UH1
     
 
 JD-TC-Get list by item encId-UH2
-
     [Documentation]  Get list by item encId without login
 
     ${resp}=   Get list by item encId   ${SO_Cata_Item_Batch_Encid}    
@@ -1041,7 +1038,6 @@ JD-TC-Get list by item encId-UH2
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-Get list by item encId-UH3
-
     [Documentation]  Get list by item encId using sa login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}

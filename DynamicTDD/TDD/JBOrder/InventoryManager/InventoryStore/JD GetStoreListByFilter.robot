@@ -24,7 +24,6 @@ ${invalidEma}        asd122
 *** Test Cases ***
 
 JD-TC-GetStoreListByFilter-1
-
     [Documentation]  Get Store List By Filter - name filter
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -187,7 +186,6 @@ JD-TC-GetStoreListByFilter-1
 
 
 JD-TC-GetStoreListByFilter-2
-
     [Documentation]  Get Store List By Filter - storeNature filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -206,7 +204,6 @@ JD-TC-GetStoreListByFilter-2
     Should Be Equal As Strings  ${resp.json()[0]['emails'][0]}  ${email_id}
 
 JD-TC-GetStoreListByFilter-3
-
     [Documentation]  Get Store List By Filter - storeCode filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -225,7 +222,6 @@ JD-TC-GetStoreListByFilter-3
     Should Be Equal As Strings  ${resp.json()[0]['emails'][0]}  ${email_id2}
 
 JD-TC-GetStoreListByFilter-4
-
     [Documentation]  Get Store List By Filter - encId filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -244,7 +240,6 @@ JD-TC-GetStoreListByFilter-4
     Should Be Equal As Strings  ${resp.json()[0]['emails'][0]}  ${email_id2}
 
 JD-TC-GetStoreListByFilter-5
-
     [Documentation]  Get Store List By Filter - city filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -272,7 +267,6 @@ JD-TC-GetStoreListByFilter-5
 
 
 JD-TC-GetStoreListByFilter-6
-
     [Documentation]  Get Store List By Filter - district filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -299,7 +293,6 @@ JD-TC-GetStoreListByFilter-6
     Should Be Equal As Strings  ${resp.json()[1]['emails'][0]}  ${email_id}
 
 JD-TC-GetStoreListByFilter-7
-
     [Documentation]  Get Store List By Filter - state filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -327,7 +320,6 @@ JD-TC-GetStoreListByFilter-7
 
 
 JD-TC-GetStoreListByFilter-8
-
     [Documentation]  Get Store List By Filter - country filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -354,7 +346,6 @@ JD-TC-GetStoreListByFilter-8
     Should Be Equal As Strings  ${resp.json()[1]['emails'][0]}  ${email_id}
 
 JD-TC-GetStoreListByFilter-9
-
     [Documentation]  Get Store List By Filter - pincode filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -382,7 +373,6 @@ JD-TC-GetStoreListByFilter-9
 
 
 JD-TC-GetStoreListByFilter-10
-
     [Documentation]  Get Store List By Filter - status filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -409,7 +399,6 @@ JD-TC-GetStoreListByFilter-10
     Should Be Equal As Strings  ${resp.json()[1]['emails'][0]}  ${email_id}
 
 JD-TC-GetStoreListByFilter-11
-
     [Documentation]  Get Store List By Filter - filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -437,7 +426,6 @@ JD-TC-GetStoreListByFilter-11
 
 
 JD-TC-GetStoreListByFilter-12
-
     [Documentation]  Get Store List By Filter - storeType filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -465,7 +453,6 @@ JD-TC-GetStoreListByFilter-12
 
 
 JD-TC-GetStoreListByFilter-13
-
     [Documentation]  Get Store List By Filter - without login
 
     ${resp}=    Get store list

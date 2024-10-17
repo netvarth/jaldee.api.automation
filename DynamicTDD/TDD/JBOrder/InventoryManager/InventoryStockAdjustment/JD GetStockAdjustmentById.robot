@@ -26,7 +26,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Get Stock Adjustment By Id-1
-
     [Documentation]  create stock adjustment and get stock adjustment by id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
@@ -216,7 +215,6 @@ JD-TC-Get Stock Adjustment By Id-1
 
 
 JD-TC-Get Stock Adjustment By Id-2
-
     [Documentation]  update stock adjustment by adding more  stockAdjustDetailsDtos then get stock adjustment by id
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
@@ -289,7 +287,6 @@ JD-TC-Get Stock Adjustment By Id-2
 
 
 JD-TC-Get Stock Adjustment By Id-3
-
     [Documentation]  Create stock adjustment with multiple batch enabled item then get by id.
 
 
@@ -416,7 +413,6 @@ JD-TC-Get Stock Adjustment By Id-3
 
 
 JD-TC-Get Stock Adjustment By Id-UH1
-
     [Documentation]  Get stock adjustment By Id without login
 
     ${resp}=  Get Stock Adjustment By Id  ${uid}   
@@ -425,7 +421,6 @@ JD-TC-Get Stock Adjustment By Id-UH1
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-Get Stock Adjustment By Id-UH2
-
     [Documentation]  Get stock adjustment By Id with invalid id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}

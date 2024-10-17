@@ -26,7 +26,6 @@ ${order}        0
 
 *** Test Cases ***
 JD-TC-Get Catalog Batch by Encid-1
-
     [Documentation]  creating batch item when inventory manager is on
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
@@ -630,7 +629,6 @@ JD-TC-Get Catalog Batch by Encid-1
 
 
 JD-TC-Get Catalog Batch by Encid-2
-
     [Documentation]  creating multiple batch item for same catalog item batch when inventory manager is on
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
@@ -812,7 +810,6 @@ JD-TC-Get Catalog Batch by Encid-2
 
 
 JD-TC-Get Catalog Batch by Encid-3
-
     [Documentation]    update batch and get catalog batch by encid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
@@ -868,7 +865,6 @@ JD-TC-Get Catalog Batch by Encid-3
 
 
 JD-TC-Get Catalog Batch by Encid-4
-
     [Documentation]    update batch status as disable and get catalog batch by encid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
@@ -888,7 +884,6 @@ JD-TC-Get Catalog Batch by Encid-4
 
 
 JD-TC-Get Catalog Batch by Encid-UH1
-
     [Documentation]   Get Catalog Item Batch By Encid with invalid catalog batch id
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
@@ -902,7 +897,6 @@ JD-TC-Get Catalog Batch by Encid-UH1
     
 
 JD-TC-Get Catalog Batch by Encid-UH2
-
     [Documentation]   Get Catalog Item Batch By Encid without login
 
     ${resp}=   Get Catalog Item Batch By Encid   ${SO_Cata_Item_Batch_Encid1}    
@@ -911,7 +905,6 @@ JD-TC-Get Catalog Batch by Encid-UH2
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-Get Catalog Batch by Encid-UH3
-
     [Documentation]  Get Catalog Item Batch By Encid using sa login.(inventory manager is false)
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -926,7 +919,6 @@ JD-TC-Get Catalog Batch by Encid-UH3
 
 *** Comments ***
 JD-TC-Get Catalog Batch by Encid-1
-
     [Documentation]   create of a batch of catalog items then get catalog batch by encid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
@@ -1127,7 +1119,6 @@ JD-TC-Get Catalog Batch by Encid-1
 
 
 JD-TC-Get Catalog Batch by Encid-2
-
     [Documentation]   create salesorder catalog items where inventory management is true then create catalog item batch where invmgnt is false then get batch by encid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
@@ -1194,7 +1185,6 @@ JD-TC-Get Catalog Batch by Encid-2
 
 
 JD-TC-Get Catalog Batch by Encid-3
-
     [Documentation]    create new catalog item batch and get catalog batch by encid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}

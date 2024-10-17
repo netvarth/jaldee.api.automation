@@ -26,7 +26,6 @@ ${maxSaleQuantity}   50
 *** Test Cases ***
 
 JD-TC-Get Cart Iems Count -1
-
     [Documentation]  Create cart and check that  count from   provider side
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
@@ -261,7 +260,6 @@ JD-TC-Get Cart Iems Count -1
  
 
 JD-TC-Get Cart Iems Count -2
-
     [Documentation]  Create cart  wwhere item is tax applicable and get that count from provider side
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME303}  ${PASSWORD}
@@ -508,7 +506,6 @@ JD-TC-Get Cart Iems Count -2
 
 
 JD-TC-Get Cart Iems Count -3
-
     [Documentation]  In the sales order catalog, only home delivery is disable and store pickup is enabled. Then, try to add an item to the cart using home delivery without address. then get that  count from provider side
 
 
@@ -678,7 +675,6 @@ JD-TC-Get Cart Iems Count -3
 
 
 JD-TC-Get Cart Iems Count -4
-
     [Documentation]  In the sales order catalog where inventory manager is on , only courier delivery is disable and store pickup is enabled. Then, try to add an item to the cart using Courier Service.get that from provider side
 
 
@@ -866,7 +862,6 @@ JD-TC-Get Cart Iems Count -4
     Should Be Equal As Strings     ${resp.json()}    ${len}  
 
 JD-TC-Get Cart Iems Count -5
-
     [Documentation]  Get Cart Iems of Provider consumer
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
@@ -1099,7 +1094,6 @@ JD-TC-Get Cart Iems Count -5
     Should Be Equal As Strings     ${resp.json()}    ${len}  
 
 JD-TC-Get Cart Iems Count -UH1
-
     [Documentation]  Get Cart Iems of count without login
     ${resp}=    Get Cart Items by provider consumer id   ${cid} 
     Log   ${resp.content}

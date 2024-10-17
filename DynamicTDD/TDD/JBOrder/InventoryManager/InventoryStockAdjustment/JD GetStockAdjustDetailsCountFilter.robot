@@ -26,7 +26,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Get Item Stock adjust Details Counter Filter-1
-
     [Documentation]  Get Item Stock adjust Details Filter  using account.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
@@ -206,7 +205,6 @@ JD-TC-Get Item Stock adjust Details Counter Filter-1
 
 
 JD-TC-Get Item Stock adjust Details Counter Filter-2
-
     [Documentation]  Get Item Stock adjust Details Filter  using invCatalogId.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
@@ -226,7 +224,6 @@ JD-TC-Get Item Stock adjust Details Counter Filter-2
 
 
 JD-TC-Get Item Stock adjust Details Counter Filter-3
-
     [Documentation]  Get Item Stock adjust Details Filter  using invCatalogItemId.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
@@ -245,7 +242,6 @@ JD-TC-Get Item Stock adjust Details Counter Filter-3
 
 
 JD-TC-Get Item Stock adjust Details Counter Filter-4
-
     [Documentation]   Get Item Stock adjust Details Filter  using quantity.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
@@ -267,7 +263,6 @@ JD-TC-Get Item Stock adjust Details Counter Filter-4
 
 
 JD-TC-Get Item Stock adjust Details Counter Filter-5
-
     [Documentation]  Get Item Stock adjust Details Filter  using stockAdjust.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
@@ -285,7 +280,6 @@ JD-TC-Get Item Stock adjust Details Counter Filter-5
     Should Be Equal As Strings    ${resp.json()}    ${count}
 
 JD-TC-Get Item Stock adjust Details Counter Filter-6
-
     [Documentation]  Update Item Stock adjust  using stockAdjust then Get Item Stock adjust Details Filter.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
@@ -317,7 +311,6 @@ JD-TC-Get Item Stock adjust Details Counter Filter-6
     Should Be Equal As Strings    ${resp.json()}    ${count}
 
 JD-TC-Get Item Stock adjust Details Counter Filter-7
-
     [Documentation]  create Item Stock adjust   then Get Item Stock adjust Details Filter.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
@@ -361,7 +354,6 @@ JD-TC-Get Item Stock adjust Details Counter Filter-7
     Should Be Equal As Strings    ${resp.json()}    ${count}
 
 JD-TC-Get Item Stock adjust Details Counter Filter-UH1
-
     [Documentation]  remove all Stock adjust Details then Get Item Stock adjust Details Filter.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
@@ -382,7 +374,6 @@ JD-TC-Get Item Stock adjust Details Counter Filter-UH1
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()}    ${count}
 JD-TC-Get Item Stock adjust Details Counter Filter-UH2
-
     [Documentation]   Get Item Stock adjust Details Filter using invalid invCatalogId.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
@@ -414,7 +405,6 @@ JD-TC-Get Item Stock adjust Details Counter Filter-UH2
     Should Be Equal As Strings    ${resp.json()}    ${count}
 
 JD-TC-Get Item Stock adjust Details Counter Filter-UH3
-
     [Documentation]   Get Item Stock adjust Details Filter using invalid stockAdjust.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
@@ -434,7 +424,6 @@ JD-TC-Get Item Stock adjust Details Counter Filter-UH3
     Should Be Equal As Strings    ${resp.json()}    ${count}
 
 JD-TC-Get Item Stock adjust Details Counter Filter-UH4
-
     [Documentation]   Get Item Stock adjust Details Filter using invalid qty.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
@@ -453,7 +442,6 @@ JD-TC-Get Item Stock adjust Details Counter Filter-UH4
     Should Be Equal As Strings    ${resp.json()}    ${count}
 
 JD-TC-Get Item Stock adjust Details Counter Filter-UH5
-
     [Documentation]   Get Item Stock adjust Details Filter using invalid invCatalogItemId.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
@@ -471,7 +459,6 @@ JD-TC-Get Item Stock adjust Details Counter Filter-UH5
     Should Be Equal As Strings    ${resp.json()}    ${count}
 
 JD-TC-Get Item Stock adjust Details Counter Filter-UH6
-
     [Documentation]   Get Item Stock adjust Details Filter without login.
 
 

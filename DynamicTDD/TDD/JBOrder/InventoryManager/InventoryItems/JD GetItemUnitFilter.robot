@@ -19,7 +19,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-GetitemUitFilter-1
-
     [Documentation]  Get Item Unit Filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
@@ -82,7 +81,6 @@ JD-TC-GetitemUitFilter-1
     Should Be Equal As Strings    ${resp.json()[1]['status']}      ${toggle[0]}
 
 JD-TC-GetitemUitFilter-2
-
     [Documentation]  Get Item Unit Filter - unitCode    
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
@@ -101,7 +99,6 @@ JD-TC-GetitemUitFilter-2
     Should Be Equal As Strings    ${resp.json()[0]['status']}      ${toggle[0]}
 
 JD-TC-GetitemUitFilter-3
-
     [Documentation]  Get Item Unit Filter - unitName
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
@@ -120,7 +117,6 @@ JD-TC-GetitemUitFilter-3
     Should Be Equal As Strings    ${resp.json()[0]['status']}      ${toggle[0]}
 
 JD-TC-GetitemUitFilter-4
-
     [Documentation]  Get Item Unit Filter - status
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
@@ -143,7 +139,6 @@ JD-TC-GetitemUitFilter-4
     Should Be Equal As Strings    ${resp.json()[1]['status']}      ${toggle[0]}
 
 JD-TC-GetitemUitFilter-UH1
-
     [Documentation]  Get Item Unit Filter - withou login
 
     ${resp}=    Get Item Unit Filter
@@ -152,7 +147,6 @@ JD-TC-GetitemUitFilter-UH1
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED}
 
 JD-TC-GetitemUitFilter-UH2
-
     [Documentation]  Get Item Unit Filter - with another provider login
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}

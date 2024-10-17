@@ -27,7 +27,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Update Sales Order Catalog Items-1
-
     [Documentation]  create SO Catalog items with all items having invMgmt set to false (with out Tax)Then Update it's price.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
@@ -186,7 +185,6 @@ JD-TC-Update Sales Order Catalog Items-1
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-Update Sales Order Catalog Items-2
-
     [Documentation]  create SO Catalog items with all items having invMgmt set to false (with out Tax)Then Update it's batchPricing to true.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}

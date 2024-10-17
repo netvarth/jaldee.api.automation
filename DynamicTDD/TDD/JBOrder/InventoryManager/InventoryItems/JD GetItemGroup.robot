@@ -19,7 +19,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-GetItemGroup-1
-
     [Documentation]   Get Item Group
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME15}  ${PASSWORD}
@@ -59,7 +58,6 @@ JD-TC-GetItemGroup-1
     Should Be Equal As Strings    ${resp.json()['status']}       ${toggle[0]} 
 
 JD-TC-GetItemGroup-Uh1
-
     [Documentation]   Get Item Group - with invalid item group id
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME15}  ${PASSWORD}
@@ -73,7 +71,6 @@ JD-TC-GetItemGroup-Uh1
     Should Be Equal As Strings    ${resp.status_code}            200
 
 JD-TC-GetItemGroup-Uh2
-
     [Documentation]   Get Item Group - without login
 
     ${resp}=    Get Item group by id Provider  ${ig_id}
@@ -82,7 +79,6 @@ JD-TC-GetItemGroup-Uh2
     Should Be Equal As Strings    ${resp.json()}                 ${SESSION_EXPIRED}
 
 JD-TC-GetItemGroup-UH3
-
     [Documentation]   Get Item Group - with another provider login
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME15}  ${PASSWORD}

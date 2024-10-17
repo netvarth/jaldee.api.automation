@@ -27,7 +27,6 @@ comment   Dev Removed this url
 
 *** Comments ***
 JD-TC-Get inventory catalog item by inventory catalog encoded id-1
-
     [Documentation]  Get inventory catalog item by inventory catalog encoded id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME41}  ${PASSWORD}
@@ -174,7 +173,6 @@ JD-TC-Get inventory catalog item by inventory catalog encoded id-1
 
 
 JD-TC-Get inventory catalog item by inventory catalog encoded id-2
-
     [Documentation]  Create Inventory Catalog Item from main account then Get inventory catalog item by inventory catalog encoded id from user login.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME41}  ${PASSWORD}
@@ -270,7 +268,6 @@ JD-TC-Get inventory catalog item by inventory catalog encoded id-2
 
 
 JD-TC-Get inventory catalog item by inventory catalog encoded id-3
-
     [Documentation]  update inventory catalog items then Get inventory catalog item by inventory catalog encoded id
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME41}  ${PASSWORD}
@@ -312,7 +309,6 @@ JD-TC-Get inventory catalog item by inventory catalog encoded id-3
     Should Be Equal As Strings    ${resp.json()[1]['item']['spCode']}    ${itemEncIds}
 
 JD-TC-Get inventory catalog item by inventory catalog encoded id-4
-
     [Documentation]  update inventory catalog items status then Get inventory catalog item by inventory catalog encoded id
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME41}  ${PASSWORD}
@@ -356,7 +352,6 @@ JD-TC-Get inventory catalog item by inventory catalog encoded id-4
 
 
 JD-TC-Get inventory catalog item by inventory catalog encoded id-UH1
-
     [Documentation]  Get inventory catalog item by inventory catalog encoded id using invalid encid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME41}  ${PASSWORD}
@@ -372,7 +367,6 @@ JD-TC-Get inventory catalog item by inventory catalog encoded id-UH1
 
 
 JD-TC-Get inventory catalog item by inventory catalog encoded id-UH2
-
     [Documentation]   Get inventory catalog item by inventory catalog encoded id without login.
 
 
@@ -382,7 +376,6 @@ JD-TC-Get inventory catalog item by inventory catalog encoded id-UH2
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-Get inventory catalog item by inventory catalog encoded id-UH5
-
     [Documentation]  Get inventory catalog item by inventory catalog encoded id from sa login login.
 
 
@@ -397,7 +390,6 @@ JD-TC-Get inventory catalog item by inventory catalog encoded id-UH5
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-Get inventory catalog item by inventory catalog encoded id-UH6
-
     [Documentation]  Get inventory catalog item by inventory catalog encoded id using another provider
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}

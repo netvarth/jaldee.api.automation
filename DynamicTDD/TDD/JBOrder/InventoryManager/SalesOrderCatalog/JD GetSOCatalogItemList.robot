@@ -26,7 +26,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Get Sales Order Catalog Items List-1
-
     [Documentation]  Test whether the system can successfully create items with all items having invMgmt set to false (with out Tax) Then it get List by Encid param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -202,7 +201,6 @@ JD-TC-Get Sales Order Catalog Items List-1
     Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${displayName}
 
 JD-TC-Get Sales Order Catalog Items List-2
-
     [Documentation]  update sales order catalog Item .(inventory manager is false) then get sales order list by status
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -230,7 +228,6 @@ JD-TC-Get Sales Order Catalog Items List-2
     Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${displayName}
 
 JD-TC-Get Sales Order Catalog Items List-3
-
     [Documentation]   Get SalesOrder Catalog item List by invCatId
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -259,7 +256,6 @@ JD-TC-Get Sales Order Catalog Items List-3
 
 
 JD-TC-Get Sales Order Catalog Items List-UH1
-
     [Documentation]  Get SalesOrder Catalog item List  with invalid catalog id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -272,7 +268,6 @@ JD-TC-Get Sales Order Catalog Items List-UH1
     Should Be Equal As Strings   ${resp.json()}   []
 
 JD-TC-Get Sales Order Catalog Items List-UH2
-
     [Documentation]  Get SalesOrder Catalog item List without login.
 
     ${resp}=  Get SalesOrder Catalog Item List  sorderCatalogEncId-eq=${SO_Cata_Encid}     encId-eq=${SO_itemEncIds}
@@ -282,7 +277,6 @@ JD-TC-Get Sales Order Catalog Items List-UH2
 
 
 JD-TC-Get Sales Order Catalog Items List-UH3
-
     [Documentation]  Get SalesOrder Catalog item List using sa login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -296,7 +290,6 @@ JD-TC-Get Sales Order Catalog Items List-UH3
 
 
 JD-TC-Get Sales Order Catalog Items List-UH4
-
     [Documentation]  Get SalesOrder Catalog item List using another provider login
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -309,7 +302,6 @@ JD-TC-Get Sales Order Catalog Items List-UH4
     Should Be Equal As Strings   ${resp.json()}   []
 
 JD-TC-Get Sales Order Catalog Items List-UH5
-
     [Documentation]  Get SalesOrder Catalog item List using with out sorderCatalogEncId param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}

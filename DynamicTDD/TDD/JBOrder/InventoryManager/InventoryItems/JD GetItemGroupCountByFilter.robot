@@ -19,7 +19,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-GetItemGroupCount-1
-
     [Documentation]   Create Item Group
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
@@ -65,7 +64,6 @@ JD-TC-GetItemGroupCount-1
 
 
 JD-TC-GetItemGroupCount-2
-
     [Documentation]  Get Item group Count Filter - groupName
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
@@ -78,7 +76,6 @@ JD-TC-GetItemGroupCount-2
     Should Be Equal As Strings    ${resp.json()}              1
 
 JD-TC-GetItemGroupCount-3
-
     [Documentation]  Get Item group Count Filter - groupDesc
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
@@ -91,7 +88,6 @@ JD-TC-GetItemGroupCount-3
     Should Be Equal As Strings    ${resp.json()}              1
 
 JD-TC-GetItemGroupCount-4
-
     [Documentation]  Get Item group Count Filter - status
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
@@ -104,7 +100,6 @@ JD-TC-GetItemGroupCount-4
     Should Be Equal As Strings    ${resp.json()}              1
 
 JD-TC-GetItemGroupCount-UH1
-
     [Documentation]  Get Item group Count Filter - without login
 
     ${resp}=    Get Item group Count Filter 
@@ -114,7 +109,6 @@ JD-TC-GetItemGroupCount-UH1
 
 
 JD-TC-GetItemGroupCount-5
-
     [Documentation]  Get Item group Count Filter - with another provider login
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME0}  ${PASSWORD}

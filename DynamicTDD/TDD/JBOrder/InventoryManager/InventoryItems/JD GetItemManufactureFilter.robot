@@ -19,7 +19,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-GetItemManufactureByFilter-1
-
     [Documentation]  Get Item Manufacture Filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME26}  ${PASSWORD}
@@ -78,7 +77,6 @@ JD-TC-GetItemManufactureByFilter-1
     Should Be Equal As Strings    ${resp.json()[0]['manufacturerName']}    ${manufactureName2}
 
 JD-TC-GetItemManufactureByFilter-2
-
     [Documentation]   Get Item Manufacture Filter - with manufactureCode
  
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME26}  ${PASSWORD}
@@ -94,7 +92,6 @@ JD-TC-GetItemManufactureByFilter-2
 
 
 JD-TC-GetItemManufactureByFilter-3
-
     [Documentation]   Get Item Manufacture Filter - with manufactureName
  
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME26}  ${PASSWORD}
@@ -109,7 +106,6 @@ JD-TC-GetItemManufactureByFilter-3
     Should Be Equal As Strings    ${resp.json()[0]['manufacturerName']}    ${manufactureName}
 
 JD-TC-GetItemManufactureByFilter-4
-
     [Documentation]   Get Item Manufacture Filter - with status enable
  
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME26}  ${PASSWORD}
@@ -128,7 +124,6 @@ JD-TC-GetItemManufactureByFilter-4
     Should Be Equal As Strings    ${resp.json()[0]['manufacturerName']}    ${manufactureName2}
 
 JD-TC-GetItemManufactureByFilter-5
-
     [Documentation]   Get Item Manufacture Filter - with status Disable
  
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME26}  ${PASSWORD}
@@ -141,7 +136,6 @@ JD-TC-GetItemManufactureByFilter-5
     Should Be Equal As Strings    ${resp.json()}    []
 
 JD-TC-GetItemManufactureByFilter-6
-
     [Documentation]   Get Item Manufacture Filter - without login
 
     ${resp}=    Get Item Manufacture Filter  

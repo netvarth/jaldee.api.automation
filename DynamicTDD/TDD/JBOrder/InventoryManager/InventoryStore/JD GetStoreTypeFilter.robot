@@ -20,7 +20,6 @@ Resource          /ebs/TDD/SuperAdminKeywords.robot
 *** Test Cases ***
 
 JD-TC-GetStoreTypeByFilter-1
-
     [Documentation]  Super Admin Create a Store Type (storeNature is PHARMACY)and provide Get Store Type Filter(encId).
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -54,7 +53,6 @@ JD-TC-GetStoreTypeByFilter-1
     Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${St_Id}
 
 JD-TC-GetStoreTypeByFilter-2
-
     [Documentation]  Super Admin Create a Store Type (storeNature is LAB)and Get Store Type Filter(storeNature-LAB).
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -88,7 +86,6 @@ JD-TC-GetStoreTypeByFilter-2
     Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${St_Id1}
 
 JD-TC-GetStoreTypeByFilter-3
-
     [Documentation]  Super Admin Create a Store Type (storeNature is LAB)and Get Store Type Filter(storeNature-PHARMACY).
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -114,7 +111,6 @@ JD-TC-GetStoreTypeByFilter-3
     Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${St_Id}
 
 JD-TC-GetStoreTypeByFilter-4
-
     [Documentation]  Super Admin Create a Store Type (storeNature is RADIOLOGY)and Get Store Type Filter(storeNature-RADIOLOGY).
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -148,7 +144,6 @@ JD-TC-GetStoreTypeByFilter-4
     Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${St_Id2}
 
 JD-TC-GetStoreTypeByFilter-5
-
     [Documentation]   Get Store Type Filter(name).
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -174,7 +169,6 @@ JD-TC-GetStoreTypeByFilter-5
     Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${St_Id2}
 
 JD-TC-GetStoreTypeByFilter-6
-
     [Documentation]   Update store type storenature to PHARMACY andGet Store Type Filter(storeNature).
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}

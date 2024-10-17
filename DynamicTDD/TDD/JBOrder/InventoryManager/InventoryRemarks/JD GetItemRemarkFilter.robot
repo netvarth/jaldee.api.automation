@@ -25,7 +25,6 @@ ${invalidEma}        asd122
 *** Test Cases ***
 
 JD-TC-GetItemRemarksFilter-1
-
     [Documentation]   Get Item Remark Filter using account id. 
 
 
@@ -61,7 +60,6 @@ JD-TC-GetItemRemarksFilter-1
     Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${remarks_encid1}
 
 JD-TC-GetItemRemarksFilter-2
-
     [Documentation]   Get Item Remark Filter using encid.
 
 
@@ -85,7 +83,6 @@ JD-TC-GetItemRemarksFilter-2
 
 
 JD-TC-GetItemRemarksFilter-3
-
     [Documentation]   Get Item Remark Filter using transaction enum.
 
 
@@ -111,7 +108,6 @@ JD-TC-GetItemRemarksFilter-3
 
 
 JD-TC-GetItemRemarksFilter-4
-
     [Documentation]   Get Item Remark Filter using id.
 
 
@@ -141,7 +137,6 @@ JD-TC-GetItemRemarksFilter-4
 
 
 JD-TC-GetItemRemarksFilter-5
-
     [Documentation]   update item remarks  and Get Item Remark filter using accountid.
 
 
@@ -173,7 +168,6 @@ JD-TC-GetItemRemarksFilter-5
     Should Be Equal As Strings    ${resp.json()[3]['encId']}    ${remarks_encid1}
 
 JD-TC-GetItemRemarksFilter-6
-
     [Documentation]    Get Item Remark filter using transactionTypeEnum.
 
 
@@ -192,7 +186,6 @@ JD-TC-GetItemRemarksFilter-6
     Should Be Equal As Strings    ${resp.json()[1]['encId']}    ${remarks_encid1}
 
 JD-TC-GetItemRemarksFilter-UH1
-
     [Documentation]    Get Item Remark filter without login.
 
     ${resp}=  Get Item Remark Filter   transactionTypeEnum-eq=${transactionTypeEnum[0]}   
@@ -201,7 +194,6 @@ JD-TC-GetItemRemarksFilter-UH1
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-GetItemRemarksFilter-UH2
-
     [Documentation]    Get Item Remark filter using invalid data.
 
 
@@ -215,7 +207,6 @@ JD-TC-GetItemRemarksFilter-UH2
     Should Be Equal As Strings    ${resp.json()}    []
     
 JD-TC-GetItemRemarksFilter-UH3
-
     [Documentation]    Get Item Remark filter using EMPTY ID.
 
 
