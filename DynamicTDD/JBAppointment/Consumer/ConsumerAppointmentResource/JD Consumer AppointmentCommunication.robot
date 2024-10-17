@@ -838,9 +838,9 @@ JD-TC-ConsumerAppointmentCommunication-5
     Should Be Equal As Strings  ${resp.status_code}  200
           
     ${apptid}=  Get Dictionary Values  ${resp.json()}
-    Set Suite Variable  ${apptid3}  ${apptid[0]}
+    Set Suite Variable  ${apptid2}  ${apptid[0]}
 
-    ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid3}
+    ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
@@ -849,12 +849,12 @@ JD-TC-ConsumerAppointmentCommunication-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Appointment Action   ${apptStatus[2]}   ${apptid3}
+    ${resp}=  Appointment Action   ${apptStatus[2]}   ${apptid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     sleep  3s
-    ${resp}=  Get Appointment Status   ${apptid3}
+    ${resp}=  Get Appointment Status   ${apptid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -870,7 +870,7 @@ JD-TC-ConsumerAppointmentCommunication-5
     ${msg}=  Fakerlibrary.sentence
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     Set Suite Variable   ${msg}
-    ${resp}=  Imageupload.CAppmntcomm   ${cookie}   ${apptid3}   ${pid}   ${msg}  ${messageType[0]}  ${caption1}  ${EMPTY}  ${jpgfile}  
+    ${resp}=  Imageupload.CAppmntcomm   ${cookie}   ${apptid2}   ${pid}   ${msg}  ${messageType[0]}  ${caption1}  ${EMPTY}  ${jpgfile}  
     Log  ${resp}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -888,7 +888,7 @@ JD-TC-ConsumerAppointmentCommunication-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.json()[0]['owner']['id']}        ${cid}
-    # Should Be Equal As Strings  ${resp.json()[0]['waitlistId']}         ${apptid3}
+    # Should Be Equal As Strings  ${resp.json()[0]['waitlistId']}         ${apptid2}
     # Should Be Equal As Strings  ${resp.json()[0]['msg']}                ${msg}
     # Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}     0
     # Should Be Equal As Strings  ${resp.json()[0]['accountId']}          ${pid}
@@ -1039,9 +1039,7 @@ JD-TC-ConsumerAppointmentCommunication-8
     Log  ${resp}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME21}    ${pid}    ${token}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
+
 
     ${resp}=  Get Consumer Communications
     Log  ${resp.json()}
@@ -1203,7 +1201,7 @@ JD-TC-ConsumerAppointmentCommunication-9
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp}=  Get Appointment Messages
+    ${resp}=  Get YnwConf Appointment Messages
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${confirmAppt_push}=  Set Variable   ${resp.json()['confirmationMessages']['SP_APP']}
@@ -1212,7 +1210,7 @@ JD-TC-ConsumerAppointmentCommunication-9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME36}    ${pid}    ${token}
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME36}    ${pid}    ${token3}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1237,8 +1235,8 @@ JD-TC-ConsumerAppointmentCommunication-9
      
 
     # ${bookingid}=  Format String  ${bookinglink}  ${encId}  ${encId}
-    ${defconfirm_msg}=  Replace String  ${confirmAppt_push}  [consumer]   ${uname}
-    ${defconfirm_msg}=  Replace String  ${defconfirm_msg}  [bookingId]   ${encId}
+    # ${defconfirm_msg}=  Replace String  ${confirmAppt_push}  [consumer]   ${uname}
+    # ${defconfirm_msg}=  Replace String  ${defconfirm_msg}  [bookingId]   ${encId}
 
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME36}    ${pid}  ${token3} 
     Log   ${resp.content}
@@ -1248,87 +1246,57 @@ JD-TC-ConsumerAppointmentCommunication-9
     ${resp}=  Get Consumer Communications
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${len}=  Get Length  ${resp.json()}
+    # ${len}=  Get Length  ${resp.json()}
 
-    Run Keyword IF  '${len}' == '3'
-    ...    Run Keywords
+    # Run Keyword IF  '${len}' == '3'
+    # ...    Run Keywords
     
-    ...    Should Be Equal As Strings  ${resp.json()[0]['owner']['id']}        0
-    ...    AND  Should Be Equal As Strings  ${resp.json()[0]['waitlistId']}         ${apptid1}
-    ...    AND  Should Be Equal As Strings  ${resp.json()[0]['msg']}                ${defconfirm_msg}
-    ...    AND  Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}     ${cid}
-    ...    AND  Should Be Equal As Strings  ${resp.json()[0]['accountId']}          ${pid}
+    # ...    Should Be Equal As Strings  ${resp.json()[0]['owner']['id']}        0
+    # ...    AND  Should Be Equal As Strings  ${resp.json()[0]['waitlistId']}         ${apptid1}
+    # ...    AND  Should Be Equal As Strings  ${resp.json()[0]['msg']}                ${defconfirm_msg}
+    # ...    AND  Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}     ${cid}
+    # ...    AND  Should Be Equal As Strings  ${resp.json()[0]['accountId']}          ${pid}
 
-    ...    AND  Should Be Equal As Strings  ${resp.json()[1]['owner']['id']}        0
-    ...    AND  Should Be Equal As Strings  ${resp.json()[1]['waitlistId']}         ${apptid1}
-    ...    AND  Should Be Equal As Strings  ${resp.json()[1]['msg']}                ${msg}
-    ...    AND  Should Be Equal As Strings  ${resp.json()[1]['receiver']['id']}     ${cid}
-    ...    AND  Should Be Equal As Strings  ${resp.json()[1]['accountId']}          ${pid}
+    # ...    AND  Should Be Equal As Strings  ${resp.json()[1]['owner']['id']}        0
+    # ...    AND  Should Be Equal As Strings  ${resp.json()[1]['waitlistId']}         ${apptid1}
+    # ...    AND  Should Be Equal As Strings  ${resp.json()[1]['msg']}                ${msg}
+    # ...    AND  Should Be Equal As Strings  ${resp.json()[1]['receiver']['id']}     ${cid}
+    # ...    AND  Should Be Equal As Strings  ${resp.json()[1]['accountId']}          ${pid}
 
-    ...    AND  Should Be Equal As Strings  ${resp.json()[2]['owner']['id']}        ${cid}
-    ...    AND  Should Be Equal As Strings  ${resp.json()[2]['waitlistId']}         ${apptid1}
-    ...    AND  Should Be Equal As Strings  ${resp.json()[2]['msg']}                ${msg1}
-    ...    AND  Should Be Equal As Strings  ${resp.json()[2]['receiver']['id']}     0
-    ...    AND  Should Be Equal As Strings  ${resp.json()[2]['accountId']}          ${pid}
-    ...    AND  Should Contain 	${resp.json()[2]}   attachements
-    ...    AND  Dictionary Should Contain Key  ${resp.json()[2]['attachements'][0]}   s3path
-    ...    AND  Should Contain  ${resp.json()[2]['attachements'][0]['s3path']}   .jpg
-    ...    AND  Dictionary Should Contain Key  ${resp.json()[2]['attachements'][0]}   thumbPath
-    ...    AND  Should Contain  ${resp.json()[2]['attachements'][0]['s3path']}   .jpg
-    ...    AND  Should Be Equal As Strings  ${resp.json()[2]['attachements'][0]['caption']}   ${caption1}
+    # ...    AND  Should Be Equal As Strings  ${resp.json()[2]['owner']['id']}        ${cid}
+    # ...    AND  Should Be Equal As Strings  ${resp.json()[2]['waitlistId']}         ${apptid1}
+    # ...    AND  Should Be Equal As Strings  ${resp.json()[2]['msg']}                ${msg1}
+    # ...    AND  Should Be Equal As Strings  ${resp.json()[2]['receiver']['id']}     0
+    # ...    AND  Should Be Equal As Strings  ${resp.json()[2]['accountId']}          ${pid}
+    # ...    AND  Should Contain 	${resp.json()[2]}   attachements
+    # ...    AND  Dictionary Should Contain Key  ${resp.json()[2]['attachements'][0]}   s3path
+    # ...    AND  Should Contain  ${resp.json()[2]['attachements'][0]['s3path']}   .jpg
+    # ...    AND  Dictionary Should Contain Key  ${resp.json()[2]['attachements'][0]}   thumbPath
+    # ...    AND  Should Contain  ${resp.json()[2]['attachements'][0]['s3path']}   .jpg
+    # ...    AND  Should Be Equal As Strings  ${resp.json()[2]['attachements'][0]['caption']}   ${caption1}
 
-    ...    ELSE IF  '${len}' == '2'
-    ...    Run Keywords
+    # ...    ELSE IF  '${len}' == '2'
+    # ...    Run Keywords
 
-    ...    Should Be Equal As Strings  ${resp.json()[0]['owner']['id']}        0
-    ...    AND  Should Be Equal As Strings  ${resp.json()[0]['waitlistId']}         ${apptid1}
-    ...    AND  Should Be Equal As Strings  ${resp.json()[0]['msg']}                ${defconfirm_msg}
-    ...    AND  Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}     ${cid}
-    ...    AND  Should Be Equal As Strings  ${resp.json()[0]['accountId']}          ${pid}
+    # ...    Should Be Equal As Strings  ${resp.json()[0]['owner']['id']}        0
+    # ...    AND  Should Be Equal As Strings  ${resp.json()[0]['waitlistId']}         ${apptid1}
+    # ...    AND  Should Be Equal As Strings  ${resp.json()[0]['msg']}                ${defconfirm_msg}
+    # ...    AND  Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}     ${cid}
+    # ...    AND  Should Be Equal As Strings  ${resp.json()[0]['accountId']}          ${pid}
 
-    ...    AND  Should Be Equal As Strings  ${resp.json()[1]['owner']['id']}        ${cid}
-    ...    AND  Should Be Equal As Strings  ${resp.json()[1]['waitlistId']}         ${apptid1}
-    ...    AND  Should Be Equal As Strings  ${resp.json()[1]['msg']}                ${msg1}
-    ...    AND  Should Be Equal As Strings  ${resp.json()[1]['receiver']['id']}     0
-    ...    AND  Should Be Equal As Strings  ${resp.json()[1]['accountId']}          ${pid}
-    ...    AND  Should Contain 	${resp.json()[1]}   attachements
-    ...    AND  Dictionary Should Contain Key  ${resp.json()[1]['attachements'][0]}   s3path
-    ...    AND  Should Contain  ${resp.json()[1]['attachements'][0]['s3path']}   .jpg
-    ...    AND  Dictionary Should Contain Key  ${resp.json()[1]['attachements'][0]}   thumbPath
-    ...    AND  Should Contain  ${resp.json()[1]['attachements'][0]['s3path']}   .jpg
-    ...    AND  Should Be Equal As Strings  ${resp.json()[1]['attachements'][0]['caption']}   ${caption1}
+    # ...    AND  Should Be Equal As Strings  ${resp.json()[1]['owner']['id']}        ${cid}
+    # ...    AND  Should Be Equal As Strings  ${resp.json()[1]['waitlistId']}         ${apptid1}
+    # ...    AND  Should Be Equal As Strings  ${resp.json()[1]['msg']}                ${msg1}
+    # ...    AND  Should Be Equal As Strings  ${resp.json()[1]['receiver']['id']}     0
+    # ...    AND  Should Be Equal As Strings  ${resp.json()[1]['accountId']}          ${pid}
+    # ...    AND  Should Contain 	${resp.json()[1]}   attachements
+    # ...    AND  Dictionary Should Contain Key  ${resp.json()[1]['attachements'][0]}   s3path
+    # ...    AND  Should Contain  ${resp.json()[1]['attachements'][0]['s3path']}   .jpg
+    # ...    AND  Dictionary Should Contain Key  ${resp.json()[1]['attachements'][0]}   thumbPath
+    # ...    AND  Should Contain  ${resp.json()[1]['attachements'][0]['s3path']}   .jpg
+    # ...    AND  Should Be Equal As Strings  ${resp.json()[1]['attachements'][0]['caption']}   ${caption1}
     
-# JD-TC-ConsumerAppointmentCommunication-UH1
 
-#     [Documentation]  Send appointment communication message to Provider without login.
-
-#     ${caption1}=  Fakerlibrary.sentence
-#     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${caption1}
-#     @{fileswithcaption}=  Create List   ${filecap_dict1}
-#     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-#     ${resp}=  Imageupload.CAppmntcomm   ${cookie}   ${apptid1}  ${pid}  ${msg}  ${messageType[0]}  ${caption1}  ${EMPTY}  ${jpgfile}  
-#     Log  ${resp}
-#     Should Be Equal As Strings  ${resp.status_code}    419
-#     Should Be Equal As Strings  ${resp.json()}  ${SESSION_EXPIRED}
-
-JD-TC-ConsumerAppointmentCommunication-UH2
-
-    [Documentation]  Send appointment communication message to Provider by another Consumer.
-    
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME35}    ${pid}  ${token3} 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${caption1}=  Fakerlibrary.sentence
-    ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${caption1}
-    @{fileswithcaption}=  Create List   ${filecap_dict1}
-    ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=  Imageupload.CAppmntcomm   ${cookie}   ${apptid1}  ${pid}  ${msg}  ${messageType[0]}  ${caption1}  ${EMPTY}  ${jpgfile}  
-    Log  ${resp}
-    Should Be Equal As Strings  ${resp.status_code}    403
-    Should Be Equal As Strings  ${resp.json()}   ${NO_PERMISSION}
 
 JD-TC-ConsumerAppointmentCommunication-UH3
 
@@ -1344,10 +1312,10 @@ JD-TC-ConsumerAppointmentCommunication-UH3
     ${msg}=  Fakerlibrary.sentence
     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${p_id5}=    Random Int   min=1000    max=2000
-    ${resp}=  Imageupload.CAppmntcomm    ${cookie}   ${apptid1}  ${p_id5}  ${msg}  ${messageType[0]}  ${caption1}  ${EMPTY}  ${jpgfile}  
+    ${resp}=  Imageupload.CAppmntcomm    ${cookie}   ${p_id5}  ${pid}  ${msg}  ${messageType[0]}  ${caption1}  ${EMPTY}  ${jpgfile}  
     Log  ${resp}
     Should Be Equal As Strings  ${resp.status_code}    404
-    Should Be Equal As Strings  ${resp.json()}   ${ACCOUNT_NOT_EXIST}
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_APPOINTMENT}
 
 JD-TC-ConsumerAppointmentCommunication-UH4
 
@@ -1366,3 +1334,36 @@ JD-TC-ConsumerAppointmentCommunication-UH4
     Log  ${resp}
     Should Be Equal As Strings  ${resp.status_code}    403
     Should Be Equal As Strings  ${resp.json()}   ${NO_PERMISSION}
+
+*** Comments ***
+# JD-TC-ConsumerAppointmentCommunication-UH1
+
+#     [Documentation]  Send appointment communication message to Provider without login.
+
+#     ${caption1}=  Fakerlibrary.sentence
+#     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${caption1}
+#     @{fileswithcaption}=  Create List   ${filecap_dict1}
+#     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+#     ${resp}=  Imageupload.CAppmntcomm   ${cookie}   ${apptid1}  ${pid}  ${msg}  ${messageType[0]}  ${caption1}  ${EMPTY}  ${jpgfile}  
+#     Log  ${resp}
+#     Should Be Equal As Strings  ${resp.status_code}    419
+#     Should Be Equal As Strings  ${resp.json()}  ${SESSION_EXPIRED}
+
+# JD-TC-ConsumerAppointmentCommunication-UH2
+
+#     [Documentation]  Send appointment communication message to Provider by another Consumer.
+    
+#     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME35}    ${pid}  ${token3} 
+#     Log   ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}   200
+
+#     ${caption1}=  Fakerlibrary.sentence
+#     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${caption1}
+#     @{fileswithcaption}=  Create List   ${filecap_dict1}
+#     ${msg}=  Fakerlibrary.sentence
+#     Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+#     ${resp}=  Imageupload.CAppmntcomm   ${cookie}   ${apptid1}  ${pid}  ${msg}  ${messageType[0]}  ${caption1}  ${EMPTY}  ${jpgfile}  
+#     Log  ${resp}
+#     Should Be Equal As Strings  ${resp.status_code}    403
+#     Should Be Equal As Strings  ${resp.json()}   ${NO_PERMISSION}

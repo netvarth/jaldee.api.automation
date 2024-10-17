@@ -715,10 +715,18 @@ JD-TC-AddToWaitlist-UH6
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${cid8}  ${resp.json()}
-    
-      ${resp}=  Add To Waitlist  ${cid8}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid8} 
+
+      ${SERVICE1}=    generate_service_name
+      ${s_id}=  Create Sample Service  ${SERVICE1}
+
+      ${resp}=  Sample Queue  ${loc_id1}   ${s_id}
+      Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${resp}=  Add To Waitlist  ${cid8}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid8} 
+      Set Test Variable  ${q_id}  ${resp.json()}
+    
+      ${resp}=  Add To Waitlist  ${cid8}  ${s_id}  ${q_id}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid8} 
+      Should Be Equal As Strings  ${resp.status_code}  200
+      ${resp}=  Add To Waitlist  ${cid8}  ${s_id}  ${q_id}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid8} 
       Should Be Equal As Strings  ${resp.status_code}  422
       Should Be Equal As Strings  "${resp.json()}"    	"${WAITLIST_CUSTOMER_ALREADY_IN}"
 
