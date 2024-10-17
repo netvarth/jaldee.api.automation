@@ -2267,7 +2267,7 @@ JD-TC-AddMultipleWaitlistLabel-15
 
     FOR   ${a}  IN RANGE   15
 
-        ${PO_Number}    Generate random string    4    ${digits} 
+        ${PO_Number}    Generate random string    4    0123456789
         ${PO_Number}    Convert To Integer  ${PO_Number}
         ${CUSERPH}=  Evaluate  ${CUSERNAME}+${PO_Number}
         Set Test Variable  ${CUSERPH${a}}  ${CUSERPH}
@@ -2557,6 +2557,30 @@ JD-TC-AddMultipleWaitlistLabel-UH3
     ${wl_i}=   Set Variable   ${resp.json()[${i}]['ynwUuid']}
     ${wl_j}=   Set Variable   ${resp.json()[${j}]['ynwUuid']}
 
+    ${account_id}=  get_acc_id  ${HLPUSERNAME17}
+
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Suite Variable  ${PCPHONENO}  555${PH_Number}
+
+    ${fname}=  FakerLibrary.first_name
+    ${lname}=  FakerLibrary.last_name
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+
+    ${resp}=  AddCustomer  ${PCPHONENO}    firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  email=${pc_emailid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  Send Otp For Login    ${PCPHONENO}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Verify Otp For Login   ${PCPHONENO}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+    
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200

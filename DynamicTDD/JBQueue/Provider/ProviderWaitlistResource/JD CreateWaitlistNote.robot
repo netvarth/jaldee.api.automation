@@ -797,7 +797,7 @@ JD-TC-Provider Note-9
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${wid}=  Get Dictionary Values  ${resp.json()}
-    Set Test Variable  ${uuid}  ${wid[0]}   
+    Set Suite Variable  ${uuid}  ${wid[0]}   
 
     ${cookie}  ${resp}=   Imageupload.spLogin  ${HLPUSERNAME28}  ${PASSWORD}
     Log  ${resp.json()}
@@ -838,7 +838,7 @@ JD-TC-Provider Note-UH1
 
     
 JD-TC-Provider Note-UH2
-    [Documentation]   create note by consumer
+    [Documentation]   create note by provider consumer
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Log   ${resp.content}
@@ -931,10 +931,10 @@ JD-TC-Provider Note-UH6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}  
-    ${ser_name1}=   FakerLibrary.word
+    ${ser_name1}=   generate_service_name 
     ${resp}=   Create Sample Service  ${ser_name1}
     Set Test Variable    ${ser_id1}    ${resp}  
-    ${ser_name2}=   FakerLibrary.word
+    ${ser_name2}=   generate_service_name 
     ${resp}=   Create Sample Service  ${ser_name2}
     Set Test Variable    ${ser_id2}    ${resp}  
     ${q_name}=    FakerLibrary.name
