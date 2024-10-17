@@ -19,7 +19,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-UpdateItemManufactureStatus-1
-
     [Documentation]  Update Item Manufacture Status
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME47}  ${PASSWORD}
@@ -65,7 +64,6 @@ JD-TC-UpdateItemManufactureStatus-1
     Should Be Equal As Strings    ${resp.json()['status']}              ${toggle[1]}
 
 JD-TC-UpdateItemManufactureStatus-2
-
     [Documentation]  Update Item Manufacture Status - Disable to Disable
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME47}  ${PASSWORD}
@@ -85,7 +83,6 @@ JD-TC-UpdateItemManufactureStatus-2
     Should Be Equal As Strings    ${resp.status_code}    422
 
 JD-TC-UpdateItemManufactureStatus-3
-
     [Documentation]  Update Item Manufacture Status - Disable to Enable
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME47}  ${PASSWORD}
@@ -113,7 +110,6 @@ JD-TC-UpdateItemManufactureStatus-3
     Should Be Equal As Strings    ${resp.json()['status']}              ${toggle[0]}
 
 JD-TC-UpdateItemManufactureStatus-4
-
     [Documentation]  Update Item Manufacture Status - Enable to Enable
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME47}  ${PASSWORD}
@@ -134,7 +130,6 @@ JD-TC-UpdateItemManufactureStatus-4
 
 
 JD-TC-UpdateItemManufactureStatus-5
-
     [Documentation]  Update Item Manufacture Status - without login
 
     ${resp}=    Update Item Manufacture Status  ${mf_id}  ${toggle[0]}

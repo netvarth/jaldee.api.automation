@@ -19,7 +19,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-CreateItemHsn-1
-
     [Documentation]  Create Item Hsn
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
@@ -58,7 +57,6 @@ JD-TC-CreateItemHsn-1
 
 
 JD-TC-CreateItemHsn-Uh1
-
     [Documentation]  Create Item Hsn - where hsn code is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
@@ -72,7 +70,6 @@ JD-TC-CreateItemHsn-Uh1
     
 
 JD-TC-CreateItemHsn-UH2
-
     [Documentation]  Create Item Hsn - without login
 
     ${resp}=    Create Item hns  ${hsnCode} 

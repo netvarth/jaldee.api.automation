@@ -29,7 +29,6 @@ ${order}        0
 *** Test Cases ***
 
 JD-TC-GetInvAuditlogByUid-1
-
     [Documentation]  Create inventory item, add item to inventory cataloge, then verify auditlogByUid.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -169,7 +168,6 @@ JD-TC-GetInvAuditlogByUid-1
     Should Be Equal As Strings  ${resp.json()[0]['userId']}             ${user_id}
 
 JD-TC-GetInvAuditlogByUid-2
-
     [Documentation]  Update inventory cataloge, then verify auditlogByUid.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
@@ -214,7 +212,6 @@ JD-TC-GetInvAuditlogByUid-2
     Should Be Equal As Strings  ${resp.json()[1]['userId']}             ${user_id}
 
 JD-TC-GetInvAuditlogByUid-3
-
     [Documentation]  Update inventory catalog status, then verify auditlogByUid.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
@@ -256,7 +253,6 @@ JD-TC-GetInvAuditlogByUid-3
     Should Be Equal As Strings  ${resp.json()[2]['userId']}             ${user_id}
 
 JD-TC-GetInvAuditlogByUid-4
-
     [Documentation]  Provider do the purchase then verify auditlogByUid.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
@@ -686,7 +682,6 @@ JD-TC-GetInvAuditlogByUid-4
     Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByUid-5
-
     [Documentation]  Update purchase then verify auditlogByUid.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
@@ -740,7 +735,6 @@ JD-TC-GetInvAuditlogByUid-5
     Should Be Equal As Strings  ${resp.json()[1]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByUid-6
-
     [Documentation]  Update purchase status then verify auditlogByUid.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
@@ -796,7 +790,6 @@ JD-TC-GetInvAuditlogByUid-6
     Should Be Equal As Strings  ${resp.json()[2]['userId']}   ${user_id}
 
 JD-TC-GetInvAuditlogByUid-7
-
     [Documentation]  Provider add Remark then verifing with get auditlogByUid.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
@@ -824,7 +817,6 @@ JD-TC-GetInvAuditlogByUid-7
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByUid-8
-
     [Documentation]  Provider Adjust the stock then verifing with get auditlogByUid.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
@@ -865,7 +857,6 @@ JD-TC-GetInvAuditlogByUid-8
     Should Contain              ${resp.json()[0]['dateTime']}   ${datetime01} 
 
 JD-TC-GetInvAuditlogByUid-9
-
     [Documentation]  update the stock Adjusted then verifing with get auditlogByUid.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}

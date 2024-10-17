@@ -32,7 +32,6 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-Get Inventory Item Count-1
-
     [Documentation]  Get Inventory Item Count
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME319}  ${PASSWORD}
@@ -558,7 +557,6 @@ JD-TC-Get Inventory Item Count-1
 
 
 JD-TC-Get Inventory Item Count-2
-
     [Documentation]  Get Inventory Item Count
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME319}  ${PASSWORD}
@@ -571,7 +569,6 @@ JD-TC-Get Inventory Item Count-2
     Should Be Equal As Strings    ${resp.json()}    1
 
 JD-TC-Get Inventory Item Count-UH1
-
     [Documentation]  Get Inventory Item Count
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME319}  ${PASSWORD}

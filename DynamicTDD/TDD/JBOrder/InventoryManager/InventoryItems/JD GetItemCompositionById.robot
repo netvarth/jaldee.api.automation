@@ -19,7 +19,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-GetItemComposition-1
-
     [Documentation]  Get Item Composition
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
@@ -52,7 +51,6 @@ JD-TC-GetItemComposition-1
     Should Be Equal As Strings    ${resp.json()['status']}             ${toggle[0]}
 
 JD-TC-GetItemComposition-UH1
-
     [Documentation]  Get Item Composition - composition code is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
@@ -68,7 +66,6 @@ JD-TC-GetItemComposition-UH1
 
 
 JD-TC-GetItemComposition-UH2
-
     [Documentation]  Get Item Composition - without login
 
     ${resp}=    Get Item Composition by id   ${compositionCode}
@@ -78,7 +75,6 @@ JD-TC-GetItemComposition-UH2
 
 
 JD-TC-GetItemComposition-UH3
-
     [Documentation]  Get Item Composition - with another login
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}

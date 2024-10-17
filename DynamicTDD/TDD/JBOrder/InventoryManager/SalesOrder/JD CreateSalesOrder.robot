@@ -30,7 +30,6 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-Create Sales Order-1
-
     [Documentation]   Create a sales Order with Valid Details.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
@@ -374,7 +373,6 @@ JD-TC-Create Sales Order-1
     Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
 # *** comments ***
 JD-TC-Create Sales Order-2
-
     [Documentation]   Create a sales Order where quantity passes as zero
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
@@ -391,7 +389,6 @@ JD-TC-Create Sales Order-2
     Should Be Equal As Strings    ${resp.json()}   ${QUANTITY_REQUIRED}
 
 JD-TC-Create Sales Order-3
-
     [Documentation]   Create a sales Order using invalid provider consumer id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
@@ -409,7 +406,6 @@ JD-TC-Create Sales Order-3
     Should Be Equal As Strings    ${resp.json()}   ${INVALID_CONS_ID}
 
 JD-TC-Create Sales Order-4
-
     [Documentation]   Create a sales Order where sales order catalog id is invalid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
@@ -426,7 +422,6 @@ JD-TC-Create Sales Order-4
 
 
 JD-TC-Create Sales Order-5
-
     [Documentation]   Create a sales Order without login.
 
     ${quantity}=    Random Int  min=2   max=5
@@ -439,7 +434,6 @@ JD-TC-Create Sales Order-5
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-Create Sales Order-6
-
     [Documentation]   Create a sales Order using sa login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -455,7 +449,6 @@ JD-TC-Create Sales Order-6
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-Create Sales Order-7
-
     [Documentation]   Create a sales Order using provider id instead of provider consumer id
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
@@ -470,7 +463,6 @@ JD-TC-Create Sales Order-7
     Should Be Equal As Strings    ${resp.json()}   ${INVALID_CONS_ID}
 
 JD-TC-Create Sales Order-8
-
     [Documentation]   Create a sales Order using same item add two times.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
@@ -487,7 +479,6 @@ JD-TC-Create Sales Order-8
     Should Be Equal As Strings    ${resp.status_code}   200
 
 JD-TC-Create Sales Order-9
-
     [Documentation]   Create a sales Order add invalid one item.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
@@ -505,7 +496,6 @@ JD-TC-Create Sales Order-9
     Should Be Equal As Strings    ${resp.json()}   ${INVALID_ITEMID}
 
 JD-TC-Create Sales Order-10
-
     [Documentation]   Create a sales Order add Two different item.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
@@ -529,7 +519,6 @@ JD-TC-Create Sales Order-10
 
 
 JD-TC-Create Sales Order-11
-
     [Documentation]   Create a sales Order with prescribedBy details.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
@@ -560,7 +549,6 @@ JD-TC-Create Sales Order-11
     # Set Suite Variable   ${SO_Encid}     ${resp.json()['encId']}
 
 JD-TC-Create Sales Order-12
-
     [Documentation]   Create a sales Order with billingAddress , homeDeliveryAddress , notes , notesForCustomer details.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}
@@ -620,7 +608,6 @@ JD-TC-Create Sales Order-12
 
 
 JD-TC-Create Sales Order-13
-
     [Documentation]   Create a sales Order with Create SalesOrder Catalog Item-invMgmt True.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME16}  ${PASSWORD}

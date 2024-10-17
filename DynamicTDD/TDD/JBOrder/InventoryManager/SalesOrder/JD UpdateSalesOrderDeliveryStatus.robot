@@ -29,7 +29,6 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-Update Sales Order Delivery Status-1
-
     [Documentation]   Create a sales Order with Valid Details then Update Sales Order Delivery Status .
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME23}  ${PASSWORD}
@@ -265,7 +264,6 @@ JD-TC-Update Sales Order Delivery Status-1
 
 
 JD-TC-Update Sales Order Delivery Status-2
-
     [Documentation]    Update Sales Order Delivery Status ORDER_RECEIVED to PACKING .
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME23}  ${PASSWORD}
@@ -282,7 +280,6 @@ JD-TC-Update Sales Order Delivery Status-2
     Should Be Equal As Strings    ${resp.json()['deliveryStatus']}                                  ${deliveryStatus[2]}
 
 JD-TC-Update Sales Order Delivery Status-3
-
     [Documentation]    Update Sales Order Delivery Status PACKING to READY_FOR_PICKUP .
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME23}  ${PASSWORD}
@@ -299,7 +296,6 @@ JD-TC-Update Sales Order Delivery Status-3
     Should Be Equal As Strings    ${resp.json()['deliveryStatus']}                                  ${deliveryStatus[3]}
 
 JD-TC-Update Sales Order Delivery Status-4
-
     [Documentation]    Update Sales Order Delivery Status READY_FOR_PICKUP to IN_TRANSIST .
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME23}  ${PASSWORD}

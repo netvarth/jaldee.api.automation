@@ -30,7 +30,6 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-GetRXPrescriptionItemByFilter-1
-
     [Documentation]    Get RX Prescription Item By Filter
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
@@ -604,7 +603,6 @@ JD-TC-GetRXPrescriptionItemByFilter-1
     Should Be Equal As Strings      ${resp.status_code}             200
 
 JD-TC-GetRXPrescriptionItemByFilter-2
-
     [Documentation]    Get RX Prescription Item By Filter - id
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -625,7 +623,6 @@ JD-TC-GetRXPrescriptionItemByFilter-2
     Should Be Equal As Strings      ${resp.json()[0]['prescriptioinUid']}       ${prescription_id}
 
 JD-TC-GetRXPrescriptionItemByFilter-3
-
     [Documentation]    Get RX Prescription Item By Filter - account
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -646,7 +643,6 @@ JD-TC-GetRXPrescriptionItemByFilter-3
     Should Be Equal As Strings      ${resp.json()[0]['prescriptioinUid']}       ${prescription_id} 
 
 JD-TC-GetRXPrescriptionItemByFilter-4
-
     [Documentation]    Get RX Prescription Item By Filter - spItemCode
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -667,7 +663,6 @@ JD-TC-GetRXPrescriptionItemByFilter-4
     Should Be Equal As Strings      ${resp.json()[0]['prescriptioinUid']}       ${prescription_id} 
 
 *** Comments ***
-
     [Documentation]    Get RX Prescription Item By Filter - medicineName
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -688,7 +683,6 @@ JD-TC-GetRXPrescriptionItemByFilter-4
     Should Be Equal As Strings      ${resp.json()[0]['prescriptioinUid']}       ${prescription_id} 
 
 JD-TC-GetRXPrescriptionItemByFilter-6
-
     [Documentation]    Get RX Prescription Item By Filter - duration
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -710,7 +704,6 @@ JD-TC-GetRXPrescriptionItemByFilter-6
 
 
 JD-TC-GetRXPrescriptionItemByFilter-7
-
     [Documentation]    Get RX Prescription Item By Filter - frequency
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -741,7 +734,6 @@ JD-TC-GetRXPrescriptionItemByFilter-7
     Should Be Equal As Strings      ${resp.json()[1]['prescriptioinUid']}       ${prescription_id}
 
 JD-TC-GetRXPrescriptionItemByFilter-8
-
     [Documentation]    Get RX Prescription Item By Filter - dosage
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -772,7 +764,6 @@ JD-TC-GetRXPrescriptionItemByFilter-8
     Should Be Equal As Strings      ${resp.json()[1]['prescriptioinUid']}       ${prescription_id}
 
 JD-TC-GetRXPrescriptionItemByFilter-9
-
     [Documentation]    Get RX Prescription Item By Filter - description
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -804,7 +795,6 @@ JD-TC-GetRXPrescriptionItemByFilter-9
 
 
 JD-TC-GetRXPrescriptionItemByFilter-10
-
     [Documentation]    Get RX Prescription Item By Filter - quantity
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -833,7 +823,6 @@ JD-TC-GetRXPrescriptionItemByFilter-10
 
 
 JD-TC-GetRXPrescriptionItemByFilter-11
-
     [Documentation]    Get RX Prescription Item By Filter - duration
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -854,7 +843,6 @@ JD-TC-GetRXPrescriptionItemByFilter-11
     Should Be Equal As Strings      ${resp.json()[0]['prescriptioinUid']}       ${prescription_id} 
 
 JD-TC-GetRXPrescriptionItemByFilter-12
-
     [Documentation]    Get RX Prescription Item By Filter - duration
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -875,7 +863,6 @@ JD-TC-GetRXPrescriptionItemByFilter-12
     Should Be Equal As Strings      ${resp.json()[0]['prescriptioinUid']}       ${prescription_id} 
 
 JD-TC-GetRXPrescriptionItemByFilter-13
-
     [Documentation]    Get RX Prescription Item By Filter - duration
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -896,7 +883,6 @@ JD-TC-GetRXPrescriptionItemByFilter-13
     Should Be Equal As Strings      ${resp.json()[0]['prescriptioinUid']}       ${prescription_id} 
 
 JD-TC-GetRXPrescriptionItemByFilter-14
-
     [Documentation]    Get RX Prescription Item By Filter - duration
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -917,7 +903,6 @@ JD-TC-GetRXPrescriptionItemByFilter-14
     Should Be Equal As Strings      ${resp.json()[0]['prescriptioinUid']}       ${prescription_id} 
 
 JD-TC-GetRXPrescriptionItemByFilter-15
-
     [Documentation]    Get RX Prescription Item By Filter - duration
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -938,7 +923,6 @@ JD-TC-GetRXPrescriptionItemByFilter-15
     Should Be Equal As Strings      ${resp.json()[0]['prescriptioinUid']}       ${prescription_id} 
 
 JD-TC-GetRXPrescriptionItemByFilter-16
-
     [Documentation]    Get RX Prescription Item By Filter - duration
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -959,7 +943,6 @@ JD-TC-GetRXPrescriptionItemByFilter-16
     Should Be Equal As Strings      ${resp.json()[0]['prescriptioinUid']}       ${prescription_id} 
 
 JD-TC-GetRXPrescriptionItemByFilter-17
-
     [Documentation]    Get RX Prescription Item By Filter - duration
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -980,7 +963,6 @@ JD-TC-GetRXPrescriptionItemByFilter-17
     Should Be Equal As Strings      ${resp.json()[0]['prescriptioinUid']}       ${prescription_id} 
 
 JD-TC-GetRXPrescriptionItemByFilter-18
-
     [Documentation]    Get RX Prescription Item By Filter - duration
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}

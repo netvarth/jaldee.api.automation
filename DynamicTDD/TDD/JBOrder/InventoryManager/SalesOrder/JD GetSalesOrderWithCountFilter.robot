@@ -31,7 +31,6 @@ ${s_len}            1
 *** Test Cases ***
 
 JD-TC-Get Sales Order With Count Filter -1
-
     [Documentation]   Create a sales Order then try to get sales order count with encId param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
@@ -323,7 +322,6 @@ JD-TC-Get Sales Order With Count Filter -1
     Should Be Equal As Strings    ${resp.json()}                 ${s_len}                         
     
 JD-TC-Get Sales Order With Count Filter -2
-
     [Documentation]    Try to get sales order count with uid param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
@@ -336,7 +334,6 @@ JD-TC-Get Sales Order With Count Filter -2
     Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
 
 JD-TC-Get Sales Order With Count Filter -3
-
     [Documentation]    Try to get sales order count with locationId param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
@@ -348,7 +345,6 @@ JD-TC-Get Sales Order With Count Filter -3
     Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
 
 JD-TC-Get Sales Order With Count Filter -4
-
     [Documentation]    Try to get sales order count with locationName param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
@@ -366,7 +362,6 @@ JD-TC-Get Sales Order With Count Filter -4
     Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
 
 JD-TC-Get Sales Order With Count Filter -5
-
     [Documentation]    Try to get sales order count with storeId param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
@@ -379,7 +374,6 @@ JD-TC-Get Sales Order With Count Filter -5
     Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
 
 JD-TC-Get Sales Order With Count Filter -6
-
     [Documentation]    Try to get sales order count with storeName param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
@@ -391,7 +385,6 @@ JD-TC-Get Sales Order With Count Filter -6
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
 JD-TC-Get Sales Order With Count Filter -7
-
     [Documentation]    Try to get sales order count with orderNum param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
@@ -404,7 +397,6 @@ JD-TC-Get Sales Order With Count Filter -7
     Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
 
 JD-TC-Get Sales Order With Count Filter -8
-
     [Documentation]    Try to get sales order count with rxRefId param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
@@ -417,7 +409,6 @@ JD-TC-Get Sales Order With Count Filter -8
     Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
 
 JD-TC-Get Sales Order With Count Filter -9
-
     [Documentation]    Try to get sales order count with providerConsumerName param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
@@ -430,7 +421,6 @@ JD-TC-Get Sales Order With Count Filter -9
     Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
 
 JD-TC-Get Sales Order With Count Filter -10
-
     [Documentation]    Try to get sales order count with sorderCatalogId param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
@@ -443,7 +433,6 @@ JD-TC-Get Sales Order With Count Filter -10
     Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
 
 JD-TC-Get Sales Order With Count Filter -11
-
     [Documentation]    Try to get sales order count with soCatalogName param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
@@ -456,7 +445,6 @@ JD-TC-Get Sales Order With Count Filter -11
     Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
 
 JD-TC-Get Sales Order With Count Filter -12
-
     [Documentation]    Try to get sales order count with originFrom param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
@@ -469,7 +457,6 @@ JD-TC-Get Sales Order With Count Filter -12
     Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
 
 JD-TC-Get Sales Order With Count Filter -13
-
     [Documentation]    Try to get sales order count with orderType param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
@@ -482,7 +469,6 @@ JD-TC-Get Sales Order With Count Filter -13
     Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
 
 JD-TC-Get Sales Order With Count Filter -14
-
     [Documentation]    Try to get sales order count with orderStatus param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
@@ -495,7 +481,6 @@ JD-TC-Get Sales Order With Count Filter -14
     Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
 
 JD-TC-Get Sales Order With Count Filter -15
-
     [Documentation]    Try to get sales order count with deliveryType param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
@@ -508,7 +493,6 @@ JD-TC-Get Sales Order With Count Filter -15
     Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
 
 JD-TC-Get Sales Order With Count Filter -16
-
     [Documentation]    Try to get sales order count with deliveryStatus param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
@@ -523,7 +507,6 @@ JD-TC-Get Sales Order With Count Filter -16
     
 *** Comments ***
 JD-TC-Get Sales Order With Count Filter -17
-
     [Documentation]    Try to get sales order count with partnerSpAccountId param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
@@ -536,7 +519,6 @@ JD-TC-Get Sales Order With Count Filter -17
     Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
 
 JD-TC-Get Sales Order With Count Filter -18
-
     [Documentation]    Try to get sales order count with partnerSpName param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
@@ -549,7 +531,6 @@ JD-TC-Get Sales Order With Count Filter -18
     Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
 
 JD-TC-Get Sales Order With Count Filter -19
-
     [Documentation]    Try to get sales order count with partnerSpUserId param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
@@ -562,7 +543,6 @@ JD-TC-Get Sales Order With Count Filter -19
     Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
 
 JD-TC-Get Sales Order With Count Filter -20
-
     [Documentation]    Try to get sales order count with partnerSpUserName param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
@@ -575,7 +555,6 @@ JD-TC-Get Sales Order With Count Filter -20
     Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
 
 JD-TC-Get Sales Order With Count Filter -21
-
     [Documentation]    Try to get sales order count with partnerSpRxOwnerId param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}
@@ -588,7 +567,6 @@ JD-TC-Get Sales Order With Count Filter -21
     Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
 
 JD-TC-Get Sales Order With Count Filter -22
-
     [Documentation]    Try to get sales order count with partnerSpRxOwnerName param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME22}  ${PASSWORD}

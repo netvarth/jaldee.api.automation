@@ -30,7 +30,6 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-UpdatePrescription-1
-
     [Documentation]    Update Prescription
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
@@ -575,7 +574,6 @@ JD-TC-UpdatePrescription-1
 
 
 JD-TC-UpdatePrescription-2
-
     [Documentation]    Update Prescription - prescription id is invalid
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -593,7 +591,6 @@ JD-TC-UpdatePrescription-2
 
 
 JD-TC-UpdatePrescription-3
-
     [Documentation]    Update Prescription - Provider consumer id is invalid
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -608,7 +605,6 @@ JD-TC-UpdatePrescription-3
     Should Be Equal As Strings      ${resp.json()}          ${CONSUMER_NOT_FOUND}
 
 JD-TC-UpdatePrescription-4
-
     [Documentation]    Update Prescription - Provider consumer id is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -621,7 +617,6 @@ JD-TC-UpdatePrescription-4
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_PROVIDERCONSUMER_ID}
 
 JD-TC-UpdatePrescription-5
-
     [Documentation]    Update Prescription - invalid doc id
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -636,7 +631,6 @@ JD-TC-UpdatePrescription-5
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_USER_ID}
 
 JD-TC-UpdatePrescription-6
-
     [Documentation]    Update Prescription - doc id is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -649,7 +643,6 @@ JD-TC-UpdatePrescription-6
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_Doctor_ID}
 
 JD-TC-UpdatePrescription-7
-
     [Documentation]    Update Prescription - medicine name is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -684,7 +677,6 @@ JD-TC-UpdatePrescription-7
     Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['prescriptioinUid']}    ${prescription_id}
 
 JD-TC-UpdatePrescription-8
-
     [Documentation]    Update Prescription - medicine name is changed
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -721,7 +713,6 @@ JD-TC-UpdatePrescription-8
     Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['prescriptioinUid']}    ${prescription_id}
 
 JD-TC-UpdatePrescription-9
-
     [Documentation]    Update Prescription - duration is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -758,7 +749,6 @@ JD-TC-UpdatePrescription-9
     # Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['prescriptioinUid']}    ${prescription_id}
 
 JD-TC-UpdatePrescription-10
-
     [Documentation]    Update Prescription - duration is changed
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -797,7 +787,6 @@ JD-TC-UpdatePrescription-10
 
 
 JD-TC-UpdatePrescription-11
-
     [Documentation]    Update Prescription - quantity is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -834,7 +823,6 @@ JD-TC-UpdatePrescription-11
     # Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['prescriptioinUid']}    ${prescription_id}
 
 JD-TC-UpdatePrescription-12
-
     [Documentation]    Update Prescription - quantity is changed
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -873,7 +861,6 @@ JD-TC-UpdatePrescription-12
 
 
 JD-TC-UpdatePrescription-13
-
     [Documentation]    Update Prescription - description is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -908,7 +895,6 @@ JD-TC-UpdatePrescription-13
     Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['prescriptioinUid']}    ${prescription_id}
 
 JD-TC-UpdatePrescription-14
-
     [Documentation]    Update Prescription - description is changed
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -945,7 +931,6 @@ JD-TC-UpdatePrescription-14
     Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['prescriptioinUid']}    ${prescription_id}
 
 JD-TC-UpdatePrescription-15
-
     [Documentation]    Update Prescription - item code is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -981,7 +966,6 @@ JD-TC-UpdatePrescription-15
 
 
 JD-TC-UpdatePrescription-16
-
     [Documentation]    Update Prescription - item code is invalid
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1018,7 +1002,6 @@ JD-TC-UpdatePrescription-16
     Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['prescriptioinUid']}    ${prescription_id}
 
 JD-TC-UpdatePrescription-17
-
     [Documentation]    Update Prescription - dosage is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1032,7 +1015,6 @@ JD-TC-UpdatePrescription-17
 
 
 JD-TC-UpdatePrescription-18
-
     [Documentation]    Update Prescription - dosage is chamged
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1070,7 +1052,6 @@ JD-TC-UpdatePrescription-18
     Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['prescriptioinUid']}    ${prescription_id}
 
 JD-TC-UpdatePrescription-19
-
     [Documentation]    Update Prescription - frequency is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1084,7 +1065,6 @@ JD-TC-UpdatePrescription-19
     
 
 JD-TC-UpdatePrescription-20
-
     [Documentation]    Update Prescription - frequency is invalid
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1101,7 +1081,6 @@ JD-TC-UpdatePrescription-20
 
 
 JD-TC-UpdatePrescription-21
-
     [Documentation]    Update Prescription - html is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -1114,7 +1093,6 @@ JD-TC-UpdatePrescription-21
     Should Be Equal As Strings      ${resp.json()}             ${HTML_REQUIRED}
 
 JD-TC-UpdatePrescription-22
-
     [Documentation]    Update Prescription - without login
 
     ${resp}=    RX Update Prescription  ${prescription_id}  ${cid}  ${doc1}  ${medicineName2}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}

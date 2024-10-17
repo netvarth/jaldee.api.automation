@@ -30,7 +30,6 @@ ${originFrom}       NONE
 
 
 JD-TC-EbableDisableInventoryRX-1
-
     [Documentation]  Ebable Disable Inventory RX
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
@@ -57,7 +56,6 @@ JD-TC-EbableDisableInventoryRX-1
     Should Be Equal As Strings  ${resp.json()['enableInventoryRx']}  ${bool[1]}
 
 JD-TC-EbableDisableInventoryRX-UH1
-
     [Documentation]  Ebable Disable Inventory RX - status enable to enable  
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
@@ -76,7 +74,6 @@ JD-TC-EbableDisableInventoryRX-UH1
 
 
 JD-TC-EbableDisableInventoryRX-2
-
     [Documentation]  Ebable Disable Inventory RX - enable to disable
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
@@ -98,7 +95,6 @@ JD-TC-EbableDisableInventoryRX-2
     Should Be Equal As Strings  ${resp.json()['enableInventoryRx']}  ${bool[0]}
 
 JD-TC-EbableDisableInventoryRX-UH2
-
     [Documentation]  Ebable Disable Inventory RX - status disable to disaable  
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
@@ -116,7 +112,6 @@ JD-TC-EbableDisableInventoryRX-UH2
     Should Be Equal As Strings      ${resp1.json()}          ${INVTRY_RX_ALREADY_DISABLED}
 
 JD-TC-EbableDisableInventoryRX-3
-
     [Documentation]  Ebable Disable Inventory RX - disable to enaable
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}

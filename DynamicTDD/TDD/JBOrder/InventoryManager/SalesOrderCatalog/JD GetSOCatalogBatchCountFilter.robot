@@ -31,7 +31,6 @@ ${order}        0
 *** Test Cases ***
 
 JD-TC-Get Catalog Batch Count Filter-1
-
     [Documentation]   Get count filter with salesorderItemEncid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
@@ -789,7 +788,6 @@ JD-TC-Get Catalog Batch Count Filter-1
 #     Should Be Equal As Strings   ${resp.json()}   ${count}
 
 JD-TC-Get Catalog Batch Count Filter-2
-
     [Documentation]   Get count filter with price.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
@@ -807,7 +805,6 @@ JD-TC-Get Catalog Batch Count Filter-2
     Should Be Equal As Strings   ${resp.json()}   ${count}
 
 JD-TC-Get Catalog Batch Count Filter-3
-
     [Documentation]   Get count filter with catalog item batch id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
@@ -826,7 +823,6 @@ JD-TC-Get Catalog Batch Count Filter-3
     Should Be Equal As Strings   ${resp.json()}   ${count}
 
 JD-TC-Get Catalog Batch Count Filter-4
-
     [Documentation]   Get Catalog Item Batch  count List with enabled status
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
@@ -845,7 +841,6 @@ JD-TC-Get Catalog Batch Count Filter-4
     Should Be Equal As Strings   ${resp.json()}   ${count}
 
 JD-TC-Get Catalog Batch Count Filter-5
-
     [Documentation]   Get Catalog Item Batch  count filter with enabled status
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
@@ -864,7 +859,6 @@ JD-TC-Get Catalog Batch Count Filter-5
     Should Be Equal As Strings   ${resp.json()}   ${count}
 
 JD-TC-Get Catalog Batch Count Filter-6
-
     [Documentation]   Create Catalog Item Batch with same sales order item encid and then Get Catalog Item Batch count filter 
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
@@ -893,7 +887,6 @@ JD-TC-Get Catalog Batch Count Filter-6
 
 
 JD-TC-Get Catalog Batch Count Filter-UH1
-
     [Documentation]   Get Catalog Item Batch  count filter with invalid catalog item id
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
@@ -912,7 +905,6 @@ JD-TC-Get Catalog Batch Count Filter-UH1
     Should Be Equal As Strings   ${resp.json()}   ${count}
 
 JD-TC-Get Catalog Batch Count Filter-UH2
-
     [Documentation]   Get Catalog Item Batch count filter without catalogItemEncid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
@@ -925,7 +917,6 @@ JD-TC-Get Catalog Batch Count Filter-UH2
     Should Be Equal As Strings    ${resp.json()}    ${SORDERCATALOGITEMENCID_FILTER_REQUIRED}
 
 JD-TC-Get Catalog Batch Count Filter-UH3
-
     [Documentation]   Get Catalog Item Batch count filter with status as disabled
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
@@ -943,7 +934,6 @@ JD-TC-Get Catalog Batch Count Filter-UH3
     Should Be Equal As Strings   ${resp.json()}   ${count}
 
 JD-TC-Get Catalog Batch Count Filter-UH4
-
     [Documentation]   Get Catalog Item Batch count filter where price is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
@@ -961,7 +951,6 @@ JD-TC-Get Catalog Batch Count Filter-UH4
     Should Be Equal As Strings   ${resp.json()}   ${count}
 
 JD-TC-Get Catalog Batch Count Filter-UH5
-
     [Documentation]   Get Catalog Item Batch count filter where sorderCatalogItemEncId is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME30}  ${PASSWORD}
@@ -979,7 +968,6 @@ JD-TC-Get Catalog Batch Count Filter-UH5
     Should Be Equal As Strings   ${resp.json()}   ${count}
 
 JD-TC-Get Catalog Batch Count Filter-UH6
-
     [Documentation]   Get count filter without login
 
     ${resp}=   Get Catalog Item Batch Count   sorderCatalogItemEncId-eq=${SO_itemEncIds}  encId-eq=${SO_Cata_Item_Batch_Encid}     
@@ -989,7 +977,6 @@ JD-TC-Get Catalog Batch Count Filter-UH6
 
 
 JD-TC-Get Catalog Batch Count Filter-UH7
-
     [Documentation]  Get Catalog Item Batch count filter using sa login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}

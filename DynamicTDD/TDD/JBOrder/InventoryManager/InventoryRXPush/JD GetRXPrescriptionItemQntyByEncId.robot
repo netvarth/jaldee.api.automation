@@ -30,7 +30,6 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-GetRXPrescriptionItemQuantity-1
-
     [Documentation]    Get RX Prescription Item Quantity
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
@@ -585,7 +584,6 @@ JD-TC-GetRXPrescriptionItemQuantity-1
 
 
 JD-TC-GetRXPrescriptionItemQuantity-2
-
     [Documentation]    Get RX Prescription Item Quantity - medicine name is invalid 
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -600,7 +598,6 @@ JD-TC-GetRXPrescriptionItemQuantity-2
 
 
 JD-TC-GetRXPrescriptionItemQuantity-3
-
     [Documentation]    Get RX Prescription Item Quantity - medicine name is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -613,7 +610,6 @@ JD-TC-GetRXPrescriptionItemQuantity-3
 
 
 JD-TC-GetRXPrescriptionItemQuantity-4
-
     [Documentation]    Get RX Prescription Item Quantity - duration is invalid
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -628,7 +624,6 @@ JD-TC-GetRXPrescriptionItemQuantity-4
 
 
 JD-TC-GetRXPrescriptionItemQuantity-UH1
-
     [Documentation]    Get RX Prescription Item Quantity - duration is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -641,7 +636,6 @@ JD-TC-GetRXPrescriptionItemQuantity-UH1
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_DURATION_VALUE}
 
 JD-TC-GetRXPrescriptionItemQuantity-6
-
     [Documentation]    Get RX Prescription Item Quantity - quantity is invalid
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -656,7 +650,6 @@ JD-TC-GetRXPrescriptionItemQuantity-6
 
 
 JD-TC-GetRXPrescriptionItemQuantity-7
-
     [Documentation]    Get RX Prescription Item Quantity - quantity is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -671,7 +664,6 @@ JD-TC-GetRXPrescriptionItemQuantity-7
 
 
 8JD-TC-GetRXPrescriptionItemQuantity-9
-
     [Documentation]    Get RX Prescription Item Quantity - description
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -686,7 +678,6 @@ JD-TC-GetRXPrescriptionItemQuantity-7
 
 
 JD-TC-GetRXPrescriptionItemQuantity-10
-
     [Documentation]    Get RX Prescription Item Quantity - Descriptiom is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}

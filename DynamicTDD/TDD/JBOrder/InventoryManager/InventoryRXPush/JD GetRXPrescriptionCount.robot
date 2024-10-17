@@ -30,7 +30,6 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-GetRXPrescriptionCount-1
-
     [Documentation]    Get RX Prescription Count 
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
@@ -583,7 +582,6 @@ JD-TC-GetRXPrescriptionCount-1
     Should Be Equal As Strings      ${resp.json()}                  ${length}
 
 JD-TC-GetRXPrescriptionCount-2
-
     [Documentation]    Get RX Prescription Count  - id
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -597,7 +595,6 @@ JD-TC-GetRXPrescriptionCount-2
 
 
 JD-TC-GetRXPrescriptionCount-3
-
     [Documentation]    Get RX Prescription Count  - spItemCode
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -610,7 +607,6 @@ JD-TC-GetRXPrescriptionCount-3
     Should Be Equal As Strings      ${resp.json()}                  ${length}
 
 JD-TC-GetRXPrescriptionCount-4
-
     [Documentation]    Get RX Prescription Count  - medicineName
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -623,7 +619,6 @@ JD-TC-GetRXPrescriptionCount-4
     Should Be Equal As Strings      ${resp.json()}                  ${length}
 
 JD-TC-GetRXPrescriptionCount-5
-
     [Documentation]    Get RX Prescription Count  - duration
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -636,7 +631,6 @@ JD-TC-GetRXPrescriptionCount-5
     Should Be Equal As Strings      ${resp.json()}                  ${length}
 
 JD-TC-GetRXPrescriptionCount-6
-
     [Documentation]    Get RX Prescription Count  - frequency
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -650,7 +644,6 @@ JD-TC-GetRXPrescriptionCount-6
 
 
 JD-TC-GetRXPrescriptionCount-7
-
     [Documentation]    Get RX Prescription Count  - frequencyCode
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -663,7 +656,6 @@ JD-TC-GetRXPrescriptionCount-7
     Should Be Equal As Strings      ${resp.json()}                  ${length}
 
 JD-TC-GetRXPrescriptionCount-8
-
     [Documentation]    Get RX Prescription Count  - frequencyDescription
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -676,7 +668,6 @@ JD-TC-GetRXPrescriptionCount-8
     Should Be Equal As Strings      ${resp.json()}                  ${length}
 
 JD-TC-GetRXPrescriptionCount-9
-
     [Documentation]    Get RX Prescription Count  - frequencyRemark
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -689,7 +680,6 @@ JD-TC-GetRXPrescriptionCount-9
     Should Be Equal As Strings      ${resp.json()}                  ${length}
 
 JD-TC-GetRXPrescriptionCount-10
-
     [Documentation]    Get RX Prescription Count  - dosage
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -702,7 +692,6 @@ JD-TC-GetRXPrescriptionCount-10
     Should Be Equal As Strings      ${resp.json()}                  ${length}
 
 JD-TC-GetRXPrescriptionCount-11 
-
     [Documentation]    Get RX Prescription Count  - description
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -715,7 +704,6 @@ JD-TC-GetRXPrescriptionCount-11
     Should Be Equal As Strings      ${resp.json()}                  ${length}
 
 JD-TC-GetRXPrescriptionCount-12
-
     [Documentation]    Get RX Prescription Count  - quantity
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -728,7 +716,6 @@ JD-TC-GetRXPrescriptionCount-12
     Should Be Equal As Strings      ${resp.json()}                  ${length}
 
 JD-TC-GetRXPrescriptionCount-UH1
-
     [Documentation]    Get RX Prescription Count  - invalid id
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -744,7 +731,6 @@ JD-TC-GetRXPrescriptionCount-UH1
 
 
 JD-TC-GetRXPrescriptionCount-UH2
-
     [Documentation]    Get RX Prescription Count  - invalid spItemCode
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -759,7 +745,6 @@ JD-TC-GetRXPrescriptionCount-UH2
     Should Be Equal As Strings      ${resp.json()}                  0
 
 JD-TC-GetRXPrescriptionCount-UH3
-
     [Documentation]    Get RX Prescription Count  - invalid medicineName
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -774,7 +759,6 @@ JD-TC-GetRXPrescriptionCount-UH3
     Should Be Equal As Strings      ${resp.json()}                  0
 
 JD-TC-GetRXPrescriptionCount-UH4
-
     [Documentation]    Get RX Prescription Count  - invalid duration
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -789,7 +773,6 @@ JD-TC-GetRXPrescriptionCount-UH4
     Should Be Equal As Strings      ${resp.json()}                  0
 
 JD-TC-GetRXPrescriptionCount-UH5
-
     [Documentation]    Get RX Prescription Count  - invalid frequency
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -805,7 +788,6 @@ JD-TC-GetRXPrescriptionCount-UH5
 
 
 JD-TC-GetRXPrescriptionCount-UH6
-
     [Documentation]    Get RX Prescription Count  - invalid frequencyCode
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -821,7 +803,6 @@ JD-TC-GetRXPrescriptionCount-UH6
 
 
 JD-TC-GetRXPrescriptionCount-UH7
-
     [Documentation]    Get RX Prescription Count  - invalid frequencyDescription
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -836,7 +817,6 @@ JD-TC-GetRXPrescriptionCount-UH7
     Should Be Equal As Strings      ${resp.json()}                  0
 
 JD-TC-GetRXPrescriptionCount-UH8
-
     [Documentation]    Get RX Prescription Count  - invalid frequencyRemark
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -851,7 +831,6 @@ JD-TC-GetRXPrescriptionCount-UH8
     Should Be Equal As Strings      ${resp.json()}                  0
 
 JD-TC-GetRXPrescriptionCount-UH9
-
     [Documentation]    Get RX Prescription Count  - invalid dosage
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -866,7 +845,6 @@ JD-TC-GetRXPrescriptionCount-UH9
     Should Be Equal As Strings      ${resp.json()}                  0
 
 JD-TC-GetRXPrescriptionCount-UH10
-
     [Documentation]    Get RX Prescription Count  - invalid description
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -881,7 +859,6 @@ JD-TC-GetRXPrescriptionCount-UH10
     Should Be Equal As Strings      ${resp.json()}                  0
 
 JD-TC-GetRXPrescriptionCount-UH11
-
     [Documentation]    Get RX Prescription Count  - invalid quantity
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -896,7 +873,6 @@ JD-TC-GetRXPrescriptionCount-UH11
     Should Be Equal As Strings      ${resp.json()}                  0
 
 JD-TC-GetRXPrescriptionCount-UH12
-
     [Documentation]    Get RX Prescription Count -  without login
 
     ${resp}=    Get RX Prescription count

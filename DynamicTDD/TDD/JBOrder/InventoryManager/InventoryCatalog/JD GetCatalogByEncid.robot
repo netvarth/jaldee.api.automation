@@ -29,7 +29,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Get Inventory Catalog By EncId-1
-
     [Documentation]  create inventory catalog then Get Inventory Catalog By EncId.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -137,7 +136,6 @@ JD-TC-Get Inventory Catalog By EncId-1
 
 
 JD-TC-Get Inventory Catalog By EncId-2
-
     [Documentation]  update inventory catalog then Get Inventory Catalog By EncId.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
@@ -166,7 +164,6 @@ JD-TC-Get Inventory Catalog By EncId-2
 
 
 JD-TC-Get Inventory Catalog By EncId-3
-
     [Documentation]  create  inventory catalog from main account then get inventory catalog using encid from user login.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
@@ -266,7 +263,6 @@ JD-TC-Get Inventory Catalog By EncId-3
     
 
 JD-TC-Get Inventory Catalog By EncId-4
-
     [Documentation]  create  inventory catalog where name as invalid string then get inventory catalog by encid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
@@ -293,7 +289,6 @@ JD-TC-Get Inventory Catalog By EncId-4
 
 
 JD-TC-Get Inventory Catalog By EncId-5
-
     [Documentation]  Update Inventory Catalog status as inactive then get inventory catalog by encid
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
@@ -310,7 +305,6 @@ JD-TC-Get Inventory Catalog By EncId-5
 
 
 JD-TC-Get Inventory Catalog By EncId-UH1
-
     [Documentation]    Get Inventory Catalog By EncId with invalid encid id
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
@@ -326,7 +320,6 @@ JD-TC-Get Inventory Catalog By EncId-UH1
 
 
 JD-TC-Get Inventory Catalog By EncId-UH2
-
     [Documentation]  Get Inventory Catalog By EncId without login.
 
     ${resp}=  Get Inventory Catalog By EncId   ${encid}  
@@ -336,7 +329,6 @@ JD-TC-Get Inventory Catalog By EncId-UH2
 
 
 JD-TC-Get Inventory Catalog By EncId-UH3
-
     [Documentation]  Get Inventory Catalog By EncId using sa login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}

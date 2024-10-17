@@ -27,7 +27,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Create Inventory Catalog Item-1
-
     [Documentation]  Create Inventory Catalog Item with valid details.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME47}  ${PASSWORD}
@@ -164,7 +163,6 @@ JD-TC-Create Inventory Catalog Item-1
 
 
 JD-TC-Create Inventory Catalog Item-2
-
     [Documentation]  Create Inventory Catalog Item from user login.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME47}  ${PASSWORD}
@@ -237,7 +235,6 @@ JD-TC-Create Inventory Catalog Item-2
 
 
 JD-TC-Create Inventory Catalog Item-3
-
     [Documentation]  Create 50 items and add that items to catalog 
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME47}  ${PASSWORD}
@@ -263,7 +260,6 @@ JD-TC-Create Inventory Catalog Item-3
     END
 
 JD-TC-Create Inventory Catalog Item-UH1
-
     [Documentation]  adding existing item to the existing catalog.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME47}  ${PASSWORD}
@@ -277,7 +273,6 @@ JD-TC-Create Inventory Catalog Item-UH1
     Should Be Equal As Strings   ${resp.json()}   ${ITEM_NAME_EXIST}
 
 JD-TC-Create Inventory Catalog Item-UH2
-
     [Documentation]  Create Inventory Catalog Item using invalid encid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME47}  ${PASSWORD}
@@ -292,7 +287,6 @@ JD-TC-Create Inventory Catalog Item-UH2
     Should Be Equal As Strings   ${resp.json()}   ${Invalid_inventory_catalog_Id}
 
 JD-TC-Create Inventory Catalog Item-UH3
-
     [Documentation]  Create Inventory Catalog Item using invalid itemencid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME47}  ${PASSWORD}
@@ -308,7 +302,6 @@ JD-TC-Create Inventory Catalog Item-UH3
     Should Be Equal As Strings   ${resp.json()}   ${X_NOT_FOUND}
 
 JD-TC-Create Inventory Catalog Item-UH4
-
     [Documentation]  Create Inventory Catalog Item without login.
 
 
@@ -318,7 +311,6 @@ JD-TC-Create Inventory Catalog Item-UH4
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-Create Inventory Catalog Item-UH5
-
     [Documentation]  Create Inventory Catalog Item from sa login login.
 
 
@@ -332,7 +324,6 @@ JD-TC-Create Inventory Catalog Item-UH5
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-Create Inventory Catalog Item-UH6
-
     [Documentation]  Create Inventory Catalog Item using another provider
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -347,7 +338,6 @@ JD-TC-Create Inventory Catalog Item-UH6
     Should Be Equal As Strings   ${resp.json()}   ${Invalid_inventory_catalog_Id}
 
 JD-TC-Create Inventory Catalog Item-UH7
-
     [Documentation]  Create Inventory Catalog Item that item is not an inventory item
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME47}  ${PASSWORD}

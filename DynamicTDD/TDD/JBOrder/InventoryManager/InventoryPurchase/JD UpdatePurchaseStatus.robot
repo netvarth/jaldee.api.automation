@@ -27,7 +27,6 @@ ${order}        0
 *** Test Cases ***
 
 JD-TC-UpdatePurchaseStatus-1
-
     [Documentation]  Update Purchase Status - change status to IN REVIEW
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
@@ -601,7 +600,6 @@ JD-TC-UpdatePurchaseStatus-1
     Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[1]}
 
 JD-TC-UpdatePurchaseStatus-2
-
     [Documentation]  Update Purchase Status - change status to IN REVIEW to IN REVIEW
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
@@ -621,7 +619,6 @@ JD-TC-UpdatePurchaseStatus-2
     Should Be Equal As Strings      ${resp.json()}          ${PURCHASE_ALREADY_IN_STATUS}
 
 JD-TC-UpdatePurchaseStatus-3
-
     [Documentation]  Update Purchase Status - change status to IN REVIEW to Draft
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
@@ -643,7 +640,6 @@ JD-TC-UpdatePurchaseStatus-3
     Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[0]}
 
 JD-TC-UpdatePurchaseStatus-4
-
     [Documentation]  Update Purchase Status - change status DRAFT to DRAFT
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
@@ -663,7 +659,6 @@ JD-TC-UpdatePurchaseStatus-4
     Should Be Equal As Strings      ${resp.json()}          ${PURCHASE_ALREADY_IN_STATUS}
 
 JD-TC-UpdatePurchaseStatus-5
-
     [Documentation]  Update Purchase Status - change status DRAFT to DRAFT
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
@@ -683,7 +678,6 @@ JD-TC-UpdatePurchaseStatus-5
     Should Be Equal As Strings      ${resp.json()}          ${PURCHASE_ALREADY_IN_STATUS}
 
 JD-TC-UpdatePurchaseStatus-6
-
     [Documentation]  Update Purchase Status - change status DRAFT to APPROVED
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
@@ -706,7 +700,6 @@ JD-TC-UpdatePurchaseStatus-6
 
 
 JD-TC-UpdatePurchaseStatus-7
-
     [Documentation]  Update Purchase Status - change status DRAFT to IN REVIEW and then change to APPROVED
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
@@ -741,7 +734,6 @@ JD-TC-UpdatePurchaseStatus-7
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-UpdatePurchaseStatus-8
-
     [Documentation]  Update Purchase Status - change status APPROVED to APPROVED
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
@@ -759,7 +751,6 @@ JD-TC-UpdatePurchaseStatus-8
     Should Be Equal As Strings      ${resp.json()}          ${ALREADY_APPROVED_STATUS}
 
 JD-TC-UpdatePurchaseStatus-9
-
     [Documentation]  Update Purchase Status - change status APPROVED to Draft
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
@@ -777,7 +768,6 @@ JD-TC-UpdatePurchaseStatus-9
     Should Be Equal As Strings      ${resp.json()}          ${PURCHASE_APPROVED_STATUS}
 
 JD-TC-UpdatePurchaseStatus-10
-
     [Documentation]  Update Purchase Status - change status APPROVED to IN REVIEW
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
@@ -795,7 +785,6 @@ JD-TC-UpdatePurchaseStatus-10
     Should Be Equal As Strings      ${resp.json()}          ${PURCHASE_APPROVED_STATUS}
 
 JD-TC-UpdatePurchaseStatus-11
-
     [Documentation]  Update Purchase Status - without login
 
     ${resp}=    Update Purchase Status  ${PurchaseStatus[2]}  ${purchaseId} 

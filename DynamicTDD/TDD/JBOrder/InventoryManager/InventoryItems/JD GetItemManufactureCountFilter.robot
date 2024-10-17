@@ -19,7 +19,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-GetItemManufactureCountByFilter-1
-
     [Documentation]  Get Item Manufacture Count Filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
@@ -73,7 +72,6 @@ JD-TC-GetItemManufactureCountByFilter-1
 
 
 JD-TC-GetItemManufactureCountByFilter-2
-
     [Documentation]   Get Item Manufacture Count Filter - with manufactureCode
  
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
@@ -87,7 +85,6 @@ JD-TC-GetItemManufactureCountByFilter-2
 
 
 JD-TC-GetItemManufactureCountByFilter-3
-
     [Documentation]   Get Item Manufacture Count Filter - with manufactureName
  
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
@@ -100,7 +97,6 @@ JD-TC-GetItemManufactureCountByFilter-3
     Should Be Equal As Strings    ${resp.json()}        1
 
 JD-TC-GetItemManufactureCountByFilter-4
-
     [Documentation]   Get Item Manufacture Count Filter - with status enable
  
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
@@ -113,7 +109,6 @@ JD-TC-GetItemManufactureCountByFilter-4
     Should Be Equal As Strings    ${resp.json()}        2
 
 JD-TC-GetItemManufactureCountByFilter-5
-
     [Documentation]   Get Item Manufacture Count Filter - with status Disable
  
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME25}  ${PASSWORD}
@@ -126,7 +121,6 @@ JD-TC-GetItemManufactureCountByFilter-5
     Should Be Equal As Strings    ${resp.json()}         0
 
 JD-TC-GetItemManufactureCountByFilter-6
-
     [Documentation]   Get Item Manufacture Count Filter - without login
 
     ${resp}=    Get Item Manufacture Count Filter  

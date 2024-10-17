@@ -20,7 +20,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-GetItemCategory-1
-
     [Documentation]  Provider Create a Item Category then try to get that item.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
@@ -53,7 +52,6 @@ JD-TC-GetItemCategory-1
     Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[0]}
 
 JD-TC-GetItemCategory-2
-
     [Documentation]  Provider Create another Item Category then try to get that item.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
@@ -76,7 +74,6 @@ JD-TC-GetItemCategory-2
     Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[0]}
 
 JD-TC-GetItemCategory-3
-
     [Documentation]  Provider Create another Item Category with number then try to get that item.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}
@@ -99,7 +96,6 @@ JD-TC-GetItemCategory-3
     Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[0]}
 
 JD-TC-GetItemCategory-UH1
-
     [Documentation]  Get Item Category without Login.
 
     ${categoryName}=    FakerLibrary.Random Number
@@ -110,7 +106,6 @@ JD-TC-GetItemCategory-UH1
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
 
 JD-TC-GetItemCategory-UH2
-
     [Documentation]  Get Item Category with Consumer Login.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME9}  ${PASSWORD}

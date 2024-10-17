@@ -28,7 +28,6 @@ ${order}        0
 *** Test Cases ***
 
 JD-TC-GetPurchaseByUid-1
-
     [Documentation]  Get Purchase By Uid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
@@ -589,7 +588,6 @@ JD-TC-GetPurchaseByUid-1
     Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['unitCode']}      ${iu_id}
 
 JD-TC-GetPurchaseByUid-2
-
     [Documentation]  Get Purchase By Uid - where purchase is not created
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME20}  ${PASSWORD}
@@ -601,7 +599,6 @@ JD-TC-GetPurchaseByUid-2
     Should Be Equal As Strings      ${resp.status_code}     422
 
 JD-TC-GetPurchaseByUid-3
-
     [Documentation]  Get Purchase By Uid - without login
 
     ${resp}=    Get Purchase By Uid  ${purchaseId} 
@@ -610,7 +607,6 @@ JD-TC-GetPurchaseByUid-3
     Should Be Equal As Strings      ${resp.json()}          ${SESSION_EXPIRED}
 
 JD-TC-GetPurchaseByUid-4
-
     [Documentation]  Get Purchase By Uid - where purchase iD is inv
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}

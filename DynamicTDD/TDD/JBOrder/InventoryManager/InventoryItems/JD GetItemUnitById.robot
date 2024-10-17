@@ -19,7 +19,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-GetItemUnitById-1
-
     [Documentation]  Get Item Unit By Id
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
@@ -54,7 +53,6 @@ JD-TC-GetItemUnitById-1
     Should Be Equal As Strings    ${resp.json()['status']}      ${toggle[0]}
 
 JD-TC-GetItemUnitById-UH1
-
     [Documentation]  Get Item Unit By Id - item unit id is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME33}  ${PASSWORD}
@@ -69,7 +67,6 @@ JD-TC-GetItemUnitById-UH1
     Should Be Empty               ${resp.content}
 
 JD-TC-GetItemUnitById-UH2
-
     [Documentation]  Get Item Unit By Id - without login
 
     ${resp}=    Get Item Unit by id  ${iu_id}
@@ -78,7 +75,6 @@ JD-TC-GetItemUnitById-UH2
     Should Be Equal As Strings    ${resp.json()}         ${SESSION_EXPIRED}
 
 JD-TC-GetItemUnitById-UH3
-
     [Documentation]  Get Item Unit By Id - with another provider login
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}

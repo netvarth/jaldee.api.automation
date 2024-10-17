@@ -26,7 +26,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Sales Order Catalog Items-1
-
     [Documentation]  Test whether the system can successfully create items with all items having invMgmt set to false.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -168,7 +167,6 @@ JD-TC-Sales Order Catalog Items-1
 
 
 JD-TC-Sales Order Catalog Items-2
-
     [Documentation]  Test whether the system can successfully create items with TaxInclude is True all items having invMgmt set to false .
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -221,7 +219,6 @@ JD-TC-Sales Order Catalog Items-2
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-Sales Order Catalog Items-3
-
     [Documentation]   create multiple items with same details but price is different.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -244,7 +241,6 @@ JD-TC-Sales Order Catalog Items-3
     Should Be Equal As Strings    ${resp.json()}    ${SP_ITEM_ALREADY_EXIST}
 
 JD-TC-Sales Order Catalog Items-4
-
     [Documentation]   create items with SO price is Zero.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -269,7 +265,6 @@ JD-TC-Sales Order Catalog Items-4
 
 
 JD-TC-Sales Order Catalog Items-5
-
     [Documentation]   create items with Empty SP Item.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -289,7 +284,6 @@ JD-TC-Sales Order Catalog Items-5
     Should Be Equal As Strings    ${resp.json()}    ${INVALID_SP_ITEM_ID}
 
 JD-TC-Sales Order Catalog Items-6
-
     [Documentation]   Test whether the system can successfully create items with all items having invMgmt set to true.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -324,7 +318,6 @@ JD-TC-Sales Order Catalog Items-6
 
 
 JD-TC-Sales Order Catalog Items-7
-
     [Documentation]   create  sales order catalog Item where invMgmt as false.(inventory manager is true)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -341,7 +334,6 @@ JD-TC-Sales Order Catalog Items-7
 
 
 JD-TC-Sales Order Catalog Items-8
-
     [Documentation]   create  sales order catalog Item where invCatItem as invalid string.(inventory manager is true)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -356,7 +348,6 @@ JD-TC-Sales Order Catalog Items-8
     Should Be Equal As Strings    ${resp.json()}    ${INVALID_INVENTORY_CATALOG_ITEM_ID}
 
 JD-TC-Sales Order Catalog Items-9
-
     [Documentation]   create  sales order catalog Item where price as Zero.(inventory manager is true)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}

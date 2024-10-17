@@ -26,7 +26,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Get SalesOrder Catalog By Encid-1
-
     [Documentation]  create sales order catalog.(inventory manager is false) then get that catalog by encid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
@@ -139,7 +138,6 @@ JD-TC-Get SalesOrder Catalog By Encid-1
 
 
 JD-TC-Get SalesOrder Catalog By Encid-2
-
     [Documentation]  update sales order catalog .(inventory manager is false) then get sales order catalog by encid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
@@ -175,7 +173,6 @@ JD-TC-Get SalesOrder Catalog By Encid-2
 
 
 JD-TC-Get SalesOrder Catalog By Encid-3
-
     [Documentation]  Disable sales order catalog.(inventory manager is false).Then get salesorder catalog by encid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
@@ -208,7 +205,6 @@ JD-TC-Get SalesOrder Catalog By Encid-3
 
 
 JD-TC-Get SalesOrder Catalog By Encid-4
-
     [Documentation]  create  sales order catalog where name as number.(inventory manager is false).then get sales order catalog by encid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
@@ -257,7 +253,6 @@ JD-TC-Get SalesOrder Catalog By Encid-4
 
 
 JD-TC-Get SalesOrder Catalog By Encid-5
-
     [Documentation]  create  sales order  catalog where name as invalid string.(inventory manager is false).then get catalog by encid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
@@ -293,7 +288,6 @@ JD-TC-Get SalesOrder Catalog By Encid-5
 
 
 JD-TC-Get SalesOrder Catalog By Encid-6
-
     [Documentation]  create sales order inventory catalog from main account then get catalog by encid  from user login(without admin privilege).(inventory manager is false)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
@@ -392,7 +386,6 @@ JD-TC-Get SalesOrder Catalog By Encid-6
 
 
 JD-TC-Get SalesOrder Catalog By Encid-7
-
     [Documentation]  create  sales order catalog where name as invalid string.(inventory manager is true)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
@@ -435,7 +428,6 @@ JD-TC-Get SalesOrder Catalog By Encid-7
 
 
 JD-TC-Get SalesOrder Catalog By Encid-UH1
-
     [Documentation]  Get SalesOrder Catalog By Encid  with invalid catalog id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME37}  ${PASSWORD}
@@ -449,7 +441,6 @@ JD-TC-Get SalesOrder Catalog By Encid-UH1
     
 
 JD-TC-Get SalesOrder Catalog By Encid-UH2
-
     [Documentation]  Get SalesOrder Catalog By Encid without login.
 
     ${resp}=  Get SalesOrder Catalog By Encid   ${sa_catlog_id4} 
@@ -459,7 +450,6 @@ JD-TC-Get SalesOrder Catalog By Encid-UH2
 
 
 JD-TC-Get SalesOrder Catalog By Encid-UH3
-
     [Documentation]  Get SalesOrder Catalog By Encid using sa login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -473,7 +463,6 @@ JD-TC-Get SalesOrder Catalog By Encid-UH3
 
 
 JD-TC-Get SalesOrder Catalog By Encid-UH4
-
     [Documentation]  Get SalesOrder Catalog By Encid using another provider login
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}

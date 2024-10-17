@@ -30,7 +30,6 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-CreateRXPrescriptionItem-1
-
     [Documentation]    Create RX Prescription Item
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
@@ -572,7 +571,6 @@ JD-TC-CreateRXPrescriptionItem-1
     Should Be Equal As Strings      ${resp.json()['prescriptioinUid']}      ${prescription_id}  
 
 JD-TC-CreateRXPrescriptionItem-2
-
     [Documentation]    Create RX Prescription Item - adding same item
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -584,7 +582,6 @@ JD-TC-CreateRXPrescriptionItem-2
     Should Be Equal As Strings      ${resp.status_code}             200
 
 JD-TC-CreateRXPrescriptionItem-3
-
     [Documentation]    Create RX Prescription Item - where Display name is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -596,7 +593,6 @@ JD-TC-CreateRXPrescriptionItem-3
     Should Be Equal As Strings      ${resp.status_code}             200
 
 JD-TC-CreateRXPrescriptionItem-UH1
-
     [Documentation]    Create RX Prescription Item - where duration is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -611,7 +607,6 @@ JD-TC-CreateRXPrescriptionItem-UH1
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
 
 JD-TC-CreateRXPrescriptionItem-UH2
-
     [Documentation]    Create RX Prescription Item - where quantity is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -624,7 +619,6 @@ JD-TC-CreateRXPrescriptionItem-UH2
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_QUANTITY_VALUE}
 
 JD-TC-CreateRXPrescriptionItem-4
-
     [Documentation]    Create RX Prescription Item - description is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -636,7 +630,6 @@ JD-TC-CreateRXPrescriptionItem-4
     Should Be Equal As Strings      ${resp.status_code}             200
 
 JD-TC-CreateRXPrescriptionItem-5
-
     [Documentation]    Create RX Prescription Item - empty item
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -648,7 +641,6 @@ JD-TC-CreateRXPrescriptionItem-5
     Should Be Equal As Strings      ${resp.status_code}             200
 
 JD-TC-CreateRXPrescriptionItem-UH3
-
     [Documentation]    Create RX Prescription Item - dosage is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -663,7 +655,6 @@ JD-TC-CreateRXPrescriptionItem-UH3
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
 
 JD-TC-CreateRXPrescriptionItem-UH4
-
     [Documentation]    Create RX Prescription Item - frequency is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -679,7 +670,6 @@ JD-TC-CreateRXPrescriptionItem-UH4
 
 
 JD-TC-CreateRXPrescriptionItem-UH5
-
     [Documentation]    Create RX Prescription Item - prescription is empty
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -694,7 +684,6 @@ JD-TC-CreateRXPrescriptionItem-UH5
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
 
 JD-TC-CreateRXPrescriptionItem-UH6
-
     [Documentation]    Create RX Prescription Item - without login
 
     ${resp}=    RX Create Prescription Item  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}

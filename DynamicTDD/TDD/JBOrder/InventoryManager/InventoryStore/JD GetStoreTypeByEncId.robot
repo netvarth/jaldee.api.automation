@@ -20,7 +20,6 @@ Resource          /ebs/TDD/SuperAdminKeywords.robot
 *** Test Cases ***
 
 JD-TC-GetStoreTypeByEncid-1
-
     [Documentation]  Super Admin Create a Store Type (storeNature is PHARMACY) and provider Get Store Type By EncId.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -54,7 +53,6 @@ JD-TC-GetStoreTypeByEncid-1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
 JD-TC-GetStoreTypeByEncid-2
-
     [Documentation]  Super Admin Create a Store Type (storeNature is LAB) and provider Get Store Type By EncId  .
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -89,7 +87,6 @@ JD-TC-GetStoreTypeByEncid-2
 
 
 JD-TC-GetStoreTypeByEncid-3
-
     [Documentation]  Super Admin Create a Store Type (storeNature is RADIOLOGY) and provider Get Store Type By EncId  .
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -123,7 +120,6 @@ JD-TC-GetStoreTypeByEncid-3
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
 JD-TC-GetStoreTypeByEncid-4
-
     [Documentation]   Create a Store Type with same name and diffrent storeNature and provider Get Store Type By EncId  .
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -165,7 +161,6 @@ JD-TC-GetStoreTypeByEncid-4
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id1}
 
 JD-TC-GetStoreTypeByEncid-UH1
-
     [Documentation]  Get Store Type By Encid without Login.
 
     ${resp}=  Provider Get Store Type By EncId   ${St_Id1}    

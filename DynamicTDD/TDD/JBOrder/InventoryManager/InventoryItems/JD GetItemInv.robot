@@ -25,7 +25,6 @@ ${order}        0
 *** Test Cases ***
 
 JD-TC-GetItemInv-1
-
     [Documentation]   Get Item Inv
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
@@ -280,7 +279,6 @@ JD-TC-GetItemInv-1
     Should Be Equal As Strings      ${resp.json()['status']}                                    ${toggle[0]}
 
 JD-TC-GetItemInv-Uh1
-
     [Documentation]   Get Item Inv - where item code is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME21}  ${PASSWORD}
@@ -295,7 +293,6 @@ JD-TC-GetItemInv-Uh1
     Should Be Empty         ${resp.content}
 
 JD-TC-GetItemInv-UH2
-
     [Documentation]   Get Item Inv - another provider trying to get
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -308,7 +305,6 @@ JD-TC-GetItemInv-UH2
     Should Be Empty         ${resp.content}
 
 JD-TC-GetItemInv-UH3
-
     [Documentation]   Get Item Inv - without login
 
     ${resp}=    Get Item Inventory  ${item}
@@ -317,7 +313,6 @@ JD-TC-GetItemInv-UH3
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
 
 JD-TC-GetItemInv-UH4
-
     [Documentation]   Get Item Inv - SA Login
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}

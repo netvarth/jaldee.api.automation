@@ -29,7 +29,6 @@ ${order}        0
 *** Test Cases ***
 
 JD-TC-GetInvAuditlogCountByFilter-1
-
     [Documentation]  Create inventory item, add item to inventory catalouge, then verify auditlogCount.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -164,7 +163,6 @@ JD-TC-GetInvAuditlogCountByFilter-1
     Should Be Equal As Strings      ${resp.json()}       ${len}
 
 JD-TC-GetInvAuditlogCountByFilter-2
-
     [Documentation]  Create another inventory catalouge, then verify auditlogCount with account filter.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
@@ -191,7 +189,6 @@ JD-TC-GetInvAuditlogCountByFilter-2
     Should Be Equal As Strings      ${resp.json()}       ${len1}
 
 JD-TC-GetInvAuditlogCountByFilter-3
-
     [Documentation]   verify auditlogCount with uid filter.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
@@ -204,7 +201,6 @@ JD-TC-GetInvAuditlogCountByFilter-3
     Should Be Equal As Strings      ${resp.json()}       ${len}
 
 JD-TC-GetInvAuditlogCountByFilter-4
-
     [Documentation]   verify auditlogCount with auditType filter.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
@@ -217,7 +213,6 @@ JD-TC-GetInvAuditlogCountByFilter-4
     Should Be Equal As Strings      ${resp.json()}       ${len1}
 
 JD-TC-GetInvAuditlogCountByFilter-5
-
     [Documentation]   verify auditlogCount with auditContext filter.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
@@ -230,7 +225,6 @@ JD-TC-GetInvAuditlogCountByFilter-5
     Should Be Equal As Strings      ${resp.json()}       ${len1}
 
 JD-TC-GetInvAuditlogCountByFilter-6
-
     [Documentation]   verify auditlogCount with auditLogAction filter.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
@@ -243,7 +237,6 @@ JD-TC-GetInvAuditlogCountByFilter-6
     Should Be Equal As Strings      ${resp.json()}       ${len1}
 
 JD-TC-GetInvAuditlogCountByFilter-7
-
     [Documentation]   verify auditlogCount with userName filter.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
@@ -256,7 +249,6 @@ JD-TC-GetInvAuditlogCountByFilter-7
     Should Be Equal As Strings      ${resp.json()}       ${len1}
 
 JD-TC-GetInvAuditlogCountByFilter-8
-
     [Documentation]   verify auditlogCount with userId filter.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
@@ -269,7 +261,6 @@ JD-TC-GetInvAuditlogCountByFilter-8
     Should Be Equal As Strings      ${resp.json()}       ${len1}
 
 JD-TC-GetInvAuditlogCountByFilter-9
-
     [Documentation]   verify auditlogCount with userType filter.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
@@ -282,7 +273,6 @@ JD-TC-GetInvAuditlogCountByFilter-9
     Should Be Equal As Strings      ${resp.json()}       ${len1}
 
 JD-TC-GetInvAuditlogCountByFilter-10
-
     [Documentation]   Update Inventory catalog then verify auditlogCount with userType filter.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
@@ -317,7 +307,6 @@ JD-TC-GetInvAuditlogCountByFilter-10
     Should Be Equal As Strings      ${resp.json()}       ${len2}
 
 JD-TC-GetInvAuditlogCountByFilter-11
-
     [Documentation]   Using account filter to find Auditlog count.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
@@ -330,7 +319,6 @@ JD-TC-GetInvAuditlogCountByFilter-11
     Should Be Equal As Strings      ${resp.json()}       ${len2}
 
 JD-TC-GetInvAuditlogCountByFilter-12
-
     [Documentation]   Using auditLogAction filter to find Auditlog count.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
@@ -343,7 +331,6 @@ JD-TC-GetInvAuditlogCountByFilter-12
     Should Be Equal As Strings      ${resp.json()}       ${len}
 
 JD-TC-GetInvAuditlogCountByFilter-13
-
     [Documentation]   Using auditType filter to find Auditlog count.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
@@ -356,7 +343,6 @@ JD-TC-GetInvAuditlogCountByFilter-13
     Should Be Equal As Strings      ${resp.json()}       ${len2}
 
 JD-TC-GetInvAuditlogCountByFilter-14
-
     [Documentation]  Provider do the purchase then verify auditlogCount with account filter.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
@@ -719,7 +705,6 @@ JD-TC-GetInvAuditlogCountByFilter-14
     Should Be Equal As Strings  ${resp.json()}             ${len1}
 
 JD-TC-GetInvAuditlogCountByFilter-15
-
     [Documentation]  Provider do the purchase then verify auditlogCount with uid filter.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
@@ -738,7 +723,6 @@ JD-TC-GetInvAuditlogCountByFilter-15
 
 
 JD-TC-GetInvAuditlogCountByFilter-16
-
     [Documentation]  Provider do the purchase then verify auditlogCount with auditType filter.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}

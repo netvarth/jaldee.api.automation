@@ -24,7 +24,6 @@ Resource          /ebs/TDD/SuperAdminKeywords.robot
 *** Test Cases ***
 
 JD-TC-Create Batch-1
-
     [Documentation]  create Batch.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME320}  ${PASSWORD}
@@ -157,7 +156,6 @@ JD-TC-Create Batch-1
 
 
 JD-TC-Create Batch-UH1
-
     [Documentation]  disbale inventory catalog and then create batch using that catalog.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME320}  ${PASSWORD}
@@ -179,7 +177,6 @@ JD-TC-Create Batch-UH1
     Should Be Equal As Strings   ${resp.json()}   ${INACTIVE_INVNTRY_CATALOG}
 
 JD-TC-Create Batch-UH2
-
     [Documentation]  Disbale inventory catalog item and then create batch using that catalog.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME320}  ${PASSWORD}
@@ -204,7 +201,6 @@ JD-TC-Create Batch-UH2
     Should Be Equal As Strings   ${resp.json()}   ${INACTIVE_INVNTRY_CATALOG_ITEMS}
 
 JD-TC-Create Batch-UH3
-
     [Documentation]  Disbale store then create batch using that catalog.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME320}  ${PASSWORD}
@@ -231,7 +227,6 @@ JD-TC-Create Batch-UH3
 
 
 JD-TC-Create Batch-UH4
-
     [Documentation]  Disbale sp item then create batch using that catalog.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME320}  ${PASSWORD}

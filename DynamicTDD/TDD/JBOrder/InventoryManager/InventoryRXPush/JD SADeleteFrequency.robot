@@ -26,7 +26,6 @@ ${order}        0
 *** Test Cases ***
 
 JD-TC-DeleteFrequencySA-1
-
     [Documentation]   Delete Frequency SA
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}

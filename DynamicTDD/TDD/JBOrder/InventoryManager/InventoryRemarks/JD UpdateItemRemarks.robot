@@ -25,7 +25,6 @@ ${invalidEma}        asd122
 *** Test Cases ***
 
 JD-TC-UpdateItemRemarks-1
-
     [Documentation]  update item remarks with transaction type as opening . 
 
 
@@ -71,7 +70,6 @@ JD-TC-UpdateItemRemarks-1
 
 
 JD-TC-UpdateItemRemarks-2
-
     [Documentation]  update item remarks with transaction type as ADJUSTMENT. 
 
 
@@ -102,7 +100,6 @@ JD-TC-UpdateItemRemarks-2
 
 
 JD-TC-UpdateItemRemarks-3
-
     [Documentation]  create item remarks with transaction type as PURCHASE_ORDER and update with same deatils.
 
 
@@ -134,7 +131,6 @@ JD-TC-UpdateItemRemarks-3
 
 
 JD-TC-UpdateItemRemarks-4
-
     [Documentation]  update item remarks where remarks is different  transaction type as same.
 
 
@@ -169,7 +165,6 @@ JD-TC-UpdateItemRemarks-4
 
 
 JD-TC-UpdateItemRemarks-5
-
     [Documentation]  update item remarks with transaction type as SALES_ORDER and Get Item Remark.
 
 
@@ -203,7 +198,6 @@ JD-TC-UpdateItemRemarks-5
 
 
 JD-TC-UpdateItemRemarks-UH1
-
     [Documentation]  Update Item Remarks with invalid encid
 
 
@@ -219,7 +213,6 @@ JD-TC-UpdateItemRemarks-UH1
 
 
 JD-TC-UpdateItemRemarks-UH2
-
     [Documentation]  Update Item Remarks without login.
 
     ${resp}=  Update Item Remark    ${remarks_encid1}   ${EMPTY}  ${transactionTypeEnum[5]}   
@@ -228,7 +221,6 @@ JD-TC-UpdateItemRemarks-UH2
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-UpdateItemRemarks-UH3
-
     [Documentation]  Get Item Remark using SA login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -241,7 +233,6 @@ JD-TC-UpdateItemRemarks-UH3
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-UpdateItemRemarks-UH4
-
     [Documentation]    Update Item Remarks with empty remarks
 
 

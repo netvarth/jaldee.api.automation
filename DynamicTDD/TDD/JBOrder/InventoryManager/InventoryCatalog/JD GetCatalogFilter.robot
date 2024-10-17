@@ -29,7 +29,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Get Inventory catalog Filter-1
-
     [Documentation]  create inventory catalog then Get Inventory catalog Filter.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -134,7 +133,6 @@ JD-TC-Get Inventory catalog Filter-1
 
 
 JD-TC-Get Inventory catalog Filter-2
-
     [Documentation]  update inventory catalog then Get Inventory catalog Filter using accountid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
@@ -159,7 +157,6 @@ JD-TC-Get Inventory catalog Filter-2
     # Should Be Equal As Strings    ${resp.json()[0]['storeName']}    ${Name}
 
 JD-TC-Get Inventory catalog Filter-3
-
     [Documentation]  Update Inventory Catalog status as inactive then Get Inventory catalog Filter using catalogName
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
     Log   ${resp.content}
@@ -181,7 +178,6 @@ JD-TC-Get Inventory catalog Filter-3
     # Should Be Equal As Strings    ${resp.json()[0]['storeName']}    ${Name}
 
 JD-TC-Get Inventory catalog Filter-4
-
     [Documentation]  create  inventory catalog from main account then get inventory catalog using encid from user login.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
@@ -267,7 +263,6 @@ JD-TC-Get Inventory catalog Filter-4
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-Get Inventory catalog Filter-5
-
     [Documentation]  create  inventory catalog where name as invalid string then Get Inventory catalog Filter using encid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
@@ -288,7 +283,6 @@ JD-TC-Get Inventory catalog Filter-5
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-Get Inventory catalog Filter-6
-
     [Documentation]   update inventory catalog then Update Inventory Catalog status as disable and get with filter.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
@@ -316,7 +310,6 @@ JD-TC-Get Inventory catalog Filter-6
 
 
 JD-TC-Get Inventory catalog Filter-UH1
-
     [Documentation]    Get Inventory catalog Filter with invalid encid id
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
@@ -332,7 +325,6 @@ JD-TC-Get Inventory catalog Filter-UH1
 
 
 JD-TC-Get Inventory catalog Filter-UH2
-
     [Documentation]  Get Inventory catalog Filter without login.
 
     ${resp}=  Get Inventory catalog Filter   encId-eq=${encid}  
@@ -342,7 +334,6 @@ JD-TC-Get Inventory catalog Filter-UH2
 
 
 JD-TC-Get Inventory catalog Filter-UH3
-
     [Documentation]  Get Inventory catalog Filter using sa login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}

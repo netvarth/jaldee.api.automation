@@ -30,7 +30,6 @@ ${originFrom}       NONE
 
 
 JD-TC-AddDetailsToCataolog-1
-
     [Documentation]  Add Details To Catalog
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
@@ -596,7 +595,6 @@ JD-TC-AddDetailsToCataolog-1
 *** Comments ***
 
 JD-TC-AddDetailsToCataolog-UH1
-
     [Documentation]  Add Details To Catalog - where purchase status is not completed
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -619,7 +617,6 @@ JD-TC-AddDetailsToCataolog-UH1
 
 
 JD-TC-AddDetailsToCataolog-UH2
-
     [Documentation]  Add Details To Catalog - where purchase uid is invalid 
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -635,7 +632,6 @@ JD-TC-AddDetailsToCataolog-UH2
     Should Be Equal As Strings      ${resp.status_code}   200
 
 JD-TC-AddDetailsToCataolog-UH3
-
     [Documentation]  Add Details To Catalog - purchase item enc id is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -652,7 +648,6 @@ JD-TC-AddDetailsToCataolog-UH3
     Should Be Equal As Strings      ${resp.json()}          ${SALES_RATE_NOT_UPDATE} 
 
 JD-TC-AddDetailsToCataolog-UH4
-
     [Documentation]  Add Details To Catalog - purchase item enc id is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -667,7 +662,6 @@ JD-TC-AddDetailsToCataolog-UH4
     Should Be Equal As Strings      ${resp.json()}          ${SALES_RATE_NOT_UPDATE} 
 
 JD-TC-AddDetailsToCataolog-UH5
-
     [Documentation]  Add Details To Catalog - Sales order catalog is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -686,7 +680,6 @@ JD-TC-AddDetailsToCataolog-UH5
     Should Be Equal As Strings      ${resp.json()}          ${SALES_RATE_NOT_UPDATE} 
 
 JD-TC-AddDetailsToCataolog-UH6
-
     [Documentation]  Add Details To Catalog - Sales order catalog is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -703,7 +696,6 @@ JD-TC-AddDetailsToCataolog-UH6
     Should Be Equal As Strings      ${resp.json()}          ${SALES_RATE_NOT_UPDATE}
 
 JD-TC-AddDetailsToCataolog-UH7
-
     [Documentation]  Add Details To Catalog - Sales rate is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -720,7 +712,6 @@ JD-TC-AddDetailsToCataolog-UH7
     Should Be Equal As Strings      ${resp.json()}          ${SALES_RATE_NOT_UPDATE} 
 
 JD-TC-AddDetailsToCataolog-UH8
-
     [Documentation]  Add Details To Catalog - Sales rate is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -737,7 +728,6 @@ JD-TC-AddDetailsToCataolog-UH8
     Should Be Equal As Strings      ${resp.json()}          ${SALES_RATE_NOT_UPDATE} 
 
 JD-TC-AddDetailsToCataolog-UH9
-
     [Documentation]  Add Details To Catalog - witjout login
 
     ${Details1}=  Create Dictionary     purchaseItemEncId=${purchaseItemEncId}  sOrderCatalog=${sOrderCatalog}  salesRate=${salesRate}

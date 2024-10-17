@@ -26,7 +26,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Get SalesOrder Catalog Count-1
-
     [Documentation]  create sales order catalog.(inventory manager is false) then get  catalog count by encid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
@@ -126,7 +125,6 @@ JD-TC-Get SalesOrder Catalog Count-1
     Should Be Equal As Strings    ${resp.json()}    ${count}
 
 JD-TC-Get SalesOrder Catalog Count-2
-
     [Documentation]  update sales order catalog .(inventory manager is false) then get sales order count by status
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
@@ -150,7 +148,6 @@ JD-TC-Get SalesOrder Catalog Count-2
     Should Be Equal As Strings    ${resp.json()}    ${count}
 
 JD-TC-Get SalesOrder Catalog Count-3
-
     [Documentation]  Disable sales order catalog.(inventory manager is false).Then Get SalesOrder Catalog count by location
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
@@ -172,7 +169,6 @@ JD-TC-Get SalesOrder Catalog Count-3
     Should Be Equal As Strings    ${resp.json()}    ${count}
 
 JD-TC-Get SalesOrder Catalog Count-4
-
     [Documentation]  create  sales order catalog where name as number.(inventory manager is false).then get sales order count by name
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
@@ -209,7 +205,6 @@ JD-TC-Get SalesOrder Catalog Count-4
 
 
 JD-TC-Get SalesOrder Catalog Count-5
-
     [Documentation]  create  sales order  catalog where name as invalid string.(inventory manager is false).then get catalog count by store
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
@@ -233,7 +228,6 @@ JD-TC-Get SalesOrder Catalog Count-5
 
 
 JD-TC-Get SalesOrder Catalog Count-6
-
     [Documentation]  create  sales order catalog where name as invalid string.(inventory manager is true).then get catalog count by invmgr
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
@@ -263,7 +257,6 @@ JD-TC-Get SalesOrder Catalog Count-6
     Should Be Equal As Strings    ${resp.json()}    ${count}
 
 JD-TC-Get SalesOrder Catalog Count-7
-
     [Documentation]  create  sales order catalog where name as invalid string.(inventory manager is true).then get catalog count by invmgr
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
@@ -282,7 +275,6 @@ JD-TC-Get SalesOrder Catalog Count-7
 
 
 JD-TC-Get SalesOrder Catalog Count-UH1
-
     [Documentation]  Get SalesOrder Catalog Count  with invalid catalog id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}
@@ -302,7 +294,6 @@ JD-TC-Get SalesOrder Catalog Count-UH1
     
 
 JD-TC-Get SalesOrder Catalog Count-UH2
-
     [Documentation]  Get SalesOrder Catalog Count without login.
 
     ${resp}=  Get SalesOrder Catalog Count    invCatEncId-eq=${inv_cat_encid} 
@@ -312,7 +303,6 @@ JD-TC-Get SalesOrder Catalog Count-UH2
 
 
 JD-TC-Get SalesOrder Catalog Count-UH3
-
     [Documentation]  Get SalesOrder Catalog Count using sa login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -325,7 +315,6 @@ JD-TC-Get SalesOrder Catalog Count-UH3
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-Get SalesOrder Catalog Count-UH4
-
     [Documentation]  Get SalesOrder Catalog Count using another provider login
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -343,7 +332,6 @@ JD-TC-Get SalesOrder Catalog Count-UH4
     Should Be Equal As Strings   ${resp.json()}    ${count}
 
 JD-TC-Get SalesOrder Catalog Count-UH5
-
     [Documentation]  Get SalesOrder Catalog Count using inventory manager  and with invcatalog encid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME35}  ${PASSWORD}

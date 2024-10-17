@@ -20,7 +20,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-UpdateItemUnitStatus-1
-
     [Documentation]  Update Item Unit Status
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME52}  ${PASSWORD}
@@ -67,7 +66,6 @@ JD-TC-UpdateItemUnitStatus-1
 
 
 JD-TC-UpdateItemUnitStatus-2
-
     [Documentation]  Update Item Unit Status as already disabled.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME52}  ${PASSWORD}
@@ -80,7 +78,6 @@ JD-TC-UpdateItemUnitStatus-2
     Should Be Equal As Strings    ${resp.json()}         ${STATUS_ALREADY_UPDATED}
 
 JD-TC-UpdateItemUnitStatus-3
-
     [Documentation]  try to Enable ,Disabled Status.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME52}  ${PASSWORD}
@@ -99,7 +96,6 @@ JD-TC-UpdateItemUnitStatus-3
     Should Be Equal As Strings    ${resp.json()['status']}      ${toggle[0]}
 
 JD-TC-UpdateItemUnitStatus-UH1
-
     [Documentation]  Get Item Unit without Login.
 
     ${resp}=  Update Item Unit Status   ${iu_id}    ${toggle[0]}
@@ -108,7 +104,6 @@ JD-TC-UpdateItemUnitStatus-UH1
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
 
 JD-TC-UpdateItemUnitStatus-UH2
-
     [Documentation]  Get Item Unit with Consumer Login.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME52}  ${PASSWORD}

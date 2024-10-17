@@ -20,7 +20,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-UpdateItemCategory-1
-
     [Documentation]  Provider Create a Item Category then try to Update that item name.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME36}  ${PASSWORD}
@@ -69,7 +68,6 @@ JD-TC-UpdateItemCategory-1
 
 
 JD-TC-UpdateItemCategory-2
-
     [Documentation]  Update item CategoryName to a Number.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME36}  ${PASSWORD}
@@ -90,7 +88,6 @@ JD-TC-UpdateItemCategory-2
     Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[0]}
 
 JD-TC-UpdateItemCategory-3
-
     [Documentation]  Update item CategoryName then update it's Item Category Status.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME36}  ${PASSWORD}
@@ -122,7 +119,6 @@ JD-TC-UpdateItemCategory-3
     Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[1]} 
 
 JD-TC-UpdateItemCategory-4
-
     [Documentation]  Try to Update Disable item  .
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME36}  ${PASSWORD}
@@ -143,7 +139,6 @@ JD-TC-UpdateItemCategory-4
     Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[1]} 
 
 JD-TC-UpdateItemCategory-5
-
     [Documentation]  Update item Category name as same.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME36}  ${PASSWORD}
@@ -159,7 +154,6 @@ JD-TC-UpdateItemCategory-5
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-UpdateItemCategory-UH3
-
     [Documentation]  Update item CategoryName With EMPTY value.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME36}  ${PASSWORD}
@@ -175,7 +169,6 @@ JD-TC-UpdateItemCategory-UH3
     
 
 JD-TC-UpdateItemCategory-UH1
-
     [Documentation]  Get Item Category without Login.
 
     ${resp}=  Update Item Category   ${EMPTY}    ${Ca_Id}
@@ -184,7 +177,6 @@ JD-TC-UpdateItemCategory-UH1
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
 
 JD-TC-UpdateItemCategory-UH2
-
     [Documentation]  Get Item Category with Consumer Login.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME36}  ${PASSWORD}

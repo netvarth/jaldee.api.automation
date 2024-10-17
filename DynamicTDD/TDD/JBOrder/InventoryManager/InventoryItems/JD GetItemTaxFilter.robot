@@ -19,7 +19,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-CreateItemTax-1
-
     [Documentation]  Get Item tax Filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
@@ -73,7 +72,6 @@ JD-TC-CreateItemTax-1
     END
 
 JD-TC-CreateItemTax-2
-
     [Documentation]  Get Item tax Filter - taxCode filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
@@ -89,7 +87,6 @@ JD-TC-CreateItemTax-2
     Should Be Equal As Strings    ${resp.json()[0]['taxTypeEnum']}        ${taxtypeenum[0]}
 
 JD-TC-CreateItemTax-3
-
     [Documentation]  Get Item tax Filter - taxName filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
@@ -105,7 +102,6 @@ JD-TC-CreateItemTax-3
     Should Be Equal As Strings    ${resp.json()[0]['taxTypeEnum']}        ${taxtypeenum[0]}
 
 JD-TC-CreateItemTax-4
-
     [Documentation]  Get Item tax Filter - status
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME29}  ${PASSWORD}
@@ -118,7 +114,6 @@ JD-TC-CreateItemTax-4
     
 
 JD-TC-CreateItemTax-UH1
-
     [Documentation]  Get Item tax Filter - without login
 
     ${resp}=    Get Item Tax Filter
@@ -127,7 +122,6 @@ JD-TC-CreateItemTax-UH1
     Should Be Equal As Strings    ${resp.json()}         ${SESSION_EXPIRED}
 
 JD-TC-CreateItemTax-UH2
-
     [Documentation]  Get Item tax Filter - with another provider login
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}

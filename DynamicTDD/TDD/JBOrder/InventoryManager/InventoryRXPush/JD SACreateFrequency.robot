@@ -26,7 +26,6 @@ ${order}        0
 *** Test Cases ***
 
 JD-TC-CreateFrequencySA-1
-
     [Documentation]   Create Frequency SA
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -72,7 +71,6 @@ JD-TC-CreateFrequencySA-1
     Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos}
 
 JD-TC-CreateFrequencySA-2
-
     [Documentation]   Create Frequency SA - create with same details
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -84,7 +82,6 @@ JD-TC-CreateFrequencySA-2
     Should Be Equal As Strings      ${resp.status_code}     200
 
 JD-TC-CreateFrequencySA-UH1
-
     [Documentation]   Create Frequency SA - frequency is empty
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -98,7 +95,6 @@ JD-TC-CreateFrequencySA-UH1
     
 
 JD-TC-CreateFrequencySA-UH2
-
     [Documentation]   Create Frequency SA - dosage is empty
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -111,7 +107,6 @@ JD-TC-CreateFrequencySA-UH2
     Should Be Equal As Strings      ${resp.json()}             ${DOSAGE_REQUIRED}
 
 JD-TC-CreateFrequencySA-5
-
     [Documentation]   Create Frequency SA - description is empty
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -123,7 +118,6 @@ JD-TC-CreateFrequencySA-5
     Should Be Equal As Strings      ${resp.status_code}     200
 
 JD-TC-CreateFrequencySA-6
-
     [Documentation]   Create Frequency SA - remark is empty
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -135,7 +129,6 @@ JD-TC-CreateFrequencySA-6
     Should Be Equal As Strings      ${resp.status_code}     200
 
 JD-TC-CreateFrequencySA-UH3
-
     [Documentation]   Create Frequency SA - without login
     ${frequency}=       Random Int  min=36  max=40
     ${resp}=    SA Create Frequency  ${frequency}  ${dosage}  description=${description}  remark=${remark}

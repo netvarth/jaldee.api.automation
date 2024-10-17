@@ -26,7 +26,6 @@ ${order}        0
 *** Test Cases ***
 
 JD-TC-Get Catalog Batch Filter-1
-
     [Documentation]   Get filter with salesorderItemEncid.
 
 
@@ -628,7 +627,6 @@ JD-TC-Get Catalog Batch Filter-1
 
 
 JD-TC-Get Catalog Batch Filter-2
-
     [Documentation]   Get filter with price.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
@@ -651,7 +649,6 @@ JD-TC-Get Catalog Batch Filter-2
 
 
 JD-TC-Get Catalog Batch Filter-3
-
     [Documentation]   Get filter with catalog item batch id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
@@ -675,7 +672,6 @@ JD-TC-Get Catalog Batch Filter-3
 
 
 JD-TC-Get Catalog Batch Filter-4
-
     [Documentation]   Get Catalog Item Batch List with enabled status
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
@@ -699,7 +695,6 @@ JD-TC-Get Catalog Batch Filter-4
 
 
 JD-TC-Get Catalog Batch Filter-5
-
     [Documentation]   Get Catalog Item Batch filter with enabled status
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
@@ -728,7 +723,6 @@ JD-TC-Get Catalog Batch Filter-5
 
 
 JD-TC-Get Catalog Batch Filter-UH1
-
     [Documentation]   Get Catalog Item Batch filter with invalid catalog item id
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
@@ -742,7 +736,6 @@ JD-TC-Get Catalog Batch Filter-UH1
     Should Be Equal As Strings    ${resp.json()}    []
 
 JD-TC-Get Catalog Batch Filter-UH2
-
     [Documentation]   Get Catalog Item Batch filter without catalogItemEncid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
@@ -755,7 +748,6 @@ JD-TC-Get Catalog Batch Filter-UH2
     Should Be Equal As Strings    ${resp.json()}    ${SORDERCATALOGITEMENCID_FILTER_REQUIRED}
 
 JD-TC-Get Catalog Batch Filter-UH3
-
     [Documentation]   Get Catalog Item Batch filter with status as disabled
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
@@ -768,7 +760,6 @@ JD-TC-Get Catalog Batch Filter-UH3
     Should Be Equal As Strings    ${resp.json()}    []
 
 JD-TC-Get Catalog Batch Filter-UH4
-
     [Documentation]   Get Catalog Item Batch filter where price is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
@@ -781,7 +772,6 @@ JD-TC-Get Catalog Batch Filter-UH4
     Should Be Equal As Strings    ${resp.json()}    []
 
 JD-TC-Get Catalog Batch Filter-UH5
-
     [Documentation]   Get Catalog Item Batch filter where sorderCatalogItemEncId is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
@@ -794,7 +784,6 @@ JD-TC-Get Catalog Batch Filter-UH5
     Should Be Equal As Strings    ${resp.json()}    []
 
 JD-TC-Get Catalog Batch Filter-UH6
-
     [Documentation]   Get filter without login
 
     ${resp}=   Get Catalog Item Batch List   sorderCatalogItemEncId-eq=${SO_itemEncIds}  encId-eq=${SO_Cata_Item_Batch_Encid}     
@@ -804,7 +793,6 @@ JD-TC-Get Catalog Batch Filter-UH6
 
 
 JD-TC-Get Catalog Batch Filter-UH7
-
     [Documentation]  Get Catalog Item Batch filter using sa login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -818,7 +806,6 @@ JD-TC-Get Catalog Batch Filter-UH7
 
 *** Comments ***
 JD-TC-Get Catalog Batch Filter-6
-
     [Documentation]   Create Catalog Item Batch with same sales order item encid and then Get Catalog Item Batch filter 
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}

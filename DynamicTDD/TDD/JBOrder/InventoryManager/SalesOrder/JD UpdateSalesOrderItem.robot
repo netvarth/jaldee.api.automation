@@ -30,7 +30,6 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-Update Sales Order Item -1
-
     [Documentation]   Create a sales Order with Valid Details then update order quantity(inventory manager is false).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
@@ -309,7 +308,6 @@ JD-TC-Update Sales Order Item -1
     Should Be Equal As Strings    ${resp.json()['netRate']}                                         ${netTotal}
 
 JD-TC-Update Sales Order Item-2
-
     [Documentation]    update sales order Item Encid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
@@ -335,7 +333,6 @@ JD-TC-Update Sales Order Item-2
     Should Be Equal As Strings    ${resp.json()['netRate']}                                         ${netTotal}
 
 JD-TC-Update Sales Order Item-3
-
     [Documentation]    Create a sales Order with Valid Details then update order quantity(inventory manager is True).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
@@ -420,7 +417,6 @@ JD-TC-Update Sales Order Item-3
 
     
 JD-TC-Update Sales Order Item-UH1
-
     [Documentation]    update sales order quantity as Zero.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
@@ -436,7 +432,6 @@ JD-TC-Update Sales Order Item-UH1
     Should Be Equal As Strings    ${resp.json()}   ${QUANTITY_REQUIRED}
 
 JD-TC-Update Sales Order Item-UH2
-
     [Documentation]    update sales order with EMPTY Sales order Item Encid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME18}  ${PASSWORD}
@@ -453,7 +448,6 @@ JD-TC-Update Sales Order Item-UH2
 
 
 JD-TC-Update Sales Order Item-UH3
-
     [Documentation]    Another provider try to update sales order quantity.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
@@ -469,7 +463,6 @@ JD-TC-Update Sales Order Item-UH3
     Should Be Equal As Strings    ${resp.json()}   ${INVALID_ORDER_ID}
 
 JD-TC-Update Sales Order Item-UH4
-
     [Documentation]  Update sales odrer without login
 
     ${quantity}=    Random Int  min=4   max=50
@@ -481,7 +474,6 @@ JD-TC-Update Sales Order Item-UH4
 
 
 JD-TC-Update Sales Order Item-UH5
-
     [Documentation]  Update sales order using sa login
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log   ${resp.content}

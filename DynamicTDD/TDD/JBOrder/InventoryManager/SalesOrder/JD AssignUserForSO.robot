@@ -30,7 +30,6 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-Assign User For Sales Order-1
-
     [Documentation]   Create a sales Order with Valid Details then Assign user for sales order.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
@@ -339,7 +338,6 @@ JD-TC-Assign User For Sales Order-1
 
 
 JD-TC-Assign User For Sales Order-2
-
     [Documentation]   Assign Sales order to assistant type user.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
@@ -366,7 +364,6 @@ JD-TC-Assign User For Sales Order-2
     Should Be Equal As Strings    ${resp.json()['assignedUserName']}        ${f_name1} ${l_name1}
 
 JD-TC-Assign User For Sales Order-3
-
     [Documentation]   Assign Sales order to with admin privilage user.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
@@ -393,7 +390,6 @@ JD-TC-Assign User For Sales Order-3
     Should Be Equal As Strings    ${resp.json()['assignedUserName']}        ${f_name2} ${l_name2}
 
 JD-TC-Assign User For Sales Order-UH1
-
     [Documentation]   Assign Sales order to inactive user.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
@@ -416,7 +412,6 @@ JD-TC-Assign User For Sales Order-UH1
     Should Be Equal As Strings    ${resp.status_code}   422
 
 JD-TC-Assign User For Sales Order-UH2
-
     [Documentation]   Assign Sales order to user without login.
 
     ${resp}=    Assign User For Sales Order    ${SO_Uid}     ${us_id2}
@@ -426,7 +421,6 @@ JD-TC-Assign User For Sales Order-UH2
 
 
 JD-TC-Assign User For Sales Order-UH3
-
     [Documentation]   Assign Sales order to user where sales order id is invalid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
@@ -439,7 +433,6 @@ JD-TC-Assign User For Sales Order-UH3
     Should Be Equal As Strings   ${resp.json()}   ${INVALID_ORDER_ID}
 
 JD-TC-Assign User For Sales Order-UH4
-
     [Documentation]   Assign Sales order to user where user id is invalid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
@@ -452,7 +445,6 @@ JD-TC-Assign User For Sales Order-UH4
     Should Be Equal As Strings   ${resp.json()}   ${INVALID_FM_USER_ID}
 
 JD-TC-Assign User For Sales Order-UH5
-
     [Documentation]    Try to Assign Sales order to already assigned user.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
@@ -479,7 +471,6 @@ JD-TC-Assign User For Sales Order-UH5
     Should Be Equal As Strings   ${resp.json()}   ${USER_ALREADY_ASSIGNED}
 
 JD-TC-Assign User For Sales Order-UH6
-
     [Documentation]    Try to Assign Sales order to user login.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}

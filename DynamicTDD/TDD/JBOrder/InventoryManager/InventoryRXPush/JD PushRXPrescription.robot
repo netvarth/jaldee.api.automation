@@ -30,7 +30,6 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-PushRXPrescription-1
-
     [Documentation]    Push RX Prescription
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1

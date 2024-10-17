@@ -31,7 +31,6 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-Update Sales Order-1
-
     [Documentation]   Create a sales Order with Valid Details then Update sales order.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
@@ -352,7 +351,6 @@ JD-TC-Update Sales Order-1
     Should Be Equal As Strings    ${resp.json()['contactInfo']['phone']['number']}                                  ${primaryMobileNo} 
 
 JD-TC-Update Sales Order-2
-
     [Documentation]    Update sales order contactinfo number.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
@@ -403,7 +401,6 @@ JD-TC-Update Sales Order-2
     Should Be Equal As Strings    ${resp.json()['contactInfo']['phone']['number']}                                  ${primaryMobileNo1} 
 
 JD-TC-Update Sales Order-3
-
     [Documentation]    Update sales order homeDeliveryAddress number.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}
@@ -453,7 +450,6 @@ JD-TC-Update Sales Order-3
     Should Be Equal As Strings    ${resp.json()['contactInfo']['phone']['number']}                                  ${primaryMobileNo1} 
 
 JD-TC-Update Sales Order-4
-
     [Documentation]    Update sales order billingAddress number.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME17}  ${PASSWORD}

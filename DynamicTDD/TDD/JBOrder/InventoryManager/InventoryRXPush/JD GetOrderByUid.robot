@@ -30,7 +30,6 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-GetOrderByUid-1
-
     [Documentation]    Get Order By Uid
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
@@ -613,7 +612,6 @@ JD-TC-GetOrderByUid-1
     Should Be Equal As Strings      ${resp.status_code}             200
 
 JD-TC-GetOrderByUid-2
-
     [Documentation]    Get Order By Uid - where uid is invalid 
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME77}  ${PASSWORD}
@@ -627,7 +625,6 @@ JD-TC-GetOrderByUid-2
     Should Be Equal As Strings      ${resp.status_code}             200
 
 JD-TC-GetOrderByUid-3
-
     [Documentation]    Get Order By Uid - without login 
 
     ${resp}=    Get Sorder By Uid  ${invsorder_uid}

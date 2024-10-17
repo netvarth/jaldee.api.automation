@@ -20,7 +20,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-GetItemCategoryCountByFilter-1
-
     [Documentation]   Get Item Category Count By Filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
@@ -59,7 +58,6 @@ JD-TC-GetItemCategoryCountByFilter-1
 
 
 JD-TC-GetItemCategoryCountByFilter-2
-
     [Documentation]   Create a Item Category then try to get count of that item Category with filter(categoryName).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
@@ -88,7 +86,6 @@ JD-TC-GetItemCategoryCountByFilter-2
 
 
 JD-TC-GetItemCategoryCountByFilter-3
-
     [Documentation]   Create a Item Category then try to get count of that item Category with filter(status).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
@@ -102,7 +99,6 @@ JD-TC-GetItemCategoryCountByFilter-3
 
 
 JD-TC-GetItemCategoryCountByFilter-4
-
     [Documentation]   Update a Item Category Status then try to get count of that item Category with filter(status).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
@@ -120,7 +116,6 @@ JD-TC-GetItemCategoryCountByFilter-4
 
 
 JD-TC-GetItemCategoryCountByFilter-UH1
-
     [Documentation]  Get Item Category Count By Filter without Login.
 
     ${resp}=  Get Item Category Count By Filter   categoryName-eq=${categoryName1}
@@ -129,7 +124,6 @@ JD-TC-GetItemCategoryCountByFilter-UH1
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
 
 JD-TC-GetItemCategoryCountByFilter-UH2
-
     [Documentation]  Get Item Category Count By Filter with Consumer Login.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}

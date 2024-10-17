@@ -26,7 +26,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Get Item Stock adjust Count Filter-1
-
     [Documentation]  Get Item Stock adjust count Filter.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -197,7 +196,6 @@ JD-TC-Get Item Stock adjust Count Filter-1
 
 
 JD-TC-Get Item Stock adjust Count Filter-2
-
     [Documentation]  Get Item Stock adjust count Filter using location name.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -216,7 +214,6 @@ JD-TC-Get Item Stock adjust Count Filter-2
 
 
 JD-TC-Get Item Stock adjust Count Filter-3
-
     [Documentation]  Get Item Stock adjust count Filter using storeId.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -234,7 +231,6 @@ JD-TC-Get Item Stock adjust Count Filter-3
     Should Be Equal As Strings    ${resp.json()}    ${count}
 
 JD-TC-Get Item Stock adjust Count Filter-4
-
     [Documentation]  Get Item Stock adjust count Filter using storeEncId.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -252,7 +248,6 @@ JD-TC-Get Item Stock adjust Count Filter-4
     Should Be Equal As Strings    ${resp.json()}    ${count}
 
 JD-TC-Get Item Stock adjust Count Filter-5
-
     [Documentation]  Get Item Stock adjust count Filter using storeName.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -270,7 +265,6 @@ JD-TC-Get Item Stock adjust Count Filter-5
     Should Be Equal As Strings    ${resp.json()}    ${count}
 
 JD-TC-Get Item Stock adjust Count Filter-6
-
     [Documentation]  Get Item Stock adjust count Filter using invCatalogId.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -291,7 +285,6 @@ JD-TC-Get Item Stock adjust Count Filter-6
 
 
 JD-TC-Get Item Stock adjust Count Filter-7
-
     [Documentation]  Get Item Stock adjust count Filter using status.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -309,7 +302,6 @@ JD-TC-Get Item Stock adjust Count Filter-7
     Should Be Equal As Strings    ${resp.json()}    ${count}
 
 JD-TC-Get Item Stock adjust Count Filter-8
-
     [Documentation]  Get Item Stock adjust count Filter using location.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -327,7 +319,6 @@ JD-TC-Get Item Stock adjust Count Filter-8
     Should Be Equal As Strings    ${resp.json()}    ${count}
 
 JD-TC-Get Item Stock adjust Count Filter-9
-
     [Documentation]  Get Item Stock adjust count Filter using invCatalogEncId.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -345,7 +336,6 @@ JD-TC-Get Item Stock adjust Count Filter-9
     Should Be Equal As Strings    ${resp.json()}    ${count}
 
 JD-TC-Get Item Stock adjust Count Filter-10
-
     [Documentation]  Get Item Stock adjust count Filter using uid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -363,7 +353,6 @@ JD-TC-Get Item Stock adjust Count Filter-10
     Should Be Equal As Strings    ${resp.json()}    ${count}
 
 JD-TC-Get Item Stock adjust Count Filter-11
-
     [Documentation]  Get Item Stock adjust count Filter using remark.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -381,7 +370,6 @@ JD-TC-Get Item Stock adjust Count Filter-11
     Should Be Equal As Strings    ${resp.json()}    ${count}
 
 JD-TC-Get Item Stock adjust Count Filter-12
-
     [Documentation]  Get Item Stock adjust count Filter using remark.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -399,7 +387,6 @@ JD-TC-Get Item Stock adjust Count Filter-12
     Should Be Equal As Strings    ${resp.json()}    ${count}
 
 JD-TC-Get Item Stock adjust Count Filter-13
-
     [Documentation]  update stock adjustment by adding more  stockAdjustDetailsDtos then get stock adjustment by count flter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -434,7 +421,6 @@ JD-TC-Get Item Stock adjust Count Filter-13
 
 
 JD-TC-Get Item Stock adjust Count Filter-UH1
-
     [Documentation]  Get stock adjustment count filter without login
 
     ${resp}=  Get Item Stock adjust Count Filter   account-eq=${accountId}     
@@ -443,7 +429,6 @@ JD-TC-Get Item Stock adjust Count Filter-UH1
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-Get Item Stock adjust Count Filter-UH2
-
     [Documentation]  Get stock adjustment count filter with invalid remarks id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -464,7 +449,6 @@ JD-TC-Get Item Stock adjust Count Filter-UH2
 
 
 JD-TC-Get Item Stock adjust Count Filter-UH3
-
     [Documentation]  Get stock adjustment count filter with invalid remark id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -483,7 +467,6 @@ JD-TC-Get Item Stock adjust Count Filter-UH3
     Should Be Equal As Strings    ${resp.json()}    ${count}
 
 JD-TC-Get Item Stock adjust Count Filter-UH4
-
     [Documentation]  Get stock adjustment count filter with invalid uid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -502,7 +485,6 @@ JD-TC-Get Item Stock adjust Count Filter-UH4
     Should Be Equal As Strings    ${resp.json()}    ${count}
 
 JD-TC-Get Item Stock adjust Count Filter-UH5
-
     [Documentation]  Get stock adjustment count filter with invalid location.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -522,7 +504,6 @@ JD-TC-Get Item Stock adjust Count Filter-UH5
 
 
 JD-TC-Get Item Stock adjust Count Filter-UH6
-
     [Documentation]  Get stock adjustment count filter with invalid status.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -541,7 +522,6 @@ JD-TC-Get Item Stock adjust Count Filter-UH6
     Should Be Equal As Strings    ${resp.json()}    ${count}
 
 JD-TC-Get Item Stock adjust Count Filter-UH7
-
     [Documentation]  Get stock adjustment count filter with invalid locationName.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -560,7 +540,6 @@ JD-TC-Get Item Stock adjust Count Filter-UH7
     Should Be Equal As Strings    ${resp.json()}    ${count}
 
 JD-TC-Get Item Stock adjust Count Filter-UH8
-
     [Documentation]  Get stock adjustment count filter with invalid storeId.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -579,7 +558,6 @@ JD-TC-Get Item Stock adjust Count Filter-UH8
     Should Be Equal As Strings    ${resp.json()}    ${count}
     
 JD-TC-Get Item Stock adjust Count Filter-UH9
-
     [Documentation]  Get stock adjustment count filter with invalid storeEncId.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}
@@ -598,7 +576,6 @@ JD-TC-Get Item Stock adjust Count Filter-UH9
     Should Be Equal As Strings    ${resp.json()}    ${count}
 
 JD-TC-Get Item Stock adjust Count Filter-UH10
-
     [Documentation]  Get stock adjustment count filter with invalid storeName.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME7}  ${PASSWORD}

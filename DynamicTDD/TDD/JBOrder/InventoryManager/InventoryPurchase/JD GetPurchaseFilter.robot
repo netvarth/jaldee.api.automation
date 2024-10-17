@@ -27,7 +27,6 @@ ${order}        0
 *** Test Cases ***
 
 JD-TC-GetPurchaseByFilter-1
-
     [Documentation]  Get Purchase By Filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -615,7 +614,6 @@ JD-TC-GetPurchaseByFilter-1
 
 
 JD-TC-GetPurchaseByFilter-3
-
     [Documentation]  Get Purchase Filter - location
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -644,7 +642,6 @@ JD-TC-GetPurchaseByFilter-3
     Should Be Equal As Strings      ${resp.json()[0]['totalSgst']}      ${totalSgst}
 
 JD-TC-GetPurchaseByFilter-4
-
     [Documentation]  Get Purchase Filter - locationName
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -673,7 +670,6 @@ JD-TC-GetPurchaseByFilter-4
     Should Be Equal As Strings      ${resp.json()[0]['totalSgst']}      ${totalSgst}
 
 JD-TC-GetPurchaseByFilter-5
-
     [Documentation]  Get Purchase Filter - storeEncId
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -702,7 +698,6 @@ JD-TC-GetPurchaseByFilter-5
     Should Be Equal As Strings      ${resp.json()[0]['totalSgst']}      ${totalSgst}
 
 JD-TC-GetPurchaseByFilter-6
-
     [Documentation]  Get Purchase Filter - storeName
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -731,7 +726,6 @@ JD-TC-GetPurchaseByFilter-6
     Should Be Equal As Strings      ${resp.json()[0]['totalSgst']}      ${totalSgst}
 
 JD-TC-GetPurchaseByFilter-7
-
     [Documentation]  Get Purchase Filter - uid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -791,7 +785,6 @@ JD-TC-GetPurchaseByFilter-7
 
 
 JD-TC-GetPurchaseByFilter-11
-
     [Documentation]  Get Purchase Filter - invoicereferenceNo
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -820,7 +813,6 @@ JD-TC-GetPurchaseByFilter-11
     Should Be Equal As Strings      ${resp.json()[0]['totalSgst']}      ${totalSgst}
 
 JD-TC-GetPurchaseByFilter-12
-
     [Documentation]  Get Purchase Filter - invoiceDate
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -849,7 +841,6 @@ JD-TC-GetPurchaseByFilter-12
     Should Be Equal As Strings      ${resp.json()[0]['totalSgst']}      ${totalSgst}
 
 JD-TC-GetPurchaseByFilter-13
-
     [Documentation]  Get Purchase Filter - purchaseStatus
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -879,7 +870,6 @@ JD-TC-GetPurchaseByFilter-13
 
 
 JD-TC-GetPurchaseByFilter-UH1
-
     [Documentation]  Get Purchase Filter - without login
 
     ${resp}=    Get Purchase Filter 
@@ -889,7 +879,6 @@ JD-TC-GetPurchaseByFilter-UH1
 
 
 JD-TC-GetPurchaseByFilter-UH3
-
     [Documentation]  Get Purchase Filter - location invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -904,7 +893,6 @@ JD-TC-GetPurchaseByFilter-UH3
     Should Be Equal As Strings      ${resp.json()}          []   
 
 JD-TC-GetPurchaseByFilter-UH4
-
     [Documentation]  Get Purchase Filter - locationName invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -917,7 +905,6 @@ JD-TC-GetPurchaseByFilter-UH4
     Should Be Equal As Strings      ${resp.json()}          []
 
 JD-TC-GetPurchaseByFilter-UH5
-
     [Documentation]  Get Purchase Filter - storeEncId invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -932,7 +919,6 @@ JD-TC-GetPurchaseByFilter-UH5
     Should Be Equal As Strings      ${resp.json()}          []
 
 JD-TC-GetPurchaseByFilter-UH6
-
     [Documentation]  Get Purchase Filter - storeName invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -945,7 +931,6 @@ JD-TC-GetPurchaseByFilter-UH6
     Should Be Equal As Strings      ${resp.json()}          []
 
 JD-TC-GetPurchaseByFilter-UH7
-
     [Documentation]  Get Purchase Filter - uid is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -960,7 +945,6 @@ JD-TC-GetPurchaseByFilter-UH7
     Should Be Equal As Strings      ${resp.json()}          []
 
 JD-TC-GetPurchaseByFilter-UH8
-
     [Documentation]  Get Purchase Filter - purchaseReferenceNo invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -975,7 +959,6 @@ JD-TC-GetPurchaseByFilter-UH8
     Should Be Equal As Strings      ${resp.json()}          []
 
 JD-TC-GetPurchaseByFilter-UH11
-
     [Documentation]  Get Purchase Filter - invoicereferenceNo invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -990,7 +973,6 @@ JD-TC-GetPurchaseByFilter-UH11
     Should Be Equal As Strings      ${resp.json()}          []
 
 JD-TC-GetPurchaseByFilter-UH12
-
     [Documentation]  Get Purchase Filter - invoiceDate invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}
@@ -1005,7 +987,6 @@ JD-TC-GetPurchaseByFilter-UH12
     Should Be Equal As Strings      ${resp.json()}          []
 
 JD-TC-GetPurchaseByFilter-UH13
-
     [Documentation]  Get Purchase Filter - purchaseStatus is another
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}

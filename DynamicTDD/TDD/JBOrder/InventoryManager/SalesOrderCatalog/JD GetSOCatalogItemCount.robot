@@ -26,7 +26,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Get Sales Order Catalog Items Count-1
-
     [Documentation]  Test whether the system can successfully create items with all items having invMgmt set to false (with out Tax) Then it get count by Encid param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
@@ -187,7 +186,6 @@ JD-TC-Get Sales Order Catalog Items Count-1
     Should Be Equal As Strings    ${resp.json()}    1
 
 JD-TC-Get Sales Order Catalog Items Count-2
-
     [Documentation]  Try to get count by status filter param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
@@ -200,7 +198,6 @@ JD-TC-Get Sales Order Catalog Items Count-2
     Should Be Equal As Strings    ${resp.json()}    1
 
 JD-TC-Get Sales Order Catalog Items Count-3
-
     [Documentation]  Try to get count by invCatId filter param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
@@ -213,7 +210,6 @@ JD-TC-Get Sales Order Catalog Items Count-3
     Should Be Equal As Strings    ${resp.json()}    1
 
 JD-TC-Get Sales Order Catalog Items Count-UH1
-
     [Documentation]  Get SalesOrder Catalog Count  with invalid catalog id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME12}  ${PASSWORD}
@@ -227,7 +223,6 @@ JD-TC-Get Sales Order Catalog Items Count-UH1
     
 
 JD-TC-Get Sales Order Catalog Items Count-UH2
-
     [Documentation]  Get SalesOrder Catalog item Count without login.
 
     ${resp}=  Get SalesOrder Catalog Item Count  sorderCatalogEncId-eq=${SO_Cata_Encid}    invCatId-eq=${SO_Cata_Encid}  
@@ -237,7 +232,6 @@ JD-TC-Get Sales Order Catalog Items Count-UH2
 
 
 JD-TC-Get Sales Order Catalog Items Count-UH3
-
     [Documentation]  Get SalesOrder Catalog item Count using sa login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -250,7 +244,6 @@ JD-TC-Get Sales Order Catalog Items Count-UH3
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-Get Sales Order Catalog Items Count-UH4
-
     [Documentation]  Get SalesOrder Catalog item Count using another provider login
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}

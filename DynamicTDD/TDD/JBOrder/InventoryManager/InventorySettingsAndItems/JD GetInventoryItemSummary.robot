@@ -35,7 +35,6 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-Get Inventory Item Summary-1
-
     [Documentation]  Get Inventory Item Summary
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME317}  ${PASSWORD}
@@ -559,7 +558,6 @@ JD-TC-Get Inventory Item Summary-1
 
 
 JD-TC-Get Inventory Item Summary-UH1
-
     [Documentation]  Get Inventory Item Summary
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME317}  ${PASSWORD}
@@ -572,7 +570,6 @@ JD-TC-Get Inventory Item Summary-UH1
     Should Be Equal As Strings   ${resp.json()}   ${STORE_REQUIRED}
 
 JD-TC-Get Inventory Item Summary-UH2
-
     [Documentation]  Get Inventory Item Summary where from is not passed
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME317}  ${PASSWORD}

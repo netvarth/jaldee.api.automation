@@ -27,7 +27,6 @@ ${order}        0
 *** Test Cases ***
 
 JD-TC-UpdatePurchase-1
-
     [Documentation]  Update Purchase - invoice Reference No Updated
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -636,7 +635,6 @@ JD-TC-UpdatePurchase-1
     Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['unitCode']}      ${iu_id}
 
 JD-TC-UpdatePurchase-2
-
     [Documentation]  Update Purchase - invoice date Updated
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -691,7 +689,6 @@ JD-TC-UpdatePurchase-2
     Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['unitCode']}      ${iu_id}
 
 JD-TC-UpdatePurchase-3
-
     [Documentation]  Update Purchase - purchaseNote Updated
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -747,7 +744,6 @@ JD-TC-UpdatePurchase-3
 
 
 JD-TC-UpdatePurchase-4
-
     [Documentation]  Update Purchase - round off Updated
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -806,7 +802,6 @@ JD-TC-UpdatePurchase-4
 
 
 JD-TC-UpdatePurchase-5
-
     [Documentation]  Update Purchase - purchaseId is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -823,7 +818,6 @@ JD-TC-UpdatePurchase-5
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
 
 JD-TC-UpdatePurchase-6
-
     [Documentation]  Update Purchase - inventory catalogue encid in invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -842,7 +836,6 @@ JD-TC-UpdatePurchase-6
     Should Be Equal As Strings    ${resp.json()}            ${ITEM_NOT_FOUND}
 
 JD-TC-UpdatePurchase-8
-
     [Documentation]  Update Purchase - quantity is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -859,7 +852,6 @@ JD-TC-UpdatePurchase-8
     Should Be Equal As Strings    ${resp.json()}            ${INVALID_PURCHASE_QUANTITY}
 
 JD-TC-UpdatePurchase-9
-
     [Documentation]  Update Purchase - ifree quantity as empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -874,7 +866,6 @@ JD-TC-UpdatePurchase-9
 
 
 JD-TC-UpdatePurchase-12
-
     [Documentation]  Update Purchase - amount is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -888,7 +879,6 @@ JD-TC-UpdatePurchase-12
     Should Be Equal As Strings      ${resp.status_code}     200
 
 JD-TC-UpdatePurchase-12.1
-
     [Documentation]  Update Purchase - amount is null
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -902,7 +892,6 @@ JD-TC-UpdatePurchase-12.1
     Should Be Equal As Strings      ${resp.status_code}     422
 
 JD-TC-UpdatePurchase-12.2
-
     [Documentation]  Update Purchase - amount is negative
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -919,7 +908,6 @@ JD-TC-UpdatePurchase-12.2
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
 
 JD-TC-UpdatePurchase-13
-
     [Documentation]  Update Purchase - amount is changed
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -935,7 +923,6 @@ JD-TC-UpdatePurchase-13
     Should Be Equal As Strings      ${resp.status_code}     200
 
 JD-TC-UpdatePurchase-14
-
     [Documentation]  Update Purchase - discount amount is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -951,7 +938,6 @@ JD-TC-UpdatePurchase-14
     Should Be Equal As Strings      ${resp.status_code}     200
 
 JD-TC-UpdatePurchase-15
-
     [Documentation]  Update Purchase - discount amount is updated
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -967,7 +953,6 @@ JD-TC-UpdatePurchase-15
     Should Be Equal As Strings      ${resp.status_code}     200
 
 JD-TC-UpdatePurchase-16
-
     [Documentation]  Update Purchase - discount Percentage is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -981,7 +966,6 @@ JD-TC-UpdatePurchase-16
     Should Be Equal As Strings      ${resp.status_code}     200
 
 JD-TC-UpdatePurchase-16.1
-
     [Documentation]  Update Purchase - discount Percentage is null
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -995,7 +979,6 @@ JD-TC-UpdatePurchase-16.1
     Should Be Equal As Strings      ${resp.status_code}     400
 
 JD-TC-UpdatePurchase-16.2
-
     [Documentation]  Update Purchase - discount Percentage is negative
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -1012,7 +995,6 @@ JD-TC-UpdatePurchase-16.2
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
 
 JD-TC-UpdatePurchase-17
-
     [Documentation]  Update Purchase - discount percentage is above 100
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -1029,7 +1011,6 @@ JD-TC-UpdatePurchase-17
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_ITEM_DISCOUNT_PERCENTAGE}
 
 JD-TC-UpdatePurchase-18
-
     [Documentation]  Update Purchase - fixed discount is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -1045,7 +1026,6 @@ JD-TC-UpdatePurchase-18
     Should Be Equal As Strings      ${resp.status_code}     200
 
 JD-TC-UpdatePurchase-18.1
-
     [Documentation]  Update Purchase - fixed discount is null
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -1061,7 +1041,6 @@ JD-TC-UpdatePurchase-18.1
     Should Be Equal As Strings      ${resp.status_code}     422
 
 JD-TC-UpdatePurchase-18.2
-
     [Documentation]  Update Purchase - fixed discount is negative
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -1080,7 +1059,6 @@ JD-TC-UpdatePurchase-18.2
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
 
 JD-TC-UpdatePurchase-19
-
     [Documentation]  Update Purchase - fixed discount is above total
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -1097,7 +1075,6 @@ JD-TC-UpdatePurchase-19
 
 
 JD-TC-UpdatePurchase-27
-
     [Documentation]  Update Purchase - expairy date is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -1116,7 +1093,6 @@ JD-TC-UpdatePurchase-27
     Should Be Equal As Strings      ${resp.json()}          ${EXPIRY_DATE_REQ}
 
 JD-TC-UpdatePurchase-28
-
     [Documentation]  Update Purchase - expairy date is changed
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -1132,7 +1108,6 @@ JD-TC-UpdatePurchase-28
     Should Be Equal As Strings      ${resp.status_code}     200
 
 JD-TC-UpdatePurchase-29
-
     [Documentation]  Update Purchase - expairy date is past date
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -1149,7 +1124,6 @@ JD-TC-UpdatePurchase-29
     Should Be Equal As Strings      ${resp.json()}          ${ITEM_EXPIRED}
 
 JD-TC-UpdatePurchase-30
-
     [Documentation]  Update Purchase - mrp is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -1164,7 +1138,6 @@ JD-TC-UpdatePurchase-30
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_MRP}
 
 JD-TC-UpdatePurchase-30.1
-
     [Documentation]  Update Purchase - mrp is null
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -1179,7 +1152,6 @@ JD-TC-UpdatePurchase-30.1
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_MRP}
 
 JD-TC-UpdatePurchase-30.2
-
     [Documentation]  Update Purchase - mrp is negative
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -1196,7 +1168,6 @@ JD-TC-UpdatePurchase-30.2
     Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
 
 JD-TC-UpdatePurchase-31
-
     [Documentation]  Update Purchase - mrp is changed
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -1212,7 +1183,6 @@ JD-TC-UpdatePurchase-31
     Should Be Equal As Strings      ${resp.status_code}     200
 
 JD-TC-UpdatePurchase-34
-
     [Documentation]  Update Purchase - batch number is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -1229,7 +1199,6 @@ JD-TC-UpdatePurchase-34
     Should Be Equal As Strings      ${resp.json()}          ${ITEM_BATCH_NEEDED}
 
 JD-TC-UpdatePurchase-35
-
     [Documentation]  Update Purchase - batch number is updated
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -1246,7 +1215,6 @@ JD-TC-UpdatePurchase-35
 
 
 JD-TC-UpdatePurchase-40
-
     [Documentation]  Update Purchase - unit code is empty
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -1266,7 +1234,6 @@ JD-TC-UpdatePurchase-40
 
 
 JD-TC-UpdatePurchase-41
-
     [Documentation]  Update Purchase - unit code is invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME8}  ${PASSWORD}
@@ -1285,7 +1252,6 @@ JD-TC-UpdatePurchase-41
     Should Be Equal As Strings      ${resp.json()}          ${UNIT_REQ}
 
 JD-TC-UpdatePurchase-42
-
     [Documentation]  Update Purchase - without login 
 
     ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${quantity}  ${freeQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${expiryDate}  ${mrp}  ${batchNo}  ${iu_id}                                                               

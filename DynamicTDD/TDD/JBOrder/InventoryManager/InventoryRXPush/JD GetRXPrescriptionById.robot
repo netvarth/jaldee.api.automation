@@ -30,7 +30,6 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-GetPrescription-1
-
     [Documentation]    Get Prescription
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
@@ -541,7 +540,6 @@ JD-TC-GetPrescription-1
 
 
 JD-TC-GetPrescription-2
-
     [Documentation]    Get Prescription - prescription is invalid 
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -558,7 +556,6 @@ JD-TC-GetPrescription-2
     Should Be Equal As Strings      ${resp.json()}          ${NOT_FOUND_WITH_ID}
 
 JD-TC-GetPrescription-3
-
     [Documentation]    Get Prescription - without login
 
     ${resp}=    Get RX Prescription By Id  ${prescription_id}

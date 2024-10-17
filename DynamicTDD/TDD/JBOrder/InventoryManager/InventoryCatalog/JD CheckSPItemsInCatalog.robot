@@ -42,7 +42,6 @@ Check SP Items In Catalog
 *** Test Cases ***
 
 JD-TC-Check SP Items In Catalog-1
-
     [Documentation]  Create two Inventory Catalog Item then check SP Items In Catalog .
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -210,7 +209,6 @@ JD-TC-Check SP Items In Catalog-1
 
 
 JD-TC-Check SP Items In Catalog-UH1
-
     [Documentation]  Check SP Items In Catalog
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -227,7 +225,6 @@ JD-TC-Check SP Items In Catalog-UH1
 
 
 JD-TC-Check SP Items In Catalog-UH2
-
     [Documentation]  Check SP Items In Catalog without login.
 
     ${resp}=   Check SP Items In Catalog     ${itemEncId1}   ${encid}   ${encid1}
@@ -237,7 +234,6 @@ JD-TC-Check SP Items In Catalog-UH2
 
 
 JD-TC-Check SP Items In Catalog-UH3
-
     [Documentation]  Check SP Items In Catalog with invalid catalog id.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -252,7 +248,6 @@ JD-TC-Check SP Items In Catalog-UH3
 
 
 JD-TC-Check SP Items In Catalog-UH4
-
     [Documentation]  Item is not added in catalog then check sp item in catalog
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}

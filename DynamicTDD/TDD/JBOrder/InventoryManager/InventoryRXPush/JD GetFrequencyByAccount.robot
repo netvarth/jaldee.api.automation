@@ -30,7 +30,6 @@ ${originFrom}       NONE
 
 
 JD-TC-GetFrequencyByAccount-1
-
     [Documentation]  Get Frequency By Account
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
@@ -109,7 +108,6 @@ JD-TC-GetFrequencyByAccount-1
 
 
 JD-TC-GetFrequencyByAccount-2
-
     [Documentation]  Get Frequency By Account - where account id is invalid
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
@@ -123,7 +121,6 @@ JD-TC-GetFrequencyByAccount-2
     Should Be Equal As Strings      ${resp.status_code}                 200
 
 JD-TC-GetFrequencyByAccount-3
-
     [Documentation]  Get Frequency By Account - without login 
 
     ${resp}=    Get Frequency By Account  ${account_id_PUSERNAME300}

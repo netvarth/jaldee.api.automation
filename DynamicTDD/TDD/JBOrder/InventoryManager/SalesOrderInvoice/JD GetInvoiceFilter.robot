@@ -27,7 +27,6 @@ ${invalidItem}     sprx-3250dr0-800
 *** Test Cases ***
 
 JD-TC-Get invoice filter-1
-
     [Documentation]   Create a sales Order with Valid Details then Get invoice filter by uid param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
@@ -374,7 +373,6 @@ JD-TC-Get invoice filter-1
 
 
 JD-TC-Get invoice filter-2
-
     [Documentation]   Get invoice filter by status param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
@@ -404,7 +402,6 @@ JD-TC-Get invoice filter-2
     Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
 
 JD-TC-Get invoice filter-3
-
     [Documentation]   Get invoice filter by storeId param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
@@ -434,7 +431,6 @@ JD-TC-Get invoice filter-3
     Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
 
 JD-TC-Get invoice filter-4
-
     [Documentation]   Get invoice filter by locationId param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
@@ -464,7 +460,6 @@ JD-TC-Get invoice filter-4
     Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
 
 JD-TC-Get invoice filter-5
-
     [Documentation]   Get invoice filter by orderUid param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
@@ -494,7 +489,6 @@ JD-TC-Get invoice filter-5
     Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
 
 JD-TC-Get invoice filter-6
-
     [Documentation]   Get invoice filter by providerConsumerId param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
@@ -524,7 +518,6 @@ JD-TC-Get invoice filter-6
     Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
 
 JD-TC-Get invoice filter-7
-
     [Documentation]   Get invoice filter by providerConsumerName param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}
@@ -554,7 +547,6 @@ JD-TC-Get invoice filter-7
     Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
 
 JD-TC-Get invoice filter-8
-
     [Documentation]   Get invoice filter by paymentStatus param.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME34}  ${PASSWORD}

@@ -29,7 +29,6 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-StockAvaliability-1
-
     [Documentation]  Get Stock Avaliability
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}

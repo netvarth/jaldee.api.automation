@@ -20,7 +20,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-UpdateItemTypeStatus-1
-
     [Documentation]  Provider Create a Item Type then try to Update Item Type Status.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
@@ -64,7 +63,6 @@ JD-TC-UpdateItemTypeStatus-1
     Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[1]}
 
 JD-TC-UpdateItemTypeStatus-2
-
     [Documentation]  Update Item Type Status as already disabled.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
@@ -77,7 +75,6 @@ JD-TC-UpdateItemTypeStatus-2
     Should Be Equal As Strings    ${resp.json()}         ${STATUS_ALREADY_UPDATED}
 
 JD-TC-UpdateItemTypeStatus-3
-
     [Documentation]  try to Enable ,Disabled Status.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}
@@ -96,7 +93,6 @@ JD-TC-UpdateItemTypeStatus-3
     Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[0]}
 
 JD-TC-UpdateItemTypeStatus-UH1
-
     [Documentation]  Get Item Type without Login.
 
     ${resp}=  Update Item Type Status   ${Ty_Id}    ${toggle[0]}
@@ -105,7 +101,6 @@ JD-TC-UpdateItemTypeStatus-UH1
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
 
 JD-TC-UpdateItemTypeStatus-UH2
-
     [Documentation]  Get Item Type with Consumer Login.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}

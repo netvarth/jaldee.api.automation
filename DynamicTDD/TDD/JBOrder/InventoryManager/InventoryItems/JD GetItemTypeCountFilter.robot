@@ -20,7 +20,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-GetItemTypeCountByFilter-1
-
     [Documentation]   Create a Item Type Count by Filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
@@ -59,7 +58,6 @@ JD-TC-GetItemTypeCountByFilter-1
 
 
 JD-TC-GetItemTypeCountByFilter-2
-
     [Documentation]   Create a Item Type then try to get that item Type with filter(TypeName).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
@@ -87,7 +85,6 @@ JD-TC-GetItemTypeCountByFilter-2
     Should Be Equal As Strings    ${resp.json()}        1
 
 JD-TC-GetItemTypeCountByFilter-3
-
     [Documentation]   Create a Item Type then try to get that item Type with filter(status).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
@@ -100,7 +97,6 @@ JD-TC-GetItemTypeCountByFilter-3
     Should Be Equal As Strings    ${resp.json()}        2
 
 JD-TC-GetItemTypeCountByFilter-4
-
     [Documentation]   Update a Item Type Status then try to get that item Type with filter(status).
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
@@ -117,7 +113,6 @@ JD-TC-GetItemTypeCountByFilter-4
     Should Be Equal As Strings    ${resp.json()}        1
 
 JD-TC-GetItemTypeCountByFilter-UH1
-
     [Documentation]  Get Item Type Count By Filter without Login.
 
     ${resp}=  Get Item Type Count By Filter   typeName-eq=${TypeName1}
@@ -126,7 +121,6 @@ JD-TC-GetItemTypeCountByFilter-UH1
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
 
 JD-TC-GetItemTypeCountByFilter-UH2
-
     [Documentation]  Get Item Type Count By Filter with Consumer Login.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}

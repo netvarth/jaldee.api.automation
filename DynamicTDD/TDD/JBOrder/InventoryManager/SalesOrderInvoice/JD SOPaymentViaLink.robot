@@ -27,7 +27,6 @@ ${invalidItem}     sprx-3250dr0-800
 *** Test Cases ***
 
 JD-TC-Sales Order Payment Via Link-1
-
     [Documentation]   Create a sales Order with Valid Details then do the payment through link.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME38}  ${PASSWORD}
@@ -385,7 +384,6 @@ JD-TC-Sales Order Payment Via Link-1
     Should Be Equal As Strings    ${resp.status_code}   200
 
 JD-TC-Sales Order Payment Via Link-2
-
     [Documentation]   Create a sales Order  then do the payment through link payment modes is CC.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME38}  ${PASSWORD}

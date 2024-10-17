@@ -19,7 +19,6 @@ Variables         /ebs/TDD/varfiles/hl_providers.py
 *** Test Cases ***
 
 JD-TC-CreateItemTaxCountFilter-1
-
     [Documentation]  Get Item tax Count Filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
@@ -62,7 +61,6 @@ JD-TC-CreateItemTaxCountFilter-1
     Should Be Equal As Strings    ${resp.json()}        1
 
 JD-TC-CreateItemTaxCountFilter-2
-
     [Documentation]  Get Item tax Count Filter - taxCode filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
@@ -75,7 +73,6 @@ JD-TC-CreateItemTaxCountFilter-2
     Should Be Equal As Strings    ${resp.json()}        1
 
 JD-TC-CreateItemTaxCountFilter-3
-
     [Documentation]  Get Item tax Count Filter - taxName filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
@@ -88,7 +85,6 @@ JD-TC-CreateItemTaxCountFilter-3
     Should Be Equal As Strings    ${resp.json()}        1
 
 JD-TC-CreateItemTaxCountFilter-4
-
     [Documentation]  Get Item tax Count Filter - status
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
@@ -102,7 +98,6 @@ JD-TC-CreateItemTaxCountFilter-4
     
 
 JD-TC-CreateItemTaxCountFilter-UH1
-
     [Documentation]  Get Item tax Count Filter - without login
 
     ${resp}=    Get Item Tax Count Filter
@@ -111,7 +106,6 @@ JD-TC-CreateItemTaxCountFilter-UH1
     Should Be Equal As Strings    ${resp.json()}         ${SESSION_EXPIRED}
 
 JD-TC-CreateItemTaxCountFilter-UH2
-
     [Documentation]  Get Item tax Count Filter - with another provider login
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}

@@ -30,7 +30,6 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-Unassign User-1
-
     [Documentation]   Create a sales Order with Valid Details then assign to a user and unassign.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}
@@ -338,7 +337,6 @@ JD-TC-Unassign User-1
     Should Be Equal As Strings    ${resp.status_code}   200    
 
 JD-TC-Unassign User-2
-
     [Documentation]   Create a sales Order with Valid Details then assign to a user and unassign.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME5}  ${PASSWORD}

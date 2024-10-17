@@ -29,7 +29,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-Update Inventory Catalog status-1
-
     [Documentation]  Update Inventory Catalog status as inactive then change to active.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -128,7 +127,6 @@ JD-TC-Update Inventory Catalog status-1
 
 
 JD-TC-Update Inventory Catalog status-2
-
     [Documentation]   update inventory catalog then Update Inventory Catalog status as enable.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME51}  ${PASSWORD}
@@ -158,7 +156,6 @@ JD-TC-Update Inventory Catalog status-2
 
 
 JD-TC-Update Inventory Catalog status-UH1
-
     [Documentation]  Update Inventory Catalog status with invalid encid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME51}  ${PASSWORD}
@@ -173,7 +170,6 @@ JD-TC-Update Inventory Catalog status-UH1
     
 
 JD-TC-Update Inventory Catalog status-UH2
-
     [Documentation]  Update Inventory Catalog status as active again(its already active status)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME51}  ${PASSWORD}
@@ -187,7 +183,6 @@ JD-TC-Update Inventory Catalog status-UH2
     Should Be Equal As Strings   ${resp.json()}   ${Inventory_catalog_active_status}
 
 JD-TC-Update Inventory Catalog status-UH3
-
     [Documentation]  Update Inventory Catalog status as inactive again
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME51}  ${PASSWORD}
@@ -206,7 +201,6 @@ JD-TC-Update Inventory Catalog status-UH3
 
 
 JD-TC-Update Inventory Catalog status-UH4
-
     [Documentation]  create  inventory catalog without login.
 
 
@@ -217,7 +211,6 @@ JD-TC-Update Inventory Catalog status-UH4
 
 
 JD-TC-Update Inventory Catalog status-UH5
-
     [Documentation]  create  inventory catalog using sa login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -231,7 +224,6 @@ JD-TC-Update Inventory Catalog status-UH5
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-Update Inventory Catalog status-UH6
-
     [Documentation]  Update Inventory Catalog status as inactive again
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -245,7 +237,6 @@ JD-TC-Update Inventory Catalog status-UH6
     Should Be Equal As Strings   ${resp.json()}   ${Invalid_inventory_catalog_encoded_id}
 
 JD-TC-Update Inventory Catalog status-UH7
-
     [Documentation]  create  inventory catalog from main account ,then inactive that status then create catalog with  same name from user login(with admin privilege)
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME51}  ${PASSWORD}
@@ -331,7 +322,6 @@ JD-TC-Update Inventory Catalog status-UH7
     Should Be Equal As Strings   ${resp.json()}   ${SAME_NAME_EXIST}
 
 JD-TC-Update Inventory Catalog status-UH8
-
     [Documentation]  create  inventory catalog from main account , then then inactive that status from user login(without admin privilege)
 
    ${resp}=  Encrypted Provider Login  ${HLPUSERNAME50}  ${PASSWORD}

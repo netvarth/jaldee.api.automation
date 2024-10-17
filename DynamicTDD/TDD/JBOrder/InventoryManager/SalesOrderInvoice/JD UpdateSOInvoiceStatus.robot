@@ -27,7 +27,6 @@ ${invalidItem}     sprx-3250dr0-800
 *** Test Cases ***
 
 JD-TC-Update Sales Order Invoice Status-1
-
     [Documentation]   Create a sales Order with Valid Details then Update sales order invoice Status New to Settled.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
@@ -355,7 +354,6 @@ JD-TC-Update Sales Order Invoice Status-1
     Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[1]}
 
 JD-TC-Update Sales Order Invoice Status-UH1
-
     [Documentation]    Update sales order invoice Status Settled to Cancel.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
@@ -368,7 +366,6 @@ JD-TC-Update Sales Order Invoice Status-UH1
     Should Be Equal As Strings    ${resp.json()}   ${CAN_NOT_CHANGE_SETTLED_STATUS}
 
 JD-TC-Update Sales Order Invoice Status-UH2
-
     [Documentation]    Update sales order invoice Status Cancel to new.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
@@ -440,7 +437,6 @@ JD-TC-Update Sales Order Invoice Status-UH2
     Should Be Equal As Strings    ${resp.json()}   ${CAN_NOT_CHANGE_STATUS}
 
 JD-TC-Update Sales Order Invoice Status-UH3
-
     [Documentation]    Update sales order invoice Status Cancel to Settled.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
@@ -453,7 +449,6 @@ JD-TC-Update Sales Order Invoice Status-UH3
     Should Be Equal As Strings    ${resp.json()}   ${CAN_NOT_CHANGE_STATUS}
 
 JD-TC-Update Sales Order Invoice Status-UH4
-
     [Documentation]    Update sales order invoice Status Cancel to Cancel.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME39}  ${PASSWORD}
@@ -466,7 +461,6 @@ JD-TC-Update Sales Order Invoice Status-UH4
     Should Be Equal As Strings    ${resp.json()}   ${ALREADY_CANCELLED}
 
 JD-TC-Update Sales Order Invoice Status-UH5
-
     [Documentation]   Another provider try to Update sales order invoice Status.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME4}  ${PASSWORD}

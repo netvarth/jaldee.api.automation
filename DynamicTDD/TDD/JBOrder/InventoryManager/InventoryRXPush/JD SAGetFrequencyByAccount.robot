@@ -30,7 +30,6 @@ ${originFrom}       NONE
 
 
 JD-TC-GetAllAccountFrequency-1
-
     [Documentation]  Get All Account Frequency
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME104}  ${PASSWORD}
@@ -143,7 +142,6 @@ JD-TC-GetAllAccountFrequency-1
 
 
 JD-TC-GetAllAccountFrequency-2
-
     [Documentation]  Get Frequency by account 
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}

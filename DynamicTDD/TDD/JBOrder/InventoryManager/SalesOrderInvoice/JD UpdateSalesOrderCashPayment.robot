@@ -28,7 +28,6 @@ ${invalidItem}     sprx-3250dr0-800
 *** Test Cases ***
 
 JD-TC-Update Cash Payment For Sales Order-1
-
     [Documentation]   Create a sales Order with Valid Details then pay full amount by cash payment and update with same sales amount.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
@@ -383,7 +382,6 @@ JD-TC-Update Cash Payment For Sales Order-1
 
 
 JD-TC-Update Cash Payment For Sales Order-2
-
     [Documentation]    update cash payment amount as half of the total .
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
@@ -412,7 +410,6 @@ JD-TC-Update Cash Payment For Sales Order-2
     Should Be Equal As Strings    ${resp.json()['amountPaid']}                                      ${half_Total}
 
 JD-TC-Update Cash Payment For Sales Order-UH1
-
     [Documentation]    update cash payment amount as higher amount.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
@@ -430,7 +427,6 @@ JD-TC-Update Cash Payment For Sales Order-UH1
     Should Be Equal As Strings  ${resp.json()}  ${GREATER_THAN_THE_BILL}
 
 JD-TC-Update Cash Payment For Sales Order-UH2
-
     [Documentation]    update cash payment with EMPTY Invoice id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
@@ -445,7 +441,6 @@ JD-TC-Update Cash Payment For Sales Order-UH2
     Should Be Equal As Strings  ${resp.json()}  ${INVALID_FM_INVOICE_ID}
 
 JD-TC-Update Cash Payment For Sales Order-UH3
-
     [Documentation]    update cash payment with negative amount.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
@@ -460,7 +455,6 @@ JD-TC-Update Cash Payment For Sales Order-UH3
     Should Be Equal As Strings  ${resp.json()}  ${GREATER_THAN_THE_BILL}
 
 JD-TC-Update Cash Payment For Sales Order-UH4
-
     [Documentation]    update cash payment with EMPTY note.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
@@ -473,7 +467,6 @@ JD-TC-Update Cash Payment For Sales Order-UH4
     Should Be Equal As Strings  ${resp.json()}  ${NOTES_CANNOT_BE_EMPTY}
 
 JD-TC-Update Cash Payment For Sales Order-UH5
-
     [Documentation]    update cash payment with EMPTY paymentRefId.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME11}  ${PASSWORD}
@@ -488,7 +481,6 @@ JD-TC-Update Cash Payment For Sales Order-UH5
     Should Be Equal As Strings  ${resp.json()}  ${INVALID_PAYMENT_REF_ID}
 
 JD-TC-Update Cash Payment For Sales Order-UH6
-
     [Documentation]    update cash payment without login.
 
     ${note}=  FakerLibrary.name
@@ -499,7 +491,6 @@ JD-TC-Update Cash Payment For Sales Order-UH6
     Should Be Equal As Strings  ${resp.json()}  ${SESSION_EXPIRED}
 
 JD-TC-Update Cash Payment For Sales Order-UH7
-
     [Documentation]    update cash payment with another provider login.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}

@@ -27,7 +27,6 @@ ${order}        0
 *** Test Cases ***
 
 JD-TC-GetPurchaseItemFilter-1
-
     [Documentation]  Get Purchase Item Filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
@@ -613,7 +612,6 @@ JD-TC-GetPurchaseItemFilter-1
     Should Be Equal As Strings      ${resp.json()[0]['unitCode']}                                ${iu_id}
 
 JD-TC-GetPurchaseItemFilter-3
-
     [Documentation]  Get Purchase Item Filter - purchaseUid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
@@ -643,7 +641,6 @@ JD-TC-GetPurchaseItemFilter-3
     Should Be Equal As Strings      ${resp.json()[0]['unitCode']}                                ${iu_id}
 
 JD-TC-GetPurchaseItemFilter-4
-
     [Documentation]  Get Purchase Item Filter - expiryDate
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
@@ -674,7 +671,6 @@ JD-TC-GetPurchaseItemFilter-4
 
 
 JD-TC-GetPurchaseItemFilter-UH2
-
     [Documentation]  Get Purchase Item Filter - without login
 
     ${resp}=    Get Purchase Item Filter 
@@ -683,7 +679,6 @@ JD-TC-GetPurchaseItemFilter-UH2
     Should Be Equal As Strings      ${resp.json()}          ${SESSION_EXPIRED}
 
 JD-TC-GetPurchaseItemFilter-UH3
-
     [Documentation]  Get Purchase Item Filter - purchaseUid invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}
@@ -698,7 +693,6 @@ JD-TC-GetPurchaseItemFilter-UH3
     Should Be Equal As Strings      ${resp.json()}          []
 
 JD-TC-GetPurchaseItemFilter-UH4
-
     [Documentation]  Get Purchase Item Filter - expiryDate invalid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME6}  ${PASSWORD}

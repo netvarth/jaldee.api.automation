@@ -27,7 +27,6 @@ ${invalidItem}     sprx-3250dr0-800
 *** Test Cases ***
 
 JD-TC-Get Sales Order Invoice By Order Encid-1
-
     [Documentation]   Create a sales Order with Valid Details then Genarate sales order invoice and Get it by order encid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
@@ -368,7 +367,6 @@ JD-TC-Get Sales Order Invoice By Order Encid-1
     Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
 
 JD-TC-Get Sales Order Invoice By Order Encid-UH1
-
     [Documentation]   Another povider login and try to Get order encid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME3}  ${PASSWORD}
@@ -381,7 +379,6 @@ JD-TC-Get Sales Order Invoice By Order Encid-UH1
     Should Be Equal As Strings    ${resp.json()}   ${INVALID_ORDER}
 
 JD-TC-Get Sales Order Invoice By Order Encid-UH2
-
     [Documentation]   Get sales order invoice with invalid order encid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}
@@ -394,7 +391,6 @@ JD-TC-Get Sales Order Invoice By Order Encid-UH2
     Should Be Equal As Strings    ${resp.json()}   ${INVALID_ORDER}
 
 JD-TC-Get Sales Order Invoice By Order Encid-UH3
-
     [Documentation]   Get sales order invoice with EMPTY order encid.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME32}  ${PASSWORD}

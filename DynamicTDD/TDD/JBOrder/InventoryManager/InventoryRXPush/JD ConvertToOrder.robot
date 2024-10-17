@@ -30,7 +30,6 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 JD-TC-ConvertToOrder-1
-
     [Documentation]    Convert to Order
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
@@ -639,7 +638,6 @@ JD-TC-ConvertToOrder-1
     Should Be Equal As Strings      ${resp.json()[0]['doctorName']}    ${Docfname} ${Doclname}
 
 JD-TC-ConvertToOrder-UH2
-
     [Documentation]    Convert to Order - where order is already accepted
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -654,7 +652,6 @@ JD-TC-ConvertToOrder-UH2
     Should Be Equal As Strings      ${resp.json()}                  ${ORDER_IN_STATUS}
 
 JD-TC-ConvertToOrder-UH3
-
     [Documentation]    Convert to Order - where sorder uid is invalid
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -670,7 +667,6 @@ JD-TC-ConvertToOrder-UH3
     
 
 JD-TC-ConvertToOrder-UH4
-
     [Documentation]    Convert to Order - where order status draft to confirmed
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -683,7 +679,6 @@ JD-TC-ConvertToOrder-UH4
     Should Be Equal As Strings      ${resp.status_code}             422
     Should Be Equal As Strings      ${resp.json()}                  ${ORDER_IN_STATUS}
 JD-TC-ConvertToOrder-UH5
-
     [Documentation]    Convert to Order - where order status confirmed to draft
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
@@ -696,7 +691,6 @@ JD-TC-ConvertToOrder-UH5
     Should Be Equal As Strings      ${resp.status_code}             422
     Should Be Equal As Strings      ${resp.json()}                  ${ORDER_IN_STATUS}
 JD-TC-OrderRequest-UH1
-
     [Documentation]    Convert to Order - without login
 
     ${resp}=    Convert to order  ${sorder_uid}  ${orderStatus[0]}

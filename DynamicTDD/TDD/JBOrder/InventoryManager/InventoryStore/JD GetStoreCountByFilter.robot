@@ -24,7 +24,6 @@ ${invalidEma}        asd122
 *** Test Cases ***
 
 JD-TC-GetStoreCountByFilter-1
-
     [Documentation]  Get Store Count By Filter - name filter
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -180,7 +179,6 @@ JD-TC-GetStoreCountByFilter-1
     Should Be Equal As Strings  ${resp.json()}      1
 
 JD-TC-GetStoreCountByFilter-2
-
     [Documentation]  Get Store Count By Filter - storeNature filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -193,7 +191,6 @@ JD-TC-GetStoreCountByFilter-2
     Should Be Equal As Strings  ${resp.json()}      1
 
 JD-TC-GetStoreCountByFilter-3
-
     [Documentation]  Get Store Count By Filter - storeCode filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -206,7 +203,6 @@ JD-TC-GetStoreCountByFilter-3
     Should Be Equal As Strings  ${resp.json()}      1
 
 JD-TC-GetStoreCountByFilter-4
-
     [Documentation]  Get Store Count By Filter - encId filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -219,7 +215,6 @@ JD-TC-GetStoreCountByFilter-4
     Should Be Equal As Strings  ${resp.json()}      1
 
 JD-TC-GetStoreCountByFilter-5
-
     [Documentation]  Get Store Count By Filter - city filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -233,7 +228,6 @@ JD-TC-GetStoreCountByFilter-5
 
 
 JD-TC-GetStoreCountByFilter-6
-
     [Documentation]  Get Store Count By Filter - district filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -246,7 +240,6 @@ JD-TC-GetStoreCountByFilter-6
     Should Be Equal As Strings  ${resp.json()}      2
 
 JD-TC-GetStoreCountByFilter-7
-
     [Documentation]  Get Store Count By Filter - state filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -260,7 +253,6 @@ JD-TC-GetStoreCountByFilter-7
 
 
 JD-TC-GetStoreCountByFilter-8
-
     [Documentation]  Get Store Count By Filter - country filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -273,7 +265,6 @@ JD-TC-GetStoreCountByFilter-8
     Should Be Equal As Strings  ${resp.json()}      2
 
 JD-TC-GetStoreCountByFilter-9
-
     [Documentation]  Get Store Count By Filter - pincode filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -287,7 +278,6 @@ JD-TC-GetStoreCountByFilter-9
 
 
 JD-TC-GetStoreCountByFilter-10
-
     [Documentation]  Get Store Count By Filter - status filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -300,7 +290,6 @@ JD-TC-GetStoreCountByFilter-10
     Should Be Equal As Strings  ${resp.json()}      2
 
 JD-TC-GetStoreCountByFilter-11
-
     [Documentation]  Get Store Count By Filter - filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -314,7 +303,6 @@ JD-TC-GetStoreCountByFilter-11
 
 
 JD-TC-GetStoreCountByFilter-12
-
     [Documentation]  Get Store Count By Filter - storeType filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}
@@ -328,7 +316,6 @@ JD-TC-GetStoreCountByFilter-12
 
 
 JD-TC-GetStoreCountByFilter-13
-
     [Documentation]  Get Store Count By Filter - without login
 
     ${resp}=    Get store Count

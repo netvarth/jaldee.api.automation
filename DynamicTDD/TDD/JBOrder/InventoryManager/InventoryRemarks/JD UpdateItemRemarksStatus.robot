@@ -26,7 +26,6 @@ ${invalidEma}        asd122
 *** Test Cases ***
 
 JD-TC-UpdateItemRemarkStatus-1
-
     [Documentation]  create reamrks and update status as inactive . 
 
 
@@ -73,7 +72,6 @@ JD-TC-UpdateItemRemarkStatus-1
 
 
 JD-TC-UpdateItemRemarkStatus-2
-
     [Documentation]  update item remarks with transaction type as ADJUSTMENT then change status as inactive. 
 
 
@@ -125,7 +123,6 @@ JD-TC-UpdateItemRemarkStatus-2
 
 
 JD-TC-UpdateItemRemarkStatus-3
-
     [Documentation]  try to update remarks thats in inactive status .then active the status.
 
 
@@ -152,7 +149,6 @@ JD-TC-UpdateItemRemarkStatus-3
     Should Be Equal As Strings    ${resp.json()[0]['status']}     ${status[0]}
 
 JD-TC-UpdateItemRemarkStatus-UH1
-
     [Documentation]  Try to Update already active status remarks to active status.
 
 
@@ -167,7 +163,6 @@ JD-TC-UpdateItemRemarkStatus-UH1
     Should Be Equal As Strings   ${resp.json()}   ${STATUS_ALREADY_UPDATED}
 
 JD-TC-UpdateItemRemarkStatus-UH2
-
     [Documentation]  Try to Update already inactive status remarks to inactive.
 
 
@@ -183,7 +178,6 @@ JD-TC-UpdateItemRemarkStatus-UH2
 
 
 JD-TC-UpdateItemRemarkStatus-UH3
-
     [Documentation]  Update Item Remarks status with invalid encid
 
 
@@ -199,7 +193,6 @@ JD-TC-UpdateItemRemarkStatus-UH3
 
 
 JD-TC-UpdateItemRemarkStatus-UH4
-
     [Documentation]  Update Item Remarks status without login.
 
     ${resp}=  Update Item Remark Status      ${status[0]}   ${remarks_encid}
@@ -208,7 +201,6 @@ JD-TC-UpdateItemRemarkStatus-UH4
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-UpdateItemRemarkStatus-UH5
-
     [Documentation]  Update Item Remarks status using SA login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}

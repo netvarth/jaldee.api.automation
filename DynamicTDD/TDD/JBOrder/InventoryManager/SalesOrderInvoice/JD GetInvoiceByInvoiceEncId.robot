@@ -27,7 +27,6 @@ ${invalidItem}     sprx-3250dr0-800
 *** Test Cases ***
 
 JD-TC-Get Sales Order Invoice-1
-
     [Documentation]   Create a sales Order with Valid Details then Genarate sales order invoice and verify.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
@@ -342,7 +341,6 @@ JD-TC-Get Sales Order Invoice-1
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 
 JD-TC-Get Sales Order Invoice-2
-
     [Documentation]   Create a sales Order with Create SalesOrder Inventory Catalog-InvMgr is True then create sales order invoice and verify.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
@@ -786,7 +784,6 @@ JD-TC-Get Sales Order Invoice-2
 
 # ----------------------------------------------------------------------------------------------
 JD-TC-Get Sales Order Invoice-3
-
     [Documentation]   After generation of invoice update the invoice status then try to get invoice.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}
@@ -823,7 +820,6 @@ JD-TC-Get Sales Order Invoice-3
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 
 JD-TC-Get Sales Order Invoice-UH
-
     [Documentation]   Get Sales order invoice with invalid sales order invoice id.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME31}  ${PASSWORD}

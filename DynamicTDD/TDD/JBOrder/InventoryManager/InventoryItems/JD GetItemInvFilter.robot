@@ -25,7 +25,6 @@ ${order}        0
 *** Test Cases ***
 
 JD-TC-GetItemInvFilter-1
-
     [Documentation]   Get Item Inv Filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME23}  ${PASSWORD}
@@ -326,7 +325,6 @@ JD-TC-GetItemInvFilter-1
 
 
 JD-TC-GetItemInvFilter-2
-
     [Documentation]   Get Item Inv Filter - status filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME23}  ${PASSWORD}
@@ -379,7 +377,6 @@ JD-TC-GetItemInvFilter-2
     Should Be Equal As Strings      ${resp.json()[0]['status']}                                    ${toggle[0]}
 
 JD-TC-GetItemInvFilter-3
-
     [Documentation]   Get Item Inv Filter - status filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME23}  ${PASSWORD}
@@ -392,7 +389,6 @@ JD-TC-GetItemInvFilter-3
     Should Be Equal As Strings      ${resp.json()}      []
 
 JD-TC-GetItemInvFilter-UH1
-
     [Documentation]   Get Item Inv Filter - without login
 
     ${resp}=    Get Item inv Filter
@@ -401,7 +397,6 @@ JD-TC-GetItemInvFilter-UH1
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
 
 JD-TC-GetItemInvFilter-UH2
-
     [Documentation]   Get Item Inv - SA Login
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -414,7 +409,6 @@ JD-TC-GetItemInvFilter-UH2
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
 
 JD-TC-GetItemInvFilter-UH3
-
     [Documentation]   Get Item Inv - another provider trying to get
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME2}  ${PASSWORD}

@@ -26,7 +26,6 @@ ${invalidstring}     _ad$.sa_
 *** Test Cases ***
 
 JD-TC-GET Inventory Catalog Item Filter-1
-
     [Documentation]  GET Inventory Catalog Item filter.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME43}  ${PASSWORD}
@@ -182,7 +181,6 @@ JD-TC-GET Inventory Catalog Item Filter-1
     Should Be Equal As Strings    ${resp.json()[0]['item']['spCode']}    ${itemEncId1}
 
 JD-TC-GET Inventory Catalog Item Filter-2
-
     [Documentation]  Create Inventory Catalog Item from main account then get inventory catalog from user login.
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME43}  ${PASSWORD}
@@ -281,7 +279,6 @@ JD-TC-GET Inventory Catalog Item Filter-2
 
 
 JD-TC-GET Inventory Catalog Item Filter-3
-
     [Documentation]  update inventory catalog items then get catalog items filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME43}  ${PASSWORD}
@@ -322,7 +319,6 @@ JD-TC-GET Inventory Catalog Item Filter-3
     Should Be Equal As Strings    ${resp.json()[1]['item']['spCode']}    ${itemEncId1}
 
 JD-TC-GET Inventory Catalog Item Filter-4
-
     [Documentation]  update inventory catalog items status then get catalog items filter
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME43}  ${PASSWORD}
@@ -351,7 +347,6 @@ JD-TC-GET Inventory Catalog Item Filter-4
 
 
 JD-TC-GET Inventory Catalog Item Filter-5
-
     [Documentation]   get catalog items filter using lotNumber
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME43}  ${PASSWORD}
@@ -378,7 +373,6 @@ JD-TC-GET Inventory Catalog Item Filter-5
     Should Be Equal As Strings    ${resp.json()[0]['item']['spCode']}    ${itemEncId1}
 
 JD-TC-GET Inventory Catalog Item Filter-6
-
     [Documentation]   get catalog items filter using storeId
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME43}  ${PASSWORD}
@@ -418,7 +412,6 @@ JD-TC-GET Inventory Catalog Item Filter-6
     Should Be Equal As Strings    ${resp.json()[1]['item']['spCode']}    ${itemEncId1}
 
 JD-TC-GET Inventory Catalog Item Filter-7
-
     [Documentation]   get catalog items filter using location id
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME43}  ${PASSWORD}
@@ -458,7 +451,6 @@ JD-TC-GET Inventory Catalog Item Filter-7
     Should Be Equal As Strings    ${resp.json()[1]['item']['spCode']}    ${itemEncId1}
 
 JD-TC-GET Inventory Catalog Item Filter-8
-
     [Documentation]   get catalog items filter using encid
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME43}  ${PASSWORD}
     Log   ${resp.content}
@@ -483,7 +475,6 @@ JD-TC-GET Inventory Catalog Item Filter-8
     Should Be Equal As Strings    ${resp.json()[0]['item']['spCode']}    ${itemEncIds}
 
 JD-TC-GET Inventory Catalog Item Filter-UH1
-
     [Documentation]  get Inventory Catalog filter using  invalid encid
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME43}  ${PASSWORD}
@@ -497,7 +488,6 @@ JD-TC-GET Inventory Catalog Item Filter-UH1
 
 
 JD-TC-GET Inventory Catalog Item Filter-UH2
-
     [Documentation]  get Inventory Catalog filter without login.
 
 
@@ -507,7 +497,6 @@ JD-TC-GET Inventory Catalog Item Filter-UH2
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-GET Inventory Catalog Item Filter-UH3
-
     [Documentation]  get Inventory Catalog filter from sa login .
 
 
@@ -521,7 +510,6 @@ JD-TC-GET Inventory Catalog Item Filter-UH3
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-GET Inventory Catalog Item Filter-UH4
-
     [Documentation]  get Inventory Catalog filter using using invalid details
 
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME1}  ${PASSWORD}
