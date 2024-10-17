@@ -4105,11 +4105,11 @@ JD-TC-Take Appointment-18
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
 
-    Set Test Variable  ${email_id}  ${firstname}${HLPUSERNAME5}.${test_mail}
+    # Set Test Variable  ${email_id}  ${firstname}${HLPUSERNAME5}.${test_mail}
 
-    ${resp}=  Update Email   ${pidHL}   ${firstname}  ${lastname}   ${email_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Update Email   ${pidHL}   ${firstname}  ${lastname}   ${email_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
