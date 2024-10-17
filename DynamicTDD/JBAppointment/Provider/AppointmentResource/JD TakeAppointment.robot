@@ -1227,19 +1227,19 @@ JD-TC-Take Appointment-15
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME350}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_service   ${PUSERNAME186}
-    # clear_location  ${PUSERNAME186}
-    # clear_location   ${PUSERNAME186}
+    # clear_service   ${PUSERNAME350}
+    # clear_location  ${PUSERNAME350}
+    # clear_location   ${PUSERNAME350}
 
     ${lid1}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
-    # clear_appt_schedule   ${PUSERNAME186}
+    # clear_appt_schedule   ${PUSERNAME350}
 
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime2}=  add_two   ${sTime1}  ${delta}
@@ -1405,19 +1405,19 @@ JD-TC-Take Appointment-16
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME350}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_service   ${PUSERNAME186}
-    # clear_location  ${PUSERNAME186}
-    # clear_location   ${PUSERNAME186}
+    # clear_service   ${PUSERNAME350}
+    # clear_location  ${PUSERNAME350}
+    # clear_location   ${PUSERNAME350}
 
     ${lid1}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
-    # clear_appt_schedule   ${PUSERNAME186}
+    # clear_appt_schedule   ${PUSERNAME350}
 
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime2}=  add_two   ${sTime1}  ${delta}
@@ -1521,11 +1521,20 @@ JD-TC-Take Appointment-17
     END 
     # ${lid1}=  Create Sample Location
     # clear_appt_schedule   ${PUSERNAME345}
-    
+
+    ${resp}=    Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${SERVICE1}=    generate_service_name   
+        ${s_id}=  Create Sample Service  ${SERVICE1}  
+    ELSE
+        Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
+    END
+
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=    FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    
     ${schedule_name1}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -1593,12 +1602,12 @@ JD-TC-Take Appointment-17
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME350}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_service   ${PUSERNAME186}
-    # clear_location  ${PUSERNAME186}
-    # clear_location   ${PUSERNAME186}
+    # clear_service   ${PUSERNAME350}
+    # clear_location  ${PUSERNAME350}
+    # clear_location   ${PUSERNAME350}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1613,12 +1622,21 @@ JD-TC-Take Appointment-17
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
-    # clear_appt_schedule   ${PUSERNAME186}
+    # clear_appt_schedule   ${PUSERNAME350}
+
+    ${resp}=    Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${SERVICE1}=    generate_service_name   
+        ${s_id1}=  Create Sample Service  ${SERVICE1}  
+    ELSE
+        Set Test Variable  ${s_id1}   ${resp.json()[0]['id']}
+    END
 
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime2}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=    FakerLibrary.word
-    ${s_id1}=  Create Sample Service  ${SERVICE1}
+    
     ${schedule_name2}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -1709,10 +1727,19 @@ JD-TC-Take Appointment-18
     # ${lid1}=  Create Sample Location
     # clear_appt_schedule   ${PUSERNAME345}
 
+    ${resp}=    Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${SERVICE1}=    generate_service_name   
+        ${s_id}=  Create Sample Service  ${SERVICE1}  
+    ELSE
+        Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
+    END
+
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=    FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+   
     ${schedule_name1}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -1780,24 +1807,33 @@ JD-TC-Take Appointment-18
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME350}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_service   ${PUSERNAME186}
-    # clear_location  ${PUSERNAME186}
-    # clear_location   ${PUSERNAME186}
+    # clear_service   ${PUSERNAME350}
+    # clear_location  ${PUSERNAME350}
+    # clear_location   ${PUSERNAME350}
 
     ${lid1}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz1}  ${resp.json()['timezone']}
-    # clear_appt_schedule   ${PUSERNAME186}
+    # clear_appt_schedule   ${PUSERNAME350}
+
+    ${resp}=    Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${SERVICE1}=    generate_service_name   
+        ${s_id1}=  Create Sample Service  ${SERVICE1}  
+    ELSE
+        Set Test Variable  ${s_id1}   ${resp.json()[0]['id']}
+    END
 
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime2}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=    FakerLibrary.word
-    ${s_id1}=  Create Sample Service  ${SERVICE1}
+    
     ${schedule_name2}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -1889,8 +1925,16 @@ JD-TC-Take Appointment-19
 
     # clear_appt_schedule   ${PUSERNAME345}
 
-    ${SERVICE1}=    FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${resp}=    Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${SERVICE1}=    generate_service_name   
+        ${s_id}=  Create Sample Service  ${SERVICE1}  
+    ELSE
+        Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
+    END
+
     ${schedule_name1}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -1953,12 +1997,12 @@ JD-TC-Take Appointment-19
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME350}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # clear_service   ${PUSERNAME186}
-    # clear_location  ${PUSERNAME186}
-    # clear_location   ${PUSERNAME186}
+    # clear_service   ${PUSERNAME350}
+    # clear_location  ${PUSERNAME350}
+    # clear_location   ${PUSERNAME350}
 
     ${lid1}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid1}
@@ -1966,12 +2010,20 @@ JD-TC-Take Appointment-19
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${tz}  ${resp.json()['timezone']}
 
-    # clear_appt_schedule   ${PUSERNAME186}
-    
+    # clear_appt_schedule   ${PUSERNAME350}
+    ${resp}=    Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${SERVICE1}=    generate_service_name   
+        ${s_id1}=  Create Sample Service  ${SERVICE1}  
+    ELSE
+        Set Test Variable  ${s_id1}   ${resp.json()[0]['id']}
+    END
+
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime2}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=    FakerLibrary.word
-    ${s_id1}=  Create Sample Service  ${SERVICE1}
+    
     ${schedule_name2}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -6144,11 +6196,19 @@ JD-TC-Take Appointment-42
     # clear_location  ${PUSERNAME345}
     clear_customer   ${PUSERNAME345}
 
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END 
 
     # clear_appt_schedule   ${PUSERNAME345}
 

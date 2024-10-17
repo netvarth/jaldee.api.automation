@@ -33,6 +33,11 @@ ${word3}        python
 @{cancelReason}             noshowup  blocked  closingSoon  tooFull  self  prePaymentPending  QueueDisabled  holiday
 @{PO_Number}   ${56}  ${0586185393}
 
+# [LOWER] 	Lowercase ASCII characters from 'a' to 'z'.
+# [UPPER] 	Uppercase ASCII characters from 'A' to 'Z'.
+# [LETTERS] 	Lowercase and uppercase ASCII characters.
+# [NUMBERS] 	Numbers from 0 to 9.
+
 *** Keywords ***
 
 check kwargs

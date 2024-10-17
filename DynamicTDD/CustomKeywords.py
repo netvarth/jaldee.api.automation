@@ -33,3 +33,12 @@ def generate_long_service_name():
     service_name = fake.long_services()
     
     return service_name
+
+
+def generate_unique_service_name(existing_services):
+    # Generate service names until a unique one is found
+    print(existing_services)
+    while True:
+        new_service_name = generate_service_name()
+        if new_service_name not in existing_services:
+            return new_service_name

@@ -28,9 +28,46 @@ ${lower}  abcdefghijklmnopqrstuvwxyz
 # [LETTERS] 	Lowercase and uppercase ASCII characters.
 # [NUMBERS] 	Numbers from 0 to 9.
 
+${LOWER}    abcdefghijklmnopqrstuvwxyz
+${UPPER}    ABCDEFGHIJKLMNOPQRSTUVWXYZ
+${LETTERS}  abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
+${NUMBERS}  0123456789
+
 
 
 *** Test Cases ***
+JD-TC-CheckDepartment-1
+
+    ${firstname}  ${lastname}  ${PhoneNumber}  ${PUSERNAME_A}=  Provider Signup without Profile
+    Set Suite Variable  ${PUSERNAME_A}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp1}=  Enable Disable Department  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   'len(${resp.json()}) < 1'
+            ${dep_name1}=  FakerLibrary.bs
+            ${dep_code1}=   Random Int  min=100   max=999
+            ${dep_desc1}=   FakerLibrary.word  
+            ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+            Log  ${resp1.content}
+            Should Be Equal As Strings  ${resp1.status_code}  200
+            Set Test Variable  ${dep_id1}  ${resp1.json()}
+    END
+
+*** Comments ***
 
 JD-TC-check something-2
 
@@ -41,8 +78,21 @@ JD-TC-check something-2
     Log  ${ZOOM_id0}
 
     ${meeting_id}=   FakerLibrary.lexify  text='???-????-???'  letters=${lower}    # Adjust length and characters as needed
-    ${meet_url}=     Format String    ${MEET_URL}    meeting_id=${meeting_id}
+    ${GoogleMeet_url}=     Format String    ${MEET_URL}    meeting_id=${meeting_id}
     Log    ${meet_url}
+
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   'len(${resp.json()})' < '1'
+            ${dep_name1}=  FakerLibrary.bs
+            ${dep_code1}=   Random Int  min=100   max=999
+            ${dep_desc1}=   FakerLibrary.word  
+            ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+            Log  ${resp1.content}
+            Should Be Equal As Strings  ${resp1.status_code}  200
+            Set Test Variable  ${dep_id}  ${resp1.json()}
+    END
 
 *** Comments ***
 
