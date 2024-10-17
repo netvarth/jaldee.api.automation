@@ -495,16 +495,17 @@ Add To Waitlist Children Consumer
 
 
 Cancel Waitlist
-    [Arguments]  ${id}    ${CancelReason}=${waitlist_cancl_reasn[4]}    ${CommunicationMessage}=other  &{kwargs}  #${timeZone}=Asia/Kolkata
+    [Arguments]  ${id}  ${acct_id}    ${CancelReason}=${waitlist_cancl_reasn[4]}    ${CommunicationMessage}=other  &{kwargs}  #${timeZone}=Asia/Kolkata
     ${cons_headers}=  Create Dictionary  &{headers} 
     ${auth}=  Create Dictionary   cancelReason=${CancelReason}    communicationMessage=${CommunicationMessage}
+    ${cons_params}=  Create Dictionary  account=${acct_id}
     ${auth}=    json.dumps    ${auth}
     Check And Create YNW Session
 
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    ${cons_params}=  Create Dictionary   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=  PUT On Session  ynw  /consumer/waitlist/cancel/${id}  data=${auth}   params=${cons_params}   expected_status=any  headers=${cons_headers}
     Check Deprication  ${resp}  Cancel Waitlist
     RETURN  ${resp}
