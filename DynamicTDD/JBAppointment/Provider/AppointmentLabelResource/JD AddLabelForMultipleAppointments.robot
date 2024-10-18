@@ -349,7 +349,7 @@ JD-TC-AddMultipleAppointmentLabel-2
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -656,7 +656,7 @@ JD-TC-AddMultipleAppointmentLabel-3
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -809,7 +809,7 @@ JD-TC-AddMultipleAppointmentLabel-4
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -975,7 +975,7 @@ JD-TC-AddMultipleAppointmentLabel-5
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -1181,7 +1181,7 @@ JD-TC-AddMultipleAppointmentLabel-6
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -1710,7 +1710,7 @@ JD-TC-AddMultipleAppointmentLabel-9
         IF   '${resp.content}' == '${emptylist}'
             ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre}  maxBookingsAllowed=10
             ${resp}=   Get Service By Id  ${s_id}
             Log  ${resp.json()}
@@ -1719,7 +1719,7 @@ JD-TC-AddMultipleAppointmentLabel-9
         ELSE IF   ${resp.json()[0]['isPrePayment']} == ${bool[0]}
             ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
+            Append To List  ${service_names}  ${SERVICE1}
             ${s_id}=  Create Sample Service  ${SERVICE1}   isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}  maxBookingsAllowed=10
             ${resp}=   Get Service By Id  ${s_id}
             Log  ${resp.json()}
@@ -2046,7 +2046,7 @@ JD-TC-AddMultipleAppointmentLabel-10
         IF   '${resp.content}' == '${emptylist}'
             ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre}  maxBookingsAllowed=10
             ${resp}=   Get Service By Id  ${s_id}
             Log  ${resp.json()}
@@ -2055,7 +2055,7 @@ JD-TC-AddMultipleAppointmentLabel-10
         ELSE IF   ${resp.json()[0]['isPrePayment']} == ${bool[0]}
             ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
+            Append To List  ${service_names}  ${SERVICE1}
             ${s_id}=  Create Sample Service  ${SERVICE1}   isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}  maxBookingsAllowed=10
             ${resp}=   Get Service By Id  ${s_id}
             Log  ${resp.json()}
@@ -2445,7 +2445,7 @@ JD-TC-AddMultipleAppointmentLabel-12
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -2642,7 +2642,7 @@ JD-TC-AddMultipleAppointmentLabel-13
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -2792,7 +2792,7 @@ JD-TC-AddMultipleAppointmentLabel-14
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -3228,7 +3228,7 @@ JD-TC-AddMultipleAppointmentLabel-UH3
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -3399,7 +3399,7 @@ JD-TC-AddMultipleAppointmentLabel-UH4
         IF   '${resp.content}' == '${emptylist}'
             ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre}  maxBookingsAllowed=10
             ${resp}=   Get Service By Id  ${s_id}
             Log  ${resp.json()}
@@ -3408,7 +3408,7 @@ JD-TC-AddMultipleAppointmentLabel-UH4
         ELSE IF   ${resp.json()[0]['isPrePayment']} == ${bool[0]}
             ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
+            Append To List  ${service_names}  ${SERVICE1}
             ${s_id}=  Create Sample Service  ${SERVICE1}   isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}  maxBookingsAllowed=10
             ${resp}=   Get Service By Id  ${s_id}
             Log  ${resp.json()}
@@ -3585,7 +3585,7 @@ JD-TC-AddMultipleAppointmentLabel-UH5
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -3992,7 +3992,7 @@ JD-TC-AddMultipleAppointmentLabel-UH8
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -4140,7 +4140,7 @@ JD-TC-AddMultipleAppointmentLabel-UH10
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -4309,7 +4309,7 @@ JD-TC-AddMultipleAppointmentLabel-UH11
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -4480,7 +4480,7 @@ JD-TC-AddMultipleAppointmentLabel-UH12
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -4672,7 +4672,7 @@ JD-TC-AddMultipleAppointmentLabel-UH13
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -4864,7 +4864,7 @@ JD-TC-AddMultipleAppointmentLabel-UH14
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+        Append To List  ${service_names}  ${SERVICE1}   
         ${s_id}=  Create Sample Service  ${SERVICE1}  
     ELSE
         Set Test Variable  ${s_id}   ${resp.json()[0]['id']}

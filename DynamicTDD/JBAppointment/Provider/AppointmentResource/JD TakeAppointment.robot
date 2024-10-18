@@ -1541,7 +1541,7 @@ JD-TC-Take Appointment-17
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+        Append To List  ${service_names}  ${SERVICE1}   
         ${s_id}=  Create Sample Service  ${SERVICE1}  
     ELSE
         Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -1644,7 +1644,7 @@ JD-TC-Take Appointment-17
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+        Append To List  ${service_names}  ${SERVICE1}   
         ${s_id1}=  Create Sample Service  ${SERVICE1}  
     ELSE
         Set Test Variable  ${s_id1}   ${resp.json()[0]['id']}
@@ -1748,7 +1748,7 @@ JD-TC-Take Appointment-18
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+        Append To List  ${service_names}  ${SERVICE1}   
         ${s_id}=  Create Sample Service  ${SERVICE1}  
     ELSE
         Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -1843,7 +1843,7 @@ JD-TC-Take Appointment-18
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+        Append To List  ${service_names}  ${SERVICE1}   
         ${s_id1}=  Create Sample Service  ${SERVICE1}  
     ELSE
         Set Test Variable  ${s_id1}   ${resp.json()[0]['id']}
@@ -1948,7 +1948,7 @@ JD-TC-Take Appointment-19
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+        Append To List  ${service_names}  ${SERVICE1}   
         ${s_id}=  Create Sample Service  ${SERVICE1}  
     ELSE
         Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -2035,7 +2035,7 @@ JD-TC-Take Appointment-19
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+        Append To List  ${service_names}  ${SERVICE1}   
         ${s_id1}=  Create Sample Service  ${SERVICE1}  
     ELSE
         Set Test Variable  ${s_id1}   ${resp.json()[0]['id']}

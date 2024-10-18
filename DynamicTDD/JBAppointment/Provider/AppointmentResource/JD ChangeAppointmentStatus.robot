@@ -82,7 +82,7 @@ JD-TC-ChangeAppointmentStatus-1
         IF   '${resp.content}' == '${emptylist}'
             ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre}  maxBookingsAllowed=10
             ${resp}=   Get Service By Id  ${s_id}
             Log  ${resp.json()}
@@ -91,7 +91,7 @@ JD-TC-ChangeAppointmentStatus-1
         ELSE IF   ${resp.json()[0]['isPrePayment']} == ${bool[0]}
             ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
+            Append To List  ${service_names}  ${SERVICE1}
             ${s_id}=  Create Sample Service  ${SERVICE1}   isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}  maxBookingsAllowed=10
             ${resp}=   Get Service By Id  ${s_id}
             Log  ${resp.json()}
@@ -275,7 +275,7 @@ JD-TC-ChangeAppointmentStatus-4
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -376,7 +376,7 @@ JD-TC-ChangeAppointmentStatus-5
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
             ${resp}=   Get Service By Id  ${s_id}
             Log  ${resp.json()}
@@ -384,7 +384,7 @@ JD-TC-ChangeAppointmentStatus-5
             Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
         ELSE IF   ${resp.json()[0]['isPrePayment']} != ${bool[0]}
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
+            Append To List  ${service_names}  ${SERVICE1}
             ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -423,7 +423,7 @@ JD-TC-ChangeAppointmentStatus-5
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
             ${resp}=   Get Service By Id  ${s_id}
             Log  ${resp.json()}
@@ -431,7 +431,7 @@ JD-TC-ChangeAppointmentStatus-5
             Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
         ELSE IF   ${resp.json()[0]['isPrePayment']} != ${bool[0]}
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
+            Append To List  ${service_names}  ${SERVICE1}
             ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -555,7 +555,7 @@ JD-TC-ChangeAppointmentStatus-UH1
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
             ${resp}=   Get Service By Id  ${s_id}
             Log  ${resp.json()}
@@ -563,7 +563,7 @@ JD-TC-ChangeAppointmentStatus-UH1
             Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
         ELSE IF   ${resp.json()[0]['isPrePayment']} != ${bool[0]}
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
+            Append To List  ${service_names}  ${SERVICE1}
             ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -682,7 +682,7 @@ JD-TC-ChangeAppointmentStatus-6
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
             ${resp}=   Get Service By Id  ${s_id}
             Log  ${resp.json()}
@@ -690,7 +690,7 @@ JD-TC-ChangeAppointmentStatus-6
             Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
         ELSE IF   ${resp.json()[0]['isPrePayment']} != ${bool[0]}
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
+            Append To List  ${service_names}  ${SERVICE1}
             ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -807,7 +807,7 @@ JD-TC-ChangeAppointmentStatus-7
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -899,7 +899,7 @@ JD-TC-ChangeAppointmentStatus-UH2
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
             ${resp}=   Get Service By Id  ${s_id}
             Log  ${resp.json()}
@@ -907,7 +907,7 @@ JD-TC-ChangeAppointmentStatus-UH2
             Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
         ELSE IF   ${resp.json()[0]['isPrePayment']} != ${bool[0]}
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
+            Append To List  ${service_names}  ${SERVICE1}
             ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -1043,7 +1043,7 @@ JD-TC-ChangeAppointmentStatus-8
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -1138,7 +1138,7 @@ JD-TC-ChangeAppointmentStatus-UH3
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -1176,7 +1176,7 @@ JD-TC-ChangeAppointmentStatus-UH3
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -1288,7 +1288,7 @@ JD-TC-ChangeAppointmentStatus-UH4
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -1395,7 +1395,7 @@ JD-TC-ChangeAppointmentStatus-UH5
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -1499,7 +1499,7 @@ JD-TC-ChangeAppointmentStatus-10
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -1604,7 +1604,7 @@ JD-TC-ChangeAppointmentStatus-11
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -1741,7 +1741,7 @@ JD-TC-ChangeAppointmentStatus-UH6
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -1886,7 +1886,7 @@ JD-TC-ChangeAppointmentStatus-UH7
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
             ${resp}=   Get Service By Id  ${s_id}
             Log  ${resp.json()}
@@ -1894,7 +1894,7 @@ JD-TC-ChangeAppointmentStatus-UH7
             Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
         ELSE IF   ${resp.json()[0]['isPrePayment']} != ${bool[0]}
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
+            Append To List  ${service_names}  ${SERVICE1}
             ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -1937,7 +1937,7 @@ JD-TC-ChangeAppointmentStatus-UH7
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
             ${resp}=   Get Service By Id  ${s_id}
             Log  ${resp.json()}
@@ -1945,7 +1945,7 @@ JD-TC-ChangeAppointmentStatus-UH7
             Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
         ELSE IF   ${resp.json()[0]['isPrePayment']} != ${bool[0]}
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
+            Append To List  ${service_names}  ${SERVICE1}
             ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -2051,7 +2051,7 @@ JD-TC-ChangeAppointmentStatus-UH8
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -2164,7 +2164,7 @@ JD-TC-ChangeAppointmentStatus-UH9
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -2275,7 +2275,7 @@ JD-TC-ChangeAppointmentStatus-UH10
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -2409,7 +2409,7 @@ JD-TC-ChangeAppointmentStatus-UH11
         IF   '${resp.content}' == '${emptylist}'
             ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre}  maxBookingsAllowed=10
             ${resp}=   Get Service By Id  ${s_id}
             Log  ${resp.json()}
@@ -2418,7 +2418,7 @@ JD-TC-ChangeAppointmentStatus-UH11
         ELSE IF   ${resp.json()[0]['isPrePayment']} == ${bool[0]}
             ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
+            Append To List  ${service_names}  ${SERVICE1}
             ${s_id}=  Create Sample Service  ${SERVICE1}   isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}  maxBookingsAllowed=10
             ${resp}=   Get Service By Id  ${s_id}
             Log  ${resp.json()}
@@ -2567,7 +2567,7 @@ JD-TC-ChangeAppointmentStatus-UH12
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
             ${resp}=   Get Service By Id  ${s_id}
             Log  ${resp.json()}
@@ -2575,7 +2575,7 @@ JD-TC-ChangeAppointmentStatus-UH12
             Set Test Variable  ${min_pre}  ${resp.json()['minPrePaymentAmount']}
         ELSE IF   ${resp.json()[0]['isPrePayment']} != ${bool[0]}
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
+            Append To List  ${service_names}  ${SERVICE1}
             ${s_id}=  Create Sample Service  ${SERVICE1}    maxBookingsAllowed=10
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -2700,7 +2700,7 @@ JD-TC-ChangeAppointmentStatus-UH13
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -2809,7 +2809,7 @@ JD-TC-ChangeAppointmentStatus-UH14
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -2918,7 +2918,7 @@ JD-TC-ChangeAppointmentStatus-UH15
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -3032,7 +3032,7 @@ JD-TC-ChangeAppointmentStatus-UH16
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -3165,7 +3165,7 @@ JD-TC-ChangeAppointmentStatus-12
         IF   '${resp.content}' == '${emptylist}'
             ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre}  maxBookingsAllowed=10
             ${resp}=   Get Service By Id  ${s_id}
             Log  ${resp.json()}
@@ -3174,7 +3174,7 @@ JD-TC-ChangeAppointmentStatus-12
         ELSE IF   ${resp.json()[0]['isPrePayment']} == ${bool[0]}
             ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
+            Append To List  ${service_names}  ${SERVICE1}
             ${s_id}=  Create Sample Service  ${SERVICE1}   isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}  maxBookingsAllowed=10
             ${resp}=   Get Service By Id  ${s_id}
             Log  ${resp.json()}
@@ -3315,7 +3315,7 @@ JD-TC-ChangeAppointmentStatus-UH17
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -3430,7 +3430,7 @@ JD-TC-ChangeAppointmentStatus-UH18
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -3545,7 +3545,7 @@ JD-TC-ChangeAppointmentStatus-13
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -3662,7 +3662,7 @@ JD-TC-ChangeAppointmentStatus-UH19
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -3777,7 +3777,7 @@ JD-TC-ChangeAppointmentStatus-UH20
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
@@ -3911,7 +3911,7 @@ JD-TC-ChangeAppointmentStatus-UH21
         Should Be Equal As Strings  ${resp.status_code}  200
         IF   '${resp.content}' == '${emptylist}'
             ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}   
+            Append To List  ${service_names}  ${SERVICE1}   
             ${s_id}=  Create Sample Service  ${SERVICE1}  
         ELSE
             Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
