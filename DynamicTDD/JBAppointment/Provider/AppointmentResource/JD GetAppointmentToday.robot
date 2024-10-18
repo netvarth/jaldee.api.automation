@@ -1052,11 +1052,11 @@ JD-TC-GetAppointmentToday-11
     # clear_appt_schedule   ${PUSERNAME100}
 
     # ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
+    # Append To List  ${service_names}  ${SERVICE1}
     # ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=10
 
     # ${SERVICE2}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE2}
+    # Append To List  ${service_names}  ${SERVICE2}
     # ${s_id1}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=10  
 
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
