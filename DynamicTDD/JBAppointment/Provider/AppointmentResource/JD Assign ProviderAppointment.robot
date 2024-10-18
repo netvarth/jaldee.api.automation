@@ -70,7 +70,10 @@ JD-TC-AssignproviderAppointment-1
 
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME8}  firstName=${fname}   lastName=${lname}
+    ${NewCustomer}    Generate random string    10    123456789
+    ${NewCustomer}    Convert To Integer  ${NewCustomer}
+    Set Suite variable   ${NewCustomer}
+    ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
@@ -202,7 +205,7 @@ JD-TC-AssignproviderAppointment-2
 
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME8}  firstName=${fname}   lastName=${lname}
+    ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
@@ -329,7 +332,7 @@ JD-TC-AssignproviderAppointment-3
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
   
-    ${resp}=  AddCustomer  ${CUSERNAME8}  firstName=${fname}   lastName=${lname}
+    ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
@@ -412,7 +415,7 @@ JD-TC-AssignproviderAppointment-4
 
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME8}  firstName=${fname}   lastName=${lname}
+    ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
@@ -541,7 +544,7 @@ JD-TC-AssignproviderAppointment-5
 
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME8}  firstName=${fname}   lastName=${lname}
+    ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
@@ -670,7 +673,7 @@ JD-TC-AssignproviderAppointment-6
 
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME8}  firstName=${fname}   lastName=${lname}
+    ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
@@ -821,7 +824,7 @@ JD-TC-AssignproviderAppointment-7
 
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME8}  firstName=${fname}   lastName=${lname}
+    ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
@@ -1321,7 +1324,7 @@ JD-TC-AssignproviderAppointment-UH2
 
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME8}  firstName=${fname}   lastName=${lname}
+    ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
@@ -1410,7 +1413,7 @@ JD-TC-AssignproviderAppointment-UH3
 
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME8}  firstName=${fname}   lastName=${lname}
+    ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
@@ -1458,7 +1461,7 @@ JD-TC-AssignproviderAppointment-UH4
 
     [Documentation]  Assingn appointment to another account's user
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME328}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1466,9 +1469,9 @@ JD-TC-AssignproviderAppointment-UH4
     Log  ${decrypted_data}
     Set Suite Variable  ${pid2}  ${decrypted_data['id']}
 
-    # clear_service   ${PUSERNAME1}
-    # clear_appt_schedule   ${PUSERNAME1}
-    clear_customer   ${PUSERNAME1}
+    # clear_service   ${PUSERNAME328}
+    # clear_appt_schedule   ${PUSERNAME328}
+    clear_customer   ${PUSERNAME328}
     reset_user_metric  ${pid2}
 
     ${resp}=    Get Locations
@@ -1540,7 +1543,7 @@ JD-TC-AssignproviderAppointment-UH4
 
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME8}  firstName=${fname}   lastName=${lname}
+    ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
@@ -1611,7 +1614,7 @@ JD-TC-AssignproviderAppointment-UH5
 
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME8}  firstName=${fname}   lastName=${lname}
+    ${resp}=  AddCustomer  ${NewCustomer}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
