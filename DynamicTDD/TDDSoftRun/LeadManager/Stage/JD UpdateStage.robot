@@ -129,7 +129,7 @@ JD-TC-Update_Stage-1
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${firstName_n}=   FakerLibrary.firstName
+    ${firstName_n}=   generate_firstname
     ${lastName_n}=    FakerLibrary.lastName
     Set Suite Variable      ${firstName_n}
     Set Suite Variable      ${lastName_n}
@@ -160,7 +160,7 @@ JD-TC-Update_Stage-1
     Should Be Equal As Strings          ${resp.status_code}  200
     Set Suite Variable  ${user1_id}     ${resp.json()['id']}
 
-    ${stage}=   FakerLibrary.firstName
+    ${stage}=   generate_firstname
 
     ${resp}=    Create Stage  ${stage}  ${crm_lead_id}  ${user1_id}
     Log  ${resp.content}
@@ -171,7 +171,7 @@ JD-TC-Update_Stage-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${stage2}=   FakerLibrary.firstName
+    ${stage2}=   generate_firstname
     Set Suite Variable      ${stage2}
 
     ${resp}=    Update stage  ${stage_id}  ${stage2}  ${crm_lead_id}  ${user1_id}

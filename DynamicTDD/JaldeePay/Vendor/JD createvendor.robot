@@ -58,7 +58,7 @@ JD-TC-CreateVendor-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
     ${contactPersonName}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
@@ -136,7 +136,7 @@ JD-TC-CreateVendor-2
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
     ${owner_name}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
@@ -175,7 +175,7 @@ JD-TC-CreateVendor-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
     ${contactPersonName}=   FakerLibrary.lastname
     ${owner_name}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
@@ -222,7 +222,7 @@ JD-TC-CreateVendor-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
     ${contactPersonName}=   FakerLibrary.lastname
     ${owner_name}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
@@ -262,7 +262,7 @@ JD-TC-CreateVendor-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
    
 
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
     ${contactPersonName}=   FakerLibrary.lastname
     ${owner_name}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
@@ -300,7 +300,7 @@ JD-TC-CreateVendor-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
     ${owner_name}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
@@ -339,7 +339,7 @@ JD-TC-CreateVendor-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
     ${owner_name}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
@@ -380,7 +380,7 @@ JD-TC-CreateVendor-UH6
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
     ${owner_name}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
@@ -440,7 +440,7 @@ JD-TC-CreateVendor-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${category_id2}   ${resp.json()}
 
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
     ${contactPersonName}=   FakerLibrary.lastname
     ${owner_name}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word

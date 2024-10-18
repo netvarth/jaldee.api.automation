@@ -43,7 +43,7 @@ JD-TC-Create_Lead_Consumer-1
 
     END
 
-    ${firstName_n}=   FakerLibrary.firstName
+    ${firstName_n}=   generate_firstname
     ${lastName_n}=    FakerLibrary.lastName
     Set Suite Variable      ${firstName_n}
     Set Suite Variable      ${lastName_n}
@@ -70,7 +70,7 @@ JD-TC-Create_Lead_Consumer-2
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
 
-    ${firstName}=   FakerLibrary.firstName
+    ${firstName}=   generate_firstname
     ${lastName}=    FakerLibrary.lastName
     ${dob}=  FakerLibrary.Date
     Set Suite Variable  ${dob}
@@ -111,7 +111,7 @@ JD-TC-Create_Lead_Consumer-UH2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${firstName}=   FakerLibrary.firstName
+    ${firstName}=   generate_firstname
 
     ${resp}=    Create Lead Consumer  ${firstName}  ${empty}
     Log  ${resp.content}
@@ -174,7 +174,7 @@ JD-TC-Create_Lead_Consumer-UH6
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${firstName}=   FakerLibrary.firstName
+    ${firstName}=   generate_firstname
     ${lastName}=    Generate Random String    10    [NUMBERS] [LETTERS]
 
     ${resp}=    Create Lead Consumer  ${firstName}  ${lastName}
@@ -190,7 +190,7 @@ JD-TC-Create_Lead_Consumer-UH7
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${firstName}=   FakerLibrary.firstName
+    ${firstName}=   generate_firstname
     ${lastName}=    Generate Random String  2  [LETTERS]
 
     ${resp}=    Create Lead Consumer  ${firstName}  ${lastName}
@@ -206,7 +206,7 @@ JD-TC-Create_Lead_Consumer-UH8
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${firstName}=   FakerLibrary.firstName
+    ${firstName}=   generate_firstname
     ${lastName}=    Generate Random String  101  [LETTERS]
 
     ${resp}=    Create Lead Consumer  ${firstName}  ${lastName}
@@ -218,7 +218,7 @@ JD-TC-Create_Lead_Consumer-UH9
 
     [Documentation]   Create Lead Consumer - without login
 
-    ${firstName}=   FakerLibrary.firstName
+    ${firstName}=   generate_firstname
     ${lastName}=    FakerLibrary.lastName
 
     ${resp}=    Create Lead Consumer  ${firstName}  ${lastName}
@@ -234,7 +234,7 @@ JD-TC-Create_Lead_Consumer-UH10
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${firstNam_n}=   FakerLibrary.firstName
+    ${firstNam_n}=   generate_firstname
     ${lastName_n}=    FakerLibrary.lastName
 
     ${resp}=    Create Lead Consumer  ${firstName_n}  ${lastName_n}
@@ -249,7 +249,7 @@ JD-TC-Create_Lead_Consumer-UH11
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${firstName}=   FakerLibrary.firstName
+    ${firstName}=   generate_firstname
     ${lastName}=    FakerLibrary.lastName
 
     ${phone}=   Random Int  min=111  max=999
@@ -267,7 +267,7 @@ JD-TC-Create_Lead_Consumer-UH12
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${firstName}=   FakerLibrary.firstName
+    ${firstName}=   generate_firstname
     ${lastName}=    FakerLibrary.lastName
 
     ${phone}=   Generate Random String    16    [NUMBERS]

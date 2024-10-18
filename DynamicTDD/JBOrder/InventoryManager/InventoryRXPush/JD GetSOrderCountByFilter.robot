@@ -241,7 +241,7 @@ JD-TC-GetOrderCountByFilter-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
     ${contactPersonName}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
@@ -884,7 +884,7 @@ JD-TC-GetOrderCountByFilter-UH5
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${ran_name}=    FakerLibrary.firstName
+    ${ran_name}=    generate_firstname
 
     ${resp}=    Get Sorder Count By Filter       storeName-eq=${ran_name}
     Log   ${resp.content}
@@ -927,7 +927,7 @@ JD-TC-GetOrderCountByFilter-UH7
 #     Log  ${resp.json()}         
 #     Should Be Equal As Strings            ${resp.status_code}    200
 
-#     ${inv_orgin}=   FakerLibrary.firstName
+#     ${inv_orgin}=   generate_firstname
 
 #     ${resp}=    Get Sorder Count By Filter       originFrom-eq=${inv_orgin}
 #     Log   ${resp.content}
@@ -1017,7 +1017,7 @@ JD-TC-GetOrderCountByFilter-UH14
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${ran_name}=    FakerLibrary.firstName
+    ${ran_name}=    generate_firstname
 
     ${resp}=    Get Sorder Count By Filter        doctorName-eq=${ran_name}
     Log   ${resp.content}
@@ -1073,7 +1073,7 @@ JD-TC-GetOrderCountByFilter-UH18
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${ran_name}=    FakerLibrary.firstName
+    ${ran_name}=    generate_firstname
 
     ${resp}=    Get Sorder Count By Filter        providerConsumerName-eq=${ran_name}
     Log   ${resp.content}

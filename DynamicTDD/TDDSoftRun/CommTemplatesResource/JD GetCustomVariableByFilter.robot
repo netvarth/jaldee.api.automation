@@ -247,7 +247,7 @@ JD-TC-GetCustomVariableByFilter-5
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${var_id1}  ${resp.json()}
 
-    ${name1}=    FakerLibrary.firstname
+    ${name1}=    generate_firstname
     ${dis_name1}=    FakerLibrary.lastname
     ${value1}=   FakerLibrary.hostname
 

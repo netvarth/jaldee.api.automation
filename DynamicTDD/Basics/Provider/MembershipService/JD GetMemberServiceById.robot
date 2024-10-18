@@ -47,8 +47,8 @@ JD-TC-Get_Member_Service_By_Id-1
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     
     ${description}=    FakerLibrary.bs
-    ${name}=           FakerLibrary.firstName
-    ${displayname}=    FakerLibrary.firstName
+    ${name}=           generate_firstname
+    ${displayname}=    generate_firstname
     ${effectiveFrom}=  db.get_date_by_timezone  ${tz}
     ${effectiveTo}=      db.add_timezone_date  ${tz}  10   
     Set Suite Variable    ${description}

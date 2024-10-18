@@ -83,12 +83,12 @@ ${bType}                  Waitlist
 @{ServiceType}              virtualService  physicalService  donationService  billingService  serviceRequest
 @{multiples}                10  20  30  40  50
 @{vservicetype}             audioService   videoService
+@{CallingModes}             Zoom   WhatsApp   Phone   GoogleMeet  VideoCall
 @{apptStatus}               prepaymentPending  Confirmed  Arrived  Started  Cancelled  Rejected  Completed  failed  calling  blocked  Rescheduled  Requested  RequestRejected
 @{cancelReason}             noshowup  blocked  closingSoon  tooFull  self  prePaymentPending  QueueDisabled  holiday
 @{waitlistedby}             CONSUMER  PROVIDER
 @{waitlistMode}             WALK_IN_CHECKIN   ONLINE_CHECKIN   PHONE_CHECKIN   WHATSAPP_CHECKIN  TELEGRAM_CHECKIN
 @{appointmentMode}          WALK_IN_APPOINTMENT  PHONE_IN_APPOINTMENT  ONLINE_APPOINTMENT   TELEGRAM_APPOINTMENT
-@{CallingModes}             Zoom   WhatsApp   Phone   GoogleMeet  VideoCall
 @{reason}                   Holiday  QueueFull  ScheduleFull
 @{Report_Types}             TOKEN   APPOINTMENT   DONATION   PAYMENT  ORDER
 @{Report_Date_Category}     LAST_WEEK  NEXT_WEEK  LAST_THIRTY_DAYS  NEXT_THIRTY_DAYS  TODAY  YEARLY  DATE_RANGE  NONE

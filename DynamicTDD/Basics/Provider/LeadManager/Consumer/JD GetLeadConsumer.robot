@@ -43,7 +43,7 @@ JD-TC-Get_Lead_Consumer-1
 
     END
 
-    ${firstName}=   FakerLibrary.firstName
+    ${firstName}=   generate_firstname
     ${lastName}=    FakerLibrary.lastName
 
     ${resp}=    Create Lead Consumer  ${firstName}  ${lastName}
@@ -72,7 +72,7 @@ JD-TC-Get_Lead_Consumer-2
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
 
-    ${firstName}=   FakerLibrary.firstName
+    ${firstName}=   generate_firstname
     ${lastName}=    FakerLibrary.lastName
     ${dob}=  FakerLibrary.Date
     Set Suite Variable  ${dob}

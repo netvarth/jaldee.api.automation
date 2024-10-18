@@ -150,7 +150,7 @@ JD-TC-CreateCustomVariable-8
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${name1}=    FakerLibrary.firstname
+    ${name1}=    generate_firstname
     ${dis_name1}=    FakerLibrary.word
     ${value1}=   FakerLibrary.hostname
 
@@ -508,7 +508,7 @@ JD-TC-CreateCustomVariable-UH7
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${name1}=    FakerLibrary.firstname
+    ${name1}=    generate_firstname
     ${value1}=   FakerLibrary.hostname
 
     ${resp}=  Create Custom Variable   ${name1}  ${dis_name}  ${value1}  ${VariableValueType[1]}  ${VariableContext[0]}

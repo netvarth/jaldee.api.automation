@@ -54,7 +54,7 @@ JD-TC-GetFilter-1
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
     Set Suite Variable    ${vender_name}
     ${contactPersonName}=   FakerLibrary.lastname
     Set Suite Variable    ${contactPersonName}

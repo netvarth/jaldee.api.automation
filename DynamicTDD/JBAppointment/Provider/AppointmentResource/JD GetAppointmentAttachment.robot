@@ -110,7 +110,7 @@ JD-TC-GetAppointmentAttachment-1
     Log  ${resp}
     ${fileType1}=  Get From Dictionary       ${resp}    ${jpgfile}
     ${caption1}=  Fakerlibrary.Sentence
-    ${fileName}=    FakerLibrary.firstname
+    ${fileName}=    generate_filename
 
     ${resp}    upload file to temporary location    ${file_action[0]}    ${provider_id}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption1}    ${fileType1}    ${EMPTY}    ${order}
     Log  ${resp.content}
@@ -200,7 +200,7 @@ JD-TC-GetAppointmentAttachment-2
     Log  ${resp}
     ${fileType1}=  Get From Dictionary       ${resp}    ${pngfile}
     ${caption1}=  Fakerlibrary.Sentence
-    ${fileName}=    FakerLibrary.firstname
+    ${fileName}=    generate_filename
 
     ${resp}    upload file to temporary location    ${file_action[0]}    ${provider_id}    ${ownerType[0]}    ${pdrname}    ${pngfile}    ${fileSize}    ${caption1}    ${fileType1}    ${EMPTY}    ${order}
     Log  ${resp.content}
@@ -291,7 +291,7 @@ JD-TC-GetAppointmentAttachment-3
     Log  ${resp}
     ${fileType1}=  Get From Dictionary       ${resp}    ${pdffile}
     ${caption1}=  Fakerlibrary.Sentence
-    ${fileName}=    FakerLibrary.firstname
+    ${fileName}=    generate_filename
 
     ${resp}    upload file to temporary location    ${file_action[0]}    ${provider_id}    ${ownerType[0]}    ${pdrname}    ${pdffile}    ${fileSize}    ${caption1}    ${fileType1}    ${EMPTY}    ${order}
     Log  ${resp.content}
@@ -382,7 +382,7 @@ JD-TC-GetAppointmentAttachment-4
     Log  ${resp}
     ${fileType1}=  Get From Dictionary       ${resp}    ${jpegfile}
     ${caption1}=  Fakerlibrary.Sentence
-    ${fileName}=    FakerLibrary.firstname
+    ${fileName}=    generate_filename
 
     ${resp}    upload file to temporary location    ${file_action[0]}    ${provider_id}    ${ownerType[0]}    ${pdrname}    ${jpegfile}    ${fileSize}    ${caption1}    ${fileType1}    ${EMPTY}    ${order}
     Log  ${resp.content}
@@ -472,7 +472,7 @@ JD-TC-GetAppointmentAttachment-5
     ${resp}=  db.getType   ${pdffile}
     Log  ${resp}
     ${fileType1}=  Get From Dictionary       ${resp}    ${pdffile}
-    ${fileName}=    FakerLibrary.firstname
+    ${fileName}=    generate_filename
 
     ${resp}    upload file to temporary location    ${file_action[0]}    ${provider_id}    ${ownerType[0]}    ${pdrname}    ${pdffile}    ${fileSize}    ${EMPTY}    ${fileType1}    ${EMPTY}    ${order}
     Log  ${resp.content}
@@ -562,7 +562,7 @@ JD-TC-GetAppointmentAttachment-6
     ${resp}=  db.getType   ${giffile}
     Log  ${resp}
     ${fileType1}=  Get From Dictionary       ${resp}    ${giffile}
-    ${fileName}=    FakerLibrary.firstname
+    ${fileName}=    generate_filename
 
     ${resp}    upload file to temporary location    ${file_action[0]}    ${provider_id}    ${ownerType[0]}    ${pdrname}    ${giffile}    ${fileSize}    ${EMPTY}    ${fileType1}    ${EMPTY}    ${order}
     Log  ${resp.content}

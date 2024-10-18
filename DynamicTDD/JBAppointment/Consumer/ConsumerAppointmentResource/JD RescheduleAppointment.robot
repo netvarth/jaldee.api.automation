@@ -1234,7 +1234,7 @@ JD-TC-Reschedule Appointment-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  scheduleName=${schedule_name1}  scheduleId=${sch_id1}
 
-    ${SERVICE2}=    FakerLibrary.firstName
+    ${SERVICE2}=    generate_firstname
     ${s_id2}=  Create Sample Service  ${SERVICE2}
 
     ${sTime2}=  add_two  ${eTime1}  5

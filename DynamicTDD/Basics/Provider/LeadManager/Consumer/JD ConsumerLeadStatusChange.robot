@@ -41,7 +41,7 @@ JD-TC-Consumer_Lead_Status_Change-1
 
     END
 
-    ${firstName}=   FakerLibrary.firstName
+    ${firstName}=   generate_firstname
     ${lastName}=    FakerLibrary.lastName
 
     ${resp}=    Create Lead Consumer  ${firstName}  ${lastName}

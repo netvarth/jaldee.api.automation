@@ -295,7 +295,7 @@ JD-TC-Create_Provider_Schedule-1
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
     ${dob}=  Convert To String  ${dob}
-    ${firstName}=    FakerLibrary.firstName
+    ${firstName}=    generate_firstname
     ${lastName}=    FakerLibrary.lastName
     Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
 

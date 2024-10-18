@@ -254,7 +254,7 @@ JD-TC-Update Stock Transfer Status-1
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
     ${contactPersonName}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
@@ -830,7 +830,7 @@ JD-TC-Update Stock Transfer Status-5
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
     ${contactPersonName}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
@@ -1368,7 +1368,7 @@ JD-TC-Update Stock Transfer Status-6
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
     ${contactPersonName}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
@@ -1842,7 +1842,7 @@ JD-TC-Update Stock Transfer Status-7
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
     ${contactPersonName}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
@@ -2354,7 +2354,7 @@ JD-TC-Update Stock Transfer Status-UH8
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
     ${contactPersonName}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
@@ -2866,7 +2866,7 @@ JD-TC-Update Stock Transfer Status-UH9
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
     ${contactPersonName}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789

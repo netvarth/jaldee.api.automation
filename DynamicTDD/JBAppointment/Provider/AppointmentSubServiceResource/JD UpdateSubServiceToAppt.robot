@@ -148,7 +148,7 @@ JD-TC-UpdateSubServicesToAppt-1
     ${subser_price}=   Random Int   min=100   max=500
     ${subser_price}=  Convert To Number  ${subser_price}  1
     Set Suite Variable   ${subser_price}
-    ${subser_name}=    FakerLibrary.firstname
+    ${subser_name}=    generate_service_name
     Set Suite Variable   ${subser_name}
 
     ${resp}=  Create Service    ${subser_name}  ${desc}   ${subser_dur}  ${bool[0]}  ${subser_price}  ${bool[0]}   serviceCategory=${serviceCategory[0]}
@@ -526,7 +526,7 @@ JD-TC-UpdateSubServicesToAppt-UH5
     ${subser_dur}=   Random Int   min=5   max=10
     ${subser_price}=   Random Int   min=100   max=500
     ${subser_price}=  Convert To Number  ${subser_price}  1
-    ${subser_name}=    FakerLibrary.firstname
+    ${subser_name}=    generate_service_name
    
     ${resp}=  Create Service    ${subser_name}  ${desc}   ${subser_dur}  ${bool[0]}  ${subser_price}  ${bool[0]}    serviceCategory=${serviceCategory[0]}
     Log   ${resp.content}  

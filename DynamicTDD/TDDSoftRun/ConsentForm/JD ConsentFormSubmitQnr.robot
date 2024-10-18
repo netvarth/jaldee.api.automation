@@ -159,12 +159,12 @@ JD-TC-ConsentFormSubmitQnr-1
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
-    ${caption}     FakerLibrary.firstName
+    ${caption}     generate_firstname
     ${file_size}    Get File Size    ${jpg}
-    ${labelName}    FakerLibrary.firstName
+    ${labelName}    generate_firstname
     ${resp}=    db.getMimetype   ${jpg}
     ${mimetype}    Get From Dictionary    ${resp}    ${jpg}
-    ${keyName}    FakerLibrary.firstName  
+    ${keyName}    generate_firstname  
     ${file_name}    Evaluate    __import__('os').path.basename('${jpg}')
 
     ${resp}=    Imageupload.UploadQNRfiletoTempLocation    ${cookie}  ${user_id}  ${Quid}  ${caption}  ${mimetype}  ${file_name}  ${file_name}  ${file_size}  ${labelName}

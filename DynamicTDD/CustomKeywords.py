@@ -11,6 +11,115 @@ long_service_list = DynamicProvider(
      elements= ["Online fundraising strategies for social initiatives", "Remote program evaluation for advocacy organizations", "Remote stakeholder engagement for community projects", "Online volunteer recruitment strategies for nonprofits", "Online fundraising campaigns for social initiatives", "Remote coalition building for nonprofit initiatives", "Online fundraising planning for nonprofit organizations", "Digital advocacy strategies for community initiatives", "Remote program evaluation for community organizations", "Online fundraising strategies for community projects", "Digital marketing strategies for nonprofit campaigns", "Digital marketing strategies for community organizations", "Online partnership development for advocacy initiatives", "Online fundraising execution for advocacy campaigns", "Online partnership development for advocacy campaigns", "Remote fundraising strategies for advocacy campaigns", "Remote evaluation frameworks for advocacy campaigns", "Digital marketing strategies for social initiatives", "Digital marketing strategies for advocacy organizations", "Digital communication strategies for advocacy organizations", "Online fundraising campaigns for community organizations", "Online fundraising execution for advocacy organizations", "Remote evaluation frameworks for advocacy organizations", "Online fundraising execution for community organizations", "Remote evaluation frameworks for nonprofit initiatives", "Remote community building initiatives for nonprofits", "Digital marketing strategies for advocacy campaigns", "Digital communication strategies for nonprofit initiatives", "Remote coalition building for nonprofit organizations", "Online partnership development for social initiatives", "Remote community building strategies for nonprofits", "Online impact measurement for community organizations", "Online impact measurement strategies for community organizations", "Online partnership development for community initiatives", "Remote community building initiatives for social impact", "Remote program evaluation frameworks for social change", "Remote community building initiatives for social enterprises", "Remote fundraising planning for nonprofit campaigns", "Virtual evaluation frameworks for community initiatives", "Online impact assessment for community organizations", "Online community engagement for nonprofit organizations", "Online fundraising execution for community projects", "Remote community partnerships for advocacy organizations", "Digital communication strategies for community engagement", "Digital communication strategies for advocacy campaigns", "Remote fundraising planning for nonprofit organizations", "Online fundraising campaigns for social enterprises", "Online partnership development for social change initiatives", "Remote evaluation frameworks for nonprofit organizations", "Digital communication tools for advocacy organizations", "Online community outreach initiatives for nonprofits", "Online fundraising campaigns for nonprofit organizations", "Digital communication strategies for social enterprises", "Remote community building initiatives for nonprofit organizations", "Digital advocacy strategies for community organizations", "Remote community partnerships for nonprofit projects", "Online fundraising campaign execution for nonprofits", "Online fundraising strategies for social enterprises", "Remote program evaluation for nonprofit initiatives", "Online impact measurement for nonprofit organizations", "Digital advocacy training for community organizations", "Online fundraising execution for social initiatives", "Remote fundraising planning for community organizations", "Remote coalition management for advocacy initiatives", "Online fundraising campaigns for nonprofit initiatives", "Remote program evaluation for social impact projects", "Digital communication strategies for nonprofit campaigns", "Online fundraising campaigns for community initiatives", "Remote fundraising execution for advocacy campaigns", "Online program evaluation for community organizations", "Online community engagement strategies for nonprofits", "Digital marketing strategy for community engagement", "Digital marketing strategies for community engagement", "Remote evaluation frameworks for social change initiatives", "Online partnership development for nonprofit projects", "Remote community partnerships for nonprofit initiatives", "Online impact measurement for community initiatives", "Online fundraising strategies for advocacy initiatives", "Remote program evaluation for social change initiatives", "Online fundraising strategies for community organizations", "Online partnership development for community impact"],
 )
 
+filenames_list = DynamicProvider(
+    provider_name="common_filename",
+     elements= ["resume","cover_letter","report","presentation","meeting_notes",
+    "vacation_photo","family_portrait","logo","profile_pic","artwork",
+    "podcast_episode","background_music","voice_message","ringtone","sound_effect",
+    "family_video","tutorial_video","travel_vlog","recorded_stream","presentation_video",
+    "budget","inventory_list","sales_data","project_plan","expense_report",
+    "project_files","images_archive","backups","resources","code_repository",
+    "notes","draft","summary","analysis","proposal",
+    "contract","invoice","schedule","checklist","data",
+    "contacts","to_do_list","recipe","shopping_list","lyrics",
+    "journal","blog_post","review","newsletter","article",
+    "guidelines","policy","handbook","template","blueprint",
+    "map","presentation_notes","workshop_materials","brainstorming","feedback",
+    "evaluation","test_results","strategy","agenda","milestones",
+    "user_guide","manual","playbook","case_study","business_plan",
+    "workflow","process_map","technical_spec","marketing_plan","research",
+    "white_paper","presentation_handouts","timeline","goals","objectives",
+    "metrics","infographic","chart","graph","powerpoint",
+    "keynote","video_lecture","interview_transcript","webinar","work_report",
+    "team_meeting","service_agreement","terms_conditions","user_stories","sprint_backlog",
+    "epic","task_list","presentation_slides","resources_list","project_overview",
+    "site_map","design_spec","client_feedback","style_guide","brand_manifesto",
+    "social_media_plan","content_calendar","ad_copy","press_release","event_agenda",
+    "guest_list","attendance_sheet","meeting_minutes","feedback_form","survey_results",
+    "data_analysis","presentation_script","team_roles","employee_handbook","job_description",
+    "training_materials","safety_protocol","equipment_list","inventory_report","quality_assurance",
+    "risk_assessment","compliance_report","audit","financial_statement","profit_loss",
+    "budget_forecast","market_analysis","user_feedback","customer_support","bug_report",
+    "release_notes","version_history","test_plan","test_case","api_documentation",
+    "database_schema","architecture_diagram","network_diagram","system_requirements","deployment_plan",
+    "maintenance_schedule","incident_report","change_log","project_update","resource_allocation",
+    "performance_review","salary_report","employee_records","legal_document","case_file",
+    "medical_records","insurance_policy","contract_template","warranty","service_log",
+    "install_instructions","usage_statistics","application_form","proposal_template","grant_application",
+    "research_data","patient_info","project_charter","scope_statement","communication_plan",
+    "brand_assets","user_profile","personal_statement","academic_transcript","enrollment_form",
+    "transcript","certificate","work_sample","portfolio","resume_template",
+    "cover_letter_template","social_media_profile","website_content","landing_page","seo_report",
+    "content_strategy","keyword_research","traffic_analysis","ad_performance","market_research",
+    "competitor_analysis","sales_pitch","client_proposal","meeting_agenda","financial_projection",
+    "strategic_plan","brand_guide","user_research","mockup","wireframe",
+    "style_tile","color_palette","font_choices","icon_set","graphic_elements",
+    "photo_gallery","video_clips","music_playlist","sample_work","testimonial",
+    "case_study","user_manual","installation_guide","scripting_guide","environment_setup",
+    "quick_reference","toolkit","dev_guide","style_guide","lifecycle_plan",
+    "sprint_report","feature_list","meeting_schedule","team_goals","company_values",
+    "communication_strategy","product_roadmap","user_interface","landing_page","content_calendar",
+    "brand_story","customer_journey","email_template","social_post","press_kit",
+    "media_contact_list","event_schedule","catering_order","venue_details","speaker_bio",
+    "participant_feedback","after_action_report","budget_summary","goal_setting","team_roles",
+    "milestone_tracker","progress_report","daily_log","weekly_summary","monthly_review",
+    "yearly_report","client_feedback","employee_survey","market_analysis","competitor_review",
+    "sales_report","revenue_forecast","profit_margin","expense_report","account_statement",
+    "cash_flow","balance_sheet","financial_analysis","investment_plan","funding_proposal",
+    "donor_report","grant_summary","impact_report","risk_analysis","project_timeline",
+    "scope_document","project_brief","team_agreement","communication_plan","risk_management",
+    "stakeholder_map","team_contact_list","project_feedback","timeline_chart","swot_analysis",
+    "business_model_canvas","value_proposition","customer_segments","key_partners","key_activities",
+    "cost_structure","revenue_streams","pitch_deck","sales_script","network_map",
+    "business_plan_template","financial_model","investment_analysis","asset_allocation","exit_strategy",
+    "legal_agreement","confidentiality_agreement","nda","terms_of_service","privacy_policy",
+    "social_media_analytics","website_performance","a_b_test_results","content_audit","email_campaign",
+    "website_sitemap","search_console_report","analytics_overview","user_engagement","user_retention",
+    "content_updates","email_newsletter","blog_schedule","video_content_plan","podcast_plan",
+    "webinar_schedule","virtual_event_plan","brand_collateral","promotional_materials","customer_feedback",
+    "user_onboarding","sales_funnel","lead_generation","client_onboarding","training_schedule",
+    "employee_evaluation","exit_interview","performance_metrics","employee_engagement","company_policies",
+    "operational_plan","workforce_plan","succession_plan","employee_handbook","career_development",
+    "mentorship_program","skills_matrix","training_modules","learning_path","compliance_training",
+    "code_of_conduct","diversity_policy","workplace_safety","employee_benefits","staff_meeting_notes",
+    "project_kickoff","status_update","project_risks","issues_log","action_items",
+    "resource_plan","time_tracking","work_schedule","shift_schedule","attendance_log",
+    "project_closure","feedback_summary","customer_support_tickets","service_improvements","client_case_study",
+    "success_stories","outreach_plan","impact_analysis","community_engagement","volunteer_management",
+    "donor_management","event_recap","fundraising_strategy","project_metrics","lesson_learned",
+    "project_scope","research_overview","data_collection","experimental_design","findings_report",
+    "results_summary","project_results","publications","conference_paper","research_poster"],
+)
+
+template_list = DynamicProvider(
+    provider_name="template_name",
+     elements= ["business_plan_template","resume_template","cover_letter_template","invoice_template","report_template",
+    "presentation_template","marketing_plan_template","email_template","project_plan_template","budget_template",
+    "proposal_template","social_media_post_template","newsletter_template","event_agenda_template","meeting_minutes_template",
+    "feedback_form_template","survey_template","contract_template","invoice_request_template","training_material_template",
+    "style_guide_template","press_release_template","brand_guidelines_template","safety_protocol_template","user_guide_template",
+    "manual_template","audit_template","project_overview_template","client_feedback_template","case_study_template",
+    "data_analysis_template","project_status_template","timeline_template","risk_management_template","performance_review_template",
+    "employee_handbook_template","sales_pitch_template","marketing_campaign_template","content_calendar_template","research_report_template",
+    "grant_application_template","workshop_material_template","checklist_template","task_list_template","action_plan_template",
+    "user_story_template","customer_journey_template","communication_plan_template","event_budget_template","social_media_strategy_template",
+    "product_requirements_template","strategic_plan_template","team_roles_template","goal_setting_template","milestone_tracker_template",
+    "training_schedule_template","work_report_template","policy_template","budget_forecast_template","project_charter_template",
+    "scope_document_template","sprint_report_template","sales_report_template","financial_projection_template","exit_strategy_template",
+    "marketing_material_template","content_strategy_template","website_content_template","email_campaign_template","customer_feedback_template",
+    "meeting_schedule_template","incident_report_template","daily_log_template","weekly_summary_template","monthly_review_template",
+    "yearly_report_template","media_kit_template","service_agreement_template","terms_conditions_template","privacy_policy_template",
+    "brand_assets_template","user_research_template","design_spec_template","wireframe_template","mockup_template",
+    "case_file_template","evaluation_template","incident_log_template","research_plan_template","data_collection_template",
+    "conference_paper_template","presentation_slides_template","feedback_summary_template","project_closure_template","employee_evaluation_template",
+    "company_policy_template","lead_generation_template","customer_support_template","sales_funnel_template","community_engagement_template",
+    "event_recap_template","impact_report_template","volunteer_management_template","training_modules_template","career_development_template",
+    "mentor_program_template","diversity_policy_template","workforce_plan_template","operational_plan_template","succession_plan_template"]
+)
+
+
+
+
 
 def generate_service_name():
 
@@ -62,3 +171,35 @@ def get_service_names(response, service_names):
     service_names.extend(names)
 
     return service_names
+
+
+def generate_firstname(min_length=3):
+    fake = Faker()
+    while True:
+        firstname = fake.first_name()
+        if len(firstname) >= min_length:
+            return firstname
+        
+
+def generate_filename():
+
+    # Initialize Faker instance
+    fake = Faker()
+    # then add new provider to faker instance
+    fake.add_provider(filenames_list)
+
+    filename = fake.common_filename()
+    
+    return filename
+
+
+def generate_template_name():
+
+    # Initialize Faker instance
+    fake = Faker()
+    # then add new provider to faker instance
+    fake.add_provider(template_list)
+
+    template_name = fake.template_name()
+    
+    return template_name

@@ -363,7 +363,7 @@ JD-TC-GetTemplateByFilter-6
     Should Be Equal As Strings  ${resp.json()[0]['commTarget']}                  ${comm_target} 
     Should Be Equal As Strings  ${resp.json()[0]['status']}                      ${VarStatus[0]} 
 
-    ${temp_name1}=    FakerLibrary.firstname
+    ${temp_name1}=    generate_template_name
    
     ${resp}=  Update Template   ${temp_id1}  templateName=${temp_name1}  
     Log   ${resp.content}

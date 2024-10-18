@@ -127,7 +127,7 @@ JD-TC-UploadStatusboardLogo-1
     Log  ${resp}
     ${fileType1}=  Get From Dictionary       ${resp}    ${pdffile}
     ${caption1}=  Fakerlibrary.Sentence
-    ${fileName}=    FakerLibrary.firstname
+    ${fileName}=    generate_filename
     
     ${attachments}=  Create Dictionary   fileName=${fileName}  
 

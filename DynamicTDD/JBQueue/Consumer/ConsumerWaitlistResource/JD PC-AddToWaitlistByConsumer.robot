@@ -1685,7 +1685,7 @@ JD-TC-Add To WaitlistByConsumer-18
     ${sTime1}=  get_time_by_timezone  ${tz}
     ${eTime1}=  add_timezone_time  ${tz}  1  30  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${queue1}=    FakerLibrary.firstname
+    ${queue1}=    generate_firstname
     
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  1   5   ${p1_l2}  ${Sid1_s1}
     Log  ${resp.content} 
@@ -3229,7 +3229,7 @@ JD-TC-Add To WaitlistByConsumer-UH16
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${p2_s1}  ${resp.json()}
 
-    ${P2SERVICE2}=    FakerLibrary.firstname
+    ${P2SERVICE2}=    generate_firstname
     Set Test Variable  ${P2SERVICE2}
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50

@@ -624,7 +624,7 @@ JD-TC-Switch_Login-9
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
     
-    ${bName}    FakerLibrary.firstName
+    ${bName}    generate_firstname
     ${bDesc}    FakerLibrary.Sentence
     ${shname}   FakerLibrary.Sentence
     ${phone1}   Evaluate  ${PUSERNAME}+874589

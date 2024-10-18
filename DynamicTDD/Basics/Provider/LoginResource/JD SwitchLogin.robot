@@ -782,7 +782,7 @@ JD-TC-Switch_Login-9
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
     
-    ${bName}    FakerLibrary.firstName
+    ${bName}    generate_firstname
     ${bDesc}    FakerLibrary.Sentence
     ${shname}   FakerLibrary.Sentence
     ${phone1}   Evaluate  ${PUSERNAME}+874589
@@ -1292,7 +1292,7 @@ JD-TC-Switch_Login-14
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id2}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
     ${contactPersonName}=   FakerLibrary.lastname
     ${owner_name}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word

@@ -62,7 +62,7 @@ JD-TC-GetEncById-1
 
 
 
-    ${vender_name}=          FakerLibrary.firstname
+    ${vender_name}=          generate_firstname
     Set Suite Variable       ${vender_name}
     ${contactPersonName}=    FakerLibrary.lastname
     Set Suite Variable       ${contactPersonName}

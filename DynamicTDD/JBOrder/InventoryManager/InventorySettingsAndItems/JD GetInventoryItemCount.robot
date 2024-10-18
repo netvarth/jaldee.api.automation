@@ -163,7 +163,7 @@ JD-TC-Get Inventory Item Count-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
     ${contactPersonName}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
@@ -734,7 +734,7 @@ JD-TC-Get Inventory Item Count-3
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${accountId}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
     ${contactPersonName}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789

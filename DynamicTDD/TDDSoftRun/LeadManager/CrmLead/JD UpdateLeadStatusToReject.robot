@@ -113,7 +113,7 @@ JD-TC-Update_Lead_Status_To_Reject-1
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${firstName_n}=   FakerLibrary.firstName
+    ${firstName_n}=   generate_firstname
     ${lastName_n}=    FakerLibrary.lastName
     Set Suite Variable      ${firstName_n}
     Set Suite Variable      ${lastName_n}

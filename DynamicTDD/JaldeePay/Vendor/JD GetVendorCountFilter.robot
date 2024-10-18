@@ -63,7 +63,7 @@ JD-TC-Get Vendor List with Count filter-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${id}   ${resp.json()['id']}
 
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
     Set Suite Variable    ${vender_name}
     ${contactPersonName}=   FakerLibrary.lastname
     Set Suite Variable    ${contactPersonName}

@@ -103,7 +103,7 @@ JD-TC-UpdateCustomVariable-2
     Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
     Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
 
-    ${name1}=    FakerLibrary.firstname
+    ${name1}=    generate_firstname
 
     ${resp}=  Update Custom Variable   ${var_id1}  ${name1}  ${dis_name}  ${value}  
     Log   ${resp.content}
@@ -155,7 +155,7 @@ JD-TC-UpdateCustomVariable-3
     Should Be Equal As Strings  ${resp.json()['status']}          ${VarStatus[0]} 
     Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
 
-    ${dis_name1}=    FakerLibrary.firstname
+    ${dis_name1}=    generate_firstname
 
     ${resp}=  Update Custom Variable   ${var_id1}  ${name}  ${dis_name1}  ${value}  
     Log   ${resp.content}

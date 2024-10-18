@@ -43,7 +43,7 @@ JD-TC-Get_Lead_Consumer_By_Filter-1
 
     END
 
-    ${firstName1}=   FakerLibrary.firstName
+    ${firstName1}=   generate_firstname
     ${lastName1}=    FakerLibrary.lastName
 
     Set Suite Variable      ${firstName1}
@@ -63,7 +63,7 @@ JD-TC-Get_Lead_Consumer_By_Filter-1
     Log  ${PH_Number}
     Set Suite Variable    ${consumerPhone}  555${PH_Number}
 
-    ${firstName}=   FakerLibrary.firstName
+    ${firstName}=   generate_firstname
     ${lastName}=    FakerLibrary.lastName
     ${dob}=  FakerLibrary.Date
     Set Suite Variable  ${dob}

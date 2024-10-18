@@ -113,7 +113,7 @@ JD-TC-Unassign_User_To_Crm_Lead-1
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${firstName_n}=   FakerLibrary.firstName
+    ${firstName_n}=   generate_firstname
     ${lastName_n}=    FakerLibrary.lastName
     Set Suite Variable      ${firstName_n}
     Set Suite Variable      ${lastName_n}

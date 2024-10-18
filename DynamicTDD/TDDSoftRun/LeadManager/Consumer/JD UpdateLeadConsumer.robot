@@ -41,7 +41,7 @@ JD-TC-Update_Lead_Consumer-1
 
     END
 
-    ${firstName}=   FakerLibrary.firstName
+    ${firstName}=   generate_firstname
     ${lastName}=    FakerLibrary.lastName
     Set Suite Variable      ${firstName}
     Set Suite Variable      ${lastName}
@@ -231,7 +231,7 @@ JD-TC-Update_Lead_Consumer-UH5
 
     END
 
-    ${Name}=   FakerLibrary.firstName
+    ${Name}=   generate_firstname
 
     ${resp}=    Update Lead Consumer  ${con_id}  firstName=${Name}
     Log  ${resp.content}

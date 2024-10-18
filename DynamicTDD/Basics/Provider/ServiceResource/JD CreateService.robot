@@ -1933,28 +1933,7 @@ JD-TC-CreateService-UH25
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[1]}
-        ${resp1}=  Enable Disable Department  ${toggle[1]}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    END
-
-    ${resp}=  Get Account Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['virtualService']}==${bool[0]}   
-        ${resp}=   Enable Disable Virtual Service   ${toggle[0]}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
     
-    # ${Description1}=    FakerLibrary.sentences
-    # ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_E}   countryCode=${countryCodes[0]}  status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
-    # ${virtualCallingModes}=  Create List  ${VScallingMode1}
-    # Set Test Variable  ${vstype}  ${vservicetype[1]}
     ${vstype}=   Random Element   ${vservicetype}
     ${virtualCallingModes}=  Create List  @{EMPTY}
 
@@ -1969,71 +1948,10 @@ JD-TC-CreateService-UH25
 
 
 JD-TC-CreateService-UH26
-    [Documentation]   Create virtual service with virtual calling mode of ZOOM as EMPTY.
+    [Documentation]   Create virtual service without meeting link when calling mode is ZOOM
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[1]}
-        ${resp1}=  Enable Disable Department  ${toggle[1]}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    END
-
-    ${resp}=  Get Account Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['virtualService']}==${bool[0]}   
-        ${resp}=   Enable Disable Virtual Service   ${toggle[0]}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
-
-    ${meeting_id}=  Generate Random String    10    [NUMBERS]
-    ${passwd}=  FakerLibrary.password  length=30  #special_chars=False  upper_case=False
-    ${ZOOM_id0}=     Format String    ${ZOOM_URL}    meeting_id=9${meeting_id}    passwd=${passwd}.1
-    
-    ${Description1}=    FakerLibrary.sentences
-    ${VScallingMode1}=   Create Dictionary   callingMode=${EMPTY}   value=${ZOOM_id0}   status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
-    ${virtualCallingModes}=  Create List  ${VScallingMode1}
-    Set Test Variable  ${vstype}  ${vservicetype[1]}
-    ${vstype}=   Random Element   ${vservicetype}
-    # ${virtualCallingModes}=  Create List  @{EMPTY}
-
-    ${description}=    FakerLibrary.sentence
-    ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
-    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"  "${VIRTUAL_SERVICE_MODE_REQUIRED}"
-
-
-JD-TC-CreateService-UH27
-    [Documentation]   Create virtual service without zoom meeting link.
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[1]}
-        ${resp1}=  Enable Disable Department  ${toggle[1]}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    END
-
-    ${resp}=  Get Account Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['virtualService']}==${bool[0]}   
-        ${resp}=   Enable Disable Virtual Service   ${toggle[0]}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
 
     ${meeting_id}=  Generate Random String    10    [NUMBERS]
     ${passwd}=  FakerLibrary.password  length=30  #special_chars=False  upper_case=False
@@ -2043,8 +1961,6 @@ JD-TC-CreateService-UH27
     ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${EMPTY}   status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
     ${virtualCallingModes}=  Create List  ${VScallingMode1}
     Set Test Variable  ${vstype}  ${vservicetype[1]}
-    ${vstype}=   Random Element   ${vservicetype}
-    # ${virtualCallingModes}=  Create List  @{EMPTY}
 
     ${description}=    FakerLibrary.sentence
     ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
@@ -2054,6 +1970,209 @@ JD-TC-CreateService-UH27
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${ZOOM_ID_REQUIRED}"
+
+
+JD-TC-CreateService-UH27
+    [Documentation]   Create virtual service without phone number when calling mode is WHATSAPP
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${Description1}=    FakerLibrary.sentences
+    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${EMPTY}   countryCode=${countryCodes[0]}  status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${virtualCallingModes}=  Create List  ${VScallingMode1}
+    ${vstype}=   Random Element   ${vservicetype}
+
+    ${description}=    FakerLibrary.sentence
+    ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"  "${WHATSAPP_NUMBER_REQUIRED}"
+
+
+JD-TC-CreateService-UH28
+    [Documentation]   Create virtual service without phone number when calling mode is PHONE
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${Description1}=    FakerLibrary.sentences
+    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[2]}   value=${EMPTY}   countryCode=${countryCodes[0]}  status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${virtualCallingModes}=  Create List  ${VScallingMode1}
+    Set Test Variable  ${vstype}  ${vservicetype[0]}
+
+    ${description}=    FakerLibrary.sentence
+    ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"  "${PHONE_NUMBER_REQUIRED}"
+
+
+JD-TC-CreateService-UH29
+    [Documentation]   Create virtual service without meeting id when calling mode is GoogleMeet
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${meeting_id}=   FakerLibrary.lexify  text='???-????-???'  letters=${lower}    # Adjust length and characters as needed
+    # ${GoogleMeet_url}=     Format String    ${MEET_URL}    meeting_id=${meeting_id}
+    # Log    ${meet_url}
+
+    
+    ${Description1}=    FakerLibrary.sentences
+    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[3]}   value=${EMPTY}   status=${status[0]}    instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${virtualCallingModes}=  Create List  ${VScallingMode1}
+    ${vstype}=   Random Element   ${vservicetype}
+
+    ${description}=    FakerLibrary.sentence
+    ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"  "${GOOGLEMEET_ID_REQUIRED}"
+
+
+JD-TC-CreateService-UH30
+    [Documentation]   Create Virtual Service without enabling virtual service
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['virtualService']}==${bool[1]}   
+        ${resp}=   Enable Disable Virtual Service   ${toggle[1]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+    
+    ${Description1}=    FakerLibrary.sentences
+    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_E}   countryCode=${countryCodes[0]}  status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${virtualCallingModes}=  Create List  ${VScallingMode1}
+    ${vstype}=   Random Element   ${vservicetype}
+
+    ${description}=    FakerLibrary.sentence
+    ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"  "${VIRTUAL_SERVICES_NOT_ENABLED}"
+
+
+JD-TC-CreateService-UH31
+    [Documentation]   Use Zoom (Video Service Type) to create an Audio service
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['virtualService']}==${bool[0]}   
+        ${resp}=   Enable Disable Virtual Service   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${meeting_id}=  Generate Random String    10    [NUMBERS]
+    ${passwd}=  FakerLibrary.password  length=30  #special_chars=False  upper_case=False
+    ${ZOOM_id0}=     Format String    ${ZOOM_URL}    meeting_id=9${meeting_id}    passwd=${passwd}.1
+    
+    ${Description1}=    FakerLibrary.sentences
+    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_id0}   status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${virtualCallingModes}=  Create List  ${VScallingMode1}
+    Set Test Variable  ${vstype}  ${vservicetype[0]}
+
+    ${description}=    FakerLibrary.sentence
+    ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"  "${AUDIO_SERVICE_MODE_REQUIRED}"
+
+
+JD-TC-CreateService-UH32
+    [Documentation]   Use Phone or Whatsapp (Audio Service Type) to create a Video service
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${Description1}=    FakerLibrary.sentences
+    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[2]}   value=${PUSERNAME_E}   countryCode=${countryCodes[0]}  status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${virtualCallingModes}=  Create List  ${VScallingMode1}
+    Set Test Variable  ${vstype}  ${vservicetype[1]}
+
+    ${description}=    FakerLibrary.sentence
+    ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"  "${VIDEO_SERVICE_MODE_REQUIRED}"
+
+
+JD-TC-CreateService-UH33
+    [Documentation]   Create Virtual Service with invalid zoom url
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    # ${meeting_id}=  Generate Random String    10    [NUMBERS]
+    # ${passwd}=  FakerLibrary.password  length=30  #special_chars=False  upper_case=False
+    # ${ZOOM_id0}=     Format String    ${ZOOM_URL}    meeting_id=9${meeting_id}    passwd=${passwd}.1
+
+    # ${inv_zoom_id}=  FakerLibrary.url
+    
+    ${Description1}=    FakerLibrary.sentences
+    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${PUSERNAME_E}   status=${status[0]}   instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${virtualCallingModes}=  Create List  ${VScallingMode1}
+    Set Test Variable  ${vstype}  ${vservicetype[1]}
+
+    ${description}=    FakerLibrary.sentence
+    ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"  "${INVALID_ZOOM_ID}"
+
+
+JD-TC-CreateService-UH34
+    [Documentation]   Create Virtual Service with invalid google meet id
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${inv_meet_id}=  FakerLibrary.url
+    
+    ${Description1}=    FakerLibrary.sentences
+    ${VScallingMode1}=   Create Dictionary   callingMode=${CallingModes[3]}   value=${inv_meet_id}   status=${status[0]}    instructions=${Description1[0]}${\n}${Description1[1]}${\n}${Description1[2]}
+    ${virtualCallingModes}=  Create List  ${VScallingMode1}
+    Set Test Variable  ${vstype}  ${vservicetype[1]}
+
+    ${description}=    FakerLibrary.sentence
+    ${Total}=  Pyfloat  right_digits=1  min_value=100  max_value=500
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${resp}=  Create Service  ${SERVICE1}  ${description}  ${service_duration[1]}  ${bool[0]}  ${Total}  ${bool[0]}  serviceType=${ServiceType[0]}   virtualServiceType=${vstype}  virtualCallingModes=${virtualCallingModes}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"  "${INVALID_MEET_ID}"
+
+
 
 
 

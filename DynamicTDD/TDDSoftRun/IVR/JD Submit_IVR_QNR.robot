@@ -364,7 +364,7 @@ JD-TC-SubmitQuestionnaireForIVR-1
     ${last_caller_id}    FakerLibrary.Random Number
     ${agent_id}    FakerLibrary.Random Number
     ${agent_id}=  Convert To String  ${agent_id}
-    ${agent_name}    FakerLibrary.firstName
+    ${agent_name}    generate_firstname
     Set Test Variable  ${email}  ${agent_name}.${test_mail}
     ${agent_ex}    FakerLibrary.Random Number
     ${numb}    Random Number 	digits=5 
@@ -390,9 +390,9 @@ JD-TC-SubmitQuestionnaireForIVR-1
     ${call_log}=    after_call_log_details      ${ring_start_time}  ${ivr_dial_string[0]}  ${last_caller_id}  ${agent_id}  ${agent_name}  ${email}  ${agent_ex}  ${agent_contact}  ${agent_contact_with_cc}  ${ivr_inputValue[1]}  ${start_time}  ${end_time}  ${timestamp}  ${ivr_call_status[0]}
 
     ${file_name}    Evaluate    __import__('os').path.basename('${pdffile}')
-    ${file_link}    FakerLibrary.firstName
+    ${file_link}    generate_filename
     ${comp_id}    FakerLibrary.Random Number
-    ${caller_name}    FakerLibrary.firstName
+    ${caller_name}    generate_firstname
 
     ${resp}=    Aftercall IVR    ${account_id}    ${incall_id}    ${ivr_inputValue[1]}    ${comp_id}    ${clid_row}    ${caller_name}    ${clid}    ${countryCodes[0]}    ${loc}    ${start_time}    ${start_time}    ${start_time_in_milli_sec}    ${timestamp}    ${end_time}    ${difference}    ${dur_min}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${file_name}    ${file_link}    ${ivr_inputValue[0]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${pm}    ${empty}    ${call_log}    ${ivr_inputValue[0]}    ${empty}    ${empty}    ${empty}    ${empty}
     Log  ${resp.json()}
@@ -413,12 +413,12 @@ JD-TC-SubmitQuestionnaireForIVR-1
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
-    ${caption}     FakerLibrary.firstName
+    ${caption}     generate_firstname
     ${file_size}    Get File Size    ${pdffile}
-    ${labelName}    FakerLibrary.firstName
+    ${labelName}    generate_firstname
     ${resp}=    db.getMimetype   ${pdffile}
     ${mimetype}    Get From Dictionary    ${resp}    ${pdffile}
-    ${keyName}    FakerLibrary.firstName  
+    ${keyName}    generate_firstname  
 
     ${resp}=    Imageupload.UploadQNRfiletoTempLocation    ${cookie}  ${user_id}  ${qid}  ${caption}  ${mimetype}  ${file_name}  ${file_name}  ${file_size}  ${labelName}
     Log  ${resp.content}

@@ -165,7 +165,7 @@ JD-TC-ConsentFormVerifySign-1
     Set Suite variable    ${fileType1}
     ${caption1}=  Fakerlibrary.Sentence
     Set Suite variable    ${caption1}
-    ${fileName}=    FakerLibrary.firstname
+    ${fileName}=    generate_filename
     Set Suite variable    ${fileName}
 
     ${resp}=    upload file to temporary location consumer    ${file_action[0]}    ${consumerId}    ${ownerType[0]}    ${fullName}    ${jpgfile}    ${fileSize}    ${caption1}    ${fileType1}    ${EMPTY}    ${order}

@@ -48,13 +48,13 @@ JD-TC-Get_Member_Count-1
     Set Suite Variable  ${tz}  ${resp.json()['timezone']}
     
     ${description}=    FakerLibrary.bs
-    ${name}=           FakerLibrary.firstName
-    ${displayname}=    FakerLibrary.firstName
+    ${name}=           generate_firstname
+    ${displayname}=    generate_firstname
     ${effectiveFrom}=  db.get_date_by_timezone  ${tz}
     ${effectiveTo}=      db.add_timezone_date  ${tz}  10  
     ${description2}=    FakerLibrary.bs
-    ${name2}=           FakerLibrary.firstName
-    ${displayname2}=    FakerLibrary.firstName
+    ${name2}=           generate_firstname
+    ${displayname2}=    generate_firstname
     ${effectiveFrom2}=  db.get_date_by_timezone  ${tz}
     ${effectiveTo2}=    db.add_timezone_date  ${tz}  12
     Set Suite Variable    ${description}

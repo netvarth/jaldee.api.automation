@@ -129,7 +129,7 @@ JD-TC-Update_Lead-1
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${firstName_n}=   FakerLibrary.firstName
+    ${firstName_n}=   generate_firstname
     ${lastName_n}=    FakerLibrary.lastName
     Set Suite Variable      ${firstName_n}
     Set Suite Variable      ${lastName_n}
@@ -198,7 +198,7 @@ JD-TC-Update_Lead-2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${firstName2}=   FakerLibrary.firstName
+    ${firstName2}=   generate_firstname
 
     ${resp}=    Update Crm Lead  ${crm_lead_id}  ${firstName2}  ${lastName_n} 
     Log  ${resp.content}
@@ -231,7 +231,7 @@ JD-TC-Update_Lead-3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${lastName2}=   FakerLibrary.firstName
+    ${lastName2}=   generate_firstname
 
     ${resp}=    Update Crm Lead  ${crm_lead_id}  ${firstName_n}  ${lastName2} 
     Log  ${resp.content}

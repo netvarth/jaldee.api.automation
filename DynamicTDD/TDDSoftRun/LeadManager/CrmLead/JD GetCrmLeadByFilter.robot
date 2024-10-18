@@ -130,7 +130,7 @@ JD-TC-Get_CRM_Lead_By_Filter-1
     Should Be Equal As Strings      ${resp.status_code}     200
     Set Suite Variable    ${channel_id}      ${resp.json()['id']}
 
-    ${firstName_n}=   FakerLibrary.firstName
+    ${firstName_n}=   generate_firstname
     ${lastName_n}=    FakerLibrary.lastName
     Set Suite Variable      ${firstName_n}
     Set Suite Variable      ${lastName_n}
@@ -176,7 +176,7 @@ JD-TC-Get_CRM_Lead_By_Filter-1
 
     # second lead
 
-    ${consumerFirstName}=   FakerLibrary.firstName
+    ${consumerFirstName}=   generate_firstname
     ${consumerLastName}=    FakerLibrary.lastName
     ${dob}=  FakerLibrary.Date
     ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+336845

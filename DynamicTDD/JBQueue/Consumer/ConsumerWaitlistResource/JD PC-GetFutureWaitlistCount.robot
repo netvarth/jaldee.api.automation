@@ -162,7 +162,7 @@ JD-TC-Get Future Waitlist Count-1
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${uuid3}  ${wid[0]}
 
-    ${firstname}=  FakerLibrary.firstname
+    ${firstname}=  generate_firstname
     Set Suite Variable   ${firstname}
     ${lastname}=  FakerLibrary.last_name
     Set Suite Variable   ${lastname}

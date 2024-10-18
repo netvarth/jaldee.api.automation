@@ -129,7 +129,7 @@ JD-TC-Create_Lead-1
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${firstName_n}=   FakerLibrary.firstName
+    ${firstName_n}=   generate_firstname
     ${lastName_n}=    FakerLibrary.lastName
     Set Suite Variable      ${firstName_n}
     Set Suite Variable      ${lastName_n}
@@ -175,7 +175,7 @@ JD-TC-Create_Lead-2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${consumerFirstName}=   FakerLibrary.firstName
+    ${consumerFirstName}=   generate_firstname
     ${consumerLastName}=    FakerLibrary.lastName
 
     ${resp}=    Create Crm Lead  ${clid}  ${pid}  ${lid}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}
@@ -278,7 +278,7 @@ JD-TC-Create_Lead-UH5
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${consumerFirstName}=   FakerLibrary.firstName
+    ${consumerFirstName}=   generate_firstname
 
     ${FIELD_CANT_BE_EMPTY}=   Replace String  ${FIELD_CANT_BE_EMPTY}  {}   last name
 
@@ -292,8 +292,8 @@ JD-TC-Create_Lead-UH6
 
     [Documentation]   Create Lead - without login
 
-    ${consumerFirstName}=   FakerLibrary.firstName
-    ${consumerLastName}=   FakerLibrary.firstName
+    ${consumerFirstName}=   generate_firstname
+    ${consumerLastName}=   generate_firstname
 
     ${resp}=    Create Crm Lead  ${clid}  ${pid}  ${lid}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName} 
     Log  ${resp.content}

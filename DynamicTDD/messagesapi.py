@@ -641,7 +641,6 @@ SCHEDULE_SERVICE_NOT_EXIST= "Selected service does not exist for this schedule"
 
 
 #VirtualService 
-INVALID_ZOOM_ID= "Invalid Zoom ID"
 VIRTUAL_SERVICES_NOT_ENABLED= "Teleservices not enabled"
 VIRTUAL_SERVICE_MODE_REQUIRED= "Virtual service mode required"
 VIRTUAL_CALLING_MODES_INVALID= "Invalid virtual calling modes"
@@ -652,7 +651,7 @@ VIDEO_SERVICE_MODE_REQUIRED= "Video service mode required"
 GOOGLEMEET_ID_REQUIRED="Google Meet id required"
 ZOOM_ID_REQUIRED="Zoom id required"
 PHONE_NUMBER_REQUIRED="Phone number required"
-WHATSAPP_NUMBER_REQUIRED="Whatsapp number required"
+WHATSAPP_NUMBER_REQUIRED="Whatsapp number with country code required"
 INVALID_WHATSAPP_NUM= "Invalid WhatsApp number"
 INVAID_WHATSAPP_NUMBER= "Invalid Whatsapp Number"
 INVALID_ZOOM_ID= "Invalid Zoom ID"

@@ -171,7 +171,7 @@ JD-TC-Get Inventory Item Summary-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
     ${contactPersonName}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789

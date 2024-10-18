@@ -193,7 +193,7 @@ JD-TC-Get_Catalog_By_Criteria-1
     ${catalogName1}=   FakerLibrary.word 
     Set Suite Variable  ${catalogName1}
 
-    ${catalogName2}=   FakerLibrary.firstname 
+    ${catalogName2}=   generate_firstname 
     Set Suite Variable  ${catalogName2}
 
     ${catalogName3}=   FakerLibrary.lastname 

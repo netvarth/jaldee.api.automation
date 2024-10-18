@@ -69,7 +69,7 @@ JD-TC-Get Future Waitlist Consumer-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_s1}  ${resp.json()}
 
-    ${P1SERVICE2}=    FakerLibrary.firstname
+    ${P1SERVICE2}=    generate_firstname
     ${desc}=   FakerLibrary.sentence
     # ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500
@@ -89,7 +89,7 @@ JD-TC-Get Future Waitlist Consumer-1
 
     ${sTime2}=  add_timezone_time  ${tz}  1  00  
     ${eTime2}=  add_timezone_time  ${tz}  1  30  
-    ${p1queue2}=    FakerLibrary.firstname
+    ${p1queue2}=    generate_firstname
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
     ${resp}=  Create Queue  ${p1queue2}  ${recurringtype[1]}  ${list}  ${today}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}  ${capacity}  ${p1_l1}  ${p1_s1}  ${p1_s2} 
@@ -168,7 +168,7 @@ JD-TC-Get Future Waitlist Consumer-1
     ${resp}=  Add To Waitlist Consumers  ${cid}  ${pid}  ${p1_q2}  ${TOMORROW}  ${p1_s1}  ${cnote}  ${bool[0]}  ${self}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${firstname}=  FakerLibrary.firstname
+    ${firstname}=  generate_firstname
     Set Suite Variable   ${firstname}
     ${lastname}=  FakerLibrary.last_name
     Set Suite Variable   ${lastname}

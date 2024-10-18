@@ -130,7 +130,7 @@ JD-TC-Get_Pie_Chart-1
     Should Be Equal As Strings      ${resp.status_code}     200
     Set Suite Variable    ${channel_id}      ${resp.json()['id']}
 
-    ${firstName_n}=   FakerLibrary.firstName
+    ${firstName_n}=   generate_firstname
     ${lastName_n}=    FakerLibrary.lastName
     Set Suite Variable      ${firstName_n}
     Set Suite Variable      ${lastName_n}

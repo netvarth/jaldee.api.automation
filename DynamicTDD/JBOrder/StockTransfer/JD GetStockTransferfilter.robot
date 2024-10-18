@@ -252,7 +252,7 @@ JD-TC-Get Stock TransferFilter-1
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
     ${contactPersonName}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456798

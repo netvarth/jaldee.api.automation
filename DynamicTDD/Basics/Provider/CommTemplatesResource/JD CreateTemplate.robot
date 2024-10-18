@@ -731,7 +731,7 @@ JD-TC-CreateTemplate-25
     END
 
     ${rand_context}=   Random Element   ${context_values}
-    ${temp_name}=    FakerLibrary.firstname
+    ${temp_name}=    generate_template_name
     ${content_msg}=      FakerLibrary.sentence
     ${content}=    Create Dictionary  intro=${content_msg}
     ${comm_chanl}=  Create List   ${CommChannel[1]}  

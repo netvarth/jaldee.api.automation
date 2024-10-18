@@ -242,7 +242,7 @@ JD-TC-GetOrderByFilter-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
     ${contactPersonName}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
@@ -1061,7 +1061,7 @@ JD-TC-GetOrderByFilter-UH5
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${ran_name}=    FakerLibrary.firstName
+    ${ran_name}=    generate_firstname
 
     ${resp}=    Get Sorder By Filter       storeName-eq=${ran_name}
     Log   ${resp.content}
@@ -1090,7 +1090,7 @@ JD-TC-GetOrderByFilter-UH7
     ${resp}=  Encrypted Provider Login    ${PUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
-    ${ran_name}=    FakerLibrary.firstName
+    ${ran_name}=    generate_firstname
     ${resp}=    Get Sorder By Filter       acceptedBy-eq=${ran_name}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
@@ -1104,7 +1104,7 @@ JD-TC-GetOrderByFilter-UH7
 #     Log  ${resp.json()}         
 #     Should Be Equal As Strings            ${resp.status_code}    200
 
-#     ${inv_orgin}=   FakerLibrary.firstName
+#     ${inv_orgin}=   generate_firstname
 
 #     ${resp}=    Get Sorder By Filter       originFrom-eq=${inv_orgin}
 #     Log   ${resp.content}
@@ -1194,7 +1194,7 @@ JD-TC-GetOrderByFilter-UH14
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${ran_name}=    FakerLibrary.firstName
+    ${ran_name}=    generate_firstname
 
     ${resp}=    Get Sorder By Filter        doctorName-eq=${ran_name}
     Log   ${resp.content}
@@ -1250,7 +1250,7 @@ JD-TC-GetOrderByFilter-UH18
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${ran_name}=    FakerLibrary.firstName
+    ${ran_name}=    generate_firstname
 
     ${resp}=    Get Sorder By Filter        providerConsumerName-eq=${ran_name}
     Log   ${resp.content}

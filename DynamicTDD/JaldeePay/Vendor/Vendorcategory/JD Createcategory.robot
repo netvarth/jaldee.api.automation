@@ -57,7 +57,7 @@ JD-TC-CreateVendorCategory-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${vender_name}=   FakerLibrary.firstname
+    ${vender_name}=   generate_firstname
 
     ${resp}=  Update Vendor Category   ${vender_name}   ${encId} 
     Log  ${resp.json()}

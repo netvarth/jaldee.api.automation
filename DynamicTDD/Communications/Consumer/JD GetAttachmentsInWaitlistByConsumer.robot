@@ -169,7 +169,7 @@ JD-TC-GetAttachmentFromWLByConsumer-1
     Set Suite variable    ${fileType1}
     ${caption1}=  Fakerlibrary.Sentence
     Set Suite variable    ${caption1}
-    ${fileName}=    FakerLibrary.firstname
+    ${fileName}=    generate_filename
     Set Suite variable    ${fileName}
 
     ${resp}    upload file to temporary location consumer   ${file_action[0]}    ${cid}    ${ownerType[0]}    ${consumerFirstName}    ${jpgfile}    ${fileSize}    ${caption1}    ${fileType1}    ${EMPTY}    ${order}

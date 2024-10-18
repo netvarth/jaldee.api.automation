@@ -183,7 +183,7 @@ JD-TC-SendAttachmentAppmt-1
     Set Suite variable    ${fileType1}
     ${caption1}=  Fakerlibrary.Sentence
     Set Suite variable    ${caption1}
-    ${fileName}=    FakerLibrary.firstname
+    ${fileName}=    generate_filename
     Set Suite variable    ${fileName}
 
     ${resp}    upload file to temporary location    ${file_action[0]}    ${provider_id}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption1}    ${fileType1}    ${EMPTY}    ${order}

@@ -131,7 +131,7 @@ JD-TC-AddSubServicesToAppt-1
     ${subser_price}=   Random Int   min=100   max=500
     ${subser_price}=  Convert To Number  ${subser_price}  1
     Set Suite Variable   ${subser_price}
-    ${subser_name}=    FakerLibrary.firstname
+    ${subser_name}=    generate_service_name
     Set Suite Variable   ${subser_name}
 
     ${resp}=  Create Service    ${subser_name}  ${desc}   ${subser_dur}  ${bool[0]}  ${subser_price}  ${bool[0]}   serviceCategory=${serviceCategory[0]}
@@ -501,7 +501,7 @@ JD-TC-AddSubServicesToAppt-3
     ${subser_dur}=   Random Int   min=5   max=10
     ${subser_price}=   Random Int   min=100   max=500
     ${subser_price}=  Convert To Number  ${subser_price}  1
-    ${subser_name}=    FakerLibrary.firstname
+    ${subser_name}=    generate_service_name
     ${subser_qnty}=   Random Int   min=1   max=5
     ${subser_qnty}=  Convert To Number  ${subser_qnty}  1
    
@@ -751,7 +751,7 @@ JD-TC-AddSubServicesToAppt-4
     ${subser_dur}=   Random Int   min=5   max=10
     ${subser_price}=   Random Int   min=100   max=500
     ${subser_price}=  Convert To Number  ${subser_price}  1
-    ${subser_name}=    FakerLibrary.firstname
+    ${subser_name}=    generate_service_name
     ${subser_qnty}=   Random Int   min=1   max=5
     ${subser_qnty}=  Convert To Number  ${subser_qnty}  1
    
@@ -1292,7 +1292,7 @@ JD-TC-AddSubServicesToAppt-7
     ${subser_dur}=   Random Int   min=5   max=10
     ${subser_price}=   Random Int   min=100   max=500
     ${subser_price}=  Convert To Number  ${subser_price}  1
-    ${subser_name}=    FakerLibrary.firstname
+    ${subser_name}=    generate_service_name
     ${subser_qnty}=   Random Int   min=1   max=5
     ${subser_qnty}=  Convert To Number  ${subser_qnty}  1
    
@@ -1569,7 +1569,7 @@ JD-TC-AddSubServicesToAppt-8
     ${subser_dur}=   Random Int   min=5   max=10
     ${subser_price}=   Random Int   min=100   max=500
     ${subser_price}=  Convert To Number  ${subser_price}  1
-    ${subser_name}=    FakerLibrary.firstname
+    ${subser_name}=    generate_service_name
     ${subser_qnty}=   Random Int   min=1   max=5
     ${subser_qnty}=  Convert To Number  ${subser_qnty}  1
    
@@ -1884,7 +1884,7 @@ JD-TC-AddSubServicesToAppt-11
     ${subser_dur}=   Random Int   min=5   max=10
     ${subser_price}=   Random Int   min=100   max=500
     ${subser_price}=  Convert To Number  ${subser_price}  1
-    ${subser_name}=    FakerLibrary.firstname
+    ${subser_name}=    generate_service_name
     ${subser_qnty}=   Random Int   min=1   max=5
     ${subser_qnty}=  Convert To Number  ${subser_qnty}  1
    
@@ -1901,7 +1901,7 @@ JD-TC-AddSubServicesToAppt-11
     ${subser_dur1}=   Random Int   min=5   max=10
     ${subser_price1}=   Random Int   min=100   max=500
     ${subser_price1}=  Convert To Number  ${subser_price1}  1
-    ${subser_name1}=    FakerLibrary.firstname
+    ${subser_name1}=    generate_firstname
     ${subser_qnty1}=   Random Int   min=1   max=5
     ${subser_qnty1}=  Convert To Number  ${subser_qnty1}  1
    
@@ -2127,7 +2127,7 @@ JD-TC-AddSubServicesToAppt-12
     ${subser_dur}=   Random Int   min=5   max=10
     ${subser_price}=   Random Int   min=100   max=500
     ${subser_price}=  Convert To Number  ${subser_price}  1
-    ${subser_name}=    FakerLibrary.firstname
+    ${subser_name}=    generate_service_name
     ${subser_qnty}=   Random Int   min=1   max=5
     ${subser_qnty}=  Convert To Number  ${subser_qnty}  1
    
@@ -2397,7 +2397,7 @@ JD-TC-AddSubServicesToAppt-UH4
     ${subser_dur}=   Random Int   min=5   max=10
     ${subser_price}=   Random Int   min=100   max=500
     ${subser_price}=  Convert To Number  ${subser_price}  1
-    ${subser_name}=    FakerLibrary.firstname
+    ${subser_name}=    generate_service_name
     ${subser_qnty}=   Random Int   min=1   max=5
     ${subser_qnty}=  Convert To Number  ${subser_qnty}  1
    
@@ -2470,7 +2470,7 @@ JD-TC-AddSubServicesToAppt-UH7
     ${subser_dur}=   Random Int   min=5   max=10
     ${subser_price}=   Random Int   min=100   max=500
     ${subser_price}=  Convert To Number  ${subser_price}  1
-    ${subser_name}=    FakerLibrary.firstname
+    ${subser_name}=    generate_service_name
     ${subser_qnty}=   Random Int   min=1   max=5
     ${subser_qnty}=  Convert To Number  ${subser_qnty}  1
    
