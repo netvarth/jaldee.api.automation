@@ -32,6 +32,7 @@ ${word2}        PYTHON
 ${word3}        python
 @{cancelReason}             noshowup  blocked  closingSoon  tooFull  self  prePaymentPending  QueueDisabled  holiday
 @{PO_Number}   ${56}  ${0586185393}
+&{headers}                Content-Type=application/json
 
 # [LOWER] 	Lowercase ASCII characters from 'a' to 'z'.
 # [UPPER] 	Uppercase ASCII characters from 'A' to 'Z'.
@@ -39,6 +40,16 @@ ${word3}        python
 # [NUMBERS] 	Numbers from 0 to 9.
 
 *** Keywords ***
+
+Login
+    [Arguments]    ${usname}  ${passwrd}  &{kwargs}
+    ${login}=    Create Dictionary    loginId=${usname}  password=${passwrd}
+    Set To Dictionary 	${login}  &{kwargs}
+    ${log}=    json.dumps    ${login}
+    Create Session    ynw    ${BASE_URL}  headers=${headers}  verify=true
+    RETURN  ${log}
+
+*** Comments ***
 
 check kwargs
     [Arguments]   &{kwargs}
@@ -71,8 +82,14 @@ check kwargs
 
 
 *** Test Cases ***  
+Testing kwargs
 
-cheking if variable is empty
+    ${data}=  Login  2220700852  Jaldee12  countryCode=+91
+    Log   ${data}
+
+*** Comments ***
+
+checking if variable is empty
 
     Set Test Variable  ${token}   Some Token
     Run Keyword And Continue On Failure  check kwargs   Authorization=${token}

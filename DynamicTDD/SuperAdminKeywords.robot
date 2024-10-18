@@ -25,13 +25,13 @@ ${latti1}       88.259874
 ###### All Current Keywords above this line #############################################
 
 SuperAdmin Login
-    [Arguments]    ${usname}  ${passwrd}   
+    [Arguments]    ${usname}  ${passwrd}  &{kwargs}
     ${pass2}=  Keywordspy.second_password
     ${login}=    Create Dictionary    loginId=${usname}  password=${passwrd}  secondPassword=${pass2}
     ${log}=    json.dumps    ${login}
     Create Session    synw    ${SUPER_URL}  headers=${headers}   verify=true
     ${resp}=    POST On Session     synw    /login    data=${log}   expected_status=any 
-    Check Deprication  ${resp}  Get BusinessDomainsConf   
+    Check Deprication  ${resp}  SuperAdmin Login   
     RETURN  ${resp}
 
 Check And Create YNW SuperAdmin Session

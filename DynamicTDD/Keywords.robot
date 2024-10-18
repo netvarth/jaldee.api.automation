@@ -304,8 +304,9 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 
 
 Login
-    [Arguments]    ${usname}  ${passwrd}  ${countryCode}=+91
-    ${login}=    Create Dictionary    loginId=${usname}  password=${passwrd}  countryCode=${countryCode}
+    [Arguments]    ${usname}  ${passwrd}  &{kwargs}
+    ${login}=    Create Dictionary    loginId=${usname}  password=${passwrd}
+    Set To Dictionary 	${login}  &{kwargs}
     ${log}=    json.dumps    ${login}
     Create Session    ynw    ${BASE_URL}  headers=${headers}  verify=true
     RETURN  ${log}
