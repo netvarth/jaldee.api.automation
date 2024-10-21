@@ -155,7 +155,7 @@ JD-TC-AddMultipleAppointmentLabel-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid1}  ${resp.json()}
 
-    ${mem_fname}=   FakerLibrary.first_name
+    ${mem_fname}=   generate_firstname
     ${mem_lname}=   FakerLibrary.last_name
     ${dob}=      FakerLibrary.date
     ${gender}    Random Element    ${Genderlist}
@@ -177,7 +177,7 @@ JD-TC-AddMultipleAppointmentLabel-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid2}  ${resp.json()}
 
-    ${mem_fname1}=   FakerLibrary.first_name
+    ${mem_fname1}=   generate_firstname
     ${mem_lname1}=   FakerLibrary.last_name
     ${dob1}=      FakerLibrary.date
     ${gender}    Random Element    ${Genderlist}
@@ -401,7 +401,7 @@ JD-TC-AddMultipleAppointmentLabel-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid1}  ${resp.json()}
 
-    ${mem_fname}=   FakerLibrary.first_name
+    ${mem_fname}=   generate_firstname
     ${mem_lname}=   FakerLibrary.last_name
     ${dob}=      FakerLibrary.date
     ${gender}    Random Element    ${Genderlist}
@@ -421,7 +421,7 @@ JD-TC-AddMultipleAppointmentLabel-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid2}  ${resp.json()}
 
-    ${mem_fname1}=   FakerLibrary.first_name
+    ${mem_fname1}=   generate_firstname
     ${mem_lname1}=   FakerLibrary.last_name
     ${dob1}=      FakerLibrary.date
     ${gender}    Random Element    ${Genderlist}
@@ -1766,7 +1766,7 @@ JD-TC-AddMultipleAppointmentLabel-9
 
     ${pid}=  get_acc_id  ${PUSERNAME64}
 
-    ${fname}=  FakerLibrary.first_name    
+    ${fname}=  generate_firstname    
     ${lname}=  FakerLibrary.last_name
      Set Suite Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
     ${resp}=  AddCustomer  ${NewCustomer}   firstName=${fname}   lastName=${lname}  email=${pc_emailid1}
@@ -1806,7 +1806,7 @@ JD-TC-AddMultipleAppointmentLabel-9
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot2}   ${slots[${j1}]}
 
-    ${mem_fname}=   FakerLibrary.first_name
+    ${mem_fname}=   generate_firstname
     ${mem_lname}=   FakerLibrary.last_name
     ${dob}=      FakerLibrary.date
     ${gender}    Random Element    ${Genderlist}
@@ -1846,7 +1846,7 @@ JD-TC-AddMultipleAppointmentLabel-9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${fname1}=  FakerLibrary.first_name
+    ${fname1}=  generate_firstname
     ${lname1}=  FakerLibrary.last_name
     Set Suite Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
     ${resp}=  AddCustomer  ${CUSERNAME39}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}   email=${pc_emailid1}
@@ -1885,7 +1885,7 @@ JD-TC-AddMultipleAppointmentLabel-9
     ${slot3}=  Set Variable  ${random slots[0]}
     ${slot4}=  Set Variable  ${random slots[1]}
 
-    ${mem_fname1}=   FakerLibrary.first_name
+    ${mem_fname1}=   generate_firstname
     ${mem_lname1}=   FakerLibrary.last_name
     ${dob1}=      FakerLibrary.date
     ${gender1}    Random Element    ${Genderlist}
@@ -2101,7 +2101,7 @@ JD-TC-AddMultipleAppointmentLabel-10
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
 
-    ${fname}=  FakerLibrary.first_name    
+    ${fname}=  generate_firstname    
     ${lname}=  FakerLibrary.last_name
     Set Suite Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
     ${resp}=  AddCustomer  ${NewCustomer}   firstName=${fname}   lastName=${lname}  email=${pc_emailid1}
@@ -2668,7 +2668,7 @@ JD-TC-AddMultipleAppointmentLabel-13
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${fname}=  FakerLibrary.first_name    
+    ${fname}=  generate_firstname    
     ${lname}=  FakerLibrary.last_name
     Set Suite Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
     ${resp}=  AddCustomer  ${NewCustomer}   firstName=${fname}   lastName=${lname}  email=${pc_emailid1}
@@ -2841,7 +2841,7 @@ JD-TC-AddMultipleAppointmentLabel-14
         ${randomval}    FakerLibrary.Numerify  %%%%
         ${CUSERPH}=  Evaluate  ${CUSERNAME}+${PO_Number}+${randomval}
         Set Test Variable  ${CUSERPH${a}}  ${CUSERPH}
-        ${fname}=  FakerLibrary.first_name
+        ${fname}=  generate_firstname
         ${lname}=  FakerLibrary.last_name
         # ${dob}=  FakerLibrary.Date
         # ${gender}=  Random Element    ${Genderlist}

@@ -96,7 +96,7 @@ JD-TC-GetAppointmentAttachment-1
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
@@ -186,7 +186,7 @@ JD-TC-GetAppointmentAttachment-2
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
@@ -277,7 +277,7 @@ JD-TC-GetAppointmentAttachment-3
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200    
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
@@ -368,7 +368,7 @@ JD-TC-GetAppointmentAttachment-4
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
@@ -459,7 +459,7 @@ JD-TC-GetAppointmentAttachment-5
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
@@ -549,7 +549,7 @@ JD-TC-GetAppointmentAttachment-6
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False

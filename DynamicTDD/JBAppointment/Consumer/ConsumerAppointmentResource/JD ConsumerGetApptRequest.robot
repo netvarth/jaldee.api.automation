@@ -93,7 +93,7 @@ JD-TC-ConsumerGetApptRequest-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id1}  ${resp.json()}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     Set Suite Variable   ${fname}
     ${lname}=  FakerLibrary.last_name
     Set Suite Variable   ${lname}
@@ -225,7 +225,7 @@ JD-TC-ConsumerGetApptRequest-3
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${family_fname2}=  FakerLibrary.first_name
+    ${family_fname2}=  generate_firstname
     Set Suite Variable   ${family_fname2}
     ${family_lname2}=  FakerLibrary.last_name
     Set Suite Variable   ${family_lname2}

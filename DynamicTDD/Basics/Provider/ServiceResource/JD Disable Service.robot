@@ -153,7 +153,7 @@ JD-TC-Disable Service-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
     # ${cid}=  get_id  ${CUSERNAME7}
     # ${Familymember_ph}=  Evaluate  ${PUSERNAME0}+500000
-    # ${f_name}=   FakerLibrary.first_name
+    # ${f_name}=   generate_firstname
     # ${l_name}=   FakerLibrary.last_name
     # ${dob}=      FakerLibrary.date
     # ${resp}=  AddFamilyMemberByProviderWithPhoneNo  ${cid}  ${f_name}  ${l_name}  ${dob}  ${gender[0]}  ${Familymember_ph}

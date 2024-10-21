@@ -118,7 +118,7 @@ JD-TC-GetFrequencyByAccount-UH2
     Log  ${PH_Number}
     Set Suite Variable  ${PCPHONENO}  555${PH_Number}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     Set Suite Variable  ${fname}
     ${lastname}=  FakerLibrary.last_name
     Set Suite Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}

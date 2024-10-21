@@ -317,7 +317,7 @@ JD-TC-Get_Catalog_By_Criteria-UH3
 
     #............provider consumer creation..........
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
   
     ${resp}=    Send Otp For Login    ${CUSERNAME16}    ${account_id}

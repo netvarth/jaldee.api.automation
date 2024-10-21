@@ -225,7 +225,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-1
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
     Set Suite Variable  ${Questionnaireid}  ${qns.json()['questionnaireId']}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
    
     ${resp}=  AddCustomer  ${CUSERNAME16}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
@@ -438,7 +438,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-2
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
     Set Suite Variable  ${Questionnaireid}  ${qns.json()['questionnaireId']}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
    
     ${resp}=  AddCustomer  ${CUSERNAME17}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  

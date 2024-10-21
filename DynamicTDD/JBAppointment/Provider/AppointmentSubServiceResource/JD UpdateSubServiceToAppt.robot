@@ -192,7 +192,7 @@ JD-TC-UpdateSubServicesToAppt-1
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${locId}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           

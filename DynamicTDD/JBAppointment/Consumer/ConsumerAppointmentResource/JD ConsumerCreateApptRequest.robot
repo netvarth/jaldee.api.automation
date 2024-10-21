@@ -142,7 +142,7 @@ JD-TC-ConsumerCreateApptRequest-1
     Set Suite Variable  ${sch_id1}  ${resp.json()}
 
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     Set Suite Variable   ${fname}
     ${lname}=  FakerLibrary.last_name
     Set Suite Variable   ${lname}
@@ -295,7 +295,7 @@ JD-TC-ConsumerCreateApptRequest-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${family_fname2}=  FakerLibrary.first_name
+    ${family_fname2}=  generate_firstname
     Set Suite Variable   ${family_fname2}
     ${family_lname2}=  FakerLibrary.last_name
     Set Suite Variable   ${family_lname2}

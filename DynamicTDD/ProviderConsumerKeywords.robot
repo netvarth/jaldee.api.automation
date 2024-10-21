@@ -143,7 +143,7 @@ Create Sample Customer
         END
     END
 
-    ${firstName}=  FakerLibrary.first_name
+    ${firstName}=  generate_firstname
     ${lastName}=  FakerLibrary.last_name
     ${email}  Set Variable  ${firstName}${C_Email}.${test_mail}
 

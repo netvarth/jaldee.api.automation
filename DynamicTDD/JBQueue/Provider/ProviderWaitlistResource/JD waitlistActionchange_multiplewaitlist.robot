@@ -248,7 +248,7 @@ JD-TC-change Waitlist Action for multiple account-4
       Should Be Equal As Strings  ${resp.status_code}  200
     
       ${lname}=   FakerLibrary.last_name
-      ${fname}=   FakerLibrary.first_name
+      ${fname}=   generate_firstname
       ${resp}=  AddCustomer  ${CUSERNAME9}  firstName=${fname}   lastName=${lname}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -258,7 +258,7 @@ JD-TC-change Waitlist Action for multiple account-4
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
     
-      ${mem_fname}=   FakerLibrary.first_name
+      ${mem_fname}=   generate_firstname
       ${mem_lname}=   FakerLibrary.last_name
       ${dob}=      FakerLibrary.date
       ${resp}=  AddFamilyMemberByProvider  ${cid}  ${mem_fname}  ${mem_lname}  ${dob}  ${Genderlist[0]}
@@ -407,7 +407,7 @@ JD-TC-change Waitlist Action for multiple account UH-4
       Log  ${PH_Number}
       Set Suite Variable  ${PCPHONENO}  555${PH_Number}
 
-      ${fname}=  FakerLibrary.first_name
+      ${fname}=  generate_firstname
       ${lname}=  FakerLibrary.last_name
       Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
 

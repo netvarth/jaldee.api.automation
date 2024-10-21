@@ -211,7 +211,7 @@ JD-TC-GetAppmtServicesByLocation-1
     Log  ${PH_Number}
     Set Suite Variable  ${PCPHONENO1}  555${PH_Number}
 
-    ${fname1}=  FakerLibrary.first_name
+    ${fname1}=  generate_firstname
     Set Suite Variable  ${fname1}
     ${lastname1}=  FakerLibrary.last_name
     
@@ -652,7 +652,7 @@ JD-TC-GetAppmtServicesByLocation-UH3
 
 
 
-    ${fname1}=  FakerLibrary.first_name
+    ${fname1}=  generate_firstname
     Set Suite Variable  ${fname1}
     ${lastname1}=  FakerLibrary.last_name
     
@@ -844,7 +844,7 @@ JD-TC-GetAppmtServicesByLocation-10
     Log  ${PH_Number}
     Set Suite Variable  ${PCPHONENO2}  555${PH_Number}
 
-    ${fname1}=  FakerLibrary.first_name
+    ${fname1}=  generate_firstname
     Set Suite Variable  ${fname1}
     ${lastname1}=  FakerLibrary.last_name
     

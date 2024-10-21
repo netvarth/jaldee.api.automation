@@ -45,7 +45,7 @@ JD-TC-EncryptedProviderLogin-1
     Set Suite Variable  ${dom}  ${multilocdoms[0]['domain']}
     Set Suite Variable  ${sub_dom}  ${multilocdoms[0]['subdomains'][0]}
 
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     ${PO_Number}    Generate random string    7    ${digits} 
     ${PO_Number}    Convert To Integer  ${PO_Number}

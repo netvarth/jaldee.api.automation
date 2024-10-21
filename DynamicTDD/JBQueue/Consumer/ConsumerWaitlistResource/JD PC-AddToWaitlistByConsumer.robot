@@ -1125,7 +1125,7 @@ JD-TC-Add To WaitlistByConsumer-12
     Set Test Variable    ${cid}   ${resp.json()['id']}  
 
 
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
@@ -1188,7 +1188,7 @@ JD-TC-Add To WaitlistByConsumer-13
     Set Test Variable    ${cid}   ${resp.json()['id']}  
 
 
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
@@ -1271,7 +1271,7 @@ JD-TC-Add To WaitlistByConsumer-14
     Set Test Variable    ${cid}   ${resp.json()['id']}  
 
 
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
@@ -1860,7 +1860,7 @@ JD-TC-Add To WaitlistByConsumer-19
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid25}  ${resp.json()}
 
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     ${dob1}=  FakerLibrary.Date
     ${gender1}=  Random Element    ${Genderlist}
@@ -1905,7 +1905,7 @@ JD-TC-Add To WaitlistByConsumer-19
     # Set Test Variable    ${cid25}    ${resp.json()['providerConsumer']}
     Set Test Variable    ${cid25}   ${resp.json()['id']}  
 
-    ${family_fname}=  FakerLibrary.first_name
+    ${family_fname}=  generate_firstname
     ${family_lname}=  FakerLibrary.last_name
     ${dob2}=  FakerLibrary.Date
     ${gender2}    Random Element    ${Genderlist}
@@ -2017,7 +2017,7 @@ JD-TC-Add To WaitlistByConsumer-20
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid35}  ${resp.json()}
 
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
@@ -2055,7 +2055,7 @@ JD-TC-Add To WaitlistByConsumer-20
     # Set Test Variable    ${cid35}    ${resp.json()['providerConsumer']}
     Set Test Variable    ${cid35}   ${resp.json()['id']}  
 
-    ${family_fname}=  FakerLibrary.first_name
+    ${family_fname}=  generate_firstname
     ${family_lname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
@@ -2284,7 +2284,7 @@ JD-TC-Add To WaitlistByConsumer-UH2
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id0}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q4}
 
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
@@ -3035,7 +3035,7 @@ JD-TC-Add To WaitlistByConsumer-UH14
     # Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
     Set Test Variable    ${cid}   ${resp.json()['id']}   
 
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
@@ -3074,7 +3074,7 @@ JD-TC-Add To WaitlistByConsumer-UH16
     END
    
 
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
@@ -3813,7 +3813,7 @@ JD-TC-Add To WaitlistByConsumer-24
 
     ${pkg_id}=   get_highest_license_pkg
 
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
@@ -4001,7 +4001,7 @@ JD-TC-Add To WaitlistByConsumer-24
     Set Test Variable    ${cid}   ${resp.json()['id']}  
 
     ${cid}=  get_id  ${CUSERNAME5}
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
@@ -4199,7 +4199,7 @@ JD-TC-Add To WaitlistByConsumer-25
     Set Test Variable    ${consid1}   ${resp.json()['id']}  
 
     
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}

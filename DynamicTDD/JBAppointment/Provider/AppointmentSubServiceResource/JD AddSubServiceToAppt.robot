@@ -209,7 +209,7 @@ JD-TC-AddSubServicesToAppt-1
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${locId}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -575,7 +575,7 @@ JD-TC-AddSubServicesToAppt-3
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${locId}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -825,7 +825,7 @@ JD-TC-AddSubServicesToAppt-4
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${locId}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -1002,7 +1002,7 @@ JD-TC-AddSubServicesToAppt-5
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY2}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY2}  ${cnote}  ${apptfor}  location=${{str('${locId}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -1368,7 +1368,7 @@ JD-TC-AddSubServicesToAppt-7
     
     ${cnote}=   FakerLibrary.word
     ${user_id}=  Create Dictionary  id=${u_id1} 
-    ${resp}=   Take Appointment For Consumer     ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}   provider=${user_id}
+    ${resp}=   Take Appointment For Consumer     ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  provider=${user_id}  location=${{str('${locId}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1655,7 +1655,7 @@ JD-TC-AddSubServicesToAppt-8
     
     ${cnote}=   FakerLibrary.word
     ${user_id}=  Create Dictionary  id=${u_id1} 
-    ${resp}=   Take Appointment For Consumer    ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  provider=${user_id}
+    ${resp}=   Take Appointment For Consumer    ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  provider=${user_id}  location=${{str('${locId}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1946,7 +1946,7 @@ JD-TC-AddSubServicesToAppt-11
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${locId}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           

@@ -158,7 +158,7 @@ JD-TC-Lead_Status_To_Complete-1
     Log  ${PH_Number}
     Set Suite Variable  ${PCPHONENO}  555${PH_Number}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     Set Suite Variable  ${fname}
     ${lastname}=  FakerLibrary.last_name
     Set Suite Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
@@ -208,7 +208,7 @@ JD-TC-Lead_Status_To_Complete-1
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer    ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  appointmentMode=${appointmentMode[1]}  orginUid=${crm_lead_id}
+    ${resp}=  Take Appointment For Consumer    ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  appointmentMode=${appointmentMode[1]}  orginUid=${crm_lead_id}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

@@ -102,7 +102,7 @@ JD-TC-GetVerifyStatusOfConsentFormByUid-1
     Log  ${PH_Number}
     Set Suite Variable    ${consumerPhone}  555${PH_Number}
     Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
-    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerFirstName}=   generate_firstname
     Set Suite Variable  ${consumerFirstName}
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -197,7 +197,7 @@ JD-TC-GetVerifyStatusOfConsentFormByUid-UH1
     Log  ${PH_Number2}
     Set Suite Variable    ${consumerPhone2}  555${PH_Number2}
     Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone2}${\n}
-    ${consumerFirstName2}=   FakerLibrary.first_name
+    ${consumerFirstName2}=   generate_firstname
     Set Suite Variable  ${consumerFirstName2}
     ${consumerLastName2}=    FakerLibrary.last_name  
     ${dob2}=    FakerLibrary.Date

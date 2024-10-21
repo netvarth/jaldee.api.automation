@@ -121,7 +121,7 @@ JD-TC-Get Store Filter-1
     Log  ${PH_Number}
     Set Suite Variable    ${primaryMobileNo}  555${PH_Number}
     Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${primaryMobileNo}${\n}
-    ${firstName}=   FakerLibrary.first_name
+    ${firstName}=   generate_firstname
     ${lastName}=    FakerLibrary.last_name
     Set Suite Variable      ${firstName}
     Set Suite Variable      ${lastName}  
@@ -486,7 +486,7 @@ JD-TC-Get Store Filter-10
     Log  ${PH_Number}
     Set Test Variable    ${primaryMobileNo}  555${PH_Number}
     Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${Test NAME} - ${TEST NAME} - ${primaryMobileNo}${\n}
-    ${firstName}=   FakerLibrary.first_name
+    ${firstName}=   generate_firstname
     ${lastName}=    FakerLibrary.last_name
     Set Test Variable      ${firstName}
     Set Test Variable      ${lastName}  

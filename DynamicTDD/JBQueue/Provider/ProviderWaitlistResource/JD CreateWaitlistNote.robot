@@ -846,7 +846,7 @@ JD-TC-Provider Note-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     ${account_id}=  get_acc_id  ${HLPUSERNAME28}
     
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
 

@@ -139,7 +139,7 @@ JD-TC-GetAppointmentStatus-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     Set Suite Variable   ${fname}
     ${lname}=  FakerLibrary.last_name
     Set Suite Variable   ${lname}
@@ -334,7 +334,7 @@ JD-TC-GetAppointmentStatus-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     Set Suite Variable   ${fname}
     ${lname}=  FakerLibrary.last_name
     Set Suite Variable   ${lname}
@@ -512,7 +512,7 @@ JD-TC-GetAppointmentStatus-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     Set Suite Variable   ${fname}
     ${lname}=  FakerLibrary.last_name
     Set Suite Variable   ${lname}
@@ -641,7 +641,7 @@ JD-TC-GetAppointmentStatus-4
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -655,7 +655,7 @@ JD-TC-GetAppointmentStatus-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     ${resp}=  AddCustomer  ${CUSERNAME25}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
@@ -666,10 +666,9 @@ JD-TC-GetAppointmentStatus-4
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=  Get Appointment By Id   ${apptid1}
@@ -761,7 +760,7 @@ JD-TC-GetAppointmentStatus-5
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -1011,7 +1010,7 @@ JD-TC-GetAppointmentStatus-9
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           

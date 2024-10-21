@@ -284,7 +284,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-1
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -440,7 +440,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-2
     # ${apptfor}=   Create List  ${apptfor1}
     
     # ${cnote}=   FakerLibrary.word
-    # ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    # ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -462,7 +462,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-2
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
   
     ${resp}=  AddCustomer  ${CUSERNAME22}  firstName=${fname}   lastName=${lname}
@@ -673,7 +673,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-3
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -855,7 +855,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-4
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -1045,7 +1045,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-UH1
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -1231,7 +1231,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-UH2
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -1400,7 +1400,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-UH3
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -1665,7 +1665,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-5
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           

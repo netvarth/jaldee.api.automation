@@ -321,14 +321,14 @@ JD-TC-FixedWaitingTime-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${que_id3}   ${resp.json()}
-    ${f_name}=   FakerLibrary.first_name
+    ${f_name}=   generate_firstname
     ${l_name}=   FakerLibrary.last_name
     ${dob}=      FakerLibrary.date
     ${gender}    Random Element    ${Genderlist}
     ${resp}=  AddFamilyMemberByProvider   ${id}  ${f_name}  ${l_name}  ${dob}  ${gender}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${mem_id}  ${resp.json()}
-    ${f_name}=   FakerLibrary.first_name
+    ${f_name}=   generate_firstname
     ${l_name}=   FakerLibrary.last_name
     ${dob}=      FakerLibrary.date
     ${gender}    Random Element    ${Genderlist}
@@ -462,7 +462,7 @@ JD-TC-FixedWaitingTime-UH4
     ${resp}=  Encrypted Provider Login  ${HLPUSERNAME28}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     # ${pid}=  get_id  ${PUSERNAME30}
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     # ${ph2}=  Evaluate  ${PUSERNAME30}
     ${dob}=  FakerLibrary.Date
@@ -514,7 +514,7 @@ JD-TC-FixedWaitingTime-UH5
     Log  ${PH_Number}
     Set Suite Variable  ${PCPHONENO}  555${PH_Number}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
 

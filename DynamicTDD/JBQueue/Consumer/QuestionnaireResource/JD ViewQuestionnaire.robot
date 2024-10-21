@@ -330,7 +330,7 @@ JD-TC-GetQuestionnaireforConsumer-1
         Exit For Loop If   '${s_id}' != '${None}'
     END
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
    
     ${resp}=  AddCustomer  ${CUSERNAME7}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
@@ -409,7 +409,7 @@ JD-TC-GetQuestionnaireforConsumer-2
         Exit For Loop If   '${s_id}' != '${None}'
     END
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
    
     ${resp}=  AddCustomer  ${CUSERNAME8}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
@@ -506,7 +506,7 @@ JD-TC-GetQuestionnaireforConsumer-3
     END
     Set Suite Variable    ${s_id} 
     
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
    
     ${resp}=  AddCustomer  ${CUSERNAME7}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
@@ -531,7 +531,7 @@ JD-TC-GetQuestionnaireforConsumer-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${mem_fname}=   FakerLibrary.first_name
+    ${mem_fname}=   generate_firstname
     ${mem_lname}=   FakerLibrary.last_name
     ${dob}=      FakerLibrary.date
     ${gender}    Random Element    ${Genderlist}
@@ -617,7 +617,7 @@ JD-TC-GetQuestionnaireforConsumer-UH1
         Exit For Loop If   '${s_id}' != '${None}'
     END
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
    
     ${resp}=  AddCustomer  ${CUSERNAME7}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
@@ -699,7 +699,7 @@ JD-TC-GetQuestionnaireforConsumer-UH2
         Exit For Loop If   '${s_id}' != '${None}'
     END
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
    
     ${resp}=  AddCustomer  ${CUSERNAME7}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
@@ -795,7 +795,7 @@ JD-TC-GetQuestionnaireforConsumer-UH3
         Exit For Loop If   '${s_id}' != '${None}'
     END
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
    
     ${resp}=  AddCustomer  ${CUSERNAME7}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  

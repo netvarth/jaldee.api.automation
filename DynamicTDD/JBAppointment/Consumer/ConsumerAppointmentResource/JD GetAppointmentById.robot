@@ -65,7 +65,7 @@ JD-TC-GetConsumerAppointmentById-1
     Set Suite Variable  ${sch_id}  ${resp.json()}
 
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     Set Suite Variable   ${fname}
     ${lname}=  FakerLibrary.last_name
     Set Suite Variable   ${lname}
@@ -183,7 +183,7 @@ JD-TC-GetConsumerAppointmentById-2
 
 
 
-    ${f_Name1}=  FakerLibrary.first_name
+    ${f_Name1}=  generate_firstname
     Set Suite Variable   ${f_Name1}
     ${l_Name1}=  FakerLibrary.last_name
     Set Suite Variable   ${l_Name1}

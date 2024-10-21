@@ -133,7 +133,7 @@ JD-TC-AddAppointmentRating-1
     Log  ${PH_Number}
     Set Suite Variable  ${PCPHONENO}  555${PH_Number}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     Set Suite Variable  ${fname}
     ${lastname}=  FakerLibrary.last_name
    
@@ -331,7 +331,7 @@ JD-TC-AddAppointmentRating-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${family_fname}=  FakerLibrary.first_name
+    ${family_fname}=  generate_firstname
     ${family_lname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
@@ -702,7 +702,7 @@ JD-TC-AddAppointmentRating-UH5
     Log  ${PH_Number}
     Set Suite Variable  ${PCPHONENO2}  555${PH_Number}
 
-    ${fname2}=  FakerLibrary.first_name
+    ${fname2}=  generate_firstname
     Set Suite Variable  ${fname2}
     ${lastname2}=  FakerLibrary.last_name
   

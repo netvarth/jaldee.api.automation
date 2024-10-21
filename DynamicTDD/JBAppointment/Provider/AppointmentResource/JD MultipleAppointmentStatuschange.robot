@@ -109,10 +109,9 @@ JD-TC-change appointment status for multiple appointments-1
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer   ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer   ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -205,7 +204,7 @@ JD-TC-change appointment status for multiple appointments-2
     Set Test Variable   ${apptfor}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer   ${cid}  ${s_id}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer   ${cid}  ${s_id}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -297,14 +296,14 @@ JD-TC-change appointment status for multiple appointments-3
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
 
     ${lname}=   FakerLibrary.last_name
-    ${fname}=   FakerLibrary.first_name
+    ${fname}=   generate_firstname
     ${resp}=  AddCustomer  ${CUSERNAME10}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
     
-    ${mem_fname}=   FakerLibrary.first_name
+    ${mem_fname}=   generate_firstname
     ${mem_lname}=   FakerLibrary.last_name
     ${dob}=      FakerLibrary.date
     ${resp}=  AddFamilyMemberByProvider  ${cid}  ${mem_fname}  ${mem_lname}  ${dob}  ${Genderlist[0]}
@@ -321,7 +320,7 @@ JD-TC-change appointment status for multiple appointments-3
     ${apptfor}=   Create List  ${apptfor1}  ${apptfor2}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer   ${cid}  ${s_id}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer   ${cid}  ${s_id}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -396,7 +395,7 @@ JD-TC-change appointment status for multiple appointments- 4
     Verify Response  ${resp}  id=${sch_id1}     batchEnable=${bool[0]}
 
   
-    ${fname0}=   FakerLibrary.first_name
+    ${fname0}=   generate_firstname
     ${lname0}=   FakerLibrary.last_name
     FOR   ${b}  IN RANGE   ${count}
             
@@ -434,7 +433,7 @@ JD-TC-change appointment status for multiple appointments- 4
         ${apptfor}=   Create List  ${apptfor1}
             
         ${cnote}=   FakerLibrary.word
-        ${resp}=  Take Appointment For Consumer  ${cid${b}}  ${s_id}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}
+        ${resp}=  Take Appointment For Consumer  ${cid${b}}  ${s_id}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
             
@@ -511,7 +510,7 @@ JD-TC-change appointment status for multiple appointments- 5
     Set Suite Variable   ${apptfor}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer   ${cid}  ${s_id}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer   ${cid}  ${s_id}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -544,7 +543,7 @@ JD-TC-change appointment status for multiple appointments-6
     Set Test Variable  ${sch_id1}  ${resp.json()}
 
   
-    ${fname3}=   FakerLibrary.first_name
+    ${fname3}=   generate_firstname
     ${lname3}=   FakerLibrary.last_name
     FOR   ${a}  IN RANGE   ${count}
             
@@ -581,7 +580,7 @@ JD-TC-change appointment status for multiple appointments-6
         ${apptfor}=   Create List  ${apptfor1}
             
         ${cnote}=   FakerLibrary.word
-        ${resp}=  Take Appointment For Consumer  ${cid${a}}  ${s_id}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}
+        ${resp}=  Take Appointment For Consumer  ${cid${a}}  ${s_id}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
             
@@ -643,7 +642,7 @@ JD-TC-change appointment status for multiple appointments- 7
     Set Test Variable  ${sch_id}  ${resp.json()}
 
 
-    ${fname0}=   FakerLibrary.first_name
+    ${fname0}=   generate_firstname
     ${lname0}=   FakerLibrary.last_name
     FOR   ${a}  IN RANGE   ${count}
             
@@ -681,7 +680,7 @@ JD-TC-change appointment status for multiple appointments- 7
         ${apptfor}=   Create List  ${apptfor1}
             
         ${cnote}=   FakerLibrary.word
-        ${resp}=  Take Appointment For Consumer  ${cid${a}}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+        ${resp}=  Take Appointment For Consumer  ${cid${a}}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
             
@@ -785,7 +784,7 @@ JD-TC-change appointment status for multiple appointments UH-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${fname0}=   FakerLibrary.first_name
+    ${fname0}=   generate_firstname
     ${lname0}=   FakerLibrary.last_name
     FOR   ${a}  IN RANGE   ${count}
             
@@ -827,7 +826,7 @@ JD-TC-change appointment status for multiple appointments UH-5
         ${apptfor}=   Create List  ${apptfor1}
             
         ${cnote}=   FakerLibrary.word
-        ${resp}=  Take Appointment For Consumer  ${cid${a}}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+        ${resp}=  Take Appointment For Consumer  ${cid${a}}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
             

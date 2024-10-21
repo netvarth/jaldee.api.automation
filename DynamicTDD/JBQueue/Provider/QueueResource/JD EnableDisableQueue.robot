@@ -60,7 +60,7 @@ JD-TC-Enable Disable Queue-UH1
     Log  ${PH_Number}
     Set Suite Variable  ${PCPHONENO}  555${PH_Number}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
 

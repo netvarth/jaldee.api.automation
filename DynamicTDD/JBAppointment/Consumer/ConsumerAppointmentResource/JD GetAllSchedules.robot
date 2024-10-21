@@ -131,7 +131,7 @@ JD-TC-Get All Schedule slots-1
    #............provider consumer creation..........
 
 
-    ${f_Name}=  FakerLibrary.first_name
+    ${f_Name}=  generate_firstname
     Set Suite Variable  ${f_Name}
     ${l_Name}=  FakerLibrary.last_name
     
@@ -330,7 +330,7 @@ JD-TC-Get All Schedule slots-3
    #............provider consumer creation..........
 
 
-    ${f_Name}=  FakerLibrary.first_name
+    ${f_Name}=  generate_firstname
     Set Suite Variable  ${f_Name}
     ${l_Name}=  FakerLibrary.last_name
     

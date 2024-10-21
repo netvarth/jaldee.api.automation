@@ -126,7 +126,7 @@ JD-TC-Reschedule Appointment-1
     ${defreschedule_msg}=  Set Variable   ${resp.json()['rescheduleMessages']['Consumer_APP']}
 
 
-    ${fname}=   FakerLibrary.first_name
+    ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -321,7 +321,7 @@ JD-TC-Reschedule Appointment-2
     Set Test Variable  ${sch_id}  ${resp.json()}
 
 
-    ${fname}=   FakerLibrary.first_name
+    ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -488,7 +488,7 @@ JD-TC-Reschedule Appointment-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${fname}=   FakerLibrary.first_name
+    ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -660,7 +660,7 @@ JD-TC-Reschedule Appointment-9
 
 
 
-   ${fname}=   FakerLibrary.first_name
+   ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -703,7 +703,7 @@ JD-TC-Reschedule Appointment-9
 
     clear_FamilyMember  ${cid}
 
-    ${mem_fname}=   FakerLibrary.first_name
+    ${mem_fname}=   generate_firstname
     ${mem_lname}=   FakerLibrary.last_name
     ${dob}=      FakerLibrary.date
     ${gender}    Random Element    ${Genderlist}
@@ -854,7 +854,7 @@ JD-TC-Reschedule Appointment-10
     Set Test Variable  ${sch_id}  ${resp.json()}
 
 
-   ${fname}=   FakerLibrary.first_name
+   ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -897,7 +897,7 @@ JD-TC-Reschedule Appointment-10
 
     clear_FamilyMember  ${cid}
 
-    ${mem_fname}=   FakerLibrary.first_name
+    ${mem_fname}=   generate_firstname
     ${mem_lname}=   FakerLibrary.last_name
     ${dob}=      FakerLibrary.date
     ${gender}    Random Element    ${Genderlist}
@@ -1066,7 +1066,7 @@ JD-TC-Reschedule Appointment-UH1
 
 
 
-    ${fname}=   FakerLibrary.first_name
+    ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -1262,7 +1262,7 @@ JD-TC-Reschedule Appointment-UH2
     Set Test Variable  ${sch_id2}  ${resp.json()}
 
 
-    ${fname}=   FakerLibrary.first_name
+    ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -1448,7 +1448,7 @@ JD-TC-Reschedule Appointment-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id2}  ${resp.json()}
 
-    ${fname}=   FakerLibrary.first_name
+    ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -1644,7 +1644,7 @@ JD-TC-Reschedule Appointment-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id2}  ${resp.json()}
 
-    ${fname}=   FakerLibrary.first_name
+    ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -1782,7 +1782,7 @@ JD-TC-Reschedule Appointment-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${fname}=   FakerLibrary.first_name
+    ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -1942,7 +1942,7 @@ JD-TC-Reschedule Appointment-UH6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
-    ${fname}=   FakerLibrary.first_name
+    ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -2086,7 +2086,7 @@ JD-TC-Reschedule Appointment-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${fname}=   FakerLibrary.first_name
+    ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -2243,7 +2243,7 @@ JD-TC-Reschedule Appointment-UH8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${fname}=   FakerLibrary.first_name
+    ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -2400,7 +2400,7 @@ JD-TC-Reschedule Appointment-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${fname}=   FakerLibrary.first_name
+    ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -2557,7 +2557,7 @@ JD-TC-Reschedule Appointment-UH10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${fname}=   FakerLibrary.first_name
+    ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -2714,7 +2714,7 @@ JD-TC-Reschedule Appointment-UH11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${fname}=   FakerLibrary.first_name
+    ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -2871,7 +2871,7 @@ JD-TC-Reschedule Appointment-UH12
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${fname}=   FakerLibrary.first_name
+    ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -3028,7 +3028,7 @@ JD-TC-Reschedule Appointment-UH13
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${fname}=   FakerLibrary.first_name
+    ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -3186,7 +3186,7 @@ JD-TC-Reschedule Appointment-UH14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${fname}=   FakerLibrary.first_name
+    ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -3353,7 +3353,7 @@ JD-TC-Reschedule Appointment-UH15
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${fname}=   FakerLibrary.first_name
+    ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -3531,7 +3531,7 @@ JD-TC-Reschedule Appointment-UH16
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}  200
 
-    ${fname}=   FakerLibrary.first_name
+    ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -3761,7 +3761,7 @@ JD-TC-Reschedule Appointment-UH17
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${fname}=   FakerLibrary.first_name
+    ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -3938,7 +3938,7 @@ JD-TC-Reschedule Appointment-UH20
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
-     ${fname}=   FakerLibrary.first_name
+     ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -4121,7 +4121,7 @@ JD-TC-Reschedule Appointment-UH21
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id2}  ${resp.json()}
 
-     ${fname}=   FakerLibrary.first_name
+     ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -4324,7 +4324,7 @@ JD-TC-Reschedule Appointment-UH22
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id2}  ${resp.json()}
 
-     ${fname}=   FakerLibrary.first_name
+     ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -4543,7 +4543,7 @@ JD-TC-Reschedule Appointment-4
     # ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id2}  ${DAY3}  ${s_id}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    ${fname}=   FakerLibrary.first_name
+    ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -5551,7 +5551,7 @@ JD-TC-Reschedule Appointment-UH18
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
 
-     ${fname}=   FakerLibrary.first_name
+     ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -5733,7 +5733,7 @@ JD-TC-Reschedule Appointment-UH19
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id2}  ${resp.json()}
 
-     ${fname}=   FakerLibrary.first_name
+     ${fname}=   generate_firstname
     Set Test Variable  ${fname}
     ${lname}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date

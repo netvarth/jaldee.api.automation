@@ -45,7 +45,7 @@ JD-TC-Link_With_Other_Login-1
 
     ${ph}=  Evaluate  ${PUSERNAME}+5666514
     Set Suite Variable  ${ph}
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     Set Suite Variable      ${firstname}
     Set Suite Variable      ${lastname}
@@ -118,7 +118,7 @@ JD-TC-Link_With_Other_Login-1
 
     ${ph2}=  Evaluate  ${PUSERNAME}+5647895
     Set Suite Variable  ${ph2}
-    ${firstname2}=  FakerLibrary.first_name
+    ${firstname2}=  generate_firstname
     ${lastname2}=  FakerLibrary.last_name
     Set Suite Variable      ${firstname2}
     Set Suite Variable      ${lastname2}
@@ -221,7 +221,7 @@ JD-TC-Link_With_Other_Login-4
 
     ${ph3}=  Evaluate  ${PUSERNAME}+8745862
     Set Suite Variable  ${ph3}
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     Set Suite Variable      ${firstname}
     Set Suite Variable      ${lastname}
@@ -626,7 +626,7 @@ JD-TC-Link_With_Other_Login-UH6
 
     ${phone}=  Evaluate  ${PUSERNAME}+5741548
     Set Suite Variable  ${phone}
-    ${firstname_u1}=  FakerLibrary.first_name
+    ${firstname_u1}=  generate_firstname
     ${lastname_u1}=  FakerLibrary.last_name
     Set Suite Variable      ${firstname_u1}
     Set Suite Variable      ${lastname_u1}

@@ -86,7 +86,7 @@ JD-TC-Get waitlist Today count-1
     Log   ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  200 
     
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
    
     ${resp}=  AddCustomer  ${CUSERNAME20}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  

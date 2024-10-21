@@ -707,7 +707,7 @@ JD-TC-GetWaitlistFutureCount-56
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${cid}  ${resp.json()}
 
-      ${f_name}=   FakerLibrary.first_name
+      ${f_name}=   generate_firstname
       Set Suite Variable  ${f_name}
       ${l_name}=   FakerLibrary.last_name
       Set Suite Variable  ${l_name}
@@ -752,7 +752,7 @@ JD-TC-GetWaitlistFutureCount-UH1
       Log  ${PH_Number}
       Set Suite Variable  ${PCPHONENO}  555${PH_Number}
 
-      ${fname}=  FakerLibrary.first_name
+      ${fname}=  generate_firstname
       Set Suite Variable  ${fname}
       ${lastname}=  FakerLibrary.last_name
 

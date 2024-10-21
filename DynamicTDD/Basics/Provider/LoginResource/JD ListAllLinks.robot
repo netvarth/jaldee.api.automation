@@ -40,7 +40,7 @@ JD-TC-List_ALL_LINKS-1
 
     ${ph}=  Evaluate  ${PUSERNAME}+5666478
     Set Suite Variable  ${ph}
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     Set Suite Variable      ${firstname}
     Set Suite Variable      ${lastname}
@@ -82,7 +82,7 @@ JD-TC-List_ALL_LINKS-1
 
     ${ph2}=  Evaluate  ${PUSERNAME}+5667854
     Set Suite Variable  ${ph2}
-    ${firstname2}=  FakerLibrary.first_name
+    ${firstname2}=  generate_firstname
     ${lastname2}=  FakerLibrary.last_name
     Set Suite Variable      ${firstname2}
     Set Suite Variable      ${lastname2}
@@ -153,7 +153,7 @@ JD-TC-List_ALL_LINKS-2
 
     ${ph3}=  Evaluate  ${PUSERNAME}+5666478
     Set Suite Variable  ${ph3}
-    ${firstname3}=  FakerLibrary.first_name
+    ${firstname3}=  generate_firstname
     ${lastname3}=  FakerLibrary.last_name
     Set Suite Variable      ${firstname3}
     Set Suite Variable      ${lastname3}

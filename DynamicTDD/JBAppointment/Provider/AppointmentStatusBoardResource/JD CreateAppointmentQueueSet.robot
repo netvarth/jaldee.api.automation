@@ -51,7 +51,7 @@ JD-TC-CreateAppointmentQueueSet-1
         Exit For Loop If  '${corp}' == 'False'
         ${len}=  Evaluate  ${len}-1
     END
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_M}=  Evaluate  ${PUSERNAME}+85471
     ${pkg_id}=   get_highest_license_pkg
@@ -194,7 +194,7 @@ JD-TC-CreateAppointmentQueueSet-2
         Exit For Loop If  '${corp}' == 'True'
         ${len}=  Evaluate  ${len}-1
     END
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_M}=  Evaluate  ${PUSERNAME}+85473
     ${pkg_id}=   get_highest_license_pkg

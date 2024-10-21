@@ -117,7 +117,7 @@ JD-TC-ChangeAppointmentStatus-1
         Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
     END
   
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     ${NewCustomer}    Generate random string    10    123456789
     ${NewCustomer}    Convert To Integer  ${NewCustomer}
@@ -304,7 +304,7 @@ JD-TC-ChangeAppointmentStatus-4
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${fname}=  FakerLibrary.first_name
+        ${fname}=  generate_firstname
         ${lname}=  FakerLibrary.last_name
         ${NewCustomer}    Generate random string    10    123456789
         ${NewCustomer}    Convert To Integer  ${NewCustomer}
@@ -323,7 +323,7 @@ JD-TC-ChangeAppointmentStatus-4
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -845,7 +845,7 @@ JD-TC-ChangeAppointmentStatus-7
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -1082,7 +1082,7 @@ JD-TC-ChangeAppointmentStatus-8
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -1207,7 +1207,7 @@ JD-TC-ChangeAppointmentStatus-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${fname}=  FakerLibrary.first_name
+        ${fname}=  generate_firstname
         ${lname}=  FakerLibrary.last_name
         ${NewCustomer}    Generate random string    10    123456789
         ${NewCustomer}    Convert To Integer  ${NewCustomer}
@@ -1226,7 +1226,7 @@ JD-TC-ChangeAppointmentStatus-UH3
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
@@ -1327,7 +1327,7 @@ JD-TC-ChangeAppointmentStatus-UH4
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
@@ -1434,7 +1434,7 @@ JD-TC-ChangeAppointmentStatus-UH5
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
@@ -1538,7 +1538,7 @@ JD-TC-ChangeAppointmentStatus-10
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
@@ -1983,7 +1983,7 @@ JD-TC-ChangeAppointmentStatus-UH7
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
@@ -2090,7 +2090,7 @@ JD-TC-ChangeAppointmentStatus-UH8
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -2203,7 +2203,7 @@ JD-TC-ChangeAppointmentStatus-UH9
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -2314,7 +2314,7 @@ JD-TC-ChangeAppointmentStatus-UH10
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -2444,7 +2444,7 @@ JD-TC-ChangeAppointmentStatus-UH11
         Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
     END
   
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     ${NewCustomer}    Generate random string    10    123456789
     ${NewCustomer}    Convert To Integer  ${NewCustomer}
@@ -3200,7 +3200,7 @@ JD-TC-ChangeAppointmentStatus-12
         Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
     END
   
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     ${NewCustomer}    Generate random string    10    123456789
     ${NewCustomer}    Convert To Integer  ${NewCustomer}
@@ -3801,7 +3801,7 @@ JD-TC-ChangeAppointmentStatus-UH20
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
  
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     ${NewCustomer}    Generate random string    10    123456789
     ${NewCustomer}    Convert To Integer  ${NewCustomer}
@@ -3944,7 +3944,7 @@ JD-TC-ChangeAppointmentStatus-UH21
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${fname}=  FakerLibrary.first_name
+        ${fname}=  generate_firstname
         ${lname}=  FakerLibrary.last_name
         ${NewCustomer}    Generate random string    10    123456789
         ${NewCustomer}    Convert To Integer  ${NewCustomer}
@@ -3963,7 +3963,7 @@ JD-TC-ChangeAppointmentStatus-UH21
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -4091,7 +4091,7 @@ JD-TC-ChangeAppointmentStatus-UH25
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -4203,7 +4203,7 @@ JD-TC-ChangeAppointmentStatus-UH26
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
@@ -4317,7 +4317,7 @@ JD-TC-ChangeAppointmentStatus-14
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Customer Take Appointment  ${pid}   ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    ${resp}=   Customer Take Appointment  ${pid}   ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}  location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -4424,7 +4424,7 @@ JD-TC-ChangeAppointmentStatus-15
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     Set Suite Variable   ${fname}
     ${lname}=  FakerLibrary.last_name
     Set Suite Variable   ${lname}

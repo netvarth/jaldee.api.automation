@@ -53,7 +53,7 @@ JD-TC-Get_LoginId-1
 
     ${ph}=  Evaluate  ${PUSERNAME}+5666409
     Set Suite Variable  ${ph}
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     Set Suite Variable      ${firstname}
     Set Suite Variable      ${lastname}

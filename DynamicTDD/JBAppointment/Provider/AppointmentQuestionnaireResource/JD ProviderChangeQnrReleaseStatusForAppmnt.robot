@@ -269,7 +269,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-1
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -446,7 +446,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-2
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -561,7 +561,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     ${resp}=  AddCustomer  ${CUSERNAME11}    firstName=${fname}   lastName=${lname}
     Log   ${resp.content}
@@ -760,7 +760,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-4
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -909,7 +909,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     ${resp}=  AddCustomer  ${CUSERNAME13}    firstName=${fname}   lastName=${lname}
     Log   ${resp.content}
@@ -1102,7 +1102,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     ${resp}=  AddCustomer  ${CUSERNAME11}    firstName=${fname}   lastName=${lname}
     Log   ${resp.content}

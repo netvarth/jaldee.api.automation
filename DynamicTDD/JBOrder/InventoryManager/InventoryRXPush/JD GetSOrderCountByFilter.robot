@@ -40,7 +40,7 @@ JD-TC-GetOrderCountByFilter-1
     Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
     Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
     Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
-    ${firstname_A}=  FakerLibrary.first_name
+    ${firstname_A}=  generate_firstname
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
@@ -390,7 +390,7 @@ JD-TC-GetOrderCountByFilter-1
     Log  ${PH_Number}
     Set Suite Variable    ${primaryMobileNo}  555${PH_Number}
     Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${primaryMobileNo}${\n}
-    ${firstName}=   FakerLibrary.first_name
+    ${firstName}=   generate_firstname
     ${lastName}=    FakerLibrary.last_name
     Set Suite Variable      ${firstName}
     Set Suite Variable      ${lastName}  

@@ -37,7 +37,7 @@ JD-TC-Get Waitist Rating-1
     Set Suite Variable  ${p1_l1}  ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
 
     ${resp}=  AddCustomer  ${CUSERNAME2}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  

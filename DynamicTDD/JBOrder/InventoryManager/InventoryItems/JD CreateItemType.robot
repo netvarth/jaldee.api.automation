@@ -115,7 +115,7 @@ JD-TC-CreateItemType-UH3
     Log  ${PH_Number}
     Set Suite Variable  ${primaryMobileNo}  555${PH_Number}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     # Set Suite Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
     

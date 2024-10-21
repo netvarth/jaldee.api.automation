@@ -188,7 +188,7 @@ JD-TC-GetAppointmentMeetingDetails-1
    #............provider consumer creation..........
 
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     Set Suite Variable  ${fname}
     ${lname}=  FakerLibrary.last_name
     
@@ -460,7 +460,7 @@ JD-TC-GetAppointmentMeetingDetails-3
    #............provider consumer creation..........
 
 
-    ${fname2}=  FakerLibrary.first_name
+    ${fname2}=  generate_firstname
     Set Suite Variable  ${fname2}
     ${lastname1}=  FakerLibrary.last_name
     
@@ -523,7 +523,7 @@ JD-TC-GetAppointmentMeetingDetails-3
 
     ${cnote}=   FakerLibrary.word
     ${virtualService}=  Create Dictionary   ${CallingModes[0]}=${ZOOM_id2}
-    ${resp}=  Take Appointment For Consumer  ${pcid}  ${p1_s2}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}   virtualService=${virtualService}
+    ${resp}=  Take Appointment For Consumer  ${pcid}  ${p1_s2}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}   virtualService=${virtualService}  location=${{str('${p1_l1}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -621,7 +621,7 @@ JD-TC-GetAppointmentMeetingDetails-4
 
     ${cnote}=   FakerLibrary.word
     ${virtualService}=  Create Dictionary   ${CallingModes[1]}=${WHATSAPP_id2}
-    ${resp}=  Take Appointment For Consumer  ${pcid}  ${p1_s1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}   virtualService=${virtualService}
+    ${resp}=  Take Appointment For Consumer  ${pcid}  ${p1_s1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}   virtualService=${virtualService}  location=${{str('${p1_l1}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -709,7 +709,7 @@ JD-TC-GetAppointmentMeetingDetails-UH2
 
     ${cnote}=   FakerLibrary.word
     ${virtualService}=  Create Dictionary   ${CallingModes[0]}=${ZOOM_id2}
-    ${resp}=  Take Appointment For Consumer   ${pcid}  ${p1_s2}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}   virtualService=${virtualService}
+    ${resp}=  Take Appointment For Consumer   ${pcid}  ${p1_s2}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}   virtualService=${virtualService}  location=${{str('${p1_l1}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -814,7 +814,7 @@ JD-TC-GetAppointmentMeetingDetails-5
 
     ${cnote}=   FakerLibrary.word
     ${virtualService}=  Create Dictionary   ${CallingModes[0]}=${ZOOM_id2}
-    ${resp}=  Take Appointment For Consumer  ${pcid}  ${p1_s2}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}   virtualService=${virtualService}
+    ${resp}=  Take Appointment For Consumer  ${pcid}  ${p1_s2}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}   virtualService=${virtualService}  location=${{str('${p1_l1}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -1124,7 +1124,7 @@ JD-TC-GetAppointmentMeetingDetails-7
 
     ${cnote}=   FakerLibrary.word
     ${virtualService}=  Create Dictionary   ${CallingModes[0]}=${ZOOM_pid2}
-    ${resp}=  Take Appointment For Consumer  ${pcid0}  ${p2_s1}  ${sch_id2}  ${DAY1}  ${cnote}  ${apptfor}   virtualService=${virtualService}
+    ${resp}=  Take Appointment For Consumer  ${pcid0}  ${p2_s1}  ${sch_id2}  ${DAY1}  ${cnote}  ${apptfor}   virtualService=${virtualService}  location=${{str('${p1_l1}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           

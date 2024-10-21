@@ -44,7 +44,7 @@ JD-TC-Provider_Login-1
     Set Suite Variable  ${subdomain_list}
     ${ph}=  Evaluate  ${PUSERNAME}+5666006
     Set Suite Variable  ${ph}
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     Set Suite Variable      ${firstname}
     Set Suite Variable      ${lastname}

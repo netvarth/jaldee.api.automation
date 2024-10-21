@@ -45,12 +45,12 @@ JD-TC-RemoveLabelFromMultipleWaitlist-1
     clear_customer   ${HLPUSERNAME19}
     clear_Label  ${HLPUSERNAME19}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     Set Suite Variable  ${fname}
     ${lname}=  FakerLibrary.last_name
     Set Suite Variable  ${lname}
 
-    ${fname1}=  FakerLibrary.first_name
+    ${fname1}=  generate_firstname
     Set Suite Variable  ${fname1}
     ${lname1}=  FakerLibrary.last_name
     Set Suite Variable  ${lname1}
@@ -93,7 +93,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid1}  ${resp.json()}
 
-    ${mem_fname}=   FakerLibrary.first_name
+    ${mem_fname}=   generate_firstname
     ${mem_lname}=   FakerLibrary.last_name
     ${dob}=      FakerLibrary.date
     ${gender}    Random Element    ${Genderlist}
@@ -111,7 +111,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid2}  ${resp.json()}
 
-    ${mem_fname1}=   FakerLibrary.first_name
+    ${mem_fname1}=   generate_firstname
     ${mem_lname1}=   FakerLibrary.last_name
     ${dob1}=      FakerLibrary.date
     ${gender}    Random Element    ${Genderlist}
@@ -1585,7 +1585,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-9
     Log  ${PH_Number}
     Set Suite Variable  ${PCPHONENO}  555${PH_Number}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
 
@@ -1631,7 +1631,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${fname1}=  FakerLibrary.first_name
+    ${fname1}=  generate_firstname
     ${lname1}=  FakerLibrary.last_name
     Set Test Variable  ${pc_emailid1}  ${fname1}${C_Email}.${test_mail}
 
@@ -1953,7 +1953,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-11
         ${PO_Number}    Convert To Integer  ${PO_Number}
         ${CUSERPH}=  Evaluate  ${CUSERNAME}+${PO_Number}+${a}
         Set Test Variable  ${CUSERPH${a}}  ${CUSERPH}
-        ${fname}=  FakerLibrary.first_name
+        ${fname}=  generate_firstname
         ${lname}=  FakerLibrary.last_name
         ${resp}=  AddCustomer  ${CUSERPH${a}}  firstName=${fname}  lastName=${lname}
         Log  ${resp.json()}
@@ -3220,10 +3220,9 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH13
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid1}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid1}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=  Get Appointment EncodedID   ${apptid1}

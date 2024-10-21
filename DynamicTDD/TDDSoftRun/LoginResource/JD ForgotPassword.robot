@@ -46,7 +46,7 @@ JD-TC-Forgot_Password-1
 
     ${ph}=  Evaluate  ${PUSERNAME}+5665002
     Set Suite Variable  ${ph}
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     Set Suite Variable      ${firstname}
     Set Suite Variable      ${lastname}

@@ -2200,7 +2200,7 @@ JD-TC-AssignproviderWaitlist-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${que_id2}  ${resp.json()}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
     
@@ -2515,7 +2515,7 @@ JD-TC-CreateUser -0
         ${cons_num}    Random Int  min=123456   max=999999
         ${ph1}=  Evaluate  ${HLPUSERNAME2}+${cons_num}
         Set Test Variable  ${ph1${a}}  ${ph1}
-        ${firstname}=  FakerLibrary.first_name
+        ${firstname}=  generate_firstname
         ${lastname}=  FakerLibrary.last_name
         ${dob}=  FakerLibrary.Date
         ${pin}=  get_pincode
@@ -2651,7 +2651,7 @@ JD-TC-CreateUser -01
         ${cons_num}    Random Int  min=123456   max=999999
         ${ph1}=  Evaluate  ${HLPUSERNAME2}+${cons_num}
         Set Test Variable  ${ph1${a}}  ${ph1}
-        ${firstname}=  FakerLibrary.first_name
+        ${firstname}=  generate_firstname
         ${lastname}=  FakerLibrary.last_name
         ${dob}=  FakerLibrary.Date
         ${pin}=  get_pincode

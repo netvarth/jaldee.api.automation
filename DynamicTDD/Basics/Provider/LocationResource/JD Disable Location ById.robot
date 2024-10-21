@@ -299,7 +299,7 @@ JD-TC-DisableLocation-UH7
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-      ${fname}=  FakerLibrary.first_name
+      ${fname}=  generate_firstname
       Set Suite Variable   ${fname}
       ${lname}=  FakerLibrary.last_name
       Set Suite Variable   ${lname}

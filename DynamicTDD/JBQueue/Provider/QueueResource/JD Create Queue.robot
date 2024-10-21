@@ -401,7 +401,7 @@ JD-TC-CreateQueue-8
     Set Suite Variable  ${dom}  ${multilocdoms[0]['domain']}
     Set Suite Variable  ${sub_dom}  ${multilocdoms[0]['subdomains'][0]}
 
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_B}=  Evaluate  ${PUSERNAME}+5566782
     ${highest_package}=  get_highest_license_pkg

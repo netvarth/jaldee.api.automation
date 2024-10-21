@@ -111,7 +111,7 @@ JD-TC-RemoveMultipleAppointmentLabel-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid1}  ${resp.json()}
 
-    ${mem_fname}=   FakerLibrary.first_name
+    ${mem_fname}=   generate_firstname
     ${mem_lname}=   FakerLibrary.last_name
     ${dob}=      FakerLibrary.date
     ${gender}    Random Element    ${Genderlist}
@@ -131,7 +131,7 @@ JD-TC-RemoveMultipleAppointmentLabel-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid2}  ${resp.json()}
 
-    ${mem_fname1}=   FakerLibrary.first_name
+    ${mem_fname1}=   generate_firstname
     ${mem_lname1}=   FakerLibrary.last_name
     ${dob1}=      FakerLibrary.date
     ${gender}    Random Element    ${Genderlist}
@@ -2120,7 +2120,7 @@ JD-TC-RemoveMultipleAppointmentLabel-11
         ${PO_Number}    Convert To Integer  ${PO_Number}
         ${CUSERPH}=  Evaluate  ${CUSERNAME}+${PO_Number}
         Set Test Variable  ${CUSERPH${a}}  ${CUSERPH}
-        ${fname}=  FakerLibrary.first_name
+        ${fname}=  generate_firstname
         ${lname}=  FakerLibrary.last_name
         # ${dob}=  FakerLibrary.Date
         # ${gender}=  Random Element    ${Genderlist}

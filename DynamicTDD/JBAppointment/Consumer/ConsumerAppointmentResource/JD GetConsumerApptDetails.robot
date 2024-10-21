@@ -117,7 +117,7 @@ JD-TC-Get consumer Appt Bill Details-1
     Log  ${PH_Number}
     Set Suite Variable  ${PCPHONENO}  555${PH_Number}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     Set Suite Variable  ${fname}
     ${lastname}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname}
@@ -136,7 +136,7 @@ JD-TC-Get consumer Appt Bill Details-1
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
@@ -334,7 +334,7 @@ JD-TC-Get consumer Appt Bill Details-2
     Log  ${PH_Number}
     Set Suite Variable  ${PCPHONENO1}  555${PH_Number}
 
-    ${fname1}=  FakerLibrary.first_name
+    ${fname1}=  generate_firstname
     Set Suite Variable   ${fname1}
     ${lname1}=  FakerLibrary.last_name
     Set Suite Variable   ${lname1}
@@ -704,7 +704,7 @@ JD-TC-Get consumer Appt Bill Details-4
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
@@ -721,7 +721,7 @@ JD-TC-Get consumer Appt Bill Details-4
     Log  ${PH_Number}
     Set Suite Variable  ${PCPHONENO2}  555${PH_Number}
 
-    ${fname2}=  FakerLibrary.first_name
+    ${fname2}=  generate_firstname
     Set Suite Variable  ${fname2}
     ${lname2}=  FakerLibrary.last_name
     Set Suite Variable  ${lname2}
@@ -909,7 +909,7 @@ JD-TC-Get consumer Appt Bill Details-5
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid1}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid1}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -924,7 +924,7 @@ JD-TC-Get consumer Appt Bill Details-5
     ${apptfor}=   Create List  ${apptfor2}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid2}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid2}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           

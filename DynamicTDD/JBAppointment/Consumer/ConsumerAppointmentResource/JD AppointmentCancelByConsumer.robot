@@ -75,7 +75,7 @@ JD-TC-AppointmentCancelByConsumer-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id}  ${resp.json()}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
    
     ${resp}=  AddCustomer  ${CUSERNAME19}  firstName=${fname}   lastName=${lname}
@@ -218,7 +218,7 @@ JD-TC-AppointmentCancelByConsumer-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id1}  ${resp.json()}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
    
     ${resp}=  AddCustomer  ${CUSERNAME20}  firstName=${fname}   lastName=${lname}

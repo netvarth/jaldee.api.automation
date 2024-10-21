@@ -42,7 +42,7 @@ JD-TC-GetProviderRemindersWithFilter-1
     ${sTime1}=  add_timezone_time  ${tz}  3  15  
     ${eTime1}=  add_timezone_time  ${tz}  3  15  
     ${msg}=  FakerLibrary.word
-    ${rem_name}=  FakerLibrary.first_name
+    ${rem_name}=  generate_firstname
     ${prov_detail}=  Create Dictionary   id=${pro_id}
     ${prov_details}=  Create List  ${prov_detail}
     ${remindersource}=  Create Dictionary    Sms=${bool[1]}   Email=${bool[1]}  PushNotification=${bool[1]}  Whatsapp=${bool[1]}

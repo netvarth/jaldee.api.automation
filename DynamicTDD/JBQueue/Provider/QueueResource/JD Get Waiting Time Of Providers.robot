@@ -323,7 +323,7 @@ JD-TC-GetWaitingTimeOfProviders-5
     ${PUSERNAME}=  Evaluate  ${PUSERNAME}+89899
     Set Test Variable  ${d1}  ${domresp.json()[${len}]['domain']}    
     Set Test Variable  ${sd}  ${domresp.json()[${len}]['subDomains'][0]['subDomain']} 
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd}  ${PUSERNAME}   ${highest_package[0]}
@@ -467,7 +467,7 @@ JD-TC-GetWaitingTimeOfProviders-6
     ${PUSERNAME}=  Evaluate  ${PUSERNAME}+89895
     Set Test Variable  ${d1}  ${domresp.json()[${len}]['domain']}    
     Set Test Variable  ${sd}  ${domresp.json()[${len}]['subDomains'][0]['subDomain']} 
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd}  ${PUSERNAME}    ${highest_package[0]}

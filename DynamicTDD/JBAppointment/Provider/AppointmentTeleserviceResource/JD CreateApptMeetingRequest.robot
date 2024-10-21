@@ -213,7 +213,7 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-1
     ${apptfor}=   Create List  ${apptfor1}
     Set Suite Variable   ${apptfor}    
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     ${resp}=  AddCustomer  ${CUSERNAME6}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
@@ -618,7 +618,7 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-6
     ${apptfor}=   Create List  ${apptfor1}
     Set Suite Variable   ${apptfor}    
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     ${resp}=  AddCustomer  ${CUSERNAME7}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
