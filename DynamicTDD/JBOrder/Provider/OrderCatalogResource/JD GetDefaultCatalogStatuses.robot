@@ -59,7 +59,7 @@ JD-TC-Get_Default_Catalog_Status-UH2
 
     #............provider consumer creation..........
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
   
     ${resp}=    Send Otp For Login    ${CUSERNAME17}    ${account_id}

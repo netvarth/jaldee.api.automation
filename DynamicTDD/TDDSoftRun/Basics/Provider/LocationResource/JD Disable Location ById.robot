@@ -299,7 +299,7 @@ JD-TC-DisableLocation-UH7
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-      ${fname}=  FakerLibrary.first_name
+      ${fname}=  generate_firstname
       Set Suite Variable   ${fname}
       ${lname}=  FakerLibrary.last_name
       Set Suite Variable   ${lname}
@@ -313,7 +313,7 @@ JD-TC-DisableLocation-UH7
       ${apptfor}=   Create List  ${apptfor1}
 
       ${cnote}=   FakerLibrary.word
-      ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+      ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False

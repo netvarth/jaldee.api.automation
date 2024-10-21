@@ -138,7 +138,7 @@ JD-TC-AddMultipleWaitlistLabel-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     Set Suite Variable  ${fname}
     ${lname}=  FakerLibrary.last_name
     Set Suite Variable  ${lname}
@@ -148,7 +148,7 @@ JD-TC-AddMultipleWaitlistLabel-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid1}  ${resp.json()}
 
-    ${mem_fname}=   FakerLibrary.first_name
+    ${mem_fname}=   generate_firstname
     ${mem_lname}=   FakerLibrary.last_name
     ${dob}=      FakerLibrary.date
     ${gender}    Random Element    ${Genderlist}
@@ -161,7 +161,7 @@ JD-TC-AddMultipleWaitlistLabel-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['id']}   ${mem_id1}
 
-    ${fname1}=  FakerLibrary.first_name
+    ${fname1}=  generate_firstname
     Set Suite Variable  ${fname1}
     ${lname1}=  FakerLibrary.last_name
     Set Suite Variable  ${lname1}
@@ -171,7 +171,7 @@ JD-TC-AddMultipleWaitlistLabel-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid2}  ${resp.json()}
 
-    ${mem_fname1}=   FakerLibrary.first_name
+    ${mem_fname1}=   generate_firstname
     ${mem_lname1}=   FakerLibrary.last_name
     ${dob1}=      FakerLibrary.date
     ${gender}    Random Element    ${Genderlist}
@@ -1430,7 +1430,7 @@ JD-TC-AddMultipleWaitlistLabel-9
     Log  ${PH_Number}
     Set Suite Variable  ${PCPHONENO}  555${PH_Number}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
 
@@ -2289,7 +2289,7 @@ JD-TC-AddMultipleWaitlistLabel-15
         ${PO_Number}    Convert To Integer  ${PO_Number}
         ${CUSERPH}=  Evaluate  ${CUSERNAME}+${PO_Number}
         Set Test Variable  ${CUSERPH${a}}  ${CUSERPH}
-        ${fname}=  FakerLibrary.first_name
+        ${fname}=  generate_firstname
         ${lname}=  FakerLibrary.last_name
         # ${dob}=  FakerLibrary.Date
         # ${gender}=  Random Element    ${Genderlist}
@@ -2583,7 +2583,7 @@ JD-TC-AddMultipleWaitlistLabel-UH3
     Log  ${PH_Number}
     Set Suite Variable  ${PCPHONENO}  555${PH_Number}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
 
@@ -3292,10 +3292,9 @@ JD-TC-AddMultipleWaitlistLabel-UH13
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid1}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid1}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=  Get Appointment EncodedID   ${apptid1}
@@ -3321,6 +3320,6 @@ JD-TC-AddMultipleWaitlistLabel-UH13
     ${resp}=  Add Label for Multiple Waitlist   ${label_dict}  ${apptid1}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"  "${INVALID_WTLST_ID}"
+    Should Be Equal As Strings  ${resp.json()}  ${INVALID_WTLST_ID}
 
 

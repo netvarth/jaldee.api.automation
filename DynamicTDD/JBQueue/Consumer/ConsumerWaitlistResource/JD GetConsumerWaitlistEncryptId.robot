@@ -59,7 +59,7 @@ JD-TC-GetWaitlistByEncryptedID-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${qid}  ${resp.json()}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
    
     ${resp}=  AddCustomer  ${CUSERNAME20}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  

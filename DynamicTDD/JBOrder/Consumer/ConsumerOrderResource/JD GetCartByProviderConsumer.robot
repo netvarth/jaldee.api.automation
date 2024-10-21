@@ -167,7 +167,7 @@ JD-TC-Get Cart By ProviderConsumer-1
     Log  ${PH_Number}
     Set Test Variable  ${PCPHONENO}  555${PH_Number}
 
-    ${firstName}=  FakerLibrary.first_name
+    ${firstName}=  generate_firstname
     ${lastName}=  FakerLibrary.last_name
     Set Test Variable  ${pc_emailid1}  ${firstName}${C_Email}.${test_mail}
 
@@ -235,8 +235,8 @@ JD-TC-Get Cart By ProviderConsumer-1
     Should Be Equal As Strings    ${resp.json()['netRate']}                                                             ${Total}
 
     ${new_no}=  Evaluate  ${CUSERNAME21}+257831
-    ${firstname}=  FakerLibrary.first_name
-    ${lastname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
+    ${lastname}=  generate_firstname
     Set Test Variable  ${email}  ${firstname}${CUSERNAME21}.${test_mail}
     ${city}=   get_place
     ${address}=  get_address
@@ -401,7 +401,7 @@ JD-TC-Get Cart By ProviderConsumer-2
     Log  ${PH_Number}
     Set Test Variable  ${PCPHONENO}  555${PH_Number}
 
-    ${firstName}=  FakerLibrary.first_name
+    ${firstName}=  generate_firstname
     ${lastName}=  FakerLibrary.last_name
     Set Test Variable  ${pc_emailid1}  ${firstName}${C_Email}.${test_mail}
 

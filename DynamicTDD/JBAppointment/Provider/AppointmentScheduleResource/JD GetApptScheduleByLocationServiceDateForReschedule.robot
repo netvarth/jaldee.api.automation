@@ -153,7 +153,7 @@ JD-TC-GetApptScheduleWithLocationServiceDateForReschedule-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     ${resp}=  AddCustomer  ${CUSERNAME38}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
@@ -169,10 +169,9 @@ JD-TC-GetApptScheduleWithLocationServiceDateForReschedule-2
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -251,7 +250,7 @@ JD-TC-GetApptScheduleWithLocationServiceDateForReschedule-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     ${resp}=  AddCustomer  ${CUSERNAME38}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
@@ -267,7 +266,7 @@ JD-TC-GetApptScheduleWithLocationServiceDateForReschedule-3
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -311,7 +310,7 @@ JD-TC-GetApptScheduleWithLocationServiceDateForReschedule-4
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     ${resp}=  AddCustomer  ${CUSERNAME20}   firstName=${fname}   lastName=${lname} 
     Log   ${resp.content}
@@ -431,7 +430,7 @@ JD-TC-GetApptScheduleWithLocationServiceDateForReschedule-5
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     ${resp}=  AddCustomer  ${CUSERNAME20}   firstName=${fname}   lastName=${lname} 
     Log   ${resp.content}
@@ -553,7 +552,7 @@ JD-TC-GetApptScheduleWithLocationServiceDateForReschedule-6
         Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     ${resp}=  AddCustomer  ${CUSERNAME20}   firstName=${fname}   lastName=${lname} 
     Log   ${resp.content}

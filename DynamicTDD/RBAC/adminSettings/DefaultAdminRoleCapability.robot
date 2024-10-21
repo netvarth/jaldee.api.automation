@@ -308,7 +308,7 @@ JD-TC-Default Admin Role Capability-10
     ${cons_num}    Convert To Integer  ${PO_Number}
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${cons_num}
     Set Suite Variable  ${CUSERPH} 
-    ${firstname}=  FakerLibrary.first_name    
+    ${firstname}=  generate_firstname    
     ${lastname}=  FakerLibrary.last_name
      
     ${resp}=  AddCustomer  ${CUSERPH}   firstName=${firstname}   lastName=${lastname}
@@ -612,7 +612,7 @@ JD-TC-Default Admin Role Capability-20
     ${apptfor}=   Create List  ${apptfor1}  ${apptfor2}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid2}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid2}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

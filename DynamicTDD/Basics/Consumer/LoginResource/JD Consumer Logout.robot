@@ -28,7 +28,7 @@ JD-TC-ConsumerLogout-1
 
     #............provider consumer creation..........
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
   
     ${resp}=    Send Otp For Login    ${CUSERNAME2}    ${account_id}
@@ -81,7 +81,7 @@ JD-TC-ConsumerLogout-3
 
     #............provider consumer creation..........
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
   
     ${resp}=    Send Otp For Login    ${CUSERNAME3}    ${account_id}

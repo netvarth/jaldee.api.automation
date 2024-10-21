@@ -264,7 +264,7 @@ JD-TC-ProviderGetApptRequestCount-3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${firstname1}=  FakerLibrary.first_name
+    ${firstname1}=  generate_firstname
     ${lastname1}=  FakerLibrary.last_name 
     ${dob1}=  FakerLibrary.Date
     ${gender1}=  Random Element    ${Genderlist}

@@ -135,7 +135,7 @@ JD-TC-SendAttachmentAppmt-1
     Log  ${PH_Number}
     Set Suite Variable    ${consumerPhone}  555${PH_Number}
     Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
-    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerFirstName}=   generate_firstname
     Set Suite Variable      ${consumerFirstName}
     ${consumerLastName}=    FakerLibrary.last_name  
     Set Suite Variable      ${consumerLastName}
@@ -161,7 +161,7 @@ JD-TC-SendAttachmentAppmt-1
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           

@@ -95,8 +95,8 @@ JD-TC-Get Delivery Address of ProviderConsumer-1
 
 
       ${new_no}=  Evaluate  ${CUSERNAME21}+257831
-      ${firstname}=  FakerLibrary.first_name
-      ${lastname}=  FakerLibrary.first_name
+      ${firstname}=  generate_firstname
+      ${lastname}=  generate_firstname
       Set Test Variable  ${email}  ${firstname}${CUSERNAME21}.${test_mail}
       ${city}=   get_place
       ${address}=  get_address

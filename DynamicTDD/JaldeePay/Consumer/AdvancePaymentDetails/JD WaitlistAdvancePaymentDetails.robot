@@ -68,7 +68,7 @@ JD-TC-WaitlistAdvancePaymentdetails-1
     Log  ${d1}
     Log  ${sd1}
 
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
@@ -205,7 +205,7 @@ JD-TC-WaitlistAdvancePaymentdetails-1
     ${pid}=  get_acc_id  ${PUSERPH0}
     Set Suite Variable  ${pid}
 
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     ${email}=   FakerLibrary.word
     Set Test Variable  ${email2}  ${email}${C_Email}.${test_mail}
@@ -218,7 +218,7 @@ JD-TC-WaitlistAdvancePaymentdetails-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid}  ${resp.json()}
 
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
@@ -317,7 +317,7 @@ JD-TC-WaitlistAdvancePaymentdetails-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${qid1}  ${resp.json()}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
    
     ${resp}=  AddCustomer  ${CUSERNAME19}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  

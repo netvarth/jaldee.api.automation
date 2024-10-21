@@ -382,7 +382,7 @@ Provider Signup
         Set Test Variable  ${LoginId}  ${PhoneNumber}
     END
 
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
@@ -470,7 +470,7 @@ Provider Signup without Profile
         Set Test Variable  ${LoginId}  ${PhoneNumber}
     END
 
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
@@ -3119,7 +3119,7 @@ Create Sample Queue
         ${s_id}=  Create Sample Service  ${SERVICE1}
     ELSE IF  '${resp.json()[0]['serviceType']}' == '${ServiceType[2]}'
         ${SERVICE1}=    generate_unique_service_name  ${service_names}
-        Append To List  ${service_names}  ${SERVICE1}
+        # Append To List  ${service_names}  ${SERVICE1}
         ${s_id}=  Create Sample Service  ${SERVICE1}
     ELSE
         Set Test Variable   ${s_id}   ${resp.json()[0]['id']}

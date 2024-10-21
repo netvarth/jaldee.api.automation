@@ -320,7 +320,7 @@ JD-TC-GetServices-UH1
     Log  ${PH_Number}
     Set Suite Variable    ${consumerPhone}  555${PH_Number}
     Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
-    ${fname}=   FakerLibrary.first_name
+    ${fname}=   generate_firstname
     ${lname}=    FakerLibrary.last_name
     Set Test Variable      ${fname}
     Set Test Variable      ${lname}  

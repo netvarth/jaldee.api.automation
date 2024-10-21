@@ -33,7 +33,7 @@ JD-TC-Create Stock Transfer-1
     Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
     Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
     Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
-    ${firstname_A}=  FakerLibrary.first_name
+    ${firstname_A}=  generate_firstname
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
@@ -537,7 +537,7 @@ JD-TC-Create Stock Transfer-2
     Set Test Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
     Set Test Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
     Set Test Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
-    ${firstname_A}=  FakerLibrary.first_name
+    ${firstname_A}=  generate_firstname
     Set Test Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Test Variable  ${lastname_A}
@@ -961,7 +961,7 @@ JD-TC-Create Stock Transfer-3
     Set Test Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
     Set Test Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
     Set Test Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
-    ${firstname_A}=  FakerLibrary.first_name
+    ${firstname_A}=  generate_firstname
     Set Test Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Test Variable  ${lastname_A}
@@ -1391,7 +1391,7 @@ JD-TC-Create Stock Transfer-UH4
     Set Test Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
     Set Test Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
     Set Test Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
-    ${firstname_A}=  FakerLibrary.first_name
+    ${firstname_A}=  generate_firstname
     Set Test Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Test Variable  ${lastname_A}
@@ -1823,7 +1823,7 @@ JD-TC-Create Stock Transfer-UH5
     Set Test Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
     Set Test Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
     Set Test Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
-    ${firstname_A}=  FakerLibrary.first_name
+    ${firstname_A}=  generate_firstname
     Set Test Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Test Variable  ${lastname_A}
@@ -2258,7 +2258,7 @@ JD-TC-Create Stock Transfer-UH6
     Set Test Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
     Set Test Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
     Set Test Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
-    ${firstname_A}=  FakerLibrary.first_name
+    ${firstname_A}=  generate_firstname
     Set Test Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Test Variable  ${lastname_A}
@@ -2521,7 +2521,7 @@ JD-TC-Create Stock Transfer-UH7
     Set Test Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
     Set Test Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
     Set Test Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
-    ${firstname_A}=  FakerLibrary.first_name
+    ${firstname_A}=  generate_firstname
     Set Test Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Test Variable  ${lastname_A}
@@ -2784,7 +2784,7 @@ JD-TC-Create Stock Transfer-UH8
     Set Test Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
     Set Test Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
     Set Test Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
-    ${firstname_A}=  FakerLibrary.first_name
+    ${firstname_A}=  generate_firstname
     Set Test Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Test Variable  ${lastname_A}

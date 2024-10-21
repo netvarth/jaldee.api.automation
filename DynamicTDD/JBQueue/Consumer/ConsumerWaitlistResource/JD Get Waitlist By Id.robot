@@ -98,7 +98,7 @@ JD-TC-Get Waitlist By Id Consumer-1
     comment   ${resp}=  Enable Online Checkin
     comment  Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
    
     ${resp}=  AddCustomer  ${CUSERNAME20}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  

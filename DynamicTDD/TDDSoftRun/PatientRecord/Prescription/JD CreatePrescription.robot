@@ -42,7 +42,7 @@ JD-TC-Create Prescription-1
     Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
     Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
     Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
-    ${firstname_E}=  FakerLibrary.first_name
+    ${firstname_E}=  generate_firstname
     Set Suite Variable  ${firstname_E}
     ${lastname_E}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_E}

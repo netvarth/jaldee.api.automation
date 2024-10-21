@@ -42,7 +42,7 @@ JD-TC-GetFollowUpDetailsWl-1
     Log  ${PH_Number}
     Set Suite Variable    ${consumerPhone}  555${PH_Number}
     Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
-    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerFirstName}=   generate_firstname
     Set Suite Variable      ${consumerFirstName}
     ${consumerLastName}=    FakerLibrary.last_name  
     Set Suite Variable      ${consumerLastName}
@@ -198,7 +198,7 @@ JD-TC-GetFollowUpDetailsWl-UH3
     Log  ${PH_Number}
     Set Suite Variable  ${PCPHONENO}  555${PH_Number}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
 

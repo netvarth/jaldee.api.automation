@@ -57,7 +57,7 @@ JD-TC-Communication Between Consumer and Provider-1
 
     ${DAY}=  db.get_date_by_timezone  ${tz}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
    
     ${resp}=  AddCustomer  ${CUSERNAME0}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  

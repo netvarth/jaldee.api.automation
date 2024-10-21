@@ -353,7 +353,7 @@ JD-TC-ChangeAnsStatusForAppt-2
     Set Suite Variable  ${Questionnaireid}  ${qns.json()['questionnaireId']}
     Set Suite Variable  ${Questionnaireid2}  ${qns.json()['questionnaireId']}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
   
     ${resp}=  AddCustomer  ${CUSERNAME23}  firstName=${fname}   lastName=${lname}
@@ -1720,7 +1720,7 @@ JD-TC-ChangeAnsStatusForAppt-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME13}  
     Log  ${resp.content}

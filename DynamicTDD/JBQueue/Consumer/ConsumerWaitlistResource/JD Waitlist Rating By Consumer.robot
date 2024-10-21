@@ -81,7 +81,7 @@ JD-TC-Waitlist Rating By Consumer-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${q1_l1}  ${resp.json()}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
    
     ${resp}=  AddCustomer  ${CUSERNAME13}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  

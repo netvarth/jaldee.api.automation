@@ -379,7 +379,7 @@ JD-TC-UpdateProviderConsumer-4
     Set Test Variable  ${d1}  ${domresp.json()[${len}]['domain']}    
     Set Test Variable  ${sd}  ${domresp.json()[${len}]['subDomains'][0]['subDomain']} 
 
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd}  ${PUSERNAME_N}   ${highest_package[0]}

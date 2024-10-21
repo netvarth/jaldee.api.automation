@@ -156,7 +156,7 @@ JD-TC-UpdateService-UH1
         ${billable_domains}=  get_billable_domain
         Set Test Variable  ${domains}  ${billable_domains[0]}
         Set Test Variable  ${sub_domains}  ${billable_domains[1]}
-        ${firstname}=  FakerLibrary.first_name
+        ${firstname}=  generate_firstname
         ${lastname}=  FakerLibrary.last_name
         ${address}=  FakerLibrary.address
         ${dob}=  FakerLibrary.Date

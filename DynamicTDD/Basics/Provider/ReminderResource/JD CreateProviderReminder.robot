@@ -43,7 +43,7 @@ JD-TC-CreateProviderReminder-1
     ${sTime1}=  add_timezone_time  ${tz}  3  15  
     ${eTime1}=  add_timezone_time  ${tz}  3  15  
     ${msg}=  FakerLibrary.word
-    ${rem_name}=  FakerLibrary.first_name
+    ${rem_name}=  generate_firstname
     ${prov_detail}=  Create Dictionary   id=${pro_id}
     ${prov_details}=  Create List  ${prov_detail}
     ${remindersource}=  Create Dictionary    Sms=${bool[1]}   Email=${bool[1]}  PushNotification=${bool[1]}  Whatsapp=${bool[1]}
@@ -78,7 +78,7 @@ JD-TC-CreateProviderReminder-2
     ${sTime2}=  add_timezone_time  ${tz}  1  15  
     ${eTime2}=  add_timezone_time  ${tz}  1  15
     ${msg}=  FakerLibrary.word
-    ${rem_name}=  FakerLibrary.first_name
+    ${rem_name}=  generate_firstname
     ${prov_detail}=  Create Dictionary   id=${pro_id}
     ${prov_details}=  Create List  ${prov_detail}
     ${remindersource}=  Create Dictionary    Sms=${bool[1]}   Email=${bool[1]}  PushNotification=${bool[1]}  Whatsapp=${bool[1]}
@@ -112,7 +112,7 @@ JD-TC-CreateProviderReminder-3
     ${sTime1}=  add_timezone_time  ${tz}  3  15   
     ${eTime1}=  add_timezone_time  ${tz}  3  15  
     ${msg}=  FakerLibrary.word
-    ${rem_name}=  FakerLibrary.first_name
+    ${rem_name}=  generate_firstname
     ${prov_detail}=  Create Dictionary   id=${pro_id}
     ${prov_details}=  Create List  ${prov_detail}
     ${remindersource}=  Create Dictionary     Email=${bool[1]} 
@@ -145,7 +145,7 @@ JD-TC-CreateProviderReminder-4
     ${sTime1}=  add_timezone_time  ${tz}  3  15  
     ${eTime1}=  add_timezone_time  ${tz}  3  15  
     ${msg}=  FakerLibrary.word
-    ${rem_name}=  FakerLibrary.first_name
+    ${rem_name}=  generate_firstname
     ${prov_detail}=  Create Dictionary   id=${pro_id}
     ${prov_details}=  Create List  ${prov_detail}
     ${remindersource}=  Create Dictionary    PushNotification=${bool[1]}  
@@ -178,7 +178,7 @@ JD-TC-CreateProviderReminder-5
     ${sTime1}=  add_timezone_time  ${tz}  3  15  
     ${eTime1}=  add_timezone_time  ${tz}  3  15  
     ${msg}=  FakerLibrary.word
-    ${rem_name}=  FakerLibrary.first_name
+    ${rem_name}=  generate_firstname
     ${prov_detail}=  Create Dictionary   id=${pro_id}
     ${prov_details}=  Create List  ${prov_detail}
     ${remindersource}=  Create Dictionary     Whatsapp=${bool[1]}
@@ -211,7 +211,7 @@ JD-TC-CreateProviderReminder-6
     ${sTime1}=  add_timezone_time  ${tz}  3  15   
     ${eTime1}=  add_timezone_time  ${tz}  3  15  
     ${msg}=  FakerLibrary.word
-    ${rem_name}=  FakerLibrary.first_name
+    ${rem_name}=  generate_firstname
     ${prov_detail}=  Create Dictionary   id=${pro_id}
     ${prov_details}=  Create List  ${prov_detail}
     ${remindersource}=  Create Dictionary     Sms=${bool[1]} 
@@ -244,7 +244,7 @@ JD-TC-CreateProviderReminder-7
     ${sTime1}=  add_timezone_time  ${tz}  3  15  
     ${eTime1}=  add_timezone_time  ${tz}  3  15  
     ${msg}=  FakerLibrary.word
-    ${rem_name}=  FakerLibrary.first_name
+    ${rem_name}=  generate_firstname
     ${prov_detail}=  Create Dictionary   id=${pro_id}
     ${prov_details}=  Create List  ${prov_detail}
     ${remindersource}=  Create Dictionary    Sms=${bool[1]}   Email=${bool[1]}  PushNotification=${bool[1]}  Whatsapp=${bool[1]}
@@ -277,7 +277,7 @@ JD-TC-CreateProviderReminder-8
     ${sTime1}=  add_timezone_time  ${tz}  3  15  
     ${eTime1}=  add_timezone_time  ${tz}  3  15  
     ${msg}=  FakerLibrary.word
-    ${rem_name}=  FakerLibrary.first_name
+    ${rem_name}=  generate_firstname
     ${prov_detail}=  Create Dictionary   id=${pro_id}
     ${prov_details}=  Create List  ${prov_detail}
     ${remindersource}=  Create Dictionary    Sms=${bool[1]}   Email=${bool[1]}  PushNotification=${bool[1]}  Whatsapp=${bool[1]}
@@ -365,7 +365,7 @@ JD-TC-CreateProviderReminder-9
     ${sTime1}=  add_timezone_time  ${tz}  3  15  
     ${eTime1}=  add_timezone_time  ${tz}  3  15  
     ${msg}=  FakerLibrary.word
-    ${rem_name}=  FakerLibrary.first_name
+    ${rem_name}=  generate_firstname
     ${prov_detail}=  Create Dictionary   id=${u_id1}
     ${prov_detail1}=  Create Dictionary   id=${u_id2}
     ${provcons_detail}=  Create Dictionary   id=${cons_id}
@@ -433,7 +433,7 @@ JD-TC-CreateProviderReminder-UH2
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  add_timezone_time  ${tz}  3  15  
     ${eTime1}=  add_timezone_time  ${tz}  3  15  
-    ${rem_name}=  FakerLibrary.first_name
+    ${rem_name}=  generate_firstname
     ${prov_detail}=  Create Dictionary   id=${pro_id}
     ${prov_details}=  Create List  ${prov_detail}
     ${remindersource}=  Create Dictionary    Sms=${bool[1]}   Email=${bool[1]}  PushNotification=${bool[1]}  Whatsapp=${bool[1]}
@@ -464,7 +464,7 @@ JD-TC-CreateProviderReminder-UH3
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  add_timezone_time  ${tz}  3  15  
     ${eTime1}=  add_timezone_time  ${tz}  3  15  
-    ${rem_name}=  FakerLibrary.first_name
+    ${rem_name}=  generate_firstname
     ${prov_detail}=  Create Dictionary   id=${pro_id}
     ${prov_details}=  Create List  ${prov_detail}
     ${remindersource}=  Create Dictionary    Sms=${bool[1]}   Email=${bool[1]}  PushNotification=${bool[1]}  Whatsapp=${bool[1]}
@@ -495,7 +495,7 @@ JD-TC-CreateProviderReminder-UH4
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  add_timezone_time  ${tz}  3  15  
     ${eTime1}=  add_timezone_time  ${tz}  3  15  
-    ${rem_name}=  FakerLibrary.first_name
+    ${rem_name}=  generate_firstname
     ${prov_detail}=  Create Dictionary   id=${pro_id}
     ${prov_details}=  Create List  ${prov_detail}
     ${remindersource}=  Create Dictionary    Sms=${bool[1]}   Email=${bool[1]}  PushNotification=${bool[1]}  Whatsapp=${bool[1]}
@@ -525,7 +525,7 @@ JD-TC-CreateProviderReminder-UH5
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${rem_name}=  FakerLibrary.first_name
+    ${rem_name}=  generate_firstname
     ${prov_detail}=  Create Dictionary   id=${pro_id}
     ${prov_details}=  Create List  ${prov_detail}
     ${remindersource}=  Create Dictionary    Sms=${bool[1]}   Email=${bool[1]}  PushNotification=${bool[1]}  Whatsapp=${bool[1]}
@@ -554,7 +554,7 @@ JD-TC-CreateProviderReminder-UH6
     ${sTime1}=  add_timezone_time  ${tz}  3  15  
     ${eTime1}=  add_timezone_time  ${tz}  3  15  
     ${msg}=  FakerLibrary.word
-    ${rem_name}=  FakerLibrary.first_name
+    ${rem_name}=  generate_firstname
     ${prov_detail}=  Create Dictionary   id=${EMPTY}
     ${prov_details}=  Create List  ${prov_detail}
     ${remindersource}=  Create Dictionary    Sms=${bool[1]}   Email=${bool[1]}  PushNotification=${bool[1]}  Whatsapp=${bool[1]}
@@ -587,7 +587,7 @@ JD-TC-CreateProviderReminder-UH7
     ${sTime1}=  add_timezone_time  ${tz}  3  15  
     ${eTime1}=  add_timezone_time  ${tz}  3  15  
     ${msg}=  FakerLibrary.word
-    ${rem_name}=  FakerLibrary.first_name
+    ${rem_name}=  generate_firstname
     ${prov_detail}=  Create Dictionary   id=${pro_id}
     ${prov_details}=  Create List  ${prov_detail}
     ${remindersource}=  Create Dictionary    
@@ -619,7 +619,7 @@ JD-TC-CreateProviderReminder-UH8
     ${sTime1}=  add_timezone_time  ${tz}  3  15  
     ${eTime1}=  add_timezone_time  ${tz}  3  15  
     ${msg}=  FakerLibrary.word
-    ${rem_name}=  FakerLibrary.first_name
+    ${rem_name}=  generate_firstname
     ${prov_detail}=  Create Dictionary   id=${pro_id}
     ${prov_details}=  Create List  ${prov_detail}
     ${remindersource}=  Create Dictionary    Sms=${bool[1]}   Email=${bool[1]}  PushNotification=${bool[1]}  Whatsapp=${bool[1]}

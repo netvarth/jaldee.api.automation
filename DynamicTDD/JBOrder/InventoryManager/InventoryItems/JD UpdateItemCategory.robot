@@ -191,7 +191,7 @@ JD-TC-UpdateItemCategory-UH2
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${accountId}        ${resp.json()['id']}
 
-     ${firstname}=  FakerLibrary.first_name
+     ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     ${PH_Number}=  FakerLibrary.Numerify  %#####
     ${PUSERNAME_N}=  Evaluate  ${PUSERNAME}+${PH_Number}

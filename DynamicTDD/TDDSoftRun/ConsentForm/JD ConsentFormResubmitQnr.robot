@@ -101,7 +101,7 @@ JD-TC-ConsentFormReubmitQnr-1
     Log  ${PH_Number}
     Set Suite Variable    ${consumerPhone}  555${PH_Number}
     Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
-    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerFirstName}=   generate_firstname
     Set Suite Variable  ${consumerFirstName}
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -320,7 +320,7 @@ JD-TC-ConsentFormReubmitQnr-UH4
     Log  ${PH_Number}
     Set Suite Variable    ${consumerPhone}  555${PH_Number}
     Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
-    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerFirstName}=   generate_firstname
     Set Suite Variable  ${consumerFirstName}
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date

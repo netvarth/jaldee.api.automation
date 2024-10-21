@@ -132,7 +132,7 @@ JD-TC-GetAppointmentRating-1
     Log  ${PH_Number}
     Set Suite Variable  ${PCPHONENO}  555${PH_Number}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     Set Suite Variable  ${fname}
     ${lastname}=  FakerLibrary.last_name
     Set Suite Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
@@ -444,7 +444,7 @@ JD-TC-GetAppointmentRating-3
     Log  ${PH_Number}
     Set Suite Variable  ${PCPHONENO1}  555${PH_Number}
 
-    ${fname1}=  FakerLibrary.first_name
+    ${fname1}=  generate_firstname
     Set Suite Variable  ${fname1}
     ${lastname1}=  FakerLibrary.last_name
     

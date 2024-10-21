@@ -892,7 +892,7 @@ JD-TC-Reschedule Waitlist-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${f_Name}=  FakerLibrary.first_name
+    ${f_Name}=  generate_firstname
     ${l_Name}=  FakerLibrary.last_name
 
     ${resp}=  AddCustomer   ${CUSERNAME13}    firstName=${f_Name}   

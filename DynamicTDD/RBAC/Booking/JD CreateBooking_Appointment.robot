@@ -228,7 +228,7 @@ JD-TC-CreateBooking_Appmt-1
     Log  ${PH_Number}
     Set Suite Variable    ${primaryMobileNo}  555${PH_Number}
     Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${primaryMobileNo}${\n}
-    ${firstName}=   FakerLibrary.first_name
+    ${firstName}=   generate_firstname
     ${lastName}=    FakerLibrary.last_name
     Set Suite Variable      ${firstName}
     Set Suite Variable      ${lastName}  
@@ -341,10 +341,9 @@ JD-TC-CreateBooking_Appmt-1
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${apptid1}  ${apptid[0]}
 

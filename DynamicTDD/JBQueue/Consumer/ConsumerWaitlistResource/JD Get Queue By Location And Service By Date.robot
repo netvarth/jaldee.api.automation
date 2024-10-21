@@ -175,7 +175,7 @@ JD-TC-Get Queue By Location and Service By Date-1
     ${accId}=  get_acc_id  ${PUSERNAME_P}
     Set Suite Variable  ${accId}  ${accId}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
    
     ${resp}=  AddCustomer  ${CUSERNAME2}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  

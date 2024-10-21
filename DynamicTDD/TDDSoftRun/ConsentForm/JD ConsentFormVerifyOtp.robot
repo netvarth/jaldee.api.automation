@@ -101,7 +101,7 @@ JD-TC-ConsentFormVerifyOtp-1
     # Set Suite Variable    ${consumerPhone}  555${PH_Number}
     # Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerPhone}=  Set Variable  ${CUSERNAME14}
-    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerFirstName}=   generate_firstname
     Set Suite Variable  ${consumerFirstName}
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date

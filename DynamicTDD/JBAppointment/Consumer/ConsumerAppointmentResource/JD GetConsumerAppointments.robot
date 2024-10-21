@@ -93,7 +93,7 @@ JD-TC-GetConsumerAppointments-1
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
     
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
    
     ${resp}=  AddCustomer  ${CUSERNAME20}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
@@ -343,7 +343,7 @@ JD-TC-GetConsumerAppointments-2
 
     reset_queue_metric  ${account_id}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     Set Suite Variable  ${fname}
     ${lname}=  FakerLibrary.last_name
     Set Suite Variable  ${lname}
@@ -1377,7 +1377,7 @@ JD-TC-GetConsumerAppointments-17
     Set Test Variable  ${schedule_id1}  ${resp.json()}
 
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
    
     ${resp}=  AddCustomer  ${CUSERNAME27}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  

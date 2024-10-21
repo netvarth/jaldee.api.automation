@@ -181,7 +181,7 @@ JD-TC-Get Appointment history-1
     # Set Suite Variable  ${l_Name}  ${resp.json()['lastName']}
     # Set Suite Variable  ${ph_no}  ${resp.json()['primaryPhoneNumber']}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     Set Suite Variable   ${fname}
     ${lname}=  FakerLibrary.last_name
     Set Suite Variable   ${lname}

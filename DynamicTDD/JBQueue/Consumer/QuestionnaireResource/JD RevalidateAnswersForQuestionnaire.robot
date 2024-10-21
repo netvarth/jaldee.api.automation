@@ -139,7 +139,7 @@ JD-TC-RevalidateConsumerQuestionnaire-1
     END
     Set Suite Variable   ${s_id}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
    
     ${resp}=  AddCustomer  ${CUSERNAME10}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  

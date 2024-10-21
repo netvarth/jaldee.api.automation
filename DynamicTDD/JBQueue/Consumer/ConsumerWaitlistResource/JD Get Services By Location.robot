@@ -177,7 +177,7 @@ JD-TC-Get Service By Location -1
     Set Suite Variable  ${p1_q2}  ${resp.json()}
     
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
    
     ${resp}=  AddCustomer  ${CUSERNAME2}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  

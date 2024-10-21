@@ -88,7 +88,7 @@ JD-TC-GetAppointmentHistory-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id}  ${resp.json()}
 
-    ${fname1}=  FakerLibrary.first_name
+    ${fname1}=  generate_firstname
     ${lname1}=  FakerLibrary.last_name
     ${resp}=  AddCustomer  ${CUSERNAME16}   firstName=${fname1}   lastName=${lname1}  countryCode=${countryCodes[1]}  
     Log   ${resp.content}
@@ -279,7 +279,7 @@ JD-TC-GetAppointmentHistory-11
     ${resp}=  Encrypted Provider Login  ${PUSERNAME342}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${fname1}=  FakerLibrary.first_name
+    ${fname1}=  generate_firstname
     ${lname1}=  FakerLibrary.last_name
     ${resp}=  AddCustomer  ${CUSERNAME11}   firstName=${fname1}   lastName=${lname1}  countryCode=${countryCodes[1]}  
     Log   ${resp.content}
@@ -365,7 +365,7 @@ JD-TC-GetAppointmentHistory-12
     ${resp}=  Encrypted Provider Login  ${PUSERNAME342}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${fname1}=  FakerLibrary.first_name
+    ${fname1}=  generate_firstname
     ${lname1}=  FakerLibrary.last_name
     ${resp}=  AddCustomer  ${CUSERNAME8}   firstName=${fname1}   lastName=${lname1}  countryCode=${countryCodes[1]}  
     Log   ${resp.content}
@@ -476,7 +476,7 @@ JD-TC-GetAppointmentHistory-13
     ${resp}=  Encrypted Provider Login  ${PUSERNAME342}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${fname1}=  FakerLibrary.first_name
+    ${fname1}=  generate_firstname
     ${lname1}=  FakerLibrary.last_name
     ${resp}=  AddCustomer  ${CUSERNAME7}   firstName=${fname1}   lastName=${lname1}  countryCode=${countryCodes[1]}  
     Log   ${resp.content}

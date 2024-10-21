@@ -282,7 +282,7 @@ JD-TC-GetAppointmentToday-1
     # ${j}=  Random Int  max=${num_slots-1}
     # Set Suite Variable   ${slot1}   ${slots[${j}]}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     Set Suite Variable   ${fname}
     ${lname}=  FakerLibrary.last_name
     Set Suite Variable   ${lname}
@@ -343,7 +343,7 @@ JD-TC-GetAppointmentToday-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
-    ${family_fname2}=  FakerLibrary.first_name
+    ${family_fname2}=  generate_firstname
     Set Suite Variable   ${family_fname2}
     ${family_lname2}=  FakerLibrary.last_name
     Set Suite Variable   ${family_lname2}
@@ -416,7 +416,7 @@ JD-TC-GetAppointmentToday-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${family_fname3}=  FakerLibrary.first_name
+    ${family_fname3}=  generate_firstname
     Set Suite Variable   ${family_fname3}
     ${family_lname3}=  FakerLibrary.last_name
     Set Suite Variable   ${family_lname3}

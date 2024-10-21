@@ -236,7 +236,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-1
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
     Set Suite Variable  ${Questionnaireid}  ${qns.json()['questionnaireId']}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     Set Suite Variable      ${fname}
     Set Suite Variable      ${lname}

@@ -43,7 +43,7 @@ JD-TC-providerConsumerDeactivation-1
     Log  ${PH_Number}
     Set Test Variable  ${primaryMobileNo}  555${PH_Number}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     # Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
     
@@ -94,7 +94,7 @@ JD-TC-SPConsumer Deactivation -2
     Set Suite Variable  ${dom}  ${multilocdoms[0]['domain']}
     Set Suite Variable  ${sub_dom}  ${multilocdoms[0]['subdomains'][0]}
 
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_B}=  Evaluate  ${PUSERNAME}+5566014
     ${highest_package}=  get_highest_license_pkg

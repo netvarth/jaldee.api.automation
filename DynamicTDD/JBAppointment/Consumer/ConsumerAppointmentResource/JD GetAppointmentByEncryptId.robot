@@ -92,7 +92,7 @@ JD-TC-GetApptByEncryptedIDconsumer-1
     #............provider consumer creation..........
 
 
-    ${fname1}=  FakerLibrary.first_name
+    ${fname1}=  generate_firstname
     Set Suite Variable  ${fname1}
     ${lastname1}=  FakerLibrary.last_name
     

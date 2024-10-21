@@ -182,7 +182,7 @@ JD-TC-Get Sales Order-1
     Log  ${PH_Number}
     Set Suite Variable    ${primaryMobileNo}  555${PH_Number}
     Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${primaryMobileNo}${\n}
-    ${firstName}=   FakerLibrary.first_name
+    ${firstName}=   generate_firstname
     ${lastName}=    FakerLibrary.last_name
     Set Suite Variable      ${firstName}
     Set Suite Variable      ${lastName}  

@@ -45,7 +45,7 @@ JD-TC-Forget_LoginId-1
 
     ${ph}=  Evaluate  ${PUSERNAME}+5678001
     Set Suite Variable  ${ph}
-    ${firstname}=  FakerLibrary.first_name
+    ${firstname}=  generate_firstname
     ${lastname}=  FakerLibrary.last_name
     Set Suite Variable      ${firstname}
     Set Suite Variable      ${lastname}
@@ -368,7 +368,7 @@ JD-TC-Forget_LoginId-6
     Log  ${PH_Number}
     Set Test Variable  ${phone}  555${PH_Number}
 
-    ${firstname3}=  FakerLibrary.first_name
+    ${firstname3}=  generate_firstname
     ${lastname3}=  FakerLibrary.last_name
     Set Suite Variable      ${firstname3}
     Set Suite Variable      ${lastname3}

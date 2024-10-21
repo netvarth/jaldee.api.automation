@@ -358,7 +358,7 @@ JD-TC-Update Service With info-4-Service_type
         ${appt_sh}=   Create Dictionary  id=${sch_id}
         ${appt_shd}=    Create List   ${appt_sh}
         ${app_status}=    Create List   ${apptStatus[1]}
-        ${resp}=   Create Appointment QueueSet for Provider    ${s_name[0]}   ${s_name[1]}   ${s_desc}   ${fieldList}       ${ser}     ${EMPTY}   ${EMPTY}    ${appt_shd}    ${app_status}         ${statusboard_type[0]}   ${service_list}
+        ${resp}=   Create Appointment QueueSet for Provider    ${s_name[0]}   ${s_name[1]}   ${s_desc}   ${fieldList}       ${ser}     ${EMPTY}   ${EMPTY}    ${appt_shd}    ${app_status}  ${statusboard_type[0]}   ${service_list}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${sba_id1}  ${resp.json()}
@@ -382,7 +382,7 @@ JD-TC-Update Service With info-4-Service_type
         ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
         ${apptfor}=   Create List  ${apptfor1}
         ${cnote}=   FakerLibrary.word
-        ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+        ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid97}')}}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         
@@ -1013,7 +1013,7 @@ JD-TC-Update Service With info-12-Pre_info_&_Post_info
         ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot60}
         ${apptfor}=   Create List  ${apptfor1}
         ${cnote}=   FakerLibrary.word
-        ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id13}  ${sch_id60}  ${DAY1}  ${cnote}  ${apptfor}
+        ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id13}  ${sch_id60}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid60}')}}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         

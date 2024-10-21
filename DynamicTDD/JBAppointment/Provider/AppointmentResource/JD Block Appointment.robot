@@ -933,7 +933,7 @@ JD-TC-Block Appointment-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${fname}=  FakerLibrary.first_name
+    ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
     ${resp}=  AddCustomer  ${CUSERNAME37}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
@@ -1017,7 +1017,7 @@ JD-TC-Block Appointment-10
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${fname}=  FakerLibrary.first_name
+        ${fname}=  generate_firstname
         ${lname}=  FakerLibrary.last_name
         ${NewCustomer}    Generate random string    10    123456789
         ${NewCustomer}    Convert To Integer  ${NewCustomer}
@@ -1143,7 +1143,7 @@ JD-TC-Block Appointment-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${fname}=  FakerLibrary.first_name
+        ${fname}=  generate_firstname
         ${lname}=  FakerLibrary.last_name
         ${NewCustomer}    Generate random string    10    123456789
         ${NewCustomer}    Convert To Integer  ${NewCustomer}
@@ -1162,7 +1162,7 @@ JD-TC-Block Appointment-UH1
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -1366,7 +1366,7 @@ JD-TC-Block Appointment-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${fname}=  FakerLibrary.first_name
+        ${fname}=  generate_firstname
         ${lname}=  FakerLibrary.last_name
         ${NewCustomer}    Generate random string    10    123456789
         ${NewCustomer}    Convert To Integer  ${NewCustomer}

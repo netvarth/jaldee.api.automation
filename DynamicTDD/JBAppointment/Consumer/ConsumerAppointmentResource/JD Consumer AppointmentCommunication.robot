@@ -51,7 +51,7 @@ JD-TC-ConsumerAppointmentCommunication-1
 #     Set Suite Variable  ${dom}  ${multilocdoms[0]['domain']}
 #     Set Suite Variable  ${sub_dom}  ${multilocdoms[0]['subdomains'][0]}
 
-#     ${firstname}=  FakerLibrary.first_name
+#     ${firstname}=  generate_firstname
 #     ${lastname}=  FakerLibrary.last_name
 #     ${PUSERNAME_H}=  Evaluate  ${PUSERNAME}+5566003
 #     ${highest_package}=  get_highest_license_pkg
@@ -428,7 +428,7 @@ JD-TC-ConsumerAppointmentCommunication-2
    #............provider consumer creation..........
 
 
-    ${f_Name}=  FakerLibrary.first_name
+    ${f_Name}=  generate_firstname
     Set Suite Variable  ${f_Name}
     ${l_Name}=  FakerLibrary.last_name
     
@@ -538,7 +538,7 @@ JD-TC-ConsumerAppointmentCommunication-3
    #............provider consumer creation..........
 
 
-    ${f_Name}=  FakerLibrary.first_name
+    ${f_Name}=  generate_firstname
     ${l_Name}=  FakerLibrary.last_name
     
     ${resp}=  AddCustomer  ${CUSERNAME32}    firstName=${f_Name}   lastName=${l_Name}  countryCode=${countryCodes[1]}  
@@ -649,7 +649,7 @@ JD-TC-ConsumerAppointmentCommunication-4
    #............provider consumer creation..........
 
 
-    ${f_Name}=  FakerLibrary.first_name
+    ${f_Name}=  generate_firstname
     ${l_Name}=  FakerLibrary.last_name
     
     ${resp}=  AddCustomer  ${CUSERNAME33}    firstName=${f_Name}   lastName=${l_Name}  countryCode=${countryCodes[1]}  
@@ -753,7 +753,7 @@ JD-TC-ConsumerAppointmentCommunication-5
    #............provider consumer creation..........
 
 
-    ${f_Name}=  FakerLibrary.first_name
+    ${f_Name}=  generate_firstname
     ${l_Name}=  FakerLibrary.last_name
     
     ${resp}=  AddCustomer  ${CUSERNAME34}    firstName=${f_Name}   lastName=${l_Name}  countryCode=${countryCodes[1]}  
@@ -788,7 +788,7 @@ JD-TC-ConsumerAppointmentCommunication-5
 
     clear_Providermsg  ${PUSERNAME_H}
 
-    ${family_fname}=  FakerLibrary.first_name
+    ${family_fname}=  generate_firstname
     ${family_lname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
@@ -1108,7 +1108,7 @@ JD-TC-ConsumerAppointmentCommunication-9
    #............provider consumer creation..........
 
 
-    ${f_Name}=  FakerLibrary.first_name
+    ${f_Name}=  generate_firstname
     Set Suite Variable  ${f_Name}
     ${l_Name}=  FakerLibrary.last_name
     
