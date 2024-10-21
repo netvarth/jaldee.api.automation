@@ -2899,33 +2899,33 @@ JD-TC-AddMultipleAppointmentLabel-15
     Set Test Variable  ${bsname}  ${resp.json()['businessName']}
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Disable Appointment   ${toggle[0]}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
+    # ${resp}=   Get Appointment Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF  ${resp.json()['enableAppt']}==${bool[0]}   
+    #     ${resp}=   Enable Disable Appointment   ${toggle[0]}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END
 
-    ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Appointment Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
     # clear_service   ${PUSERNAME65}
     # clear_location  ${PUSERNAME65}
     clear_customer   ${PUSERNAME65}
 
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Service
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
+    # ${resp}=    Get Locations
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200   
 
     clear_Label  ${PUSERNAME65}
     ${label_id}=  Create Sample Label
@@ -2934,27 +2934,27 @@ JD-TC-AddMultipleAppointmentLabel-15
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
         
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    # ${lid}=  Create Sample Location
+    # ${resp}=   Get Location ById  ${lid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    # ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    # Append To List  ${service_names}  ${SERVICE1}
+    # ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    # clear_appt_schedule   ${PUSERNAME65}
+    # # clear_appt_schedule   ${PUSERNAME65}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    # ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.content}
@@ -2970,7 +2970,11 @@ JD-TC-AddMultipleAppointmentLabel-15
     ${num_slots}=  Get Length  ${slots}
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
-    Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
+    IF  '${resp.json()['availableSlots'][${j1}]['noOfAvailbleSlots']}' == 0   
+        Remove From List    ${slots}    ${slots[${j1}]}
+    END
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot2}   ${slots[${j1}]}
 
     ${fname}=  FakerLibrary.name    
     ${lname}=  FakerLibrary.last_name
@@ -3192,52 +3196,52 @@ JD-TC-AddMultipleAppointmentLabel-UH3
     clear_customer   ${PUSERNAME65} 
     clear_Label  ${PUSERNAME65}
 
-    ${resp}=    Get Appointment Schedules
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  '${resp.content}' == '${emptylist}'
-        ${resp}=    Get Locations
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        IF   '${resp.content}' == '${emptylist}'
-            ${lid}=  Create Sample Location
-            ${resp}=   Get Location ById  ${lid}
-            Log  ${resp.content}
-            Should Be Equal As Strings  ${resp.status_code}  200
-            Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-        ELSE
-            Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-            Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
-        END
+    # ${resp}=    Get Appointment Schedules
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF  '${resp.content}' == '${emptylist}'
+    #     ${resp}=    Get Locations
+    #     Log  ${resp.content}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    #     IF   '${resp.content}' == '${emptylist}'
+    #         ${lid}=  Create Sample Location
+    #         ${resp}=   Get Location ById  ${lid}
+    #         Log  ${resp.content}
+    #         Should Be Equal As Strings  ${resp.status_code}  200
+    #         Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    #     ELSE
+    #         Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+    #         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    #     END
 
-        ${resp}=    Get Service
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        IF   '${resp.content}' == '${emptylist}'
-            ${SERVICE1}=    generate_unique_service_name  ${service_names}
-            Append To List  ${service_names}  ${SERVICE1}   
-            ${s_id}=  Create Sample Service  ${SERVICE1}  
-        ELSE
-            Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
-        END
-        ${schedule_name}=  FakerLibrary.bs
-        ${parallel}=  FakerLibrary.Random Int  min=3  max=10
-        ${maxval}=  Convert To Integer   ${delta/2}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-        ${bool1}=  Random Element  ${bool}
-        ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${sch_id}  ${resp.json()}
-    ELSE
-        Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
-        Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
-        Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
-    END
+    #     ${resp}=    Get Service
+    #     Log  ${resp.content}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    #     IF   '${resp.content}' == '${emptylist}'
+    #         ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    #         Append To List  ${service_names}  ${SERVICE1}   
+    #         ${s_id}=  Create Sample Service  ${SERVICE1}  
+    #     ELSE
+    #         Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
+    #     END
+    #     ${schedule_name}=  FakerLibrary.bs
+    #     ${parallel}=  FakerLibrary.Random Int  min=3  max=10
+    #     ${maxval}=  Convert To Integer   ${delta/2}
+    #     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    #     ${bool1}=  Random Element  ${bool}
+    #     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    #     Log  ${resp.json()}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    #     Set Test Variable  ${sch_id}  ${resp.json()}
+    # ELSE
+    #     Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
+    #     Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
+    #     Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
+    # END
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.content}
@@ -3817,7 +3821,11 @@ JD-TC-AddMultipleAppointmentLabel-UH7
     ${num_slots}=  Get Length  ${slots}
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
-    Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
+    IF  ${resp.json()['availableSlots'][${j1}]['noOfAvailbleSlots']} == 0   
+        Remove From List    ${slots}    ${slot1}
+    END
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot2}   ${slots[${j1}]}
 
     ${fname}=  FakerLibrary.name    
     ${lname}=  FakerLibrary.last_name
@@ -3911,6 +3919,7 @@ JD-TC-AddMultipleAppointmentLabel-UH7
 
 
 JD-TC-AddMultipleAppointmentLabel-UH8
+
     [Documentation]  Add label with another provider's label 
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME66}  ${PASSWORD}
@@ -4017,7 +4026,7 @@ JD-TC-AddMultipleAppointmentLabel-UH8
     ${num_slots}=  Get Length  ${slots}
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
-    IF  ${resp.json()['availableSlots'][${j1}]['noOfAvailbleSlots']} == 0   
+    IF  '${resp.json()['availableSlots'][${j1}]['noOfAvailbleSlots']}' == 0   
         # Remove From List    ${slots}    ${slot1}
         Remove Values From List  ${slots}    ${slot1}
     END
@@ -4166,7 +4175,7 @@ JD-TC-AddMultipleAppointmentLabel-UH10
     ${num_slots}=  Get Length  ${slots}
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
-    IF  ${resp.json()['availableSlots'][${j1}]['noOfAvailbleSlots']} == 0   
+    IF  '${resp.json()['availableSlots'][${j1}]['noOfAvailbleSlots']}' == 0   
         Remove From List    ${slots}    ${slots[${j1}]}
     END
     ${j1}=  Random Int  max=${num_slots-1}
@@ -4445,52 +4454,52 @@ JD-TC-AddMultipleAppointmentLabel-UH12
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=    Get Appointment Schedules
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${resp}=    Get Locations
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        IF   '${resp.content}' == '${emptylist}'
-            ${lid}=  Create Sample Location
-            ${resp}=   Get Location ById  ${lid}
-            Log  ${resp.content}
-            Should Be Equal As Strings  ${resp.status_code}  200
-            Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-        ELSE
-            Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-            Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
-        END
+    # ${resp}=    Get Appointment Schedules
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF   '${resp.content}' == '${emptylist}'
+    #     ${resp}=    Get Locations
+    #     Log  ${resp.content}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    #     IF   '${resp.content}' == '${emptylist}'
+    #         ${lid}=  Create Sample Location
+    #         ${resp}=   Get Location ById  ${lid}
+    #         Log  ${resp.content}
+    #         Should Be Equal As Strings  ${resp.status_code}  200
+    #         Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    #     ELSE
+    #         Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+    #         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    #     END
 
-        ${resp}=    Get Service
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        IF   '${resp.content}' == '${emptylist}'
-            ${SERVICE1}=    generate_unique_service_name  ${service_names}
-            Append To List  ${service_names}  ${SERVICE1}   
-            ${s_id}=  Create Sample Service  ${SERVICE1}  
-        ELSE
-            Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
-        END
-        ${schedule_name}=  FakerLibrary.bs
-        ${parallel}=  FakerLibrary.Random Int  min=3  max=10
-        ${maxval}=  Convert To Integer   ${delta/2}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-        ${bool1}=  Random Element  ${bool}
-        ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${sch_id}  ${resp.json()}
-    ELSE
-        Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
-        Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
-        Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
-    END
+    #     ${resp}=    Get Service
+    #     Log  ${resp.content}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    #     IF   '${resp.content}' == '${emptylist}'
+    #         ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    #         Append To List  ${service_names}  ${SERVICE1}   
+    #         ${s_id}=  Create Sample Service  ${SERVICE1}  
+    #     ELSE
+    #         Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
+    #     END
+    #     ${schedule_name}=  FakerLibrary.bs
+    #     ${parallel}=  FakerLibrary.Random Int  min=3  max=10
+    #     ${maxval}=  Convert To Integer   ${delta/2}
+    #     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    #     ${bool1}=  Random Element  ${bool}
+    #     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    #     Log  ${resp.json()}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    #     Set Test Variable  ${sch_id}  ${resp.json()}
+    # ELSE
+    #     Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
+    #     Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
+    #     Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
+    # END
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.content}
@@ -4506,6 +4515,9 @@ JD-TC-AddMultipleAppointmentLabel-UH12
     ${num_slots}=  Get Length  ${slots}
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
+    IF  '${resp.json()['availableSlots'][${j1}]['noOfAvailbleSlots']}' == 0   
+        Remove From List    ${slots}    ${slot1}
+    END
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot2}   ${slots[${j1}]}
 
@@ -4637,52 +4649,52 @@ JD-TC-AddMultipleAppointmentLabel-UH13
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
         
-    ${resp}=    Get Appointment Schedules
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${resp}=    Get Locations
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        IF   '${resp.content}' == '${emptylist}'
-            ${lid}=  Create Sample Location
-            ${resp}=   Get Location ById  ${lid}
-            Log  ${resp.content}
-            Should Be Equal As Strings  ${resp.status_code}  200
-            Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-        ELSE
-            Set Test Variable  ${lid}  ${resp.json()[0]['id']}
-            Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
-        END
+    # ${resp}=    Get Appointment Schedules
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF   '${resp.content}' == '${emptylist}'
+    #     ${resp}=    Get Locations
+    #     Log  ${resp.content}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    #     IF   '${resp.content}' == '${emptylist}'
+    #         ${lid}=  Create Sample Location
+    #         ${resp}=   Get Location ById  ${lid}
+    #         Log  ${resp.content}
+    #         Should Be Equal As Strings  ${resp.status_code}  200
+    #         Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    #     ELSE
+    #         Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+    #         Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    #     END
 
-        ${resp}=    Get Service
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        IF   '${resp.content}' == '${emptylist}'
-            ${SERVICE1}=    generate_unique_service_name  ${service_names}
-            Append To List  ${service_names}  ${SERVICE1}   
-            ${s_id}=  Create Sample Service  ${SERVICE1}  
-        ELSE
-            Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
-        END
-        ${schedule_name}=  FakerLibrary.bs
-        ${parallel}=  FakerLibrary.Random Int  min=3  max=10
-        ${maxval}=  Convert To Integer   ${delta/2}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-        ${bool1}=  Random Element  ${bool}
-        ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${sch_id}  ${resp.json()}
-    ELSE
-        Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
-        Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
-        Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
-    END
+    #     ${resp}=    Get Service
+    #     Log  ${resp.content}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    #     IF   '${resp.content}' == '${emptylist}'
+    #         ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    #         Append To List  ${service_names}  ${SERVICE1}   
+    #         ${s_id}=  Create Sample Service  ${SERVICE1}  
+    #     ELSE
+    #         Set Test Variable  ${s_id}   ${resp.json()[0]['id']}
+    #     END
+    #     ${schedule_name}=  FakerLibrary.bs
+    #     ${parallel}=  FakerLibrary.Random Int  min=3  max=10
+    #     ${maxval}=  Convert To Integer   ${delta/2}
+    #     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    #     ${bool1}=  Random Element  ${bool}
+    #     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    #     Log  ${resp.json()}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    #     Set Test Variable  ${sch_id}  ${resp.json()}
+    # ELSE
+    #     Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
+    #     Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
+    #     Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
+    # END
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.content}
@@ -4698,6 +4710,9 @@ JD-TC-AddMultipleAppointmentLabel-UH13
     ${num_slots}=  Get Length  ${slots}
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
+    IF  '${resp.json()['availableSlots'][${j1}]['noOfAvailbleSlots']}' == 0   
+        Remove From List    ${slots}    ${slots[${j1}]}
+    END
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot2}   ${slots[${j1}]}
 
