@@ -238,7 +238,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-1
     ${resp}=  Create Queue  ${queue1}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${q_id}  ${resp.json()}
+    Set Suite Variable  ${q_id}  ${resp.json()}
 
     ${resp}=  Get Queue ById  ${q_id}
     Log  ${resp.content}
@@ -333,10 +333,10 @@ JD-TC-ResubmitQuestionnaireForWaitlist-2
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue  ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${q_id}  ${resp.json()}
+    # ${resp}=  Sample Queue  ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${q_id}  ${resp.json()}
 
     ${resp}=  Get Queue ById  ${q_id}
     Log  ${resp.content}
@@ -510,21 +510,21 @@ JD-TC-ResubmitQuestionnaireForWaitlist-3
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
     Set Suite Variable  ${Questionnaireid}  ${qns.json()['questionnaireId']}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10   
-    # ${sTime}=  db.get_time_by_timezone   ${tz}
-    ${sTime}=  db.get_time_by_timezone  ${tz}
-    ${delta}=  FakerLibrary.Random Int  min=15  max=60
-    ${eTime}=  add_two   ${sTime}  ${delta}
-    ${capacity}=  Random Int  min=20   max=40
-    ${parallel}=  Random Int   min=1   max=2
-    ${queue1}=    FakerLibrary.Word
-    ${resp}=  Create Queue  ${queue1}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid}  ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${q_id}  ${resp.json()}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${list}=  Create List  1  2  3  4  5  6  7
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # # ${sTime}=  db.get_time_by_timezone   ${tz}
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    # ${delta}=  FakerLibrary.Random Int  min=15  max=60
+    # ${eTime}=  add_two   ${sTime}  ${delta}
+    # ${capacity}=  Random Int  min=20   max=40
+    # ${parallel}=  Random Int   min=1   max=2
+    # ${queue1}=    FakerLibrary.Word
+    # ${resp}=  Create Queue  ${queue1}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid}  ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${q_id}  ${resp.json()}
 
     ${resp}=  Get Queue ById  ${q_id}
     Log  ${resp.content}
@@ -650,20 +650,20 @@ JD-TC-ResubmitQuestionnaireForWaitlist-4
 
     # clear_queue   ${HLPUSERNAME31}
     
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10   
-    # ${sTime}=  db.get_time_by_timezone   ${tz}
-    ${sTime}=  db.get_time_by_timezone  ${tz}
-    ${delta}=  FakerLibrary.Random Int  min=15  max=60
-    ${eTime}=  add_two   ${sTime}  ${delta}
-    ${capacity}=  Random Int  min=20   max=40
-    ${parallel}=  Random Int   min=1   max=2
-    ${queue1}=    FakerLibrary.Word
-    ${resp}=  Create Queue  ${queue1}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid}  ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${q_id}  ${resp.json()}
+    # ${list}=  Create List  1  2  3  4  5  6  7
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # # ${sTime}=  db.get_time_by_timezone   ${tz}
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    # ${delta}=  FakerLibrary.Random Int  min=15  max=60
+    # ${eTime}=  add_two   ${sTime}  ${delta}
+    # ${capacity}=  Random Int  min=20   max=40
+    # ${parallel}=  Random Int   min=1   max=2
+    # ${queue1}=    FakerLibrary.Word
+    # ${resp}=  Create Queue  ${queue1}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid}  ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${q_id}  ${resp.json()}
 
     ${resp}=  Get Queue ById  ${q_id}
     Log  ${resp.content}
@@ -701,6 +701,9 @@ JD-TC-ResubmitQuestionnaireForWaitlist-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid}  ${resp.json()}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10 
     
     ${description}=  FakerLibrary.sentence
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${description}   ${bool[1]}  ${cid}
@@ -821,19 +824,19 @@ JD-TC-ResubmitQuestionnaireForWaitlist-5
 
     # clear_queue   ${HLPUSERNAME31}
 
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10   
-    ${sTime}=  db.get_time_by_timezone  ${tz}
-    ${delta}=  FakerLibrary.Random Int  min=15  max=60
-    ${eTime}=  add_two   ${sTime}  ${delta}
-    ${capacity}=  Random Int  min=20   max=40
-    ${parallel}=  Random Int   min=1   max=2
-    ${queue1}=    FakerLibrary.Word
-    ${resp}=  Create Queue  ${queue1}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid}  ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${q_id}  ${resp.json()}
+    # ${list}=  Create List  1  2  3  4  5  6  7
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    # ${delta}=  FakerLibrary.Random Int  min=15  max=60
+    # ${eTime}=  add_two   ${sTime}  ${delta}
+    # ${capacity}=  Random Int  min=20   max=40
+    # ${parallel}=  Random Int   min=1   max=2
+    # ${queue1}=    FakerLibrary.Word
+    # ${resp}=  Create Queue  ${queue1}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid}  ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${q_id}  ${resp.json()}
 
     ${resp}=  Get Queue ById  ${q_id}
     Log  ${resp.content}
@@ -871,6 +874,9 @@ JD-TC-ResubmitQuestionnaireForWaitlist-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid}  ${resp.json()}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10 
     
     ${description}=  FakerLibrary.sentence
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${description}   ${bool[1]}  ${cid}
@@ -999,15 +1005,15 @@ JD-TC-ResubmitQuestionnaireForWaitlist-UH1
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue  ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${q_id}  ${resp.json()}
+    # ${resp}=  Sample Queue  ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${q_id}  ${resp.json()}
 
-    ${resp}=  Get Queue ById  ${q_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${q_id}   queueState=${Qstate[0]}
+    # ${resp}=  Get Queue ById  ${q_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  id=${q_id}   queueState=${Qstate[0]}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -1160,15 +1166,15 @@ JD-TC-ResubmitQuestionnaireForWaitlist-UH2
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue  ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${q_id}  ${resp.json()}
+    # ${resp}=  Sample Queue  ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${q_id}  ${resp.json()}
 
-    ${resp}=  Get Queue ById  ${q_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${q_id}   queueState=${Qstate[0]}
+    # ${resp}=  Get Queue ById  ${q_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  id=${q_id}   queueState=${Qstate[0]}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -1299,15 +1305,15 @@ JD-TC-ResubmitQuestionnaireForWaitlist-UH3
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue  ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${q_id}  ${resp.json()}
+    # ${resp}=  Sample Queue  ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${q_id}  ${resp.json()}
 
-    ${resp}=  Get Queue ById  ${q_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${q_id}   queueState=${Qstate[0]}
+    # ${resp}=  Get Queue ById  ${q_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  id=${q_id}   queueState=${Qstate[0]}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -1536,15 +1542,15 @@ JD-TC-ResubmitQuestionnaireForWaitlist-6
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue  ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${q_id}  ${resp.json()}
+    # ${resp}=  Sample Queue  ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${q_id}  ${resp.json()}
 
-    ${resp}=  Get Queue ById  ${q_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${q_id}   queueState=${Qstate[0]}
+    # ${resp}=  Get Queue ById  ${q_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  id=${q_id}   queueState=${Qstate[0]}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
