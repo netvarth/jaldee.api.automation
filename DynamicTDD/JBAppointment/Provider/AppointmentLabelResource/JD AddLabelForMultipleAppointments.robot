@@ -1846,10 +1846,11 @@ JD-TC-AddMultipleAppointmentLabel-9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${fname1}=  FakerLibrary.name    
+    ${fname1}=  FakerLibrary.first_name
     ${lname1}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME39}   firstName=${fname1}   lastName=${lname1}
-    Log   ${resp.json()}
+    Set Suite Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${resp}=  AddCustomer  ${CUSERNAME39}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}   email=${pc_emailid1}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
     ${resp}=  Provider Logout
@@ -2014,7 +2015,7 @@ JD-TC-AddMultipleAppointmentLabel-10
     Should Be Equal As Strings  ${resp.status_code}  200
    
     # ${SERVICE2}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE2}
+    # Append To List  ${service_names}  ${SERVICE2}
     # ${min_pre}=   Random Int   min=10   max=50
     # ${min_pre}=  Convert To Number  ${min_pre}  1
     # ${servicecharge}=   Random Int  min=100  max=200
