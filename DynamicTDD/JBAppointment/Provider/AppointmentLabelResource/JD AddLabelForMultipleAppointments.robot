@@ -4031,7 +4031,8 @@ JD-TC-AddMultipleAppointmentLabel-UH8
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j1}]}
     IF  ${resp.json()['availableSlots'][${j1}]['noOfAvailbleSlots']} == 0   
-        Remove From List    ${slots}    ${slot1}
+        # Remove From List    ${slots}    ${slot1}
+        Remove Values From List  ${slots}    ${slot1}
     END
     ${j1}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot2}   ${slots[${j1}]}
