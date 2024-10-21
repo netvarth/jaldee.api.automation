@@ -79,6 +79,8 @@ JD-TC-Update schedule-1
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -163,6 +165,8 @@ JD-TC-Update schedule-2
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -246,6 +250,8 @@ JD-TC-Update schedule-3
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -333,6 +339,8 @@ JD-TC-Update schedule-4
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -457,6 +465,8 @@ JD-TC-Update schedule-5
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -583,6 +593,8 @@ JD-TC-Update schedule-6
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -745,6 +757,8 @@ JD-TC-Update schedule-7
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -840,6 +854,8 @@ JD-TC-Update schedule-8
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -980,6 +996,8 @@ JD-TC-Update schedule-9
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -1073,6 +1091,8 @@ JD-TC-Update schedule-10
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -1168,6 +1188,8 @@ JD-TC-Update schedule-11
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -1260,6 +1282,8 @@ JD-TC-Update schedule-12
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -1353,6 +1377,8 @@ JD-TC-Update schedule-13
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name1}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -1415,6 +1441,8 @@ JD-TC-Update schedule-13
 
 
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -1509,6 +1537,8 @@ JD-TC-Update schedule-14
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name1}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -1574,6 +1604,8 @@ JD-TC-Update schedule-14
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -1666,6 +1698,8 @@ JD-TC-Update schedule-15
     ${converted_eTime2}=  db.convert_time   ${eTime2}
     Set Suite Variable   ${eTime2}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name1}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -1737,6 +1771,8 @@ JD-TC-Update schedule-15
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -1862,6 +1898,8 @@ JD-TC-Update schedule-16
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name1}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -1924,6 +1962,8 @@ JD-TC-Update schedule-16
     Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -2045,6 +2085,8 @@ JD-TC-Update schedule-17
     Set Test Variable  ${lid}  ${resp.json()}
     # clear_appt_schedule   ${PUSERNAME207}
 
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name1}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -2113,6 +2155,8 @@ JD-TC-Update schedule-17
 
 
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -2215,7 +2259,9 @@ JD-TC-Update schedule-18
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
 
-    # ${s_id}=  Create Sample Service  ${SERVICE1}
+    # ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
+    ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name1}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -2277,6 +2323,8 @@ JD-TC-Update schedule-18
 
 
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -2380,6 +2428,8 @@ JD-TC-Update schedule-19
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -2501,6 +2551,8 @@ JD-TC-Update schedule-20
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -2627,6 +2679,8 @@ JD-TC-Update schedule-21
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -2750,6 +2804,8 @@ JD-TC-Update schedule-22
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -2873,6 +2929,8 @@ JD-TC-Update schedule-23
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -3027,6 +3085,8 @@ JD-TC-Update schedule-24
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -3186,6 +3246,8 @@ JD-TC-Update schedule-25
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -3346,6 +3408,8 @@ JD-TC-Update schedule-26
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -3445,6 +3509,8 @@ JD-TC-Update schedule-27
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -3563,6 +3629,8 @@ JD-TC-Update schedule-28
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -3660,6 +3728,8 @@ JD-TC-Update schedule-29
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -3780,6 +3850,8 @@ JD-TC-Update schedule-30
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -3902,6 +3974,8 @@ JD-TC-Update schedule-31
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -4014,6 +4088,8 @@ JD-TC-Update schedule-32
     Set Suite Variable    ${eTime1} 
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable    ${converted_eTime1} 
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable    ${s_id} 
     ${s_id1}=  Create Sample Service  ${SERVICE2}
@@ -4263,6 +4339,8 @@ JD-TC-Update schedule-36
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -4362,6 +4440,8 @@ JD-TC-Update schedule-37
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -4462,6 +4542,8 @@ JD-TC-Update schedule-38
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -4620,6 +4702,8 @@ JD-TC-Update schedule-39
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -4778,6 +4862,8 @@ JD-TC-Update schedule-40
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -4938,6 +5024,8 @@ JD-TC-Update schedule-41
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -5096,6 +5184,8 @@ JD-TC-Update schedule-UH1
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -5220,6 +5310,8 @@ JD-TC-Update schedule-UH2
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -5347,6 +5439,8 @@ JD-TC-Update schedule-UH3
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name1}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -5408,6 +5502,8 @@ JD-TC-Update schedule-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
@@ -5538,6 +5634,8 @@ JD-TC-Update schedule-UH4
 
 
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
@@ -5666,6 +5764,8 @@ JD-TC-Update schedule-UH5
 
     # ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id}
     ${schedule_name}=  FakerLibrary.bs
@@ -5787,6 +5887,8 @@ JD-TC-Update schedule-UH7
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -5883,6 +5985,8 @@ JD-TC-Update schedule-UH8
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -5966,6 +6070,8 @@ JD-TC-Update schedule-UH9
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -6048,6 +6154,8 @@ JD-TC-Update schedule-UH10
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -6142,6 +6250,8 @@ JD-TC-Update schedule-UH11
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -6227,6 +6337,8 @@ JD-TC-Update schedule-UH12
     Set Suite Variable    ${eTime1} 
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable    ${converted_eTime1} 
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable    ${s_id} 
     ${s_id1}=  Create Sample Service  ${SERVICE2}
@@ -6765,6 +6877,8 @@ JD-TC-Update schedule-UH23
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -6862,6 +6976,8 @@ JD-TC-Update schedule-UH24
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -7001,6 +7117,8 @@ JD-TC-Update schedule-UH25
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -7129,6 +7247,8 @@ JD-TC-Update schedule-UH26
     
     clear_customer   ${PUSERNAME208}
 
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -7247,6 +7367,8 @@ JD-TC-Update schedule-UH27
     
     clear_customer   ${PUSERNAME208}
 
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -7378,6 +7500,8 @@ JD-TC-Update schedule-UH28
     
     clear_customer   ${PUSERNAME208}
 
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     ${resp}=    Get Locations
@@ -7553,6 +7677,8 @@ JD-TC-Update schedule-42
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -7679,6 +7805,8 @@ JD-TC-Update schedule-43
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -7853,6 +7981,8 @@ JD-TC-Update schedule-44
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -8044,6 +8174,8 @@ JD-TC-Update schedule-45
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -8237,6 +8369,8 @@ JD-TC-Update schedule-UH29
     ${converted_eTime1}=  db.convert_time   ${eTime1}
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
@@ -8301,6 +8435,8 @@ JD-TC-Update schedule-UH30
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${resouces}=    FakerLibrary.Random Int  min=4  max=8
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}    resoucesRequired=${resouces}
@@ -8417,6 +8553,8 @@ JD-TC-Update schedule-UH31
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${resouces}=    FakerLibrary.Random Int  min=4  max=8
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}    resoucesRequired=${resouces}
