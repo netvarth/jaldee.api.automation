@@ -765,7 +765,7 @@ JD-TC-Create Service With info-9
         ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
         ${apptfor}=   Create List  ${apptfor1}
         ${cnote}=   FakerLibrary.word
-        ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+        ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid97}')}}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         

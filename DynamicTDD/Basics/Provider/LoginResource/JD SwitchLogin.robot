@@ -1918,7 +1918,7 @@ JD-TC-Switch_Login-16
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  provider=${user_id}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  provider=${user_id}  location=${{str('${locId}')}}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           

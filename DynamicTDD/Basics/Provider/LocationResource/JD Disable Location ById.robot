@@ -313,7 +313,7 @@ JD-TC-DisableLocation-UH7
       ${apptfor}=   Create List  ${apptfor1}
 
       ${cnote}=   FakerLibrary.word
-      ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+      ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
       Log  ${resp.content}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
