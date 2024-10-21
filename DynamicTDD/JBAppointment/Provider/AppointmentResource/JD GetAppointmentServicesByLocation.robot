@@ -455,7 +455,14 @@ JD-TC-GetAppointmentServicesByLocation-8
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY}  ${s_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable     ${slot1}   ${resp.json()['availableSlots'][0]['time']}   
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()['availableSlots'][${i}]['active']} == True 
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    Set Test Variable     ${slot1}   ${slots[0]}   
 
     ${resp}=    Get Appoinment Service By Location   ${loc_id1}
     Log   ${resp.json()}
