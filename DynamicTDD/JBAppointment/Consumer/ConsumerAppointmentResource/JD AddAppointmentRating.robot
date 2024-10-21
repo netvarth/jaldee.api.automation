@@ -12,7 +12,6 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/consumermail.py
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 
 *** Variables ***
@@ -338,9 +337,14 @@ JD-TC-AddAppointmentRating-3
     ${gender}    Random Element    ${Genderlist}
     ${primnum}  FakerLibrary.Numerify   text=%%%%%%%%%%
     ${address}  FakerLibrary.address
-    ${resp}=  AddFamilyMember   ${family_fname}  ${family_lname}  ${dob}  ${gender}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200  
+    # ${resp}=  AddFamilyMember   ${family_fname}  ${family_lname}  ${dob}  ${gender}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200  
+
+
+    ${resp}=    Create Family Member       ${family_fname}  ${family_lname}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${cidfor}   ${resp.json()}
     
     ${DAY2}=  db.add_timezone_date  ${tz}  7  

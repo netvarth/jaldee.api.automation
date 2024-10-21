@@ -151,8 +151,9 @@ JD-TC-GetAppointmentAdvancePaymentDetails-1
     ${fname}=  FakerLibrary.first_name
     Set Suite Variable  ${fname}
     ${lastname}=  FakerLibrary.last_name
+    Set Test Variable  ${consumerEmail}  ${CUSERNAME19}${fname}.${test_mail}
    
-    ${resp}=  AddCustomer  ${CUSERNAME19}    firstName=${fname}   lastName=${lastname}  countryCode=${countryCodes[1]} 
+    ${resp}=  AddCustomer  ${CUSERNAME19}    firstName=${fname}   lastName=${lastname}  countryCode=${countryCodes[1]}    email=${consumerEmail}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -912,6 +913,16 @@ JD-TC-GetAppointmentAdvancePaymentDetails-6
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
     Set Suite Variable  ${Questionnaireid3}  ${qns.json()['questionnaireId']}
+
+    ${fname}=  FakerLibrary.first_name
+    Set Suite Variable  ${fname}
+    ${lastname}=  FakerLibrary.last_name
+    Set Test Variable  ${consumerEmail}  ${CUSERNAME4}${fname}.${test_mail}
+   
+    ${resp}=  AddCustomer  ${CUSERNAME4}    firstName=${fname}   lastName=${lastname}  countryCode=${countryCodes[1]}    email=${consumerEmail}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME4}  
     Log  ${resp.content}

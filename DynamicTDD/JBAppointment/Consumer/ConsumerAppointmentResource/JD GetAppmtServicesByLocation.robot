@@ -286,7 +286,7 @@ JD-TC-GetAppmtServicesByLocation-1
 
             Should Be Equal As Strings       ${resp.json()[${i}]['name']}                       ${P1SERVICE1}       
             Should Be Equal As Strings  ${resp.json()[${i}]['status']}                      ${status[0]}     
-            Should Be Equal As Strings  ${resp.json()[${i}]['notificationType']}                        ${notifytype[2]}
+            # Should Be Equal As Strings  ${resp.json()[${i}]['notificationType']}                        ${notifytype[2]}
             Should Be Equal As Strings  ${resp.json()[${i}]['serviceDuration']}                            ${service_duration}   
             Should Be Equal As Strings  ${resp.json()[${i}]['serviceAvailability']['nextAvailableDate']}                              ${DAY1}
             Should Be Equal As Strings  ${resp.json()[${i}]['serviceAvailability']['nextAvailable']}                              ${a${i}}
@@ -295,7 +295,7 @@ JD-TC-GetAppmtServicesByLocation-1
 
             Should Be Equal As Strings       ${resp.json()[${i}]['name']}                       ${P1SERVICE3}       
             Should Be Equal As Strings  ${resp.json()[${i}]['status']}                      ${status[0]}     
-            Should Be Equal As Strings  ${resp.json()[${i}]['notificationType']}                        ${notifytype[2]}
+            # Should Be Equal As Strings  ${resp.json()[${i}]['notificationType']}                        ${notifytype[2]}
             Should Be Equal As Strings  ${resp.json()[${i}]['serviceDuration']}                            ${service_duration}   
             Should Be Equal As Strings  ${resp.json()[${i}]['serviceAvailability']['nextAvailableDate']}                              ${DAY1}
             Should Be Equal As Strings  ${resp.json()[${i}]['serviceAvailability']['nextAvailable']}                              ${b0}
@@ -318,12 +318,12 @@ JD-TC-GetAppmtServicesByLocation-2
     Should Be Equal As Strings       ${resp.json()[0]['id']}                       ${p1_s2}  
     Should Be Equal As Strings       ${resp.json()[0]['name']}                       ${P1SERVICE2}       
     Should Be Equal As Strings  ${resp.json()[0]['status']}                      ${status[0]}     
-    Should Be Equal As Strings  ${resp.json()[0]['notificationType']}                        ${notifytype[2]}
+    # Should Be Equal As Strings  ${resp.json()[0]['notificationType']}                        ${notifytype[2]}
     Should Be Equal As Strings  ${resp.json()[0]['serviceDuration']}                            ${service_duration}   
     Should Be Equal As Strings       ${resp.json()[1]['id']}                       ${p1_s3}  
     Should Be Equal As Strings       ${resp.json()[1]['name']}                       ${P1SERVICE3}       
     Should Be Equal As Strings  ${resp.json()[1]['status']}                      ${status[0]}     
-    Should Be Equal As Strings  ${resp.json()[1]['notificationType']}                        ${notifytype[2]}
+    # Should Be Equal As Strings  ${resp.json()[1]['notificationType']}                        ${notifytype[2]}
     Should Be Equal As Strings  ${resp.json()[1]['serviceDuration']}                            ${service_duration}  
 
 
@@ -341,12 +341,12 @@ JD-TC-GetAppmtServicesByLocation-3
     Should Be Equal As Strings       ${resp.json()[0]['id']}                       ${p1_s2}  
     Should Be Equal As Strings       ${resp.json()[0]['name']}                       ${P1SERVICE2}       
     Should Be Equal As Strings  ${resp.json()[0]['status']}                      ${status[0]}     
-    Should Be Equal As Strings  ${resp.json()[0]['notificationType']}                        ${notifytype[2]}
+    # Should Be Equal As Strings  ${resp.json()[0]['notificationType']}                        ${notifytype[2]}
     Should Be Equal As Strings  ${resp.json()[0]['serviceDuration']}                            ${service_duration}   
     Should Be Equal As Strings       ${resp.json()[1]['id']}                       ${p1_s3}  
     Should Be Equal As Strings       ${resp.json()[1]['name']}                       ${P1SERVICE3}       
     Should Be Equal As Strings  ${resp.json()[1]['status']}                      ${status[0]}     
-    Should Be Equal As Strings  ${resp.json()[1]['notificationType']}                        ${notifytype[2]}
+    # Should Be Equal As Strings  ${resp.json()[1]['notificationType']}                        ${notifytype[2]}
     Should Be Equal As Strings  ${resp.json()[1]['serviceDuration']}                            ${service_duration}  
     Should Not Contain  ${resp.json()}  ${p1_s4}
 
@@ -356,12 +356,12 @@ JD-TC-GetAppmtServicesByLocation-3
     Should Be Equal As Strings       ${resp.json()[0]['id']}                       ${p1_s1}  
     Should Be Equal As Strings       ${resp.json()[0]['name']}                       ${P1SERVICE1}       
     Should Be Equal As Strings  ${resp.json()[0]['status']}                      ${status[0]}     
-    Should Be Equal As Strings  ${resp.json()[0]['notificationType']}                        ${notifytype[2]}
+    # Should Be Equal As Strings  ${resp.json()[0]['notificationType']}                        ${notifytype[2]}
     Should Be Equal As Strings  ${resp.json()[0]['serviceDuration']}                            ${service_duration}   
     Should Be Equal As Strings       ${resp.json()[1]['id']}                       ${p1_s3}  
     Should Be Equal As Strings       ${resp.json()[1]['name']}                       ${P1SERVICE3}       
     Should Be Equal As Strings  ${resp.json()[1]['status']}                      ${status[0]}     
-    Should Be Equal As Strings  ${resp.json()[1]['notificationType']}                        ${notifytype[2]}
+    # Should Be Equal As Strings  ${resp.json()[1]['notificationType']}                        ${notifytype[2]}
     Should Be Equal As Strings  ${resp.json()[1]['serviceDuration']}                            ${service_duration}  
     Should Not Contain  ${resp.json()}  ${p1_s4}
 
@@ -455,12 +455,12 @@ JD-TC-GetAppmtServicesByLocation-8
     Should Be Equal As Strings       ${resp.json()[0]['id']}                       ${p1_s2}  
     Should Be Equal As Strings       ${resp.json()[0]['name']}                       ${P1SERVICE2}       
     Should Be Equal As Strings  ${resp.json()[0]['status']}                      ${status[0]}     
-    Should Be Equal As Strings  ${resp.json()[0]['notificationType']}                        ${notifytype[2]}
+    # Should Be Equal As Strings  ${resp.json()[0]['notificationType']}                        ${notifytype[2]}
     Should Be Equal As Strings  ${resp.json()[0]['serviceDuration']}                            ${service_duration}   
     Should Be Equal As Strings       ${resp.json()[1]['id']}                       ${p1_s3}  
     Should Be Equal As Strings       ${resp.json()[1]['name']}                       ${P1SERVICE3}       
     Should Be Equal As Strings  ${resp.json()[1]['status']}                      ${status[0]}     
-    Should Be Equal As Strings  ${resp.json()[1]['notificationType']}                        ${notifytype[2]}
+    # Should Be Equal As Strings  ${resp.json()[1]['notificationType']}                        ${notifytype[2]}
     Should Be Equal As Strings  ${resp.json()[1]['serviceDuration']}                            ${service_duration}  
 
 

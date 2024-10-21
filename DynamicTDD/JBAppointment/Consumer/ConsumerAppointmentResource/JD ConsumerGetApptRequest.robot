@@ -60,11 +60,12 @@ JD-TC-ConsumerGetApptRequest-1
     # ...   ${bool[1]}   date=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${sid1}  ${resp.json()}
+
 
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${sid1}=  Create Sample Service  ${SERVICE1}  date=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
+    Set Suite Variable  ${sid1}  
 
     ${resp}=   Get Service By Id  ${sid1}
     Log  ${resp.json()}
