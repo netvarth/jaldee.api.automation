@@ -361,10 +361,19 @@ JD-TC-GetFutureAppointment-1
     Set Suite Variable   ${family_lname2}
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMember   ${family_fname2}  ${family_lname2}  ${dob}  ${gender}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200  
+    # ${resp}=  AddFamilyMember   ${family_fname2}  ${family_lname2}  ${dob}  ${gender}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200  
+    # Set Suite Variable  ${cidfor2}   ${resp.json()}
+
+    ${primnum}  FakerLibrary.Numerify   text=%%%%%%%%%%
+    ${address}  FakerLibrary.address
+
+    ${resp}=    Create Family Member       ${family_fname2}  ${family_lname2}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${cidfor2}   ${resp.json()}
+    
 
     ${resp}=  ListFamilyMember
     Log  ${resp.content}
@@ -436,9 +445,17 @@ JD-TC-GetFutureAppointment-1
     Set Suite Variable   ${family_lname3}
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMember   ${family_fname3}  ${family_lname3}  ${dob}  ${gender}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200  
+    # ${resp}=  AddFamilyMember   ${family_fname3}  ${family_lname3}  ${dob}  ${gender}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200  
+    # Set Suite Variable  ${cidfor3}   ${resp.json()}
+
+    ${primnum}  FakerLibrary.Numerify   text=%%%%%%%%%%
+    ${address}  FakerLibrary.address
+
+    ${resp}=    Create Family Member       ${family_fname3}  ${family_lname3}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${cidfor3}   ${resp.json()}
 
     ${resp}=  ListFamilyMember

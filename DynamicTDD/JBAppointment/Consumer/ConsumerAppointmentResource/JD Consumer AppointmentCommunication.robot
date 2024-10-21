@@ -760,6 +760,8 @@ JD-TC-ConsumerAppointmentCommunication-5
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+
+
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME34}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
@@ -790,9 +792,17 @@ JD-TC-ConsumerAppointmentCommunication-5
     ${family_lname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMember   ${family_fname}  ${family_lname}  ${dob}  ${gender}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200  
+    ${primnum}  FakerLibrary.Numerify   text=%%%%%%%%%%
+    ${address}  FakerLibrary.address
+    # ${resp}=  AddFamilyMember   ${family_fname}  ${family_lname}  ${dob}  ${gender}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200  
+    # Set Suite Variable  ${cidfor}   ${resp.json()}
+
+
+    ${resp}=    Create Family Member       ${family_fname}  ${family_lname}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${cidfor}   ${resp.json()}
    
     # ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id1}   ${pid}

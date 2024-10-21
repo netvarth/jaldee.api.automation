@@ -257,6 +257,8 @@ JD-TC-GetConsumerAppointments-2
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
 
+    ${resp}=  Enable Disable Department  ${toggle[0]}
+
     # clear_service   ${HLPUSERNAME53}
     # clear_location  ${HLPUSERNAME53}
 
@@ -1325,7 +1327,7 @@ JD-TC-GetConsumerAppointments-17
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${servicecharge}=  Convert To Number  ${servicecharge}  1 
     ${srv_duration}=   Random Int   min=10   max=20
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${service_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${ser_id1}  ${resp.json()}

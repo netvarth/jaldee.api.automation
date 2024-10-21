@@ -231,9 +231,17 @@ JD-TC-ConsumerGetApptRequest-3
     Set Suite Variable   ${family_lname2}
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  AddFamilyMember   ${family_fname2}  ${family_lname2}  ${dob}  ${gender}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200  
+    ${primnum}  FakerLibrary.Numerify   text=%%%%%%%%%%
+    ${address}  FakerLibrary.address
+    # ${resp}=  AddFamilyMember   ${family_fname2}  ${family_lname2}  ${dob}  ${gender}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200  
+    # Set Suite Variable  ${cidfor2}   ${resp.json()}
+
+
+    ${resp}=    Create Family Member       ${family_fname2}  ${family_lname2}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${cidfor2}   ${resp.json()}
 
     ${apptfor1}=  Create Dictionary  id=${cidfor2} 

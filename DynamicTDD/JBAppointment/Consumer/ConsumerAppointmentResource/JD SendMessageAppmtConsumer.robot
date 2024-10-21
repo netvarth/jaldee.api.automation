@@ -120,10 +120,16 @@ JD-TC-SendMessageWithAppmt-1
     Set Test Variable  ${schedule_id1}  ${resp.json()}
 
 
-    ${fname}=  FakerLibrary.first_name
-    ${lname}=  FakerLibrary.last_name
+    # ${fname}=  FakerLibrary.first_name
+    # ${lname}=  FakerLibrary.last_name
    
-    ${resp}=  AddCustomer  ${CUSERNAME27}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
+    # ${resp}=  AddCustomer  ${CUSERNAME27}   firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    Set Test Variable  ${consumerEmail}  ${CUSERNAME27}${fname}.${test_mail}
+   
+    ${resp}=  AddCustomer  ${CUSERNAME27}    firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}    email=${consumerEmail}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

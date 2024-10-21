@@ -16,6 +16,7 @@ ${self}     0
 @{service_names}
 ${SERVICE1}  manicure 
 ${SERVICE2}  pedicure
+${SERVICE3}  SERVICE3
 
 
 *** Test Cases ***
@@ -141,8 +142,13 @@ JD-TC-GetAppointmentStatus-1
     ${lname}=  FakerLibrary.last_name
     Set Suite Variable   ${lname}
    
-    ${resp}=  AddCustomer  ${CUSERNAME24}  firstName=${fname}   lastName=${lname}
-    Log   ${resp.json()}
+    # ${resp}=  AddCustomer  ${CUSERNAME24}  firstName=${fname}   lastName=${lname}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${consumerEmail}  ${CUSERNAME24}${fname}.${test_mail}
+
+    ${resp}=  AddCustomer  ${CUSERNAME24}    firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  email=${consumerEmail} 
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}
    
@@ -320,8 +326,16 @@ JD-TC-GetAppointmentStatus-2
     ${lname}=  FakerLibrary.last_name
     Set Suite Variable   ${lname}
    
-    ${resp}=  AddCustomer  ${CUSERNAME24}  firstName=${fname}   lastName=${lname}
-    Log   ${resp.json()}
+    # ${resp}=  AddCustomer  ${CUSERNAME24}  firstName=${fname}   lastName=${lname}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${cid}  ${resp.json()}
+
+    Set Test Variable  ${consumerEmail}  ${CUSERNAME24}${fname}.${test_mail}
+
+
+    ${resp}=  AddCustomer  ${CUSERNAME24}    firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  email=${consumerEmail} 
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}
    
@@ -480,8 +494,16 @@ JD-TC-GetAppointmentStatus-3
     ${lname}=  FakerLibrary.last_name
     Set Suite Variable   ${lname}
    
-    ${resp}=  AddCustomer  ${CUSERNAME24}  firstName=${fname}   lastName=${lname}
-    Log   ${resp.json()}
+    # ${resp}=  AddCustomer  ${CUSERNAME24}  firstName=${fname}   lastName=${lname}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${cid}  ${resp.json()}
+
+    Set Test Variable  ${consumerEmail}  ${CUSERNAME24}${fname}.${test_mail}
+
+
+    ${resp}=  AddCustomer  ${CUSERNAME24}    firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  email=${consumerEmail} 
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}
    
@@ -620,10 +642,18 @@ JD-TC-GetAppointmentStatus-4
 
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME25}  firstName=${fname}   lastName=${lname}
-    Log   ${resp.json()}
+    # ${resp}=  AddCustomer  ${CUSERNAME25}  firstName=${fname}   lastName=${lname}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${cid}   ${resp.json()}
+
+    Set Test Variable  ${consumerEmail}  ${CUSERNAME25}${fname}.${test_mail}
+
+
+    ${resp}=  AddCustomer  ${CUSERNAME25}    firstName=${fname}   lastName=${lname}  countryCode=${countryCodes[1]}  email=${consumerEmail} 
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}   ${resp.json()}
+    Set Test Variable  ${cid}  ${resp.json()}
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -713,7 +743,7 @@ JD-TC-GetAppointmentStatus-5
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${lid}=  Create Sample Location
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id}=  Create Sample Service  ${SERVICE3}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}

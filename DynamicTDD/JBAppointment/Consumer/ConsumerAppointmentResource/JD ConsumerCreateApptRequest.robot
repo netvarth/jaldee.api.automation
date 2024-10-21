@@ -92,7 +92,7 @@ JD-TC-ConsumerCreateApptRequest-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${SERVICE3}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE3}
+    # Append To List  ${service_names}  ${SERVICE3}
     # ${service_duration}=   Random Int   min=5   max=10
     # ${desc}=   FakerLibrary.sentence
     # ${min_pre}=   Random Int   min=1   max=50
