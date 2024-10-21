@@ -381,14 +381,61 @@ JD-TC-GetAppointmentAdvancePaymentDetails-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
 
-    ${resp}=  ProviderLogout
-    Log   ${resp.json()}
+
+    # ${resp}=  ProviderLogout
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${f_Name}=  FakerLibrary.first_name
+    Set Test Variable  ${f_Name}
+    ${l_Name}=  FakerLibrary.last_name
+
+    Set Test Variable  ${consumerEmail}  ${CUSERNAME15}${f_Name}.${test_mail}
+
+    ${resp}=  AddCustomer  ${CUSERNAME15}    firstName=${f_Name}   lastName=${l_Name}  countryCode=${countryCodes[1]}  email=${consumerEmail} 
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${pid}  ${token} 
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME15}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${cid}  ${resp.json()[0]['id']}
+
+    ${resp}=  ProviderLogout
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME15}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME15}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token7}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME15}    ${pid}  ${token7} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${cid1}  ${resp.json()['id']}
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+
+    # ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${pid}  ${token} 
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+
+    # Set Test Variable  ${cid1}  ${resp.json()['id']}
+
+    # Set Test Variable  ${pc_email1}  ${fname}.${test_mail}
+
+    ${resp}=    Update ProviderConsumer    ${cid}    email=${consumerEmail}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get ProviderConsumer
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${loc_id1}  ${ser_id1}
     Log  ${resp.content}
@@ -441,7 +488,7 @@ JD-TC-GetAppointmentAdvancePaymentDetails-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME19}    ${pid}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME15}    ${pid}  ${token7} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
    
