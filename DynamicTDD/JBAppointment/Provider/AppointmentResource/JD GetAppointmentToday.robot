@@ -1836,7 +1836,7 @@ JD-TC-GetAppointmentToday-20
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
