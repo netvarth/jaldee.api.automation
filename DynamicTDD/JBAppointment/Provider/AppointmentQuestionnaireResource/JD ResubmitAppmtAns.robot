@@ -1537,14 +1537,14 @@ JD-TC-ResubmitQuestionnaireForAppointment-5
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME328}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME329}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${resp}=  Get Business Profile
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${account_id}  ${resp.json()['id']}
-    # Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -1586,7 +1586,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME328}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME329}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1609,30 +1609,30 @@ JD-TC-ResubmitQuestionnaireForAppointment-5
     # Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     # Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]} 
 
-    # ${resp}=    Get Locations
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
-    # Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    # ${resp}=   Get Service
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # ${s_len}=  Get Length  ${resp.json()}
-    # FOR  ${i}  IN RANGE   ${s_len}
-    #     ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-    #     Exit For Loop If   '${s_id}' != '${None}'
-    # END
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${s_len}=  Get Length  ${resp.json()}
+    FOR  ${i}  IN RANGE   ${s_len}
+        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
+        Exit For Loop If   '${s_id}' != '${None}'
+    END
     # Set Suite Variable   ${s_id}  
 
     # clear_appt_schedule   ${PUSERNAME328}
 
     # ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    # ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${sch_id}  ${resp.json()}
+    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${sch_id}  ${resp.json()}
 
     # ${resp}=  Get Appointment Schedule ById  ${sch_id}
     # Log  ${resp.content}
@@ -1735,7 +1735,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME328}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME329}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
