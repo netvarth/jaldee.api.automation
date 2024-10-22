@@ -33,7 +33,7 @@ JD-TC-RemoveMultipleAppointmentLabel-1
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+    Set sUITE Variable  ${pid}  ${resp.json()['id']}
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -56,14 +56,6 @@ JD-TC-RemoveMultipleAppointmentLabel-1
     clear_customer   ${PUSERNAME74}
     clear_Label  ${PUSERNAME74}
 
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
-
     ${label_id}=  Create Sample Label
 
     ${resp}=  Get Label By Id  ${label_id}
@@ -71,23 +63,36 @@ JD-TC-RemoveMultipleAppointmentLabel-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${label_id}
     
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        Set Suite Variable   ${lid}
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+        Set Suite Variable  ${lid}  ${resp.json()['id']}
+    ELSE
+        Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+
     ${SERVICE1}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
+    Set Suite Variable   ${s_id}
 
     # clear_appt_schedule   ${PUSERNAME74}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    Set Suite Variable  ${sch_id}  ${resp.json()}
 
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
@@ -627,38 +632,38 @@ JD-TC-RemoveMultipleAppointmentLabel-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${resp}=  Get Business Profile
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+    # ${resp}=  Get Business Profile
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Disable Appointment   ${toggle[0]}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
+    # ${resp}=   Get Appointment Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF  ${resp.json()['enableAppt']}==${bool[0]}   
+    #     ${resp}=   Enable Disable Appointment   ${toggle[0]}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END
 
-    ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Appointment Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
     # clear_service   ${PUSERNAME74}
     # clear_location  ${PUSERNAME74}
     clear_customer   ${PUSERNAME74}
     clear_Label  ${PUSERNAME74}
 
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Service
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
+    # ${resp}=    Get Locations
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200   
 
     ${label_id1}=  Create Sample Label
 
@@ -681,32 +686,42 @@ JD-TC-RemoveMultipleAppointmentLabel-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${label_id3}
     
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    # ${lid}=  Create Sample Location
+    # ${resp}=   Get Location ById  ${lid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    # ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    # Append To List  ${service_names}  ${SERVICE1}
+    # ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_appt_schedule   ${PUSERNAME74}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    # ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+    Verify Response  ${resp}  scheduleId=${sch_id}
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j1}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j1}]}
 
     ${fname}=  FakerLibrary.name    
     ${lname}=  FakerLibrary.last_name
@@ -795,18 +810,95 @@ JD-TC-RemoveMultipleAppointmentLabel-5
     [Documentation]  Remove one label when there are multiple labels in the appointments
 
         
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME74}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME74}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200 
+
+    # ${resp}=  Get Business Profile
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
+
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    
+    # ${resp}=   Get Appointment Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF  ${resp.json()['enableAppt']}==${bool[0]}   
+    #     ${resp}=   Enable Disable Appointment   ${toggle[0]}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END
+
+    # ${resp}=   Get Appointment Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    
+    # clear_service   ${PUSERNAME74}
+    # clear_location  ${PUSERNAME74}
+    # clear_customer   ${PUSERNAME74}
+    # clear_Label  ${PUSERNAME74}
+
+    # ${resp}=   Get Service
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${resp}=    Get Locations
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200   
+
+    # ${label_id1}=  Create Sample Label
+
+    # ${resp}=  Get Label By Id  ${label_id1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  id=${label_id1}
+
+    # ${label_id2}=  Create Sample Label
+
+    # ${resp}=  Get Label By Id  ${label_id2}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  id=${label_id2}
+
+    # ${label_id3}=  Create Sample Label
+
+    # ${resp}=  Get Label By Id  ${label_id3}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  id=${label_id3}
+    
+    # ${lid}=  Create Sample Location
+    # ${resp}=   Get Location ById  ${lid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    # ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    # Append To List  ${service_names}  ${SERVICE1}
+    # ${s_id}=  Create Sample Service  ${SERVICE1}
+
+    # clear_appt_schedule   ${PUSERNAME74}
+
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
+    
+    # ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
+
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
     Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200 
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
-
-    ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
+    Set Test Variable  ${pid}  ${resp.json()['id']} 
+
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -815,22 +907,9 @@ JD-TC-RemoveMultipleAppointmentLabel-5
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-    # clear_service   ${PUSERNAME74}
-    # clear_location  ${PUSERNAME74}
-    clear_customer   ${PUSERNAME74}
-    clear_Label  ${PUSERNAME74}
-
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
+    # clear_location_n_service  ${PUSERNAME82}
+    clear_customer   ${PUSERNAME62}
+    clear_Label  ${PUSERNAME62}
 
     ${label_id1}=  Create Sample Label
 
@@ -853,27 +932,52 @@ JD-TC-RemoveMultipleAppointmentLabel-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${label_id3}
     
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
-    ${s_id}=  Create Sample Service  ${SERVICE1}
-
-    # clear_appt_schedule   ${PUSERNAME74}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        Set Test Variable   ${lid}
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_timezone_time  ${tz}  3   50  
+   
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}   
+    ${s_id}=  Create Sample Service  ${SERVICE1}      maxBookingsAllowed=20
+    Set Test Variable  ${s_id}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.json()}
+    ${resp}=    Get Appointment Schedules
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'       
+        ${schedule_name}=  FakerLibrary.bs
+        ${parallel}=  FakerLibrary.Random Int  min=10  max=20
+        ${maxval}=  Convert To Integer   ${delta/2}
+        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+        ${bool1}=  Random Element  ${bool}
+        ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}  
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${sch_id}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
+        Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
+        Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
+    END
+
     
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -881,6 +985,8 @@ JD-TC-RemoveMultipleAppointmentLabel-5
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
 
+    ${NewCustomer}    Generate random string    10    123456789
+    ${NewCustomer}    Convert To Integer  ${NewCustomer}
     ${fname}=  FakerLibrary.name    
     ${lname}=  FakerLibrary.last_name
     ${resp}=  AddCustomer  ${NewCustomer}   firstName=${fname}   lastName=${lname}
@@ -905,11 +1011,6 @@ JD-TC-RemoveMultipleAppointmentLabel-5
           
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
-    ${resp}=  Get Appointment EncodedID   ${apptid1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId1}=  Set Variable   ${resp.json()}
-
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -923,11 +1024,6 @@ JD-TC-RemoveMultipleAppointmentLabel-5
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${apptid2}=  Get From Dictionary  ${resp.json()}  ${fname1}
-
-    ${resp}=  Get Appointment EncodedID   ${apptid2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${encId2}=  Set Variable   ${resp.json()}
 
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log   ${resp.json()}
@@ -965,7 +1061,7 @@ JD-TC-RemoveMultipleAppointmentLabel-5
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}   uid=${apptid1}   appointmentEncId=${encId1}
+    Verify Response   ${resp}   uid=${apptid1}  
     ${items}     Get Dictionary Items   ${resp.json()['label']}
     FOR  ${key}    ${value}    IN    @{items}
         Run Keyword If  '${key}' == '${lbl_name1}'
@@ -980,7 +1076,7 @@ JD-TC-RemoveMultipleAppointmentLabel-5
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}   uid=${apptid2}   appointmentEncId=${encId2}
+    Verify Response   ${resp}   uid=${apptid2}   
     ${items}     Get Dictionary Items   ${resp.json()['label']}
     FOR  ${key}    ${value}    IN    @{items}
         Run Keyword If  '${key}' == '${lbl_name1}'
@@ -1000,7 +1096,7 @@ JD-TC-RemoveMultipleAppointmentLabel-5
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}   uid=${apptid1}   appointmentEncId=${encId1}
+    Verify Response   ${resp}   uid=${apptid1}  
     ${items}     Get Dictionary Items   ${resp.json()['label']}
     FOR  ${key}    ${value}    IN    @{items}
         Run Keyword If  '${key}' == '${lbl_name1}'
@@ -1013,7 +1109,7 @@ JD-TC-RemoveMultipleAppointmentLabel-5
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}   uid=${apptid2}   appointmentEncId=${encId2}
+    Verify Response   ${resp}   uid=${apptid2}  
     ${items}     Get Dictionary Items   ${resp.json()['label']}
     FOR  ${key}    ${value}    IN    @{items}
         Run Keyword If  '${key}' == '${lbl_name1}'
@@ -1023,23 +1119,79 @@ JD-TC-RemoveMultipleAppointmentLabel-5
 
     END
 
-
 JD-TC-RemoveMultipleAppointmentLabel-6
+
     [Documentation]  Remove label from appointments in different schedules
 
         
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME74}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME74}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200 
+
+    # # ${resp}=  Get Business Profile
+    # # Should Be Equal As Strings  ${resp.status_code}  200
+    # # Set Test Variable  ${pid}  ${resp.json()['id']}
+
+    # # ${resp}=   Get jaldeeIntegration Settings
+    # # Log   ${resp.json()}
+    # # Should Be Equal As Strings  ${resp.status_code}  200
+    
+    # # ${resp}=   Get Appointment Settings
+    # # Log  ${resp.content}
+    # # Should Be Equal As Strings  ${resp.status_code}  200
+    # # IF  ${resp.json()['enableAppt']}==${bool[0]}   
+    # #     ${resp}=   Enable Disable Appointment   ${toggle[0]}
+    # #     Should Be Equal As Strings  ${resp.status_code}  200
+    # # END
+
+    # # ${resp}=   Get Appointment Settings
+    # # Log   ${resp.json()}
+    # # Should Be Equal As Strings  ${resp.status_code}  200
+    
+    # # clear_service   ${PUSERNAME74}
+    # # clear_location  ${PUSERNAME74}
+    # clear_customer   ${PUSERNAME74}
+    # clear_Label  ${PUSERNAME74}
+
+    # ${label_id}=  Create Sample Label
+
+    # ${resp}=  Get Label By Id  ${label_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  id=${label_id}
+    
+    # # ${lid}=  Create Sample Location
+    # # ${resp}=   Get Location ById  ${lid}
+    # # Log  ${resp.content}
+    # # Should Be Equal As Strings  ${resp.status_code}  200
+    # # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    # # ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    # # Append To List  ${service_names}  ${SERVICE1}
+    # # ${s_id}=  Create Sample Service  ${SERVICE1}
+
+    # # clear_appt_schedule   ${PUSERNAME74}
+
+    # # ${DAY1}=  db.get_date_by_timezone  ${tz}
+    
+    # # ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    # # Log  ${resp.json()}
+    # # Should Be Equal As Strings  ${resp.status_code}  200
+    # # Set Test Variable  ${sch_id}  ${resp.json()}
+
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${eTime1}  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME82}  ${PASSWORD}
     Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200 
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
-
-    ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
+    Set Test Variable  ${pid}  ${resp.json()['id']} 
+
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1048,22 +1200,9 @@ JD-TC-RemoveMultipleAppointmentLabel-6
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-    # clear_service   ${PUSERNAME74}
-    # clear_location  ${PUSERNAME74}
-    clear_customer   ${PUSERNAME74}
-    clear_Label  ${PUSERNAME74}
-
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
+    # clear_location_n_service  ${PUSERNAME82}
+    clear_customer   ${PUSERNAME82}
+    clear_Label  ${PUSERNAME82}
 
     ${label_id}=  Create Sample Label
 
@@ -1072,28 +1211,51 @@ JD-TC-RemoveMultipleAppointmentLabel-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${label_id}
     
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
-    ${s_id}=  Create Sample Service  ${SERVICE1}
-
-    # clear_appt_schedule   ${PUSERNAME74}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        Set Test Variable   ${lid}
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_timezone_time  ${tz}  3   50  
+   
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}   
+    ${s_id}=  Create Sample Service  ${SERVICE1}      maxBookingsAllowed=20
+    Set Test Variable  ${s_id}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.json()}
+    ${resp}=    Get Appointment Schedules
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-        Set Test Variable  ${eTime1}  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}
+    IF   '${resp.content}' == '${emptylist}'       
+        ${schedule_name}=  FakerLibrary.bs
+        ${parallel}=  FakerLibrary.Random Int  min=10  max=20
+        ${maxval}=  Convert To Integer   ${delta/2}
+        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+        ${bool1}=  Random Element  ${bool}
+        ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}  
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${sch_id}  ${resp.json()}
+    ELSE
+        Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
+        Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
+        Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
+    END
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -1107,17 +1269,12 @@ JD-TC-RemoveMultipleAppointmentLabel-6
     ${schedule_name2}=  FakerLibrary.bs
     ${parallel2}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval2}=  Convert To Integer   ${delta2/5}
-        ${duration2}=  FakerLibrary.Random Int  min=1  max=${maxval2}
+    ${duration2}=  FakerLibrary.Random Int  min=1  max=${maxval2}
     ${bool2}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel2}    ${parallel2}  ${lid}  ${duration2}  ${bool2}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id2}  ${resp.json()}
-
-    ${resp}=  Get Appointment Schedule ById  ${sch_id2}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id2}   name=${schedule_name2}  apptState=${Qstate[0]}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id2}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -1217,16 +1374,11 @@ JD-TC-RemoveMultipleAppointmentLabel-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}   uid=${apptid2}   appointmentEncId=${encId2}  label=${Emptydict}
 
-
 JD-TC-RemoveMultipleAppointmentLabel-7
-    [Documentation]  Remove label from appointments in different locations
 
-    ${multilocPro}=  MultiLocation Domain Providers  
-    Log  ${multilocPro}
-    ${len}=  Get Length  ${multilocPro}
-    
+    [Documentation]  Remove label from appointments in different locations
         
-    ${resp}=  Encrypted Provider Login  ${multilocPro[74]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -1250,8 +1402,8 @@ JD-TC-RemoveMultipleAppointmentLabel-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_customer   ${multilocPro[74]}
-    clear_Label  ${multilocPro[74]}
+    clear_customer   ${PUSERNAME83}
+    clear_Label  ${PUSERNAME83}
 
     ${label_id}=  Create Sample Label
 
@@ -1284,7 +1436,7 @@ JD-TC-RemoveMultipleAppointmentLabel-7
     Append To List  ${service_names}  ${SERVICE1}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    # clear_appt_schedule   ${multilocPro[74]}
+    # clear_appt_schedule   ${PUSERNAME83}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     
@@ -1363,7 +1515,7 @@ JD-TC-RemoveMultipleAppointmentLabel-7
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid2}  ${s_id}  ${sch_id2}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid}')}}
+    ${resp}=  Take Appointment For Consumer  ${cid2}  ${s_id}  ${sch_id2}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${lid1}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -1419,47 +1571,46 @@ JD-TC-RemoveMultipleAppointmentLabel-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}   uid=${apptid2}   appointmentEncId=${encId2}  label=${Emptydict}
 
-
 JD-TC-RemoveMultipleAppointmentLabel-8
+
     [Documentation]  Remove label from appointments in different services
 
-        
     ${resp}=  Encrypted Provider Login  ${PUSERNAME74}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${resp}=  Get Business Profile
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+    # ${resp}=  Get Business Profile
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Disable Appointment   ${toggle[0]}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
+    # ${resp}=   Get Appointment Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF  ${resp.json()['enableAppt']}==${bool[0]}   
+    #     ${resp}=   Enable Disable Appointment   ${toggle[0]}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END
 
-    ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Appointment Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
     # clear_service   ${PUSERNAME74}
     # clear_location  ${PUSERNAME74}
     clear_customer   ${PUSERNAME74}
     clear_Label  ${PUSERNAME74}
 
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Service
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
+    # ${resp}=    Get Locations
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200   
 
     ${label_id}=  Create Sample Label
 
@@ -1468,38 +1619,48 @@ JD-TC-RemoveMultipleAppointmentLabel-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${label_id}
     
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    # ${lid}=  Create Sample Location
+    # ${resp}=   Get Location ById  ${lid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    # ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    # Append To List  ${service_names}  ${SERVICE1}
+    # ${s_id}=  Create Sample Service  ${SERVICE1}
     ${SERVICE2}=    generate_unique_service_name  ${service_names}
     Append To List  ${service_names}  ${SERVICE2}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
 
     # clear_appt_schedule   ${PUSERNAME74}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=1
-    ${maxval}=  Convert To Integer   ${delta/4}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}  ${s_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    # ${list}=  Create List  1  2  3  4  5  6  7
+    # ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    # ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    # ${eTime1}=  add_two   ${sTime1}  ${delta}
+    # ${schedule_name}=  FakerLibrary.bs
+    # ${parallel}=  FakerLibrary.Random Int  min=1  max=1
+    # ${maxval}=  Convert To Integer   ${delta/4}
+    # ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    # ${bool1}=  Random Element  ${bool}
+    # ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}  ${s_id1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
+
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+  
+    ${parallel}=  FakerLibrary.Random Int  min=20  max=25
+    ${resp}=  Update Appointment Schedule  ${sch_id}  ${resp.json()['name']}  ${resp.json()['apptSchedule']['recurringType']}  ${resp.json()['apptSchedule']['repeatIntervals']}
+    ...  ${resp.json()['apptSchedule']['startDate']}  ${resp.json()['apptSchedule']['terminator']['endDate']}  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}
+    ...  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${parallel}  ${parallel}  ${lid}  ${resp.json()['timeDuration']}  ${bool[1]}  ${s_id}  ${s_id1}  
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
@@ -1609,38 +1770,38 @@ JD-TC-RemoveMultipleAppointmentLabel-9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${resp}=  Get Business Profile
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+    # ${resp}=  Get Business Profile
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Disable Appointment   ${toggle[0]}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
+    # ${resp}=   Get Appointment Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF  ${resp.json()['enableAppt']}==${bool[0]}   
+    #     ${resp}=   Enable Disable Appointment   ${toggle[0]}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END
 
-    ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Appointment Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
     # clear_service   ${PUSERNAME74}
     # clear_location  ${PUSERNAME74}
     clear_customer   ${PUSERNAME74}
     clear_Label  ${PUSERNAME74}
 
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Service
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
+    # ${resp}=    Get Locations
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200   
 
     ${label_id}=  Create Sample Label
 
@@ -1649,31 +1810,31 @@ JD-TC-RemoveMultipleAppointmentLabel-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${label_id}
     
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    # ${lid}=  Create Sample Location
+    # ${resp}=   Get Location ById  ${lid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    # ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    # Append To List  ${service_names}  ${SERVICE1}
+    # ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_appt_schedule   ${PUSERNAME74}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    # ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${NewCustomer}    Generate random string    10    123456789
     ${NewCustomer}    Convert To Integer  ${NewCustomer}
@@ -1691,7 +1852,9 @@ JD-TC-RemoveMultipleAppointmentLabel-9
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}
+    ${jsessionynw_value}=   Get Cookie from Header  ${resp}
+
+    ${resp}=    Verify Otp For Login   ${NewCustomer}   ${OtpPurpose['Authentication']}   JSESSIONYNW=${jsessionynw_value}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
@@ -1857,44 +2020,43 @@ JD-TC-RemoveMultipleAppointmentLabel-9
 
 JD-TC-RemoveMultipleAppointmentLabel-10
     [Documentation]  Remove label from future appointments
-
         
     ${resp}=  Encrypted Provider Login  ${PUSERNAME74}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${resp}=  Get Business Profile
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+    # ${resp}=  Get Business Profile
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Disable Appointment   ${toggle[0]}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
+    # ${resp}=   Get Appointment Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF  ${resp.json()['enableAppt']}==${bool[0]}   
+    #     ${resp}=   Enable Disable Appointment   ${toggle[0]}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END
 
-    ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Appointment Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
     # clear_service   ${PUSERNAME74}
     # clear_location  ${PUSERNAME74}
     clear_customer   ${PUSERNAME74}
     clear_Label  ${PUSERNAME74}
 
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Service
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
+    # ${resp}=    Get Locations
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200   
 
     ${label_id}=  Create Sample Label
 
@@ -1903,28 +2065,28 @@ JD-TC-RemoveMultipleAppointmentLabel-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${label_id}
     
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    # ${lid}=  Create Sample Location
+    # ${resp}=   Get Location ById  ${lid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    # ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    # Append To List  ${service_names}  ${SERVICE1}
+    # ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_appt_schedule   ${PUSERNAME74}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  4  
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    # ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY3}  ${s_id}
     Log  ${resp.json()}
@@ -2033,88 +2195,181 @@ JD-TC-RemoveMultipleAppointmentLabel-10
 JD-TC-RemoveMultipleAppointmentLabel-11
     [Documentation]  Remove label from 15 appointments
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME74}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200 
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME74}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${resp}=  Get Business Profile
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+    # ${resp}=  Get Business Profile
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Disable Appointment   ${toggle[0]}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
+    # ${resp}=   Get Appointment Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF  ${resp.json()['enableAppt']}==${bool[0]}   
+    #     ${resp}=   Enable Disable Appointment   ${toggle[0]}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END
 
-    ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Appointment Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
     # clear_service   ${PUSERNAME74}
     # clear_location  ${PUSERNAME74}
-    clear_customer   ${PUSERNAME74}
-    clear_Label  ${PUSERNAME74}
+    # clear_customer   ${PUSERNAME74}
+    # clear_Label  ${PUSERNAME74}
 
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Service
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
+    # ${resp}=    Get Locations
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200   
 
-    ${label_id}=  Create Sample Label
+    # ${label_id}=  Create Sample Label
 
-    ${resp}=  Get Label By Id  ${label_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${label_id}
+    # ${resp}=  Get Label By Id  ${label_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  id=${label_id}
     
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    # ${lid}=  Create Sample Location
+    # ${resp}=   Get Location ById  ${lid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    # ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    # Append To List  ${service_names}  ${SERVICE1}
+    # ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_appt_schedule   ${PUSERNAME74}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}      
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=40  max=80
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=5
-    ${duration}=  Set Variable  ${2}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}      
+    # ${list}=  Create List  1  2  3  4  5  6  7
+    # ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    # ${delta}=  FakerLibrary.Random Int  min=40  max=80
+    # ${eTime1}=  add_two   ${sTime1}  ${delta}
+    # ${schedule_name}=  FakerLibrary.bs
+    # ${parallel}=  FakerLibrary.Random Int  min=1  max=5
+    # ${duration}=  Set Variable  ${2}
+    # ${bool1}=  Random Element  ${bool}
+    # ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME85}  ${PASSWORD}
+        Log   ${resp.json()}
+        Should Be Equal As Strings    ${resp.status_code}    200
+
+        ${resp}=  Get Business Profile
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${pid}  ${resp.json()['id']} 
+
+        ${resp}=   Get Appointment Settings
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        IF  ${resp.json()['enableAppt']}==${bool[0]}   
+            ${resp}=   Enable Disable Appointment   ${toggle[0]}
+            Should Be Equal As Strings  ${resp.status_code}  200
+        END
+
+        # clear_location_n_service  ${PUSERNAME82}
+        clear_customer   ${PUSERNAME85}
+        clear_Label  ${PUSERNAME85}
+
+        ${label_id}=  Create Sample Label
+
+        ${resp}=  Get Label By Id  ${label_id}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Verify Response  ${resp}  id=${label_id}
+        
+        ${resp}=    Get Locations
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        IF   '${resp.content}' == '${emptylist}'
+            ${lid}=  Create Sample Location
+            Set Test Variable   ${lid}
+            ${resp}=   Get Location ById  ${lid}
+            Log  ${resp.content}
+            Should Be Equal As Strings  ${resp.status_code}  200
+            Set Test Variable  ${tz}  ${resp.json()['timezone']}
+        ELSE
+            Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+            Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+        END
+
+        ${DAY1}=  db.get_date_by_timezone  ${tz}
+        ${DAY2}=  db.add_timezone_date  ${tz}  30    
+        ${list}=  Create List  1  2  3  4  5  6  7
+        ${sTime1}=  db.get_time_by_timezone  ${tz}
+        ${delta}=  FakerLibrary.Random Int  min=10  max=60
+        ${eTime1}=  add_timezone_time  ${tz}  3   50  
     
-    ${appt ids}=  Create List
+        ${SERVICE1}=    generate_unique_service_name  ${service_names}
+        Append To List  ${service_names}  ${SERVICE1}   
+        ${s_id}=  Create Sample Service  ${SERVICE1}      maxBookingsAllowed=20
+        Set Test Variable  ${s_id}
+
+        ${resp}=    Get Appointment Schedules
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        IF   '${resp.content}' == '${emptylist}'       
+            ${schedule_name}=  FakerLibrary.bs
+            ${parallel}=  FakerLibrary.Random Int  min=10  max=20
+            ${maxval}=  Convert To Integer   ${delta/2}
+            ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+            ${bool1}=  Random Element  ${bool}
+            ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}  
+            Log  ${resp.json()}
+            Should Be Equal As Strings  ${resp.status_code}  200
+            Set Test Variable  ${sch_id}  ${resp.json()}
+        ELSE
+            Set Test Variable  ${sch_id}  ${resp.json()[0]['id']}
+            Set Test Variable  ${lid}  ${resp.json()[0]['location']['id']}
+            Set Test Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
+        END
+        
+        ${appt ids}=  Create List
 
     FOR   ${a}  IN RANGE   15
 
         ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
-        Log  ${resp.json()}
+        Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Verify Response  ${resp}  scheduleId=${sch_id}
-        Set Test Variable   ${slot}   ${resp.json()['availableSlots'][${a}]['time']}
+        ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+        @{slots}=  Create List
+        FOR   ${i}  IN RANGE   0   ${no_of_slots}
+            IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+                Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+            END
+        END
+        ${num_slots}=  Get Length  ${slots}
+        ${j1}=  Random Int  max=${num_slots-1}
+        Set Test Variable   ${slot}   ${slots[${j1}]}
+        # IF  ${resp.json()['availableSlots'][${j1}]['noOfAvailbleSlots']} == 0   
+        #     Remove From List    ${slots}    ${slot1}
+        # END
+        # ${j1}=  Random Int  max=${num_slots-1}
+        # Set Test Variable   ${slot2}   ${slots[${j1}]}
+
+        # ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
+        # Log  ${resp.json()}
+        # Should Be Equal As Strings  ${resp.status_code}  200
+        # Verify Response  ${resp}  scheduleId=${sch_id}
+        # Set Test Variable   ${slot}   ${resp.json()['availableSlots'][${a}]['time']}
         
         ${PO_Number}    Generate random string    4    ${digits} 
         ${PO_Number}    Convert To Integer  ${PO_Number}
@@ -2201,8 +2456,8 @@ JD-TC-RemoveMultipleAppointmentLabel-11
 
     END
 
-
 JD-TC-RemoveMultipleAppointmentLabel-UH1
+
     [Documentation]  Remove label not added in appointments
 
         
@@ -2210,38 +2465,38 @@ JD-TC-RemoveMultipleAppointmentLabel-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${resp}=  Get Business Profile
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+    # ${resp}=  Get Business Profile
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Disable Appointment   ${toggle[0]}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
+    # ${resp}=   Get Appointment Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF  ${resp.json()['enableAppt']}==${bool[0]}   
+    #     ${resp}=   Enable Disable Appointment   ${toggle[0]}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END
 
-    ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Appointment Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
     # clear_service   ${PUSERNAME74}
     # clear_location  ${PUSERNAME74}
     clear_customer   ${PUSERNAME74}
     clear_Label  ${PUSERNAME74}
 
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Service
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
+    # ${resp}=    Get Locations
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200   
 
     ${label_id1}=  Create Sample Label
 
@@ -2257,27 +2512,27 @@ JD-TC-RemoveMultipleAppointmentLabel-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${label_id2}
     
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    # ${lid}=  Create Sample Location
+    # ${resp}=   Get Location ById  ${lid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    # ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    # Append To List  ${service_names}  ${SERVICE1}
+    # ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_appt_schedule   ${PUSERNAME74}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    # ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -2396,38 +2651,38 @@ JD-TC-RemoveMultipleAppointmentLabel-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${resp}=  Get Business Profile
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+    # ${resp}=  Get Business Profile
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Disable Appointment   ${toggle[0]}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
+    # ${resp}=   Get Appointment Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF  ${resp.json()['enableAppt']}==${bool[0]}   
+    #     ${resp}=   Enable Disable Appointment   ${toggle[0]}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END
 
-    ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Appointment Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
     # clear_service   ${PUSERNAME74}
     # clear_location  ${PUSERNAME74}
     clear_customer   ${PUSERNAME74}
     clear_Label  ${PUSERNAME74}
 
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Service
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
+    # ${resp}=    Get Locations
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200   
 
     ${label_id}=  Create Sample Label
 
@@ -2436,27 +2691,27 @@ JD-TC-RemoveMultipleAppointmentLabel-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${label_id}
     
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    # ${lid}=  Create Sample Location
+    # ${resp}=   Get Location ById  ${lid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    # ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    # Append To List  ${service_names}  ${SERVICE1}
+    # ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_appt_schedule   ${PUSERNAME74}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    # ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -2582,38 +2837,38 @@ JD-TC-RemoveMultipleAppointmentLabel-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${resp}=  Get Business Profile
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+    # ${resp}=  Get Business Profile
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Disable Appointment   ${toggle[0]}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
+    # ${resp}=   Get Appointment Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF  ${resp.json()['enableAppt']}==${bool[0]}   
+    #     ${resp}=   Enable Disable Appointment   ${toggle[0]}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END
 
-    ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Appointment Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
     # clear_service   ${PUSERNAME74}
     # clear_location  ${PUSERNAME74}
     clear_customer   ${PUSERNAME74}
     clear_Label  ${PUSERNAME74}
 
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Service
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
+    # ${resp}=    Get Locations
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200   
 
     ${label_id}=  Create Sample Label
 
@@ -2622,27 +2877,27 @@ JD-TC-RemoveMultipleAppointmentLabel-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${label_id}
     
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    # ${lid}=  Create Sample Location
+    # ${resp}=   Get Location ById  ${lid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    # ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    # Append To List  ${service_names}  ${SERVICE1}
+    # ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_appt_schedule   ${PUSERNAME74}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    # ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -3056,47 +3311,46 @@ JD-TC-RemoveMultipleAppointmentLabel-UH10
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${LABEL_NOT_EXIST}
 
-
 JD-TC-RemoveMultipleAppointmentLabel-UH11
+
     [Documentation]  Remove label without adding any
 
-        
     ${resp}=  Encrypted Provider Login  ${PUSERNAME74}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${resp}=  Get Business Profile
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+    # ${resp}=  Get Business Profile
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Disable Appointment   ${toggle[0]}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
+    # ${resp}=   Get Appointment Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF  ${resp.json()['enableAppt']}==${bool[0]}   
+    #     ${resp}=   Enable Disable Appointment   ${toggle[0]}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END
 
-    ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Appointment Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
     # clear_service   ${PUSERNAME74}
     # clear_location  ${PUSERNAME74}
     clear_customer   ${PUSERNAME74}
     clear_Label  ${PUSERNAME74}
 
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Service
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
+    # ${resp}=    Get Locations
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200   
 
     ${label_id}=  Create Sample Label
 
@@ -3105,27 +3359,27 @@ JD-TC-RemoveMultipleAppointmentLabel-UH11
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${label_id}
     
-    ${lid}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
-    ${SERVICE1}=    generate_unique_service_name  ${service_names}
-    Append To List  ${service_names}  ${SERVICE1}
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    # ${lid}=  Create Sample Location
+    # ${resp}=   Get Location ById  ${lid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    # ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    # Append To List  ${service_names}  ${SERVICE1}
+    # ${s_id}=  Create Sample Service  ${SERVICE1}
 
     # clear_appt_schedule   ${PUSERNAME74}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    # ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
@@ -3209,7 +3463,7 @@ JD-TC-RemoveMultipleAppointmentLabel-UH11
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}   uid=${apptid2}   appointmentEncId=${encId2}  label=${Emptydict}
 
-
+*** Comments ***
 JD-TC-RemoveMultipleAppointmentLabel-UH12
     [Documentation]  Remove label from waitlist
 
