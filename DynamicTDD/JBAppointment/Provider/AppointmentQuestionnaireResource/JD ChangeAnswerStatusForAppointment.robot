@@ -86,7 +86,7 @@ JD-TC-ChangeAnsStatusForAppt-1
     Log  ${unique_snames}
     Set Suite Variable   ${unique_snames}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -144,7 +144,7 @@ JD-TC-ChangeAnsStatusForAppt-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -160,23 +160,86 @@ JD-TC-ChangeAnsStatusForAppt-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
+    # ${resp}=    Get Locations
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
+
+    # clear_appt_schedule   ${PUSERNAME300}
+
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
+    
+    # ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
+
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
-
-    # clear_appt_schedule   ${PUSERNAME113}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        Set Suite Variable   ${lid}
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    Set Suite Variable   ${DAY1}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
+    Set Suite Variable   ${DAY2}    
+    ${list}=  Create List  1  2  3  4  5  6  7
+    Set Suite Variable   ${list}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    Set Suite Variable   ${sTime1}
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    Set Suite Variable   ${delta}
+    ${eTime1}=  add_timezone_time  ${tz}  3   50  
+    Set Suite Variable   ${eTime1}
+   
+    # ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    # Append To List  ${service_names}  ${SERVICE1}   
+    # ${s_id}=  Create Sample Service  ${SERVICE1}      maxBookingsAllowed=20
+    # Set Suite Variable  ${s_id}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # ${SERVICE2}=  generate_service_name
+    # ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    # Set Suite Variable   ${min_pre}
+    # ${s_id1}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=10   isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre} 
+    # Set Suite Variable  ${s_id1}
+
+    # ${SERVICE3}=    generate_unique_service_name  ${service_names}
+    # Append To List  ${service_names}  ${SERVICE3}
+    # ${s_id2}=  Create Sample Service  ${SERVICE3}   maxBookingsAllowed=10
+    # Set Suite Variable  ${s_id2}
+
+    ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'       
+        ${schedule_name}=  FakerLibrary.bs
+        ${parallel}=  FakerLibrary.Random Int  min=10  max=20
+        ${maxval}=  Convert To Integer   ${delta/2}
+        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+        ${bool1}=  Random Element  ${bool}
+        ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id} 
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${sch_id}  ${resp.json()}
+    ELSE
+        Set Suite Variable  ${sch_id}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${lid}  ${resp.json()[0]['location']['id']}
+        Set Suite Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
+    END
   
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -257,7 +320,7 @@ JD-TC-ChangeAnsStatusForAppt-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME113}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME300}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
@@ -291,39 +354,39 @@ JD-TC-ChangeAnsStatusForAppt-2
 
     [Documentation]   change Answer status to complete from incomplete for online appointment.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Get Service
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
-            ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
-        END
-    END
+    # ${resp}=   Get Service
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${s_len}=  Get Length  ${resp.json()}
+    # FOR  ${i}  IN RANGE   ${s_len}
+    #     IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
+    #         ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
+    #     END
+    # END
 
-    Set Suite Variable   ${s_id}
+    # Set Suite Variable   ${s_id}
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
+    # ${resp}=    Get Locations
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
 
-    # clear_appt_schedule   ${PUSERNAME113}
+    # # clear_appt_schedule   ${PUSERNAME300}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    # ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
   
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -443,7 +506,7 @@ JD-TC-ChangeAnsStatusForAppt-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -476,7 +539,7 @@ JD-TC-ChangeAnsStatusForAppt-3
 
     # comment  file gives error, audio/video gives 200.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -544,40 +607,40 @@ JD-TC-ChangeAnsStatusForAppt-4
 
     [Documentation]   change answer status to complete after resubmitting the answers.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Get Service
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
-            ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
-        END
-    END
+    # ${resp}=   Get Service
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${s_len}=  Get Length  ${resp.json()}
+    # FOR  ${i}  IN RANGE   ${s_len}
+    #     IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
+    #         ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
+    #     END
+    # END
 
-    Set Suite Variable   ${s_id}
+    # Set Suite Variable   ${s_id}
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
+    # ${resp}=    Get Locations
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
 
-    # clear_appt_schedule   ${PUSERNAME113}
+    # # clear_appt_schedule   ${PUSERNAME300}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    # ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -657,7 +720,7 @@ JD-TC-ChangeAnsStatusForAppt-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME113}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME300}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
@@ -723,40 +786,40 @@ JD-TC-ChangeAnsStatusForAppt-4
 JD-TC-ChangeAnsStatusForAppt-5
     [Documentation]   change answer status to complete per upload question.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Get Service
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
-            ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
-        END
-    END
+    # ${resp}=   Get Service
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${s_len}=  Get Length  ${resp.json()}
+    # FOR  ${i}  IN RANGE   ${s_len}
+    #     IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
+    #         ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
+    #     END
+    # END
 
-    Set Suite Variable   ${s_id}
+    # Set Suite Variable   ${s_id}
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
+    # ${resp}=    Get Locations
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
 
-    # clear_appt_schedule   ${PUSERNAME113}
+    # clear_appt_schedule   ${PUSERNAME300}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    # ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -836,7 +899,7 @@ JD-TC-ChangeAnsStatusForAppt-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME113}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME300}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
@@ -873,40 +936,40 @@ JD-TC-ChangeAnsStatusForAppt-5
 JD-TC-ChangeAnsStatusForAppt-UH1
     [Documentation]   change answer status to complete without giving details.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Get Service
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
-            ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
-        END
-    END
+    # ${resp}=   Get Service
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${s_len}=  Get Length  ${resp.json()}
+    # FOR  ${i}  IN RANGE   ${s_len}
+    #     IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
+    #         ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
+    #     END
+    # END
 
-    Set Suite Variable   ${s_id}
+    # Set Suite Variable   ${s_id}
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
+    # ${resp}=    Get Locations
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
 
-    # clear_appt_schedule   ${PUSERNAME113}
+    # clear_appt_schedule   ${PUSERNAME300}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    # ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -986,7 +1049,7 @@ JD-TC-ChangeAnsStatusForAppt-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME113}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME300}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
@@ -1020,40 +1083,40 @@ JD-TC-ChangeAnsStatusForAppt-UH1
 JD-TC-ChangeAnsStatusForAppt-UH2
     [Documentation]   change answer status without provider login
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Get Service
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
-            ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
-        END
-    END
+    # ${resp}=   Get Service
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${s_len}=  Get Length  ${resp.json()}
+    # FOR  ${i}  IN RANGE   ${s_len}
+    #     IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
+    #         ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
+    #     END
+    # END
 
-    Set Suite Variable   ${s_id}
+    # Set Suite Variable   ${s_id}
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
+    # ${resp}=    Get Locations
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
 
-    # clear_appt_schedule   ${PUSERNAME113}
+    # clear_appt_schedule   ${PUSERNAME300}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    # ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -1133,7 +1196,7 @@ JD-TC-ChangeAnsStatusForAppt-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME113}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME300}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
@@ -1162,7 +1225,7 @@ JD-TC-ChangeAnsStatusForAppt-UH2
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  ${resp.json()}    ${SESSION_EXPIRED}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1175,40 +1238,40 @@ JD-TC-ChangeAnsStatusForAppt-UH2
 JD-TC-ChangeAnsStatusForAppt-UH3
     [Documentation]   change answer status without file uid
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Get Service
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
-            ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
-        END
-    END
+    # ${resp}=   Get Service
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${s_len}=  Get Length  ${resp.json()}
+    # FOR  ${i}  IN RANGE   ${s_len}
+    #     IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
+    #         ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
+    #     END
+    # END
 
-    Set Suite Variable   ${s_id}
+    # Set Suite Variable   ${s_id}
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
+    # ${resp}=    Get Locations
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
 
-    # clear_appt_schedule   ${PUSERNAME113}
+    # clear_appt_schedule   ${PUSERNAME300}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    # ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -1288,7 +1351,7 @@ JD-TC-ChangeAnsStatusForAppt-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME113}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME300}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
@@ -1325,40 +1388,40 @@ JD-TC-ChangeAnsStatusForAppt-UH3
 JD-TC-ChangeAnsStatusForAppt-UH4
     [Documentation]   change answer status without labelname
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Get Service
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
-            ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
-        END
-    END
+    # ${resp}=   Get Service
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${s_len}=  Get Length  ${resp.json()}
+    # FOR  ${i}  IN RANGE   ${s_len}
+    #     IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
+    #         ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
+    #     END
+    # END
 
-    Set Suite Variable   ${s_id}
+    # Set Suite Variable   ${s_id}
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
+    # ${resp}=    Get Locations
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
 
-    # clear_appt_schedule   ${PUSERNAME113}
+    # clear_appt_schedule   ${PUSERNAME300}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    # ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -1438,7 +1501,7 @@ JD-TC-ChangeAnsStatusForAppt-UH4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME113}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME300}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
@@ -1476,40 +1539,40 @@ JD-TC-ChangeAnsStatusForAppt-UH4
 JD-TC-ChangeAnsStatusForAppt-UH5
     [Documentation]   change answer status without column id
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Get Service
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
-            ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
-        END
-    END
+    # ${resp}=   Get Service
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${s_len}=  Get Length  ${resp.json()}
+    # FOR  ${i}  IN RANGE   ${s_len}
+    #     IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
+    #         ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
+    #     END
+    # END
 
-    Set Suite Variable   ${s_id}
+    # Set Suite Variable   ${s_id}
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
+    # ${resp}=    Get Locations
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
 
-    # clear_appt_schedule   ${PUSERNAME113}
+    # clear_appt_schedule   ${PUSERNAME300}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    # ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -1589,7 +1652,7 @@ JD-TC-ChangeAnsStatusForAppt-UH5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME113}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME300}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
@@ -1627,7 +1690,7 @@ JD-TC-ChangeAnsStatusForAppt-UH5
 JD-TC-ChangeAnsStatusForAppt-UH6
     [Documentation]   change answer status with invalid appointment id.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1651,7 +1714,7 @@ JD-TC-ChangeAnsStatusForAppt-UH6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME113}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME300}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
@@ -1752,7 +1815,7 @@ JD-TC-ChangeAnsStatusForAppt-UH7
     ${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1776,7 +1839,7 @@ JD-TC-ChangeAnsStatusForAppt-UH7
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME113}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME300}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
@@ -1811,7 +1874,7 @@ JD-TC-ChangeAnsStatusForAppt-UH7
 JD-TC-ChangeAnsStatusForAppt-UH8
     [Documentation]   change answer status with another label name.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1835,7 +1898,7 @@ JD-TC-ChangeAnsStatusForAppt-UH8
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME113}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME300}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
@@ -1872,7 +1935,7 @@ JD-TC-ChangeAnsStatusForAppt-UH8
 JD-TC-ChangeAnsStatusForAppt-UH9
     [Documentation]   change answer status with non existant label name.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1896,7 +1959,7 @@ JD-TC-ChangeAnsStatusForAppt-UH9
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME113}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME300}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
@@ -1935,7 +1998,7 @@ JD-TC-ChangeAnsStatusForAppt-UH9
 JD-TC-ChangeAnsStatusForAppt-UH10
     [Documentation]   change answer status with invalid file id.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1959,7 +2022,7 @@ JD-TC-ChangeAnsStatusForAppt-UH10
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME113}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME300}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
@@ -1997,40 +2060,40 @@ JD-TC-ChangeAnsStatusForAppt-UH10
 JD-TC-ChangeAnsStatusForAppt-6
     [Documentation]   change answer status to complete after resubmitting the answers.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Get Service
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
-            ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
-        END
-    END
+    # ${resp}=   Get Service
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${s_len}=  Get Length  ${resp.json()}
+    # FOR  ${i}  IN RANGE   ${s_len}
+    #     IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${ServiceType[1]}'
+    #         ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
+    #     END
+    # END
 
-    Set Suite Variable   ${s_id}
+    # Set Suite Variable   ${s_id}
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
+    # ${resp}=    Get Locations
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${lid}   ${resp.json()[0]['id']}  
 
-    # clear_appt_schedule   ${PUSERNAME113}
+    # clear_appt_schedule   ${PUSERNAME300}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    # ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -2110,7 +2173,7 @@ JD-TC-ChangeAnsStatusForAppt-6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME113}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME300}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 

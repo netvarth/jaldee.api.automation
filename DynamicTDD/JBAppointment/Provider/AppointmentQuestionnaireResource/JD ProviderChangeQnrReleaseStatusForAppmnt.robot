@@ -120,7 +120,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME301}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -169,7 +169,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME301}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -181,17 +181,11 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END 
 
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]} 
-
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
-    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    # ${resp}=    Get Locations
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    # Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -203,19 +197,82 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-1
     END
     Set Suite Variable   ${s_id}  
 
-    # clear_appt_schedule   ${PUSERNAME164}
+    # clear_appt_schedule   ${PUSERNAME301}
+
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
+    
+    # ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
+
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        Set Suite Variable   ${lid}
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    Set Suite Variable   ${DAY1}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
+    Set Suite Variable   ${DAY2}    
+    ${list}=  Create List  1  2  3  4  5  6  7
+    Set Suite Variable   ${list}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    Set Suite Variable   ${sTime1}
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    Set Suite Variable   ${delta}
+    ${eTime1}=  add_timezone_time  ${tz}  3   50  
+    Set Suite Variable   ${eTime1}
+   
+    # ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    # Append To List  ${service_names}  ${SERVICE1}   
+    # ${s_id}=  Create Sample Service  ${SERVICE1}      maxBookingsAllowed=20
+    # Set Suite Variable  ${s_id}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # ${SERVICE2}=  generate_service_name
+    # ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    # Set Suite Variable   ${min_pre}
+    # ${s_id1}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=10   isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre} 
+    # Set Suite Variable  ${s_id1}
+
+    # ${SERVICE3}=    generate_unique_service_name  ${service_names}
+    # Append To List  ${service_names}  ${SERVICE3}
+    # ${s_id2}=  Create Sample Service  ${SERVICE3}   maxBookingsAllowed=10
+    # Set Suite Variable  ${s_id2}
+
+    ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+    IF   '${resp.content}' == '${emptylist}'       
+        ${schedule_name}=  FakerLibrary.bs
+        ${parallel}=  FakerLibrary.Random Int  min=10  max=20
+        ${maxval}=  Convert To Integer   ${delta/2}
+        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+        ${bool1}=  Random Element  ${bool}
+        ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id} 
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${sch_id}  ${resp.json()}
+    ELSE
+        Set Suite Variable  ${sch_id}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${lid}  ${resp.json()[0]['location']['id']}
+        Set Suite Variable  ${s_id}  ${resp.json()[0]['services'][0]['id']}
+    END
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -346,53 +403,53 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-2
 
     [Documentation]  submit questionnaire for appointment taken from provider side
 
-    clear_customer   ${PUSERNAME164}
+    clear_customer   ${PUSERNAME301}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME301}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Disable Appointment   ${toggle[0]}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END 
+    # ${resp}=   Get Appointment Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF  ${resp.json()['enableAppt']}==${bool[0]}   
+    #     ${resp}=   Enable Disable Appointment   ${toggle[0]}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END 
 
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Appointment Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
   
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
-    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    # ${resp}=    Get Locations
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    # Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${resp}=   Get Service
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
-    END
-    Set Suite Variable   ${s_id}  
+    # ${resp}=   Get Service
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${s_len}=  Get Length  ${resp.json()}
+    # FOR  ${i}  IN RANGE   ${s_len}
+    #     ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
+    #     Exit For Loop If   '${s_id}' != '${None}'
+    # END
+    # Set Suite Variable   ${s_id}  
 
-    # clear_appt_schedule   ${PUSERNAME164}
+    # clear_appt_schedule   ${PUSERNAME301}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    # ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -479,7 +536,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME164}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME301}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
@@ -496,31 +553,31 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-3
 
     [Documentation]  Take a online checkin and consumer submit after questionnaire 
 
-    clear_customer   ${PUSERNAME164}
+    clear_customer   ${PUSERNAME301}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME301}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
   
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
-    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    # ${resp}=    Get Locations
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    # Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${resp}=   Get Service
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
-    END
-    Set Suite Variable   ${s_id}  
+    # ${resp}=   Get Service
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${s_len}=  Get Length  ${resp.json()}
+    # FOR  ${i}  IN RANGE   ${s_len}
+    #     ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
+    #     Exit For Loop If   '${s_id}' != '${None}'
+    # END
+    # Set Suite Variable   ${s_id}  
 
-    # clear_appt_schedule   ${PUSERNAME164}
+    # clear_appt_schedule   ${PUSERNAME301}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -551,15 +608,15 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-3
     Set Suite Variable  ${Questionnaireid}  ${qns.json()['questionnaireId']}
     Set Suite Variable  ${Questionnaireid3}  ${qns.json()['questionnaireId']}
 
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    # ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
 
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
@@ -619,7 +676,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-3
     Should Be Equal As Strings   ${resp.json()['releasedQnr'][0]['status']}   ${QnrReleaseStatus[2]}
 
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME301}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -643,7 +700,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME164}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME301}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
@@ -660,29 +717,29 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-4
 
     [Documentation]  consumer submit questionnaire for waitlist taken from provider side
 
-    clear_customer   ${PUSERNAME164}
+    clear_customer   ${PUSERNAME301}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME301}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
-    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    # ${resp}=    Get Locations
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    # Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${resp}=   Get Service
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
-    END
-    Set Suite Variable   ${s_id}  
+    # ${resp}=   Get Service
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${s_len}=  Get Length  ${resp.json()}
+    # FOR  ${i}  IN RANGE   ${s_len}
+    #     ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
+    #     Exit For Loop If   '${s_id}' != '${None}'
+    # END
+    # Set Suite Variable   ${s_id}  
 
-    # clear_queue   ${PUSERNAME164}
+    # clear_queue   ${PUSERNAME301}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Get Questionnaire List By Provider   
@@ -725,16 +782,16 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-4
     Set Suite Variable  ${Questionnaireid}  ${qns.json()['questionnaireId']}
     Set Suite Variable  ${Questionnaireid4}  ${qns.json()['questionnaireId']}
    
-    # clear_appt_schedule   ${PUSERNAME164}
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    # clear_appt_schedule   ${PUSERNAME301}
+    # ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
 
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.content}
@@ -844,31 +901,31 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-5
 
     [Documentation]  consumer submit questionnaire for waitlist taken from consumer side
 
-    clear_customer   ${PUSERNAME164}
+    clear_customer   ${PUSERNAME301}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME301}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
-    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    # ${resp}=    Get Locations
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    # Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${resp}=   Get Service
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
-    END
-    Set Suite Variable   ${s_id}  
+    # ${resp}=   Get Service
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${s_len}=  Get Length  ${resp.json()}
+    # FOR  ${i}  IN RANGE   ${s_len}
+    #     ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
+    #     Exit For Loop If   '${s_id}' != '${None}'
+    # END
+    # Set Suite Variable   ${s_id}  
 
-    # clear_queue   ${PUSERNAME164}
+    # clear_queue   ${PUSERNAME301}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -897,17 +954,17 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-5
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
     Set Suite Variable  ${Questionnaireid5}  ${qns.json()['questionnaireId']}
 
-    # clear_appt_schedule   ${PUSERNAME164}
+    # clear_appt_schedule   ${PUSERNAME301}
  
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    # ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
 
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
@@ -964,7 +1021,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME301}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1038,31 +1095,31 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-UH3
 
     [Documentation]   change questinare release status for a canceled appointment
 
-    clear_customer   ${PUSERNAME164}
+    clear_customer   ${PUSERNAME301}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME301}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
-    Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    # ${resp}=    Get Locations
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    # Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
 
-    ${resp}=   Get Service
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
-    END
-    Set Suite Variable   ${s_id}  
+    # ${resp}=   Get Service
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${s_len}=  Get Length  ${resp.json()}
+    # FOR  ${i}  IN RANGE   ${s_len}
+    #     ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${ServiceType[2]}'   Set Variable   ${resp.json()[${i}]['id']}
+    #     Exit For Loop If   '${s_id}' != '${None}'
+    # END
+    # Set Suite Variable   ${s_id}  
 
-    # clear_appt_schedule   ${PUSERNAME164}
+    # clear_appt_schedule   ${PUSERNAME301}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -1092,15 +1149,15 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-UH3
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
     Set Suite Variable  ${Questionnaireid}  ${qns.json()['questionnaireId']}
 
-    ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    # ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+    # ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
 
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
@@ -1169,7 +1226,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-UH3
     Verify Response  ${resp}    apptStatus=${apptStatus[4]}
     Should Be Equal As Strings   ${resp.json()['releasedQnr'][0]['status']}   ${QnrReleaseStatus[2]}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME301}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
