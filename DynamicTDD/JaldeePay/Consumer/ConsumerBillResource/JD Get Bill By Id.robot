@@ -77,15 +77,6 @@ JD-TC-Get Bill By Id-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${itemId}  ${resp.json()}
     
-    # ${coupon1}=   FakerLibrary.word
-    # ${desc}=   FakerLibrary.word
-    # ${coupenprice1}=     Random Int   min=50   max=100
-    # ${coupenprice}=  Convert To Number  ${coupenprice1}  1
-    # ${resp}=  Create Coupon  ${coupon1}  ${desc}  ${coupenprice}  ${calctype[1]}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable   ${couponId}   ${resp.json()} 
-    
     ${resp}=  Enable Waitlist
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -97,6 +88,21 @@ JD-TC-Get Bill By Id-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]} 
+
+    ${resp}=  Get Bill Settings 
+    Log   ${resp.json}
+
+    
+    IF  ${resp.status_code}!=200 or ${resp.json()['enablepos']}==${bool[0]}
+        ${resp}=  Enable Disable bill  ${bool[1]}
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=  Get Bill Settings 
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['enablepos']}    ${bool[1]}
 
 
     ${discount1}=     FakerLibrary.word
