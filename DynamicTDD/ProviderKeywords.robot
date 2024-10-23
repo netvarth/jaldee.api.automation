@@ -14711,6 +14711,60 @@ Get Audit Log or History LOS
     Check Deprication  ${resp}  Get Audit Log or History LOS
     RETURN  ${resp}
 
+
+Create Los Lead Sourcing Channel
+    [Arguments]     ${name}
+
+    ${data}=  Create Dictionary    name=${name}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/los/lead/sourcingchannel  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Create Los Lead Sourcing Channel 
+    RETURN  ${resp}
+
+Get Los Sourcing Channel By UID
+    [Arguments]     ${uid}
+
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /provider/los/lead/sourcingchannel/${uid}   expected_status=any
+    Check Deprication  ${resp}  Get Los Sourcing Channel By UID
+    RETURN  ${resp}
+
+Update Los Lead Sourcing Channel
+    [Arguments]     ${uid}  ${name}
+
+    ${data}=  Create Dictionary    name=${name}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/sourcingchannel/${uid}  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Update Los Lead Sourcing Channel
+    RETURN  ${resp}
+
+Get Los Sourcing Channel
+    [Arguments]     &{param}
+    Log  ${param}
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /provider/los/lead/sourcingchannel   params=${param}   expected_status=any
+    Check Deprication  ${resp}  Get Los Sourcing Channel
+    RETURN  ${resp}
+
+Get Los Sourcing Channel Count
+    [Arguments]     &{param}
+    Log  ${param}
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /provider/los/lead/sourcingchannel/count   params=${param}   expected_status=any
+    Check Deprication  ${resp}  Get Los Sourcing Channel Count
+    RETURN  ${resp}
+
+Update Los Lead Channel Status
+    [Arguments]     ${uid}  ${status}
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/sourcingchannel/${uid}/status/${status}  expected_status=any
+    Check Deprication  ${resp}  Update Los Lead Channel Status
+    RETURN  ${resp}
+
+
 AddItemToInvoice
    [Arguments]  ${uuid}   ${ItemLists}  &{kwargs}
     ${ItemLists}=  Create List     ${ItemLists}
