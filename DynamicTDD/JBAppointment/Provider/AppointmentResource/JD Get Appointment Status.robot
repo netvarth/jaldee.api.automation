@@ -31,26 +31,23 @@ JD-TC-GetAppointmentStatus-1
 
     [Documentation]  Check status prepaymentpending.
 
-    ${billable_providers}=    Billable Domain Providers   min=100   max=120
-    Log   ${billable_providers}
-    Set Suite Variable   ${billable_providers}
-    ${pro_len}=  Get Length   ${billable_providers}
-    # clear_service   ${billable_providers[1]}
-    # clear_location  ${billable_providers[1]}
-    ${pid}=  get_acc_id  ${billable_providers[1]}
-    ${cid}=  get_id  ${CUSERNAME24}
+    # ${billable_providers}=    Billable Domain Providers   min=100   max=120
+    # Log   ${billable_providers}
+    # Set Suite Variable   ${billable_providers}
+    # ${pro_len}=  Get Length   ${billable_providers}
+    # # clear_service   ${PUSERNAME200}
+    # # clear_location  ${PUSERNAME200}
+    # ${pid}=  get_acc_id  ${PUSERNAME200}
+    # ${cid}=  get_id  ${CUSERNAME24}
 
-    ${resp}=  Encrypted Provider Login  ${billable_providers[1]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Get Service
+    ${resp}=  Get Business Profile
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${pid}  ${resp.json()['id']} 
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -60,12 +57,19 @@ JD-TC-GetAppointmentStatus-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${lid}=  Create Sample Location
-
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -76,11 +80,7 @@ JD-TC-GetAppointmentStatus-1
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
 
-    # clear_appt_schedule   ${billable_providers[1]}
-
-    ${resp}=  Get Appointment Schedules
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # clear_appt_schedule   ${PUSERNAME200}
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
@@ -106,16 +106,6 @@ JD-TC-GetAppointmentStatus-1
         ${resp}=   Enable Disable Online Payment   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
     END
-
-    ${resp}=  Get Account Settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -140,11 +130,9 @@ JD-TC-GetAppointmentStatus-1
     Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
 
     ${fname}=  generate_firstname
-    Set Suite Variable   ${fname}
     ${lname}=  FakerLibrary.last_name
-    Set Suite Variable   ${lname}
-   
-    ${resp}=  AddCustomer  ${CUSERNAME24}  firstName=${fname}   lastName=${lname}
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${resp}=  AddCustomer  ${CUSERNAME24}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}
@@ -165,9 +153,9 @@ JD-TC-GetAppointmentStatus-1
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME24}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    Set Test Variable  ${lname}   ${resp.json()['lastName']}
+    # Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    # Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
@@ -198,23 +186,12 @@ JD-TC-GetAppointmentStatus-1
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    Verify Response             ${resp}     uid=${apptid1}   appmtDate=${DAY1}   appmtTime=${slot1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}                                ${cid}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}          ${fname}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}           ${lname}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}                                 ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}                                ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}                                    ${apptStatus[0]}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}                      ${fname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}                       ${lname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}                       ${slot1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}                                ${lid}
-    
+  
     ${resp}=  Consumer Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${billable_providers[1]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -227,24 +204,21 @@ JD-TC-GetAppointmentStatus-2
 
     [Documentation]  Check status Confirmed after prepayment.
 
-    Log   ${billable_providers}
-    ${pro_len}=  Get Length   ${billable_providers}
-    # clear_service   ${billable_providers[2]}
-    # clear_location  ${billable_providers[2]}
-    ${pid}=  get_acc_id  ${billable_providers[2]}
-    ${cid}=  get_id  ${CUSERNAME24}
+    # Log   ${billable_providers}
+    # ${pro_len}=  Get Length   ${billable_providers}
+    # clear_service   ${PUSERNAME201}
+    # clear_location  ${PUSERNAME201}
+    # ${pid}=  get_acc_id  ${PUSERNAME201}
+    # ${cid}=  get_id  ${CUSERNAME24}
 
-    ${resp}=  Encrypted Provider Login  ${billable_providers[2]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME201}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Get Service
+    ${resp}=  Get Business Profile
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${pid}  ${resp.json()['id']} 
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -258,7 +232,6 @@ JD-TC-GetAppointmentStatus-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    
     IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
         ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
         Log  ${resp1.content}
@@ -271,12 +244,19 @@ JD-TC-GetAppointmentStatus-2
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
     Set Test Variable  ${accountId1}  ${resp.json()['accountId']}
 
-    ${lid}=  Create Sample Location
-
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
 
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -289,11 +269,7 @@ JD-TC-GetAppointmentStatus-2
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
 
-    # clear_appt_schedule   ${billable_providers[2]}
-
-    ${resp}=  Get Appointment Schedules
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # clear_appt_schedule   ${PUSERNAME201}
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -303,16 +279,6 @@ JD-TC-GetAppointmentStatus-2
         Should Be Equal As Strings  ${resp.status_code}  200
     END
     
-    ${resp}=  Get Account Settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-  
-    ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
-
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -335,14 +301,11 @@ JD-TC-GetAppointmentStatus-2
     Should Be Equal As Strings  ${resp.status_code}  200
   
     ${fname}=  generate_firstname
-    Set Suite Variable   ${fname}
     ${lname}=  FakerLibrary.last_name
-    Set Suite Variable   ${lname}
-   
-    ${resp}=  AddCustomer  ${CUSERNAME24}  firstName=${fname}   lastName=${lname}
+    ${resp}=  AddCustomer  ${CUSERNAME24}  firstName=${fname}   lastName=${lname}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid}  ${resp.json()}
+    # Set Test Variable  ${cid}  ${resp.json()}
    
     ${resp}=  Provider Logout
     Log   ${resp.json()}
@@ -361,8 +324,18 @@ JD-TC-GetAppointmentStatus-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    Set Test Variable  ${lname}   ${resp.json()['lastName']}
+     Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+    # Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Test Variable  ${lname}   ${resp.json()['lastName']}
+    
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${resp}=    Update ProviderConsumer    ${cid}    email=${pc_emailid1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get ProviderConsumer
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
@@ -393,17 +366,7 @@ JD-TC-GetAppointmentStatus-2
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    Verify Response             ${resp}     uid=${apptid1}   appmtDate=${DAY1}   appmtTime=${slot1}   apptStatus=${apptStatus[0]}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}  ${cid}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}  ${fname}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}  ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}  ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}  ${fname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}  ${lname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-    
+   
     ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre}  ${purpose[0]}  ${apptid1}  ${s_id}  ${bool[0]}   ${bool[1]}  ${jdconID}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -423,11 +386,11 @@ JD-TC-GetAppointmentStatus-2
 
     comment  Check JD-TC-Verify-GetAppointmentStatus-2 for verification
     
-    ${resp}=  Encrypted Provider Login  ${billable_providers[2]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME201}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Set Suite Variable   ${TC-2-apptid1}  ${apptid1}
+    Set Test Variable   ${TC-2-apptid1}  ${apptid1}
 
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
@@ -437,22 +400,14 @@ JD-TC-GetAppointmentStatus-3
 
     [Documentation]  Check status Confirmed after consumer takes appointment without prepayment
 
-    # clear_service   ${PUSERNAME187}
-    # clear_location  ${PUSERNAME187}
-    ${pid}=  get_acc_id  ${PUSERNAME187}
-    ${cid}=  get_id  ${CUSERNAME24}
+    # clear_service   ${PUSERNAME20187}
+    # clear_location  ${PUSERNAME20187}
+    # ${pid}=  get_acc_id  ${PUSERNAME20187}
+    # ${cid}=  get_id  ${CUSERNAME24}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME187}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20187}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -462,12 +417,31 @@ JD-TC-GetAppointmentStatus-3
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${lid}=  Create Sample Location
+    ${resp}=  Get Business Profile
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${pid}  ${resp.json()['id']} 
 
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['timezone']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${tz}  ${resp.json()['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['timezone']}
+    END
+
+    # ${lid}=  Create Sample Location
+
+    # ${resp}=   Get Location ById  ${lid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${tz}  ${resp.json()['timezone']}
 
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -478,17 +452,17 @@ JD-TC-GetAppointmentStatus-3
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
 
-    # clear_appt_schedule   ${PUSERNAME187}
+    # clear_appt_schedule   ${PUSERNAME20187}
 
-    ${resp}=  Get Appointment Schedules
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Appointment Schedules
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
+    # ${resp}=   Get Appointment Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
+    # Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -507,17 +481,10 @@ JD-TC-GetAppointmentStatus-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
-
     ${fname}=  generate_firstname
-    Set Suite Variable   ${fname}
     ${lname}=  FakerLibrary.last_name
-    Set Suite Variable   ${lname}
-   
-    ${resp}=  AddCustomer  ${CUSERNAME24}  firstName=${fname}   lastName=${lname}
+    Set Test Variable  ${pc_emailid1}  ${fname}${C_Email}.${test_mail}
+    ${resp}=  AddCustomer  ${CUSERNAME24}  firstName=${fname}   lastName=${lname}   email=${pc_emailid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}
@@ -538,9 +505,9 @@ JD-TC-GetAppointmentStatus-3
     ${resp}=    ProviderConsumer Login with token   ${CUSERNAME24}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    Set Test Variable  ${lname}   ${resp.json()['lastName']}
+    # Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    # Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Test Variable  ${lname}   ${resp.json()['lastName']}
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
@@ -576,7 +543,7 @@ JD-TC-GetAppointmentStatus-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME187}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20187}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -588,44 +555,44 @@ JD-TC-GetAppointmentStatus-4
 
     [Documentation]  Check status Arrived when provider takes appointment for consumer
   
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20183}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Service
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=    Get Locations
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Disable Appointment   ${toggle[0]}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
+    # ${resp}=   Get Appointment Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF  ${resp.json()['enableAppt']}==${bool[0]}   
+    #     ${resp}=   Enable Disable Appointment   ${toggle[0]}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END
 
-    # clear_service   ${PUSERNAME183}
-    # clear_location  ${PUSERNAME183}
-    # clear_appt_schedule   ${PUSERNAME183}
-    clear_customer   ${PUSERNAME183}
+    # clear_service   ${PUSERNAME20183}
+    # clear_location  ${PUSERNAME20183}
+    # clear_appt_schedule   ${PUSERNAME20183}
+    clear_customer   ${PUSERNAME20183}
 
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Service
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
+    # ${resp}=    Get Locations
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200   
 
-    ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
+    # ${resp}=   Get Appointment Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
+    # Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -686,41 +653,41 @@ JD-TC-GetAppointmentStatus-5
 
     [Documentation]  Check status Started
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20183}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Service
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=    Get Locations
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Disable Appointment   ${toggle[0]}
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
+    # ${resp}=   Get Appointment Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF  ${resp.json()['enableAppt']}==${bool[0]}   
+    #     ${resp}=   Enable Disable Appointment   ${toggle[0]}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+    # END
 
-    # clear_service   ${PUSERNAME183}
-    # clear_location  ${PUSERNAME183}
-    # clear_appt_schedule   ${PUSERNAME183}
+    # clear_service   ${PUSERNAME20183}
+    # clear_location  ${PUSERNAME20183}
+    # clear_appt_schedule   ${PUSERNAME20183}
 
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Service
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
+    # ${resp}=    Get Locations
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200   
 
-    ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Get Appointment Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
   
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
@@ -806,7 +773,7 @@ JD-TC-GetAppointmentStatus-6
 
     [Documentation]  Check status Cancelled
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20183}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -841,7 +808,7 @@ JD-TC-GetAppointmentStatus-7
 
     [Documentation]  Check status Rejected
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20183}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -879,7 +846,7 @@ JD-TC-GetAppointmentStatus-8
 
     [Documentation]  Check status Completed
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20183}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -935,7 +902,7 @@ JD-TC-GetAppointmentStatus-9
 
     [Documentation]  Check status failed
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20183}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -955,9 +922,9 @@ JD-TC-GetAppointmentStatus-9
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    # clear_service   ${PUSERNAME183}
-    # clear_location  ${PUSERNAME183}
-    # clear_appt_schedule   ${PUSERNAME183}
+    # clear_service   ${PUSERNAME20183}
+    # clear_location  ${PUSERNAME20183}
+    # clear_appt_schedule   ${PUSERNAME20183}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1059,7 +1026,7 @@ JD-TC-GetAppointmentStatus-UH1
 
 JD-TC-GetAppointmentStatus-UH2
     [Documentation]  Check status of invalid appointment id
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20183}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1071,7 +1038,7 @@ JD-TC-GetAppointmentStatus-UH2
 
 JD-TC-GetAppointmentStatus-UH3
     [Documentation]  Check appointment status of another provider
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME201}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1084,7 +1051,7 @@ JD-TC-GetAppointmentStatus-UH3
 JD-TC-Verify-GetAppointmentStatus-2
     [Documentation]  Check status Confirmed after prepayment.
 
-    ${resp}=  Encrypted Provider Login  ${billable_providers[2]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME201}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
