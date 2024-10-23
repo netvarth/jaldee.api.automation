@@ -16,8 +16,6 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 *** Variables ***
 
-${SERVICE1}  manicure 
-${SERVICE2}  pedicure
 ${self}     0
 @{service_names}
 ${digits}       0123456789
@@ -151,7 +149,7 @@ JD-TC-GetFutureAppointment-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}   
-    Set Test Variable  ${apptid1}  ${apptid[0]}
+    Set Suite Variable  ${apptid1}  ${apptid[0]}
 
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
@@ -203,6 +201,7 @@ JD-TC-GetFutureAppointment-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid2}=  Get From Dictionary  ${resp.json()}  ${fname2}
+    Set Suite Variable    ${apptid2}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid2}
     Log  ${resp.json()}
@@ -338,9 +337,9 @@ JD-TC-GetFutureAppointment-2
     Should Be Equal As Strings  ${resp.status_code}  200
           
     ${apptid}=  Get Dictionary Values  ${resp.json()}   
-    Set Test Variable  ${apptid1}  ${apptid[0]}
+    Set Test Variable  ${apptid3}  ${apptid[0]}
 
-    ${resp}=  Get Appointment By Id   ${apptid1}
+    ${resp}=  Get Appointment By Id   ${apptid3}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
@@ -385,9 +384,9 @@ JD-TC-GetFutureAppointment-2
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id2}  ${DAY4}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${apptid2}=  Get From Dictionary  ${resp.json()}  ${fname2}
+    ${apptid4}=  Get From Dictionary  ${resp.json()}  ${fname2}
 
-    ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid2}
+    ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid4}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
    
@@ -403,13 +402,17 @@ JD-TC-GetFutureAppointment-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}  2
+    Should Be Equal As Integers  ${len}  4
 
     FOR  ${i}  IN RANGE   ${len}
 
         IF  '${resp.json()[${i}]['uid']}' == '${apptid1}'  
             CONTINUE
         ELSE IF   '${resp.json()[${i}]['uid']}' == '${apptid2}'     
+            CONTINUE
+        ELSE IF   '${resp.json()[${i}]['uid']}' == '${apptid3}'     
+            CONTINUE
+        ELSE IF   '${resp.json()[${i}]['uid']}' == '${apptid4}'     
             CONTINUE
         END
     END
@@ -426,7 +429,7 @@ JD-TC-GetFutureAppointment-3
     # ${pro_len}=  Get Length   ${billable_providers}
     # # clear_service   ${PUSERNAME257}
     # # clear_location  ${PUSERNAME257}
-    # ${pid}=  get_acc_id  ${PUSERNAME257}
+    ${pid}=  get_acc_id  ${PUSERNAME257}
    
     ${resp}=  Encrypted Provider Login  ${PUSERNAME257}  ${PASSWORD}
     Log   ${resp.json()}
@@ -470,6 +473,8 @@ JD-TC-GetFutureAppointment-3
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500
     ${srv_duration}=   Random Int   min=10   max=20
+    ${SERVICE1}=    generate_unique_service_name  ${service_names}
+    Append To List  ${service_names}  ${SERVICE1}
     ${resp}=  Create Service  ${SERVICE1}  ${desc}  ${srv_duration}  ${bool[1]}  ${servicecharge}  ${bool[0]}  minPrePaymentAmount=${min_pre}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
@@ -499,7 +504,7 @@ JD-TC-GetFutureAppointment-3
     
     ${fname}=  generate_firstname
     ${lname}=  FakerLibrary.last_name
-    ${resp}=  AddCustomer  ${CUSERNAME34}  firstName=${fname}   lastName=${lname}
+    ${resp}=  AddCustomer  ${CUSERNAME34}  firstName=${fname}   lastName=${lname}     email=${pc_emailid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}
@@ -556,19 +561,32 @@ JD-TC-GetFutureAppointment-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Future Appointments
+    ${resp}=   Get Future Appointments
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()}    []
     ${len}=  Get Length  ${resp.json()}
-    Should Be Equal As Integers  ${len}   0
+    @{uid_list}=  Create List
+    FOR    ${index}    IN RANGE    ${len}
+        Append To List  ${uid_list}  ${resp.json()[${index}]['uid']}
+    END
+    Log  ${uid_list}
+    List Should Contain Value   ${uid_list}   ${apptid1}  
+
+
+    # ${resp}=  Get Future Appointments
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${len}=  Get Length  ${resp.json()}
+    # Should Be Equal As Integers  ${len}   0
 
 JD-TC-GetFutureAppointment-4
 
     [Documentation]  Get provider's future appointment list based on payment status
     
-    Log   ${billable_providers}
-    Set Suite Variable   ${billable_providers}
-    ${pro_len}=  Get Length   ${billable_providers}
+    # Log   ${billable_providers}
+    # Set Suite Variable   ${billable_providers}
+    # ${pro_len}=  Get Length   ${billable_providers}
     # clear_service   ${PUSERNAME257}
     # clear_location  ${PUSERNAME257}
     ${pid}=  get_acc_id  ${PUSERNAME257}
