@@ -2652,7 +2652,13 @@ JD-TC-GetAppointmentTodayCount-28
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=    Get Consumer Appointments Today Count
+    ${resp}=  Consumer Logout   
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Today Appointment Count
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()}   1
