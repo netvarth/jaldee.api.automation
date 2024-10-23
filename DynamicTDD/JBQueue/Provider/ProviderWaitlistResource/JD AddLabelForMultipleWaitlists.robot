@@ -1552,7 +1552,7 @@ JD-TC-AddMultipleWaitlistLabel-10
     Append To List  ${service_names}  ${SERVICE1} 
     ${min_pre}=   Random Int   min=20   max=50
     ${servicecharge}=   Random Int  min=100  max=200
-    ${s_id}=  Create Sample Service   ${SERVICE1}  isPrePayment=${bool[1]}  PrePaymentAmount=${min_pre}
+    ${s_id}=  Create Sample Service   ${SERVICE1}  isPrePayment=${bool[1]}  minPrePaymentAmount=${min_pre}
 
     # clear_queue    ${HLPUSERNAME17}
     
@@ -1584,17 +1584,26 @@ JD-TC-AddMultipleWaitlistLabel-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  label=${Emptydict}
     
+    ${resp}=  Send Otp For Login    ${CUSERNAME23}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Verify Otp For Login   ${CUSERNAME23}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+    
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${PCPHONENO}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME23}    ${account_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
     # ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
+    ${resp}=  Add To Waitlist Consumers     ${cid1}  ${pid}  ${q_id}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${wid}=  Get Dictionary Values  ${resp.json()}

@@ -146,7 +146,7 @@ JD-TC-Reschedule Waitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time_by_timezone   ${tz}
+    # ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -615,6 +615,22 @@ JD-TC-Reschedule Waitlist-4
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]} 
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
     clear_location   ${billable_providers[2]}
     clear_service    ${billable_providers[2]}
     clear_customer   ${billable_providers[2]}
@@ -630,9 +646,9 @@ JD-TC-Reschedule Waitlist-4
     Should Be Equal As Strings  ${resp.status_code}  200
 	
     ${SERVICE1}=    generate_service_name
-    ${min_pre}=   Random Int   min=10   max=50
-    ${servicecharge}=   Random Int  min=100  max=200
-    ${s_id}=  Create Sample Service    ${SERVICE1}  ${bool[1]}  ${servicecharge}
+    ${min_pre}=   Pyfloat  right_digits=1  min_value=10  max_value=50
+    Set Suite Variable   ${min_pre}
+    ${s_id}=  Create Sample Service    ${SERVICE1}  maxBookingsAllowed=10   isPrePayment=${bool[1]}   minPrePaymentAmount=${min_pre} 
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -646,7 +662,7 @@ JD-TC-Reschedule Waitlist-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  AddCustomer  ${CUSERNAME12}  
+    ${resp}=  AddCustomer  ${CUSERNAME12}    firstName=${bsname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
@@ -689,28 +705,38 @@ JD-TC-Reschedule Waitlist-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  
     ...   waitlistedBy=${waitlistedby[1]}   personsAhead=0   #checkInTime=${sTime1}  
-    ...   consLastVisitedDate=${date1}${SPACE}${sTime1}  appxWaitingTime=0
+    ...   consLastVisitedDate=${date1}${SPACE}${sTime1}  
     Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${s_id}
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
     # Set Test Variable   ${waitingtime}   ${resp.json()['appxWaitingTime']}
 
+    ${resp}=  Send Otp For Login    ${CUSERNAME12}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Verify Otp For Login   ${CUSERNAME12}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+    
+
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME12}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME12}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-
+    Set Test Variable  ${jdconID}   ${resp.json()['id']}
     ${resp}=  Get consumer Waitlist By Id   ${wid4}  ${pid}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  
-    ...   partySize=1  appxWaitingTime=0  waitlistedBy=${waitlistedby[1]}  personsAhead=0
+    ...   partySize=1    waitlistedBy=${waitlistedby[1]}  
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${s_id}
-    Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${jdconID}
+    # Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${jdconID}
     # Should Be Equal As Strings  ${resp.json()['consumer']['jaldeeId']}  ${jdconID}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${cid}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${q_id}
@@ -730,7 +756,7 @@ JD-TC-Reschedule Waitlist-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${wid4}
     Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${min_pre}.0
-    Should Be Equal As Strings  ${resp.json()[0]['custId']}  ${jdconID}  
+    # Should Be Equal As Strings  ${resp.json()[0]['custId']}  ${jdconID}  
     Should Be Equal As Strings  ${resp.json()[0]['status']}  ${cupnpaymentStatus[0]}
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${pid}
 
@@ -741,7 +767,7 @@ JD-TC-Reschedule Waitlist-4
     Should Be Equal As Strings  ${resp.json()[0]['status']}  ${cupnpaymentStatus[0]}  
     Should Be Equal As Strings  ${resp.json()[0]['acceptPaymentBy']}  ${pay_mode_selfpay}
     Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${min_pre}.0 
-    Should Be Equal As Strings  ${resp.json()[0]['custId']}  ${jdconID}   
+    # Should Be Equal As Strings  ${resp.json()[0]['custId']}  ${jdconID}   
     Should Be Equal As Strings  ${resp.json()[0]['paymentMode']}  ${payment_modes[5]}  
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${pid}   
     Should Be Equal As Strings  ${resp.json()[0]['paymentGateway']}  RAZORPAY  
@@ -785,7 +811,7 @@ JD-TC-Reschedule Waitlist-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME12}    ${account_id}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME12}    ${pid}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

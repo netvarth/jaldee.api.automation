@@ -17,6 +17,8 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 
 *** Variables ***
 ${waitlistedby}           PROVIDER
+@{service_names}
+
 
 *** Test Cases ***
 JD-TC-GetWaitlistFuture-1
@@ -45,12 +47,15 @@ JD-TC-GetWaitlistFuture-1
             Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
       END
 
-      ${ser_name1}=   FakerLibrary.word
-      Set Suite Variable    ${ser_name1} 
+      ${ser_name1}=    generate_unique_service_name  ${service_names} 
+      Append To List  ${service_names}  ${ser_name1}
+      Set Suite Variable  ${ser_name1}
       ${resp}=   Create Sample Service  ${ser_name1}
       Set Suite Variable    ${ser_id1}    ${resp}  
-      ${ser_name2}=   FakerLibrary.word
-      Set Suite Variable    ${ser_name2} 
+
+      ${ser_name2}=    generate_unique_service_name  ${service_names} 
+      Append To List  ${service_names}  ${ser_name2}
+      Set Suite Variable  ${ser_name2}
       ${resp}=   Create Sample Service  ${ser_name2}
       Set Suite Variable    ${ser_id2}    ${resp}  
 
@@ -77,16 +82,19 @@ JD-TC-GetWaitlistFuture-1
       ${desc}=   FakerLibrary.word
       Set Suite Variable   ${desc}
 
-      ${resp}=  Get Consumer By Id  ${CUSERNAME10}
-      Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${cname1}   ${resp.json()['userProfile']['firstName']}
-      Set Suite Variable  ${lname1}   ${resp.json()['userProfile']['lastName']}
+      ${cname1}=    FakerLibrary.name
+      Set Suite Variable    ${cname1}
+      ${lname1}=    FakerLibrary.name
+      Set Suite Variable    ${lname1}
 
       ${resp}=  AddCustomer  ${CUSERNAME10}   firstName=${cname1}   lastName=${lname1}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${cid1}  ${resp.json()}
+
+      ${resp}=  Get Consumer By Id  ${CUSERNAME10}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
 
       ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
       Log  ${resp.json()}
@@ -99,16 +107,20 @@ JD-TC-GetWaitlistFuture-1
       ${resp}=  Get provider communications
       Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${resp}=  Get Consumer By Id  ${CUSERNAME1}
-      Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${cname2}   ${resp.json()['userProfile']['firstName']}
-      Set Suite Variable  ${lname2}   ${resp.json()['userProfile']['lastName']}
+      ${cname2}=    FakerLibrary.name
+      Set Suite Variable    ${cname2}
+      ${lname2}=    FakerLibrary.name
+      Set Suite Variable    ${lname2}
 
-      ${resp}=  AddCustomer  ${CUSERNAME1}  firstName=${cname2}   lastName=${lname2}
+      ${resp}=  AddCustomer  ${CUSERNAME1}   firstName=${cname2}   lastName=${lname2}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${cid2}  ${resp.json()}
+
+      ${resp}=  Get Consumer By Id  ${CUSERNAME1}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+  
 
       ${resp}=  Add To Waitlist  ${cid2}  ${ser_id1}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -117,16 +129,19 @@ JD-TC-GetWaitlistFuture-1
       ${tid}=  Get Dictionary Keys  ${resp.json()}
       Set Suite Variable  ${token_id1}  ${tid[0]}
 
-      ${resp}=  Get Consumer By Id  ${CUSERNAME2}
-      Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${cname3}   ${resp.json()['userProfile']['firstName']}
-      Set Suite Variable  ${lname3}   ${resp.json()['userProfile']['lastName']}
+      ${cname3}=    FakerLibrary.name
+      Set Suite Variable    ${cname3}
+      ${lname3}=    FakerLibrary.name
+      Set Suite Variable    ${lname3}
 
-      ${resp}=  AddCustomer  ${CUSERNAME2}  firstName=${cname3}   lastName=${lname3}
+      ${resp}=  AddCustomer  ${CUSERNAME2}    firstName=${cname3}   lastName=${lname3}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${cid3}  ${resp.json()}
+
+      ${resp}=  Get Consumer By Id  ${CUSERNAME2}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
 
       ${resp}=  Add To Waitlist  ${cid3}  ${ser_id1}  ${que_id1}  ${DAY2}  ${desc}  ${bool[1]}  ${cid3}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -135,16 +150,21 @@ JD-TC-GetWaitlistFuture-1
       ${tid}=  Get Dictionary Keys  ${resp.json()}
       Set Suite Variable  ${token_id2}  ${tid[0]}
 
-      ${resp}=  Get Consumer By Id  ${CUSERNAME3}
-      Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${cname4}   ${resp.json()['userProfile']['firstName']}
-      Set Suite Variable  ${lname4}   ${resp.json()['userProfile']['lastName']}
+      ${cname4}=    FakerLibrary.name
+      Set Suite Variable    ${cname4}
+      ${lname4}=    FakerLibrary.name
+      Set Suite Variable    ${lname4}
 
-      ${resp}=  AddCustomer  ${CUSERNAME3}   firstName=${cname4}   lastName=${lname4}
+
+      ${resp}=  AddCustomer  ${CUSERNAME3}    firstName=${cname4}   lastName=${lname4}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${cid4}  ${resp.json()}
+
+      ${resp}=  Get Consumer By Id  ${CUSERNAME3}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
 
       ${resp}=  Add To Waitlist  ${cid4}  ${ser_id1}  ${que_id1}  ${DAY2}  ${desc}  ${bool[1]}  ${cid4}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -153,16 +173,16 @@ JD-TC-GetWaitlistFuture-1
       ${tid}=  Get Dictionary Keys  ${resp.json()}
       Set Suite Variable  ${token_id3}  ${tid[0]}
 
-      ${resp}=  Get Consumer By Id  ${CUSERNAME31}
-      Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${cname5}   ${resp.json()['userProfile']['firstName']}
-      Set Suite Variable  ${lname5}   ${resp.json()['userProfile']['lastName']}
 
-      ${resp}=  AddCustomer  ${CUSERNAME31}   firstName=${cname5}   lastName=${lname5}
+
+      ${resp}=  AddCustomer  ${CUSERNAME31}   
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${consid}  ${resp.json()}
+
+      ${resp}=  Get Consumer By Id  ${CUSERNAME31}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
 
       ${f_name}=   generate_firstname
       Set Suite Variable  ${f_name}
@@ -185,12 +205,6 @@ JD-TC-GetWaitlistFuture-1
       ${resp}=  Get Waitlist Future   
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable    ${cname1}    ${resp.json()[0]['consumer']['firstName']}
-      Set Suite Variable    ${cname2}    ${resp.json()[1]['consumer']['firstName']}
-      Set Suite Variable    ${cname3}    ${resp.json()[2]['consumer']['firstName']}
-      Set Suite Variable    ${cname4}    ${resp.json()[3]['consumer']['firstName']}
-      Set Suite Variable    ${cname5}    ${resp.json()[4]['consumer']['firstName']}
-      
       
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  5
