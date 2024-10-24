@@ -14765,6 +14765,61 @@ Update Los Lead Channel Status
     RETURN  ${resp}
 
 
+Create Los Lead Product
+    [Arguments]     ${losProduct}  ${name}
+
+    ${data}=  Create Dictionary    losProduct=${losProduct}  name=${name}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/los/lead/product  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Create Los Lead Product 
+    RETURN  ${resp}
+
+Get Los Product By UID
+    [Arguments]     ${uid}
+
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /provider/los/lead/product/${uid}   expected_status=any
+    Check Deprication  ${resp}  Get Los Product By UID
+    RETURN  ${resp}
+
+Update Los Lead Product
+    [Arguments]     ${losProduct}  ${uid}  ${name}
+
+    ${data}=  Create Dictionary    losProduct=${losProduct}  name=${name}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/product/${uid}  data=${data}  expected_status=any
+    Check Deprication  ${resp}  Update Los Lead Product
+    RETURN  ${resp}
+
+Get Los Product
+    [Arguments]     &{param}
+    Log  ${param}
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /provider/los/lead/product   params=${param}   expected_status=any
+    Check Deprication  ${resp}  Get Los Product
+    RETURN  ${resp}
+
+Get Los Product Count
+    [Arguments]     &{param}
+    Log  ${param}
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /provider/los/lead/product/count   params=${param}   expected_status=any
+    Check Deprication  ${resp}  Get Los Product Count
+    RETURN  ${resp}
+
+Update Los Lead Product Status
+    [Arguments]     ${uid}  ${status}
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/product/${uid}/status/${status}  expected_status=any
+    Check Deprication  ${resp}  Update Los Lead Product Status
+    RETURN  ${resp}
+
+
+
+
 AddItemToInvoice
    [Arguments]  ${uuid}   ${ItemLists}  &{kwargs}
     ${ItemLists}=  Create List     ${ItemLists}

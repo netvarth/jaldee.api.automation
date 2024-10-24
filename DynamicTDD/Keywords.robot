@@ -297,6 +297,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{productEnum}                      APPOINTMENT     CHECKIN     ORDER    IVR
 @{stockTransfer}                    DRAFT   DISPATCHED   RECEIVED   DECLINED   CANCELED
 @{toggleButton}                     enable  disable
+@{losProduct}                       CDL  PROPERTYLOAN  DOCTORSLOAN  TEACHERSLOAN
 *** Keywords ***
 
 
