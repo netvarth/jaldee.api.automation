@@ -195,7 +195,7 @@ JD-TC-ChangeAppointmentStatus-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre}  ${purpose[0]}  ${apptid1}  ${s_id}  ${bool[0]}   ${bool[1]}  ${jdconID}
+    ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre}  ${purpose[0]}  ${apptid1}  ${s_id}  ${bool[0]}   ${bool[1]}  ${cid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
@@ -2487,6 +2487,7 @@ JD-TC-ChangeAppointmentStatus-UH11
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
 
     ${resp}=    Get All Schedule Slots By Date Location and Service  ${pid}  ${DAY1}  ${lid}  ${s_id}
     Log  ${resp.content}
@@ -2522,7 +2523,7 @@ JD-TC-ChangeAppointmentStatus-UH11
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre}  ${purpose[0]}  ${apptid1}  ${s_id}  ${bool[0]}   ${bool[1]}  ${jdconID}
+    ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre}  ${purpose[0]}  ${apptid1}  ${s_id}  ${bool[0]}   ${bool[1]}  ${cid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
