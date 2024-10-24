@@ -108,13 +108,14 @@ populate()
                 # mysql --compress --max_allowed_packet=32M ${DATABASE_NAME} < ${latest}
                 # mysql --compress --max_allowed_packet=1G < ${latest}
                 # time mysql --compression-algorithms=zstd --zstd-compression-level=7 ${DATABASE_NAME} < ${latest}
-                mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} -e 'ALTER INSTANCE DISABLE INNODB REDO_LOG;'
+                # mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} -e 'ALTER INSTANCE DISABLE INNODB REDO_LOG;'
                 if [[ $myversion == 5.7.* ]]; then
                     echo "mysql $myversion"
-                    time mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} --compress ${DATABASE_NAME} < ${latest}
+                    time mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} --add-drop-database --compress ${DATABASE_NAME}  < ${latest}
                 elif [[ $myversion == 8.* ]]; then
                     echo "mysql $myversion"
-                    time mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} --compression-algorithms=zstd --zstd-compression-level=7 --init-command='ALTER INSTANCE DISABLE INNODB REDO_LOG; SET SESSION FOREIGN_KEY_CHECKS=0;SET UNIQUE_CHECKS=0;' ${DATABASE_NAME} < ${latest}
+                    # time mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} --compression-algorithms=zstd --zstd-compression-level=7 --init-command='ALTER INSTANCE DISABLE INNODB REDO_LOG; SET SESSION FOREIGN_KEY_CHECKS=0;SET UNIQUE_CHECKS=0;' ${DATABASE_NAME} < ${latest}
+                    time mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} --add-drop-database --compression-algorithms=zstd --zstd-compression-level=7 --init-command='SET SESSION FOREIGN_KEY_CHECKS=0;SET UNIQUE_CHECKS=0;' ${DATABASE_NAME} < ${latest}
                 fi
                 # cat pre.sql ${latest} post.sql | mysql --max_allowed_packet=16M ${DATABASE_NAME}
                 echo "done"
