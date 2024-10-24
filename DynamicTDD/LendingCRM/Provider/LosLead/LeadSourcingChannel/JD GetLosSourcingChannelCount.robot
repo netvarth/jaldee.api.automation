@@ -197,6 +197,26 @@ JD-TC-GetLeadSourcingChannelCountByFilter-7
     Should Be Equal As Strings    ${resp.status_code}        200
     Should Be Equal As Strings    ${resp.json()}        ${length}
 
+
+JD-TC-GetLeadSourcingChannelCountByFilter-8
+
+    [Documentation]  Get Lead Sourcing Channel By Filter Count- by name
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Los Sourcing Channel   name-eq=${SCname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}        200
+
+    ${length}=   Get Length  ${resp.json()}
+
+    ${resp}=    Get Los Sourcing Channel Count   name-eq=${SCname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}        200
+    Should Be Equal As Strings    ${resp.json()}        ${length}
+
 JD-TC-GetLeadSourcingChannelCountByFilter-UH1
 
     [Documentation]  Get Lead Sourcing Channel By Filter Count- by invalid id

@@ -202,6 +202,22 @@ JD-TC-GetLeadSourcingChannelByFilter-7
     Should Be Equal As Strings    ${resp.json()[1]['status']}   ${toggle[0]}
 
 
+JD-TC-GetLeadSourcingChannelByFilter-8
+
+    [Documentation]  Get Lead Sourcing Channel By Filter- by name
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Los Sourcing Channel   name-eq=${SCname2}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}        200
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}      ${sourcinguid2}
+    Should Be Equal As Strings    ${resp.json()[0]['account']}  ${account_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}     ${SCname2}
+
+
 JD-TC-GetLeadSourcingChannelByFilter-UH1
 
     [Documentation]  Get Lead Sourcing Channel By Filter- by invalid id
